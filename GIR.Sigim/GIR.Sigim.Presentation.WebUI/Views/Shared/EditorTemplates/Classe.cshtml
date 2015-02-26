@@ -1,0 +1,95 @@
+﻿@model GIR.Sigim.Application.DTO.Financeiro.ClasseDTO
+
+<section class="@ViewBag.sectionClass">
+    @{
+        string labelText = !string.IsNullOrEmpty(ViewBag.labelText) ? ViewBag.labelText : Html.DisplayNameFor(m => m.Codigo).ToString();
+    }
+    @Html.LabelFor(m => m.Codigo, labelText, new { @class = "label" })
+    <div class="input-group">
+        <label class="input">
+            @Html.TextBoxFor(m => m.Codigo)
+        </label>
+        <a data-toggle="modal" href="#@Html.IdFor(m => m.Codigo)_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-sitemap"></i></a>
+    </div>
+    @Html.ValidationMessageFor(m => m.Codigo, "", new { @id = Html.IdFor(m => m.Codigo) + "_ValidationMessage", @class = "note note-error" })
+</section>
+<section class="@ViewBag.sectionClass">
+    <label class="label" for="fname">&nbsp;</label>
+    <label class="input">
+        @Html.TextBoxFor(m => m.Descricao, new { @readonly = "" })
+    </label>
+</section>
+
+<div class="modal fade" id="@Html.IdFor(m => m.Codigo)_ModalPanel" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Classe
+                </h4>
+            </div>
+            <div id="@Html.IdFor(m => m.Codigo)_ModalBody" class="modal-body no-padding sigimModalBody">
+                <div id="@Html.IdFor(m => m.Codigo)_tree" class="tree smart-form">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on("change", "#@Html.IdFor(m => m.Codigo)", function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ValidaClasse", "Classe", new { area = "Financeiro" })',
+                cache: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    codigo: $("#@Html.IdFor(m => m.Codigo)").val()
+                })
+            })
+            .success(function (result) {
+                showErrorMessage($('#@Html.IdFor(m => m.Codigo)_ValidationMessage'), result.errorMessage);
+                $('#@Html.IdFor(m => m.Descricao)').val(result.descricao);
+            })
+            .error(function (xhr, status) {
+                //alert(status);
+            })
+        });
+
+        $(document).on("show.bs.modal", "#@Html.IdFor(m => m.Codigo)_ModalPanel", function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("TreeView", "Classe", new { area = "Financeiro" })',
+                cache: false
+            })
+            .success(function (result) {
+                $('#@Html.IdFor(m => m.Codigo)_tree').html(result);
+
+                $('#@Html.IdFor(m => m.Codigo)_tree.tree > ul').attr('role', 'tree').find('ul').attr('role', 'group');
+
+                $('#@Html.IdFor(m => m.Codigo)_tree.tree').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem').find(' > span').attr('title', 'Recolher').on('click', function (e) {
+                    var children = $(this).parent('li.parent_li').find(' > ul > li');
+                    if (children.is(':visible')) {
+                        children.hide('fast');
+                        $(this).attr('title', 'Expandir').find(' > i').removeClass().addClass('fa fa-lg fa-plus-circle');
+                    } else {
+                        children.show('fast');
+                        $(this).attr('title', 'Recolher').find(' > i').removeClass().addClass('fa fa-lg fa-minus-circle');
+                    }
+                    e.stopPropagation();
+                });
+
+                $('#@Html.IdFor(m => m.Codigo)_tree.tree').find('li').not(':has(ul)').find(' > span').css({ cursor: 'pointer' }).on('click', function (e) {
+                    $('#@Html.IdFor(m => m.Codigo)').val($(this).data("codigo-centro-custo")).change();
+                    $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('toggle');
+                });
+            })
+            .error(function (xhr, status) {
+                //alert(status);
+            })
+        });
+    });
+</script>

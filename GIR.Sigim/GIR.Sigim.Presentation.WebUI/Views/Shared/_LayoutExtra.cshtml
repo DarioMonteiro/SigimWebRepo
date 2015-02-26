@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR" id="extr-page">
+<head>
+    @Html.Partial("_HeadPartial")
+    @RenderSection("style", required: false)
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body>
+    <header id="header">
+        <div id="logo-group">
+            <span id="logo">
+                <a href="/">
+                    <img src="~/Content/img/logo.png" alt="SIGIM">
+                </a>
+            </span>
+        </div>
+        <div class="pull-right">
+            @Html.Partial("_LoginPartial")
+		</div>
+    </header>
+    <div id="main" role="main">
+        <div id="content">
+            <section id="widget-grid" class="">
+                @Html.Partial("_NotificationMessagesPartial")
+                @RenderBody()
+            </section>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/scripts")
+
+    @if (ViewBag.IsUploadForm != null && ViewBag.IsUploadForm == true)
+    {
+        @Scripts.Render("~/bundles/jquery-form");
+    }
+    else
+    {
+        @Scripts.Render("~/bundles/unobtrusive-ajax");
+    }
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

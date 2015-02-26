@@ -1,0 +1,251 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+ * INDEX
+ * 
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+
+.field-validation-valid
+{
+	display: none;
+}
+
+.alert
+{
+	margin-bottom: 5px;
+}
+
+div#accountActions
+{
+	float: left;
+}
+
+div#ribbon ol.breadcrumb li a:hover
+{
+	color: #FFFFFF!important;
+}
+
+.centerBox
+{
+    margin: auto;
+    float: none;
+}
+
+.modal-dialog
+{
+	margin: 30px auto;
+}
+
+.modal-header
+{
+	padding: 15px;
+}
+
+.sigimModalBody
+{
+	height:550px;
+	overflow:auto;
+}
+
+.panel
+{
+	border-top: 0;
+	border-right: 0;
+	border-left: 0;
+	border-bottom: 2px solid transparent;
+}
+
+.panel:last-of-type
+{
+	border-bottom: 0;
+}
+
+.smart-form .col-12
+{
+	width: 100%;
+}
+
+.smart-form .labelCheckBox
+{
+	display: inline;
+}
+
+.smart-form .note-error
+{
+	color: #A90329;
+}
+
+.smart-form .note-error:empty
+{
+	display: none;
+}
+
+.bgIconeRelatorio48x48
+{
+	width: 98px;
+	height: 127px;
+	background-color: #EEEEEE;
+}
+
+	.bgIconeRelatorio48x48 img
+	{
+		border: 1px solid #999999;
+	}
+
+	.bgIconeRelatorio48x48 a
+	{
+		margin-top: 5px;
+	}
+
+.smart-form fieldset {
+	background: none;
+}
+
+.smart-form fieldset.min-padding-top {
+	padding-top: 5px;
+}
+
+.smart-form fieldset legend {
+	padding-top: 0;
+}
+
+.smart-form section.min-margim-bottom
+{
+	margin-bottom: 0;
+}
+
+.smart-form .btn
+{
+	padding: 6px 12px;
+}
+
+.jarviswidget div.table-container
+{
+	margin-top: 13px;
+	padding: 0 13px 13px 13px;
+}
+
+@media (min-width:601px)
+{
+	.base-align
+	{
+		margin-top: 25px;
+	}
+}
+
+.text-left
+{
+	text-align: left;
+}
+
+.text-center
+{
+	text-align: center;
+}
+
+.text-right
+{
+	text-align: right;
+}
+
+div.table-header
+{
+	border: 1px solid #ddd;
+	border-bottom: 0;
+}
+
+div.table-footer
+{
+	border: 1px solid #ddd;
+	border-top: 0;
+}
+
+div.table-container div.empty-result
+{
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	margin-bottom: 13px;
+	float: left;
+	border: 1px solid #ddd;
+	text-align: center;
+	background-color: #FEFEFE;
+	color: #A90329;
+}
+
+table.dataTable
+{
+	margin: 0!important;
+}
+
+	table.dataTable > thead > tr > th
+	{
+		vertical-align: middle;
+	}
+
+.ui-autocomplete
+{
+	max-height: 250px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	width: initial;
+	white-space: nowrap;
+	font: 13px/16px 'Open Sans',Helvetica,Arial,sans-serif;
+}
+
+	.ui-autocomplete a
+	{
+		color: #404040;
+	}
+
+.ui-menu .ui-menu-item a
+{
+	line-height: 1;
+}
+
+	.ui-menu .ui-menu-item a.ui-state-active, .ui-menu .ui-menu-item a.ui-state-focus, .ui-menu .ui-menu-item a.ui-widget-content
+	{
+		font-weight: normal;
+		background-color: #428BCA;
+		border-color: #357EBD;
+		padding-right: 200px;
+	}
+
+* html .ui-autocomplete
+{
+	height: 250px;
+}
+
+.text-color-error
+{
+	color: #FFFFFF;
+}
+
+.text-color-success
+{
+	color: #356635;
+}
+
+.text-color-warning
+{
+	color: #826430;
+}
+
+.text-color-info
+{
+	color: #305d8c;
+}

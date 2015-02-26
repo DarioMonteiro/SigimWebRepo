@@ -1,0 +1,58 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel.ParametrosUsuarioViewModel
+
+@{
+    ViewBag.Title = "Parâmetros do Usuário";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-8 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Index",
+                        "ParametrosUsuario",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
+                        new { @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <fieldset>
+                            <div class="row">
+                                <section class="col col-6">
+                                    @Html.LabelFor(m => m.ParametrosUsuario.Email, new { @class = "label" })
+                                    <label class="input">
+                                        <i class="icon-append fa fa-envelope-o"></i>
+                                        @Html.TextBoxFor(m => m.ParametrosUsuario.Email)
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.ParametrosUsuario.Email, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-6">
+                                    @Html.LabelFor(m => m.ParametrosUsuario.Senha, new { @class = "label" })
+                                    <label class="input">
+                                        <i class="icon-append fa fa-lock"></i>
+                                        @Html.PasswordFor(m => m.ParametrosUsuario.Senha)
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.ParametrosUsuario.Senha, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">
+                                @Html.EditorFor(m => m.ParametrosUsuario.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de custo default" })
+                            </div>
+                        </fieldset>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Salvar
+                            </button>
+                        </footer>
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div>

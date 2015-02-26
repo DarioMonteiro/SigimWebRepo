@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B581E80A-8ED7-4B76-B24A-B3332020CF56}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GIR.Sigim.Infrastructure.Crosscutting.IoC</RootNamespace>
+    <AssemblyName>GIR.Sigim.Infrastructure.Crosscutting.IoC</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Container.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GIR.Sigim.Application.Service\GIR.Sigim.Application.Service.csproj">
+      <Project>{5cb76b8f-44f7-42eb-bc19-4d2e53790ec9}</Project>
+      <Name>GIR.Sigim.Application.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Application\GIR.Sigim.Application.csproj">
+      <Project>{5ca0a583-33a5-43ab-99c6-2d5d19508ca0}</Project>
+      <Name>GIR.Sigim.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Domain\GIR.Sigim.Domain.csproj">
+      <Project>{1235e084-57fe-4dc3-9858-63c7063003b2}</Project>
+      <Name>GIR.Sigim.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting.Adapter\GIR.Sigim.Infrastructure.Crosscutting.Adapter.csproj">
+      <Project>{3c2f3688-ae7c-45a1-b6c8-0efca43a1019}</Project>
+      <Name>GIR.Sigim.Infrastructure.Crosscutting.Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting.Security\GIR.Sigim.Infrastructure.Crosscutting.Security.csproj">
+      <Project>{5d44f30a-c342-4757-b4c0-b0bdcb2d20e1}</Project>
+      <Name>GIR.Sigim.Infrastructure.Crosscutting.Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting.Validator\GIR.Sigim.Infrastructure.Crosscutting.Validator.csproj">
+      <Project>{bfa27338-9b4c-4c2d-8d90-89fb8af6a501}</Project>
+      <Name>GIR.Sigim.Infrastructure.Crosscutting.Validator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting\GIR.Sigim.Infrastructure.Crosscutting.csproj">
+      <Project>{c6691185-a423-4909-9157-1cb230a48980}</Project>
+      <Name>GIR.Sigim.Infrastructure.Crosscutting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Data\GIR.Sigim.Infrastructure.Data.csproj">
+      <Project>{b6a84fc7-9009-4d4e-82e8-0d1e4ceab6a0}</Project>
+      <Name>GIR.Sigim.Infrastructure.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

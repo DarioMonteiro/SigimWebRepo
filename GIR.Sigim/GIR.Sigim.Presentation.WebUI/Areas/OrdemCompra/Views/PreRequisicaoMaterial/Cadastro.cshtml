@@ -1,0 +1,423 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel.PreRequisicaoMaterialCadastroViewModel
+
+@{
+    ViewBag.Title = "Pré requisição de material";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Cadastro",
+                        "PreRequisicaoMaterial",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
+                        new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <fieldset>
+                            <div class="row">
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.PreRequisicaoMaterial.Id, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.PreRequisicaoMaterial.Id, new { @readonly = "" })
+                                    </label>
+                                </section>
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.PreRequisicaoMaterial.Data, new { @class = "label" })
+                                    <label class="input">
+                                        <i class="icon-append fa fa-calendar"></i>
+                                        @Html.TextBoxFor(m => m.PreRequisicaoMaterial.Data, "{0:dd/MM/yyyy}")
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.PreRequisicaoMaterial.Data, "Informe uma data válida.", new { @class = "note note-error" })
+                                </section>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        $('#@Html.IdFor(m => m.PreRequisicaoMaterial.Data)').datepicker({
+                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                        });
+                                    });
+                                </script>
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.PreRequisicaoMaterial.SituacaoDescricao, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.PreRequisicaoMaterial.SituacaoDescricao, new { @readonly = "" })
+                                    </label>
+                                </section>
+                            </div>
+                            @Html.HiddenFor(m => m.JsonItens)
+                        </fieldset>
+                        <fieldset id="formItem">
+                            <div class="row">
+                                <section class="col col-12">
+                                    <article class="col-sm-12">
+                                        <div class="alert alert-danger fade in">
+                                            <button class="close" data-dismiss="alert">×</button><i class="fa-fw fa fa-check"></i>
+                                            Sucesso
+                                        </div>
+
+                                    </article>
+                                </section>
+                            </div>
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.HiddenFor(m => m.Sequencial)
+                            <div class="row">
+                                @Html.EditorFor(m => m.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo" })
+                                @Html.EditorFor(m => m.Classe, "Classe", new { @sectionClass = "col col-3" })
+                            </div>
+                            <div class="row">
+                                @Html.EditorFor(m => m.Material, "Material", new { @sectionClass = "col col-6" })
+                                <section class="col col-6">
+                                    @Html.LabelFor(m => m.Complemento, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Complemento)
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Complemento, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-2">
+                                    @Html.LabelFor(m => m.Quantidade, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Quantidade, "{0:F4}", new { @class = "text-right decimal-4-casas" })
+                                        <script type="text/javascript">
+                                            $(document).ready(function () {
+                                                $("#@Html.IdFor(m => m.Quantidade)").on("focusout", function () {
+                                                    $("#@Html.IdFor(m => m.QuantidadeAprovada)").val(roundDecimal($(this).val(), 4));
+                                                });
+                                            });
+                                        </script>
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Quantidade, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-2">
+                                    @Html.LabelFor(m => m.QuantidadeAprovada, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.QuantidadeAprovada, "{0:F4}", new { @class = "text-right decimal-4-casas", @readonly = "" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.QuantidadeAprovada, "", new { @class = "note note-error" })
+                                </section>
+
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.DataMinima, new { @class = "label" })
+                                    <label class="input">
+                                        <i class="icon-append fa fa-calendar"></i>
+                                        @Html.TextBoxFor(m => m.DataMinima, "{0:dd/MM/yyyy}")
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.DataMinima, "Informe uma data válida.", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-2">
+                                    @Html.LabelFor(m => m.Prazo, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Prazo, new { @class = "text-right" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Prazo, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.DataMaxima, new { @class = "label" })
+                                    <label class="input">
+                                        <i class="icon-append fa fa-calendar"></i>
+                                        @Html.TextBoxFor(m => m.DataMaxima, "{0:dd/MM/yyyy}")
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.DataMaxima, "Informe uma data válida.", new { @class = "note note-error" })
+                                </section>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        $('#@Html.IdFor(m => m.DataMinima)').datepicker({
+                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                            onClose: function (selectedDate) {
+                                                $('#@Html.IdFor(m => m.DataMaxima)').datepicker('option', 'minDate', selectedDate);
+                                            }
+                                        });
+
+                                        $('#@Html.IdFor(m => m.DataMaxima)').datepicker({
+                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                            onClose: function (selectedDate) {
+                                                $('#@Html.IdFor(m => m.DataMinima)').datepicker('option', 'maxDate', selectedDate);
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+                            <div class="row">
+                                <section class="col col-6">
+                                    <button id="btnAddItem" type="button" class="btn btn-primary">
+                                        Adicionar
+                                    </button>
+                                </section>
+                            </div>
+                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="text-center" style="min-width: 65px;">Item pré RM</th>
+                                            <th class="text-right">Material</th>
+                                            <th>Descrição</th>
+                                            <th>Complemento</th>
+                                            <th class="text-center">UN</th>
+                                            <th class="text-right">Quantidade</th>
+                                            <th class="text-right">Qtd. aprovada</th>
+                                            <th>Classe de despesa</th>
+                                            <th>Centro de custo</th>
+                                            <th class="text-center" style="min-width: 70px;">Data mínima</th>
+                                            <th class="text-center" style="min-width: 70px;">Data máxima</th>
+                                            <th>Situação</th>
+                                            <th class="text-center">RM gerada</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <script type="text/javascript">
+                                jsonItemArray = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+
+                                $(document).ready(function () {
+                                    fillTable();
+
+                                    jQuery.validator.setDefaults({
+                                        ignore: '#formItem *'
+                                    });
+
+                                    $('#btnAddItem').on("click", function () {
+                                        if ($('#formItem input').valid()) {
+                                            if (!ehItemRepetido()) {
+                                                addItem();
+                                            }
+                                            else {
+                                                smartAlert("Erro", "Esse material e essa classe já foram adicionados para esse centro de custo.", "error");
+                                            }
+                                        }
+                                    });
+
+                                    jQuery.validator.addMethod(
+                                        "centroCustoValido",
+                                        function (value, element) {
+                                            alert(validaCentroCusto());
+                                            return validaCentroCusto();
+                                        },
+                                        ""
+                                    );
+
+                                    $('#formCadastro').validate({
+                                        rules: {
+                                            '@Html.NameFor(m => m.CentroCusto.Codigo)': {
+                                                required: true,
+                                                centroCustoValido: true
+                                            },
+                                            '@Html.NameFor(m => m.Classe.Codigo)': "required",
+                                            '@Html.NameFor(m => m.Material.Id)': "required",
+                                            '@Html.NameFor(m => m.Quantidade)': "decimalGreaterThanZero",
+                                            '@Html.NameFor(m => m.DataMinima)': "date",
+                                            '@Html.NameFor(m => m.DataMaxima)': "date"
+                                        },
+                                        messages: {
+                                            '@Html.NameFor(m => m.CentroCusto.Codigo)': {
+                                                required: "O campo Centro de Custo é obrigatório."
+                                            },
+                                            '@Html.NameFor(m => m.Classe.Codigo)': {
+                                                required: "O campo Classe é obrigatório."
+                                            },
+                                            '@Html.NameFor(m => m.Material.Id)': {
+                                                required: "O campo Material é obrigatório."
+                                            },
+                                            '@Html.NameFor(m => m.Quantidade)': {
+                                                decimalGreaterThanZero: "A Quantidade deve ser maior que zero."
+                                            },
+                                            '@Html.NameFor(m => m.DataMinima)': {
+                                                date: "Informe uma data válida."
+                                            },
+                                            '@Html.NameFor(m => m.DataMaxima)': {
+                                                date: "Informe uma data válida."
+                                            }
+                                        },
+                                        errorPlacement: function (error, element) {
+                                            var span = getErrorMessageContainer(element.attr("name"));
+                                            span.html(error.append());
+                                        },
+                                        highlight: function (element, errorClass) {
+                                            var span = getErrorMessageContainer($(element).attr("name"));
+                                            span.removeClass("field-validation-valid");
+                                            span.addClass("field-validation-error");
+                                        },
+                                        unhighlight: function (element, errorClass) {
+                                            var span = getErrorMessageContainer($(element).attr("name"));
+                                            span.removeClass("field-validation-error");
+                                            span.addClass("field-validation-valid");
+                                        }
+                                    });
+                                });
+
+                                function fillTable() {
+                                    $("#tableItens tbody").empty();
+                                    for (var i = 0; i < jsonItemArray.length; i++) {
+                                        var row = $('<tr />')
+                                        $("#tableItens tbody").append(row);
+                                        row.append($('<td>' + jsonItemArray[i].Sequencial + '</td>'));
+                                        row.append($('<td class="text-right">' + jsonItemArray[i].Material.Id + '</td>'));
+                                        row.append($('<td class="text-nowrap">' + jsonItemArray[i].Material.Descricao + '</td>'));
+                                        row.append($('<td>' + jsonItemArray[i].Complemento + '</td>'));
+                                        row.append($('<td>' + jsonItemArray[i].Material.SiglaUnidadeMedida + '</td>'));
+                                        row.append($('<td class="text-right">' + roundDecimal(jsonItemArray[i].Quantidade, 4) + '</td>'));
+                                        row.append($('<td class="text-right">' + roundDecimal(jsonItemArray[i].QuantidadeAprovada, 4) + '</td>'));
+                                        row.append($('<td class="text-nowrap">' + jsonItemArray[i].Classe.Codigo + " - " + jsonItemArray[i].Classe.Descricao + '</td>'));
+                                        row.append($('<td class="text-nowrap">' + jsonItemArray[i].CentroCusto.Codigo + " - " + jsonItemArray[i].CentroCusto.Descricao + '</td>'));
+                                        row.append($('<td>' + new Date(parseInt(jsonItemArray[i].DataMinima.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                                        row.append($('<td>' + new Date(parseInt(jsonItemArray[i].DataMaxima.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                                        row.append($('<td>' + jsonItemArray[i].SituacaoDescricao + '</td>'));
+                                        var rmGerada = "&nbsp;";
+                                        if (jsonItemArray[i].ListaRequisicaoMaterialItem.length > 0)
+                                            rmGerada = jsonItemArray[i].ListaRequisicaoMaterialItem[0].RequisicaoMaterial.Id;
+                                        row.append($('<td class="text-center">' + rmGerada + '</td>'));
+                                    }
+                                }
+
+                                function ehItemRepetido() {
+                                    var result = false;
+                                    $.each(jsonItemArray, function (i, obj) {
+                                        var ehMesmoMaterial = (obj.Material.Id == $('#@Html.IdFor(m => m.Material.Id)').val());
+                                        var ehMesmaClasse = (obj.Classe.Codigo == $('#@Html.IdFor(m => m.Classe.Codigo)').val());
+                                        var ehMesmoCentroCusto = (obj.CentroCusto.Codigo == $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val());
+                                        var ehMesmoSequencial = (obj.Sequencial == $('#@Html.IdFor(m => m.Sequencial)').val());
+
+                                        if (ehMesmoMaterial && ehMesmaClasse && ehMesmoCentroCusto && !ehMesmoSequencial) {
+                                            result = true;
+                                            return false;
+                                        }
+                                    });
+                                    return result;
+                                }
+
+                                function addItem() {
+                                    var item = $("#formItem").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
+
+                                    if (item["@Html.IdFor(m => m.Sequencial)"] == '') {
+                                        if (jsonItemArray.length == 0)
+                                            item["@Html.IdFor(m => m.Sequencial)"] = 1;
+                                        else
+                                            item["@Html.IdFor(m => m.Sequencial)"] = Math.max.apply(Math, jsonItemArray.map(function (o) { return o.Sequencial; })) + 1;
+                                    }
+
+                                    item["Situacao"] = 0;
+                                    item["SituacaoDescricao"] = "Requisitado";
+                                    item["ListaRequisicaoMaterialItem"] = [];
+                                    jsonItemArray.push(item);
+                                    $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(jsonItemArray));
+                                    fillTable();
+                                }
+
+                                function processData(node) {
+                                    var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+                                    var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+                                    if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.DataMinima)" || fieldId == "@Html.IdFor(m => m.DataMaxima)")) {
+                                        var date = $("#" + fieldId).datepicker("getDate");
+                                        var jsonDate = "";
+                                        if (date != null)
+                                            jsonDate = "/Date(" + date.getTime() + ")/";
+                                        return { name: fieldName, value: jsonDate };
+                                    }
+
+                                    return false;
+                                }
+                            </script>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <section class="col col-6">
+                                    @Html.LabelFor(m => m.PreRequisicaoMaterial.Observacao, new { @class = "label" })
+                                    <label class="textarea">
+                                        @Html.TextAreaFor(m => m.PreRequisicaoMaterial.Observacao, new { rows = 5, style = "height:104px;" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.PreRequisicaoMaterial.Observacao, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-6" style="padding: 0;">
+                                    <section class="col col-12" style="padding: 0; margin: 0;">
+                                        <section class="col col-6">
+                                            @Html.LabelFor(m => m.PreRequisicaoMaterial.LoginUsuarioCadastro, new { @class = "label" })
+                                            <label class="input">
+                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.LoginUsuarioCadastro, new { @readonly = "" })
+                                            </label>
+                                        </section>
+                                        <section class="col col-6">
+                                            @Html.LabelFor(m => m.PreRequisicaoMaterial.DataCadastro, new { @class = "label" })
+                                            <label class="input">
+                                                <i class="icon-append fa fa-calendar"></i>
+                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.DataCadastro, "{0:dd/MM/yyyy}", new { @readonly = "" })
+                                            </label>
+                                        </section>
+                                    </section>
+                                    <section class="col col-12" style="padding: 0; margin: 0;">
+                                        <section class="col col-6">
+                                            @Html.LabelFor(m => m.PreRequisicaoMaterial.LoginUsuarioCancelamento, new { @class = "label" })
+                                            <label class="input">
+                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.LoginUsuarioCancelamento, new { @readonly = "" })
+                                            </label>
+                                        </section>
+                                        <section class="col col-6">
+                                            @Html.LabelFor(m => m.PreRequisicaoMaterial.DataCancelamento, new { @class = "label" })
+                                            <label class="input">
+                                                <i class="icon-append fa fa-calendar"></i>
+                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.DataCancelamento, "{0:dd/MM/yyyy}", new { @readonly = "" })
+                                            </label>
+                                        </section>
+                                    </section>
+                                </section>
+                            </div>
+                        </fieldset>
+                        <footer>
+                            @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
+                            <button id="btnSalvar" type="submit" class="btn btn-primary right">
+                                Salvar
+                            </button>
+                        </footer>
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.validator.addMethod(
+                 "validaCentroCustoPorUsuario",
+                 function (value, element) {
+                     $.ajax({
+                         type: 'POST',
+                         url: '@Url.Action("ValidaCentroCustoPorUsuario", "CentroCusto", new { area = "Financeiro" })',
+                         cache: false,
+                         contentType: 'application/json; charset=utf-8',
+                         data: JSON.stringify({
+                             codigo: $("#CentroCusto_Codigo").val(),
+                             modulo: '@GIR.Sigim.Application.Resource.Sigim.NomeModulo.OrdemCompra'
+                         }),
+                         success: function (result) {
+                             showErrorMessage($('#CentroCusto_Codigo_ValidationMessage'), result.errorMessage);
+                             $('#CentroCusto_Descricao').val(result.descricao);
+                             if (result.errorMessage.length > 0) {
+                                 $('#CentroCusto_Codigo').attr('aria-invalid', 'true');
+                                 return false;
+                             }
+                             else
+                                 $('#CentroCusto_Codigo').attr('aria-invalid', 'false');
+
+                             return true;
+                         }
+                     })
+                 },
+                 "asdfadsfads dsf."
+             );
+
+        $(':input[name="CentroCusto.Codigo"]').rules("add", { "validaCentroCustoPorUsuario": true });
+    });
+</script>*@

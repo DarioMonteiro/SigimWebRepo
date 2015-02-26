@@ -1,0 +1,6 @@
+﻿<div class="row">
+    <article class="col-sm-12">
+        @Html.Raw(Html.CustomNotificationSummary(Session["MessageQueue"] as GIR.Sigim.Infrastructure.Crosscutting.Notification.MessageQueue))
+        @Html.Raw(Html.CustomValidationSummary(false))
+    </article>
+</div>

@@ -1,0 +1,10 @@
+﻿<label>
+    <select id="pageSizeSelector" name="dt_basic_length" aria-controls="dt_basic" class="form-control" onchange="changePageSize();">
+        @{
+            foreach (var item in ViewBag.PageSizeOptions)
+            {
+                <option value="@item">@item</option>
+            }
+        }
+    </select>
+</label>

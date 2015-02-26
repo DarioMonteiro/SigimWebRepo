@@ -1,0 +1,14 @@
+﻿@if (Request.IsAuthenticated) {
+    <text>
+        <div id="accountActions">
+            @using (Html.BeginForm("Logout", "Account", new { area = "" }, FormMethod.Post, new { @id = "logoutForm", @style = "float:left;" }))
+            {
+                @Html.AntiForgeryToken()
+                <span id="show-shortcut" class="hidden">@User.Identity.Name</span>
+                <div id="logout" class="btn-header transparent pull-right">
+				    <span><a href="javascript:$('#logoutForm').submit()" title="Sair" data-action="userLogout" data-logout-msg="Você pode melhorar sua segurança ainda mais depois de sair com o fechamento do navegador"><i class="fa fa-sign-out"></i></a></span>
+			    </div>
+            }
+        </div>
+    </text>
+}

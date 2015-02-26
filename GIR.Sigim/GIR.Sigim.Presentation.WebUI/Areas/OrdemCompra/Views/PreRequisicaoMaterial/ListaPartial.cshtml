@@ -1,0 +1,92 @@
+﻿@using GIR.Sigim.Application.DTO.OrdemCompra
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<PreRequisicaoMaterialDTO> Lista = Model.Records as IEnumerable<PreRequisicaoMaterialDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector",
+                                @aria_controls = "dt_basic",
+                                @class = "form-control",
+                                onchange = "changePageSize();"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+        string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+        string idSortingSuffix = "sorting";
+        string situacaoSortingSuffix = "sorting";
+        string dataSortingSuffix = "sorting";
+        string observacaoSortingSuffix = "sorting";
+        //string rmgeradasSortingSuffix = "sorting";
+        string responsavelSortingSuffix = "sorting";
+
+        switch (Model.OrderBy)
+        {
+            case "id":
+                idSortingSuffix += sortingSuffix;
+                break;
+            case "situacao":
+                situacaoSortingSuffix += sortingSuffix;
+                break;
+            case "data":
+                dataSortingSuffix += sortingSuffix;
+                break;
+            case "observacao":
+                observacaoSortingSuffix += sortingSuffix;
+                break;
+            //case "rmgeradas":
+            //    rmgeradasSortingSuffix += sortingSuffix;
+            //    break;
+            case "responsavel":
+                responsavelSortingSuffix += sortingSuffix;
+                break;
+            default:
+                break;
+        }
+                        }
+                        
+                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="min-width:65px;">Código</th>
+                        <th class="sorting @situacaoSortingSuffix text-center" data-order="situacao" style="min-width:75px;">Situação</th>
+                        <th class="sorting @dataSortingSuffix text-center" data-order="data" style="min-width:70px;">Data</th>
+                        <th class="sorting @observacaoSortingSuffix" data-order="observacao">Observação</th>
+                        <th class="text-nowrap" data-order="rmgeradas" style="min-width:100px;">RM(s) geradas</th>
+                        <th class="sorting @responsavelSortingSuffix text-center" data-order="responsavel" style="min-width:100px;">Responsável</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td class="text-center">@Html.ActionLink(item.Id.ToString(), "Cadastro", new { id = item.Id })</td>
+                            <td class="text-center">@item.SituacaoDescricao</td>
+                            <td class="text-center">@item.Data.ToShortDateString()</td>
+                            <td>@item.Observacao</td>
+                            <td>@item.RMGeradas</td>
+                            <td class="text-center">@item.LoginUsuarioCadastro</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model.Pagination)
+    }
+</div>

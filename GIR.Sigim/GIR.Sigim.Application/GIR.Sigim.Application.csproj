@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5CA0A583-33A5-43AB-99C6-2D5D19508CA0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GIR.Sigim.Application</RootNamespace>
+    <AssemblyName>GIR.Sigim.Application</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.3.0-ci1017\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.3.0-ci1017\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adapter\Adapter.cs" />
+    <Compile Include="Adapter\EnumAdapter.cs" />
+    <Compile Include="CustomAttribute\RequiredIfNotEmptyAttribute.cs" />
+    <Compile Include="DTO\Admin\UsuarioDTO.cs" />
+    <Compile Include="DTO\BaseDTO.cs" />
+    <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
+    <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
+    <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
+    <Compile Include="DTO\Financeiro\TipoCompromissoDTO.cs" />
+    <Compile Include="DTO\Orcamento\ParametrosOrcamentoDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\RequisicaoMaterialDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\InterfaceCotacaoDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\ParametrosOrdemCompraDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\ParametrosUsuarioDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\RequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\Sigim\AssuntoContatoDTO.cs" />
+    <Compile Include="DTO\Sigim\BancoDTO.cs" />
+    <Compile Include="DTO\Sigim\BancoLayoutDTO.cs" />
+    <Compile Include="DTO\Sigim\ClienteFornecedorDTO.cs" />
+    <Compile Include="DTO\Sigim\UnidadeMedidaDTO.cs" />
+    <Compile Include="DTO\Sigim\MaterialDTO.cs" />
+    <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
+    <Compile Include="Filtros\BaseFiltro.cs" />
+    <Compile Include="Filtros\OrdemCompras\RequisicaoMaterialFiltro.cs" />
+    <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
+    <Compile Include="Filtros\PaginationParameters.cs" />
+    <Compile Include="Helper\MapperHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource\Admin\ErrorMessages.Designer.cs">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resource\Financeiro\ErrorMessages.Designer.cs">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resource\Sigim\ErrorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resource\Admin\SuccessMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SuccessMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resource\Sigim\NomeModulo.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NomeModulo.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resource\Sigim\SuccessMessages.Designer.cs">
+      <DependentUpon>SuccessMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Service\Admin\IUsuarioAppService.cs" />
+    <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
+    <Compile Include="Service\Financeiro\IClasseAppService.cs" />
+    <Compile Include="Service\Financeiro\ICentroCustoAppService.cs" />
+    <Compile Include="Service\Financeiro\ITipoCompromissoAppService.cs" />
+    <Compile Include="Service\IBaseAppService.cs" />
+    <Compile Include="Service\Orcamento\IParametrosOrcamentoAppService.cs" />
+    <Compile Include="Service\OrdemCompra\IRequisicaoMaterialAppService.cs" />
+    <Compile Include="Service\OrdemCompra\IPreRequisicaoMaterialAppService.cs" />
+    <Compile Include="Service\OrdemCompra\IParametrosOrdemCompraAppService.cs" />
+    <Compile Include="Service\OrdemCompra\IParametrosUsuarioAppService.cs" />
+    <Compile Include="Service\Sigim\IMaterialAppService.cs" />
+    <Compile Include="Service\Sigim\IAssuntoContatoAppService.cs" />
+    <Compile Include="Service\Sigim\IBancoLayoutAppService.cs" />
+    <Compile Include="Service\Sigim\IClienteFornecedorAppService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GIR.Sigim.Domain\GIR.Sigim.Domain.csproj">
+      <Project>{1235e084-57fe-4dc3-9858-63c7063003b2}</Project>
+      <Name>GIR.Sigim.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting\GIR.Sigim.Infrastructure.Crosscutting.csproj">
+      <Project>{c6691185-a423-4909-9157-1cb230a48980}</Project>
+      <Name>GIR.Sigim.Infrastructure.Crosscutting</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resource\OrdemCompra\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Admin\ErrorMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Financeiro\ErrorMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Sigim\ErrorMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Admin\SuccessMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SuccessMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Sigim\NomeModulo.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NomeModulo.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Sigim\SuccessMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SuccessMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\AutoMapper.3.3.0-ci1017\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.0-ci1017\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

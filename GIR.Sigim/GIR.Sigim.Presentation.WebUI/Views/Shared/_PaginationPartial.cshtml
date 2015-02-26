@@ -1,0 +1,47 @@
+﻿@model GIR.Sigim.Presentation.WebUI.ViewModel.Pagination
+
+<div class="dt-toolbar-footer table-footer">
+    <div class="col-sm-6 col-xs-12 hidden-xs">
+        <div class="dataTables_info" id="dt_basic_info" role="status" aria-live="polite">
+            Exibindo <span class="txt-color-darken">@Model.FirstRecord</span> a <span class="txt-color-darken">@Model.LastRecord</span>
+            de <span class="text-primary">@Model.TotalRecords</span> registros
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+            <ul class="pagination">
+                @foreach (var item in Model.PageList)
+                {
+                    string classActive = string.Empty;
+                    if (item.Active)
+                    {
+                        classActive = "class=active";
+                    }
+
+                    <li @classActive>
+                        <a href="javascript:goToPage(@item.Index);">
+                            @switch (item.Decription)
+                            {
+                                case "<<":
+                                    @Html.Raw("<i class=\"fa fa-chevron-left\"></i><i class=\"fa fa-chevron-left\"></i>");
+                                    break;
+                                case "<":
+                                    @Html.Raw("<i class=\"fa fa-chevron-left\"></i>");
+                                    break;
+                                case ">":
+                                    @Html.Raw("<i class=\"fa fa-chevron-right\"></i>");
+                                    break;
+                                case ">>":
+                                    @Html.Raw("<i class=\"fa fa-chevron-right\"></i><i class=\"fa fa-chevron-right\"></i>");
+                                    break;
+                                default:
+                                    @item.Decription
+                                    break;
+                            }
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

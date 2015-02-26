@@ -1,0 +1,59 @@
+﻿@model GIR.Sigim.Application.DTO.Sigim.MaterialDTO
+
+<section class="@ViewBag.sectionClass" style="margin: 0;">
+    <section class="col col-10" style="padding-left: 0;">
+        @Html.LabelFor(m => m.Descricao, "Material", new { @class = "label" })
+        <div class="input-group">
+            <label class="input">
+                @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do material" })
+                @Html.HiddenFor(m => m.Id)
+            </label>
+            <a data-toggle="modal" href="javascript:alert('Em Construção');" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+        </div>
+        @Html.ValidationMessageFor(m => m.Id, "", new { @id = Html.IdFor(m => m.Id) + "_ValidationMessage", @class = "note note-error" })
+    </section>
+    <section class="col col-2" style="padding-right: 0;">
+        @Html.LabelFor(m => m.SiglaUnidadeMedida, "UN", new { @class = "label" })
+        <label class="input">
+            @Html.TextBoxFor(m => m.SiglaUnidadeMedida, new { @readonly = "" })
+        </label>
+    </section>
+</section>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#@Html.IdFor(m => m.Descricao)").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ListaMaterial", "PreRequisicaoMaterial", new { area = "OrdemCompra" })',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        descricao: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                id: item.Id,
+                                label: item.Descricao,
+                                value: item.Descricao,
+                                unidade: item.SiglaUnidadeMedida
+                            }
+                        }));
+                    }
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                $('#@Html.IdFor(m => m.Id)').val(ui.item.id);
+                $('#@Html.IdFor(m => m.SiglaUnidadeMedida)').val(ui.item.unidade);
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + " - " + item.unidade + "</a>")
+                .appendTo(ul);
+        };
+    });
+</script>
