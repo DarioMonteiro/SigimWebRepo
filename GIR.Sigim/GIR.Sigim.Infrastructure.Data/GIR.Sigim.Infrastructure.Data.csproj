@@ -48,7 +48,11 @@
   <ItemGroup>
     <Compile Include="Configuration\Contrato\ParametrosContratoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ClasseConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoCompromissoConfiguration.cs" />
+    <Compile Include="Configuration\Orcamento\OrcamentoComposicaoConfiguration.cs" />
+    <Compile Include="Configuration\Orcamento\OrcamentoConfiguration.cs" />
+    <Compile Include="Configuration\Orcamento\ObraConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\ParametrosOrcamentoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialItemConfiguration.cs" />
@@ -61,6 +65,7 @@
     <Compile Include="Configuration\Sigim\BancoLayoutConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AssuntoContatoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ClienteFornecedorConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\ComposicaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\UnidadeMedidaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\SituacaoMercadoriaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\NCMConfiguration.cs" />
@@ -78,6 +83,7 @@
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoCompromissoRepository.cs" />
+    <Compile Include="Repository\Orcamento\OrcamentoRepository.cs" />
     <Compile Include="Repository\Orcamento\ParametrosOrcamentoRepository.cs" />
     <Compile Include="Repository\Financeiro\CentroCustoRepository.cs" />
     <Compile Include="Repository\OrdemCompra\RequisicaoMaterialRepository.cs" />

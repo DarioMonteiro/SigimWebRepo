@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.Financeiro;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
     public class ClienteFornecedor : BaseEntity
     {
         public string Nome { get; set; }
+        public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
         public ICollection<OrdemCompra.ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
         [Obsolete("Esta propriedade será removida em uma versão futura. Caso NÃO esteja codificando em um repositório, utilize a propriedade \"Ativo\"")]
         public string Situacao { get; set; }
@@ -20,6 +22,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
 
         public ClienteFornecedor()
         {
+            this.ListaCentroCustoEmpresa = new HashSet<CentroCustoEmpresa>();
             this.ListaParametrosOrdemCompra = new HashSet<OrdemCompra.ParametrosOrdemCompra>();
         }
     }

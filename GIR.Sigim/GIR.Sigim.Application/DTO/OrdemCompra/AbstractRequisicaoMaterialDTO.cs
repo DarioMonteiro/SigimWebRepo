@@ -35,7 +35,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
 
         public string MotivoCancelamento { get; set; }
 
-        public AbstractRequisicaoMaterialDTO ()
+        public AbstractRequisicaoMaterialDTO()
         {
             this.Data = DateTime.Now;
         }

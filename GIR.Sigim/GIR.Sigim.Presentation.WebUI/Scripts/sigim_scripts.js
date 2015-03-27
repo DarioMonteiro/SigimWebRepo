@@ -104,9 +104,9 @@ function roundDecimal(value, precision) {
 
 Date.prototype.toFormatDDMMYYYY = function () {
     if (!isNaN(this)) {
-        var yyyy = this.getFullYear().toString();
-        var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
-        var dd = this.getDate().toString();
+        var yyyy = this.getUTCFullYear().toString();
+        var mm = (this.getUTCMonth() + 1).toString(); // getMonth() is zero-based
+        var dd = this.getUTCDate().toString();
         return (dd[1] ? dd : "0" + dd[0]) + '/' + (mm[1] ? mm : "0" + mm[0]) + '/' + yyyy;
     }
     return "";
@@ -127,10 +127,18 @@ function getErrorMessageContainer(fieldName) {
 jQuery.validator.addMethod(
     "decimalGreaterThanZero",
     function (value, element) {
-        return parseFloat(value.toString().replace(".", "").replace(",", ".")) > 0
+        return stringToFloat(value) > 0;
     },
     "Informe um valor maior que zero."
 );
+
+function floatToString(value) {
+    return value.toString().replace(".", ",");
+}
+
+function stringToFloat(value) {
+    return parseFloat(value.toString().replace(".", "").replace(",", "."));
+}
 
 function smartAlert(title, message, type) {
     var color = "";

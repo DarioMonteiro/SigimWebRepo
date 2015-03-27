@@ -47,8 +47,12 @@
     <Compile Include="Entity\Admin\Usuario.cs" />
     <Compile Include="Entity\Contrato\ParametrosContrato.cs" />
     <Compile Include="Entity\Financeiro\CentroCusto.cs" />
+    <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
     <Compile Include="Entity\Financeiro\TipoCompromisso.cs" />
+    <Compile Include="Entity\Orcamento\Orcamento.cs" />
+    <Compile Include="Entity\Orcamento\Obra.cs" />
+    <Compile Include="Entity\Orcamento\OrcamentoComposicao.cs" />
     <Compile Include="Entity\Orcamento\ParametrosOrcamento.cs" />
     <Compile Include="Entity\OrdemCompra\AbstractRequisicaoMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\AbstractRequisicaoMaterialItem.cs" />
@@ -67,6 +71,7 @@
     <Compile Include="Entity\Sigim\Banco.cs" />
     <Compile Include="Entity\Sigim\BancoLayout.cs" />
     <Compile Include="Entity\Sigim\ClienteFornecedor.cs" />
+    <Compile Include="Entity\Sigim\Composicao.cs" />
     <Compile Include="Entity\Sigim\TipoTabela.cs" />
     <Compile Include="Entity\Sigim\NCM.cs" />
     <Compile Include="Entity\Sigim\Material.cs" />
@@ -78,11 +83,13 @@
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
+    <Compile Include="Repository\Financeiro\ICentroCustoEmpresaRepository.cs" />
     <Compile Include="Repository\Financeiro\IClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\ICentroCustoRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoCompromissoRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\Admin\IUsuarioRepository.cs" />
+    <Compile Include="Repository\Orcamento\IOrcamentoRepository.cs" />
     <Compile Include="Repository\Orcamento\IParametrosOrcamentoRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />

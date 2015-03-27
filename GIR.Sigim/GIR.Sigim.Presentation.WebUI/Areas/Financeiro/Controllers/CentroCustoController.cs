@@ -12,22 +12,24 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
     public class CentroCustoController : BaseController
     {
-        private ICentroCustoAppService centroCustoService;
+        private ICentroCustoAppService centroCustoAppService;
 
-        public CentroCustoController(ICentroCustoAppService centroCustoService, MessageQueue messageQueue)
+        public CentroCustoController(ICentroCustoAppService centroCustoAppService, MessageQueue messageQueue)
             : base(messageQueue)
         {
-            this.centroCustoService = centroCustoService;
+            this.centroCustoAppService = centroCustoAppService;
         }
 
         [HttpPost]
-        public ActionResult ValidaCentroCustoPorUsuario(string codigo, string modulo)
+        public ActionResult ValidaCentroCustoPorUsuario(string codigo, string modulo, bool somenteNivelFolha)
         {
-            var centroCusto = centroCustoService.ObterPeloCodigo(codigo);
+            var centroCusto = centroCustoAppService.ObterPeloCodigo(codigo);
             if (!string.IsNullOrEmpty(codigo))
             {
-                if (!centroCustoService.EhCentroCustoUltimoNivelValido(centroCusto)
-                    || !centroCustoService.UsuarioPossuiAcessoCentroCusto(centroCusto, Usuario.Id, modulo))
+
+                if ((somenteNivelFolha && !centroCustoAppService.EhCentroCustoUltimoNivelValido(centroCusto))
+                    || !centroCustoAppService.EhCentroCustoValido(centroCusto)
+                    || !centroCustoAppService.UsuarioPossuiAcessoCentroCusto(centroCusto, Usuario.Id, modulo))
                 {
                     var msg = messageQueue.GetAll()[0].Text;
                     messageQueue.Clear();
@@ -41,7 +43,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         [HttpPost]
         public ActionResult TreeView()
         {
-            var model = centroCustoService.ListarRaizesAtivas();
+            var model = centroCustoAppService.ListarRaizesAtivas();
             ViewBag.FirstNode = "Centro de Custo";
             return View(model);
         }

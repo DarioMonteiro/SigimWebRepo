@@ -147,6 +147,8 @@
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
+    <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
+    <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\HomeController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\ParametrosController.cs" />
@@ -235,6 +237,7 @@
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\Cadastro.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\ListaPartial.cshtml" />
+    <Content Include="Areas\Orcamento\Views\Web.config" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
@@ -673,10 +676,13 @@
     <Content Include="Views\Shared\EditorTemplates\Classe.cshtml" />
     <Content Include="Areas\Financeiro\Views\Shared\TreeView.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Material.cshtml" />
+    <Content Include="Views\Shared\Redirect.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Financeiro\Views\CentroCusto\" />
+    <Folder Include="Areas\Orcamento\ViewModel\" />
+    <Folder Include="Areas\Orcamento\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

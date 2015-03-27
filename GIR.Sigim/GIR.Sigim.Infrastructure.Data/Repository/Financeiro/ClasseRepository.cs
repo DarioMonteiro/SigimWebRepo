@@ -24,12 +24,15 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Financeiro
 
         #region IClasseRepository Members
 
-        public Classe ObterPeloCodigo(string codigo, params Expression<Func<Classe, object>>[] includes)
+        public Classe ObterPeloCodigoEOrcamento(string codigo, int orcamentoId, params Expression<Func<Classe, object>>[] includes)
         {
             var set = QueryableUnitOfWork.CreateSet<Classe>().AsQueryable<Classe>();
 
             if (includes.Any())
                 set = includes.Aggregate(set, (current, expression) => current.Include(expression));
+
+            if (orcamentoId > 0)
+                set = set.Where(l => l.ListaOrcamentoComposicao.Any(s => s.OrcamentoId == orcamentoId));
 
             return set.Where(l => l.Codigo == codigo).SingleOrDefault();
         }

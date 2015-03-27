@@ -61,6 +61,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O campo {0} é obrigatório..
+        /// </summary>
+        public static string CampoObrigatorio {
+            get {
+                return ResourceManager.GetString("CampoObrigatorio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Por favor insira um endereço de email válido..
         /// </summary>
         public static string EmailInvalido {
@@ -79,7 +88,7 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preencha o campo {0} com uma data válida..
+        ///   Looks up a localized string similar to Informe uma data válida..
         /// </summary>
         public static string InformeDataValida {
             get {

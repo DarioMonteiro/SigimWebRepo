@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
+using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using GIR.Sigim.Infrastructure.Crosscutting.Validator;
 
 namespace GIR.Sigim.Application.Service
@@ -14,6 +15,18 @@ namespace GIR.Sigim.Application.Service
         protected IEntityValidator Validator;
         protected List<string> validationErrors;
         protected MessageQueue messageQueue;
+
+        private IAuthenticationService authenticationService;
+        protected IAuthenticationService AuthenticationService
+        {
+            get
+            {
+                if (authenticationService == null)
+                    authenticationService = AuthenticationServiceFactory.Create();
+
+                return authenticationService;
+            }
+        }
 
         public BaseAppService(MessageQueue messageQueue)
         {
@@ -28,6 +41,17 @@ namespace GIR.Sigim.Application.Service
         public List<string> ValidationErrors
         {
             get { return validationErrors; }
+        }
+
+        protected void QueueExeptionMessages(Exception exception)
+        {
+            var ex = exception;
+            do
+            {
+                messageQueue.Add(ex.Message, TypeMessage.Error);
+                ex = ex.InnerException;
+            }
+            while (ex != null);
         }
     }
 }

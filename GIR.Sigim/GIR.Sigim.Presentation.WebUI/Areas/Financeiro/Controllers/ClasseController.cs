@@ -12,35 +12,36 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
     public class ClasseController : BaseController
     {
-        private IClasseAppService classeService;
+        private IClasseAppService classeAppService;
 
-        public ClasseController(IClasseAppService ClasseService, MessageQueue messageQueue)
+        public ClasseController(IClasseAppService classeAppService, MessageQueue messageQueue)
             : base(messageQueue)
         {
-            this.classeService = ClasseService;
+            this.classeAppService = classeAppService;
         }
 
         [HttpPost]
-        public ActionResult ValidaClasse(string codigo)
+        public ActionResult ValidaClasse(string codigo, int orcamentoId, bool somenteNivelFolha)
         {
-            var Classe = classeService.ObterPeloCodigo(codigo);
+            var classe = classeAppService.ObterPeloCodigoEOrcamento(codigo, orcamentoId);
             if (!string.IsNullOrEmpty(codigo))
             {
-                if (!classeService.EhClasseUltimoNivelValida(Classe))
+                if (somenteNivelFolha && !classeAppService.EhClasseUltimoNivelValida(classe, orcamentoId)
+                    || !classeAppService.EhClasseValida(classe, orcamentoId))
                 {
                     var msg = messageQueue.GetAll()[0].Text;
                     messageQueue.Clear();
                     return Json(new { ehValido = false, errorMessage = msg, descricao = string.Empty });
                 }
-                return Json(new { ehValido = true, errorMessage = string.Empty, descricao = Classe.Descricao });
+                return Json(new { ehValido = true, errorMessage = string.Empty, descricao = classe.Descricao });
             }
             return Json(new { ehValido = true, errorMessage = string.Empty, descricao = string.Empty });
         }
 
         [HttpPost]
-        public ActionResult TreeView()
+        public ActionResult TreeView(int orcamentoId)
         {
-            var model = classeService.ListarRaizes();
+            var model = classeAppService.ListarPeloOrcamento(orcamentoId);
             ViewBag.FirstNode = "Classe";
             return View(model);
         }

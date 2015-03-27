@@ -11,7 +11,7 @@ namespace GIR.Sigim.Domain.Repository.Financeiro
 {
     public interface IClasseRepository : IRepository<Classe>
     {
-        Classe ObterPeloCodigo(string codigo, params Expression<Func<Classe, object>>[] includes);
+        Classe ObterPeloCodigoEOrcamento(string codigo, int orcamentoId, params Expression<Func<Classe, object>>[] includes);
         IEnumerable<Classe> ListarRaizes();
     }
 }

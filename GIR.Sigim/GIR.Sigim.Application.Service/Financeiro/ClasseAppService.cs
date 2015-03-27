@@ -28,24 +28,28 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         #region IClasseService Members
 
-        public ClasseDTO ObterPeloCodigo(string codigo)
+        public ClasseDTO ObterPeloCodigoEOrcamento(string codigo, int orcamentoId)
         {
-            return ClasseRepository.ObterPeloCodigo(codigo, l => l.ListaFilhos).To<ClasseDTO>();
+            return ClasseRepository.ObterPeloCodigoEOrcamento(codigo, orcamentoId, l => l.ListaFilhos).To<ClasseDTO>();
         }
 
-        public bool EhClasseValida(ClasseDTO Classe)
+        public bool EhClasseValida(ClasseDTO Classe, int orcamentoId)
         {
             if (Classe == null)
             {
-                messageQueue.Add(Resource.Financeiro.ErrorMessages.ClasseNaoCadastrada, TypeMessage.Error);
+                if (orcamentoId > 0)
+                    messageQueue.Add(Resource.Financeiro.ErrorMessages.ClasseNaoCadastradaNoOrcamento, TypeMessage.Error);
+                else
+                    messageQueue.Add(Resource.Financeiro.ErrorMessages.ClasseNaoCadastrada, TypeMessage.Error);
+
                 return false;
             }
             return true;
         }
 
-        public bool EhClasseUltimoNivelValida(ClasseDTO Classe)
+        public bool EhClasseUltimoNivelValida(ClasseDTO Classe, int orcamentoId)
         {
-            if (!EhClasseValida(Classe))
+            if (!EhClasseValida(Classe, orcamentoId))
                 return false;
 
             var filhosClasse = ClasseRepository.ListarPeloFiltro(l => l.Codigo.StartsWith(Classe.Codigo));
@@ -58,11 +62,33 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return true;
         }
 
-        public List<TreeNodeDTO> ListarRaizes()
+        public List<TreeNodeDTO> ListarPeloOrcamento(int orcamentoId)
         {
-            return ClasseRepository.ListarRaizes().To<List<TreeNodeDTO>>();
+            var arvore = ClasseRepository.ListarRaizes();
+            if (orcamentoId > 0)
+                return RemoverClassesNaoPertencentesAoOrcamento(arvore.ToList(), orcamentoId).To<List<TreeNodeDTO>>();
+            else
+                return arvore.To<List<TreeNodeDTO>>();;
         }
 
         #endregion
+
+        private List<Classe> RemoverClassesNaoPertencentesAoOrcamento(List<Classe> arvore, int orcamentoId)
+        {
+            for (int i = arvore.Count - 1; i >= 0; i--)
+            {
+                if (arvore[i].ListaFilhos.Any())
+                {
+                    var filhos = RemoverClassesNaoPertencentesAoOrcamento(arvore[i].ListaFilhos.ToList(), orcamentoId);
+                    if (filhos.Any())
+                        arvore[i].ListaFilhos = RemoverClassesNaoPertencentesAoOrcamento(arvore[i].ListaFilhos.ToList(), orcamentoId);
+                    else
+                        arvore.Remove(arvore[i]);
+                }
+                else if (!arvore[i].ListaOrcamentoComposicao.Any(l => l.OrcamentoId == orcamentoId))
+                    arvore.Remove(arvore[i]);
+            }
+            return arvore;
+        }
     }
 }

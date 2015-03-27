@@ -129,6 +129,9 @@
   <data name="ClasseNaoCadastrada" xml:space="preserve">
     <value>Classe não cadastrada.</value>
   </data>
+  <data name="ClasseNaoCadastradaNoOrcamento" xml:space="preserve">
+    <value>Classe não cadastrada no orçamento.</value>
+  </data>
   <data name="ClasseUltimoNivel" xml:space="preserve">
     <value>Selecione uma classe do último nível.</value>
   </data>

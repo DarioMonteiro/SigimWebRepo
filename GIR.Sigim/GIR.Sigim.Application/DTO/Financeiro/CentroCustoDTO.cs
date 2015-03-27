@@ -19,7 +19,7 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public int? AnoMes { get; set; }
         public int? TipoTabela { get; set; }
         public bool Ativo { get; set; }
-        public CentroCustoDTO CentroCustoPai { get; set; }
+        //public CentroCustoDTO CentroCustoPai { get; set; }
         public ICollection<CentroCustoDTO> ListaFilhos { get; set; }
 
         public CentroCustoDTO()

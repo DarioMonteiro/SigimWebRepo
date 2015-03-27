@@ -19,7 +19,7 @@
                         "ParametrosUsuario",
                         null,
                         new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
-                        new { @class = "smart-form client-form", @novalidate = "novalidate" }))
+                        new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
                         <fieldset>
@@ -42,7 +42,7 @@
                                 </section>
                             </div>
                             <div class="row">
-                                @Html.EditorFor(m => m.ParametrosUsuario.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de custo default" })
+                                @Html.EditorFor(m => m.ParametrosUsuario.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de custo default", @somenteNivelFolha = true })
                             </div>
                         </fieldset>
                         <footer>
@@ -56,3 +56,44 @@
         </div>
     </article>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.validator.addMethod(
+            "centroCustoValido",
+            function (value, element) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.centroCustoValido = getErrorMessageContainer(element.name).html();
+                return isValid;
+            }, ''
+        );
+
+        $('#formCadastro').validate({
+            rules: {
+                '@Html.NameFor(m => m.ParametrosUsuario.Email)': "email",
+                '@Html.NameFor(m => m.ParametrosUsuario.CentroCusto.Codigo)': {
+                    centroCustoValido: true
+                }
+            },
+            messages: {
+                '@Html.NameFor(m => m.ParametrosUsuario.Email)': {
+                    email: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.EmailInvalido'
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
+        });
+    });
+</script>

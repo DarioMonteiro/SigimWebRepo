@@ -63,7 +63,15 @@ namespace GIR.Sigim.Infrastructure.Data
 
         public void Commit()
         {
-            base.SaveChanges();
+            try
+            {
+                base.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                this.RollbackChanges();
+                throw ex;
+            }
         }
 
         public void RollbackChanges()
@@ -97,10 +105,14 @@ namespace GIR.Sigim.Infrastructure.Data
 
             //Financeiro
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());
+            modelBuilder.Configurations.Add(new CentroCustoEmpresaConfiguration());
             modelBuilder.Configurations.Add(new ClasseConfiguration());
             modelBuilder.Configurations.Add(new TipoCompromissoConfiguration());
 
             //Orcamento
+            modelBuilder.Configurations.Add(new ObraConfiguration());
+            modelBuilder.Configurations.Add(new OrcamentoComposicaoConfiguration());
+            modelBuilder.Configurations.Add(new OrcamentoConfiguration());
             modelBuilder.Configurations.Add(new ParametrosOrcamentoConfiguration());
 
             //OrdemCompra
@@ -116,6 +128,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new BancoConfiguration());
             modelBuilder.Configurations.Add(new BancoLayoutConfiguration());
             modelBuilder.Configurations.Add(new ClienteFornecedorConfiguration());
+            modelBuilder.Configurations.Add(new ComposicaoConfiguration());
             modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
             modelBuilder.Configurations.Add(new MaterialConfiguration());
             modelBuilder.Configurations.Add(new NCMConfiguration());

@@ -25,18 +25,22 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public string CodigoPai { get; set; }
         public CentroCusto CentroCustoPai { get; set; }
         public virtual ICollection<CentroCusto> ListaFilhos { get; set; }
+        public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
         public ICollection<ParametrosUsuario> ListaParametrosUsuario { get; set; }
         public ICollection<UsuarioCentroCusto> ListaUsuarioCentroCusto { get; set; }
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterial> ListaRequisicaoMaterial { get; set; }
+        public ICollection<Orcamento.Obra> ListaObra { get; set; }
 
         public CentroCusto()
         {
             this.ListaFilhos = new HashSet<CentroCusto>();
+            this.ListaCentroCustoEmpresa = new HashSet<CentroCustoEmpresa>();
             this.ListaParametrosUsuario = new HashSet<ParametrosUsuario>();
             this.ListaUsuarioCentroCusto = new HashSet<UsuarioCentroCusto>();
             this.ListaPreRequisicaoMaterialItem = new HashSet<PreRequisicaoMaterialItem>();
             this.ListaRequisicaoMaterial = new HashSet<RequisicaoMaterial>();
+            this.ListaObra = new HashSet<Orcamento.Obra>();
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)

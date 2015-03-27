@@ -17,18 +17,6 @@ namespace GIR.Sigim.Application.Service.Admin
     {
         private IUsuarioRepository usuarioRepository;
 
-        private IAuthenticationService authenticationService;
-        private IAuthenticationService AuthenticationService
-        {
-            get
-            {
-                if (authenticationService == null)
-                    authenticationService = AuthenticationServiceFactory.Create();
-
-                return authenticationService;
-            }
-        }
-
         public UsuarioAppService(IUsuarioRepository usuarioRepository, MessageQueue messageQueue)
             : base(messageQueue)
         {

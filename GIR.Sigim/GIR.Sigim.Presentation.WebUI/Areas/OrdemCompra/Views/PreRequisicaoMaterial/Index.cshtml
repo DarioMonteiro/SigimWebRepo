@@ -62,6 +62,8 @@
                                                         $('#@Html.IdFor(m => m.Filtro.DataInicial)').datepicker({
                                                             prevText: '<i class="fa fa-chevron-left"></i>',
                                                             nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
                                                             onClose: function (selectedDate) {
                                                                 $('#@Html.IdFor(m => m.Filtro.DataFinal)').datepicker('option', 'minDate', selectedDate);
                                                             }
@@ -70,6 +72,8 @@
                                                         $('#@Html.IdFor(m => m.Filtro.DataFinal)').datepicker({
                                                             prevText: '<i class="fa fa-chevron-left"></i>',
                                                             nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
                                                             onClose: function (selectedDate) {
                                                                 $('#@Html.IdFor(m => m.Filtro.DataInicial)').datepicker('option', 'maxDate', selectedDate);
                                                             }

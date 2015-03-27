@@ -18,7 +18,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
     {
         public PreRequisicaoMaterialDTO PreRequisicaoMaterial { get; set; }
 
-        public int? Id { get; set; }
+        public int? ItemId { get; set; }
 
         public CentroCustoDTO CentroCusto { get; set; }
         public ClasseDTO Classe { get; set; }
@@ -49,6 +49,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public int? Prazo { get; set; }
 
         public string JsonItens { get; set; }
+
+        public bool PodeSalvar { get; set; }
+        public bool PodeCancelar { get; set; }
+        public bool PodeAdicionarItem { get; set; }
+        public bool PodeCancelarItem { get; set; }
+        public bool PodeEditarItem { get; set; }
 
         public PreRequisicaoMaterialCadastroViewModel()
         {

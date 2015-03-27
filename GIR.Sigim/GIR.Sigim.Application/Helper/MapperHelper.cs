@@ -48,6 +48,12 @@ namespace GIR.Sigim.Application.Helper
             #endregion
 
             #region Orçamento
+            Mapper.CreateMap<Obra, ObraDTO>();
+            Mapper.CreateMap<ObraDTO, Obra>();
+
+            Mapper.CreateMap<Orcamento, OrcamentoDTO>();
+            Mapper.CreateMap<OrcamentoDTO, Orcamento>();
+
             Mapper.CreateMap<ParametrosOrcamento, ParametrosOrcamentoDTO>();
             Mapper.CreateMap<ParametrosOrcamentoDTO, ParametrosOrcamento>()
                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
@@ -71,7 +77,13 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<PreRequisicaoMaterialDTO, PreRequisicaoMaterial>();
 
             Mapper.CreateMap<PreRequisicaoMaterialItem, PreRequisicaoMaterialItemDTO>();
-            Mapper.CreateMap<PreRequisicaoMaterialItemDTO, PreRequisicaoMaterialItem>();
+            Mapper.CreateMap<PreRequisicaoMaterialItemDTO, PreRequisicaoMaterialItem>()
+                .ForMember(d => d.CentroCusto, m => m.UseValue(null))
+                .ForMember(d => d.CodigoCentroCusto, m => m.MapFrom(s => s.CentroCusto.Codigo))
+                .ForMember(d => d.Classe, m => m.UseValue(null))
+                .ForMember(d => d.CodigoClasse, m => m.MapFrom(s => s.Classe.Codigo))
+                .ForMember(d => d.UnidadeMedida, m => m.MapFrom(s => s.Material.SiglaUnidadeMedida))
+                .ForMember(d => d.Material, m => m.UseValue(null));
 
             Mapper.CreateMap<RequisicaoMaterial, RequisicaoMaterialDTO>()
                 .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()));

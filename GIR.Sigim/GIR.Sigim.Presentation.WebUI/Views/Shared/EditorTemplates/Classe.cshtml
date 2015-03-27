@@ -5,6 +5,7 @@
         string labelText = !string.IsNullOrEmpty(ViewBag.labelText) ? ViewBag.labelText : Html.DisplayNameFor(m => m.Codigo).ToString();
     }
     @Html.LabelFor(m => m.Codigo, labelText, new { @class = "label" })
+    <input type="hidden" id="orcamentoId" value="0" />
     <div class="input-group">
         <label class="input">
             @Html.TextBoxFor(m => m.Codigo)
@@ -39,45 +40,38 @@
 </div>
 
 <script type="text/javascript">
+    @{
+        bool? somenteNivelFolha = ViewBag.somenteNivelFolha as bool? ?? false;
+    }
+
     $(document).ready(function () {
         $(document).on("change", "#@Html.IdFor(m => m.Codigo)", function () {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("ValidaClasse", "Classe", new { area = "Financeiro" })',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({
-                    codigo: $("#@Html.IdFor(m => m.Codigo)").val()
-                })
-            })
-            .success(function (result) {
-                showErrorMessage($('#@Html.IdFor(m => m.Codigo)_ValidationMessage'), result.errorMessage);
-                $('#@Html.IdFor(m => m.Descricao)').val(result.descricao);
-            })
-            .error(function (xhr, status) {
-                //alert(status);
-            })
+            validaClasse();
         });
 
         $(document).on("show.bs.modal", "#@Html.IdFor(m => m.Codigo)_ModalPanel", function () {
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("TreeView", "Classe", new { area = "Financeiro" })',
-                cache: false
+                cache: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    orcamentoId: $("#orcamentoId").val()
+                })
             })
             .success(function (result) {
                 $('#@Html.IdFor(m => m.Codigo)_tree').html(result);
 
                 $('#@Html.IdFor(m => m.Codigo)_tree.tree > ul').attr('role', 'tree').find('ul').attr('role', 'group');
 
-                $('#@Html.IdFor(m => m.Codigo)_tree.tree').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem').find(' > span').attr('title', 'Recolher').on('click', function (e) {
+                $('#@Html.IdFor(m => m.Codigo)_tree.tree').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem').find(' > span').on('click', function (e) {
                     var children = $(this).parent('li.parent_li').find(' > ul > li');
                     if (children.is(':visible')) {
                         children.hide('fast');
-                        $(this).attr('title', 'Expandir').find(' > i').removeClass().addClass('fa fa-lg fa-plus-circle');
+                        $(this).find(' > i').removeClass().addClass('fa fa-lg fa-plus-circle');
                     } else {
                         children.show('fast');
-                        $(this).attr('title', 'Recolher').find(' > i').removeClass().addClass('fa fa-lg fa-minus-circle');
+                        $(this).find(' > i').removeClass().addClass('fa fa-lg fa-minus-circle');
                     }
                     e.stopPropagation();
                 });
@@ -86,10 +80,55 @@
                     $('#@Html.IdFor(m => m.Codigo)').val($(this).data("codigo-centro-custo")).change();
                     $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('toggle');
                 });
-            })
-            .error(function (xhr, status) {
-                //alert(status);
-            })
+
+                @if (!somenteNivelFolha.Value) {
+                    @:$('#@Html.IdFor(m => m.Codigo)_tree.tree').find('li:has(ul)').find(' > span').css({ cursor: 'pointer' }).on('dblclick', function (e) {
+                    @:  $('#@Html.IdFor(m => m.Codigo)').val($(this).data("codigo-centro-custo")).change();
+                    @:  $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('toggle');
+                    @:});
+                }
+            });
         });
-    });
+
+        $(document).on("centroCustoValidado",            function (e) {
+                $("#orcamentoId").val(0);
+                if (e.codigo != '') {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("ObterIdUltimoOrcamentoPeloCentroCusto", "Orcamento", new { area = "Orcamento" })',
+                        cache: false,
+                        async: false,
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({
+                            codigoCentroCusto: e.codigo
+                        })
+                    })
+                    .success(function (result) {
+                        $("#orcamentoId").val(result);
+                    })
+                }
+            }        );    });
+
+    function validaClasse() {
+        var isValid = false;
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ValidaClasse", "Classe", new { area = "Financeiro" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                codigo: $("#@Html.IdFor(m => m.Codigo)").val(),
+                orcamentoId: $("#orcamentoId").val(),
+                somenteNivelFolha: '@somenteNivelFolha.Value'
+            })
+        })
+        .success(function (result) {
+            showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.Codigo)'), result.errorMessage);
+            $('#@Html.IdFor(m => m.Descricao)').val(result.descricao);
+            isValid = result.ehValido;
+        });
+
+        return isValid;
+    }
 </script>

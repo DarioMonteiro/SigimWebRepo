@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CampoObrigatorio" xml:space="preserve">
+    <value>O campo {0} é obrigatório.</value>
+  </data>
   <data name="EmailInvalido" xml:space="preserve">
     <value>Por favor insira um endereço de email válido.</value>
   </data>
@@ -124,7 +127,7 @@
     <value>A imagem deve ter um dos seguintes formatos: BMP, JPG, GIF ou PNG.</value>
   </data>
   <data name="InformeDataValida" xml:space="preserve">
-    <value>Preencha o campo {0} com uma data válida.</value>
+    <value>Informe uma data válida.</value>
   </data>
   <data name="LimiteMaximoCaracteresExcedido" xml:space="preserve">
     <value>Limite máximo de {1} caracteres excedido.</value>

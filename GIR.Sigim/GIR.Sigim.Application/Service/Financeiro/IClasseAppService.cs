@@ -10,9 +10,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
 {
     public interface IClasseAppService
     {
-        ClasseDTO ObterPeloCodigo(string codigo);
-        bool EhClasseValida(ClasseDTO Classe);
-        bool EhClasseUltimoNivelValida(ClasseDTO Classe);
-        List<TreeNodeDTO> ListarRaizes();
+        ClasseDTO ObterPeloCodigoEOrcamento(string codigo, int orcamentoId);
+        bool EhClasseValida(ClasseDTO Classe, int orcamentoId);
+        bool EhClasseUltimoNivelValida(ClasseDTO Classe, int orcamentoId);
+        List<TreeNodeDTO> ListarPeloOrcamento(int orcamentoId);
     }
 }

@@ -74,7 +74,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
 
             model.PreRequisicaoMaterial = preRequisicaoMaterial;
-            model.JsonItens = new JavaScriptSerializer().Serialize(preRequisicaoMaterial.ListaItens);
+            model.JsonItens = Newtonsoft.Json.JsonConvert.SerializeObject(preRequisicaoMaterial.ListaItens);
 
             var parametros = parametrosOrdemCompraAppService.Obter();
             if (parametros != null)
@@ -83,6 +83,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 model.DataMaxima = parametros.DiasPrazo.HasValue ? model.DataMinima.Value.AddDays(parametros.DiasPrazo.Value) : DateTime.Now;
                 model.Prazo = parametros.DiasPrazo.HasValue ? parametros.DiasPrazo.Value : 0;
             }
+
+            model.PodeSalvar = preRequisicaoMaterialAppService.EhPermitidoSalvar(preRequisicaoMaterial);
+            model.PodeCancelar = preRequisicaoMaterialAppService.EhPermitidoCancelar(preRequisicaoMaterial);
+            model.PodeAdicionarItem = preRequisicaoMaterialAppService.EhPermitidoAdicionarItem(preRequisicaoMaterial);
+            model.PodeCancelarItem = preRequisicaoMaterialAppService.EhPermitidoCancelarItem(preRequisicaoMaterial);
+            model.PodeEditarItem = preRequisicaoMaterialAppService.EhPermitidoEditarItem(preRequisicaoMaterial);
             
             return View(model);
         }
@@ -100,15 +106,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         {
             if (ModelState.IsValid)
             {
-                var x = new JavaScriptSerializer().Deserialize<List<PreRequisicaoMaterialItemDTO>>(model.JsonItens);
-                var y = Newtonsoft.Json.JsonConvert.DeserializeObject<List<PreRequisicaoMaterialItemDTO>>(model.JsonItens);
-                var z = new DateTime(2011, 03, 15).ToFileTimeUtc();
-                //var x = new JavaScriptSerializer().Deserialize<List<GIR.Sigim.Application.DTO.Financeiro.CentroCustoDTO>>(model.JsonItens);
-                //model.ParametrosUsuario.Id = Usuario.Id;
-                //parametrosUsuarioAppService.Salvar(model.ParametrosUsuario);
-                messageQueue.Add("Sucesso", TypeMessage.Success);
+                model.PreRequisicaoMaterial.ListaItens = Newtonsoft.Json.JsonConvert.DeserializeObject<List<PreRequisicaoMaterialItemDTO>>(model.JsonItens);
+                if(preRequisicaoMaterialAppService.Salvar(model.PreRequisicaoMaterial))
+                    return PartialView("Redirect", Url.Action("Cadastro", "PreRequisicaoMaterial", new { id = model.PreRequisicaoMaterial.Id }));
             }
-
             return PartialView("_NotificationMessagesPartial");
         }
     }

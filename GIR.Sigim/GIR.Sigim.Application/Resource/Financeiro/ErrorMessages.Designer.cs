@@ -97,6 +97,15 @@ namespace GIR.Sigim.Application.Resource.Financeiro {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Classe não cadastrada no orçamento..
+        /// </summary>
+        public static string ClasseNaoCadastradaNoOrcamento {
+            get {
+                return ResourceManager.GetString("ClasseNaoCadastradaNoOrcamento", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selecione uma classe do último nível..
         /// </summary>
         public static string ClasseUltimoNivel {

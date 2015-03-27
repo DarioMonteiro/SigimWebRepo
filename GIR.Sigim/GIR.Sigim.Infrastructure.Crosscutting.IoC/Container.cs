@@ -82,6 +82,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #endregion
 
             #region Orçamento
+            currentContainer.RegisterType<IOrcamentoRepository, OrcamentoRepository>();
             currentContainer.RegisterType<IParametrosOrcamentoRepository, ParametrosOrcamentoRepository>();
             #endregion
 
@@ -124,6 +125,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #endregion
 
             #region Orçamento
+            currentContainer.RegisterType<IOrcamentoAppService, OrcamentoAppService>();
             currentContainer.RegisterType<IParametrosOrcamentoAppService, ParametrosOrcamentoAppService>();
             #endregion
 
