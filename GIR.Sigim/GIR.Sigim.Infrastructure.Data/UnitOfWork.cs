@@ -108,6 +108,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new CentroCustoEmpresaConfiguration());
             modelBuilder.Configurations.Add(new ClasseConfiguration());
             modelBuilder.Configurations.Add(new TipoCompromissoConfiguration());
+            modelBuilder.Configurations.Add(new ParametrosUsuarioFinanceiroConfiguration());
 
             //Orcamento
             modelBuilder.Configurations.Add(new ObraConfiguration());
