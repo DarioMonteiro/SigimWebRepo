@@ -1,0 +1,62 @@
+﻿@using GIR.Sigim.Application.DTO.Financeiro
+
+@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.ParametrosUsuarioFinanceiroViewModel
+
+@{
+    ViewBag.Title = "Parâmetros do Usuário";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-8 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Index",
+                        "ParametrosUsuarioFinanceiro",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
+                        new { @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <fieldset>
+                            <legend style="font-size:small">Impressora de cheque</legend> 
+                            <div class="row">                               
+                                <section class="col col-6"> 
+                                    @Html.LabelFor(m => m.ParametrosUsuarioFinanceiro.TipoImpressoraEscolhida, new { @class = "label" })
+                                    <div class="inline-group">
+										<label class="radio">
+											@Html.RadioButtonFor(m => m.ParametrosUsuarioFinanceiro.TipoImpressoraEscolhida,GIR.Sigim.Application.DTO.Financeiro.TipoImpressoraEnum.Bematech, new {id = "TipoimpressoraBematech"}) 
+											<i></i>@TipoImpressoraEnum.Bematech 
+										</label>
+										<label class="radio">
+											@Html.RadioButtonFor(m => m.ParametrosUsuarioFinanceiro.TipoImpressoraEscolhida,GIR.Sigim.Application.DTO.Financeiro.TipoImpressoraEnum.Pertocheck ,new {id = "TipoimpressoraPertocheck"})
+											<i></i>@TipoImpressoraEnum.Pertocheck
+										</label>
+									</div>
+                                </section>
+                                <section class="col col-6">
+                                    @Html.LabelFor(m => m.ParametrosUsuarioFinanceiro.PortaSerial , new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.ParametrosUsuarioFinanceiro.PortaSerial)
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.ParametrosUsuarioFinanceiro.PortaSerial, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                        </fieldset>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Salvar
+                            </button>
+                        </footer>
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div>

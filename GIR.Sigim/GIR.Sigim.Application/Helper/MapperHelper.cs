@@ -45,6 +45,10 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<TipoCompromisso, TipoCompromissoDTO>();
             Mapper.CreateMap<TipoCompromissoDTO, TipoCompromisso>();
+
+            Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
+            Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
+
             #endregion
 
             #region Orçamento
