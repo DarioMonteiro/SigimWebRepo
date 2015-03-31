@@ -29,5 +29,13 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public Nullable<DateTime> DataInicioAssinaturaRealizado { get; set; }
         public Nullable<DateTime> DataFimAssinaturaRealizado { get; set; }
         public Nullable<DateTime> DataInicioServicoRealizado { get; set; }
+
+        public ICollection<Licitacao> ListaLicitacao { get; set; }
+
+        public LicitacaoCronograma()
+        {
+            this.ListaLicitacao = new HashSet<Licitacao>();
+        }
+
      }
 }

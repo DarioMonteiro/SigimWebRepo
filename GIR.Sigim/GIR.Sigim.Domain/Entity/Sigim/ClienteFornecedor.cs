@@ -15,6 +15,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<Contrato.Contrato> ListaContratoContratante { get; set; }
         public ICollection<Contrato.Contrato> ListaContratoContratado { get; set; }
         public ICollection<Contrato.Contrato> ListaContratoInterveniente { get; set; }
+        public ICollection<Contrato.Licitacao> ListaLicitacao { get; set; }
         [Obsolete("Esta propriedade será removida em uma versão futura. Caso NÃO esteja codificando em um repositório, utilize a propriedade \"Ativo\"")]
         public string Situacao { get; set; }
         public bool Ativo
@@ -27,6 +28,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         {
             this.ListaCentroCustoEmpresa = new HashSet<CentroCustoEmpresa>();
             this.ListaParametrosOrdemCompra = new HashSet<OrdemCompra.ParametrosOrdemCompra>();
+            this.ListaLicitacao = new HashSet<Contrato.Licitacao>();
         }
     }
 }
