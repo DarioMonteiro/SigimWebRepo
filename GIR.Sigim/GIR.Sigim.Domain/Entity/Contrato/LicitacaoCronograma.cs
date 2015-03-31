@@ -11,6 +11,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
     {
         public string CodigoCentroCusto { get; set; }
         public virtual CentroCusto CentroCusto { get; set; }
+        public int? LicitacaoDescricaoId { get; set; }
         public LicitacaoDescricao LicitacaoDescricao { get; set; }
         public DateTime DataInicioCartaConvite { get; set; }
         public DateTime DataFimCartaConvite { get; set; }
@@ -18,13 +19,14 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public DateTime DataFimQuadroComparativo { get; set; }
         public DateTime DataInicioAssinatura { get; set; }
         public DateTime DataFimAssinatura { get; set; }
+        public DateTime DataInicioServico { get; set; }
         public int? PrazoFabricacao { get; set; }
         public int DuracaoCartaConvite { get; set; }
         public int DuracaoQuadroComparativo { get; set; }
         public int DuracaoAssinatura { get; set; }
         public Nullable<DateTime> DataInicioCartaConviteRealizado { get; set; }
         public Nullable<DateTime> DataFimCartaConviteRealizado { get; set; }
-        public Nullable<DateTime> DataInicioQuadroComprativoRealizado { get; set; }
+        public Nullable<DateTime> DataInicioQuadroComparativoRealizado { get; set; }
         public Nullable<DateTime> DataFimQuadroComparativoRealizado { get; set; }
         public Nullable<DateTime> DataInicioAssinaturaRealizado { get; set; }
         public Nullable<DateTime> DataFimAssinaturaRealizado { get; set; }

@@ -33,6 +33,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<RequisicaoMaterial> ListaRequisicaoMaterial { get; set; }
         public ICollection<Orcamento.Obra> ListaObra { get; set; }
         public ICollection<Contrato.Contrato> ListaContrato { get; set; }
+        public ICollection<LicitacaoCronograma> ListaLicitacaoCronograma { get; set; }
 
         public CentroCusto()
         {
@@ -43,7 +44,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaPreRequisicaoMaterialItem = new HashSet<PreRequisicaoMaterialItem>();
             this.ListaRequisicaoMaterial = new HashSet<RequisicaoMaterial>();
             this.ListaObra = new HashSet<Orcamento.Obra>();
-            this.ListaContrato = new HashSet<Contrato.Contrato>(); 
+            this.ListaContrato = new HashSet<Contrato.Contrato>();
+            this.ListaLicitacaoCronograma = new HashSet<LicitacaoCronograma>(); 
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)
