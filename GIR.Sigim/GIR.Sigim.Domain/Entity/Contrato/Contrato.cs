@@ -12,10 +12,15 @@ namespace GIR.Sigim.Domain.Entity.Contrato
     {
         public string CodigoCentroCusto { get; set; }
         public virtual CentroCusto CentroCusto { get; set; }
-        public ContratoLicitacao Licitacao { get; set; }
+        public int? LicitacaoId { get; set; }
+        public Licitacao Licitacao { get; set; }
+        public int ContratanteId { get; set; }
         public ClienteFornecedor Contratante { get; set; }
+        public int ContratadoId { get; set; }
         public ClienteFornecedor Contratado { get; set; }
+        public int? IntervenienteId { get; set; } 
         public ClienteFornecedor Interveniente { get; set; }
+        public int ContratoDescricaoId { get; set; }
         public LicitacaoDescricao ContratoDescricao { get; set; }
         public SituacaoContrato Situacao { get; set; }
         public Nullable<DateTime> DataAssinatura { get; set; }

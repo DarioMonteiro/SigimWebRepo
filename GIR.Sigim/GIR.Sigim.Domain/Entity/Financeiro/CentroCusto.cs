@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Contrato; 
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -31,6 +32,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterial> ListaRequisicaoMaterial { get; set; }
         public ICollection<Orcamento.Obra> ListaObra { get; set; }
+        public ICollection<Contrato.Contrato> ListaContrato { get; set; }
 
         public CentroCusto()
         {
@@ -41,6 +43,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaPreRequisicaoMaterialItem = new HashSet<PreRequisicaoMaterialItem>();
             this.ListaRequisicaoMaterial = new HashSet<RequisicaoMaterial>();
             this.ListaObra = new HashSet<Orcamento.Obra>();
+            this.ListaContrato = new HashSet<Contrato.Contrato>(); 
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)

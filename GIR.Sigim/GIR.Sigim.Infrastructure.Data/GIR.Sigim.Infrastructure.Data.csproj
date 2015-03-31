@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Contrato\ContratoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ParametrosContratoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ClasseConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />

@@ -12,6 +12,9 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public string Nome { get; set; }
         public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
         public ICollection<OrdemCompra.ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
+        public ICollection<Contrato.Contrato> ListaContratoContratante { get; set; }
+        public ICollection<Contrato.Contrato> ListaContratoContratado { get; set; }
+        public ICollection<Contrato.Contrato> ListaContratoInterveniente { get; set; }
         [Obsolete("Esta propriedade será removida em uma versão futura. Caso NÃO esteja codificando em um repositório, utilize a propriedade \"Ativo\"")]
         public string Situacao { get; set; }
         public bool Ativo

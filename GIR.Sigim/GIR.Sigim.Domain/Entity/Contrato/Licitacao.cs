@@ -8,7 +8,7 @@ using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Domain.Entity.Contrato
 {
-    public class ContratoLicitacao : BaseEntity 
+    public class Licitacao : BaseEntity 
     {
         public string CodigoCentroCusto { get; set; }
         public virtual CentroCusto CentroCusto { get; set; }
@@ -25,5 +25,11 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public string UsuarioCancela { get; set; }
         public string MotivoCancela { get; set; }
 
+        public ICollection<Contrato> ListaContrato { get; set; }
+
+        public Licitacao()
+        {
+            this.ListaContrato = new HashSet<Contrato>();
+        }
     }
 }
