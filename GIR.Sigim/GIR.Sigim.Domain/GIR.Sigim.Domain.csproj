@@ -45,7 +45,13 @@
     <Compile Include="Entity\Admin\Perfil.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Admin\Usuario.cs" />
+    <Compile Include="Entity\Contrato\Contrato.cs" />
+    <Compile Include="Entity\Contrato\ContratoLicitacao.cs" />
+    <Compile Include="Entity\Contrato\LicitacaoCronograma.cs" />
+    <Compile Include="Entity\Contrato\LicitacaoDescricao.cs" />
     <Compile Include="Entity\Contrato\ParametrosContrato.cs" />
+    <Compile Include="Entity\Contrato\SituacaoContrato.cs" />
+    <Compile Include="Entity\Contrato\SituacaoLicitacao.cs" />
     <Compile Include="Entity\Financeiro\CentroCusto.cs" />
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
