@@ -29,7 +29,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .WithMany(l => l.ListaLicitacaoCronograma)
                 .HasForeignKey(l => l.CodigoCentroCusto);
 
-
             Property(l => l.LicitacaoDescricaoId)
                 .HasColumnName("licitacaoDescricao")
                 .HasColumnOrder(3);
@@ -59,7 +58,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnOrder(8);
 
             Property(l => l.DataFimAssinatura)
-                .HasColumnName("dataInicioAssinatura")
+                .HasColumnName("dataFimAssinatura")
                 .HasColumnOrder(9);
 
             Property(l => l.DataInicioServico)

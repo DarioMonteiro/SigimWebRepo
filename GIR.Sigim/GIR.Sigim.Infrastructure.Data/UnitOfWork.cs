@@ -102,6 +102,10 @@ namespace GIR.Sigim.Infrastructure.Data
 
             //Contrato
             modelBuilder.Configurations.Add(new ParametrosContratoConfiguration());
+            modelBuilder.Configurations.Add(new LicitacaoDescricaoConfiguration());
+            modelBuilder.Configurations.Add(new LicitacaoConfiguration());
+            modelBuilder.Configurations.Add(new LicitacaoCronogramaConfiguration());
+            modelBuilder.Configurations.Add(new ContratoConfiguration());
 
             //Financeiro
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());

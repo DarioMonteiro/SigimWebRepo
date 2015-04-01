@@ -45,13 +45,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
              Property(l => l.Observacao)
                 .HasColumnName("observacao")
+                .HasMaxLength(255) 
                 .HasColumnOrder(6);
 
             Property(l => l.ClienteFornecedorId)
                 .HasColumnName("clienteFornecedor")
                 .HasColumnOrder(7);
 
-            HasRequired(l => l.ClienteFornecedor)
+            HasOptional(l => l.ClienteFornecedor)
                 .WithMany(l => l.ListaLicitacao)
                 .HasForeignKey(l => l.ClienteFornecedorId);
 
@@ -61,6 +62,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.ReferenciaDigital)
                 .HasColumnName("referenciaDigital")
+                .HasMaxLength(255) 
                 .HasColumnOrder(9);
 
             Property(l => l.DataCadastro)
@@ -69,6 +71,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.UsuarioCadastro)
                 .HasColumnName("usuarioCadastro")
+                .HasMaxLength(50) 
                 .HasColumnOrder(11);
 
             Property(l => l.DataCancela)
@@ -77,10 +80,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.UsuarioCancela)
                 .HasColumnName("usuarioCancela")
+                .HasMaxLength(50) 
                 .HasColumnOrder(13);
 
             Property(l => l.MotivoCancela)
                 .HasColumnName("motivoCancela")
+                .HasMaxLength(255) 
                 .HasColumnOrder(14);
         }
 

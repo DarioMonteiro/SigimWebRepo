@@ -13,7 +13,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
     {
         public LicitacaoDescricaoConfiguration()
         {
-            ToTable("Contrato", "Licitacao");
+            ToTable("Contrato", "LicitacaoDescricao");
 
             Property(l => l.Id)
                 .HasColumnName("codigo")
@@ -21,6 +21,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.Descricao)
                .HasColumnName("descricao")
+               .HasMaxLength(100) 
                .HasColumnOrder(2);
 
         }

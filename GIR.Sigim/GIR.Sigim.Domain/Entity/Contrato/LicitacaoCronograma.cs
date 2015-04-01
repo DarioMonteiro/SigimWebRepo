@@ -11,7 +11,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
     {
         public string CodigoCentroCusto { get; set; }
         public virtual CentroCusto CentroCusto { get; set; }
-        public int? LicitacaoDescricaoId { get; set; }
+        public int LicitacaoDescricaoId { get; set; }
         public LicitacaoDescricao LicitacaoDescricao { get; set; }
         public DateTime DataInicioCartaConvite { get; set; }
         public DateTime DataFimCartaConvite { get; set; }

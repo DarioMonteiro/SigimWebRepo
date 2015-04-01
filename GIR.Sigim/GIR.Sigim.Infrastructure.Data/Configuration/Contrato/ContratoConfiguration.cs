@@ -33,7 +33,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("licitacao")
                 .HasColumnOrder(3);
 
-            HasRequired(l => l.Licitacao)
+            HasOptional(l => l.Licitacao)
                 .WithMany(l => l.ListaContrato)
                 .HasForeignKey(l => l.LicitacaoId);
 
@@ -57,10 +57,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("interveniente")
                 .HasColumnOrder(6);
 
-            HasRequired(l => l.Interveniente)
+            HasOptional(l => l.Interveniente)
                 .WithMany(l => l.ListaContratoInterveniente)
                 .HasForeignKey(l => l.IntervenienteId);
-
 
             Property(l => l.ContratoDescricaoId)
                 .HasColumnName("contratoDescricao")
@@ -80,10 +79,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.DocumentoOrigem)
                 .HasColumnName("documentoOrigem")
+                .HasMaxLength(10) 
                 .HasColumnOrder(10);
 
             Property(l => l.NumeroEmpenho)
                 .HasColumnName("numeroEmpenho")
+                .HasMaxLength(10) 
                 .HasColumnOrder(11);
 
             Property(l => l.ValorContrato)
@@ -96,6 +97,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.UsuarioCadastro)
                 .HasColumnName("usuarioCadastro")
+                .HasMaxLength(50) 
                 .HasColumnOrder(14);
 
             Property(l => l.DataCancela)
@@ -104,10 +106,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.UsuarioCancela)
                 .HasColumnName("usuarioCancela")
+                .HasMaxLength(50) 
                 .HasColumnOrder(16);
 
             Property(l => l.MotivoCancela)
                 .HasColumnName("motivoCancela")
+                .HasMaxLength(255) 
                 .HasColumnOrder(17);
 
             Property(l => l.TipoContrato)
