@@ -13,7 +13,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         [Description("Minuta")]
             Minuta = 0,
 
-        [Description("AguardandoAssinatura")]
+        [Description("Aguardando Assinatura")]
             AguardandoAssinatura = 1,
 
         [Description("Assinado")]
@@ -26,10 +26,10 @@ namespace GIR.Sigim.Domain.Entity.Contrato
             Suspenso = 4,
 
         [Description("Concluido")]
-            concluido = 5,
+            Concluido = 5,
 
         [Description("Cancelado")]
-            cancelado = 6
+            Cancelado = 6
 
     }
 }

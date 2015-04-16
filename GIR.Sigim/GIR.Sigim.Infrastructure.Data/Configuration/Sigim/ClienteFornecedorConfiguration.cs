@@ -25,16 +25,66 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("nome")
                 .HasColumnOrder(2);
 
+            Property(l => l.TipoPessoa)
+                .IsRequired()
+                .HasColumnType("char")
+                .HasMaxLength(1)
+                .HasColumnName("tipoPessoa")
+                .HasColumnOrder(5);
+            
             Property(l => l.Situacao)
                 .IsRequired()
                 .HasColumnType("char")
                 .HasMaxLength(1)
-                .HasColumnName("situacao");
+                .HasColumnName("situacao")
+                .HasColumnOrder(6);
+
+            Property(l => l.TipoCliente)
+                .HasColumnType("char")
+                .HasMaxLength(1)
+                .HasColumnName("tipoCliente")
+                .HasColumnOrder(7);
+
+            Property(l => l.ClienteAPagar)
+                .HasColumnType("char")
+                .HasMaxLength(1)
+                .HasColumnName("clienteAPagar")
+                .HasColumnOrder(11);
+
+            Property(l => l.ClienteAReceber)
+                .HasColumnType("char")
+                .HasMaxLength(1)
+                .HasColumnName("clienteAReceber")
+                .HasColumnOrder(12);
+
+            Property(l => l.ClienteOrdemCompra)
+                .HasColumnType("char")
+                .HasMaxLength(1)
+                .HasColumnName("clienteOrdemCompra")
+                .HasColumnOrder(13);
+
+            Property(l => l.ClienteContrato)
+                .HasColumnType("char")
+                .HasMaxLength(1)
+                .HasColumnName("clienteContrato")
+                .HasColumnOrder(14);
+
+            Property(l => l.ClienteAluguel)
+                .HasColumnType("char")
+                .HasMaxLength(1)
+                .HasColumnName("clienteAluguel")
+                .HasColumnOrder(21);
+
+            Property(l => l.ClienteEmpreitada)
+                .HasColumnType("char")
+                .HasMaxLength(1)
+                .HasColumnName("clienteEmpreitada")
+                .HasColumnOrder(24);
 
             Ignore(l => l.Ativo);
 
             HasMany(l => l.ListaParametrosOrdemCompra)
-                .WithOptional(l => l.Cliente);
+                .WithOptional(c => c.Cliente);
         }
     }
 }

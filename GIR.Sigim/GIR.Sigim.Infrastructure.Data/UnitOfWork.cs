@@ -106,6 +106,8 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new LicitacaoConfiguration());
             modelBuilder.Configurations.Add(new LicitacaoCronogramaConfiguration());
             modelBuilder.Configurations.Add(new ContratoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemConfiguration());  
 
             //Financeiro
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());
@@ -113,6 +115,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ClasseConfiguration());
             modelBuilder.Configurations.Add(new TipoCompromissoConfiguration());
             modelBuilder.Configurations.Add(new ParametrosUsuarioFinanceiroConfiguration());
+            modelBuilder.Configurations.Add(new TipoDocumentoConfiguration());
 
             //Orcamento
             modelBuilder.Configurations.Add(new ObraConfiguration());
@@ -133,13 +136,22 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new BancoConfiguration());
             modelBuilder.Configurations.Add(new BancoLayoutConfiguration());
             modelBuilder.Configurations.Add(new ClienteFornecedorConfiguration());
+            modelBuilder.Configurations.Add(new PessoaFisicaConfiguration());
+            modelBuilder.Configurations.Add(new PessoaJuridicaConfiguration()); 
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());
             modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
             modelBuilder.Configurations.Add(new MaterialConfiguration());
+            modelBuilder.Configurations.Add(new ServicoConfiguration());  
             modelBuilder.Configurations.Add(new NCMConfiguration());
             modelBuilder.Configurations.Add(new SituacaoMercadoriaConfiguration());
             modelBuilder.Configurations.Add(new UnidadeMedidaConfiguration());
             modelBuilder.Configurations.Add(new UsuarioCentroCustoConfiguration());
+            modelBuilder.Configurations.Add(new TipoCompraConfiguration());
+            modelBuilder.Configurations.Add(new CifFobConfiguration());
+            modelBuilder.Configurations.Add(new NaturezaOperacaoConfiguration());
+            modelBuilder.Configurations.Add(new SerieNFConfiguration());
+            modelBuilder.Configurations.Add(new CSTConfiguration());
+            modelBuilder.Configurations.Add(new CodigoContribuicaoConfiguration());
         }
         #endregion
     }

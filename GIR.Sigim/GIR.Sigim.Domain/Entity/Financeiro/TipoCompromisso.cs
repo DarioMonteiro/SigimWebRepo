@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Contrato; 
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -13,11 +15,15 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         //TODO: Juntar as infomações dos campos TipoPagar e TipoReceber em um único campo
         public bool? TipoPagar { get; set; }
         public bool? TipoReceber { get; set; }
-        public ICollection<OrdemCompra.ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
+        public ICollection<ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
+        public ICollection<ContratoRetificacao> ListaContratoRetificacao { get; set; }
+        public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }  
 
         public TipoCompromisso()
         {
-            this.ListaParametrosOrdemCompra = new HashSet<OrdemCompra.ParametrosOrdemCompra>();
+            this.ListaParametrosOrdemCompra = new HashSet<ParametrosOrdemCompra>();
+            this.ListaContratoRetificacao = new HashSet<ContratoRetificacao>();
+            this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>();
         }
     }
 }

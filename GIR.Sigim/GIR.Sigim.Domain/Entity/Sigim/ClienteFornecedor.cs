@@ -10,19 +10,32 @@ namespace GIR.Sigim.Domain.Entity.Sigim
     public class ClienteFornecedor : BaseEntity
     {
         public string Nome { get; set; }
-        public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
-        public ICollection<OrdemCompra.ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
-        public ICollection<Contrato.Contrato> ListaContratoContratante { get; set; }
-        public ICollection<Contrato.Contrato> ListaContratoContratado { get; set; }
-        public ICollection<Contrato.Contrato> ListaContratoInterveniente { get; set; }
-        public ICollection<Contrato.Licitacao> ListaLicitacao { get; set; }
+        public string TipoPessoa { get; set; }
         [Obsolete("Esta propriedade será removida em uma versão futura. Caso NÃO esteja codificando em um repositório, utilize a propriedade \"Ativo\"")]
         public string Situacao { get; set; }
         public bool Ativo
         {
             get { return Situacao == "A"; }
             set { Situacao = value ? "A" : "I"; }
-        }
+        }      
+        public string TipoCliente { get; set; }
+        public string ClienteAPagar { get; set; }
+        public string ClienteAReceber { get; set; }
+        public string ClienteOrdemCompra { get; set; }
+        public string ClienteContrato { get; set; }
+        public string ClienteAluguel { get; set; }
+        public string ClienteEmpreitada { get; set; }
+
+        public PessoaJuridica PessoaJuridica { get; set; }
+        public PessoaFisica PessoaFisica { get; set; }
+
+        public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
+        public ICollection<OrdemCompra.ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
+        public ICollection<Contrato.Contrato> ListaContratoContratante { get; set; }
+        public ICollection<Contrato.Contrato> ListaContratoContratado { get; set; }
+        public ICollection<Contrato.Contrato> ListaContratoInterveniente { get; set; }
+        public ICollection<Contrato.Licitacao> ListaLicitacao { get; set; }
+
 
         public ClienteFornecedor()
         {

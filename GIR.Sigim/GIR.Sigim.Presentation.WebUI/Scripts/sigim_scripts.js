@@ -91,9 +91,18 @@ jQuery.extend(jQuery.validator.methods, {
 });
 
 $(document).ready(function () {
+    $("input.decimal-2-casas").on("focusout", function () {
+        $(this).val(roundDecimal($(this).val(), 2));
+    });
+
     $("input.decimal-4-casas").on("focusout", function () {
         $(this).val(roundDecimal($(this).val(), 4));
     });
+
+    $("input.decimal-5-casas").on("focusout", function () {
+        $(this).val(roundDecimal($(this).val(), 5));
+    });
+
 });
 
 function roundDecimal(value, precision) {

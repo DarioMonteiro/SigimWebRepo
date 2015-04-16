@@ -40,6 +40,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             HasMany(l => l.ListaParametrosOrdemCompra)
                 .WithOptional(l => l.TipoCompromissoFrete);
+
+            HasMany(l => l.ListaContratoRetificacao)
+                .WithOptional(c => c.RetencaoTipoCompromisso); 
         }
     }
 }

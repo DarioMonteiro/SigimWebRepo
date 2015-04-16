@@ -13,7 +13,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
     {
         public LicitacaoDescricaoConfiguration()
         {
-            ToTable("Contrato", "LicitacaoDescricao");
+            ToTable("LicitacaoDescricao","Contrato");
 
             Property(l => l.Id)
                 .HasColumnName("codigo")

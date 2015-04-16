@@ -34,6 +34,16 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public string MotivoCancela { get; set; }
         public int TipoContrato { get; set; }
 
+        public ICollection<ContratoRetificacao> ListaContratoRetificacao { get; set; }
+        //public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
+
+
+        public Contrato()
+        {
+            this.Situacao = SituacaoContrato.Minuta;
+            this.ListaContratoRetificacao = new HashSet<ContratoRetificacao>();
+            //this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>(); 
+        }
 
     }
 }

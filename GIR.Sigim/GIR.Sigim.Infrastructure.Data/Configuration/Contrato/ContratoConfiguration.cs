@@ -38,6 +38,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasForeignKey(l => l.LicitacaoId);
 
             Property(l => l.ContratanteId)
+                .IsRequired()
                 .HasColumnName("contratante")
                 .HasColumnOrder(4);
 
@@ -46,6 +47,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasForeignKey(l => l.ContratanteId);
 
             Property(l => l.ContratadoId)
+                .IsRequired() 
                 .HasColumnName("contratado")
                 .HasColumnOrder(5);
 
@@ -62,6 +64,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasForeignKey(l => l.IntervenienteId);
 
             Property(l => l.ContratoDescricaoId)
+                .IsRequired() 
                 .HasColumnName("contratoDescricao")
                 .HasColumnOrder(7);
 
@@ -70,6 +73,8 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasForeignKey(l => l.ContratoDescricaoId);
 
             Property(l => l.Situacao)
+                .IsRequired() 
+                .HasColumnType("smallint") 
                 .HasColumnName("situacao")
                 .HasColumnOrder(8);
 
@@ -89,6 +94,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.ValorContrato)
                 .HasColumnName("valorContrato")
+                .HasPrecision(18, 5)
                 .HasColumnOrder(12);
 
             Property(l => l.DataCadastro)
@@ -115,9 +121,15 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnOrder(17);
 
             Property(l => l.TipoContrato)
+                .IsRequired() 
                 .HasColumnName("tipoContrato")
                 .HasColumnOrder(18);
 
+            HasMany(l => l.ListaContratoRetificacao)
+                .WithRequired(c => c.Contrato);
+
+            //HasMany(l => l.ListaContratoRetificacaoItem)
+            //    .WithRequired(c => c.Contrato);  
         }
 
 

@@ -31,9 +31,21 @@ namespace GIR.Sigim.Application.Helper
             #endregion
 
             #region Contrato
+            Mapper.CreateMap<Contrato, ContratoDTO>()
+                .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()));
+            Mapper.CreateMap<ContratoDTO, Contrato>()
+                .ForMember(d => d.CentroCusto, m => m.UseValue(null))
+                .ForMember(d => d.CodigoCentroCusto, m => m.MapFrom(s => s.CentroCusto.Codigo));
             Mapper.CreateMap<ParametrosContrato, ParametrosContratoDTO>();
             Mapper.CreateMap<ParametrosContratoDTO, ParametrosContrato>()
                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
+            Mapper.CreateMap<LicitacaoDescricao, LicitacaoDescricaoDTO>();
+            Mapper.CreateMap<LicitacaoDescricaoDTO, LicitacaoDescricao>();
+            Mapper.CreateMap<ContratoRetificacao, ContratoRetificacaoDTO>();
+            Mapper.CreateMap<ContratoRetificacaoDTO, ContratoRetificacao>();
+            Mapper.CreateMap<ContratoRetificacaoItem, ContratoRetificacaoItemDTO>();
+            Mapper.CreateMap<ContratoRetificacaoItemDTO, ContratoRetificacaoItem>(); 
+
             #endregion
             
             #region Financeiro
@@ -48,6 +60,9 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
             Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
+
+            Mapper.CreateMap<TipoDocumento, TipoDocumentoDTO>();
+            Mapper.CreateMap<TipoDocumentoDTO, TipoDocumento>(); 
 
             #endregion
 
@@ -114,11 +129,39 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ClienteFornecedor, ClienteFornecedorDTO>();
             Mapper.CreateMap<ClienteFornecedorDTO, ClienteFornecedor>();
 
+            Mapper.CreateMap<PessoaFisica, PessoaFisicaDTO>();
+            Mapper.CreateMap<PessoaFisicaDTO, PessoaFisica>();
+
+            Mapper.CreateMap<PessoaJuridica, PessoaJuridicaDTO>();
+            Mapper.CreateMap<PessoaJuridicaDTO, PessoaJuridica>();   
+
             Mapper.CreateMap<Material, MaterialDTO>();
             Mapper.CreateMap<MaterialDTO, Material>();
 
+            Mapper.CreateMap<Servico, ServicoDTO>();
+            Mapper.CreateMap<ServicoDTO, Servico>();
+
             Mapper.CreateMap<UnidadeMedida, UnidadeMedidaDTO>();
             Mapper.CreateMap<UnidadeMedidaDTO, UnidadeMedida>();
+
+            Mapper.CreateMap<TipoCompra, TipoCompraDTO>();
+            Mapper.CreateMap<TipoCompraDTO, TipoCompra>();
+
+            Mapper.CreateMap<CifFob, CifFobDTO>();
+            Mapper.CreateMap<CifFobDTO, CifFob>();
+
+            Mapper.CreateMap<NaturezaOperacao, NaturezaOperacaoDTO>();
+            Mapper.CreateMap<NaturezaOperacaoDTO, NaturezaOperacao>();
+
+            Mapper.CreateMap<SerieNF, SerieNFDTO>();
+            Mapper.CreateMap<SerieNFDTO, SerieNF>();
+
+            Mapper.CreateMap<CST, CSTDTO>();
+            Mapper.CreateMap<CSTDTO, CST>();
+
+            Mapper.CreateMap<CodigoContribuicao, CodigoContribuicaoDTO>();
+            Mapper.CreateMap<CodigoContribuicaoDTO, CodigoContribuicao>();
+
             #endregion
         }
     }

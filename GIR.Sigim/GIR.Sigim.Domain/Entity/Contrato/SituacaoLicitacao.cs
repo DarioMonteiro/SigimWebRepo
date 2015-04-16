@@ -13,16 +13,16 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         [Description("Pendente")]
             Pendente = 0,
 
-        [Description("EmAndamento")]
+        [Description("Em Andamento")]
             EmAndamento = 1,
 
-        [Description("FornecedorEleito")] 
+        [Description("Fornecedor Eleito")] 
             FornecedorEleito = 2,
 
         [Description("Fechada")]
             Fechada = 3,
 
-        [Description("ContratoAssinado")] 
+        [Description("Contrato Assinado")] 
             ContratoAssinado = 4,
 
         [Description("Cancelada")] 

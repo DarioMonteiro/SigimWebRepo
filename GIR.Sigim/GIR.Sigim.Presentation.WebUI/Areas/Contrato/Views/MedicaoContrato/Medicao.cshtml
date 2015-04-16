@@ -1,0 +1,315 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel.MedicaoContratoMedicaoViewModel
+
+@{
+    ViewBag.Title = "Medição";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-8 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Medicao",
+                            "MedicaoContrato",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formMedicao", @class = "smart-form client-form", @novalidate = "novalidate", @enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseContrato" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Contrato
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseContrato" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="label">Contrato</label> 
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Contrato.Id, new { @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                    <label class="label">Descrição Contrato</label> 
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Contrato.ContratoDescricao.Descricao, new { @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="label">Centro custo</label> 
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Contrato.CentroCustoDescricao, new { @readonly = "" })  
+                                                    </label>
+                                                </section> 
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.RetencaoContratual, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.RetencaoContratual,"{0:F5}", new { @readonly = "", @class = "text-right decimal-5-casas" })  
+                                                    </label>
+                                                </section> 
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="label">Contratado</label> 
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Contrato.Contratado.Nome, new { @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                @{
+                                                    if (Model.Contrato.Contratado.TipoPessoa == "J")
+                                                    {
+                                                        <label class="label">C.N.P.J</label> 
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.Contrato.Contratado.PessoaJuridica.Cnpj , new { @readonly = "" })  
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="label">C.P.F</label> 
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.Contrato.Contratado.PessoaFisica.Cpf, new { @readonly = "" })  
+                                                        </label>
+                                                    }
+                                                }
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <label class="label">Item</label>
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemId, Model.ListaServicoContratoRetificacaoItem, string.Empty ,new { @novalidate = "novalidate" })          
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.ContratoRetencaoItem.ComplementoDescricao, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetencaoItem.ComplementoDescricao, new { @readonly = "" })
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.ContratoRetencaoItem.DescricaoNaturezaItem , new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetencaoItem.DescricaoNaturezaItem , new { @readonly = "" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-2">
+                                                    @Html.LabelFor(m => m.ContratoRetencaoItem.Servico.UnidadeMedida.Sigla , new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetencaoItem.Servico.UnidadeMedida.Sigla, new { @readonly = "" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    <label class="label">Valor ítem</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorItem,"{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas" })
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseDadosNota" class="collapsed">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Dados da Nota
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseDadosNota" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ListaTipoDocumento, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.TipoDocumentoId,Model.ListaTipoDocumento , string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.NumeroNotaFiscal, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.NumeroNotaFiscal, new { @maxlength = "10" })  
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.NumeroNotaFiscal , "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.DataEmissaoNotaFiscal, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.DataEmissaoNotaFiscal, "{0:dd/MM/yyyy}")  
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.DataEmissaoNotaFiscal, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.DataVencimentoNotaFiscal , new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.DataVencimentoNotaFiscal, "{0:dd/MM/yyyy}")  
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.DataVencimentoNotaFiscal, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $('#@Html.IdFor(m => m.DataEmissaoNotaFiscal)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            onClose: function (selectedDate) {
+                                                                $('#@Html.IdFor(m => m.DataVencimentoNotaFiscal)').datepicker('option', 'minDate', selectedDate);
+                                                            }
+                                                        });
+
+                                                        $('#@Html.IdFor(m => m.DataVencimentoNotaFiscal)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            onClose: function (selectedDate) {
+                                                                $('#@Html.IdFor(m => m.DataEmissaoNotaFiscal)').datepicker('option', 'maxDate', selectedDate);
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.ListaMultiFornecedor, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.MultiFornecedorId,Model.ListaMultiFornecedor, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                        <h5 style="padding-left :15px;">
+                                            Dados Gerais
+                                        </h5>
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaTipoCompra, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.TipoCompraCodigo,Model.ListaTipoCompra, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaCifFob, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.CifFobId,Model.ListaCifFob, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaNaturezaOperacao, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.NaturezaOperacaoCodigo,Model.ListaNaturezaOperacao, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaSerieNF, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.SerieNFId,Model.ListaSerieNF, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaCST, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.CSTCodigo,Model.ListaCST, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaCodigoContribuicao, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.CodigoContribuicaoCodigo,Model.ListaCodigoContribuicao, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.CodigoBarras, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.CodigoBarras, new { @maxlength = "50" })  
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.CodigoBarras , "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div> 
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on("change", "#@Html.IdFor(m => m.ContratoRetificacaoItemId)", function () {
+            recuperaContratoItem();
+        });
+    });
+
+    function recuperaContratoItem() {
+        var isRecuperou = false
+        var codigoContratoRetificacaoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemId)").val(); 
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("RecuperaContratoRetificacaoItem","MedicaoContrato",new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                codigo: codigoContratoRetificacaoItem
+            })
+        })
+        .success(function (result) {
+            showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemId)'), result.errorMessage);
+            $('#@Html.IdFor(m => m.ContratoRetencaoItem.ComplementoDescricao)').val(result.complementoDescricao);
+            $('#@Html.IdFor(m => m.ContratoRetencaoItem.DescricaoNaturezaItem)').val(result.descricaoNatureza);
+            $('#@Html.IdFor(m => m.ContratoRetencaoItem.Servico.UnidadeMedida.Sigla)').val(result.siglaUnidadeMedida);
+            $('#@Html.IdFor(m => m.ValorItem)').val(roundDecimal(result.valorContratadoItem, 2));
+            if (result.retencaoItem != null) $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(result.retencaoItem,5)); 
+            isRecuperou = result.ehRecuperouContratoRetificacaoItem;
+        });
+
+        return isRecuperou;
+    }
+</script>

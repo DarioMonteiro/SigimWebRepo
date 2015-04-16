@@ -46,6 +46,8 @@
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Admin\Usuario.cs" />
     <Compile Include="Entity\Contrato\Contrato.cs" />
+    <Compile Include="Entity\Contrato\ContratoRetificacao.cs" />
+    <Compile Include="Entity\Contrato\ContratoRetificacaoItem.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />
     <Compile Include="Entity\Contrato\LicitacaoCronograma.cs" />
     <Compile Include="Entity\Contrato\LicitacaoDescricao.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="Entity\Financeiro\Classe.cs" />
     <Compile Include="Entity\Financeiro\ParametrosUsuarioFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\TipoCompromisso.cs" />
+    <Compile Include="Entity\Financeiro\TipoDocumento.cs" />
     <Compile Include="Entity\Orcamento\Orcamento.cs" />
     <Compile Include="Entity\Orcamento\Obra.cs" />
     <Compile Include="Entity\Orcamento\OrcamentoComposicao.cs" />
@@ -77,8 +80,21 @@
     <Compile Include="Entity\Sigim\AssuntoContato.cs" />
     <Compile Include="Entity\Sigim\Banco.cs" />
     <Compile Include="Entity\Sigim\BancoLayout.cs" />
+    <Compile Include="Entity\Sigim\CifFob.cs" />
     <Compile Include="Entity\Sigim\ClienteFornecedor.cs" />
+    <Compile Include="Entity\Sigim\CodigoContribuicao.cs" />
     <Compile Include="Entity\Sigim\Composicao.cs" />
+    <Compile Include="Entity\Sigim\CST.cs" />
+    <Compile Include="Entity\Sigim\NaturezaOperacao.cs" />
+    <Compile Include="Entity\Sigim\PessoaFisica.cs" />
+    <Compile Include="Entity\Sigim\PessoaJuridica.cs" />
+    <Compile Include="Entity\Sigim\SerieNF.cs" />
+    <Compile Include="Entity\Sigim\Servico.cs" />
+    <Compile Include="Entity\Sigim\SituacaoClienteFornecedor.cs" />
+    <Compile Include="Entity\Sigim\ClassificacaoClienteFornecedor.cs" />
+    <Compile Include="Entity\Sigim\TipoClienteProspect.cs" />
+    <Compile Include="Entity\Sigim\TipoCompra.cs" />
+    <Compile Include="Entity\Sigim\TipoPessoa.cs" />
     <Compile Include="Entity\Sigim\TipoTabela.cs" />
     <Compile Include="Entity\Sigim\NCM.cs" />
     <Compile Include="Entity\Sigim\Material.cs" />
@@ -89,12 +105,15 @@
     <Compile Include="Entity\Sigim\UsuarioCentroCusto.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\Contrato\IContratoRepository.cs" />
+    <Compile Include="Repository\Contrato\IContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ICentroCustoEmpresaRepository.cs" />
     <Compile Include="Repository\Financeiro\IClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\ICentroCustoRepository.cs" />
     <Compile Include="Repository\Financeiro\IParametrosUsuarioFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoCompromissoRepository.cs" />
+    <Compile Include="Repository\Financeiro\ITipoDocumentoRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\Admin\IUsuarioRepository.cs" />
     <Compile Include="Repository\Orcamento\IOrcamentoRepository.cs" />
@@ -103,10 +122,16 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\ICifFobRepository.cs" />
+    <Compile Include="Repository\Sigim\ICodigoContribuicaoRepository.cs" />
+    <Compile Include="Repository\Sigim\ICSTRepository.cs" />
     <Compile Include="Repository\Sigim\IMaterialRepository.cs" />
     <Compile Include="Repository\Sigim\IBancoLayoutRepository.cs" />
     <Compile Include="Repository\Sigim\IAssuntoContatoRepository.cs" />
     <Compile Include="Repository\Sigim\IClienteFornecedorRepository.cs" />
+    <Compile Include="Repository\Sigim\INaturezaOperacaoRepository.cs" />
+    <Compile Include="Repository\Sigim\ISerieNFRepository.cs" />
+    <Compile Include="Repository\Sigim\ITipoCompraRepository.cs" />
     <Compile Include="Resource\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -115,6 +140,7 @@
     <Compile Include="Specification\AndSpecification.cs" />
     <Compile Include="Specification\BaseSpecification.cs" />
     <Compile Include="Specification\CompositeSpecification.cs" />
+    <Compile Include="Specification\Contrato\ContratoSpecification.cs" />
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />
     <Compile Include="Specification\ExpressionBuilder.cs" />
