@@ -13,10 +13,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         List<PreRequisicaoMaterialDTO> ListarPeloFiltro(PreRequisicaoMaterialFiltro filtro, int? idUsuario, out int totalRegistros);
         PreRequisicaoMaterialDTO ObterPeloId(int? id, int? idUsuario);
         bool Salvar(PreRequisicaoMaterialDTO dto);
+        bool Aprovar(int? id, int[] itens);
         bool EhPermitidoSalvar(PreRequisicaoMaterialDTO dto);
         bool EhPermitidoCancelar(PreRequisicaoMaterialDTO dto);
         bool EhPermitidoAdicionarItem(PreRequisicaoMaterialDTO dto);
         bool EhPermitidoCancelarItem(PreRequisicaoMaterialDTO dto);
         bool EhPermitidoEditarItem(PreRequisicaoMaterialDTO dto);
+        bool EhPermitidoAprovarItem(PreRequisicaoMaterialDTO dto);
     }
 }

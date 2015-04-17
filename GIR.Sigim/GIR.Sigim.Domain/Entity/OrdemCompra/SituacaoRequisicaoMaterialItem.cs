@@ -12,10 +12,16 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         [Description("Requisitado")]
         Requisitado = 0,
 
-        [Description("Aprovado")]
-        Aprovado = 1,
+        [Description("Em Cotação")]
+        EmCotacao = 1,
+
+        [Description("Aguardando Fechamento")]
+        AguardandoFechamento = 2,
+
+        [Description("Fechado")]
+        Fechado = 3,
 
         [Description("Cancelado")]
-        Cancelado = 2
+        Cancelado = 4
     }
 }

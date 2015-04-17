@@ -32,10 +32,14 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         [Display(Name = "Aprovado por")]
         public string LoginUsuarioAprovacao { get; set; }
 
+        public List<RequisicaoMaterialItemDTO> ListaItens { get; set; }
+
         public RequisicaoMaterialDTO()
         {
             this.Situacao = SituacaoRequisicaoMaterial.Requisitada;
             this.Data = DateTime.Now;
+            this.CentroCusto = new CentroCustoDTO();
+            this.ListaItens = new List<RequisicaoMaterialItemDTO>();
         }
     }
 }

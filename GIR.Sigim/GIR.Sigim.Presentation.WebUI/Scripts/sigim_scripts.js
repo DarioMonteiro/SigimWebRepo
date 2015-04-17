@@ -175,3 +175,7 @@ function smartAlert(title, message, type) {
     $('.SmallBox:has(i.fa-warning)').addClass('text-color-warning');
     $('.SmallBox:has(i.fa-info-circle)').addClass('text-color-info');
 }
+
+$('.numeric').on('input', function (event) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});

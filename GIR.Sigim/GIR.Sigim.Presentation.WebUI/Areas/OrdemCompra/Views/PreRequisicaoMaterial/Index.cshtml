@@ -1,10 +1,13 @@
 ﻿@model GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel.PreRequisicaoMaterialListaViewModel
 
 @{
-    ViewBag.Title = "Pré requisição de material";
+    ViewBag.Title = "Pré-requisição de material";
 }
 
 @Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+        @Html.ActionLink("Novo", "Cadastro", null, new { @class = "btn btn-primary", @style = "float:right;" })
+</div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
         <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">

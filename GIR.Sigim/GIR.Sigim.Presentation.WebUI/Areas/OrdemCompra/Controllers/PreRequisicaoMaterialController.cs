@@ -89,6 +89,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.PodeAdicionarItem = preRequisicaoMaterialAppService.EhPermitidoAdicionarItem(preRequisicaoMaterial);
             model.PodeCancelarItem = preRequisicaoMaterialAppService.EhPermitidoCancelarItem(preRequisicaoMaterial);
             model.PodeEditarItem = preRequisicaoMaterialAppService.EhPermitidoEditarItem(preRequisicaoMaterial);
+            model.PodeAprovarItem = preRequisicaoMaterialAppService.EhPermitidoAprovarItem(preRequisicaoMaterial);
             
             return View(model);
         }
@@ -110,6 +111,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 if(preRequisicaoMaterialAppService.Salvar(model.PreRequisicaoMaterial))
                     return PartialView("Redirect", Url.Action("Cadastro", "PreRequisicaoMaterial", new { id = model.PreRequisicaoMaterial.Id }));
             }
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+        [HttpPost]
+        public ActionResult Aprovar(int? id, int[] itens)
+        {
+            if (preRequisicaoMaterialAppService.Aprovar(id, itens))
+                return PartialView("Redirect", Url.Action("Cadastro", "PreRequisicaoMaterial", new { id = id }));
+
             return PartialView("_NotificationMessagesPartial");
         }
     }

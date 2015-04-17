@@ -8,16 +8,19 @@
     <input type="hidden" id="orcamentoId" value="0" />
     <div class="input-group">
         <label class="input">
-            @Html.TextBoxFor(m => m.Codigo)
+            @{
+                string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+            }
+            @Html.TextBoxFor(m => m.Codigo, new { @class = cssClass })
         </label>
-        <a data-toggle="modal" href="#@Html.IdFor(m => m.Codigo)_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-sitemap"></i></a>
+        <a id="BtnShowModalPanel_@Html.IdFor(m => m.Codigo)" data-toggle="modal" href="#@Html.IdFor(m => m.Codigo)_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-sitemap"></i></a>
     </div>
     @Html.ValidationMessageFor(m => m.Codigo, "", new { @id = Html.IdFor(m => m.Codigo) + "_ValidationMessage", @class = "note note-error" })
 </section>
 <section class="@ViewBag.sectionClass">
     <label class="label" for="fname">&nbsp;</label>
     <label class="input">
-        @Html.TextBoxFor(m => m.Descricao, new { @readonly = "" })
+        @Html.TextBoxFor(m => m.Descricao, new { @readonly = "", @class = "readonly" })
     </label>
 </section>
 
@@ -90,6 +93,16 @@
             });
         });
 
+        @{
+            bool? centroCustoRequerido = ViewBag.centroCustoRequerido as bool? ?? false;
+            string linkModal = "#" + Html.IdFor(m => m.Codigo) + "_ModalPanel";
+            string linkNotificarObrigatoriedadeCentroCusto = "javascript:notificarObrigatoriedadeCentroCusto();";
+            string href = linkModal;
+            if (centroCustoRequerido.Value) {
+                href = linkNotificarObrigatoriedadeCentroCusto;
+            }
+        }
+
         $(document).on("centroCustoValidado",            function (e) {
                 $("#orcamentoId").val(0);
                 if (e.codigo != '') {
@@ -105,9 +118,36 @@
                     })
                     .success(function (result) {
                         $("#orcamentoId").val(result);
-                    })
+                    });
                 }
-            }        );    });
+
+                @if (centroCustoRequerido.Value) {
+                    @:if (e.isValid) {
+                    @:  if (e.codigo != '')
+                    @:      unblockClasseForm();
+                    @:  else
+                    @:      blockClasseForm();
+                    @:}
+                    @:else
+                    @:  blockClasseForm();
+                }
+            }        );        @if (centroCustoRequerido.Value) {            @:blockClasseForm();        }    });
+
+    function blockClasseForm() {
+        $("#@Html.IdFor(m => m.Codigo)").attr("readonly", true);
+        $("#@Html.IdFor(m => m.Codigo)").addClass("readonly");
+        $("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+    }
+
+    function unblockClasseForm() {
+        $("#@Html.IdFor(m => m.Codigo)").attr("readonly", false);
+        $("#@Html.IdFor(m => m.Codigo)").removeClass("readonly");
+        $("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").attr('href', '@linkModal');
+    }
+
+    function notificarObrigatoriedadeCentroCusto() {
+        smartAlert("Erro", "Escolha o Centro de Custo!", "error");
+    }
 
     function validaClasse() {
         var isValid = false;

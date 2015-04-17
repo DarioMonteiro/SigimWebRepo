@@ -9,5 +9,6 @@ namespace GIR.Sigim.Domain.Repository.OrdemCompra
 {
     public interface IRequisicaoMaterialRepository : IRepository<RequisicaoMaterial>
     {
+        void RemoverItem(RequisicaoMaterialItem item);
     }
 }

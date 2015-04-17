@@ -1,10 +1,22 @@
 ﻿@model GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel.PreRequisicaoMaterialCadastroViewModel
 
 @{
-    ViewBag.Title = "Pré requisição de material";
+    ViewBag.Title = "Pré-requisição de material";
 }
 
 @Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    @{
+        string disablebtnAprovarItem = string.Empty;
+        if (!Model.PodeAprovarItem)
+        {
+            disablebtnAprovarItem = "disabled";
+        }
+    }
+    <button id="btnAprovarItem" type="button" class="btn btn-primary @disablebtnAprovarItem">
+        Aprovar Pré-requisição
+    </button>
+</div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
         <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
@@ -27,7 +39,7 @@
                                 <section class="col col-3">
                                     @Html.LabelFor(m => m.PreRequisicaoMaterial.Id, new { @class = "label" })
                                     <label class="input">
-                                        @Html.TextBoxFor(m => m.PreRequisicaoMaterial.Id, new { @readonly = "" })
+                                        @Html.TextBoxFor(m => m.PreRequisicaoMaterial.Id, new { @readonly = "", @class = "readonly" })
                                     </label>
                                 </section>
                                 <section class="col col-3">
@@ -51,10 +63,10 @@
                                         });
                                     });
                                 </script>
-                                <section class="col col-3">
+                                <section class="col col-4">
                                     @Html.LabelFor(m => m.PreRequisicaoMaterial.SituacaoDescricao, new { @class = "label" })
                                     <label class="input">
-                                        @Html.TextBoxFor(m => m.PreRequisicaoMaterial.SituacaoDescricao, new { @readonly = "" })
+                                        @Html.TextBoxFor(m => m.PreRequisicaoMaterial.SituacaoDescricao, new { @readonly = "", @class = "readonly" })
                                     </label>
                                 </section>
                             </div>
@@ -64,11 +76,11 @@
                             @Html.HiddenFor(m => m.ItemId)
                             @Html.HiddenFor(m => m.Sequencial)
                             <div class="row">
-                                @Html.EditorFor(m => m.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo", @somenteNivelFolha = true })
-                                @Html.EditorFor(m => m.Classe, "Classe", new { @sectionClass = "col col-3", @somenteNivelFolha = true })
+                                @Html.EditorFor(m => m.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo", @somenteNivelFolha = true, @required = true })
+                                @Html.EditorFor(m => m.Classe, "Classe", new { @sectionClass = "col col-3", @somenteNivelFolha = true, @required = true, @centroCustoRequerido = true })
                             </div>
                             <div class="row">
-                                @Html.EditorFor(m => m.Material, "Material", new { @sectionClass = "col col-6" })
+                                @Html.EditorFor(m => m.Material, "Material", new { @sectionClass = "col col-6", @required = true })
                                 <section class="col col-6">
                                     @Html.LabelFor(m => m.Complemento, new { @class = "label" })
                                     <label class="input">
@@ -81,7 +93,7 @@
                                 <section class="col col-2">
                                     @Html.LabelFor(m => m.Quantidade, new { @class = "label" })
                                     <label class="input">
-                                        @Html.TextBoxFor(m => m.Quantidade, "{0:F4}", new { @class = "text-right decimal-4-casas" })
+                                        @Html.TextBoxFor(m => m.Quantidade, "{0:F4}", new { @class = "text-right decimal-4-casas required" })
                                         <script type="text/javascript">
                                             $(document).ready(function () {
                                                 $("#@Html.IdFor(m => m.Quantidade)").on("focusout", function () {
@@ -95,7 +107,7 @@
                                 <section class="col col-2">
                                     @Html.LabelFor(m => m.QuantidadeAprovada, new { @class = "label" })
                                     <label class="input">
-                                        @Html.TextBoxFor(m => m.QuantidadeAprovada, "{0:F4}", new { @class = "text-right decimal-4-casas", @readonly = "" })
+                                        @Html.TextBoxFor(m => m.QuantidadeAprovada, "{0:F4}", new { @class = "text-right decimal-4-casas readonly", @readonly = "" })
                                     </label>
                                     @Html.ValidationMessageFor(m => m.QuantidadeAprovada, "", new { @class = "note note-error" })
                                 </section>
@@ -111,7 +123,7 @@
                                 <section class="col col-2">
                                     @Html.LabelFor(m => m.Prazo, new { @class = "label" })
                                     <label class="input">
-                                        @Html.TextBoxFor(m => m.Prazo, new { @class = "text-right" })
+                                        @Html.TextBoxFor(m => m.Prazo, new { @class = "text-right numeric" })
                                     </label>
                                     @Html.ValidationMessageFor(m => m.Prazo, "", new { @class = "note note-error" })
                                 </section>
@@ -210,14 +222,14 @@
                                         <section class="col col-6">
                                             @Html.LabelFor(m => m.PreRequisicaoMaterial.LoginUsuarioCadastro, new { @class = "label" })
                                             <label class="input">
-                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.LoginUsuarioCadastro, new { @readonly = "" })
+                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.LoginUsuarioCadastro, new { @readonly = "", @class = "readonly" })
                                             </label>
                                         </section>
                                         <section class="col col-6">
                                             @Html.LabelFor(m => m.PreRequisicaoMaterial.DataCadastro, new { @class = "label" })
                                             <label class="input">
                                                 <i class="icon-append fa fa-calendar"></i>
-                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.DataCadastro, "{0:dd/MM/yyyy}", new { @readonly = "" })
+                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.DataCadastro, "{0:dd/MM/yyyy}", new { @readonly = "", @class = "readonly" })
                                             </label>
                                         </section>
                                     </section>
@@ -225,14 +237,14 @@
                                         <section class="col col-6">
                                             @Html.LabelFor(m => m.PreRequisicaoMaterial.LoginUsuarioCancelamento, new { @class = "label" })
                                             <label class="input">
-                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.LoginUsuarioCancelamento, new { @readonly = "" })
+                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.LoginUsuarioCancelamento, new { @readonly = "", @class = "readonly" })
                                             </label>
                                         </section>
                                         <section class="col col-6">
                                             @Html.LabelFor(m => m.PreRequisicaoMaterial.DataCancelamento, new { @class = "label" })
                                             <label class="input">
                                                 <i class="icon-append fa fa-calendar"></i>
-                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.DataCancelamento, "{0:dd/MM/yyyy}", new { @readonly = "" })
+                                                @Html.TextBoxFor(m => m.PreRequisicaoMaterial.DataCancelamento, "{0:dd/MM/yyyy}", new { @readonly = "", @class = "readonly" })
                                             </label>
                                         </section>
                                     </section>
@@ -248,10 +260,7 @@
                                     disableBtnCandelar = "disabled";
                                 }
                             }
-                            <button id="btnCancelar" type="button" class="btn btn-danger @disableBtnCandelar">
-                                Cancelar
-                            </button>
-
+                            <a data-toggle="modal" href="#MotivoCancelamento_ModalPanel" class="btn btn-danger @disableBtnCandelar">Cancelar</a>
                             @{
                                 string disableBtnSalvar = string.Empty;
                                 if (!Model.PodeSalvar)
@@ -263,6 +272,30 @@
                                 Salvar
                             </button>
                         </footer>
+                        <div class="modal fade" id="MotivoCancelamento_ModalPanel" tabindex="-1" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <h4 class="modal-title">
+                                            Motivo do Cancelamento
+                                        </h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label class="textarea">
+                                            @Html.TextAreaFor(m => m.PreRequisicaoMaterial.MotivoCancelamento, new { @rows = "3" })
+                                        </label>
+                                    </div>
+                                    <div class="modal-footer">
+								        <button type="button" class="btn btn-primary">
+									        Ok
+								        </button>
+							        </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                 </div>
             </div>
@@ -293,6 +326,10 @@
 
         $('#btnCancelarItem').on("click", function () {
             cancelarItensSelecionados();
+        });
+
+        $('#btnAprovarItem').on("click", function () {
+            aprovarItensSelecionados();
         });
 
         jQuery.validator.addMethod(
@@ -410,7 +447,7 @@
             row.append($('<td>' + jsonItemArray[i].SituacaoDescricao + '</td>'));
             var rmGerada = "&nbsp;";
             if (jsonItemArray[i].ListaRequisicaoMaterialItem.length > 0)
-                rmGerada = jsonItemArray[i].ListaRequisicaoMaterialItem[0].RequisicaoMaterial.Id;
+                rmGerada = jsonItemArray[i].ListaRequisicaoMaterialItem[0].RequisicaoMaterialId;
             row.append($('<td class="text-center">' + rmGerada + '</td>'));
         }
     }
@@ -511,6 +548,57 @@
         }
         else
             smartAlert("Erro", "Selecione pelo menos 1 item para cancelamento.", "error");
+    }
+
+    function aprovarItensSelecionados() {
+        var itemInvalidoSelecionado = false;
+        var arrSequencial = [];
+        var arrItemId = [];
+        $('#tableItens input[type=checkbox]:checked').each(function () {
+            arrSequencial.push(parseInt($(this).val()));
+        });
+
+        if (arrSequencial.length > 0) {
+            $.SmartMessageBox({
+                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a aprovação dos itens selecionados?",
+                content: "Esta ação não poderá ser revertida.",
+                buttons: '[Não][Sim]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Sim") {
+
+                    $.each(jsonItemArray, function (i, obj) {
+                        if (jQuery.inArray(obj.Sequencial, arrSequencial) > -1) {
+                            if (obj.Id == '') {
+                                smartAlert("Erro", "O item " + obj.Sequencial + " ainda não foi salvo na pré requisição.", "error");
+                                itemInvalidoSelecionado = true;
+                            }
+                            else {
+                                arrItemId.push(parseInt(obj.Id));
+                            }
+                        }
+                    });
+
+                    if (!itemInvalidoSelecionado) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("Aprovar", "PreRequisicaoMaterial")',
+                            cache: false,
+                            async: false,
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify({
+                                itens: arrItemId,
+                                id: '@Model.PreRequisicaoMaterial.Id'
+                            })
+                        })
+                        .success(function (result) {
+                            $('#notificationMessages').html(result);
+                        })
+                    }
+                }
+            });
+        }
+        else
+            smartAlert("Erro", "Selecione pelo menos 1 item para aprovação.", "error");
     }
 
     function limpaCentroCusto() {

@@ -54,6 +54,16 @@ div#ribbon ol.breadcrumb li a:hover
 	padding: 15px;
 }
 
+.modal-body
+{
+	padding: 15px;
+}
+
+.modal-footer
+{
+	padding: 15px;
+}
+
 .sigimModalBody
 {
 	height:550px;
@@ -257,4 +267,14 @@ td[onclick] {
 td[onclick]:hover {
 	cursor: pointer;
 	text-decoration: underline;
+}
+
+.smart-form .input input.required, .smart-form .select select.required, .smart-form .textarea textarea.required
+{ 
+    background-color: #FFFFC0;
+}
+
+.smart-form .input input.readonly, .smart-form .select select.readonly, .smart-form .textarea textarea.readonly
+{ 
+    background-color: #EFEFEF;
 }

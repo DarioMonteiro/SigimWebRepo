@@ -19,15 +19,18 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
     public class PreRequisicaoMaterialAppService : BaseAppService, IPreRequisicaoMaterialAppService
     {
         private IPreRequisicaoMaterialRepository preRequisicaoMaterialRepository;
+        private IRequisicaoMaterialRepository requisicaoMaterialRepository;
         private IUsuarioAppService usuarioAppService;
 
         public PreRequisicaoMaterialAppService(
             IPreRequisicaoMaterialRepository preRequisicaoMaterialRepository,
+            IRequisicaoMaterialRepository requisicaoMaterialRepository,
             IUsuarioAppService usuarioAppService,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.preRequisicaoMaterialRepository = preRequisicaoMaterialRepository;
+            this.requisicaoMaterialRepository = requisicaoMaterialRepository;
             this.usuarioAppService = usuarioAppService;
         }
 
@@ -96,7 +99,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             if (!PodeSerSalvaNaSituacaoAtual(preRequisicaoMaterial.Situacao))
             {
-                var msg = string.Format("Pré requisição \"{0}\".", preRequisicaoMaterial.Situacao.ObterDescricao());
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.PreRequisicaoSituacaoInvalida, preRequisicaoMaterial.Situacao.ObterDescricao());
                 messageQueue.Add(msg, TypeMessage.Error);
                 return false;
             }
@@ -105,8 +108,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             preRequisicaoMaterial.Observacao = dto.Observacao;
             ProcessarItens(dto, preRequisicaoMaterial);
 
-            if (preRequisicaoMaterial.ListaItens.All(l => l.Situacao == SituacaoPreRequisicaoMaterialItem.Aprovado || l.Situacao == SituacaoPreRequisicaoMaterialItem.Cancelado))
-                preRequisicaoMaterial.Situacao = SituacaoPreRequisicaoMaterial.Fechada;
+            AjustarSituacaoPreRequisicao(preRequisicaoMaterial);
 
             if (Validator.IsValid(preRequisicaoMaterial, out validationErrors))
             {
@@ -133,6 +135,85 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return false;
         }
 
+        public bool Aprovar(int? id, int[] itens)
+        {
+            if (!itens.Any())
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmItemParaAprocacao, TypeMessage.Error);
+                return false;
+            }
+
+            var preRequisicaoMaterial = preRequisicaoMaterialRepository.ObterPeloId(id, l => l.ListaItens);
+
+            if (preRequisicaoMaterial == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
+                return false;
+            }
+
+            if (!PodeAprovarNaSituacaoAtual(preRequisicaoMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.PreRequisicaoSituacaoInvalida, preRequisicaoMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            if (ItemJaAprovadoFoiSelecionado(itens, preRequisicaoMaterial))
+                return false;
+
+            var listaCentroCusto = preRequisicaoMaterial.ListaItens.Where(l => itens.Contains(l.Id.Value)).Select(l => l.CodigoCentroCusto).Distinct().ToList();
+            
+            foreach (var centroCusto in listaCentroCusto)
+            {
+                RequisicaoMaterial requisicaoMaterial = new RequisicaoMaterial();
+                int sequencial = 1;
+
+                requisicaoMaterial = new RequisicaoMaterial();
+                requisicaoMaterial.Situacao = SituacaoRequisicaoMaterial.Aprovada;
+                requisicaoMaterial.DataAprovacao = DateTime.Now;
+                requisicaoMaterial.LoginUsuarioAprovacao = AuthenticationService.GetUser().Login;
+
+                requisicaoMaterial.CodigoCentroCusto = centroCusto;
+                requisicaoMaterial.Data = preRequisicaoMaterial.Data;
+                requisicaoMaterial.DataCadastro = preRequisicaoMaterial.DataCadastro;
+                requisicaoMaterial.LoginUsuarioCadastro = preRequisicaoMaterial.LoginUsuarioCadastro;
+                requisicaoMaterial.Observacao = preRequisicaoMaterial.Observacao;
+
+                var listaItens = preRequisicaoMaterial.ListaItens.Where(l => itens.Contains(l.Id.Value) && l.CodigoCentroCusto == centroCusto).ToList();
+                foreach (var item in listaItens)
+                {
+                    RequisicaoMaterialItem requisicaoMaterialItem = new RequisicaoMaterialItem();
+                    requisicaoMaterialItem.Sequencial = sequencial;
+                    requisicaoMaterialItem.MaterialId = item.MaterialId;
+                    requisicaoMaterialItem.CodigoClasse = item.CodigoClasse;
+                    requisicaoMaterialItem.Complemento = item.Complemento;
+                    requisicaoMaterialItem.UnidadeMedida = item.UnidadeMedida;
+                    requisicaoMaterialItem.Quantidade = item.Quantidade;
+                    requisicaoMaterialItem.QuantidadeAprovada = item.QuantidadeAprovada;
+                    requisicaoMaterialItem.DataMaxima = item.DataMaxima;
+                    requisicaoMaterialItem.DataMinima = item.DataMinima;
+                    requisicaoMaterialItem.Situacao = SituacaoRequisicaoMaterialItem.Requisitado;
+                    requisicaoMaterialItem.PreRequisicaoMaterialItemId = item.Id;
+                    requisicaoMaterialItem.RequisicaoMaterial = requisicaoMaterial;
+                    requisicaoMaterial.ListaItens.Add(requisicaoMaterialItem);
+
+                    item.ListaRequisicaoMaterialItem.Add(requisicaoMaterialItem);
+                    item.Situacao = SituacaoPreRequisicaoMaterialItem.Aprovado;
+                    item.DataAprovacao = DateTime.Now;
+                    item.LoginUsuarioAprovacao = AuthenticationService.GetUser().Login;
+                    sequencial++;
+                }
+                requisicaoMaterialRepository.Inserir(requisicaoMaterial);
+            }
+
+            AjustarSituacaoPreRequisicao(preRequisicaoMaterial);
+
+            preRequisicaoMaterialRepository.Alterar(preRequisicaoMaterial);
+            preRequisicaoMaterialRepository.UnitOfWork.Commit();
+            messageQueue.Add(Resource.OrdemCompra.SuccessMessages.AprovacaoItensComSucesso, TypeMessage.Success);
+            return true;
+        }
+
         public bool EhPermitidoSalvar(PreRequisicaoMaterialDTO dto)
         {
             return PodeSerSalvaNaSituacaoAtual(dto.Situacao);
@@ -140,7 +221,16 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoCancelar(PreRequisicaoMaterialDTO dto)
         {
-            return false;// EhPermitidoSalvar(dto);
+            if (!dto.Id.HasValue)
+                return false;
+
+            if (dto.Situacao != SituacaoPreRequisicaoMaterial.Requisitada)
+                return false;
+
+            if (dto.ListaItens.Any())
+                return false;
+
+            return true;
         }
 
         public bool EhPermitidoAdicionarItem(PreRequisicaoMaterialDTO dto)
@@ -157,6 +247,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         {
             return EhPermitidoSalvar(dto);
         }
+
+        public bool EhPermitidoAprovarItem(PreRequisicaoMaterialDTO dto)
+        {
+            if ((dto.Situacao != SituacaoPreRequisicaoMaterial.Requisitada) && (dto.Situacao != SituacaoPreRequisicaoMaterial.ParcialmenteAprovada))
+                return false;
+
+            if (!dto.ListaItens.Any(l => l.Situacao == SituacaoPreRequisicaoMaterialItem.Requisitado))
+                return false;
+
+            return true;
+        }
         
         #endregion
 
@@ -167,6 +268,25 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             return true;
         }
+
+        private bool PodeAprovarNaSituacaoAtual(SituacaoPreRequisicaoMaterial situacao)
+        {
+            if ((situacao != SituacaoPreRequisicaoMaterial.Requisitada) && (situacao != SituacaoPreRequisicaoMaterial.ParcialmenteAprovada))
+                return false;
+
+            return true;
+        }
+
+        private void AjustarSituacaoPreRequisicao(PreRequisicaoMaterial preRequisicao)
+        {
+            if ((preRequisicao.ListaItens.Any())
+                && (preRequisicao.ListaItens.All(l => l.Situacao == SituacaoPreRequisicaoMaterialItem.Aprovado
+                    || l.Situacao == SituacaoPreRequisicaoMaterialItem.Cancelado)))
+                preRequisicao.Situacao = SituacaoPreRequisicaoMaterial.Fechada;
+            else if (preRequisicao.ListaItens.Any(l => l.Situacao == SituacaoPreRequisicaoMaterialItem.Aprovado))
+                preRequisicao.Situacao = SituacaoPreRequisicaoMaterial.ParcialmenteAprovada;
+        }
+
         private void ProcessarItens(PreRequisicaoMaterialDTO dto, PreRequisicaoMaterial preRequisicaoMaterial)
         {
             RemoverItens(dto, preRequisicaoMaterial);
@@ -220,6 +340,22 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 itemLista.PreRequisicaoMaterial = preRequisicaoMaterial;
                 preRequisicaoMaterial.ListaItens.Add(itemLista);
             }
+        }
+
+        private bool ItemJaAprovadoFoiSelecionado(int[] itens, PreRequisicaoMaterial preRequisicaoMaterial)
+        {
+            bool existeItemJaAprovado = false;
+            foreach (var itemId in itens)
+            {
+                var item = preRequisicaoMaterial.ListaItens.Where(l => l.Id == itemId).SingleOrDefault();
+                if (item.ListaRequisicaoMaterialItem.Count > 0)
+                {
+                    messageQueue.Add(string.Format(Application.Resource.OrdemCompra.ErrorMessages.ItemJaAprovado, item.Sequencial.ToString()), TypeMessage.Error);
+                    existeItemJaAprovado = true;
+                }
+            }
+
+            return existeItemJaAprovado;
         }
     }
 }
