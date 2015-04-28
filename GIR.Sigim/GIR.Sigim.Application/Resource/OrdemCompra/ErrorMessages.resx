@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InformeMotivoCancelamentoPreRequisicao" xml:space="preserve">
+    <value>Informe o motivo do cancelamento da Pré-requisicao.</value>
+  </data>
   <data name="ItemJaAprovado" xml:space="preserve">
     <value>O item {0} já foi aprovado.</value>
+  </data>
+  <data name="PreRequisicaoComItens" xml:space="preserve">
+    <value>A Pré-requisição possui itens e não pode ser cancelada.</value>
   </data>
   <data name="PreRequisicaoSituacaoInvalida" xml:space="preserve">
     <value>Pré requisição \"{0}\".</value>

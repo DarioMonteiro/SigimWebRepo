@@ -4,7 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.OrdemCompra;
+using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Service.OrdemCompra;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
@@ -68,7 +70,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         public ActionResult Cadastro(int? id)
         {
             PreRequisicaoMaterialCadastroViewModel model = new PreRequisicaoMaterialCadastroViewModel();
-            var preRequisicaoMaterial = preRequisicaoMaterialAppService.ObterPeloId(id, Usuario.Id) ?? new PreRequisicaoMaterialDTO();
+            var preRequisicaoMaterial = preRequisicaoMaterialAppService.ObterPeloId(id) ?? new PreRequisicaoMaterialDTO();
 
             if (id.HasValue && !preRequisicaoMaterial.Id.HasValue)
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
@@ -86,10 +88,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 
             model.PodeSalvar = preRequisicaoMaterialAppService.EhPermitidoSalvar(preRequisicaoMaterial);
             model.PodeCancelar = preRequisicaoMaterialAppService.EhPermitidoCancelar(preRequisicaoMaterial);
+            model.PodeImprimir = preRequisicaoMaterialAppService.EhPermitidoImprimir(preRequisicaoMaterial);
             model.PodeAdicionarItem = preRequisicaoMaterialAppService.EhPermitidoAdicionarItem(preRequisicaoMaterial);
             model.PodeCancelarItem = preRequisicaoMaterialAppService.EhPermitidoCancelarItem(preRequisicaoMaterial);
             model.PodeEditarItem = preRequisicaoMaterialAppService.EhPermitidoEditarItem(preRequisicaoMaterial);
             model.PodeAprovarItem = preRequisicaoMaterialAppService.EhPermitidoAprovarItem(preRequisicaoMaterial);
+
+            ViewBag.ListaFormatoExportacaoArquivo = new SelectList(typeof(FormatoExportacaoArquivo).ToItemListaDTO(), "Id", "Descricao", (int)FormatoExportacaoArquivo.PDF);
             
             return View(model);
         }
@@ -119,6 +124,31 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         {
             if (preRequisicaoMaterialAppService.Aprovar(id, itens))
                 return PartialView("Redirect", Url.Action("Cadastro", "PreRequisicaoMaterial", new { id = id }));
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+        [HttpPost]
+        public ActionResult Cancelar(int? id, string motivo)
+        {
+            if (preRequisicaoMaterialAppService.Cancelar(id, motivo))
+                return PartialView("Redirect", Url.Action("Cadastro", "PreRequisicaoMaterial", new { id = id }));
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+        //[HttpPost]
+        public ActionResult Imprimir(int? id, FormatoExportacaoArquivo formato)
+        {
+            var arquivo = preRequisicaoMaterialAppService.Exportar(id, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+            //    return PartialView("Redirect", Url.Action("Cadastro", "PreRequisicaoMaterial", new { id = id }));
 
             return PartialView("_NotificationMessagesPartial");
         }

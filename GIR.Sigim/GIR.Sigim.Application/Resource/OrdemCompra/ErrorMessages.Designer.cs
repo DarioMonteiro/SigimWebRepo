@@ -61,11 +61,29 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Informe o motivo do cancelamento da Pré-requisicao..
+        /// </summary>
+        public static string InformeMotivoCancelamentoPreRequisicao {
+            get {
+                return ResourceManager.GetString("InformeMotivoCancelamentoPreRequisicao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O item {0} já foi aprovado..
         /// </summary>
         public static string ItemJaAprovado {
             get {
                 return ResourceManager.GetString("ItemJaAprovado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Pré-requisição possui itens e não pode ser cancelada..
+        /// </summary>
+        public static string PreRequisicaoComItens {
+            get {
+                return ResourceManager.GetString("PreRequisicaoComItens", resourceCulture);
             }
         }
         

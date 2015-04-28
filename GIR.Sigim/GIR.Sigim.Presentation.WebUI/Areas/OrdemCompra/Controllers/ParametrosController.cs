@@ -89,7 +89,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 layoutSPEDId = model.Parametros.LayoutSPEDId;
                 interfaceCotacaoModelo = model.Parametros.InterfaceCotacao.Modelo;
             }
-
+            
             model.ListaEmpresa = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", clienteId);
             model.ListaAssuntoContatoEmail = new SelectList(assuntoContatoAppService.ListarTodos(), "Id", "Descricao", assuntoContatoId);
             model.ListaTipoCompromissoFrete = new SelectList(tipoCompromissoAppService.ListarTipoPagar(), "Id", "Descricao", tipoCompromissoFreteId);

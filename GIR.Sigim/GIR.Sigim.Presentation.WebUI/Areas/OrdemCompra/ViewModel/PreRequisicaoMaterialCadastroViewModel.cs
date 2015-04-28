@@ -52,6 +52,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
 
         public bool PodeSalvar { get; set; }
         public bool PodeCancelar { get; set; }
+        public bool PodeImprimir { get; set; }
         public bool PodeAdicionarItem { get; set; }
         public bool PodeCancelarItem { get; set; }
         public bool PodeEditarItem { get; set; }

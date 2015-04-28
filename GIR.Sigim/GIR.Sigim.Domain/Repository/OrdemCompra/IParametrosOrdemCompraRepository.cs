@@ -9,5 +9,6 @@ namespace GIR.Sigim.Domain.Repository.OrdemCompra
 {
     public interface IParametrosOrdemCompraRepository : IRepository<ParametrosOrdemCompra>
     {
+        ParametrosOrdemCompra Obter();
     }
 }

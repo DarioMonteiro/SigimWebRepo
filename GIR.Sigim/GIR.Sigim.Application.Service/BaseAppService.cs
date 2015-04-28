@@ -53,5 +53,17 @@ namespace GIR.Sigim.Application.Service
             }
             while (ex != null);
         }
+
+        protected string DiretorioImagemRelatorio
+        {
+            get
+            {
+                string diretorio = AppDomain.CurrentDomain.BaseDirectory + "//ImagemRelatorio//";
+                if (!System.IO.Directory.Exists(diretorio))
+                    System.IO.Directory.CreateDirectory(diretorio);
+
+                return diretorio;
+            }
+        }
     }
 }

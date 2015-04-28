@@ -677,6 +677,7 @@
     <Content Include="Areas\Financeiro\Views\Shared\TreeView.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Material.cshtml" />
     <Content Include="Views\Shared\Redirect.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Imprimir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

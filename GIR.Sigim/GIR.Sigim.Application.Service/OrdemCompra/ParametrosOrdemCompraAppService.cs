@@ -36,7 +36,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public ParametrosOrdemCompraDTO Obter()
         {
-            return parametrosRepository.ListarTodos().FirstOrDefault().To<ParametrosOrdemCompraDTO>();
+            return parametrosRepository.Obter().To<ParametrosOrdemCompraDTO>();
         }
 
         public void Salvar(ParametrosOrdemCompraDTO dto)

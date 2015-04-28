@@ -36,9 +36,13 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.3.0-ci1017\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapter\Adapter.cs" />
+    <Compile Include="Adapter\ImageAdapter.cs" />
     <Compile Include="Adapter\EnumAdapter.cs" />
     <Compile Include="CustomAttribute\RequiredIfNotEmptyAttribute.cs" />
     <Compile Include="DTO\Admin\UsuarioDTO.cs" />
@@ -70,7 +75,10 @@
     <Compile Include="DTO\Sigim\AssuntoContatoDTO.cs" />
     <Compile Include="DTO\Sigim\BancoDTO.cs" />
     <Compile Include="DTO\Sigim\BancoLayoutDTO.cs" />
+    <Compile Include="DTO\Sigim\FormatoExportacaoArquivo.cs" />
     <Compile Include="DTO\Sigim\ClienteFornecedorDTO.cs" />
+    <Compile Include="DTO\Sigim\FileDownloadDTO.cs" />
+    <Compile Include="DTO\Sigim\ItemListaDTO.cs" />
     <Compile Include="DTO\Sigim\UnidadeMedidaDTO.cs" />
     <Compile Include="DTO\Sigim\MaterialDTO.cs" />
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
@@ -80,6 +88,12 @@
     <Compile Include="Filtros\PaginationParameters.cs" />
     <Compile Include="Helper\MapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\OrdemCompra\relPreRequisicaoMaterial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relPreRequisicaoMaterial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Resource\Admin\ErrorMessages.Designer.cs">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -150,8 +164,14 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\OrdemCompra\relPreRequisicaoMaterial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relPreRequisicaoMaterial.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resource\Admin\ErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
