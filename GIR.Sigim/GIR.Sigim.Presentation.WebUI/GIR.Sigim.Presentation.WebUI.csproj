@@ -147,7 +147,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\ParametrosUsuarioFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\ParametrosUsuarioFinanceiroViewModel.cs" />
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
@@ -240,6 +243,9 @@
     <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\ListaPartial.cshtml" />
     <Content Include="Areas\Orcamento\Views\Web.config" />
+    <Content Include="Areas\Financeiro\Views\ParametrosUsuarioFinanceiro\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\Shared\_MenuPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\Home\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Cadastro.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />

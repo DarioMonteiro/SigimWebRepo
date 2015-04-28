@@ -59,6 +59,7 @@
     <Compile Include="Contrato\ParametrosContratoAppService.cs" />
     <Compile Include="Financeiro\CentroCustoAppService.cs" />
     <Compile Include="Financeiro\ClasseAppService.cs" />
+    <Compile Include="Financeiro\ParametrosUsuarioFinanceiroAppService.cs" />
     <Compile Include="Financeiro\TipoCompromissoAppService.cs" />
     <Compile Include="Orcamento\OrcamentoAppService.cs" />
     <Compile Include="Orcamento\ParametrosOrcamentoAppService.cs" />

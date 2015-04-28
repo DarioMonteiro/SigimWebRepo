@@ -39,7 +39,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
 
             Ignore(l => l.ParametrosUsuarioId);
 
+            Ignore(l => l.ParametrosUsuarioFinanceiroId);
+
             HasRequired(l => l.ParametrosUsuario).WithRequiredPrincipal(l => l.Usuario);
+
+            HasRequired(l => l.ParametrosUsuarioFinanceiro).WithRequiredPrincipal(l => l.Usuario);
+
 
             //TODO: Implementar controle de acesso
             Ignore(l => l.ListaFuncionalidade);

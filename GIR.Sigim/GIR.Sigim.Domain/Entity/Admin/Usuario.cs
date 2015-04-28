@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Domain.Entity.Admin
@@ -21,7 +22,9 @@ namespace GIR.Sigim.Domain.Entity.Admin
             set { Situacao = value ? "A" : "I"; }
         }
         public int? ParametrosUsuarioId { get; set; }
+        public int? ParametrosUsuarioFinanceiroId { get; set; }
         public ParametrosUsuario ParametrosUsuario { get; set; }
+        public ParametrosUsuarioFinanceiro ParametrosUsuarioFinanceiro { get; set; }
         public ICollection<Funcionalidade> ListaFuncionalidade { get; set; }
         public ICollection<Perfil> ListaPerfil { get; set; }
         public ICollection<UsuarioCentroCusto> ListaUsuarioCentroCusto { get; set; }
