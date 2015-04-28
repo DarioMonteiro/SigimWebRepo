@@ -46,7 +46,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 specification &= RequisicaoMaterialSpecification.DataMaiorOuIgual(filtro.DataInicial);
                 specification &= RequisicaoMaterialSpecification.DataMenorOuIgual(filtro.DataFinal);
-                specification &= RequisicaoMaterialSpecification.PertenceAoCentroCusto(filtro.CentroCusto.Codigo);
+                specification &= RequisicaoMaterialSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
 
                 if (filtro.EhAprovada || filtro.EhCancelada || filtro.EhFechada || filtro.EhRequisitada)
                 {
