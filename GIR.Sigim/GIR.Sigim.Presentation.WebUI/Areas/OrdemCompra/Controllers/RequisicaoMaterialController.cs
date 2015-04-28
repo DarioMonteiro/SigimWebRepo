@@ -65,22 +65,34 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        //public ActionResult Cadastro(int? id)
-        //{
-        //    RequisicaoMaterialCadastroViewModel model = new RequisicaoMaterialCadastroViewModel();
-        //    model.RequisicaoMaterial = id.HasValue ? requisicaoMaterialAppService.ObterPeloId(id) : new RequisicaoMaterialDTO();
-        //    model.ListaMaterial = new SelectList(materialAppService.ListarAtivosPeloTipoTabelaPropria(), "Id", "DescricaoComSiglaUnidadeMedida", model.MaterialId);
+        public ActionResult Cadastro(int? id)
+        {
+            RequisicaoMaterialCadastroViewModel model = new RequisicaoMaterialCadastroViewModel();
+            var requisicaoMaterial = id.HasValue ? requisicaoMaterialAppService.ObterPeloId(id) : new RequisicaoMaterialDTO();
+            if (id.HasValue && !requisicaoMaterial.Id.HasValue)
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
 
-        //    var parametros = parametrosOrdemCompraAppService.Obter();
-        //    if (parametros != null)
-        //    {
-        //        model.DataMinima = parametros.DiasDataMinima.HasValue ? DateTime.Now.AddDays(parametros.DiasDataMinima.Value) : DateTime.Now;
-        //        model.DataMaxima = parametros.DiasPrazo.HasValue ? model.DataMinima.Value.AddDays(parametros.DiasPrazo.Value) : DateTime.Now;
-        //        model.Prazo = parametros.DiasPrazo.HasValue ? parametros.DiasPrazo.Value : 0;
-        //    }
+            model.RequisicaoMaterial = requisicaoMaterial;
+            model.JsonItens = Newtonsoft.Json.JsonConvert.SerializeObject(requisicaoMaterial.ListaItens);
+
+            var parametros = parametrosOrdemCompraAppService.Obter();
+            if (parametros != null)
+            {
+                model.DataMinima = parametros.DiasDataMinima.HasValue ? DateTime.Now.AddDays(parametros.DiasDataMinima.Value) : DateTime.Now;
+                model.DataMaxima = parametros.DiasPrazo.HasValue ? model.DataMinima.Value.AddDays(parametros.DiasPrazo.Value) : DateTime.Now;
+                model.Prazo = parametros.DiasPrazo.HasValue ? parametros.DiasPrazo.Value : 0;
+            }
+
+            //model.PodeSalvar = requisicaoMaterialAppService.EhPermitidoSalvar(requisicaoMaterial);
+            //model.PodeCancelar = requisicaoMaterialAppService.EhPermitidoCancelar(requisicaoMaterial);
+            //model.PodeImprimir = requisicaoMaterialAppService.EhPermitidoImprimir(requisicaoMaterial);
+            //model.PodeAdicionarItem = requisicaoMaterialAppService.EhPermitidoAdicionarItem(requisicaoMaterial);
+            //model.PodeCancelarItem = requisicaoMaterialAppService.EhPermitidoCancelarItem(requisicaoMaterial);
+            //model.PodeEditarItem = requisicaoMaterialAppService.EhPermitidoEditarItem(requisicaoMaterial);
+            //model.PodeAprovarItem = requisicaoMaterialAppService.EhPermitidoAprovarItem(requisicaoMaterial);
             
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]

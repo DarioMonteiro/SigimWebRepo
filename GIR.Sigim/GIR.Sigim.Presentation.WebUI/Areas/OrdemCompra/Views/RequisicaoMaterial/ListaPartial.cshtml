@@ -80,8 +80,7 @@
                     @foreach (var item in Lista)
                     {
                         <tr>
-                            @*<td class="text-center">@Html.ActionLink(item.Id.ToString(), "Cadastro", new { id = item.Id })</td>*@
-                            <td class="text-center"><a href="javascript:alert('Em construção.');">@item.Id</a></td>
+                            <td class="text-center">@Html.ActionLink(item.Id.ToString(), "Cadastro", new { id = item.Id })</td>
                             <td class="text-center">@item.SituacaoDescricao</td>
                             <td class="text-center">@item.Data.ToShortDateString()</td>
                             <td class="text-center text-nowrap">
