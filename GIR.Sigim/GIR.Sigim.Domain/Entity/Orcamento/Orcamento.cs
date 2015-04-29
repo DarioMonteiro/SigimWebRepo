@@ -14,13 +14,13 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
         public int? Sequencial { get; set; }
         public string Descricao { get; set; }
         public Nullable<DateTime> Data { get; set; }
-        [Obsolete("Esta propriedade será removida em uma versão futura. Caso NÃO esteja codificando em um repositório, utilize a propriedade \"Ativo\"")]
+        //[Obsolete("Esta propriedade será removida em uma versão futura. Caso NÃO esteja codificando em um repositório, utilize a propriedade \"Ativo\"")]
         public string Situacao { get; set; }
-        public bool Ativo
-        {
-            get { return Situacao == "A"; }
-            set { Situacao = value ? "A" : "I"; }
-        }
+        //public bool Ativo
+        //{
+        //    get { return Situacao == "A"; }
+        //    set { Situacao = value ? "A" : "I"; }
+        //}
         public bool? EhControlado { get; set; }
         public ICollection<OrcamentoComposicao> ListaOrcamentoComposicao { get; set; }
 
