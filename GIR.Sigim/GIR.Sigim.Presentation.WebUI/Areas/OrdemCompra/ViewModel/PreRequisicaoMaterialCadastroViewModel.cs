@@ -35,7 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         [Display(Name = "Quantidade")]
         public decimal Quantidade { get; set; }
 
-        [Display(Name = "Quantidade aprovada")]
+        [Display(Name = "Qtd. aprovada")]
         public decimal QuantidadeAprovada { get; set; }
 
         [Display(Name = "Data mínima")]
@@ -52,9 +52,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
 
         public bool PodeSalvar { get; set; }
         public bool PodeCancelar { get; set; }
+        public bool PodeImprimir { get; set; }
         public bool PodeAdicionarItem { get; set; }
         public bool PodeCancelarItem { get; set; }
         public bool PodeEditarItem { get; set; }
+        public bool PodeAprovarItem { get; set; }
 
         public PreRequisicaoMaterialCadastroViewModel()
         {

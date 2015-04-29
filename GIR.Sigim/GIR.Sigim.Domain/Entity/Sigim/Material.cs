@@ -12,7 +12,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
     {
         public string Descricao { get; set; }
         public string SiglaUnidadeMedida { get; set; }
-        public UnidadeMedida UnidadeMedida { get; set; }
+        public virtual UnidadeMedida UnidadeMedida { get; set; }
         public string CodigoMaterialClasseInsumo { get; set; }
         public MaterialClasseInsumo MaterialClasseInsumo { get; set; }
         public decimal? PrecoUnitario { get; set; }

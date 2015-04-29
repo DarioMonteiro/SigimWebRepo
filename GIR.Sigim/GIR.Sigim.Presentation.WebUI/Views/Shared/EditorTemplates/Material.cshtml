@@ -5,7 +5,10 @@
         @Html.LabelFor(m => m.Descricao, "Material", new { @class = "label" })
         <div class="input-group">
             <label class="input">
-                @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do material" })
+                @{
+                    string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+                }
+                @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do material", @class = cssClass })
                 @Html.HiddenFor(m => m.Id)
             </label>
             <a data-toggle="modal" href="javascript:alert('Em Construção');" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
@@ -15,7 +18,7 @@
     <section class="col col-2" style="padding-right: 0;">
         @Html.LabelFor(m => m.SiglaUnidadeMedida, "UN", new { @class = "label" })
         <label class="input">
-            @Html.TextBoxFor(m => m.SiglaUnidadeMedida, new { @readonly = "" })
+            @Html.TextBoxFor(m => m.SiglaUnidadeMedida, new { @readonly = "", @class = "readonly" })
         </label>
     </section>
 </section>

@@ -26,6 +26,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Orcamento
             var set = CreateSetAsQueryable();
 
             set = set.Where(l => l.Obra.CentroCusto.Codigo == codigoCentroCusto
+                && l.Situacao == "A" 
                 && l.Obra.CentroCusto.ListaCentroCustoEmpresa.Any(s => s.EhClasseOrcamento.Value));
 
             set = set.OrderByDescending(l => l.Sequencial);

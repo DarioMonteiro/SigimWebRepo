@@ -9,13 +9,13 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
 {
     public class RequisicaoMaterialSpecification : AbstractRequisicaoMaterialSpecification<RequisicaoMaterial>
     {
-        public static Specification<RequisicaoMaterial> PertenceAoCentroCusto(string centroCustoId)
+        public static Specification<RequisicaoMaterial> PertenceAoCentroCustoIniciadoPor(string centroCustoId)
         {
             Specification<RequisicaoMaterial> specification = new TrueSpecification<RequisicaoMaterial>();
 
             if (!string.IsNullOrEmpty(centroCustoId))
             {
-                var directSpecification = new DirectSpecification<RequisicaoMaterial>(l => l.CentroCusto.Codigo == centroCustoId);
+                var directSpecification = new DirectSpecification<RequisicaoMaterial>(l => l.CentroCusto.Codigo.StartsWith(centroCustoId));
                 specification &= directSpecification;
             }
 

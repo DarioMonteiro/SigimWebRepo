@@ -35,7 +35,7 @@
 /*
  * GLOBAL: Sound Config
  */
-	$.sound_path = "../Content/sound/";
+	$.sound_path = window.location.host + "/Content/sound/";
 	$.sound_on = false;
 /*
  * Impacts the responce rate of some of the responsive elements (lower 

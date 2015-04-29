@@ -33,6 +33,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         [Display(Name = "Cancelado por")]
         public string LoginUsuarioCancelamento { get; set; }
 
+        [Display(Name = "Motivo do CancelamentoX")]
         public string MotivoCancelamento { get; set; }
 
         public AbstractRequisicaoMaterialDTO()

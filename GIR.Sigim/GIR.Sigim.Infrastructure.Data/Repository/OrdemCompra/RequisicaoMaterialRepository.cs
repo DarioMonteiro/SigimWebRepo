@@ -68,6 +68,15 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra
             return set.Skip(pageCount * pageIndex).Take(pageCount);
         }
 
+        public void RemoverItem(RequisicaoMaterialItem item)
+        {
+            if (item != (RequisicaoMaterialItem)null)
+            {
+                QueryableUnitOfWork.Attach(item);
+                QueryableUnitOfWork.CreateSet<RequisicaoMaterialItem>().Remove(item);
+            }
+        }
+
         #endregion
     }
 }

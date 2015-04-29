@@ -19,5 +19,15 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra
         }
 
         #endregion
+
+        #region IParametrosOrdemCompraRepository Members
+
+        public ParametrosOrdemCompra Obter()
+        {
+            var set = CreateSetAsQueryable(l => l.Cliente);
+            return set.FirstOrDefault();
+        }
+
+        #endregion
     }
 }

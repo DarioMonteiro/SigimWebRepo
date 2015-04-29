@@ -12,6 +12,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
     {
         List<RequisicaoMaterialDTO> ListarPeloFiltro(RequisicaoMaterialFiltro filtro, int? idUsuario, out int totalRegistros);
         RequisicaoMaterialDTO ObterPeloId(int? id);
-        //void Salvar(ParametrosUsuarioDTO dto);
+        bool Salvar(RequisicaoMaterialDTO dto);
     }
 }

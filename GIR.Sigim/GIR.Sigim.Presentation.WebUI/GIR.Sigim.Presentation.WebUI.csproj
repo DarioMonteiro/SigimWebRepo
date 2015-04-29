@@ -164,6 +164,7 @@
     <Compile Include="Areas\OrdemCompra\Controllers\ParametrosUsuarioController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\PreRequisicaoMaterialController.cs" />
     <Compile Include="Areas\OrdemCompra\OrdemCompraAreaRegistration.cs" />
+    <Compile Include="Areas\OrdemCompra\ViewModel\RequisicaoMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\RequisicaoMaterialListaViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialListaViewModel.cs" />
@@ -257,6 +258,7 @@
     <Content Include="Areas\Contrato\Views\MedicaoContrato\Index.cshtml" />
     <Content Include="Areas\Contrato\Views\MedicaoContrato\ListaPartial.cshtml" />
     <Content Include="Areas\Contrato\Views\MedicaoContrato\Medicao.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Cadastro.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
@@ -696,6 +698,7 @@
     <Content Include="Areas\Financeiro\Views\Shared\TreeView.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Material.cshtml" />
     <Content Include="Views\Shared\Redirect.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Imprimir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

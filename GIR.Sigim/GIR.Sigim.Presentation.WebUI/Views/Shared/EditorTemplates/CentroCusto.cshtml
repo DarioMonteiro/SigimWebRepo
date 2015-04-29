@@ -7,7 +7,10 @@
     @Html.LabelFor(m => m.Codigo, labelText, new { @class = "label" })
     <div class="input-group">
         <label class="input">
-            @Html.TextBoxFor(m => m.Codigo)
+            @{
+                string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+            }
+            @Html.TextBoxFor(m => m.Codigo, new { @class = cssClass })
         </label>
         <a data-toggle="modal" href="#@Html.IdFor(m => m.Codigo)_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-sitemap"></i></a>
     </div>
@@ -16,7 +19,7 @@
 <section class="@ViewBag.sectionClass">
     <label class="label" for="fname">&nbsp;</label>
     <label class="input">
-        @Html.TextBoxFor(m => m.Descricao, new { @readonly = "" })
+        @Html.TextBoxFor(m => m.Descricao, new { @readonly = "", @class = "readonly" })
     </label>
 </section>
 
@@ -109,7 +112,8 @@
 
         $.event.trigger({
             type: "centroCustoValidado",
-            codigo: codigoCentroCusto
+            codigo: codigoCentroCusto,
+            isValid: isValid
         });
 
         return isValid;
