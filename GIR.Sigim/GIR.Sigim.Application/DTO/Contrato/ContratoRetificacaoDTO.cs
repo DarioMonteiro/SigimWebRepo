@@ -25,10 +25,15 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public TipoCompromissoDTO RetencaoTipoCompromisso { get; set; }
 
         public ICollection<ContratoRetificacaoItemDTO> ListaContratoRetificacaoItem { get; set; }
+        public ICollection<ContratoRetificacaoProvisaoDTO> ListaContratoRetificacaoProvisao { get; set; }
+        public ICollection<ContratoRetificacaoItemCronogramaDTO> ListaContratoRetificacaoItemCronograma { get; set; }
+
 
         public ContratoRetificacaoDTO()
         {
-            this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItemDTO>();  
+            this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItemDTO>();
+            this.ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisaoDTO>();
+            this.ListaContratoRetificacaoItemCronograma = new HashSet<ContratoRetificacaoItemCronogramaDTO>();
         }
 
     }

@@ -21,11 +21,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnOrder(1);
 
             Property(l => l.CodigoCentroCusto)
+                .IsRequired() 
                 .HasMaxLength(18)
                 .HasColumnName("centroCusto")
                 .HasColumnOrder(2);
 
-            HasRequired(l => l.CentroCusto)
+            HasRequired<Domain.Entity.Financeiro.CentroCusto>(l => l.CentroCusto)
                 .WithMany(l => l.ListaContrato)
                 .HasForeignKey(l => l.CodigoCentroCusto);
 
@@ -33,7 +34,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("licitacao")
                 .HasColumnOrder(3);
 
-            HasOptional(l => l.Licitacao)
+            HasOptional<Licitacao>(l => l.Licitacao)
                 .WithMany(l => l.ListaContrato)
                 .HasForeignKey(l => l.LicitacaoId);
 
@@ -42,7 +43,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("contratante")
                 .HasColumnOrder(4);
 
-            HasRequired(l => l.Contratante)
+            HasRequired<Domain.Entity.Sigim.ClienteFornecedor>(l => l.Contratante)
                 .WithMany(l => l.ListaContratoContratante)
                 .HasForeignKey(l => l.ContratanteId);
 
@@ -51,7 +52,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("contratado")
                 .HasColumnOrder(5);
 
-            HasRequired(l => l.Contratado)
+            HasRequired<Domain.Entity.Sigim.ClienteFornecedor>(l => l.Contratado)
                 .WithMany(l => l.ListaContratoContratado)
                 .HasForeignKey(l => l.ContratadoId);
 
@@ -59,7 +60,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("interveniente")
                 .HasColumnOrder(6);
 
-            HasOptional(l => l.Interveniente)
+            HasOptional<Domain.Entity.Sigim.ClienteFornecedor>(l => l.Interveniente)
                 .WithMany(l => l.ListaContratoInterveniente)
                 .HasForeignKey(l => l.IntervenienteId);
 
@@ -68,7 +69,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("contratoDescricao")
                 .HasColumnOrder(7);
 
-            HasRequired(l => l.ContratoDescricao)
+            HasRequired<LicitacaoDescricao>(l => l.ContratoDescricao)
                 .WithMany(l => l.ListaContrato)
                 .HasForeignKey(l => l.ContratoDescricaoId);
 
@@ -99,6 +100,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.DataCadastro)
                 .HasColumnName("dataCadastro")
+                .IsRequired()
                 .HasColumnOrder(13);
 
             Property(l => l.UsuarioCadastro)
@@ -126,10 +128,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnOrder(18);
 
             HasMany(l => l.ListaContratoRetificacao)
-                .WithRequired(c => c.Contrato);
+                .WithRequired(c => c.Contrato)
+                .HasForeignKey(l => l.ContratoId);
 
             //HasMany(l => l.ListaContratoRetificacaoItem)
-            //    .WithRequired(c => c.Contrato);  
+            //    .WithRequired(c => c.Contrato)
+            //    .HasForeignKey(l => l.ContratoId);  
         }
 
 

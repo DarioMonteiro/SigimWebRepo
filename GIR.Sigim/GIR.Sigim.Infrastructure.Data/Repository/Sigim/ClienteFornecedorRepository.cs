@@ -32,7 +32,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
         public IEnumerable<ClienteFornecedor> ListarAtivosDeContrato()
         {
             return QueryableUnitOfWork.CreateSet<ClienteFornecedor>()
-                .Where(l => l.ClienteContrato == "S")
+                .Where(l => l.Situacao == "A" & l.ClienteContrato == "S")
                 .OrderBy(l => l.Nome); 
         }
 

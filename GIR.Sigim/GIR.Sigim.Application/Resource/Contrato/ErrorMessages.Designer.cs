@@ -61,11 +61,38 @@ namespace GIR.Sigim.Application.Resource.Contrato {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retificação não aprovada..
+        ///   Looks up a localized string similar to O contrato não está assinado..
+        /// </summary>
+        public static string ContratoNaoAssinado {
+            get {
+                return ResourceManager.GetString("ContratoNaoAssinado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O ítem não possui provisionamento para ser medido..
+        /// </summary>
+        public static string RetificacaoItemSemProvisionamento {
+            get {
+                return ResourceManager.GetString("RetificacaoItemSemProvisionamento", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A retificação não está aprovada..
         /// </summary>
         public static string RetificacaoNaoAprovada {
             get {
                 return ResourceManager.GetString("RetificacaoNaoAprovada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O contrato não possui retificação..
+        /// </summary>
+        public static string RetificacaoNaoExiste {
+            get {
+                return ResourceManager.GetString("RetificacaoNaoExiste", resourceCulture);
             }
         }
     }

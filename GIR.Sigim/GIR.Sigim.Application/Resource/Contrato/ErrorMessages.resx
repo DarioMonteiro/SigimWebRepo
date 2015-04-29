@@ -117,7 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ContratoNaoAssinado" xml:space="preserve">
+    <value>O contrato não está assinado.</value>
+  </data>
+  <data name="RetificacaoItemSemProvisionamento" xml:space="preserve">
+    <value>O ítem não possui provisionamento para ser medido.</value>
+  </data>
   <data name="RetificacaoNaoAprovada" xml:space="preserve">
-    <value>Retificação não aprovada.</value>
+    <value>A retificação não está aprovada.</value>
+  </data>
+  <data name="RetificacaoNaoExiste" xml:space="preserve">
+    <value>O contrato não possui retificação.</value>
   </data>
 </root>

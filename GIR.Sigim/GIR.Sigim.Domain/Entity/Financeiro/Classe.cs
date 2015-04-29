@@ -21,7 +21,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterialItem> ListaRequisicaoMaterialItem { get; set; }
         public virtual ICollection<OrcamentoComposicao> ListaOrcamentoComposicao { get; set; }
-        public virtual ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; } 
+        public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; } 
 
         public Classe()
         {

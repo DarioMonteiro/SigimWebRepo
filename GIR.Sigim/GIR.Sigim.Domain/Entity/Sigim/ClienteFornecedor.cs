@@ -35,13 +35,20 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<Contrato.Contrato> ListaContratoContratado { get; set; }
         public ICollection<Contrato.Contrato> ListaContratoInterveniente { get; set; }
         public ICollection<Contrato.Licitacao> ListaLicitacao { get; set; }
+        public ICollection<TituloPagar> ListaTituloPagar { get; set; }
+        public ICollection<TituloReceber> ListaTituloReceber { get; set; }
 
 
         public ClienteFornecedor()
         {
             this.ListaCentroCustoEmpresa = new HashSet<CentroCustoEmpresa>();
             this.ListaParametrosOrdemCompra = new HashSet<OrdemCompra.ParametrosOrdemCompra>();
+            this.ListaContratoContratante = new HashSet<Contrato.Contrato>();
+            this.ListaContratoContratado = new HashSet<Contrato.Contrato>();
+            this.ListaContratoInterveniente = new HashSet<Contrato.Contrato>();
             this.ListaLicitacao = new HashSet<Contrato.Licitacao>();
+            this.ListaTituloPagar = new HashSet<TituloPagar>();
+            this.ListaTituloReceber = new HashSet<TituloReceber>();
         }
     }
 }

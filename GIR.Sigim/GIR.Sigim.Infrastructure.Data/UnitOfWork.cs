@@ -107,7 +107,10 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new LicitacaoCronogramaConfiguration());
             modelBuilder.Configurations.Add(new ContratoConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoConfiguration());
-            modelBuilder.Configurations.Add(new ContratoRetificacaoItemConfiguration());  
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoProvisaoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemCronogramaConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoConfiguration());
 
             //Financeiro
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());
@@ -116,6 +119,8 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new TipoCompromissoConfiguration());
             modelBuilder.Configurations.Add(new ParametrosUsuarioFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new TipoDocumentoConfiguration());
+            modelBuilder.Configurations.Add(new TituloPagarConfiguration());
+            modelBuilder.Configurations.Add(new TituloReceberConfiguration());
 
             //Orcamento
             modelBuilder.Configurations.Add(new ObraConfiguration());

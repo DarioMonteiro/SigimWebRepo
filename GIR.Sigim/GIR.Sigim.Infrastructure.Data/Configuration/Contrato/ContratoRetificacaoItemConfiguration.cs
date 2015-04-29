@@ -24,15 +24,16 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("contrato")
                 .HasColumnOrder(2);
 
-            //HasRequired(l => l.Contrato)
-            //    .WithMany(c => c.ListaContratoRetificacaoItem).HasForeignKey(l => l.ContratoId);
+            //HasRequired<Domain.Entity.Contrato.Contrato>(l => l.Contrato)
+            //    .WithMany(c => c.ListaContratoRetificacaoItem)
+            //    .HasForeignKey(l => l.ContratoId);
 
             Property(l => l.ContratoRetificacaoId)
                 .IsRequired()
                 .HasColumnName("contratoRetificacao")
                 .HasColumnOrder(3);
 
-            HasRequired(l => l.ContratoRetificacao)
+            HasRequired<Domain.Entity.Contrato.ContratoRetificacao>(l => l.ContratoRetificacao)
                 .WithMany(c => c.ListaContratoRetificacaoItem)
                 .HasForeignKey(l => l.ContratoRetificacaoId);
 
@@ -57,7 +58,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("servico")
                 .HasColumnOrder(7);
 
-            HasRequired(l => l.Servico)
+            HasRequired<Domain.Entity.Sigim.Servico>(l => l.Servico)
                 .WithMany(c => c.ListaContratoRetificacaoItem)
                 .HasForeignKey(l => l.ServicoId);
 
@@ -83,7 +84,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .IsRequired()
                 .HasColumnOrder(11);
 
-            HasRequired(l => l.Classe)
+            HasRequired<Domain.Entity.Financeiro.Classe>(l => l.Classe)
                 .WithMany(c => c.ListaContratoRetificacaoItem)
                 .HasForeignKey(l => l.CodigoClasse);
 
@@ -110,9 +111,13 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("retencaoTipoCompromisso")
                 .HasColumnOrder(16);
 
-            HasOptional(l => l.RetencaoTipoCompromisso)
+            HasOptional<Domain.Entity.Financeiro.TipoCompromisso>(l => l.RetencaoTipoCompromisso)
                 .WithMany(c => c.ListaContratoRetificacaoItem)
-                .HasForeignKey(l => l.RetencaoTipoCompromissoId); 
+                .HasForeignKey(l => l.RetencaoTipoCompromissoId);
+
+            HasMany<Domain.Entity.Contrato.ContratoRetificacaoProvisao>(l => l.ListaContratoRetificacaoProvisao)
+                .WithOptional(c => c.ContratoRetificacaoItem)
+                .HasForeignKey(l => l.ContratoRetificacaoItemId);
 
         }
     }

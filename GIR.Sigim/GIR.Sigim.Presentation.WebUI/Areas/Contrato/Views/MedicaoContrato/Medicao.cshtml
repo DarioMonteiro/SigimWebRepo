@@ -97,6 +97,7 @@
                                                         @Html.DropDownListFor(m => m.ContratoRetificacaoItemId, Model.ListaServicoContratoRetificacaoItem, string.Empty ,new { @novalidate = "novalidate" })          
                                                         <i></i>
                                                     </label>
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemId, "", new { @id = Html.IdFor(m => m.ContratoRetificacaoItemId) + "_ValidationMessage", @class = "note note-error" })
                                                 </section>
                                             </div>
                                             <div class="row">
@@ -127,6 +128,7 @@
                                                     </label>
                                                 </section>
                                             </div>
+                                            @Html.HiddenFor(m => m.JsonListaRetificacaoProvisao)
                                         </fieldset>
                                     </div>
                                 </div>
@@ -272,6 +274,42 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseMedicao" class="collapsed">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Medição
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseMedicao" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th style="min-width: 65px;">Seq</th>
+                                                            <th>Evento</th>
+                                                            <th class="text-center">Data</th>
+                                                            <th class="text-right">Quantidade</th>
+                                                            <th class="text-right">Quantidade medida</th>
+                                                            <th class="text-right">Quantidade pendente</th>
+                                                            <th class="text-right">Valor</th>
+                                                            <th class="text-right">Valor medido</th>
+                                                            <th class="text-right">Valor pendente</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>
@@ -298,18 +336,109 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 codigo: codigoContratoRetificacaoItem
-            })
-        })
-        .success(function (result) {
-            showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemId)'), result.errorMessage);
-            $('#@Html.IdFor(m => m.ContratoRetencaoItem.ComplementoDescricao)').val(result.complementoDescricao);
-            $('#@Html.IdFor(m => m.ContratoRetencaoItem.DescricaoNaturezaItem)').val(result.descricaoNatureza);
-            $('#@Html.IdFor(m => m.ContratoRetencaoItem.Servico.UnidadeMedida.Sigla)').val(result.siglaUnidadeMedida);
-            $('#@Html.IdFor(m => m.ValorItem)').val(roundDecimal(result.valorContratadoItem, 2));
-            if (result.retencaoItem != null) $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(result.retencaoItem,5)); 
-            isRecuperou = result.ehRecuperouContratoRetificacaoItem;
+            }),
+            success: function (result) {
+                showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemId)'), result.errorMessage);
+                if (result.contratoRetificacaoItem != null) {
+                    $('#@Html.IdFor(m => m.ContratoRetencaoItem.ComplementoDescricao)').val(result.contratoRetificacaoItem.ComplementoDescricao);
+                    $('#@Html.IdFor(m => m.ContratoRetencaoItem.DescricaoNaturezaItem)').val(result.contratoRetificacaoItem.DescricaoNaturezaItem);
+                    $('#@Html.IdFor(m => m.ContratoRetencaoItem.Servico.UnidadeMedida.Sigla)').val(result.contratoRetificacaoItem.Servico.SiglaUnidadeMedida);
+                    if (result.contratoRetificacaoItem.ValorItem != null) {
+                        $('#@Html.IdFor(m => m.ValorItem)').val(roundDecimal(result.contratoRetificacaoItem.ValorItem, 2));
+                    }
+                    else {
+                        $('#@Html.IdFor(m => m.ValorItem)').val("");
+                    }
+                    if (result.contratoRetificacaoItem.RetencaoItem != null) $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(result.contratoRetificacaoItem.RetencaoItem, 5));
+                    $("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val(result.listaContratoRetificacaoProvisao);
+                    jsonRetificaoProvisaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val());
+                }
+                else
+                {
+                    $('#@Html.IdFor(m => m.ContratoRetencaoItem.ComplementoDescricao)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetencaoItem.DescricaoNaturezaItem)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetencaoItem.Servico.UnidadeMedida.Sigla)').val("");
+                    $('#@Html.IdFor(m => m.ValorItem)').val("");
+                    $("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val();
+                    jsonRetificaoProvisaoArray = null;
+
+                }
+                isRecuperou = result.ehRecuperou;
+            },
+            error: function (result) {
+                showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemId)'), result.errorMessage);
+                $('#@Html.IdFor(m => m.ContratoRetencaoItem.ComplementoDescricao)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetencaoItem.DescricaoNaturezaItem)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetencaoItem.Servico.UnidadeMedida.Sigla)').val("");
+                $('#@Html.IdFor(m => m.ValorItem)').val("");
+                $("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val();
+                jsonRetificaoProvisaoArray = null;
+            }
         });
+
+        fillTable();
 
         return isRecuperou;
     }
+
+
+    function fillTable() {
+            $("#tableItens thead").empty();
+            var row = $('<tr role="row">');
+            $("#tableItens thead").append(row);
+            row.append($('<th style="min-width: 65px;">Seq</th>'));
+            row.append($('<th>Evento</th>'));
+            row.append($('<th class="text-center">Data</th>'));
+            if (jsonRetificaoProvisaoArray != null) {
+                if (jsonRetificaoProvisaoArray[0].ContratoRetificacaoItem.NaturezaItem != 1) {
+                    row.append($('<th class="text-right">Quantidade</th>'));
+                    row.append($('<th class="text-right">Quantidade medida</th>'));
+                    row.append($('<th class="text-right">Quantidade pendente</th>'));
+                }
+            }
+            else {
+                row.append($('<th class="text-right">Quantidade</th>'));
+                row.append($('<th class="text-right">Quantidade medida</th>'));
+                row.append($('<th class="text-right">Quantidade pendente</th>'));
+            }
+            row.append($('<th class="text-right">Valor</th>'));
+            row.append($('<th class="text-right">Valor medido</th>'));
+            row.append($('<th class="text-right">Valor pendente</th>'));
+            row.append($('<tr />'));
+
+        $("#tableItens tbody").empty();
+        for (var i = 0; i < jsonRetificaoProvisaoArray.length; i++) {
+            var row = $('<tr />')
+            $("#tableItens tbody").append(row);
+
+            row.append($('<td class="text-nowrap">' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Sequencial + '</td>'));
+            row.append($('<td class="text-nowrap" onclick="loadItem(' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Sequencial + ');">' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Descricao + '</td>'));
+            row.append($('<td>' + new Date(jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.DataVencimento).toFormatDDMMYYYY() + '</td>'));
+            if (jsonRetificaoProvisaoArray[i].ContratoRetificacaoItem.NaturezaItem != 1)
+            {
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Quantidade), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadeTotalMedida), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadePendente), 2) + '</td>'));
+            }
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Valor), 2) + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorTotalMedido), 2) + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorPendente), 2) + '</td>'));
+
+
+            //row.append($('<td>' + jsonItemArray[i].Complemento + '</td>'));
+            //row.append($('<td>' + jsonItemArray[i].Material.SiglaUnidadeMedida + '</td>'));
+            //row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItemArray[i].Quantidade), 4) + '</td>'));
+            //row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItemArray[i].QuantidadeAprovada), 4) + '</td>'));
+            //row.append($('<td class="text-nowrap">' + jsonItemArray[i].Classe.Codigo + " - " + jsonItemArray[i].Classe.Descricao + '</td>'));
+            //row.append($('<td class="text-nowrap">' + jsonItemArray[i].CentroCusto.Codigo + " - " + jsonItemArray[i].CentroCusto.Descricao + '</td>'));
+            //row.append($('<td>' + new Date(jsonItemArray[i].DataMinima).toFormatDDMMYYYY() + '</td>'));
+            //row.append($('<td>' + new Date(jsonItemArray[i].DataMaxima).toFormatDDMMYYYY() + '</td>'));
+            //row.append($('<td>' + jsonItemArray[i].SituacaoDescricao + '</td>'));
+            //var rmGerada = "&nbsp;";
+            //if (jsonItemArray[i].ListaRequisicaoMaterialItem.length > 0)
+            //    rmGerada = jsonItemArray[i].ListaRequisicaoMaterialItem[0].RequisicaoMaterial.Id;
+            //row.append($('<td class="text-center">' + rmGerada + '</td>'));
+        }
+    }
+
 </script>

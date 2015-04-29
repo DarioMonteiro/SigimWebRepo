@@ -12,5 +12,8 @@ namespace GIR.Sigim.Application.Service.Contrato
     {
         List<ContratoDTO> ListarPeloFiltro(MedicaoContratoFiltro filtro,int? idUsuario, out int totalRegistros);
         ContratoDTO ObterPeloId(int? id, int? idUsuario);
+        bool EhContratoAssinado(ContratoDTO dto);
+        bool EhContratoExistente(ContratoDTO dto);
+        bool EhContratoComCentroCustoAtivo(ContratoDTO dto);
     }
 }

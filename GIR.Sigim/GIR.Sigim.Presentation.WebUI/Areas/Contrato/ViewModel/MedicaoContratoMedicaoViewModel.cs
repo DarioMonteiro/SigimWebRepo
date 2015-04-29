@@ -71,5 +71,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         [StringLength(50, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         public string CodigoBarras { get; set; }
 
+        public string JsonListaRetificacaoProvisao { get; set; }
+
     }
 }

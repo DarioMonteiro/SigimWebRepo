@@ -44,7 +44,11 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ContratoRetificacao, ContratoRetificacaoDTO>();
             Mapper.CreateMap<ContratoRetificacaoDTO, ContratoRetificacao>();
             Mapper.CreateMap<ContratoRetificacaoItem, ContratoRetificacaoItemDTO>();
-            Mapper.CreateMap<ContratoRetificacaoItemDTO, ContratoRetificacaoItem>(); 
+            Mapper.CreateMap<ContratoRetificacaoItemDTO, ContratoRetificacaoItem>();
+            Mapper.CreateMap<ContratoRetificacaoProvisao, ContratoRetificacaoProvisaoDTO>();
+            Mapper.CreateMap<ContratoRetificacaoProvisaoDTO, ContratoRetificacaoProvisao>();
+            Mapper.CreateMap<ContratoRetificacaoItemCronograma, ContratoRetificacaoItemCronogramaDTO>();
+            Mapper.CreateMap<ContratoRetificacaoItemCronogramaDTO, ContratoRetificacaoItemCronograma>();
 
             #endregion
             

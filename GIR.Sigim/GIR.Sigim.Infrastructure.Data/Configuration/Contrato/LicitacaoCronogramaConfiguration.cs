@@ -25,7 +25,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("centroCusto")
                 .HasColumnOrder(2);
 
-            HasRequired(l => l.CentroCusto)
+            HasRequired<Domain.Entity.Financeiro.CentroCusto>(l => l.CentroCusto)
                 .WithMany(l => l.ListaLicitacaoCronograma)
                 .HasForeignKey(l => l.CodigoCentroCusto);
 
@@ -33,36 +33,43 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("licitacaoDescricao")
                 .HasColumnOrder(3);
 
-            HasRequired(l => l.LicitacaoDescricao)
+            HasRequired<Domain.Entity.Contrato.LicitacaoDescricao>(l => l.LicitacaoDescricao)
                 .WithMany(l => l.ListaLicitacaoCronograma)
                 .HasForeignKey(l => l.LicitacaoDescricaoId);
 
             Property(l => l.DataInicioCartaConvite)
                 .HasColumnName("dataInicioCartaConvite")
+                .IsRequired()
                 .HasColumnOrder(4);
 
             Property(l => l.DataFimCartaConvite)
                 .HasColumnName("dataFimCartaConvite")
+                .IsRequired()
                 .HasColumnOrder(5);
 
             Property(l => l.DataInicioQuadroComparativo )
                 .HasColumnName("dataInicioQuadroComparativo")
+                .IsRequired()
                 .HasColumnOrder(6);
 
             Property(l => l.DataFimQuadroComparativo)
                 .HasColumnName("dataFimQuadroComparativo")
+                .IsRequired()
                 .HasColumnOrder(7);
 
             Property(l => l.DataInicioAssinatura)
                 .HasColumnName("dataInicioAssinatura")
+                .IsRequired()
                 .HasColumnOrder(8);
 
             Property(l => l.DataFimAssinatura)
                 .HasColumnName("dataFimAssinatura")
+                .IsRequired()
                 .HasColumnOrder(9);
 
             Property(l => l.DataInicioServico)
                 .HasColumnName("dataInicioServico")
+                .IsRequired()
                 .HasColumnOrder(10);
 
             Property(l => l.PrazoFabricacao)
@@ -71,14 +78,17 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.DuracaoCartaConvite )
                 .HasColumnName("duracaoCartaConvite")
+                .IsRequired()
                 .HasColumnOrder(12);
 
             Property(l => l.DuracaoQuadroComparativo)
                 .HasColumnName("duracaoQuadroComparativo")
+                .IsRequired()
                 .HasColumnOrder(13);
 
             Property(l => l.DuracaoAssinatura)
                 .HasColumnName("duracaoAssinatura")
+                .IsRequired()
                 .HasColumnOrder(14);
 
             Property(l => l.DataInicioCartaConviteRealizado)

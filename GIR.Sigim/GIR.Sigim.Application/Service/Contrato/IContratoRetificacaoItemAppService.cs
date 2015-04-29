@@ -9,6 +9,6 @@ namespace GIR.Sigim.Application.Service.Contrato
 {
     public interface IContratoRetificacaoItemAppService : IBaseAppService 
     {
-        ContratoRetificacaoItemDTO ObterPeloId(int? id);
+        ContratoRetificacaoItemDTO ObterPeloId(int id);
     }
 }

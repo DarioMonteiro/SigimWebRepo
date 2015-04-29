@@ -21,6 +21,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.Descricao)
                .HasColumnName("descricao")
+               .IsRequired()
                .HasMaxLength(100) 
                .HasColumnOrder(2);
 

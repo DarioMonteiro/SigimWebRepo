@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
-    public enum SituacaoClienteFornecedor
+    public enum SituacaoClienteFornecedor : short 
     {
 
         [Description("Ativo")]

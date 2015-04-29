@@ -30,9 +30,12 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         #region Métodos IContratoRetificacaoItemAppService
 
-        public ContratoRetificacaoItemDTO ObterPeloId(int? id)
+        public ContratoRetificacaoItemDTO ObterPeloId(int id)
         {
-            return contratoRetificacaoItemRepository.ObterPeloId(id,l => l.Classe, l => l.Servico.UnidadeMedida , l => l.RetencaoTipoCompromisso).To<ContratoRetificacaoItemDTO>() ;
+            return contratoRetificacaoItemRepository.ObterPeloId(   id,
+                                                                    l => l.Classe, 
+                                                                    l => l.Servico.UnidadeMedida , 
+                                                                    l => l.RetencaoTipoCompromisso).To<ContratoRetificacaoItemDTO>() ;
         }
 
         #endregion

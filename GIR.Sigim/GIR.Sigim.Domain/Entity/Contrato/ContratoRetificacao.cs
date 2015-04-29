@@ -25,10 +25,16 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public TipoCompromisso RetencaoTipoCompromisso { get; set; }
 
         public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
+        public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
+        public ICollection<ContratoRetificacaoItemCronograma> ListaContratoRetificacaoItemCronograma { get; set; }
+        public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
 
         public ContratoRetificacao()
         {
-            this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>();  
+            this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>();
+            this.ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisao>();
+            this.ListaContratoRetificacaoItemCronograma = new HashSet<ContratoRetificacaoItemCronograma>();
+            this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
         }
     }
 }

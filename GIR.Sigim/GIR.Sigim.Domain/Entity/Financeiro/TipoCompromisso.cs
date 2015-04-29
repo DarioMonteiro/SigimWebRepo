@@ -17,13 +17,17 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public bool? TipoReceber { get; set; }
         public ICollection<ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
         public ICollection<ContratoRetificacao> ListaContratoRetificacao { get; set; }
-        public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }  
+        public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
+        public ICollection<TituloPagar> ListaTituloPagar { get; set; }
+        public ICollection<TituloReceber> ListaTituloReceber { get; set; }
 
         public TipoCompromisso()
         {
             this.ListaParametrosOrdemCompra = new HashSet<ParametrosOrdemCompra>();
             this.ListaContratoRetificacao = new HashSet<ContratoRetificacao>();
             this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>();
+            this.ListaTituloPagar = new HashSet<TituloPagar>();
+            this.ListaTituloReceber = new HashSet<TituloReceber>();
         }
     }
 }

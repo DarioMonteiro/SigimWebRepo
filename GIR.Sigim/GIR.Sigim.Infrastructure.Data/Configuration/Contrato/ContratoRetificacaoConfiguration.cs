@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.ComponentModel.DataAnnotations.Schema;
-//using System.Data.Entity.Infrastructure.Annotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Infrastructure.Annotations;
 using System.Data.Entity.ModelConfiguration;  
 using System.Linq;
 using System.Text;
@@ -25,7 +25,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("contrato")
                 .HasColumnOrder(2);
 
-            HasRequired(l => l.Contrato)
+            HasRequired<Domain.Entity.Contrato.Contrato>(l => l.Contrato)
                 .WithMany(c => c.ListaContratoRetificacao)
                 .HasForeignKey(l => l.ContratoId);
 
@@ -82,12 +82,21 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("retencaoTipoCompromisso")
                 .HasColumnOrder(13);
 
-            HasOptional(l => l.RetencaoTipoCompromisso)
+            HasOptional<Domain.Entity.Financeiro.TipoCompromisso>(l => l.RetencaoTipoCompromisso)
                 .WithMany(c => c.ListaContratoRetificacao)
                 .HasForeignKey(l => l.RetencaoTipoCompromissoId);
 
-            HasMany(l => l.ListaContratoRetificacaoItem)
-                .WithRequired(c => c.ContratoRetificacao);  
+            HasMany<Domain.Entity.Contrato.ContratoRetificacaoItem>(l => l.ListaContratoRetificacaoItem)
+                .WithRequired(c => c.ContratoRetificacao)
+                .HasForeignKey(l => l.ContratoRetificacaoId);
+
+            HasMany<Domain.Entity.Contrato.ContratoRetificacaoProvisao>(l => l.ListaContratoRetificacaoProvisao)
+                .WithRequired(c => c.ContratoRetificacao)
+                .HasForeignKey(l => l.ContratoRetificacaoId);
+
+            HasMany<Domain.Entity.Contrato.ContratoRetificacaoItemCronograma>(l => l.ListaContratoRetificacaoItemCronograma)
+                .WithRequired(c => c.ContratoRetificacao)
+                .HasForeignKey(l => l.ContratoRetificacaoId);
         }
     }
 }

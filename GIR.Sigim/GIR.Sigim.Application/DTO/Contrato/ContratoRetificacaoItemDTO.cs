@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Application.DTO.Contrato
 {
@@ -18,18 +19,18 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public Int16 Sequencial { get; set; }
         [Display(Name = "Complemento")]
         public string ComplementoDescricao { get; set; }
-        public int NaturezaItem { get; set; }
+        public NaturezaItem NaturezaItem { get; set; }
         [Display(Name = "Natureza")]
         public string DescricaoNaturezaItem
         {
             get
             {
                 string descricaoNaturezaItem;
-                if (this.NaturezaItem == 0)
+                if (this.NaturezaItem == NaturezaItem.PrecoUnitario)
                 {
                     descricaoNaturezaItem = "Genérico por preço unitário";
                 }
-                else if (this.NaturezaItem == 1)
+                else if (this.NaturezaItem == NaturezaItem.PrecoGlobal)
                 {
                     descricaoNaturezaItem = "Genérico por preço global";
                 }
@@ -63,11 +64,11 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public decimal Quantidade { get; set; }
         public decimal PrecoUnitario { get; set; }
         public decimal? ValorItem { get; set; }
-        public int ClasseId { get; set; }
+        public string CodigoClasse { get; set; }
         public ClasseDTO Classe { get; set; }
         public decimal? RetencaoItem { get; set; }
         public decimal? BaseRetencaoItem { get; set; }
-        public decimal? RetencaoPrazoResgate { get; set; }
+        public int? RetencaoPrazoResgate { get; set; }
         public bool? Alterado { get; set; }
         public int? RetencaoTipoCompromissoId { get; set; }
         public TipoCompromissoDTO RetencaoTipoCompromisso { get; set; }

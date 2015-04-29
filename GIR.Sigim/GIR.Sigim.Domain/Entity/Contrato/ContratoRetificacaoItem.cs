@@ -16,7 +16,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public ContratoRetificacao ContratoRetificacao { get; set; }
         public Int16 Sequencial { get; set; }
         public string ComplementoDescricao { get; set; }
-        public int NaturezaItem { get; set; }
+        public NaturezaItem NaturezaItem { get; set; }
         public int ServicoId { get; set; }
         public Servico Servico { get; set; }
         public decimal Quantidade { get; set; }
@@ -26,10 +26,20 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public Classe Classe { get; set;}
         public decimal? RetencaoItem { get; set; }
         public decimal? BaseRetencaoItem { get; set; }
-        public decimal? RetencaoPrazoResgate { get; set; }
+        public int? RetencaoPrazoResgate { get; set; }
         public bool? Alterado { get; set; }
         public int? RetencaoTipoCompromissoId { get; set; }
         public TipoCompromisso RetencaoTipoCompromisso { get; set; }
 
+        public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
+        public ICollection<ContratoRetificacaoItemCronograma> ListaContratoRetificacaoItemCronograma { get; set; }
+        public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
+
+        public ContratoRetificacaoItem()
+        {
+            ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisao>();
+            ListaContratoRetificacaoItemCronograma = new HashSet<ContratoRetificacaoItemCronograma>();
+            ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
+        }
     }
 }

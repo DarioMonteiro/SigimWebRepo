@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
-    public enum TipoPessoa
+    public enum TipoPessoa : short
     {
         [Description("Física")]
         Fisica = 0,

@@ -10,5 +10,14 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
     {
         public string Sigla { get; set; }
         public string Descricao { get; set; }
+
+        public ICollection<TituloPagar> ListaTituloPagar { get; set; }
+        public ICollection<TituloReceber> ListaTituloReceber { get; set; }
+
+        public TipoDocumento()
+        {
+            this.ListaTituloPagar = new HashSet<TituloPagar>();
+            this.ListaTituloReceber = new HashSet<TituloReceber>();
+        }
     }
 }
