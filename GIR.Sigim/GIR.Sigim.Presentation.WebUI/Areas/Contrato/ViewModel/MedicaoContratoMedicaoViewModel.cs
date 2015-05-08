@@ -16,62 +16,66 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public ContratoDTO Contrato { get; set; }
         
         public SelectList ListaServicoContratoRetificacaoItem { get; set; }
-        public int ContratoRetificacaoItemId { get; set; }
-        
+
         [Display(Name = "Retenção %")]
         public decimal? RetencaoContratual { get; set; }
-        
-        public decimal? ValorItem { get; set; }
-        
-        public ContratoRetificacaoItemDTO ContratoRetencaoItem { get; set; }
+              
+        public ContratoRetificacaoItemDTO ContratoRetificacaoItem { get; set; }
+
+        public ContratoRetificacaoItemMedicaoDTO ContratoRetificacaoItemMedicao { get; set; }
+
+        public ContratoRetificacaoItemCronogramaDTO ContratoRetificacaoItemCronograma { get; set; }
         
         [Display(Name="Tipo")]
         public SelectList ListaTipoDocumento { get; set; }
-        public int? TipoDocumentoId { get; set; }
-        
-        [Display(Name = "Nº")]
-        [StringLength(10, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]       
-        public string NumeroNotaFiscal { get; set; }
-
-        [Display(Name = "Data emissão")]
-        public Nullable<DateTime> DataEmissaoNotaFiscal { get; set; }
-
-        [Display(Name = "Data vencimento")]
-        public Nullable<DateTime> DataVencimentoNotaFiscal { get; set; }
 
         [Display(Name = "Multifornecedor")]
         public SelectList ListaMultiFornecedor { get; set; }
-        public int? MultiFornecedorId { get; set; }
 
         [Display(Name = "Tipo compra")]
         public SelectList ListaTipoCompra { get; set; }
-        public string TipoCompraCodigo { get; set; }
 
         [Display(Name = "CIF/FOB")]
         public SelectList ListaCifFob { get; set; }
-        public int? CifFobId { get; set; }
 
         [Display(Name = "Natureza de operação")]
         public SelectList ListaNaturezaOperacao { get; set; }
-        public string NaturezaOperacaoCodigo { get; set; }
 
         [Display(Name = "Série")]
         public SelectList ListaSerieNF { get; set; }
-        public int? SerieNFId { get; set; }
 
         [Display(Name = "CST")]
         public SelectList ListaCST { get; set; }
-        public string CSTCodigo { get; set; }
 
         [Display(Name = "Contribuição")]
         public SelectList ListaCodigoContribuicao { get; set; }
-        public string CodigoContribuicaoCodigo { get; set; }
 
-        [Display(Name = "Código de barras")]
-        [StringLength(50, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
-        public string CodigoBarras { get; set; }
+        [Required]
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Valor medição atual")]
+        public decimal ValorMedicaoAtual { get; set; }
+
+        [Required]
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Quantidade medição Atual")]
+        public decimal QuantidadeMedicaoAtual { get; set; }
 
         public string JsonListaRetificacaoProvisao { get; set; }
+        public int? SituacaoMedicao { get; set; }
+
+        public int? DiasPagamentoParametrosContrato { get; set; }
+        public int? DiasMedicaoParametrosContrato { get; set; }
+
+        public MedicaoContratoMedicaoViewModel()
+        {
+            this.Contrato = new ContratoDTO();
+            this.ContratoRetificacaoItem = new ContratoRetificacaoItemDTO();
+            this.ContratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicaoDTO();
+            this.ContratoRetificacaoItemCronograma = new ContratoRetificacaoItemCronogramaDTO();
+
+            this.ValorMedicaoAtual = 0;
+            this.QuantidadeMedicaoAtual = 0;
+        }
 
     }
 }

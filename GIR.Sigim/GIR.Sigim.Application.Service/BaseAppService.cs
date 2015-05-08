@@ -65,5 +65,26 @@ namespace GIR.Sigim.Application.Service
                 return diretorio;
             }
         }
+
+        protected string RetiraZerosIniciaisNumeroDocumento(string NumeroDocumento)
+        {
+
+            string numeroNotaFiscalSemZerosIniciais = "";
+            string pedaco;
+            bool achouNumeroDifZero = false;
+            for (int x = 0; x <= (NumeroDocumento.Length - 1); x++)
+            {
+                pedaco = NumeroDocumento.Substring(x, 1);
+                if (!achouNumeroDifZero)
+                {
+                    if (pedaco == "0") continue;
+                    achouNumeroDifZero = true;
+                }
+                numeroNotaFiscalSemZerosIniciais = numeroNotaFiscalSemZerosIniciais + pedaco;
+            }
+
+            return numeroNotaFiscalSemZerosIniciais;
+        }
+
     }
 }

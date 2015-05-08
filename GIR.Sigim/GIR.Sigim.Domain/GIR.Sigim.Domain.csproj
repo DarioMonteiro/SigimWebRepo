@@ -126,6 +126,7 @@
     <Compile Include="Repository\Financeiro\IParametrosUsuarioFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoCompromissoRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoDocumentoRepository.cs" />
+    <Compile Include="Repository\Financeiro\ITituloPagarRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\Admin\IUsuarioRepository.cs" />
     <Compile Include="Repository\Orcamento\IOrcamentoRepository.cs" />

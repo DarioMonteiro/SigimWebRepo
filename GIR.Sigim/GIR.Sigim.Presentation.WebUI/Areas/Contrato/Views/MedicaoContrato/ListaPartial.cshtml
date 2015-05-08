@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
             <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
                     <tr role="row">
@@ -73,7 +73,7 @@
                         <th class="sorting @contratanteSortingSuffix" data-order="contratante">Contratante</th>
                         <th class="sorting @contratadoSortingSuffix" data-order="contratado">Contratado</th>
                         <th class="sorting @dataAssinaturaSortingSuffix text-center" data-order="dataAssinatura" style="min-width:65px;">Data assinatura</th>
-                        <th class="sorting @situacaoSortingSuffix text-center" data-order="situacao" style="min-width:65px;">Situação</th>
+                        <th class="sorting @situacaoSortingSuffix text-center" data-order="situacao" style="min-width:75px;">Situação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -82,10 +82,10 @@
                         <tr>
                             <td class="text-center">@Html.ActionLink(item.Id.ToString(), "Medicao", new { id = item.Id })</td>
                             @*<td class="text-center"><a href="javascript:alert('Em construção.');">@item.Id</a></td>*@
-                            <td>@item.CentroCustoDescricao</td>
-                            <td>@item.ContratoDescricao.Descricao</td>
-                            <td>@item.Contratante.Nome</td>
-                            <td>@item.Contratado.Nome</td>
+                            <td class="text-nowrap">@item.CentroCustoDescricao</td>
+                            <td class="text-nowrap">@item.ContratoDescricao.Descricao</td>
+                            <td class="text-nowrap">@item.Contratante.Nome</td>
+                            <td class="text-nowrap">@item.Contratado.Nome</td>
                             <td class="text-center text-nowrap">
                                 @if (item.DataAssinatura.HasValue)
                                 {
@@ -93,7 +93,7 @@
                                 }
                                 &nbsp;
                             </td>
-                            <td class="text-center">@item.SituacaoDescricao</td>
+                            <td class="text-center text-nowrap">@item.SituacaoDescricao</td>
                         </tr>
                     }
                 </tbody>

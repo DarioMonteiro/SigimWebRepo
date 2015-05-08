@@ -19,7 +19,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnName("codigo")
                 .HasColumnOrder(1);
 
-            Property(l => l.ClienteID)
+            Property(l => l.ClienteId)
                 .IsRequired()
                 .HasColumnName("cliente")
                 .HasColumnOrder(2);

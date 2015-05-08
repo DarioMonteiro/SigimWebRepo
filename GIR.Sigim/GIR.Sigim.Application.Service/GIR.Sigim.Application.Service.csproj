@@ -67,6 +67,7 @@
     <Compile Include="Financeiro\ParametrosUsuarioFinanceiroAppService.cs" />
     <Compile Include="Financeiro\TipoCompromissoAppService.cs" />
     <Compile Include="Financeiro\TipoDocumentoAppService.cs" />
+    <Compile Include="Financeiro\TituloPagarAppService.cs" />
     <Compile Include="Orcamento\OrcamentoAppService.cs" />
     <Compile Include="Orcamento\ParametrosOrcamentoAppService.cs" />
     <Compile Include="OrdemCompra\RequisicaoMaterialAppService.cs" />

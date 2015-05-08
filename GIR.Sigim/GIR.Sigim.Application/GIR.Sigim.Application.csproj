@@ -60,6 +60,7 @@
     <Compile Include="DTO\Contrato\ContratoRetificacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoItemCronogramaDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoItemDTO.cs" />
+    <Compile Include="DTO\Contrato\ContratoRetificacaoItemMedicaoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoProvisaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Service\Financeiro\IParametrosUsuarioFinanceiroAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoCompromissoAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoDocumentoAppService.cs" />
+    <Compile Include="Service\Financeiro\ITituloPagarAppService.cs" />
     <Compile Include="Service\IBaseAppService.cs" />
     <Compile Include="Service\Orcamento\IOrcamentoAppService.cs" />
     <Compile Include="Service\Orcamento\IParametrosOrcamentoAppService.cs" />

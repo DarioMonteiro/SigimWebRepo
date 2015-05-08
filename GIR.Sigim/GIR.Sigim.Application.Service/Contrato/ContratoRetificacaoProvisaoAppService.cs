@@ -38,7 +38,6 @@ namespace GIR.Sigim.Application.Service.Contrato
         public List<ContratoRetificacaoProvisaoDTO> ObterListaCronograma(int id)
         {
 
-
             List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisaoDTO =
                 contratoRetificacaoProvisaoRepository.ListarPeloFiltro(l => l.ContratoRetificacaoItemId == id,
                                                                        l => l.ContratoRetificacaoItem.Servico,
@@ -52,6 +51,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 decimal vlrTotalMedido = 0;
                 decimal qtdTotalLiberado = 0;
                 decimal vlrTotalLiberado = 0;
+
                 contratoRetificacaoItemMedicaoAppService.ObterQuantidadesEhValoresMedicao(item.ContratoRetificacaoItemId.Value,
                                                                                           item.ContratoRetificacaoItemCronogramaId.Value,
                                                                                           ref qtdTotalMedido,

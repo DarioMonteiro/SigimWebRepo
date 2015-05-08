@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -13,11 +14,13 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
 
         public ICollection<TituloPagar> ListaTituloPagar { get; set; }
         public ICollection<TituloReceber> ListaTituloReceber { get; set; }
+        public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
 
         public TipoDocumento()
         {
             this.ListaTituloPagar = new HashSet<TituloPagar>();
             this.ListaTituloReceber = new HashSet<TituloReceber>();
+            this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
         }
     }
 }

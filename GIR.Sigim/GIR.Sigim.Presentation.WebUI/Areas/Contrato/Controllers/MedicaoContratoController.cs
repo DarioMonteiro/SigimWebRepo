@@ -34,8 +34,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         private ISerieNFAppService serieNFAppService;
         private ICSTAppService cstAppService;
         private ICodigoContribuicaoAppService codigoContribuicaoAppService;
-        private IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
         private IContratoRetificacaoAppService contratoRetificacaoAppService;
+        private IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
+        private ITituloPagarAppService tituloPagarAppService;
+        private IParametrosContratoAppService parametrosContratoAppService;
 
         #endregion
 
@@ -52,8 +54,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                          ISerieNFAppService serieNFAppService,
                                          ICSTAppService cstAppService,
                                          ICodigoContribuicaoAppService codigoContribuicaoAppService,
-                                         IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
                                          IContratoRetificacaoAppService contratoRetificacaoAppService,
+                                         IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
+                                         ITituloPagarAppService tituloPagarAppService,
+                                         IParametrosContratoAppService parametrosContratoAppService,
                                          MessageQueue messageQueue) 
             : base(messageQueue) 
         {
@@ -68,8 +72,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             this.serieNFAppService = serieNFAppService;
             this.cstAppService = cstAppService;
             this.codigoContribuicaoAppService = codigoContribuicaoAppService;
-            this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
             this.contratoRetificacaoAppService = contratoRetificacaoAppService;
+            this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
+            this.tituloPagarAppService = tituloPagarAppService;
+            this.parametrosContratoAppService = parametrosContratoAppService;
         }
 
         #endregion
@@ -126,6 +132,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             model.Contrato = contrato;
 
+            ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
+            if (parametros != null)
+            {
+                model.DiasMedicaoParametrosContrato = parametros.DiasMedicao.HasValue ? parametros.DiasMedicao.Value : 0;
+                model.DiasPagamentoParametrosContrato = parametros.DiasPagamento.HasValue ? parametros.DiasPagamento.Value : 0;
+            }
+
+
             if (id.HasValue && !contratoAppService.EhContratoExistente(contrato))
             {
                 return View(model);
@@ -167,6 +181,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Medicao()
+        {
+            return null;
+        }
+
+        [HttpPost]
         public ActionResult RecuperaContratoRetificacaoItem(int? codigo)
         {
             List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisao = null;
@@ -174,13 +195,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (codigo.HasValue)
             {
-
-                //decimal qtd1=0;
-                //decimal val1=0;
-                //decimal qtd2 = 0;
-                //decimal val2 = 0;
-
-                //contratoRetificacaoItemMedicaoAppService.ObterQuantidadesEhValoresMedicao(codigo.Value,178,ref qtd1,ref val1,ref qtd2,ref val2);
 
                 listaContratoRetificacaoProvisao = contratoRetificacaoProvisaoAppService.ObterListaCronograma(codigo.Value);
 
@@ -249,28 +263,28 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             string cstCodigo = null;
             string codigoContribuicaoCodigo = null;
 
-            tipoDocumentoId = model.TipoDocumentoId;
+            tipoDocumentoId = model.ContratoRetificacaoItemMedicao.TipoDocumentoId;
 
-            if (model.MultiFornecedorId.HasValue)
+            if (model.ContratoRetificacaoItemMedicao.MultiFornecedorId.HasValue)
             {
-                multifornecedorId = model.MultiFornecedorId.Value;
+                multifornecedorId = model.ContratoRetificacaoItemMedicao.MultiFornecedorId.Value;
             }
 
-            tipoCompraCodigo = model.TipoCompraCodigo;
+            tipoCompraCodigo = model.ContratoRetificacaoItemMedicao.TipoCompraCodigo;
 
-            if (model.CifFobId.HasValue)
+            if (model.ContratoRetificacaoItemMedicao.CifFobId.HasValue)
             {
-                cifFobId = model.CifFobId.Value;
+                cifFobId = model.ContratoRetificacaoItemMedicao.CifFobId.Value;
             }
 
-            if (model.SerieNFId.HasValue)
+            if (model.ContratoRetificacaoItemMedicao.SerieNFId.HasValue)
             {
-                serieNFId = model.SerieNFId.Value;
+                serieNFId = model.ContratoRetificacaoItemMedicao.SerieNFId.Value;
             }
 
-            naturezaOperacaoCodigo = model.NaturezaOperacaoCodigo;
-            cstCodigo = model.CSTCodigo;
-            codigoContribuicaoCodigo = model.CodigoContribuicaoCodigo;
+            naturezaOperacaoCodigo = model.ContratoRetificacaoItemMedicao.NaturezaOperacaoCodigo;
+            cstCodigo = model.ContratoRetificacaoItemMedicao.CSTCodigo;
+            codigoContribuicaoCodigo = model.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo;
 
             model.ListaTipoDocumento = new SelectList(tipoDocumentoAppService.ListarTodos(), "Id", "Sigla", tipoDocumentoId);
             model.ListaMultiFornecedor = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", multifornecedorId);
@@ -280,6 +294,31 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             model.ListaSerieNF = new SelectList(serieNFAppService.ListarTodos(), "Id", "Descricao", serieNFId);
             model.ListaCST = new SelectList(cstAppService.ListarTodos(), "Codigo", "Descricao", cstCodigo);
             model.ListaCodigoContribuicao = new SelectList(codigoContribuicaoAppService.ListarTodos(), "Codigo", "Descricao", codigoContribuicaoCodigo);
+        }
+
+
+        [HttpPost]
+        public ActionResult SetaSituacaoAguardandoAprovacao()
+        {
+            return Json(new 
+            {
+                situacaoMedicao = contratoRetificacaoItemMedicaoAppService.SetaSituacaoAguardandoAprovacao()
+            });
+        }
+
+        [HttpPost]
+        public ActionResult ExisteNumeroDocumento(  Nullable<DateTime> dataEmissao,
+                                                    Nullable<DateTime> dataVencimento,
+                                                    string numeroDocumento, 
+                                                    int? contratadoId)
+        {
+            bool existeNumeroDocumento = contratoRetificacaoItemMedicaoAppService.ExisteNumeroDocumento(dataEmissao, numeroDocumento, contratadoId);
+            if (!existeNumeroDocumento) tituloPagarAppService.ExisteNumeroDocumento(dataEmissao, dataVencimento, numeroDocumento, contratadoId);
+
+            return Json(new
+            {
+                existe = existeNumeroDocumento
+            });
         }
 
         #endregion

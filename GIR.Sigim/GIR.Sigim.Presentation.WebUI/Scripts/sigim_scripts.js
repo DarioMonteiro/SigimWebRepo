@@ -103,6 +103,11 @@ $(document).ready(function () {
         $(this).val(roundDecimal($(this).val(), 5));
     });
 
+    $("input.decimal-7-casas").on("focusout", function () {
+        $(this).val(roundDecimal($(this).val(), 7));
+    });
+
+
 });
 
 function roundDecimal(value, precision) {
@@ -185,6 +190,26 @@ function smartAlert(title, message, type) {
     $('.SmallBox:has(i.fa-info-circle)').addClass('text-color-info');
 }
 
+function compararDatas(data1, data2) {
+    var data_1 = data1;
+    var data_2 = data2;
+    var dataInvertida1 = parseInt(data_1.split("/")[2].toString() + data_1.split("/")[1].toString() + data_1.split("/")[0].toString());
+    var dataInvertida2 = parseInt(data_2.split("/")[2].toString() + data_2.split("/")[1].toString() + data_2.split("/")[0].toString());
+    var retorno;
+
+    retorno = 0
+    if (dataInvertida1 > dataInvertida2) {
+        retorno = 1
+    }
+    else {
+        if (dataInvertida1 < dataInvertida2) {
+            retorno = -1
+        }
+    }
+    return retorno;
+}
+
 $('.numeric').on('input', function (event) {
     this.value = this.value.replace(/[^0-9]/g, '');
 });
+

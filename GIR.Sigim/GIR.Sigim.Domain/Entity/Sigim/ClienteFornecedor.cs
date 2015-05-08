@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
@@ -37,6 +38,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<Contrato.Licitacao> ListaLicitacao { get; set; }
         public ICollection<TituloPagar> ListaTituloPagar { get; set; }
         public ICollection<TituloReceber> ListaTituloReceber { get; set; }
+        public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
 
 
         public ClienteFornecedor()
@@ -49,6 +51,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaLicitacao = new HashSet<Contrato.Licitacao>();
             this.ListaTituloPagar = new HashSet<TituloPagar>();
             this.ListaTituloReceber = new HashSet<TituloReceber>();
+            this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
         }
     }
 }

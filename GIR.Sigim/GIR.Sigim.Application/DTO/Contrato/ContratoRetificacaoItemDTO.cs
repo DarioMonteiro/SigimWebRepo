@@ -42,6 +42,19 @@ namespace GIR.Sigim.Application.DTO.Contrato
                 return descricaoNaturezaItem;
             }
         }
+
+        public bool EhNaturezaItemGenericoPorPrecoGlobal
+        {
+            get
+            {
+                if (this.NaturezaItem == NaturezaItem.PrecoGlobal)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
         public int ServicoId { get; set; }
         public ServicoDTO Servico { get; set; }
         public string SequencialDescricaoItemComplemento 
@@ -62,6 +75,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
             }
         }
         public decimal Quantidade { get; set; }
+        [Display(Name = "Preço unitário")]
         public decimal PrecoUnitario { get; set; }
         public decimal? ValorItem { get; set; }
         public string CodigoClasse { get; set; }
@@ -72,6 +86,15 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public bool? Alterado { get; set; }
         public int? RetencaoTipoCompromissoId { get; set; }
         public TipoCompromissoDTO RetencaoTipoCompromisso { get; set; }
+
+        public ContratoRetificacaoItemDTO()
+        {
+            this.Contrato = new ContratoDTO();
+            this.ContratoRetificacao = new ContratoRetificacaoDTO();
+            this.Servico = new ServicoDTO();
+            this.Classe = new ClasseDTO();
+            this.RetencaoTipoCompromisso = new TipoCompromissoDTO();
+        }
 
     }
 }

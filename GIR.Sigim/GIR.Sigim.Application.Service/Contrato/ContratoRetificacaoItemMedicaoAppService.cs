@@ -7,6 +7,7 @@ using GIR.Sigim.Domain.Repository.Contrato;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Repository.Contrato;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Application.DTO.Contrato;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -89,6 +90,53 @@ namespace GIR.Sigim.Application.Service.Contrato
                 ValorTotalLiberado = item.ValorTotalLiberado;
             }
 
+        }
+
+        public int SetaSituacaoAguardandoAprovacao()
+        {
+            return Convert.ToInt32(SituacaoMedicao.AguardandoAprovacao);
+        }
+
+        public bool ExisteNumeroDocumento(Nullable<DateTime> DataEmissao, string NumeroDocumento, int? ContratadoId)
+        {
+            bool existe = false;
+
+            if (!string.IsNullOrEmpty(NumeroDocumento) && (ContratadoId.HasValue))
+            {
+                List<ContratoRetificacaoItemMedicao> listaContratoRetificacaoItemMedicao;
+                string numeroNotaFiscal = RetiraZerosIniciaisNumeroDocumento(NumeroDocumento);
+
+                listaContratoRetificacaoItemMedicao =
+                contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro((l =>
+                                                                                l.NumeroDocumento.EndsWith(numeroNotaFiscal) &&
+                                                                                (
+                                                                                    (DataEmissao == null) || 
+                                                                                    ((DataEmissao != null) && (l.DataEmissao.Year == DataEmissao.Value.Year))
+                                                                                ) &&
+                                                                                (
+                                                                                    (l.MultiFornecedorId == ContratadoId) ||
+                                                                                    (l.MultiFornecedorId == null && l.Contrato.ContratadoId == ContratadoId)
+                                                                                )
+                                                                            ),
+                                                                            l => l.Contrato).ToList<ContratoRetificacaoItemMedicao>();
+                if (listaContratoRetificacaoItemMedicao.Count() > 0)
+                {
+                    string numeroDeZerosIniciais;
+
+                    foreach (var item in listaContratoRetificacaoItemMedicao)
+                    {
+                        var quantidadeDeZerosIniciais = item.NumeroDocumento.Length - numeroNotaFiscal.Length;
+                        numeroDeZerosIniciais = item.NumeroDocumento.Substring(0, quantidadeDeZerosIniciais);
+                        if (Convert.ToInt32(numeroDeZerosIniciais) == 0)
+                        {
+                            existe = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return existe;
         }
 
         #endregion

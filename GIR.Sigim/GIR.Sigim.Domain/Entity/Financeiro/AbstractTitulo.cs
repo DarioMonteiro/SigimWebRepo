@@ -9,7 +9,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
 {
     public abstract class AbstractTitulo : BaseEntity
     {
-        public int ClienteID { get; set; }
+        public int ClienteId { get; set; }
         public ClienteFornecedor Cliente { get; set; }
         public int? TipoCompromissoId { get; set; }
         public TipoCompromisso TipoCompromisso { get; set; }
