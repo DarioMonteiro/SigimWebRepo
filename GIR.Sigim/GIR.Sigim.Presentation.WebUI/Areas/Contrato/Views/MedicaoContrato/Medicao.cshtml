@@ -130,9 +130,12 @@
                                                 </section>
                                             </div>
                                             @Html.HiddenFor(m => m.JsonListaRetificacaoProvisao)
-                                            @Html.HiddenFor(m => m.SituacaoMedicao)
                                             @Html.HiddenFor(m => m.DiasMedicaoParametrosContrato)
                                             @Html.HiddenFor(m => m.DiasPagamentoParametrosContrato)
+                                            @Html.HiddenFor(m => m.EhSituacaoAguardandoAprovacao)
+                                            @Html.HiddenFor(m => m.EhSituacaoAguardandoLiberacao)
+                                            @Html.HiddenFor(m => m.EhSituacaoLiberado)
+                                            @Html.HiddenFor(m => m.DataLimiteMedicao)
                                         </fieldset>
                                     </div>
                                 </div>
@@ -192,6 +195,16 @@
                                                     <label class="input">
                                                         <i class="icon-append fa fa-calendar"></i>
                                                         @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, "{0:dd/MM/yyyy}", new { @class="required",@required = true})  
+                                                        <script type="text/javascript">
+                                                            $(document).ready(function () {
+                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").on("change", function () {
+                                                                    var retorno = validaDataVencimento();
+                                                                    if (retorno == false) {
+                                                                        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val("");
+                                                                    }
+                                                                });
+                                                            });
+                                                        </script>
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, "Informe uma data válida.", new { @class = "note note-error" })
                                                 </section>
@@ -369,7 +382,7 @@
                                                                         <script type="text/javascript">
                                                                             $(document).ready(function () {
                                                                                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").on("change", function () {
-                                                                                    validouDataMedicao();
+                                                                                    validaDataMedicao();
                                                                                 });
                                                                             });
                                                                         </script>
@@ -648,17 +661,9 @@
 
                 dataVencimento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)")
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataVencimento.toFormatDDMMYYYY);
-                if (!validouDataMedicao()){
+                if (!validaDataVencimento()){
                     return;
                 }
-@*                var dataVencimento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val();
-                var dataMedicao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val();
-                if ((dataVencimento != "") && (dataMedicao != "")) {
-                    if (dataMedicao > dataVencimento) {
-                        smartAlert("Erro", "Data de medição maior que data de vencimento.", "error");
-                        return;
-                    }
-                }*@
 
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(item.ContratoRetificacaoItem.PrecoUnitario), 5));
                 if (item.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal) {
@@ -679,16 +684,9 @@
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Observacao)").val("");
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto)").val("");
 
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("SetaSituacaoAguardandoAprovacao", "MedicaoContrato")',
-                            cache: false,
-                            async: false,
-                            contentType: 'application/json; charset=utf-8'
-                })
-                .success(function (result) {
-                    $("#@Html.IdFor(m => m.SituacaoMedicao)").val(result.situacaoMedicao);
-                })
+                $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val(true);
+                $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(false);
+                $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(false);
 
                 setarAbaMedicao();
             }
@@ -758,7 +756,7 @@
 
     }
 
-    function validouDataMedicao() {
+    function validaDataVencimento() {
         var dataVencimento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val();
         var dataMedicao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val();
 
@@ -768,9 +766,49 @@
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataVencimento);
                 return false;
             }
+
+            var ehSituacaoMedicaoAguardandoAprovacao= $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val();
+            var ehSituacaoMedicaoAguardandoLiberacao = $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val();
+
+            var diasPagamentoParametrosContrato = $("#@Html.IdFor(m => m.DiasPagamentoParametrosContrato)").val();
+
+            if ((ehSituacaoMedicaoAguardandoAprovacao || ehSituacaoMedicaoAguardandoLiberacao) && (diasPagamentoParametrosContrato > 0)) {
+                var numeroDias = diasDecorridos(dataMedicao,dataVencimento);
+                if (numeroDias < diasPagamentoParametrosContrato) {
+                    smartAlert("Atenção", "Data de vencimento fora do limite de pagamento !", "warning");
+                    return false;
+                }
+            }
         }
 
         return true;
     }
+
+    function validaDataMedicao() {
+        var dataMedicao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val();
+
+        if (!validaDataVencimento()) {
+            return false;
+        }
+
+        if ((dataMedicao != "")) {
+
+            var ehSituacaoMedicaoAguardandoAprovacao = $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val();
+            var ehSituacaoMedicaoAguardandoLiberacao = $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val();
+
+            var dataLimiteMedicao = $("#@Html.IdFor(m => m.DataLimiteMedicao)").val();
+
+            if ((ehSituacaoMedicaoAguardandoAprovacao || ehSituacaoMedicaoAguardandoLiberacao) && (dataLimiteMedicao != "")) {
+                if (compararDatas(dataMedicao, dataLimiteMedicao) < 0) {
+                    smartAlert("Atenção", "Data de medição menor que data limite !", "warning");
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val("");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
 
 </script>

@@ -29,6 +29,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnType("image")
                 .HasColumnName("iconeRelatorio")
                 .HasColumnOrder(5);
+
+            Property(l => l.DiasMedicao)
+                .HasColumnName("DiasMedicao")
+                .HasColumnOrder(23);
+
+            Property(l => l.DiasPagamento)
+                .HasColumnName("DiasPagamento")
+                .HasColumnOrder(24);
         }
     }
 }

@@ -137,8 +137,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             {
                 model.DiasMedicaoParametrosContrato = parametros.DiasMedicao.HasValue ? parametros.DiasMedicao.Value : 0;
                 model.DiasPagamentoParametrosContrato = parametros.DiasPagamento.HasValue ? parametros.DiasPagamento.Value : 0;
+                model.DataLimiteMedicao = Convert.ToDateTime(DateTime.Now.AddDays((model.DiasMedicaoParametrosContrato.Value * -1)).ToShortDateString());
             }
 
+            model.EhSituacaoAguardandoAprovacao = true;
+            model.EhSituacaoAguardandoLiberacao = false;
+            model.EhSituacaoLiberado = false;
 
             if (id.HasValue && !contratoAppService.EhContratoExistente(contrato))
             {
@@ -294,16 +298,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             model.ListaSerieNF = new SelectList(serieNFAppService.ListarTodos(), "Id", "Descricao", serieNFId);
             model.ListaCST = new SelectList(cstAppService.ListarTodos(), "Codigo", "Descricao", cstCodigo);
             model.ListaCodigoContribuicao = new SelectList(codigoContribuicaoAppService.ListarTodos(), "Codigo", "Descricao", codigoContribuicaoCodigo);
-        }
-
-
-        [HttpPost]
-        public ActionResult SetaSituacaoAguardandoAprovacao()
-        {
-            return Json(new 
-            {
-                situacaoMedicao = contratoRetificacaoItemMedicaoAppService.SetaSituacaoAguardandoAprovacao()
-            });
         }
 
         [HttpPost]

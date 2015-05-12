@@ -112,6 +112,8 @@ namespace GIR.Sigim.Application.DTO.Contrato
 
             this.Desconto = 0;
 
+            this.Situacao = 0;
+
         }
     }
 }

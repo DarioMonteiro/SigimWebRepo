@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Contrato;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -16,8 +17,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                               ref decimal QuantidadeTotalLiberado,
                                               ref decimal ValorTotalLiberado);
 
-        int SetaSituacaoAguardandoAprovacao();
-
         bool ExisteNumeroDocumento(Nullable<DateTime> DataEmissao, string NumeroDocumento, int? ContratadoId);
+
     }
 }

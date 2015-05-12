@@ -5,7 +5,6 @@ using System.Text;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Repository.Contrato;
 using System.Threading.Tasks;
-using GIR.Sigim.Domain.Repository.Contrato;
 using GIR.Sigim.Domain.Entity.Contrato;
 using GIR.Sigim.Application.DTO.Contrato;
 
@@ -92,11 +91,6 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         }
 
-        public int SetaSituacaoAguardandoAprovacao()
-        {
-            return Convert.ToInt32(SituacaoMedicao.AguardandoAprovacao);
-        }
-
         public bool ExisteNumeroDocumento(Nullable<DateTime> DataEmissao, string NumeroDocumento, int? ContratadoId)
         {
             bool existe = false;
@@ -139,6 +133,8 @@ namespace GIR.Sigim.Application.Service.Contrato
             return existe;
         }
 
+
         #endregion
+
     }
 }

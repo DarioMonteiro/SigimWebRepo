@@ -61,10 +61,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public decimal QuantidadeMedicaoAtual { get; set; }
 
         public string JsonListaRetificacaoProvisao { get; set; }
-        public int? SituacaoMedicao { get; set; }
-
         public int? DiasPagamentoParametrosContrato { get; set; }
         public int? DiasMedicaoParametrosContrato { get; set; }
+        public Nullable<DateTime> DataLimiteMedicao { get; set; }
+
+        public bool EhSituacaoAguardandoAprovacao { get; set; }
+        public bool EhSituacaoAguardandoLiberacao { get; set; }
+        public bool EhSituacaoLiberado { get; set; }
 
         public MedicaoContratoMedicaoViewModel()
         {
@@ -75,6 +78,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
 
             this.ValorMedicaoAtual = 0;
             this.QuantidadeMedicaoAtual = 0;
+
+            EhSituacaoAguardandoAprovacao = true;
+            EhSituacaoAguardandoLiberacao = false;
+            EhSituacaoLiberado = false;
+
         }
 
     }

@@ -17,7 +17,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
     public class TipoCompromissoAppService : BaseAppService, ITipoCompromissoAppService
     {
         private ITipoCompromissoRepository tipoCompromissoRepository;
-        private IUsuarioRepository usuarioRepository;
 
         public TipoCompromissoAppService(ITipoCompromissoRepository tipoCompromissoRepository, MessageQueue messageQueue)
             : base(messageQueue)

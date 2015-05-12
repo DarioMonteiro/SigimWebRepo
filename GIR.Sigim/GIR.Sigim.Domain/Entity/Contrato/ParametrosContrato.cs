@@ -10,5 +10,8 @@ namespace GIR.Sigim.Domain.Entity.Contrato
     {
         public string MascaraClasseInsumo { get; set; }
         public byte[] IconeRelatorio { get; set; }
+        public int? DiasMedicao { get; set;}
+        public int? DiasPagamento { get; set; }
+
     }
 }
