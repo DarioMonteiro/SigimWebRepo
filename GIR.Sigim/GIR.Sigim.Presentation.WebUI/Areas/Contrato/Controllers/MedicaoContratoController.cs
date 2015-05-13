@@ -132,6 +132,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             model.Contrato = contrato;
 
+            model.PodeSalvar = false;
+
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
             if (parametros != null)
             {
@@ -171,6 +173,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 return View(model);
             }
 
+            model.RetencaoContratual = 0;
             if (contratoRetificacao.RetencaoContratual.HasValue)
             {
                 model.RetencaoContratual = contratoRetificacao.RetencaoContratual;
@@ -180,15 +183,22 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             model.ListaServicoContratoRetificacaoItem = new SelectList(ListaItensUltimoContratoRetificacao, "Id", "SequencialDescricaoItemComplemento", ListaItensUltimoContratoRetificacao.Select(c => c.Id));
 
+            model.PodeSalvar = true;
+
             return View(model);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Medicao()
+        public ActionResult Medicao(MedicaoContratoMedicaoViewModel model)
         {
-            return null;
+            if (ModelState.IsValid)
+            {
+                if (contratoRetificacaoItemMedicaoAppService.Salvar(model.ContratoRetificacaoItemMedicao))
+                    return PartialView("Redirect", Url.Action("Medicao", "MedicaoContrato", new { id = model.ContratoRetificacaoItemMedicao.Id }));
+            }
+            return PartialView("_NotificationMessagesPartial");
         }
 
         [HttpPost]

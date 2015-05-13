@@ -136,6 +136,8 @@
                                             @Html.HiddenFor(m => m.EhSituacaoAguardandoLiberacao)
                                             @Html.HiddenFor(m => m.EhSituacaoLiberado)
                                             @Html.HiddenFor(m => m.DataLimiteMedicao)
+                                            @Html.HiddenFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)
+                                            @Html.HiddenFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)
                                         </fieldset>
                                     </div>
                                 </div>
@@ -373,6 +375,8 @@
 							                        </div>
 							                        <div class="tab-pane fade" id="AbaMedicao">
                                                         <fieldset>
+                                                            @Html.HiddenFor(m => m.ValorPendente)
+                                                            @Html.HiddenFor(m => m.QuantidadePendente)
                                                             <div class="row">
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao, new { @class = "label" })
@@ -423,6 +427,13 @@
                                                                     @Html.LabelFor(m => m.ValorMedicaoAtual, new { @class = "label" })
                                                                     <label class="input">
                                                                         @Html.TextBoxFor(m => m.ValorMedicaoAtual,"{0:F2}", new { @class = "text-right decimal-2-casas required", @required = true })
+                                                                        <script type="text/javascript">
+                                                                            $(document).ready(function () {
+                                                                                $("#@Html.IdFor(m => m.ValorMedicaoAtual)").on("change", function () {
+                                                                                    validaValorMedicaoAtual();
+                                                                                });
+                                                                            });
+                                                                        </script>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.ValorMedicaoAtual , "", new { @class = "note note-error" })
                                                                 </section>
@@ -438,6 +449,13 @@
                                                                     @Html.LabelFor(m => m.QuantidadeMedicaoAtual, new { @class = "label" })
                                                                     <label class="input">
                                                                         @Html.TextBoxFor(m => m.QuantidadeMedicaoAtual,"{0:F7}", new { @class = "text-right decimal-7-casas required", @required = true })
+                                                                        <script type="text/javascript">
+                                                                            $(document).ready(function () {
+                                                                                $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").on("change", function () {
+                                                                                    validaQuantidadeMedicaoAtual();
+                                                                                });
+                                                                            });
+                                                                        </script>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.QuantidadeMedicaoAtual , "", new { @class = "note note-error" })
                                                                 </section>
@@ -445,6 +463,13 @@
                                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Desconto, new { @class = "label" })
                                                                     <label class="input">
                                                                         @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Desconto ,"{0:F2}", new { @class = "text-right decimal-2-casas" })
+                                                                        <script type="text/javascript">
+                                                                            $(document).ready(function () {
+                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").on("change", function () {
+                                                                                    validaDesconto();
+                                                                                });
+                                                                            });
+                                                                        </script>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Desconto , "", new { @class = "note note-error" })
                                                                 </section>
@@ -479,10 +504,10 @@
 
                             @{
                                 string disableBtnSalvar = string.Empty;
-                                //if (!Model.PodeSalvar)
-                                //{
-                                //    disableBtnSalvar = "disabled";
-                                //}
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
                             }
                             <button id="btnSalvar" type="submit" class="btn btn-primary right @disableBtnSalvar">
                                 Salvar
@@ -525,14 +550,33 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.contratoRetificacaoItem.DescricaoNaturezaItem);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItem.Servico.UnidadeMedida.Sigla)').val(result.contratoRetificacaoItem.Servico.SiglaUnidadeMedida);
                     if (result.contratoRetificacaoItem.ValorItem != null) {
-                        $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(result.contratoRetificacaoItem.ValorItem, 2));
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.ValorItem), 2));
                     }
                     else {
                         $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ValorItem)').val("");
                     }
-                    if (result.contratoRetificacaoItem.RetencaoItem != null) $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(result.contratoRetificacaoItem.RetencaoItem, 5));
+                    if (result.contratoRetificacaoItem.RetencaoItem != null) {
+                        $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));
+                    }
+                    else {
+                        $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));
+                    }
                     $("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val(result.listaContratoRetificacaoProvisao);
+                    if (result.contratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal) {
+                        $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)').val(true);
+                    }
+                    else {
+                        $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
+                    }
+                    if (result.contratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario) {
+                        $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)').val(true);
+                    }
+                    else {
+                        $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
+                    }                    
+
                     jsonRetificaoProvisaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val());
+
                 }
                 else
                 {
@@ -541,6 +585,9 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItem.Servico.UnidadeMedida.Sigla)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ValorItem)').val("");
                     $("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val();
+                    $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
+                    $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
+
                     jsonRetificaoProvisaoArray = null;
 
                 }
@@ -553,6 +600,9 @@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItem.Servico.UnidadeMedida.Sigla)').val("");
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ValorItem)').val("");
                 $("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val();
+                $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
+                $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
+
                 jsonRetificaoProvisaoArray = null;
             }
         });
@@ -659,11 +709,16 @@
                 var quantidadePendente = item.Quantidade - item.QuantidadeTotalMedida;
                 var valorPendente = item.Valor - item.ValorTotalMedido;
 
-                dataVencimento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)")
-                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataVencimento.toFormatDDMMYYYY);
+                $("#@Html.IdFor(m => m.ValorPendente)").val(valorPendente);
+                $("#@Html.IdFor(m => m.QuantidadePendente)").val(quantidadePendente);
+
+                var dataVencimento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val();
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataVencimento);
                 if (!validaDataVencimento()){
                     return;
                 }
+
+                //item.ContratoRetificacaoItem.PrecoUnitario = roundDecimal(floatToString(item.ContratoRetificacaoItem.PrecoUnitario), 2)
 
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(item.ContratoRetificacaoItem.PrecoUnitario), 5));
                 if (item.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal) {
@@ -767,8 +822,8 @@
                 return false;
             }
 
-            var ehSituacaoMedicaoAguardandoAprovacao= $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val();
-            var ehSituacaoMedicaoAguardandoLiberacao = $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val();
+            var ehSituacaoMedicaoAguardandoAprovacao = ($("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val() === "true");
+            var ehSituacaoMedicaoAguardandoLiberacao = ($("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val() === "true");
 
             var diasPagamentoParametrosContrato = $("#@Html.IdFor(m => m.DiasPagamentoParametrosContrato)").val();
 
@@ -793,8 +848,8 @@
 
         if ((dataMedicao != "")) {
 
-            var ehSituacaoMedicaoAguardandoAprovacao = $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val();
-            var ehSituacaoMedicaoAguardandoLiberacao = $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val();
+            var ehSituacaoMedicaoAguardandoAprovacao = ($("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val() === "true");
+            var ehSituacaoMedicaoAguardandoLiberacao = ($("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val() === "true");
 
             var dataLimiteMedicao = $("#@Html.IdFor(m => m.DataLimiteMedicao)").val();
 
@@ -810,5 +865,102 @@
         return true;
     }
 
+    function validaValorMedicaoAtual() {
+        var valorMedido = stringToFloat($("#@Html.IdFor(m => m.ValorMedicaoAtual)").val());
+        var valorPendente = stringToFloat($("#@Html.IdFor(m => m.ValorPendente)").val());
+        var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItem.PrecoUnitario)").val()); 
+        var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val()); 
+        var ehNaturezaItemGenericoPorPrecoUnitario = false;
+        var quantidadeMedicao = 0;
+
+        if (isNaN(valorMedido)) valorMedido = 0;
+        if (isNaN(valorPendente)) valorPendente = 0;
+        if (isNaN(precoUnitario)) precoUnitario = 0;
+        if (isNaN(desconto)) desconto = 0;
+
+        if (valorMedido == 0)  {
+            smartAlert("Atenção", "Valor medido não pode ser zerado !", "warning");
+            $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(valorPendente, 2));
+            return false;
+        }
+
+        if (valorMedido > valorPendente) {
+            smartAlert("Atenção", "Valor medido maior que valor pendente !", "warning");
+            $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(valorPendente,2));
+            return false;
+        }
+
+        if (valorMedido <= desconto) {
+            smartAlert("Atenção", "Valor medido menor que o valor do desconto !", "warning");
+            $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(0, 7));
+            return false;
+        }
+
+        ehNaturezaItemGenericoPorPrecoUnitario = ($("#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)").val() === "true");
+        if (ehNaturezaItemGenericoPorPrecoUnitario)
+        {
+            quantidadeMedicao = valorMedido / precoUnitario;
+            $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val(roundDecimal(floatToString(quantidadeMedicao), 7));
+        }
+
+        return true;
+    }
+
+    function validaQuantidadeMedicaoAtual() {
+        var quantidadeMedida = stringToFloat($("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val());
+        var quantidadePendente = stringToFloat($("#@Html.IdFor(m => m.QuantidadePendente)").val());
+        var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItem.PrecoUnitario)").val());
+        var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val());
+        var valorMedido = 0;
+
+        if (isNaN(quantidadeMedida)) quantidadeMedida = 0;
+        if (isNaN(quantidadePendente)) quantidadePendente = 0;
+        if (isNaN(precoUnitario)) precoUnitario = 0;
+        if (isNaN(desconto)) desconto = 0;
+
+        if (quantidadeMedida == 0) {
+            smartAlert("Atenção", "A quantidade medida não pode ser zero!", "warning");
+            $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val(roundDecimal(quantidadePendente, 7));
+            return false;
+        }
+
+        if (quantidadeMedida > quantidadePendente) {
+            smartAlert("Atenção", "Quantidade medida maior que quantidade pendente !", "warning");
+            $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val(roundDecimal(quantidadePendente, 7));
+            return false;
+        }
+
+        valorMedido = quantidadeMedida * precoUnitario;
+
+        $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(floatToString(valorMedido), 2));
+
+        if (valorMedido <= desconto) {
+            smartAlert("Atenção", "Valor medido menor que o valor do desconto !", "warning");
+            return false;
+        }
+
+        return true;
+    }
+
+    function validaDesconto() {
+        var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val());
+        var valorMedido = stringToFloat($("#@Html.IdFor(m => m.ValorMedicaoAtual)").val());
+
+        if (isNaN(valorMedido)) valorMedido = 0;
+        if (isNaN(desconto)) desconto = 0;
+
+        if (valorMedido == 0) {
+            smartAlert("Atenção", "O valor medido não pode ser zero !", "warning");
+            return false;
+        }
+
+        if (valorMedido <= desconto) {
+            smartAlert("Atenção", "Valor medido menor que o valor do desconto !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(0, 2));
+            return false;
+        }
+
+        return true;
+    }
 
 </script>

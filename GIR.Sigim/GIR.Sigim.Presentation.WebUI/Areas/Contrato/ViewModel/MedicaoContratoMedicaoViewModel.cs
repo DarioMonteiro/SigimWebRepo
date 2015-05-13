@@ -69,6 +69,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public bool EhSituacaoAguardandoLiberacao { get; set; }
         public bool EhSituacaoLiberado { get; set; }
 
+        public decimal? ValorPendente { get; set; }
+        public decimal? QuantidadePendente { get; set; }
+
+        public bool EhNaturezaItemGenericoPorPrecoGlobal { get; set; }
+        public bool EhNaturezaItemGenericoPorPrecoUnitario { get; set; }
+
+        public bool PodeSalvar { get; set; }
+
         public MedicaoContratoMedicaoViewModel()
         {
             this.Contrato = new ContratoDTO();

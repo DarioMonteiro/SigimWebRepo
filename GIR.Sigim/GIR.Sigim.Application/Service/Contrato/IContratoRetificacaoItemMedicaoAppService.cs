@@ -18,6 +18,6 @@ namespace GIR.Sigim.Application.Service.Contrato
                                               ref decimal ValorTotalLiberado);
 
         bool ExisteNumeroDocumento(Nullable<DateTime> DataEmissao, string NumeroDocumento, int? ContratadoId);
-
+        bool Salvar(ContratoRetificacaoItemMedicaoDTO dto);
     }
 }

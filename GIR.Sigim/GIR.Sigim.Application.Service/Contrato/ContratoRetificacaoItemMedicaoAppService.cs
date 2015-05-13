@@ -133,6 +133,11 @@ namespace GIR.Sigim.Application.Service.Contrato
             return existe;
         }
 
+        public bool Salvar(ContratoRetificacaoItemMedicaoDTO dto)
+        {
+
+            return true;
+        }
 
         #endregion
 

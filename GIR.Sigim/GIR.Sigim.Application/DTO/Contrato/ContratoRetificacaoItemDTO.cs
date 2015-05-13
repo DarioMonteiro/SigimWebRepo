@@ -25,18 +25,17 @@ namespace GIR.Sigim.Application.DTO.Contrato
         {
             get
             {
-                string descricaoNaturezaItem;
-                if (this.NaturezaItem == NaturezaItem.PrecoUnitario)
+                string descricaoNaturezaItem = "";
+                if (Id > 0)
                 {
-                    descricaoNaturezaItem = "Genérico por preço unitário";
-                }
-                else if (this.NaturezaItem == NaturezaItem.PrecoGlobal)
-                {
-                    descricaoNaturezaItem = "Genérico por preço global";
-                }
-                else
-                {
-                    descricaoNaturezaItem = "";
+                    if (this.NaturezaItem == NaturezaItem.PrecoUnitario)
+                    {
+                        descricaoNaturezaItem = "Genérico por preço unitário";
+                    }
+                    else if (this.NaturezaItem == NaturezaItem.PrecoGlobal)
+                    {
+                        descricaoNaturezaItem = "Genérico por preço global";
+                    }
                 }
 
                 return descricaoNaturezaItem;
@@ -48,6 +47,18 @@ namespace GIR.Sigim.Application.DTO.Contrato
             get
             {
                 if (this.NaturezaItem == NaturezaItem.PrecoGlobal)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public bool EhNaturezaItemGenericoPorPrecoUnitario
+        {
+            get
+            {
+                if (this.NaturezaItem == NaturezaItem.PrecoUnitario)
                 {
                     return true;
                 }
