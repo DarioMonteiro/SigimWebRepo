@@ -36,6 +36,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<Contrato.Contrato> ListaContrato { get; set; }
         public ICollection<Licitacao> ListaLicitacao { get; set; }
         public ICollection<LicitacaoCronograma> ListaLicitacaoCronograma { get; set; }
+        public ICollection<BloqueioContabil> ListaBloqueioContabil { get; set; }
 
         public CentroCusto()
         {
@@ -48,7 +49,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaObra = new HashSet<Obra>();
             this.ListaContrato = new HashSet<Contrato.Contrato>(); 
             this.ListaLicitacao = new HashSet<Licitacao>();
-            this.ListaLicitacaoCronograma = new HashSet<LicitacaoCronograma>(); 
+            this.ListaLicitacaoCronograma = new HashSet<LicitacaoCronograma>();
+            this.ListaBloqueioContabil = new HashSet<BloqueioContabil>();
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)

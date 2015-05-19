@@ -128,10 +128,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             var contrato = contratoAppService.ObterPeloId(id, Usuario.Id) ?? new ContratoDTO();
             model.ListaServicoContratoRetificacaoItem = new SelectList(new List<ContratoRetificacaoItemDTO>(), "Id", "SequencialDescricaoItemComplemento");
 
-            CarregarCombosMedicao(model); 
+            model.ContratoRetificacaoItemMedicao.ContratoId = contrato.Id.Value;
+            model.ContratoRetificacaoItemMedicao.Contrato = contrato;
 
-            model.Contrato = contrato;
-
+            CarregarCombosMedicao(model);
+ 
             model.PodeSalvar = false;
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
@@ -188,7 +189,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Medicao(MedicaoContratoMedicaoViewModel model)
@@ -196,7 +196,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             if (ModelState.IsValid)
             {
                 if (contratoRetificacaoItemMedicaoAppService.Salvar(model.ContratoRetificacaoItemMedicao))
-                    return PartialView("Redirect", Url.Action("Medicao", "MedicaoContrato", new { id = model.ContratoRetificacaoItemMedicao.Id }));
+                    return PartialView("Redirect", Url.Action("Medicao", "MedicaoContrato", new { id = model.ContratoRetificacaoItemMedicao.Contrato.Id}));
             }
             return PartialView("_NotificationMessagesPartial");
         }
@@ -209,7 +209,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (codigo.HasValue)
             {
-
                 listaContratoRetificacaoProvisao = contratoRetificacaoProvisaoAppService.ObterListaCronograma(codigo.Value);
 
                 if (!contratoRetificacaoProvisaoAppService.ExisteContratoRetificacaoProvisao(listaContratoRetificacaoProvisao))
@@ -220,7 +219,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                 {
                                     ehRecuperou = false,
                                     errorMessage = msg,
-                                    contratoRetificacaoItem = contratoRetificacaoItem,
+                                    complementoDescricao = "",
+                                    ehNaturezaItemPorPrecoGlobal = false,
+                                    descricaoNaturezaItem = "",
+                                    siglaUnidadeMedida = "",
+                                    valorItem = "",
+                                    retencaoItem = "",
                                     listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
                                 });
                 }
@@ -228,20 +232,33 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 {
                     contratoRetificacaoItem = listaContratoRetificacaoProvisao.ElementAt(0).ContratoRetificacaoItem;
 
+                    bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
+                    bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
+                    
                     return Json(new
                     {
                         ehRecuperou = true,
                         errorMessage = string.Empty,
-                        contratoRetificacaoItem = contratoRetificacaoItem,
+                        complementoDescricao = contratoRetificacaoItem.ComplementoDescricao,
+                        ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
+                        descricaoNaturezaItem = contratoRetificacaoItem.DescricaoNaturezaItem,
+                        siglaUnidadeMedida = contratoRetificacaoItem.Servico.SiglaUnidadeMedida,
+                        valorItem = contratoRetificacaoItem.ValorItem,
+                        retencaoItem = contratoRetificacaoItem.RetencaoItem,
                         listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao)
                     });
                 }
             }
             return Json(new 
             {
-                ehRecuperou = true, 
+                ehRecuperou = false, 
                 errorMessage = string.Empty, 
-                contratoRetificacaoItem = contratoRetificacaoItem,
+                complementoDescricao = "",
+                ehNaturezaItemPorPrecoGlobal = false,
+                descricaoNaturezaItem = "",
+                siglaUnidadeMedida = "",
+                valorItem = "",
+                retencaoItem = "",
                 listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
             });
         }

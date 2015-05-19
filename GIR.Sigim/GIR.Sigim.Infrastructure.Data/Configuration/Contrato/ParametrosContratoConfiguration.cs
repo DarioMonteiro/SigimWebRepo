@@ -31,12 +31,18 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnOrder(5);
 
             Property(l => l.DiasMedicao)
-                .HasColumnName("DiasMedicao")
+                .HasColumnName("diasMedicao")
                 .HasColumnOrder(23);
 
             Property(l => l.DiasPagamento)
-                .HasColumnName("DiasPagamento")
+                .HasColumnName("diasPagamento")
                 .HasColumnOrder(24);
+
+            Property(l => l.DadosSped)
+                .HasColumnName("dadosSped")
+                .HasColumnType("bit")
+                .HasColumnOrder(25);
+
         }
     }
 }

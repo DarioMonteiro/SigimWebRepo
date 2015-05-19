@@ -157,6 +157,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new SerieNFConfiguration());
             modelBuilder.Configurations.Add(new CSTConfiguration());
             modelBuilder.Configurations.Add(new CodigoContribuicaoConfiguration());
+            modelBuilder.Configurations.Add(new BloqueioContabilConfiguration());
         }
         #endregion
     }

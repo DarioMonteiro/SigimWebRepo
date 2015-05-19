@@ -87,6 +87,7 @@
     <Compile Include="DTO\Sigim\AssuntoContatoDTO.cs" />
     <Compile Include="DTO\Sigim\BancoDTO.cs" />
     <Compile Include="DTO\Sigim\BancoLayoutDTO.cs" />
+    <Compile Include="DTO\Sigim\BloqueioContabilDTO.cs" />
     <Compile Include="DTO\Sigim\FormatoExportacaoArquivo.cs" />
     <Compile Include="DTO\Sigim\CifFobDTO.cs" />
     <Compile Include="DTO\Sigim\ClienteFornecedorDTO.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Service\OrdemCompra\IPreRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosOrdemCompraAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosUsuarioAppService.cs" />
+    <Compile Include="Service\Sigim\IBloqueioContabilAppService.cs" />
     <Compile Include="Service\Sigim\ICifFobAppService.cs" />
     <Compile Include="Service\Sigim\ICodigoContribuicaoAppService.cs" />
     <Compile Include="Service\Sigim\ICSTAppService.cs" />

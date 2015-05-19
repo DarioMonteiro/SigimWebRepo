@@ -90,6 +90,7 @@
     <Compile Include="Entity\Sigim\AssuntoContato.cs" />
     <Compile Include="Entity\Sigim\Banco.cs" />
     <Compile Include="Entity\Sigim\BancoLayout.cs" />
+    <Compile Include="Entity\Sigim\BloqueioContabil.cs" />
     <Compile Include="Entity\Sigim\CifFob.cs" />
     <Compile Include="Entity\Sigim\ClienteFornecedor.cs" />
     <Compile Include="Entity\Sigim\CodigoContribuicao.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\IBloqueioContabilRepository.cs" />
     <Compile Include="Repository\Sigim\ICifFobRepository.cs" />
     <Compile Include="Repository\Sigim\ICodigoContribuicaoRepository.cs" />
     <Compile Include="Repository\Sigim\ICSTRepository.cs" />

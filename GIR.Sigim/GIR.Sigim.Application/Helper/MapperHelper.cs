@@ -149,6 +149,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<BancoLayout, BancoLayoutDTO>();
             Mapper.CreateMap<BancoLayoutDTO, BancoLayout>();
 
+            Mapper.CreateMap<BloqueioContabil, BloqueioContabilDTO>();
+            Mapper.CreateMap<BloqueioContabilDTO, BloqueioContabil>();
+
             Mapper.CreateMap<CifFob, CifFobDTO>();
             Mapper.CreateMap<CifFobDTO, CifFob>();
 

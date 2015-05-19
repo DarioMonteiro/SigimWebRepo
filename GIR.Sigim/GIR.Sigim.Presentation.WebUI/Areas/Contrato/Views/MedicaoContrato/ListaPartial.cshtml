@@ -82,7 +82,7 @@
                         <tr>
                             <td class="text-center">@Html.ActionLink(item.Id.ToString(), "Medicao", new { id = item.Id })</td>
                             @*<td class="text-center"><a href="javascript:alert('Em construção.');">@item.Id</a></td>*@
-                            <td class="text-nowrap">@item.CentroCustoDescricao</td>
+                            <td class="text-nowrap">@item.CentroCusto.CentroCustoDescricao</td>
                             <td class="text-nowrap">@item.ContratoDescricao.Descricao</td>
                             <td class="text-nowrap">@item.Contratante.Nome</td>
                             <td class="text-nowrap">@item.Contratado.Nome</td>

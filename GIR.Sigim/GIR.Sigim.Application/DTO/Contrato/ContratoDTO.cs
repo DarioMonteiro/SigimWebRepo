@@ -14,10 +14,6 @@ namespace GIR.Sigim.Application.DTO.Contrato
     public class ContratoDTO : BaseDTO
     {
         public CentroCustoDTO CentroCusto { get; set; }
-        public string CentroCustoDescricao
-        {
-            get { return this.CentroCusto.Codigo + " - " + this.CentroCusto.Descricao; } 
-        }
 
         public int ContratoDescricaoId { get; set; }
         public LicitacaoDescricaoDTO ContratoDescricao { get; set; }      

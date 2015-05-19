@@ -120,6 +120,18 @@
   <data name="ContratoNaoAssinado" xml:space="preserve">
     <value>O contrato não está assinado.</value>
   </data>
+  <data name="DataMaiorQue" xml:space="preserve">
+    <value>A data do campo "{0}" está maior que a data do campo "{1}".</value>
+  </data>
+  <data name="DataMedicaoMenorQueDataLimite" xml:space="preserve">
+    <value>A data de medição menor que a data limite.</value>
+  </data>
+  <data name="DataVencimentoForaDoLimite" xml:space="preserve">
+    <value>A data de vencimento está fora do limite  de pagamento.</value>
+  </data>
+  <data name="DocumentoExistente" xml:space="preserve">
+    <value>O documento já existe no contrato.</value>
+  </data>
   <data name="RetificacaoItemSemProvisionamento" xml:space="preserve">
     <value>O ítem não possui provisionamento para ser medido.</value>
   </data>
@@ -128,5 +140,8 @@
   </data>
   <data name="RetificacaoNaoExiste" xml:space="preserve">
     <value>O contrato não possui retificação.</value>
+  </data>
+  <data name="ValorMaiorQue" xml:space="preserve">
+    <value>O valor do campo "{0}" está maior que o valor do campo "{1}".  </value>
   </data>
 </root>

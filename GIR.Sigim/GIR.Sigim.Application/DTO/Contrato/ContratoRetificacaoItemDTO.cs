@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Domain.Entity.Contrato;
@@ -17,55 +18,23 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public int ContratoRetificacaoId { get; set; }
         public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
         public Int16 Sequencial { get; set; }
-        [Display(Name = "Complemento")]
         public string ComplementoDescricao { get; set; }
         public NaturezaItem NaturezaItem { get; set; }
         [Display(Name = "Natureza")]
         public string DescricaoNaturezaItem
         {
-            get
-            {
-                string descricaoNaturezaItem = "";
-                if (Id > 0)
-                {
-                    if (this.NaturezaItem == NaturezaItem.PrecoUnitario)
-                    {
-                        descricaoNaturezaItem = "Genérico por preço unitário";
-                    }
-                    else if (this.NaturezaItem == NaturezaItem.PrecoGlobal)
-                    {
-                        descricaoNaturezaItem = "Genérico por preço global";
-                    }
-                }
-
-                return descricaoNaturezaItem;
-            }
+            get { return this.Id.HasValue ? this.NaturezaItem.ObterDescricao() : "" ; }
         }
-
-        public bool EhNaturezaItemGenericoPorPrecoGlobal
+        public bool EhNaturezaItemGenericoPorPrecoGlobal 
         {
-            get
-            {
-                if (this.NaturezaItem == NaturezaItem.PrecoGlobal)
-                {
-                    return true;
-                }
-                return false;
-            }
+            get { return NaturezaItem == NaturezaItem.PrecoGlobal; }
+            set { NaturezaItem = value ? NaturezaItem.PrecoGlobal : NaturezaItem.PrecoUnitario; } 
         }
-
-        public bool EhNaturezaItemGenericoPorPrecoUnitario
+        public bool EhNaturezaItemGenericoPorPrecoUnitario 
         {
-            get
-            {
-                if (this.NaturezaItem == NaturezaItem.PrecoUnitario)
-                {
-                    return true;
-                }
-                return false;
-            }
+            get { return NaturezaItem == NaturezaItem.PrecoUnitario; }
+            set { NaturezaItem = value ? NaturezaItem.PrecoUnitario : NaturezaItem.PrecoGlobal; }
         }
-
         public int ServicoId { get; set; }
         public ServicoDTO Servico { get; set; }
         public string SequencialDescricaoItemComplemento 
@@ -73,7 +42,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
             get
             {
                 string sequencialDescricaoComplemento;
-                if (ComplementoDescricao == string.Empty)
+                if (string.IsNullOrEmpty(ComplementoDescricao))
                 {
                     sequencialDescricaoComplemento = Sequencial.ToString() + " - " + Servico.Descricao;
                 }

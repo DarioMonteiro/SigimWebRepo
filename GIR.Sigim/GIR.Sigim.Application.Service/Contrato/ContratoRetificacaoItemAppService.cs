@@ -38,6 +38,27 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                     l => l.RetencaoTipoCompromisso).To<ContratoRetificacaoItemDTO>() ;
         }
 
+        public bool EhNaturezaItemPrecoGlobal(ContratoRetificacaoItemDTO dto)
+        {
+            if (dto.NaturezaItem != Domain.Entity.Contrato.NaturezaItem.PrecoGlobal)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool EhNaturezaItemPrecoUnitario(ContratoRetificacaoItemDTO dto)
+        {
+            if (dto.NaturezaItem != Domain.Entity.Contrato.NaturezaItem.PrecoUnitario)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
         #endregion
     }
 }

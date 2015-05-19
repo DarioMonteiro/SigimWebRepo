@@ -12,6 +12,6 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public byte[] IconeRelatorio { get; set; }
         public int? DiasMedicao { get; set;}
         public int? DiasPagamento { get; set; }
-
+        public bool? DadosSped { get; set; }  
     }
 }

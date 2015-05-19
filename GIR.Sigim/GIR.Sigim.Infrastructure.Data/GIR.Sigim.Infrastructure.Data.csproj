@@ -80,6 +80,7 @@
     <Compile Include="Configuration\Sigim\BancoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\BancoLayoutConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AssuntoContatoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\BloqueioContabilConfiguration.cs" />
     <Compile Include="Configuration\Sigim\CifFobConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ClienteFornecedorConfiguration.cs" />
     <Compile Include="Configuration\Sigim\CodigoContribuicaoConfiguration.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Repository\OrdemCompra\ParametrosUsuarioRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Repository\Admin\UsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\BloqueioContabilRepository.cs" />
     <Compile Include="Repository\Sigim\CifFobRepository.cs" />
     <Compile Include="Repository\Sigim\ClienteFornecedorRepository.cs" />
     <Compile Include="Repository\Sigim\AssuntoContatoRepository.cs" />

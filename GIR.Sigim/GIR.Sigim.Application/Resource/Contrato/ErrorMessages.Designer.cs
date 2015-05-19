@@ -70,6 +70,42 @@ namespace GIR.Sigim.Application.Resource.Contrato {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A data do campo &quot;{0}&quot; está maior que a data do campo &quot;{1}&quot;..
+        /// </summary>
+        public static string DataMaiorQue {
+            get {
+                return ResourceManager.GetString("DataMaiorQue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A data de medição menor que a data limite..
+        /// </summary>
+        public static string DataMedicaoMenorQueDataLimite {
+            get {
+                return ResourceManager.GetString("DataMedicaoMenorQueDataLimite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A data de vencimento está fora do limite  de pagamento..
+        /// </summary>
+        public static string DataVencimentoForaDoLimite {
+            get {
+                return ResourceManager.GetString("DataVencimentoForaDoLimite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O documento já existe no contrato..
+        /// </summary>
+        public static string DocumentoExistente {
+            get {
+                return ResourceManager.GetString("DocumentoExistente", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O ítem não possui provisionamento para ser medido..
         /// </summary>
         public static string RetificacaoItemSemProvisionamento {
@@ -93,6 +129,15 @@ namespace GIR.Sigim.Application.Resource.Contrato {
         public static string RetificacaoNaoExiste {
             get {
                 return ResourceManager.GetString("RetificacaoNaoExiste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O valor do campo &quot;{0}&quot; está maior que o valor do campo &quot;{1}&quot;.  .
+        /// </summary>
+        public static string ValorMaiorQue {
+            get {
+                return ResourceManager.GetString("ValorMaiorQue", resourceCulture);
             }
         }
     }

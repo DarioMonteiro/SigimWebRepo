@@ -9,10 +9,10 @@ namespace GIR.Sigim.Domain.Entity.Contrato
 {
     public enum NaturezaItem
     {
-        [Description("Preço Unitário")]
+        [Description("Genérico por preço unitário")]
         PrecoUnitario = 0,
 
-        [Description("Preço Global")]
+        [Description("Genérico por preço global")]
         PrecoGlobal = 1
 
     }

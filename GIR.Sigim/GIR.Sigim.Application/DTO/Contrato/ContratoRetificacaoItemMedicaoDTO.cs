@@ -25,6 +25,8 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public ContratoRetificacaoItemCronogramaDTO ContratoRetificacaoItemCronograma { get; set; }
         public int SequencialCronograma { get; set; }
         public SituacaoMedicao Situacao { get; set; }
+        [Required]
+        [Display(Name = "Tipo")]
         public int TipoDocumentoId { get; set; }
         public TipoDocumentoDTO TipoDocumento { get; set; }
         [Required]
@@ -37,7 +39,13 @@ namespace GIR.Sigim.Application.DTO.Contrato
         [Required]
         [Display(Name = "Data vencimento")]
         public DateTime DataVencimento { get; set; }
+        [Required]
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Quantidade medição Atual")]
         public decimal Quantidade { get; set; }
+        [Required]
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Valor medição atual")]
         public decimal Valor { get; set; }
         [Required]
         [Display(Name = "Data medição")]
@@ -88,6 +96,9 @@ namespace GIR.Sigim.Application.DTO.Contrato
         [StringLength(30, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Motivo desconto")]
         public string MotivoDesconto { get; set; }
+
+        public decimal ValorPendente { get; set; }
+        public decimal QuantidadePendente { get; set; }
 
         public ContratoRetificacaoItemMedicaoDTO()
         {

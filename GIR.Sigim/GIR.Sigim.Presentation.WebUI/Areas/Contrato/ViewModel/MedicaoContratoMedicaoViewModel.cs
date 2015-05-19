@@ -13,18 +13,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
 {
     public class MedicaoContratoMedicaoViewModel
     {
-        public ContratoDTO Contrato { get; set; }
-        
+
         public SelectList ListaServicoContratoRetificacaoItem { get; set; }
 
         [Display(Name = "Retenção %")]
-        public decimal? RetencaoContratual { get; set; }
-              
-        public ContratoRetificacaoItemDTO ContratoRetificacaoItem { get; set; }
+        public decimal? RetencaoContratual { get; set; }             
 
         public ContratoRetificacaoItemMedicaoDTO ContratoRetificacaoItemMedicao { get; set; }
-
-        public ContratoRetificacaoItemCronogramaDTO ContratoRetificacaoItemCronograma { get; set; }
         
         [Display(Name="Tipo")]
         public SelectList ListaTipoDocumento { get; set; }
@@ -50,16 +45,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         [Display(Name = "Contribuição")]
         public SelectList ListaCodigoContribuicao { get; set; }
 
-        [Required]
-        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
-        [Display(Name = "Valor medição atual")]
-        public decimal ValorMedicaoAtual { get; set; }
-
-        [Required]
-        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
-        [Display(Name = "Quantidade medição Atual")]
-        public decimal QuantidadeMedicaoAtual { get; set; }
-
         public string JsonListaRetificacaoProvisao { get; set; }
         public int? DiasPagamentoParametrosContrato { get; set; }
         public int? DiasMedicaoParametrosContrato { get; set; }
@@ -69,23 +54,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public bool EhSituacaoAguardandoLiberacao { get; set; }
         public bool EhSituacaoLiberado { get; set; }
 
-        public decimal? ValorPendente { get; set; }
-        public decimal? QuantidadePendente { get; set; }
-
-        public bool EhNaturezaItemGenericoPorPrecoGlobal { get; set; }
-        public bool EhNaturezaItemGenericoPorPrecoUnitario { get; set; }
-
         public bool PodeSalvar { get; set; }
 
         public MedicaoContratoMedicaoViewModel()
         {
-            this.Contrato = new ContratoDTO();
-            this.ContratoRetificacaoItem = new ContratoRetificacaoItemDTO();
             this.ContratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicaoDTO();
-            this.ContratoRetificacaoItemCronograma = new ContratoRetificacaoItemCronogramaDTO();
-
-            this.ValorMedicaoAtual = 0;
-            this.QuantidadeMedicaoAtual = 0;
 
             EhSituacaoAguardandoAprovacao = true;
             EhSituacaoAguardandoLiberacao = false;

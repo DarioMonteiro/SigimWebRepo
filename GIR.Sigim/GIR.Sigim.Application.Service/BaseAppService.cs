@@ -7,6 +7,7 @@ using GIR.Sigim.Domain.Entity;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using GIR.Sigim.Infrastructure.Crosscutting.Validator;
+using System.Globalization;
 
 namespace GIR.Sigim.Application.Service
 {
@@ -68,7 +69,6 @@ namespace GIR.Sigim.Application.Service
 
         protected string RetiraZerosIniciaisNumeroDocumento(string NumeroDocumento)
         {
-
             string numeroNotaFiscalSemZerosIniciais = "";
             string pedaco;
             bool achouNumeroDifZero = false;
@@ -85,6 +85,40 @@ namespace GIR.Sigim.Application.Service
 
             return numeroNotaFiscalSemZerosIniciais;
         }
+
+        protected int ComparaDatas(string Data1, string Data2)
+        {
+            int result = 0;
+            DateTime data1,data2;
+
+            if (!DateTime.TryParseExact(Data1,"dd/MM/yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None, out data1))
+            {
+                return 1;
+            }
+
+            if (!DateTime.TryParseExact(Data2,"dd/MM/yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None, out data2))
+            {
+                return -1;
+            }
+
+            if (data1 > data2) result = -1;
+            else if (data1 < data2) result = 1;
+
+            return result;
+        }
+
+        protected bool ValidaData(string Data)
+        {
+            DateTime dataValida;
+
+            if (!DateTime.TryParse(Data, out dataValida))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
 
     }
 }

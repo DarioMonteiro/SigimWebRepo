@@ -103,6 +103,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #region Sigim
             currentContainer.RegisterType<IAssuntoContatoRepository, AssuntoContatoRepository>();
             currentContainer.RegisterType<IBancoLayoutRepository, BancoLayoutRepository>();
+            currentContainer.RegisterType<IBloqueioContabilRepository, BloqueioContabilRepository>();
             currentContainer.RegisterType<IClienteFornecedorRepository, ClienteFornecedorRepository>();
             currentContainer.RegisterType<IMaterialRepository, MaterialRepository>();
             currentContainer.RegisterType<ITipoCompraRepository, TipoCompraRepository>();
@@ -160,6 +161,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #region Sigim
             currentContainer.RegisterType<IAssuntoContatoAppService, AssuntoContatoAppService>();
             currentContainer.RegisterType<IBancoLayoutAppService, BancoLayoutAppService>();
+            currentContainer.RegisterType<IBloqueioContabilAppService, BloqueioContabilAppService>();
             currentContainer.RegisterType<IClienteFornecedorAppService, ClienteFornecedorAppService>();
             currentContainer.RegisterType<IMaterialAppService, MaterialAppService>();
             currentContainer.RegisterType<ITipoCompraAppService, TipoCompraAppService>();

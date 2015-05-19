@@ -76,6 +76,7 @@
     <Compile Include="OrdemCompra\PreRequisicaoMaterialAppService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sigim\BancoLayoutAppService.cs" />
+    <Compile Include="Sigim\BloqueioContabilAppService.cs" />
     <Compile Include="Sigim\CifFobAppService.cs" />
     <Compile Include="Sigim\ClienteFornecedorAppService.cs" />
     <Compile Include="Sigim\AssuntoContatoAppService.cs" />

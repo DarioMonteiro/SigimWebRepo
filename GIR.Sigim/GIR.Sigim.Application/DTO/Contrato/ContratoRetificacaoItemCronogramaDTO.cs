@@ -19,10 +19,8 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public DateTime DataInicial { get; set; }
         public DateTime DataFinal { get; set; }
         public DateTime DataVencimento { get; set; }
-        [Display(Name = "Quantidade contratada")]
         public decimal Quantidade { get; set; }
         public decimal PercentualExecucao { get; set; }
-        [Display(Name = "Valor contratado")]
         public decimal Valor { get; set; }
 
     }

@@ -38,23 +38,24 @@
                                         <fieldset>
                                             <div class="row">
                                                 <section class="col col-6">
-                                                    <label class="label">Contrato</label> 
+                                                    <label class="label">Contrato</label>
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Contrato.Id, new { @class="readonly", @readonly = "" })  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Id, new { @class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section>
                                                 <section class="col col-6">
-                                                    <label class="label">Descrição Contrato</label> 
+                                                    <label class="label">Descrição Contrato</label>
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Contrato.ContratoDescricao.Descricao, new { @class="readonly", @readonly = "" })  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratoDescricao.Descricao, new { @class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section>
                                             </div>
                                             <div class="row">
+                                                @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.Codigo)
                                                 <section class="col col-6">
-                                                    <label class="label">Centro custo</label> 
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.CentroCustoDescricao, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Contrato.CentroCustoDescricao, new {@class="readonly", @readonly = "" })  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.CentroCustoDescricao, new {@class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section> 
                                                 <section class="col col-6">
@@ -65,27 +66,27 @@
                                                 </section> 
                                             </div>
                                             <div class="row">
+                                                @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)
                                                 <section class="col col-6">
-                                                    <label class="label">Contratado</label> 
-                                                    @Html.HiddenFor(m => m.Contrato.ContratadoId)
+                                                    <label class="label">Contratado</label>
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Contrato.Contratado.Nome, new {@class="readonly", @readonly = "" })  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.Nome, new {@class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section>
                                                 <section class="col col-6">
                                                 @{
-                                                    if (Model.Contrato.Contratado.TipoPessoa == "J")
+                                                    if (Model.ContratoRetificacaoItemMedicao.Contrato.Contratado.TipoPessoa == "J")
                                                     {
-                                                        <label class="label">C.N.P.J</label> 
+                                                        @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaJuridica.Cnpj, new { @class = "label" })
                                                         <label class="input">
-                                                            @Html.TextBoxFor(m => m.Contrato.Contratado.PessoaJuridica.Cnpj , new {@class="readonly", @readonly = "" })  
+                                                            @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaJuridica.Cnpj , new {@class="readonly", @readonly = "" })  
                                                         </label>
                                                     }
                                                     else
                                                     {
-                                                        <label class="label">C.P.F</label> 
+                                                        @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaFisica.Cpf, new { @class = "label" })
                                                         <label class="input">
-                                                            @Html.TextBoxFor(m => m.Contrato.Contratado.PessoaFisica.Cpf, new {@class="readonly", @readonly = "" })  
+                                                            @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaFisica.Cpf, new {@class="readonly", @readonly = "" })  
                                                         </label>
                                                     }
                                                 }
@@ -103,29 +104,29 @@
                                             </div>
                                             <div class="row">
                                                 <section class="col col-12">
-                                                    @Html.LabelFor(m => m.ContratoRetificacaoItem.ComplementoDescricao, new { @class = "label" })
+                                                    <label class="label">Complemento</label>
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItem.ComplementoDescricao, new {@class="readonly", @readonly = "" })
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao, new {@class="readonly", @readonly = "" })
                                                     </label>
                                                 </section>
                                             </div>
                                             <div class="row">
                                                 <section class="col col-6">
-                                                    @Html.LabelFor(m => m.ContratoRetificacaoItem.DescricaoNaturezaItem , new { @class = "label" })
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItem.DescricaoNaturezaItem , new { @class="readonly", @readonly = "" })
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem, new { @class = "readonly", @readonly = "" })
                                                     </label>
                                                 </section>
                                                 <section class="col col-2">
-                                                    @Html.LabelFor(m => m.ContratoRetificacaoItem.Servico.UnidadeMedida.Sigla , new { @class = "label" })
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItem.Servico.UnidadeMedida.Sigla, new {@class="readonly", @readonly = "" })
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida, new { @class = "readonly", @readonly = "" })
                                                     </label>
                                                 </section>
                                                 <section class="col col-4">
                                                     <label class="label">Valor ítem</label>
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItem.ValorItem,"{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
                                                     </label>
                                                 </section>
                                             </div>
@@ -136,8 +137,8 @@
                                             @Html.HiddenFor(m => m.EhSituacaoAguardandoLiberacao)
                                             @Html.HiddenFor(m => m.EhSituacaoLiberado)
                                             @Html.HiddenFor(m => m.DataLimiteMedicao)
-                                            @Html.HiddenFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)
-                                            @Html.HiddenFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)
+                                            @*@Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)*@
                                         </fieldset>
                                     </div>
                                 </div>
@@ -159,14 +160,15 @@
                                                 <section class="col col-3">
                                                     @Html.LabelFor(m => m.ListaTipoDocumento, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId,Model.ListaTipoDocumento , string.Empty)  
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId, Model.ListaTipoDocumento, string.Empty, new { @class = "required", @required = true })  
                                                         <i></i>
                                                     </label>
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId, "", new { @class = "note note-error" })
                                                 </section>
                                                 <section class="col col-3">
                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento, new { @class="required", @maxlength = "10", @required = true})  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento, new { @class = "required", @maxlength = "10", @required = true })  
                                                         <script type="text/javascript">
                                                             $(document).ready(function () {
                                                                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").on("change", function () {
@@ -175,13 +177,13 @@
                                                             });
                                                         </script>
                                                     </label>
-                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento , "", new { @class = "note note-error" })
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento, "", new { @class = "note note-error" })
                                                 </section>
                                                 <section class="col col-3">
-                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao , new { @class = "label" })
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao, new { @class = "label" })
                                                     <label class="input">
                                                         <i class="icon-append fa fa-calendar"></i>
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao, "{0:dd/MM/yyyy}", new { @class="required", @required = true})  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
                                                         <script type="text/javascript">
                                                             $(document).ready(function () {
                                                                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").on("change", function () {
@@ -193,10 +195,10 @@
                                                     @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao, "Informe uma data válida.", new { @class = "note note-error" })
                                                 </section>
                                                 <section class="col col-3">
-                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento , new { @class = "label" })
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, new { @class = "label" })
                                                     <label class="input">
                                                         <i class="icon-append fa fa-calendar"></i>
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, "{0:dd/MM/yyyy}", new { @class="required",@required = true})  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
                                                         <script type="text/javascript">
                                                             $(document).ready(function () {
                                                                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").on("change", function () {
@@ -232,6 +234,7 @@
                                                             nextText: '<i class="fa fa-chevron-right"></i>',
                                                             changeMonth: true,
                                                             changeYear: true,
+                                                            minDate: '#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)',
                                                             onClose: function (selectedDate) {
                                                                 if ($(this).valid()) {
                                                                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)').datepicker('option', 'maxDate', selectedDate);
@@ -249,7 +252,7 @@
                                                 <section class="col col-12">
                                                     @Html.LabelFor(m => m.ListaMultiFornecedor, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId,Model.ListaMultiFornecedor, string.Empty)  
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId, Model.ListaMultiFornecedor, string.Empty)  
                                                         <i></i>
                                                         <script type="text/javascript">
                                                             $(document).ready(function () {
@@ -271,21 +274,21 @@
                                                 <section class="col col-4">
                                                     @Html.LabelFor(m => m.ListaTipoCompra, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.TipoCompraCodigo,Model.ListaTipoCompra, string.Empty)  
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.TipoCompraCodigo, Model.ListaTipoCompra, string.Empty)  
                                                         <i></i>
                                                     </label>
                                                 </section>
                                                 <section class="col col-4">
                                                     @Html.LabelFor(m => m.ListaCifFob, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.CifFobId,Model.ListaCifFob, string.Empty)  
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.CifFobId, Model.ListaCifFob, string.Empty)  
                                                         <i></i>
                                                     </label>
                                                 </section>
                                                 <section class="col col-4">
                                                     @Html.LabelFor(m => m.ListaNaturezaOperacao, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.NaturezaOperacaoCodigo,Model.ListaNaturezaOperacao, string.Empty)  
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.NaturezaOperacaoCodigo, Model.ListaNaturezaOperacao, string.Empty)  
                                                         <i></i>
                                                     </label>
                                                 </section>
@@ -294,21 +297,21 @@
                                                 <section class="col col-4">
                                                     @Html.LabelFor(m => m.ListaSerieNF, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.SerieNFId,Model.ListaSerieNF, string.Empty)  
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.SerieNFId, Model.ListaSerieNF, string.Empty)  
                                                         <i></i>
                                                     </label>
                                                 </section>
                                                 <section class="col col-4">
                                                     @Html.LabelFor(m => m.ListaCST, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.CSTCodigo,Model.ListaCST, string.Empty)  
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.CSTCodigo, Model.ListaCST, string.Empty)  
                                                         <i></i>
                                                     </label>
                                                 </section>
                                                 <section class="col col-4">
                                                     @Html.LabelFor(m => m.ListaCodigoContribuicao, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo,Model.ListaCodigoContribuicao, string.Empty)  
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo, Model.ListaCodigoContribuicao, string.Empty)  
                                                         <i></i>
                                                     </label>
                                                 </section>
@@ -319,7 +322,7 @@
                                                     <label class="input">
                                                         @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, new { @maxlength = "50" })  
                                                     </label>
-                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras , "", new { @class = "note note-error" })
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, "", new { @class = "note note-error" })
                                                 </section>
                                             </div>
                                         </fieldset>
@@ -375,14 +378,14 @@
 							                        </div>
 							                        <div class="tab-pane fade" id="AbaMedicao">
                                                         <fieldset>
-                                                            @Html.HiddenFor(m => m.ValorPendente)
-                                                            @Html.HiddenFor(m => m.QuantidadePendente)
+                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)
+                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.QuantidadePendente)
                                                             <div class="row">
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao, new { @class = "label" })
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao, "{0:dd/MM/yyyy}", new { @class="required", @required = true})  
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
                                                                         <script type="text/javascript">
                                                                             $(document).ready(function () {
                                                                                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").on("change", function () {
@@ -410,59 +413,59 @@
                                                                     });
                                                                 </script>
                                                                 <section class="col col-4">
-                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItem.PrecoUnitario, new { @class = "label" })
+                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItem.PrecoUnitario ,"{0:F5}", new { @readonly = "", @class = "text-right decimal-5-casas readonly" })
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario, "{0:F5}", new { @readonly = "", @class = "text-right decimal-5-casas readonly" })
                                                                     </label>
                                                                 </section>
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-4">
-                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemCronograma.Valor, new { @class = "label" })
+                                                                    <label class="label">Valor contratado</label>
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemCronograma.Valor ,"{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Valor, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-4">
-                                                                    @Html.LabelFor(m => m.ValorMedicaoAtual, new { @class = "label" })
+                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Valor, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ValorMedicaoAtual,"{0:F2}", new { @class = "text-right decimal-2-casas required", @required = true })
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Valor, "{0:F2}", new { @class = "text-right decimal-2-casas required", @required = true })
                                                                         <script type="text/javascript">
                                                                             $(document).ready(function () {
-                                                                                $("#@Html.IdFor(m => m.ValorMedicaoAtual)").on("change", function () {
+                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").on("change", function () {
                                                                                     validaValorMedicaoAtual();
                                                                                 });
                                                                             });
                                                                         </script>
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.ValorMedicaoAtual , "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Valor, "", new { @class = "note note-error" })
                                                                 </section>
                                                             </div>
                                                             <div class="row">
                                                                 <section class="col col-4">
-                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemCronograma.Quantidade, new { @class = "label" })
+                                                                    <label class="label">Quantidade contratada</label>
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemCronograma.Quantidade,"{0:F7}", new { @readonly = "", @class = "text-right decimal-7-casas readonly" })
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade, "{0:F7}", new { @readonly = "", @class = "text-right decimal-7-casas readonly" })
                                                                     </label>
                                                                 </section>
                                                                 <section class="col col-4">
-                                                                    @Html.LabelFor(m => m.QuantidadeMedicaoAtual, new { @class = "label" })
+                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Quantidade, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.QuantidadeMedicaoAtual,"{0:F7}", new { @class = "text-right decimal-7-casas required", @required = true })
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Quantidade, "{0:F7}", new { @class = "text-right decimal-7-casas required", @required = true })
                                                                         <script type="text/javascript">
                                                                             $(document).ready(function () {
-                                                                                $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").on("change", function () {
+                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").on("change", function () {
                                                                                     validaQuantidadeMedicaoAtual();
                                                                                 });
                                                                             });
                                                                         </script>
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.QuantidadeMedicaoAtual , "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Quantidade, "", new { @class = "note note-error" })
                                                                 </section>
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Desconto, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Desconto ,"{0:F2}", new { @class = "text-right decimal-2-casas" })
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Desconto, "{0:F2}", new { @class = "text-right decimal-2-casas" })
                                                                         <script type="text/javascript">
                                                                             $(document).ready(function () {
                                                                                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").on("change", function () {
@@ -471,7 +474,7 @@
                                                                             });
                                                                         </script>
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Desconto , "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Desconto, "", new { @class = "note note-error" })
                                                                 </section>
                                                             </div>
                                                             <div class="row">
@@ -480,14 +483,14 @@
                                                                     <label class="textarea">
                                                                         @Html.TextAreaFor(m => m.ContratoRetificacaoItemMedicao.Observacao, new { rows = 5, style = "height:104px;" })
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Observacao , "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Observacao, "", new { @class = "note note-error" })
                                                                 </section>
                                                                 <section class="col col-6">
                                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto, new { @class = "label" })
                                                                     <label class="input">
                                                                         @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto)
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto , "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto, "", new { @class = "note note-error" })
                                                                 </section>
                                                             </div>
                                                         </fieldset>
@@ -503,11 +506,11 @@
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
 
                             @{
-                                string disableBtnSalvar = string.Empty;
-                                if (!Model.PodeSalvar)
-                                {
-                                    disableBtnSalvar = "disabled";
-                                }
+                                                        string disableBtnSalvar = string.Empty;
+                                                        if (!Model.PodeSalvar)
+                                                        {
+                                                            disableBtnSalvar = "disabled";
+                                                        }
                             }
                             <button id="btnSalvar" type="submit" class="btn btn-primary right @disableBtnSalvar">
                                 Salvar
@@ -536,7 +539,7 @@
         var codigoContratoRetificacaoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)").val(); 
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("RecuperaContratoRetificacaoItem","MedicaoContrato",new { Area = "Contrato" })',
+            url: '@Url.Action("RecuperaContratoRetificacaoItem", "MedicaoContrato", new { Area = "Contrato" })',
             cache: false,
             async: false,
             contentType: 'application/json; charset=utf-8',
@@ -545,64 +548,45 @@
             }),
             success: function (result) {
                 showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
-                if (result.contratoRetificacaoItem != null) {
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ComplementoDescricao)').val(result.contratoRetificacaoItem.ComplementoDescricao);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.contratoRetificacaoItem.DescricaoNaturezaItem);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItem.Servico.UnidadeMedida.Sigla)').val(result.contratoRetificacaoItem.Servico.SiglaUnidadeMedida);
-                    if (result.contratoRetificacaoItem.ValorItem != null) {
-                        $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.ValorItem), 2));
+                if (result.ehRecuperou) {
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val(result.complementoDescricao);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.descricaoNaturezaItem);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val(result.siglaUnidadeMedida);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                    if (result.valorItem != null) {
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.valorItem), 2));
                     }
-                    else {
-                        $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ValorItem)').val("");
+                    $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));
+                    if (result.retencaoItem != null) {
+                        $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(result.retencaoItem), 5));
                     }
-                    if (result.contratoRetificacaoItem.RetencaoItem != null) {
-                        $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));
-                    }
-                    else {
-                        $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));
-                    }
-                    $("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val(result.listaContratoRetificacaoProvisao);
-                    if (result.contratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal) {
-                        $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)').val(true);
-                    }
-                    else {
-                        $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
-                    }
-                    if (result.contratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario) {
-                        $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)').val(true);
-                    }
-                    else {
-                        $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
-                    }                    
-
+                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(result.listaContratoRetificacaoProvisao);
+                    @*$('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(result.ehNaturezaItemPorPrecoUnitario);*@
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(result.ehNaturezaItemPorPrecoGlobal);
                     jsonRetificaoProvisaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val());
-
                 }
                 else
                 {
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ComplementoDescricao)').val("");
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItem.Servico.UnidadeMedida.Sigla)').val("");
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ValorItem)').val("");
-                    $("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val();
-                    $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
-                    $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
-
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(result.listaContratoRetificacaoProvisao);
+                    @*$('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);*@
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
                     jsonRetificaoProvisaoArray = null;
-
                 }
                 isRecuperou = result.ehRecuperou;
             },
             error: function (result) {
                 showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
-                $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ComplementoDescricao)').val("");
-                $('#@Html.IdFor(m => m.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
-                $('#@Html.IdFor(m => m.ContratoRetificacaoItem.Servico.UnidadeMedida.Sigla)').val("");
-                $('#@Html.IdFor(m => m.ContratoRetificacaoItem.ValorItem)').val("");
-                $("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val();
-                $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
-                $('#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
-
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val();
+                @*$('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);*@
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
                 jsonRetificaoProvisaoArray = null;
             }
         });
@@ -614,6 +598,9 @@
     }
 
     function fillTable() {
+        var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
+        @*var ehNaturezaItemPorPrecoUnitario = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)").val() === "true");*@
+
         $("#tableItens thead").empty();
         var row = $('<tr role="row">');
         $("#tableItens thead").append(row);
@@ -621,7 +608,7 @@
         row.append($('<th>Evento</th>'));
         row.append($('<th class="text-center">Data</th>'));
         if (jsonRetificaoProvisaoArray != null) {
-            if (!jsonRetificaoProvisaoArray[0].ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal) {
+            if (!ehNaturezaItemPorPrecoGlobal) {
                 row.append($('<th class="text-right">Quantidade</th>'));
                 row.append($('<th class="text-right">Quantidade medida</th>'));
                 row.append($('<th class="text-right">Quantidade pendente</th>'));
@@ -662,7 +649,7 @@
                 row.append($('<td class="text-nowrap">' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Sequencial + '</td>'));
                 row.append($('<td class="text-nowrap" onclick="carregaAbaDadosMedicao(' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Sequencial + ');">' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Descricao + '</td>'));
                 row.append($('<td class="text-center">' + new Date(jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.DataVencimento).toFormatDDMMYYYY() + '</td>'));
-                if (!jsonRetificaoProvisaoArray[i].ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal) {
+                if (!ehNaturezaItemPorPrecoGlobal) {
                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Quantidade), 7) + '</td>'));
                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadeTotalMedida), 7) + '</td>'));
                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadePendente), 7) + '</td>'));
@@ -678,7 +665,7 @@
             row.append($('<td></td>'));
             row.append($('<td></td>'));
             row.append($('<td></td>'));
-            if (!jsonRetificaoProvisaoArray[0].ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal) {
+            if (!ehNaturezaItemPorPrecoGlobal) {
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(totalQuantidade), 7) + '</td>'));
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(totalQuantidadeMedida), 7) + '</td>'));
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(totalQuantidadePendente), 7) + '</td>'));
@@ -694,7 +681,10 @@
     }
 
     function carregaAbaDadosMedicao(sequencial) {
-        jsonRetificaoProvisaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val());
+        jsonRetificaoProvisaoArray = JSON.parse($('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val());
+        var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
+        @*var ehNaturezaItemPorPrecoUnitario = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)").val() === "true");*@
+
 
         limpaAbaDadosMedicao();
 
@@ -709,32 +699,32 @@
                 var quantidadePendente = item.Quantidade - item.QuantidadeTotalMedida;
                 var valorPendente = item.Valor - item.ValorTotalMedido;
 
-                $("#@Html.IdFor(m => m.ValorPendente)").val(valorPendente);
-                $("#@Html.IdFor(m => m.QuantidadePendente)").val(quantidadePendente);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)').val(roundDecimal(floatToString(valorPendente), 2));
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.QuantidadePendente)").val(roundDecimal(floatToString(quantidadePendente), 7));
 
-                var dataVencimento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val();
-                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataVencimento);
+                var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataEmissao);
                 if (!validaDataVencimento()){
                     return;
                 }
 
                 //item.ContratoRetificacaoItem.PrecoUnitario = roundDecimal(floatToString(item.ContratoRetificacaoItem.PrecoUnitario), 2)
 
-                $("#@Html.IdFor(m => m.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(item.ContratoRetificacaoItem.PrecoUnitario), 5));
-                if (item.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal) {
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(1), 7));
-                    $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val(roundDecimal(floatToString(1), 7));
-                    $('#@Html.IdFor(m =>m.QuantidadeMedicaoAtual)').prop('readonly', true);
-                    $('#@Html.IdFor(m =>m.ValorMedicaoAtual)').prop('readonly', false);
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(item.ContratoRetificacaoItem.PrecoUnitario), 5));
+                if (ehNaturezaItemPorPrecoGlobal) {
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(1), 7));
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(1), 7));
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', true);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', false);
                 }
                 else {
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(item.ContratoRetificacaoItemCronograma.Quantidade), 7));
-                    $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val(roundDecimal(floatToString(quantidadePendente), 7));
-                    $('#@Html.IdFor(m =>m.QuantidadeMedicaoAtual)').prop('readonly', false);
-                    $('#@Html.IdFor(m =>m.ValorMedicaoAtual)').prop('readonly', true);
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(item.ContratoRetificacaoItemCronograma.Quantidade), 7));
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(quantidadePendente), 7));
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', false);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', true);
                 }
-                $("#@Html.IdFor(m => m.ContratoRetificacaoItemCronograma.Valor)").val(roundDecimal(floatToString(item.ContratoRetificacaoItemCronograma.Valor), 2));
-                $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(floatToString(valorPendente), 2));
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Valor)").val(roundDecimal(floatToString(item.ContratoRetificacaoItemCronograma.Valor), 2));
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(floatToString(0), 2));
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Observacao)").val("");
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto)").val("");
@@ -749,12 +739,13 @@
     }
 
     function limpaAbaDadosMedicao() {
-        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(new Date().toFormatDDMMYYYY());
-        $("#@Html.IdFor(m => m.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(0), 5));
-        $("#@Html.IdFor(m => m.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(0), 7));
-        $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val(roundDecimal(floatToString(0), 7));
-        $("#@Html.IdFor(m => m.ContratoRetificacaoItemCronograma.Valor)").val(roundDecimal(floatToString(0), 2));
-        $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(floatToString(0), 2));
+        var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataEmissao);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(0), 5));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(0), 7));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(0), 7));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Valor)").val(roundDecimal(floatToString(0), 2));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(0), 2));
         $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(floatToString(0), 2));
         $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Observacao)").val("");
         $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto)").val("");
@@ -770,7 +761,7 @@
 
     function validaNumeroDocumento() {
         var isValid = false;
-        var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
+        var contratadoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)").val();
         var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
         var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
         var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
@@ -866,11 +857,10 @@
     }
 
     function validaValorMedicaoAtual() {
-        var valorMedido = stringToFloat($("#@Html.IdFor(m => m.ValorMedicaoAtual)").val());
-        var valorPendente = stringToFloat($("#@Html.IdFor(m => m.ValorPendente)").val());
-        var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItem.PrecoUnitario)").val()); 
+        var valorMedido = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val());
+        var valorPendente = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)").val());
+        var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val()); 
         var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val()); 
-        var ehNaturezaItemGenericoPorPrecoUnitario = false;
         var quantidadeMedicao = 0;
 
         if (isNaN(valorMedido)) valorMedido = 0;
@@ -880,36 +870,37 @@
 
         if (valorMedido == 0)  {
             smartAlert("Atenção", "Valor medido não pode ser zerado !", "warning");
-            $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(valorPendente, 2));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
             return false;
         }
 
         if (valorMedido > valorPendente) {
             smartAlert("Atenção", "Valor medido maior que valor pendente !", "warning");
-            $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(valorPendente,2));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
             return false;
         }
 
         if (valorMedido <= desconto) {
             smartAlert("Atenção", "Valor medido menor que o valor do desconto !", "warning");
-            $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(0, 7));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(0, 2));
             return false;
         }
 
-        ehNaturezaItemGenericoPorPrecoUnitario = ($("#@Html.IdFor(m => m.EhNaturezaItemGenericoPorPrecoUnitario)").val() === "true");
-        if (ehNaturezaItemGenericoPorPrecoUnitario)
+        var ehNaturezaItemGenericoPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
+        if (!ehNaturezaItemGenericoPorPrecoGlobal)
         {
             quantidadeMedicao = valorMedido / precoUnitario;
-            $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val(roundDecimal(floatToString(quantidadeMedicao), 7));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(quantidadeMedicao), 7));
         }
 
         return true;
     }
 
     function validaQuantidadeMedicaoAtual() {
-        var quantidadeMedida = stringToFloat($("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val());
-        var quantidadePendente = stringToFloat($("#@Html.IdFor(m => m.QuantidadePendente)").val());
-        var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItem.PrecoUnitario)").val());
+        var quantidadeMedida = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val());
+        var quantidadePendente = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.QuantidadePendente)").val());
+        var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val());
         var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val());
         var valorMedido = 0;
 
@@ -920,22 +911,23 @@
 
         if (quantidadeMedida == 0) {
             smartAlert("Atenção", "A quantidade medida não pode ser zero!", "warning");
-            $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val(roundDecimal(quantidadePendente, 7));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(quantidadePendente, 7));
             return false;
         }
 
         if (quantidadeMedida > quantidadePendente) {
             smartAlert("Atenção", "Quantidade medida maior que quantidade pendente !", "warning");
-            $("#@Html.IdFor(m => m.QuantidadeMedicaoAtual)").val(roundDecimal(quantidadePendente, 7));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(quantidadePendente, 7));
             return false;
         }
 
         valorMedido = quantidadeMedida * precoUnitario;
 
-        $("#@Html.IdFor(m => m.ValorMedicaoAtual)").val(roundDecimal(floatToString(valorMedido), 2));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorMedido), 2));
 
         if (valorMedido <= desconto) {
             smartAlert("Atenção", "Valor medido menor que o valor do desconto !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(0, 2));
             return false;
         }
 
@@ -944,7 +936,7 @@
 
     function validaDesconto() {
         var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val());
-        var valorMedido = stringToFloat($("#@Html.IdFor(m => m.ValorMedicaoAtual)").val());
+        var valorMedido = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val());
 
         if (isNaN(valorMedido)) valorMedido = 0;
         if (isNaN(desconto)) desconto = 0;
