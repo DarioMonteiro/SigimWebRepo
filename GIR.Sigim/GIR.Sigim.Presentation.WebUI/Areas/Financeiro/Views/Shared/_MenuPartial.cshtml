@@ -5,11 +5,19 @@
     <li>
         <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Sistema</span></a>
         <ul>
-@*            <li>
-                @Html.ActionLink("Parâmetros", "Index", "Parametros")
-            </li>*@
+            <li>
+                @Html.ActionLink("Parâmetros", "Index", "ParametrosFinanceiro")
+            </li>
             <li>
                 @Html.ActionLink("Parâmetros - usuário", "Index", "ParametrosUsuarioFinanceiro")
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Cadastro</span></a>
+        <ul>
+            <li>
+                @Html.ActionLink("Tipo de Compromisso", "Index", "TipoCompromisso")
             </li>
         </ul>
     </li>

@@ -1,0 +1,67 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.TipoCompromissoViewModel
+
+@{
+    ViewBag.Title = "Tipo de compromisso";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+        @Html.ActionLink("Novo", "Novo", null, new { @class = "btn btn-primary", @style = "float:right;" })
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Lista",
+                        "TipoCompromisso",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            <div class="row">
+                            <section class="col col-12">
+                                @Html.LabelFor(m => m.TipoCompromisso.Descricao, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.TipoCompromisso.Descricao, new { @maxlength = "50" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.TipoCompromisso.Descricao, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-12">
+                                    <div class="inline-group">
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(m => m.TipoCompromisso.TipoPagar)<i></i>@Html.DisplayNameFor(m => m.TipoCompromisso.TipoPagar)
+                                        </label>
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(m => m.TipoCompromisso.TipoReceber)<i></i>@Html.DisplayNameFor(m => m.TipoCompromisso.TipoReceber)
+                                        </label>
+                                    </div>
+                                </section>
+                            </div>
+                        </fieldset>
+                    </div>
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
