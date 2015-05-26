@@ -73,6 +73,7 @@
     <Compile Include="DTO\OrdemCompra\ParametrosOrdemCompraDTO.cs" />
     <Compile Include="DTO\OrdemCompra\ParametrosUsuarioDTO.cs" />
     <Compile Include="DTO\OrdemCompra\RequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\Sac\ParametrosSacDTO.cs" />
     <Compile Include="DTO\Sigim\AssuntoContatoDTO.cs" />
     <Compile Include="DTO\Sigim\BancoDTO.cs" />
     <Compile Include="DTO\Sigim\BancoLayoutDTO.cs" />

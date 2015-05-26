@@ -163,6 +163,9 @@
     <Compile Include="Areas\OrdemCompra\ViewModel\RequisicaoMaterialListaViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialListaViewModel.cs" />
+    <Compile Include="Areas\Sac\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Sac\SacAreaRegistration.cs" />
+    <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\PainelController.cs" />
@@ -247,6 +250,11 @@
     <Content Include="Areas\Financeiro\Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Areas\Financeiro\Views\Home\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Cadastro.cshtml" />
+    <Content Include="Areas\Sac\Views\Web.config" />
+    <Content Include="Areas\Sac\Views\Shared\_MenuPartial.cshtml" />
+    <Content Include="Areas\Sac\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Sac\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Sac\Views\Parametros\Index.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
