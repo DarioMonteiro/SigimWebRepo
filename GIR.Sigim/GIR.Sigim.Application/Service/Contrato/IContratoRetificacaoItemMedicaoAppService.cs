@@ -10,8 +10,9 @@ namespace GIR.Sigim.Application.Service.Contrato
 {
     public interface IContratoRetificacaoItemMedicaoAppService : IBaseAppService
     {
-        void ObterQuantidadesEhValoresMedicao(int ContratoRetificacaoItemId,
-                                              int ContratoRetificacaoItemCronogramaId,
+        void ObterQuantidadesEhValoresMedicao(int ContratoId,
+                                              int SequenciaItem,
+                                              int SequencialCronograma,
                                               ref decimal QuantidadeTotalMedido,
                                               ref decimal ValorTotalMedido,
                                               ref decimal QuantidadeTotalLiberado,

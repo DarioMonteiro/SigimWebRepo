@@ -180,6 +180,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 model.RetencaoContratual = contratoRetificacao.RetencaoContratual;
             }
 
+            model.ContratoRetificacaoItemMedicao.ContratoRetificacaoId = contratoRetificacao.Id.Value;
+
             ListaItensUltimoContratoRetificacao = contratoRetificacao.ListaContratoRetificacaoItem;
 
             model.ListaServicoContratoRetificacaoItem = new SelectList(ListaItensUltimoContratoRetificacao, "Id", "SequencialDescricaoItemComplemento", ListaItensUltimoContratoRetificacao.Select(c => c.Id));
@@ -196,7 +198,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             if (ModelState.IsValid)
             {
                 if (contratoRetificacaoItemMedicaoAppService.Salvar(model.ContratoRetificacaoItemMedicao))
-                    return PartialView("Redirect", Url.Action("Medicao", "MedicaoContrato", new { id = model.ContratoRetificacaoItemMedicao.Contrato.Id}));
+                    return PartialView("Redirect", Url.Action("Medicao", "MedicaoContrato", new { id = model.ContratoRetificacaoItemMedicao.ContratoId}));
             }
             return PartialView("_NotificationMessagesPartial");
         }
@@ -225,6 +227,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                     siglaUnidadeMedida = "",
                                     valorItem = "",
                                     retencaoItem = "",
+                                    baseRetencaoItem = "",
+                                    sequencialItem = "",
                                     listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
                                 });
                 }
@@ -245,6 +249,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                         siglaUnidadeMedida = contratoRetificacaoItem.Servico.SiglaUnidadeMedida,
                         valorItem = contratoRetificacaoItem.ValorItem,
                         retencaoItem = contratoRetificacaoItem.RetencaoItem,
+                        baseRetencaoItem = contratoRetificacaoItem.BaseRetencaoItem,
+                        sequencialItem = contratoRetificacaoItem.Sequencial,
                         listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao)
                     });
                 }
@@ -259,6 +265,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 siglaUnidadeMedida = "",
                 valorItem = "",
                 retencaoItem = "",
+                baseRetencaoItem = "",
+                sequencialItem = "",
                 listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
             });
         }

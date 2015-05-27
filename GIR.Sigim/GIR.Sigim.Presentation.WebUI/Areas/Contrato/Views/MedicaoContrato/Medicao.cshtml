@@ -40,7 +40,7 @@
                                                 <section class="col col-6">
                                                     <label class="label">Contrato</label>
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Id, new { @class="readonly", @readonly = "" })  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoId, new { @class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section>
                                                 <section class="col col-6">
@@ -58,6 +58,7 @@
                                                         @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.CentroCustoDescricao, new {@class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section> 
+                                                @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacao.RetencaoContratual)
                                                 <section class="col col-6">
                                                     @Html.LabelFor(m => m.RetencaoContratual, new { @class = "label" })
                                                     <label class="input">
@@ -138,7 +139,10 @@
                                             @Html.HiddenFor(m => m.EhSituacaoLiberado)
                                             @Html.HiddenFor(m => m.DataLimiteMedicao)
                                             @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)
-                                            @*@Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)*@
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoId)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)
                                         </fieldset>
                                     </div>
                                 </div>
@@ -380,6 +384,8 @@
                                                         <fieldset>
                                                             @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)
                                                             @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.QuantidadePendente)
+                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)
+                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)
                                                             <div class="row">
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao, new { @class = "label" })
@@ -557,12 +563,19 @@
                         $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.valorItem), 2));
                     }
                     $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                     if (result.retencaoItem != null) {
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val(roundDecimal(floatToString(result.retencaoItem), 5));
                         $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(result.retencaoItem), 5));
                     }
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
+                    if (result.baseRetencaoItem != null) {
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val(roundDecimal(floatToString(result.baseRetencaoItem), 5));
+                    }
+
                     $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(result.listaContratoRetificacaoProvisao);
-                    @*$('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(result.ehNaturezaItemPorPrecoUnitario);*@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(result.ehNaturezaItemPorPrecoGlobal);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.sequencialItem);
                     jsonRetificaoProvisaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val());
                 }
                 else
@@ -571,9 +584,11 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
                     $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(result.listaContratoRetificacaoProvisao);
-                    @*$('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);*@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
                     jsonRetificaoProvisaoArray = null;
                 }
                 isRecuperou = result.ehRecuperou;
@@ -584,9 +599,11 @@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val("");
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
                 $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val();
-                @*$('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);*@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
                 jsonRetificaoProvisaoArray = null;
             }
         });
@@ -599,7 +616,6 @@
 
     function fillTable() {
         var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
-        @*var ehNaturezaItemPorPrecoUnitario = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)").val() === "true");*@
 
         $("#tableItens thead").empty();
         var row = $('<tr role="row">');
@@ -683,8 +699,6 @@
     function carregaAbaDadosMedicao(sequencial) {
         jsonRetificaoProvisaoArray = JSON.parse($('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val());
         var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
-        @*var ehNaturezaItemPorPrecoUnitario = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)").val() === "true");*@
-
 
         limpaAbaDadosMedicao();
 
@@ -698,6 +712,9 @@
                 var item = arr[0];
                 var quantidadePendente = item.Quantidade - item.QuantidadeTotalMedida;
                 var valorPendente = item.Valor - item.ValorTotalMedido;
+
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)').val(item.ContratoRetificacaoItemCronogramaId);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)').val(item.ContratoRetificacaoItemCronograma.Sequencial);
 
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)').val(roundDecimal(floatToString(valorPendente), 2));
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.QuantidadePendente)").val(roundDecimal(floatToString(quantidadePendente), 7));
