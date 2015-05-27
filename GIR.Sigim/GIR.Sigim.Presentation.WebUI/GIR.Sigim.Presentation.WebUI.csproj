@@ -164,6 +164,7 @@
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialListaViewModel.cs" />
     <Compile Include="Areas\Sac\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Sac\Controllers\ParametrosController.cs" />
     <Compile Include="Areas\Sac\SacAreaRegistration.cs" />
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />

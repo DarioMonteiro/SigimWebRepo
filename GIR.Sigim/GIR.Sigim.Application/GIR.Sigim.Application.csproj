@@ -149,6 +149,7 @@
     <Compile Include="Service\OrdemCompra\IPreRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosOrdemCompraAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosUsuarioAppService.cs" />
+    <Compile Include="Service\Sac\IParametrosSacAppService.cs" />
     <Compile Include="Service\Sigim\IMaterialAppService.cs" />
     <Compile Include="Service\Sigim\IAssuntoContatoAppService.cs" />
     <Compile Include="Service\Sigim\IBancoLayoutAppService.cs" />

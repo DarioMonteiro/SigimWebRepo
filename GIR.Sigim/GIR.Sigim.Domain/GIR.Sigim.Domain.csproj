@@ -68,6 +68,7 @@
     <Compile Include="Entity\OrdemCompra\PreRequisicaoMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\PreRequisicaoMaterialItem.cs" />
     <Compile Include="Entity\OrdemCompra\SituacaoPreRequisicaoMaterial.cs" />
+    <Compile Include="Entity\Sac\ParametrosSac.cs" />
     <Compile Include="Entity\Sigim\AssuntoContato.cs" />
     <Compile Include="Entity\Sigim\Banco.cs" />
     <Compile Include="Entity\Sigim\BancoLayout.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sac\IParametrosSacRepository.cs" />
     <Compile Include="Repository\Sigim\IMaterialRepository.cs" />
     <Compile Include="Repository\Sigim\IBancoLayoutRepository.cs" />
     <Compile Include="Repository\Sigim\IAssuntoContatoRepository.cs" />
