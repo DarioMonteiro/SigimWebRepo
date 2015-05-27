@@ -84,6 +84,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IClasseRepository, ClasseRepository>();
             currentContainer.RegisterType<ITipoCompromissoRepository, TipoCompromissoRepository>();
             currentContainer.RegisterType<IParametrosUsuarioFinanceiroRepository, ParametrosUsuarioFinanceiroRepository>();
+            currentContainer.RegisterType<IParametrosFinanceiroRepository, ParametrosFinanceiroRepository>();
             currentContainer.RegisterType<ITipoDocumentoRepository, TipoDocumentoRepository>();
             currentContainer.RegisterType<ITituloPagarRepository, TituloPagarRepository>();
             #endregion
@@ -144,6 +145,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IParametrosUsuarioFinanceiroAppService, ParametrosUsuarioFinanceiroAppService>();
             currentContainer.RegisterType<ITipoDocumentoAppService, TipoDocumentoAppService>();
             currentContainer.RegisterType<ITituloPagarAppService, TituloPagarAppService>();
+            currentContainer.RegisterType<IParametrosFinanceiroAppService, ParametrosFinanceiroAppService>();
             #endregion
 
             #region Orçamento

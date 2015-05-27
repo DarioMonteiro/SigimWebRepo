@@ -87,6 +87,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TituloReceber, TituloReceberDTO>();
             Mapper.CreateMap<TituloReceberDTO, TituloReceber>();
 
+            Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
+            Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>();
+
             #endregion
 
             #region Orçamento

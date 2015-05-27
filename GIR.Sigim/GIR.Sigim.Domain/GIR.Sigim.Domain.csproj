@@ -63,6 +63,7 @@
     <Compile Include="Entity\Financeiro\CentroCusto.cs" />
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
+    <Compile Include="Entity\Financeiro\ParametrosFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\ParametrosUsuarioFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\SituacaoTituloPagar.cs" />
     <Compile Include="Entity\Financeiro\TipoCompromisso.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Repository\Financeiro\ICentroCustoEmpresaRepository.cs" />
     <Compile Include="Repository\Financeiro\IClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\ICentroCustoRepository.cs" />
+    <Compile Include="Repository\Financeiro\IParametrosFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\IParametrosUsuarioFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoCompromissoRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoDocumentoRepository.cs" />

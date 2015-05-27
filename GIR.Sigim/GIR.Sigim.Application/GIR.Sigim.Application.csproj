@@ -67,6 +67,7 @@
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
+    <Compile Include="DTO\Financeiro\ParametrosFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\ParametrosUsuarioFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoCompromissoDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoDocumentoDTO.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="DTO\Sigim\MaterialDTO.cs" />
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
+    <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\RequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
@@ -171,6 +173,7 @@
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
     <Compile Include="Service\Financeiro\IClasseAppService.cs" />
     <Compile Include="Service\Financeiro\ICentroCustoAppService.cs" />
+    <Compile Include="Service\Financeiro\IParametrosFinanceiroAppService.cs" />
     <Compile Include="Service\Financeiro\IParametrosUsuarioFinanceiroAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoCompromissoAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoDocumentoAppService.cs" />
