@@ -52,6 +52,41 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return tipoCompromissoRepository.ObterPeloId(id).To<TipoCompromissoDTO>();
         }
 
+        public bool Salvar(TipoCompromissoDTO dto)
+        {
+            if (dto == null)
+                throw new ArgumentNullException("dto");
+
+            bool novoItem = false;
+
+            var tipoCompromisso = tipoCompromissoRepository.ObterPeloId(dto.Id);
+            if (tipoCompromisso == null)
+            {
+                tipoCompromisso = new TipoCompromisso();
+                novoItem = true;
+            }
+
+            tipoCompromisso.Descricao = dto.Descricao;
+            tipoCompromisso.TipoPagar = dto.TipoPagar;
+            tipoCompromisso.TipoReceber = dto.TipoReceber;
+            
+            if (Validator.IsValid(tipoCompromisso, out validationErrors))
+            {
+                if (novoItem)
+                    tipoCompromissoRepository.Inserir(tipoCompromisso);
+                else
+                    tipoCompromissoRepository.Alterar(tipoCompromisso);
+
+                tipoCompromissoRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            else
+                messageQueue.AddRange(validationErrors, TypeMessage.Error);
+
+            return false;
+        }
+
         #endregion
     }
 }

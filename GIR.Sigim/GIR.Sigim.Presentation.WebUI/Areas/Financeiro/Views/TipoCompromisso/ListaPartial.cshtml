@@ -65,8 +65,8 @@
                     @foreach (var item in Lista)
                     {
                         <tr>
-                            <td class="text-center">@Html.ActionLink(item.Id.ToString(), "Index", new { id = item.Id })</td>
-                            <td class="text-center">@item.Descricao</td>
+                            <td class="text-right">@Html.ActionLink(item.Id.ToString(), "Index", new { id = item.Id })</td>
+                            <td class="text-left">@item.Descricao</td>
                             <td class="text-center">@item.TipoPagar </td>
                             <td class="text-center">@item.TipoReceber </td>
                         </tr>

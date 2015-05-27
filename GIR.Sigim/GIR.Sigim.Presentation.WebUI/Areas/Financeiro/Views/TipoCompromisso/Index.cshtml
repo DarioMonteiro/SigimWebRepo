@@ -6,7 +6,7 @@
 
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
-        @Html.ActionLink("Novo", "Novo", null, new { @class = "btn btn-primary", @style = "float:right;" })
+    @Html.ActionLink("Novo", "", null, new { @class = "btn btn-primary", @style = "float:right;" })
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -18,18 +18,13 @@
             <div>
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
-                        "Lista",
+                        "Salvar",
                         "TipoCompromisso",
                         null,
-                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
-                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
+                        new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
-                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
-                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
-                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
-                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
-
                     <div class="panel-body no-padding">
                         <fieldset>
                             <div class="row">
@@ -55,6 +50,26 @@
                             </div>
                         </fieldset>
                     </div>
+                    <footer>
+                        <button type="submit" class="btn btn-primary">
+                            Salvar
+                        </button>
+                        @Html.ActionLink("Deletar", "Deletar", null, new { @class = "btn btn-primary", @id = Html.DisplayFor(l => l.TipoCompromisso.Id) })
+                    </footer>
+                    }
+
+                    @using (Ajax.BeginForm(
+                        "Lista",
+                        "TipoCompromisso",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
                     }
                     <div id="resultadoBusca"></div>
                 </div>
