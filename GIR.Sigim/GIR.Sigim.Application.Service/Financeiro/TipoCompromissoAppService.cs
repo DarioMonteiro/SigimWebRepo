@@ -87,6 +87,30 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return false;
         }
 
+        public bool Deletar(int? id)
+        {
+            if (id == null)
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
+                return false;
+            }
+
+            var tipoCompromisso = tipoCompromissoRepository.ObterPeloId(id);
+
+            try
+            {
+                tipoCompromissoRepository.Remover(tipoCompromisso);
+                tipoCompromissoRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception)
+            {
+                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.RegistroEmUso, tipoCompromisso.Descricao), TypeMessage.Error);
+                return false;
+            }
+        }
+
         #endregion
     }
 }

@@ -22,7 +22,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             Property(l => l.Descricao)
                 .IsRequired()
-                .HasMaxLength(25)
+                .HasMaxLength(50)
                 .HasColumnName("descricao")
                 .HasColumnOrder(2);
 
