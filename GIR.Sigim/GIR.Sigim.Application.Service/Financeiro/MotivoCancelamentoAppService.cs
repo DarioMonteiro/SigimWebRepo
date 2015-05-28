@@ -48,27 +48,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return motivoCancelamentoRepository.ObterPeloId(id).To<MotivoCancelamentoDTO>();
         }
 
-        //public bool Salvar(MotivoCancelamentoDTO dto)
-        //{
-        //    if (dto == null)
-        //        throw new ArgumentNullException("dto");
-
-        //    var motivoCancelamento = dto.To<MotivoCancelamento>();
-
-            
-        //    //if (EhValido(motivoCancelamento))
-        //    //{
-        //        if (motivoCancelamento.Id.HasValue)
-        //            motivoCancelamentoRepository.Alterar(motivoCancelamento);
-        //        else
-        //            motivoCancelamentoRepository.Inserir(motivoCancelamento);
-
-        //        motivoCancelamentoRepository.UnitOfWork.Commit();
-
-        //        messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
-        //    //}
-        //}
-
         public bool Salvar(MotivoCancelamentoDTO dto)
         {
             if (dto == null)
@@ -80,28 +59,21 @@ namespace GIR.Sigim.Application.Service.Financeiro
             if (motivoCancelamento == null)
             {
                 motivoCancelamento = new MotivoCancelamento();
-                motivoCancelamento.Descricao = dto.Descricao;               
                 novoItem = true;
-            }        
-           
+            }
+
+            motivoCancelamento.Descricao = dto.Descricao;
+
             if (Validator.IsValid(motivoCancelamento, out validationErrors))
             {
-                try
-                {
-                    if (novoItem)
-                        motivoCancelamentoRepository.Inserir(motivoCancelamento);
-                    else
-                        motivoCancelamentoRepository.Alterar(motivoCancelamento);
+                if (novoItem)
+                    motivoCancelamentoRepository.Inserir(motivoCancelamento);
+                else
+                    motivoCancelamentoRepository.Alterar(motivoCancelamento);
 
-                    motivoCancelamentoRepository.UnitOfWork.Commit();
-                    dto.Id = motivoCancelamento.Id;
-                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
-                    return true;
-                }
-                catch (Exception exception)
-                {
-                    QueueExeptionMessages(exception);
-                }
+                motivoCancelamentoRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
             }
             else
                 messageQueue.AddRange(validationErrors, TypeMessage.Error);
@@ -109,9 +81,32 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return false;
         }
 
+        public bool Deletar(int? id)
+        {
+            if (id == null)
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
+                return false;
+            }
+
+            var motivoCancelamento = motivoCancelamentoRepository.ObterPeloId(id);
+
+            try
+            {
+                motivoCancelamentoRepository.Remover(motivoCancelamento);
+                motivoCancelamentoRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception)
+            {
+                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.RegistroEmUso, motivoCancelamento.Descricao), TypeMessage.Error);
+                return false;
+            }
+        }
+
 
         #endregion
-
       
     }
 }

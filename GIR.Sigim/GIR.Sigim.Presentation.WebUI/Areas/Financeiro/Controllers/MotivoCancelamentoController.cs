@@ -13,7 +13,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
     public class MotivoCancelamentoController : BaseController
     {
-
         private IMotivoCancelamentoAppService motivoCancelamentoAppService;
 
         public MotivoCancelamentoController(
@@ -26,7 +25,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
        
         public ActionResult Index(int? id)
         {
-            MotivoCancelamentoViewModel model = new MotivoCancelamentoViewModel();
+            var model = Session["Filtro"] as MotivoCancelamentoViewModel;
+            if (model == null)
+            {
+                model = new MotivoCancelamentoViewModel();
+                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+            }
             var motivoCancelamento = motivoCancelamentoAppService.ObterPeloId(id) ?? new MotivoCancelamentoDTO();
 
             if (id.HasValue && !motivoCancelamento.Id.HasValue)
@@ -41,6 +45,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         {
             if (ModelState.IsValid)
             {
+                Session["Filtro"] = model;
                 int totalRegistros;
                 var result = motivoCancelamentoAppService.ListarPeloFiltro(model.Filtro, out totalRegistros);
                 if (result.Any())
@@ -53,17 +58,27 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
+        public ActionResult CarregarItem(int? id)
+        {
+            var motivoCancelamento = motivoCancelamentoAppService.ObterPeloId(id) ?? new MotivoCancelamentoDTO();
+            return Json(motivoCancelamento);
+        }
+
         [HttpPost]
         public ActionResult Salvar(MotivoCancelamentoViewModel model)
         {
             if (ModelState.IsValid)
-            {               
-                if (motivoCancelamentoAppService.Salvar(model.MotivoCancelamento))
-                    return PartialView("Redirect", Url.Action("", "MotivoCancelamento", new { id = model.MotivoCancelamento.Id }));
-            }
+                motivoCancelamentoAppService.Salvar(model.MotivoCancelamento);
+
             return PartialView("_NotificationMessagesPartial");
         }
 
-                   
+        [HttpPost]
+        public ActionResult Deletar(int? id)
+        {
+            motivoCancelamentoAppService.Deletar(id);
+            return PartialView("_NotificationMessagesPartial");
+        }      
+
     }
 }
