@@ -121,6 +121,7 @@
         .success(function (result) {
             $('#@Html.IdFor(m => m.MotivoCancelamento.Id)').val(result.Id);
             $('#@Html.IdFor(m => m.MotivoCancelamento.Descricao)').val(result.Descricao);
+            goToTop();
         });
     }
 </script>
