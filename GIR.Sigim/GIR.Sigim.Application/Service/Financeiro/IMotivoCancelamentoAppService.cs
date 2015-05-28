@@ -12,6 +12,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
     {        
         List<MotivoCancelamentoDTO> ListarPeloFiltro(MotivoCancelamentoFiltro filtro, out int totalRegistros);
         MotivoCancelamentoDTO ObterPeloId(int? id);
-        bool Salvar(MotivoCancelamentoDTO dto); 
+        bool Salvar(MotivoCancelamentoDTO dto);
+        bool Deletar(int? id);
     }
 }

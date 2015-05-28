@@ -6,7 +6,7 @@
 
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
-        @Html.ActionLink("Novo", "", null, new { @class = "btn btn-primary", @style = "float:right;" })
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>        
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -18,22 +18,18 @@
             <div>
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
-                        "Lista",
-                        "MotivoCancelamento",
-                        null,
-                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
-                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                            "Salvar",
+                            "MotivoCancelamento",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))                                            
                     {
                         @Html.AntiForgeryToken()
-                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
-                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
-                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
-                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
-
                     <div class="panel-body no-padding">
                         <fieldset>
                             <div class="row">
                             <section class="col col-12">
+                                @Html.HiddenFor(m => m.MotivoCancelamento.Id)
                                 @Html.LabelFor(m => m.MotivoCancelamento.Descricao, new { @class = "label" })
                                 <label class="input">
                                     @Html.TextBoxFor(m => m.MotivoCancelamento.Descricao, new { @maxlength = "50" })
@@ -43,16 +39,29 @@
                             </div>
                         </fieldset>
                     </div>
-                    }                     
-                    <div id="resultadoBusca"></div>  
-                    <footer>
-                        <button id="btnSalvar" type="button" class="btn btn-primary">
+                    <footer>                       
+                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                            Deletar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
                             Salvar
                         </button>
-                        @*@Html.ActionLink("Salvar", "Atualiza", null, new { @class = "btn btn-primary" })*@
-                        @Html.ActionLink("Deletar", "Deletar", null, new { @class = "btn btn-primary" })
-                    </footer>                                                          
-
+                    </footer>
+                    }                        
+                    @using (Ajax.BeginForm(
+                            "Lista",
+                            "MotivoCancelamento",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                    }
+                    <div id="resultadoBusca"></div>
                 </div>
             </div>
         </div>
@@ -63,25 +72,58 @@
 }
 
 <script type="text/javascript">
-
-    $('#btnSalvar').on("click", function () {
-        salvar();
-    });
-
-    function salvar() {
+    $("#btnDeletar").on("click", function () {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("Salvar", "MotivoCancelamento")',
-               cache: false,
-               async: false,
-               contentType: 'application/json; charset=utf-8',
-               data: JSON.stringify({
-                   model: '@Model'
-               })
+            url: '@Url.Action("Deletar", "MotivoCancelamento")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: $('#@Html.IdFor(m => m.MotivoCancelamento.Id)').val()
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
+            clearForm();
+            doFilter();
+        });
+    });
 
-           })
-       }
+    function clearForm() {
+        $('#@Html.IdFor(m => m.MotivoCancelamento.Id)').val('');
+        $('#@Html.IdFor(m => m.MotivoCancelamento.Descricao)').val('');
+    }
+
+    function novo() {
+        clearForm();
+        $('#notificationMessages').html('');
+        $('#MotivoCancelamento_Descricao-error').remove();
+    }
+
+    function refresh() {
+        onSuccess();
+        clearForm();
+        doFilter();
+    }
+
+    function loadItem(id) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CarregarItem", "MotivoCancelamento")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: id
+            })
+        })
+        .success(function (result) {
+            $('#@Html.IdFor(m => m.MotivoCancelamento.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.MotivoCancelamento.Descricao)').val(result.Descricao);
+            goToTop();
+        });
+    }
 </script>
-}
 
 
