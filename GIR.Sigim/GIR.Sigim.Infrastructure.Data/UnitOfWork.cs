@@ -14,6 +14,7 @@ using GIR.Sigim.Infrastructure.Data.Configuration.Contrato;
 using GIR.Sigim.Infrastructure.Data.Configuration.Financeiro;
 using GIR.Sigim.Infrastructure.Data.Configuration.Orcamento;
 using GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra;
+using GIR.Sigim.Infrastructure.Data.Configuration.Sac;
 using GIR.Sigim.Infrastructure.Data.Configuration.Sigim;
 
 namespace GIR.Sigim.Infrastructure.Data
@@ -136,6 +137,10 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new SituacaoMercadoriaConfiguration());
             modelBuilder.Configurations.Add(new UnidadeMedidaConfiguration());
             modelBuilder.Configurations.Add(new UsuarioCentroCustoConfiguration());
+
+            //Sac
+            modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
+            
         }
         #endregion
     }
