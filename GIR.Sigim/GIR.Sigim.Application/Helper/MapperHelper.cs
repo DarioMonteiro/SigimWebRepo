@@ -46,6 +46,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TipoCompromisso, TipoCompromissoDTO>();
             Mapper.CreateMap<TipoCompromissoDTO, TipoCompromisso>();
 
+            Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
+            Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
+
             Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
             Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
 

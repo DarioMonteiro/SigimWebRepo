@@ -147,11 +147,13 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\MotivoCancelamentoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\TipoCompromissoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\HomeController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ParametrosFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ParametrosUsuarioFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\MotivoCancelamentoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TipoCompromissoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ParametrosUsuarioFinanceiroViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ParametrosFinanceiroViewModel.cs" />
@@ -254,6 +256,8 @@
     <Content Include="Areas\Financeiro\Views\ParametrosFinanceiro\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\TipoCompromisso\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\TipoCompromisso\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\MotivoCancelamento\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\MotivoCancelamento\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />

@@ -1,0 +1,87 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.MotivoCancelamentoViewModel
+
+@{
+    ViewBag.Title = "Motivo de cancelamento";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+        @Html.ActionLink("Novo", "", null, new { @class = "btn btn-primary", @style = "float:right;" })
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Lista",
+                        "MotivoCancelamento",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            <div class="row">
+                            <section class="col col-12">
+                                @Html.LabelFor(m => m.MotivoCancelamento.Descricao, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.MotivoCancelamento.Descricao, new { @maxlength = "50" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.MotivoCancelamento.Descricao, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
+                        </fieldset>
+                    </div>
+                    }                     
+                    <div id="resultadoBusca"></div>  
+                    <footer>
+                        <button id="btnSalvar" type="button" class="btn btn-primary">
+                            Salvar
+                        </button>
+                        @*@Html.ActionLink("Salvar", "Atualiza", null, new { @class = "btn btn-primary" })*@
+                        @Html.ActionLink("Deletar", "Deletar", null, new { @class = "btn btn-primary" })
+                    </footer>                                                          
+
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+
+    $('#btnSalvar').on("click", function () {
+        salvar();
+    });
+
+    function salvar() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Salvar", "MotivoCancelamento")',
+               cache: false,
+               async: false,
+               contentType: 'application/json; charset=utf-8',
+               data: JSON.stringify({
+                   model: '@Model'
+               })
+
+           })
+       }
+</script>
+}
+
+
