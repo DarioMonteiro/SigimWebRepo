@@ -276,3 +276,7 @@ $('.numeric').on('input', function (event) {
     this.value = this.value.replace(/[^0-9]/g, '');
 });
 
+function goToTop()
+{
+    $('html, body').animate({ scrollTop: 0 }, 'slow');
+}

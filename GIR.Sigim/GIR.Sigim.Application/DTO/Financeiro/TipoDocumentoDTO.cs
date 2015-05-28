@@ -9,7 +9,14 @@ namespace GIR.Sigim.Application.DTO.Financeiro
 {
     public class TipoDocumentoDTO : BaseDTO
     {
+        [Required]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        [Display(Name = "Sigla")]
         public string Sigla { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        [Display(Name = "Descrição")]
         public string Descricao { get; set; }
     }
 }
