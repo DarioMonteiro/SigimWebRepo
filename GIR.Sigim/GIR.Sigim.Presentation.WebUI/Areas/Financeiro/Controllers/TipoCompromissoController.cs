@@ -34,7 +34,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
         public ActionResult Index(int? id)
         {
-            TipoCompromissoViewModel model = new TipoCompromissoViewModel();
+            var model = Session["Filtro"] as TipoCompromissoViewModel;
+            if (model == null)
+            {
+                model = new TipoCompromissoViewModel();
+                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+            }
             var tipoCompromisso = tipoCompromissoAppService.ObterPeloId(id) ?? new TipoCompromissoDTO();
 
             if (id.HasValue && !tipoCompromisso.Id.HasValue)
@@ -45,22 +50,22 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return View(model);
         }
 
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        /*public ActionResult Index(TipoCompromissoViewModel model)
+        public ActionResult Salvar(TipoCompromissoViewModel model)
         {
             if (ModelState.IsValid)
             {
-               TipoCompromissoAppService.Salvar(model.Parametros);
+                if (tipoCompromissoAppService.Salvar(model.TipoCompromisso))
+                    return PartialView("Redirect", Url.Action("Index", "TipoCompromisso"));
             }
-
             return PartialView("_NotificationMessagesPartial");
-        }*/
+        }
+
         public ActionResult Lista(TipoCompromissoViewModel model)
         {
             if (ModelState.IsValid)
             {
+                Session["Filtro"] = model;
                 int totalRegistros;
                 var result = tipoCompromissoAppService.ListarPeloFiltro (model.Filtro, out totalRegistros);
                 if (result.Any())
@@ -77,7 +82,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         public ActionResult Novo(TipoCompromissoViewModel model)
         {
             //Limpar o campo escondigo do ID
-            model.TipoCompromisso.Descricao =string.Empty ;
+            model.TipoCompromisso.Descricao =string.Empty;
             model.TipoCompromisso.TipoPagar = false;
             model.TipoCompromisso.TipoReceber = false;
 

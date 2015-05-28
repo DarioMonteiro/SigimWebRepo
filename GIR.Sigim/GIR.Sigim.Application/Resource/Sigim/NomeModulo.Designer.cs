@@ -61,6 +61,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CONTRATO.
+        /// </summary>
+        public static string Contrato {
+            get {
+                return ResourceManager.GetString("Contrato", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ORDEMCOMPRA.
         /// </summary>
         public static string OrdemCompra {

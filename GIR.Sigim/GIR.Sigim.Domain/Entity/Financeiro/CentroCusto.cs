@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.Orcamento; 
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -30,7 +32,11 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<UsuarioCentroCusto> ListaUsuarioCentroCusto { get; set; }
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterial> ListaRequisicaoMaterial { get; set; }
-        public ICollection<Orcamento.Obra> ListaObra { get; set; }
+        public ICollection<Obra> ListaObra { get; set; }
+        public ICollection<Contrato.Contrato> ListaContrato { get; set; }
+        public ICollection<Licitacao> ListaLicitacao { get; set; }
+        public ICollection<LicitacaoCronograma> ListaLicitacaoCronograma { get; set; }
+        public ICollection<BloqueioContabil> ListaBloqueioContabil { get; set; }
 
         public CentroCusto()
         {
@@ -40,7 +46,11 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaUsuarioCentroCusto = new HashSet<UsuarioCentroCusto>();
             this.ListaPreRequisicaoMaterialItem = new HashSet<PreRequisicaoMaterialItem>();
             this.ListaRequisicaoMaterial = new HashSet<RequisicaoMaterial>();
-            this.ListaObra = new HashSet<Orcamento.Obra>();
+            this.ListaObra = new HashSet<Obra>();
+            this.ListaContrato = new HashSet<Contrato.Contrato>(); 
+            this.ListaLicitacao = new HashSet<Licitacao>();
+            this.ListaLicitacaoCronograma = new HashSet<LicitacaoCronograma>();
+            this.ListaBloqueioContabil = new HashSet<BloqueioContabil>();
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)
