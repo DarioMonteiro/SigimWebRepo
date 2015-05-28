@@ -147,10 +147,14 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\TipoCompromissoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\ParametrosFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ParametrosUsuarioFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\TipoCompromissoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ParametrosUsuarioFinanceiroViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\ParametrosFinanceiroViewModel.cs" />
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
@@ -251,6 +255,9 @@
     <Content Include="Areas\Financeiro\Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Areas\Financeiro\Views\Home\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Cadastro.cshtml" />
+    <Content Include="Areas\Financeiro\Views\ParametrosFinanceiro\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoCompromisso\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoCompromisso\ListaPartial.cshtml" />
     <Content Include="Areas\Sac\Views\Web.config" />
     <Content Include="Areas\Sac\Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Areas\Sac\Views\_ViewStart.cshtml" />

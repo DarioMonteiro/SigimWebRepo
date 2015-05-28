@@ -1,0 +1,328 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.ParametrosFinanceiroViewModel
+
+@{
+    ViewBag.Title = "Parâmetros";
+    ViewBag.IsUploadForm = true;
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-8 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Index",
+                            "ParametrosFinanceiro",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formParametros", @class = "smart-form client-form", @novalidate = "novalidate", @enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Parametros.Id)
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseCliente" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Cliente
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseCliente" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.Parametros.ClienteId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.Parametros.ClienteId, Model.ListaEmpresa, string.Empty)
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Parametros.Responsavel, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Parametros.Responsavel)
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Parametros.Responsavel, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Parametros.PracaPagamento , new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Parametros.PracaPagamento)
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Parametros.PracaPagamento, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Parametros.Licenca , new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Parametros.Licenca)
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Parametros.Licenca, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Parametros.CentroCusto , new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Parametros.CentroCusto)
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Parametros.CentroCusto, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Parametros.Classe , new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Parametros.Classe)
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Parametros.Classe, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="panel-body no-padding">
+                                            <fieldset>
+                                                <div class="row">
+                                                    <section class="col col-12">
+                                                        <div class="alert alert-warning fade in">
+                                                            <i class="fa-fw fa fa-warning"></i>
+                                                            <strong>Atenção!</strong> A imagem deve medir 48x48 pixels e ser do tipo PNG.
+                                                        </div>
+                                                    </section>
+                                                </div>
+                                                <div class="row">
+                                                    <section class="col col-8">
+                                                        <input type="file" name="@Html.IdFor(m => m.IconeRelatorio)"  id="IconeRelatorio"/>
+                                                    </section>
+                                                    <section class="col col-4">
+                                                        @Html.HiddenFor(m => m.Parametros.RemoverImagem)
+                                                        <div class="bgIconeRelatorio48x48">
+                                                            @{
+                                                                string imgPadrao = Url.Content("~/Content/img/48x48.png");
+                                                                string imageSrc = imgPadrao;
+                                                                if (Model.Parametros.IconeRelatorio != null && Model.Parametros.IconeRelatorio.Length > 0)
+                                                                {
+                                                                    string imageBase64 = Convert.ToBase64String(Model.Parametros.IconeRelatorio);
+                                                                    imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                                                                }
+                                                                <img id="icone" src="@imageSrc" width="96" height="96" alt="Ícone para relatórios" />
+                                                                <script type="text/javascript">
+                                                                    function removerImagem() {
+                                                                        $("#IconeRelatorio").val('');
+                                                                        $('#icone').attr('src', '@imgPadrao');
+                                                                        $('#@Html.IdFor(m => m.Parametros.RemoverImagem)').val(true);
+                                                                    }
+
+                                                                    function exibirImagem(input) {
+                                                                        if (input.files && input.files[0]) {
+                                                                            var reader = new FileReader();
+
+                                                                            reader.onload = function (e) {
+                                                                                $('#icone').attr('src', e.target.result);
+                                                                            }
+
+                                                                            reader.readAsDataURL(input.files[0]);
+                                                                            $('#@Html.IdFor(m => m.Parametros.RemoverImagem)').val(false);
+                                                                        }
+                                                                        else
+                                                                            removerImagem();
+                                                                    }
+
+                                                                    $("#IconeRelatorio").on('change', function () {
+                                                                        exibirImagem(this);
+                                                                    });
+                                                                </script>
+                                                            }
+                                                            <a class="btn btn-sm btn-danger btn-block" href="javascript:removerImagem();">Remover</a>
+                                                        </div>
+                                                    </section>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseOpcao" class="collapsed"><i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>Opcões</a></h4>
+                                </div>
+                                <div id="collapseOpcao" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.GeraTituloImposto)<i></i>@Html.DisplayNameFor(m => m.Parametros.GeraTituloImposto)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.LeitoraCodigoBarras)<i></i>@Html.DisplayNameFor(m => m.Parametros.LeitoraCodigoBarras)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.PercentualApropriacao)<i></i>@Html.DisplayNameFor(m => m.Parametros.PercentualApropriacao)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.ImpostoAutomatico)<i></i>@Html.DisplayNameFor(m => m.Parametros.ImpostoAutomatico)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.ValorLiquidoApropriado)<i></i>@Html.DisplayNameFor(m => m.Parametros.ValorLiquidoApropriado)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.ContaCorrenteCentroCusto)<i></i>@Html.DisplayNameFor(m => m.Parametros.ContaCorrenteCentroCusto)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="panel-body no-padding" title="Título a pagar">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-12"> <label class="label">Título a pagar</label>
+									                <div class="inline-group">
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.SituacaoDefaultPagar, 0) <i></i>Provisionado</label>
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.SituacaoDefaultPagar, 1) <i></i>Aguardando liberação</label>
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.SituacaoDefaultPagar, 2) <i></i>Liberado</label>
+									                </div>
+								                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-12"> <label class="label">Título a receber</label>
+									                <div class="inline-group">
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.SituacaoDefaultReceber, 0) <i></i>Provisionado</label>
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.SituacaoDefaultReceber, 1) <i></i>A faturar</label>
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.SituacaoDefaultReceber, 2) <i></i>Faturado</label>
+                                                        <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.SituacaoDefaultReceber, 3) <i></i>Bloqueado</label>
+									                </div>
+								                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseInterfaceGeral" class="collapsed"><i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>Interface - Geral</a></h4>
+                                </div>
+                                <div id="collapseInterfaceGeral" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-12"> <label class="label">Bloqueio de títulos criados através de interface</label>
+									                <div class="column-group">
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.Interface, 1) <i></i>Bloqueia edição total de títulos</label>
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.Interface, 2) <i></i>Bloqueia alteração parcial de títulos</label>
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Parametros.Interface, 3) <i></i>Permite alteração somente de apropriação</label>
+									                </div>
+								                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.InterfaceContabil)<i></i>@Html.DisplayNameFor(m => m.Parametros.InterfaceContabil)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.ConfereNFOC )<i></i>@Html.DisplayNameFor(m => m.Parametros.ConfereNFOC)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.ConfereNFCT)<i></i>@Html.DisplayNameFor(m => m.Parametros.ConfereNFCT)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseInterfaceBanco" class="collapsed"><i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>Interface - Banco</a></h4>
+                                </div>
+                                <div id="collapseInterfaceBanco" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                             <div class="row">
+                                                 <section class="col col-2">
+                                                    @Html.LabelFor(m => m.Parametros.ToleranciaRecebimento, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Parametros.ToleranciaRecebimento, "{0:F2}", new { @class = "text-right decimal-2-casas required" })
+                                                        <script type="text/javascript">
+                                                            $(document).ready(function () {
+                                                                $("#@Html.IdFor(m => m.Parametros.ToleranciaRecebimento)").on("focusout", function () {
+                                                                    $("#@Html.IdFor(m => m.Parametros.ToleranciaRecebimento)").val(roundDecimal($(this).val(), 2));
+                                                                });
+                                                            });
+                                                        </script>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Parametros.ToleranciaRecebimento, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Salvar
+                            </button>
+                        </footer>
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#formParametros').ajaxForm({
+                success: function (d) {
+                    $('#IconeRelatorio').val('');
+                },
+                complete: function (xhr) {
+                    $('#notificationMessages').html(xhr.responseText);
+                }
+            });
+        });
+    </script>
+}

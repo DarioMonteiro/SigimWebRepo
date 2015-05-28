@@ -51,6 +51,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
             Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
 
+            Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
+            Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>();
+
             #endregion
 
             #region Orçamento

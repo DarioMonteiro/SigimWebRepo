@@ -1,0 +1,79 @@
+﻿@using GIR.Sigim.Application.DTO.Financeiro
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<TipoCompromissoDTO> Lista = Model.Records as IEnumerable<TipoCompromissoDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector",
+                                @aria_controls = "dt_basic",
+                                @class = "form-control",
+                                onchange = "changePageSize();"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+        string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+        string idSortingSuffix = "sorting";
+        string descricaoSortingSuffix = "sorting";
+        string tipoPagarSortingSuffix = "sorting";
+        string tipoReceberSortingSuffix = "sorting";
+
+        switch (Model.OrderBy)
+        {
+            case "id":
+                idSortingSuffix += sortingSuffix;
+                break;
+            case "descricao":
+                descricaoSortingSuffix += sortingSuffix;
+                break;
+            case "tipoPagar":
+                tipoPagarSortingSuffix += sortingSuffix;
+                break;
+            case "tipoReceber":
+                tipoReceberSortingSuffix += sortingSuffix;
+                break;
+            default:
+                break;
+        }
+                        }
+                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="min-width:65px;">Código</th>
+                        <th class="sorting @descricaoSortingSuffix text-center" data-order="descricao" style="min-width:65px;">Descrição</th>
+                        <th class="sorting @tipoPagarSortingSuffix text-center" data-order="tipoPagar" style="min-width:75px;">Tipo a pagar</th>
+                        <th class="sorting @tipoReceberSortingSuffix text-center" data-order="tipoReceber" style="min-width:75px;">Tipo a receber</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td class="text-right">@Html.ActionLink(item.Id.ToString(), "Index", new { id = item.Id })</td>
+                            <td class="text-left">@item.Descricao</td>
+                            <td class="text-center">@item.TipoPagar </td>
+                            <td class="text-center">@item.TipoReceber </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model.Pagination)
+    }
+</div>
