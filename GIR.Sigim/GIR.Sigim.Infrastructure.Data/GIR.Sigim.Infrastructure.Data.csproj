@@ -78,6 +78,7 @@
     <Compile Include="Configuration\OrdemCompra\PreRequisicaoMaterialItemConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\PreRequisicaoMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\ParametrosOrdemCompraConfiguration.cs" />
+    <Compile Include="Configuration\Sac\ParametrosSacConfiguration.cs" />
     <Compile Include="Configuration\Sigim\BancoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\BancoLayoutConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AssuntoContatoConfiguration.cs" />

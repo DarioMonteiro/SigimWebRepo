@@ -11,12 +11,14 @@ using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Orcamento;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.DTO.Sac;
 using GIR.Sigim.Domain.Entity.Admin;
 using GIR.Sigim.Domain.Entity.Contrato;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Sac;
 using GIR.Sigim.Infrastructure.Crosscutting.Adapter;
 
 namespace GIR.Sigim.Application.Helper
@@ -63,7 +65,7 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
 
             #endregion
-            
+
             #region Financeiro
 
             Mapper.CreateMap<CentroCusto, CentroCustoDTO>();
@@ -120,7 +122,7 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<PreRequisicaoMaterial, PreRequisicaoMaterialDTO>()
                 .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()))
-                .ForMember(d => d.RMGeradas,m => m.MapFrom(s => string.Join(", ", s.ListaItens.SelectMany(l => l.ListaRequisicaoMaterialItem.Select(c => c.RequisicaoMaterialId.ToString())).Distinct().OrderBy(o => o))));
+                .ForMember(d => d.RMGeradas, m => m.MapFrom(s => string.Join(", ", s.ListaItens.SelectMany(l => l.ListaRequisicaoMaterialItem.Select(c => c.RequisicaoMaterialId.ToString())).Distinct().OrderBy(o => o))));
             Mapper.CreateMap<PreRequisicaoMaterialDTO, PreRequisicaoMaterial>();
 
             Mapper.CreateMap<PreRequisicaoMaterialItem, PreRequisicaoMaterialItemDTO>();
@@ -199,6 +201,12 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<UnidadeMedidaDTO, UnidadeMedida>();
 
             #endregion
-        }
+
+            # region Sac
+            Mapper.CreateMap<ParametrosSac, ParametrosSacDTO>();
+            Mapper.CreateMap<ParametrosSacDTO, ParametrosSac>()
+                .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
+            # endregion
+        } 
     }
 }
