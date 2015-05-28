@@ -13,6 +13,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         //TODO: Juntar as infomações dos campos TipoPagar e TipoReceber em um único campo
         public bool? TipoPagar { get; set; }
         public bool? TipoReceber { get; set; }
+        
         public ICollection<OrdemCompra.ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
 
         public TipoCompromisso()

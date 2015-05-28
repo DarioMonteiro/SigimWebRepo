@@ -14,5 +14,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
         List<TipoCompromissoDTO> ListarPeloFiltro(TipoCompromissoFiltro filtro, out int totalRegistros);
         TipoCompromissoDTO ObterPeloId(int? id);
         bool Salvar(TipoCompromissoDTO dto);
+        bool Deletar(int? id);
     }
 }

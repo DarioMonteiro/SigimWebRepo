@@ -50,14 +50,18 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return View(model);
         }
 
+        public ActionResult CarregarItem(int? id)
+        {
+            var tipoCompromisso = tipoCompromissoAppService.ObterPeloId(id) ?? new TipoCompromissoDTO();
+            return Json(tipoCompromisso);
+        }
+
         [HttpPost]
         public ActionResult Salvar(TipoCompromissoViewModel model)
         {
             if (ModelState.IsValid)
-            {
-                if (tipoCompromissoAppService.Salvar(model.TipoCompromisso))
-                    return PartialView("Redirect", Url.Action("Index", "TipoCompromisso"));
-            }
+                tipoCompromissoAppService.Salvar(model.TipoCompromisso);
+
             return PartialView("_NotificationMessagesPartial");
         }
 
@@ -79,16 +83,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         }
 
         [HttpPost]
-        public ActionResult Novo(TipoCompromissoViewModel model)
+        public ActionResult Deletar(int? id)
         {
-            //Limpar o campo escondigo do ID
-            model.TipoCompromisso.Descricao =string.Empty;
-            model.TipoCompromisso.TipoPagar = false;
-            model.TipoCompromisso.TipoReceber = false;
-
-            Lista(model);
-
-            return View(model);
+            tipoCompromissoAppService.Deletar(id);
+            return PartialView("_NotificationMessagesPartial");
         }
 
     }

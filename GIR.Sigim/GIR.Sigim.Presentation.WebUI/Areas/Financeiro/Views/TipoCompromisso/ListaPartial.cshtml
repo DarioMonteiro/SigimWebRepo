@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
             <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
                     <tr role="row">
@@ -55,7 +55,7 @@
                 break;
         }
                         }
-                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="min-width:65px;">Código</th>
+                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="width:60px; ">Código</th>
                         <th class="sorting @descricaoSortingSuffix text-center" data-order="descricao" style="min-width:65px;">Descrição</th>
                         <th class="sorting @tipoPagarSortingSuffix text-center" data-order="tipoPagar" style="min-width:75px;">Tipo a pagar</th>
                         <th class="sorting @tipoReceberSortingSuffix text-center" data-order="tipoReceber" style="min-width:75px;">Tipo a receber</th>
@@ -65,10 +65,10 @@
                     @foreach (var item in Lista)
                     {
                         <tr>
-                            <td class="text-right">@Html.ActionLink(item.Id.ToString(), "Index", new { id = item.Id })</td>
+                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString()</a></td>
                             <td class="text-left">@item.Descricao</td>
-                            <td class="text-center">@item.TipoPagar </td>
-                            <td class="text-center">@item.TipoReceber </td>
+                            <td class="text-center">@item.TipoPagarDescricao</td>
+                            <td class="text-center">@item.TipoReceberDescricao</td>
                         </tr>
                     }
                 </tbody>
