@@ -65,7 +65,7 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
 
             #endregion
-
+            
             #region Financeiro
 
             Mapper.CreateMap<CentroCusto, CentroCustoDTO>();
@@ -88,6 +88,11 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<TituloReceber, TituloReceberDTO>();
             Mapper.CreateMap<TituloReceberDTO, TituloReceber>();
+            Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
+            Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
+
+            Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
+            Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
 
             Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
             Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>();
@@ -207,6 +212,6 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ParametrosSacDTO, ParametrosSac>()
                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
             # endregion
-        } 
+        }
     }
 }
