@@ -10,5 +10,9 @@ namespace GIR.Sigim.Application.DTO.Contrato
     {
         public string MascaraClasseInsumo { get; set; }
         public byte[] IconeRelatorio { get; set; }
+        public int? DiasMedicao { get; set; }
+        public int? DiasPagamento { get; set; }
+        public bool? DadosSped { get; set; }
+
     }
 }

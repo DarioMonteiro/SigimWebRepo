@@ -103,7 +103,8 @@
             }
         }
 
-        $(document).on("centroCustoValidado",            function (e) {
+        $(document).on("centroCustoValidado",
+            function (e) {
                 $("#orcamentoId").val(0);
                 if (e.codigo != '') {
                     $.ajax({
@@ -131,7 +132,13 @@
                     @:else
                     @:  blockClasseForm();
                 }
-            }        );        @if (centroCustoRequerido.Value) {            @:blockClasseForm();        }    });
+            }
+        );
+
+        @if (centroCustoRequerido.Value) {
+            @:blockClasseForm();
+        }
+    });
 
     function blockClasseForm() {
         $("#@Html.IdFor(m => m.Codigo)").attr("readonly", true);

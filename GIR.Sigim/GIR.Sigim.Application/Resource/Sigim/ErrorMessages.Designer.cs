@@ -61,6 +61,24 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operações anteriores a data de {0} não poderão ser realizadas, pois foi cadastrado um bloqueio contábil para o centro de custo {1}..
+        /// </summary>
+        public static string BloqueioContabilEncontrado {
+            get {
+                return ResourceManager.GetString("BloqueioContabilEncontrado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O campo {0}  não é válido..
+        /// </summary>
+        public static string CampoInvalido {
+            get {
+                return ResourceManager.GetString("CampoInvalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O campo {0} é obrigatório..
         /// </summary>
         public static string CampoObrigatorio {

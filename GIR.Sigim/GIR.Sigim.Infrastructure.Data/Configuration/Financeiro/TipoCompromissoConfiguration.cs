@@ -28,21 +28,24 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             Property(l => l.GeraTitulo)
                 .HasColumnName("geraTitulo")
-                .HasColumnType("bit")
+                .HasColumnType("bit") 
                 .HasColumnOrder(3);
 
             Property(l => l.TipoPagar)
                 .HasColumnName("tipoPagar")
-                .HasColumnType("bit")
+                .HasColumnType("bit") 
                 .HasColumnOrder(4);
 
             Property(l => l.TipoReceber)
                 .HasColumnName("tipoReceber")
-                .HasColumnType("bit")
+                .HasColumnType("bit") 
                 .HasColumnOrder(5);
 
             HasMany(l => l.ListaParametrosOrdemCompra)
                 .WithOptional(l => l.TipoCompromissoFrete);
+
+            HasMany(l => l.ListaContratoRetificacao)
+                .WithOptional(c => c.RetencaoTipoCompromisso); 
         }
     }
 }

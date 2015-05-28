@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -20,6 +21,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterialItem> ListaRequisicaoMaterialItem { get; set; }
         public virtual ICollection<OrcamentoComposicao> ListaOrcamentoComposicao { get; set; }
+        public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; } 
 
         public Classe()
         {
@@ -27,6 +29,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaPreRequisicaoMaterialItem = new HashSet<PreRequisicaoMaterialItem>();
             this.ListaRequisicaoMaterialItem = new HashSet<RequisicaoMaterialItem>();
             this.ListaOrcamentoComposicao = new HashSet<OrcamentoComposicao>();
+            this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>();  
         }
     }
 }

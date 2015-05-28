@@ -1,0 +1,90 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel.MedicaoContratoListaViewModel     
+
+@{
+    ViewBag.Title = "Medição de Contrato";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Lista",
+                        "MedicaoContrato",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Filtro
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFiltro" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-4", @labelText = "Centro de Custo" })
+                                                <section class="col col-2">
+                                                    @Html.LabelFor(m => m.Filtro.Id, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Filtro.Id, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-1">
+                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar" onclick="javascript:goToPage(0);">
+                                                        <i class="fa fa-search fa-lg"></i>
+                                                    </button>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.Filtro.ContratanteId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.Filtro.ContratanteId, Model.ListaContratante, string.Empty)
+                                                        <i></i>     
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.Filtro.ContratadoId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.Filtro.ContratadoId, Model.ListaContratado, string.Empty)
+                                                        <i></i>   
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        </fieldset> 
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")  
+}
