@@ -83,6 +83,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TipoDocumento, TipoDocumentoDTO>();
             Mapper.CreateMap<TipoDocumentoDTO, TipoDocumento>();
 
+            Mapper.CreateMap<TipoRateio, TipoRateioDTO>();
+            Mapper.CreateMap<TipoRateioDTO, TipoRateio>();
+
             Mapper.CreateMap<TituloPagar, TituloPagarDTO>();
             Mapper.CreateMap<TituloPagarDTO, TituloPagar>();
 

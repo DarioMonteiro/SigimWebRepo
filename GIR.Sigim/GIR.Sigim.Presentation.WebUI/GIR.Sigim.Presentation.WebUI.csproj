@@ -158,12 +158,14 @@
     <Compile Include="Areas\Financeiro\Controllers\HomeController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ParametrosFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ParametrosUsuarioFinanceiroController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\TipoRateioController.cs" />
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TipoDocumentoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\MotivoCancelamentoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TipoCompromissoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ParametrosUsuarioFinanceiroViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ParametrosFinanceiroViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\TipoRateioViewModel.cs" />
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
@@ -283,6 +285,8 @@
     <Content Include="Areas\Financeiro\Views\MotivoCancelamento\ListaPartial.cshtml" />
     <Content Include="Areas\Financeiro\Views\TipoDocumento\ListaPartial.cshtml" />
     <Content Include="Areas\Financeiro\Views\TipoDocumento\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoRateio\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoRateio\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />

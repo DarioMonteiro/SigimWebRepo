@@ -66,6 +66,7 @@
     <Compile Include="Configuration\Financeiro\ParametrosUsuarioFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoCompromissoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoDocumentoConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\TipoRateioConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloPagarConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloReceberConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoComposicaoConfiguration.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
+    <Compile Include="Repository\Financeiro\TipoRateioRepository.cs" />
     <Compile Include="Repository\Financeiro\MotivoCancelamentoRepository.cs" />
     <Compile Include="Repository\Financeiro\ParametrosFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\ParametrosUsuarioFinanceiroRepository.cs" />

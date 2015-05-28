@@ -69,6 +69,7 @@
     <Compile Include="Entity\Financeiro\SituacaoTituloPagar.cs" />
     <Compile Include="Entity\Financeiro\TipoCompromisso.cs" />
     <Compile Include="Entity\Financeiro\TipoDocumento.cs" />
+    <Compile Include="Entity\Financeiro\TipoRateio.cs" />
     <Compile Include="Entity\Financeiro\TipoTitulo.cs" />
     <Compile Include="Entity\Financeiro\TituloPagar.cs" />
     <Compile Include="Entity\Financeiro\TituloReceber.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Repository\Financeiro\IParametrosUsuarioFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoCompromissoRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoDocumentoRepository.cs" />
+    <Compile Include="Repository\Financeiro\ITipoRateioRepository.cs" />
     <Compile Include="Repository\Financeiro\ITituloPagarRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\Admin\IUsuarioRepository.cs" />

@@ -122,6 +122,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ParametrosUsuarioFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new ParametrosFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new TipoDocumentoConfiguration());
+            modelBuilder.Configurations.Add(new TipoRateioConfiguration());
             modelBuilder.Configurations.Add(new TituloPagarConfiguration());
             modelBuilder.Configurations.Add(new TituloReceberConfiguration());
 
