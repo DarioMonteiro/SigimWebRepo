@@ -1,7 +1,7 @@
-﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.TipoCompromissoViewModel
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.TipoDocumentoViewModel
 
 @{
-    ViewBag.Title = "Tipo de compromisso";
+    ViewBag.Title = "Tipo de documento";
 }
 
 @Html.Partial("_NotificationMessagesPartial")
@@ -19,7 +19,7 @@
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
                             "Salvar",
-                            "TipoCompromisso",
+                            "TipoDocumento",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
                             new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
@@ -28,26 +28,23 @@
                     <div class="panel-body no-padding">
                         <fieldset>
                             <div class="row">
-                            <section class="col col-12">
-                                @Html.HiddenFor(m => m.TipoCompromisso.Id)
-                                @Html.LabelFor(m => m.TipoCompromisso.Descricao, new { @class = "label" })
+                            <section class="col col-4">
+                                @Html.HiddenFor(m => m.TipoDocumento.Id)
+                                @Html.LabelFor(m => m.TipoDocumento.Sigla, new { @class = "label" })
                                 <label class="input">
-                                    @Html.TextBoxFor(m => m.TipoCompromisso.Descricao, new { @maxlength = "50",  @class = "required" })
+                                    @Html.TextBoxFor(m => m.TipoDocumento.Sigla, new { @maxlength = "5",  @class = "required" })
                                 </label>
-                                @Html.ValidationMessageFor(m => m.TipoCompromisso.Descricao, "", new { @class = "note note-error" })
+                                @Html.ValidationMessageFor(m => m.TipoDocumento.Sigla, "", new { @class = "note note-error" })
                             </section>
                             </div>
                             <div class="row">
-                                <section class="col col-12">
-                                    <div class="inline-group">
-                                        <label class="checkbox">
-                                            @Html.CheckBoxFor(m => m.TipoCompromisso.TipoPagar)<i></i>@Html.DisplayNameFor(m => m.TipoCompromisso.TipoPagar)
-                                        </label>
-                                        <label class="checkbox">
-                                            @Html.CheckBoxFor(m => m.TipoCompromisso.TipoReceber)<i></i>@Html.DisplayNameFor(m => m.TipoCompromisso.TipoReceber)
-                                        </label>
-                                    </div>
-                                </section>
+                            <section class="col col-12">
+                                @Html.LabelFor(m => m.TipoDocumento.Descricao, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.TipoDocumento.Descricao, new { @maxlength = "50",  @class = "required" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.TipoDocumento.Descricao, "", new { @class = "note note-error" })
+                            </section>
                             </div>
                         </fieldset>
                     </div>
@@ -63,7 +60,7 @@
 
                     @using (Ajax.BeginForm(
                             "Lista",
-                            "TipoCompromisso",
+                            "TipoDocumento",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
                             new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
@@ -88,12 +85,12 @@
     $("#btnDeletar").on("click", function() {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("Deletar", "TipoCompromisso")',
+            url: '@Url.Action("Deletar", "TipoDocumento")',
             cache: false,
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                id: $('#@Html.IdFor(m => m.TipoCompromisso.Id)').val()
+                id: $('#@Html.IdFor(m => m.TipoDocumento.Id)').val()
             })
         })
         .success(function (result) {
@@ -104,10 +101,9 @@
     });
 
     function clearForm() {
-        $('#@Html.IdFor(m => m.TipoCompromisso.Id)').val('');
-        $('#@Html.IdFor(m => m.TipoCompromisso.Descricao)').val('');
-        $('#@Html.IdFor(m => m.TipoCompromisso.TipoPagar)').prop('checked', false);
-        $('#@Html.IdFor(m => m.TipoCompromisso.TipoReceber)').prop('checked', false);
+        $('#@Html.IdFor(m => m.TipoDocumento.Id)').val('');
+        $('#@Html.IdFor(m => m.TipoDocumento.Sigla)').val('');
+        $('#@Html.IdFor(m => m.TipoDocumento.Descricao)').val('');
     }
 
     function novo() {
@@ -125,7 +121,7 @@
     function loadItem(id) {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("CarregarItem", "TipoCompromisso")',
+            url: '@Url.Action("CarregarItem", "TipoDocumento")',
             cache: false,
             async: false,
             contentType: 'application/json; charset=utf-8',
@@ -134,10 +130,9 @@
             })
         })
         .success(function (result) {
-            $('#@Html.IdFor(m => m.TipoCompromisso.Id)').val(result.Id);
-            $('#@Html.IdFor(m => m.TipoCompromisso.Descricao)').val(result.Descricao);
-            $('#@Html.IdFor(m => m.TipoCompromisso.TipoPagar)').prop('checked', result.TipoPagar);
-            $('#@Html.IdFor(m => m.TipoCompromisso.TipoReceber)').prop('checked', result.TipoReceber);
+            $('#@Html.IdFor(m => m.TipoDocumento.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.TipoDocumento.Descricao)').val(result.Descricao);
+            $('#@Html.IdFor(m => m.TipoDocumento.Sigla)').val(result.Sigla);
             goToTop();
         });
     }
