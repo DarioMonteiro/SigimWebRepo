@@ -63,6 +63,7 @@
     <Compile Include="Entity\Financeiro\CentroCusto.cs" />
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
+    <Compile Include="Entity\Financeiro\Caixa.cs" />
     <Compile Include="Entity\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Entity\Financeiro\ParametrosFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\ParametrosUsuarioFinanceiro.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
+    <Compile Include="Repository\Financeiro\ICaixaRepository.cs" />
     <Compile Include="Repository\Financeiro\IMotivoCancelamentoRepository.cs" />
     <Compile Include="Repository\Financeiro\ICentroCustoEmpresaRepository.cs" />
     <Compile Include="Repository\Financeiro\IClasseRepository.cs" />

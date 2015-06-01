@@ -74,6 +74,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<Classe, ClasseDTO>();
             Mapper.CreateMap<ClasseDTO, Classe>();
 
+            Mapper.CreateMap<Caixa, CaixaDTO>();
+            Mapper.CreateMap<CaixaDTO, Caixa>();
+
             Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
             Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
 

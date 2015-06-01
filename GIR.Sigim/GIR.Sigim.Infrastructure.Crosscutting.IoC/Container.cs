@@ -82,6 +82,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #region Financeiro
             currentContainer.RegisterType<ICentroCustoRepository, CentroCustoRepository>();
             currentContainer.RegisterType<IClasseRepository, ClasseRepository>();
+            currentContainer.RegisterType<ICaixaRepository, CaixaRepository>();
             currentContainer.RegisterType<ITipoCompromissoRepository, TipoCompromissoRepository>();
             currentContainer.RegisterType<IMotivoCancelamentoRepository, MotivoCancelamentoRepository>();
             currentContainer.RegisterType<IParametrosUsuarioFinanceiroRepository, ParametrosUsuarioFinanceiroRepository>();
@@ -142,6 +143,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #region Financeiro
             currentContainer.RegisterType<ICentroCustoAppService, CentroCustoAppService>();
             currentContainer.RegisterType<IClasseAppService, ClasseAppService>();
+            currentContainer.RegisterType<ICaixaAppService, CaixaAppService>();
             currentContainer.RegisterType<ITipoCompromissoAppService, TipoCompromissoAppService>();
             currentContainer.RegisterType<IMotivoCancelamentoAppService, MotivoCancelamentoAppService>();
             currentContainer.RegisterType<IParametrosUsuarioFinanceiroAppService, ParametrosUsuarioFinanceiroAppService>();

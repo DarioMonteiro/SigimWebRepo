@@ -64,6 +64,7 @@
     <Compile Include="Contrato\ParametrosContratoAppService.cs" />
     <Compile Include="Financeiro\CentroCustoAppService.cs" />
     <Compile Include="Financeiro\ClasseAppService.cs" />
+    <Compile Include="Financeiro\CaixaAppService.cs" />
     <Compile Include="Financeiro\MotivoCancelamentoAppService.cs" />
     <Compile Include="Financeiro\ParametrosFinanceiroAppService.cs" />
     <Compile Include="Financeiro\ParametrosUsuarioFinanceiroAppService.cs" />

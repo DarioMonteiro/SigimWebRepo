@@ -67,6 +67,7 @@
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
+    <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
     <Compile Include="DTO\Financeiro\MotivoCancelamentoDTO.cs" />
     <Compile Include="DTO\Financeiro\ParametrosFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\ParametrosUsuarioFinanceiroDTO.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="DTO\Sigim\MaterialDTO.cs" />
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
+    <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="Service\Contrato\IContratoRetificacaoItemMedicaoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoProvisaoAppService.cs" />
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
+    <Compile Include="Service\Financeiro\ICaixaAppService.cs" />
     <Compile Include="Service\Financeiro\IMotivoCancelamentoAppService.cs" />
     <Compile Include="Service\Financeiro\IClasseAppService.cs" />
     <Compile Include="Service\Financeiro\ICentroCustoAppService.cs" />
