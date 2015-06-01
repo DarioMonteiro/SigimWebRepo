@@ -73,6 +73,7 @@
     <Compile Include="DTO\Financeiro\ParametrosUsuarioFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoCompromissoDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoDocumentoDTO.cs" />
+    <Compile Include="DTO\Financeiro\TipoRateioDTO.cs" />
     <Compile Include="DTO\Financeiro\TituloPagarDTO.cs" />
     <Compile Include="DTO\Financeiro\TituloReceberDTO.cs" />
     <Compile Include="DTO\Orcamento\ObraDTO.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Service\Financeiro\IParametrosUsuarioFinanceiroAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoCompromissoAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoDocumentoAppService.cs" />
+    <Compile Include="Service\Financeiro\ITipoRateioAppService.cs" />
     <Compile Include="Service\Financeiro\ITituloPagarAppService.cs" />
     <Compile Include="Service\IBaseAppService.cs" />
     <Compile Include="Service\Orcamento\IOrcamentoAppService.cs" />
