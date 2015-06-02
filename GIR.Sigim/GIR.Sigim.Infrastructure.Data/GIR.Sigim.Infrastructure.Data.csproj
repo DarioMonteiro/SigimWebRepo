@@ -61,6 +61,7 @@
     <Compile Include="Configuration\Financeiro\AbstractTituloConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ClasseConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\CaixaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\MotivoCancelamentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ParametrosFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ParametrosUsuarioFinanceiroConfiguration.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoRateioRepository.cs" />
+    <Compile Include="Repository\Financeiro\CaixaRepository.cs" />
     <Compile Include="Repository\Financeiro\MotivoCancelamentoRepository.cs" />
     <Compile Include="Repository\Financeiro\ParametrosFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\ParametrosUsuarioFinanceiroRepository.cs" />
