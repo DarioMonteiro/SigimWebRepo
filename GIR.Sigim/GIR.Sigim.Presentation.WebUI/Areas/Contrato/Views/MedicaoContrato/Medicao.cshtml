@@ -1,0 +1,1235 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel.MedicaoContratoMedicaoViewModel
+
+@{
+    ViewBag.Title = "Medição";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-8 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Medicao",
+                            "MedicaoContrato",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formMedicao", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseContrato" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Contrato
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseContrato" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="label">Contrato</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoId, new { @class="readonly", @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                    <label class="label">Descrição Contrato</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratoDescricao.Descricao, new { @class="readonly", @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.Codigo)
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.CentroCustoDescricao, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.CentroCustoDescricao, new {@class="readonly", @readonly = "" })  
+                                                    </label>
+                                                </section> 
+                                                @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacao.RetencaoContratual)
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.RetencaoContratual, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.RetencaoContratual,"{0:F5}", new { @readonly = "", @class = "text-right decimal-5-casas readonly" })  
+                                                    </label>
+                                                </section> 
+                                            </div>
+                                            <div class="row">
+                                                @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)
+                                                <section class="col col-6">
+                                                    <label class="label">Contratado</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.Nome, new {@class="readonly", @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                @{
+                                                    if (Model.ContratoRetificacaoItemMedicao.Contrato.Contratado.TipoPessoa == "J")
+                                                    {
+                                                        @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaJuridica.Cnpj, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaJuridica.Cnpj , new {@class="readonly", @readonly = "" })  
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaFisica.Cpf, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaFisica.Cpf, new {@class="readonly", @readonly = "" })  
+                                                        </label>
+                                                    }
+                                                }
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, Model.ListaServicoContratoRetificacaoItem, string.Empty ,new {@class="required", @novalidate = "novalidate" })          
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, "", new { @id = Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId) + "_ValidationMessage", @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <label class="label">Complemento</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao, new {@class="readonly", @readonly = "" })
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem, new { @class = "readonly", @readonly = "" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-2">
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida, new { @class = "readonly", @readonly = "" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    <label class="label">Valor ítem</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            @Html.HiddenFor(m => m.JsonListaRetificacaoProvisao)
+                                            @Html.HiddenFor(m => m.DiasMedicaoParametrosContrato)
+                                            @Html.HiddenFor(m => m.DiasPagamentoParametrosContrato)
+                                            @Html.HiddenFor(m => m.EhSituacaoAguardandoAprovacao)
+                                            @Html.HiddenFor(m => m.EhSituacaoAguardandoLiberacao)
+                                            @Html.HiddenFor(m => m.EhSituacaoLiberado)
+                                            @Html.HiddenFor(m => m.DataLimiteMedicao)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoId)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)
+                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseDadosNota" class="collapsed">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Dados da Nota
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseDadosNota" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ListaTipoDocumento, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId, Model.ListaTipoDocumento, string.Empty, new { @class = "required", @required = true })  
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento, new { @class = "required", @maxlength = "10", @required = true })  
+                                                        <script type="text/javascript">
+                                                            $(document).ready(function () {
+                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").on("change", function () {
+                                                                    validaNumeroDocumento();
+                                                                });
+                                                            });
+                                                        </script>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                        <script type="text/javascript">
+                                                            $(document).ready(function () {
+                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").on("change", function () {
+                                                                    validaNumeroDocumento();
+                                                                });
+                                                            });
+                                                        </script>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                        <script type="text/javascript">
+                                                            $(document).ready(function () {
+                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").on("change", function () {
+                                                                    var retorno = validaDataVencimento();
+                                                                    if (retorno == false) {
+                                                                        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val("");
+                                                                    }
+                                                                });
+                                                            });
+                                                        </script>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            onClose: function (selectedDate) {
+                                                                if ($(this).valid()) {
+                                                                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)').datepicker('option', 'minDate', selectedDate);
+                                                                }
+                                                                else {
+                                                                    $(this).val("");
+                                                                }
+                                                            }
+                                                        });
+
+                                                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            minDate: '#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)',
+                                                            onClose: function (selectedDate) {
+                                                                if ($(this).valid()) {
+                                                                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)').datepicker('option', 'maxDate', selectedDate);
+                                                                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)').datepicker('option', 'maxDate', selectedDate);
+                                                                }
+                                                                else {
+                                                                    $(this).val("");
+                                                                }
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.ListaMultiFornecedor, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId, Model.ListaMultiFornecedor, string.Empty)  
+                                                        <i></i>
+                                                        <script type="text/javascript">
+                                                            $(document).ready(function () {
+                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").on("change", function () {
+                                                                    validaNumeroDocumento();
+                                                                });
+                                                            });
+                                                        </script>
+
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                        <h5 style="padding-left :15px;">
+                                            Dados Gerais
+                                        </h5>
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaTipoCompra, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.TipoCompraCodigo, Model.ListaTipoCompra, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaCifFob, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.CifFobId, Model.ListaCifFob, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaNaturezaOperacao, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.NaturezaOperacaoCodigo, Model.ListaNaturezaOperacao, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaSerieNF, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.SerieNFId, Model.ListaSerieNF, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaCST, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.CSTCodigo, Model.ListaCST, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ListaCodigoContribuicao, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo, Model.ListaCodigoContribuicao, string.Empty)  
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, new { @maxlength = "50" })  
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseMedicao" class="collapsed" id="accordionMedicao">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Medição
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseMedicao" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+
+                                            <div class="widget-body">
+						                        <hr class="simple">
+						
+						                        <ul id="tabMedicao" class="nav nav-tabs bordered">
+							                        <li class="active">
+								                        <a href="#AbaProvisionamento" data-toggle="tab" id="AbaProvisionamentoId">Provisionamento</a>
+							                        </li>
+							                        <li class="">
+								                        <a href="#AbaMedicao" data-toggle="tab" id="AbaMedicaoId">Dados da medição</a>
+							                        </li>
+						                        </ul>
+						                        <div id="myTabContent1" class="tab-content padding-10">
+							                        <div class="tab-pane fade active in" id="AbaProvisionamento">
+                                                        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                            <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                <thead>
+                                                                    <tr role="row">
+                                                                        <th style="min-width: 65px;">Seq</th>
+                                                                        <th>Evento</th>
+                                                                        <th class="text-center">Data</th>
+                                                                        <th class="text-right">Quantidade</th>
+                                                                        <th class="text-right">Quantidade medida</th>
+                                                                        <th class="text-right">Quantidade pendente</th>
+                                                                        <th class="text-right">Valor</th>
+                                                                        <th class="text-right">Valor medido</th>
+                                                                        <th class="text-right">Valor pendente</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+							                        </div>
+							                        <div class="tab-pane fade" id="AbaMedicao">
+                                                        <fieldset>
+                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.ValorPendente)
+                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)
+                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)
+                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)
+                                                            @Html.HiddenFor(m => m.JsonListaContratoRetificacaoItemMedicao)
+                                                            <div class="row">
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao, new { @class = "label" })
+                                                                    <div class="input-group">
+                                                                        <label class="input">
+                                                                            <i class="icon-append fa fa-calendar"></i>
+                                                                            @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                                            <script type="text/javascript">
+                                                                                $(document).ready(function () {
+                                                                                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").on("change", function () {
+                                                                                        validaDataMedicao();
+                                                                                    });
+                                                                                });
+                                                                            </script>
+                                                                        </label>
+                                                                        <a data-toggle="modal" href="#PesquisarMedicao_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+                                                                        <div class="modal fade" id="PesquisarMedicao_ModalPanel" tabindex="-1" role="dialog">
+                                                                            <div class="modal-dialog">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                                                            &times;
+                                                                                        </button>
+                                                                                        <h4 class="modal-title">
+                                                                                            Seleciona medição
+                                                                                        </h4>
+                                                                                    </div>
+                                                                                    <div class="modal-body">
+                                                                                        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                                            <table id="tableLstMedicao" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                                                <thead>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+							                                                        </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao, "Informe uma data válida.", new { @class = "note note-error" })
+                                                                </section>
+                                                                <script type="text/javascript">
+                                                                    $(document).ready(function () {
+                                                                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)').datepicker({
+                                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                                            changeMonth: true,
+                                                                            changeYear: true,
+                                                                            maxDate: '#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)',
+                                                                            onClose: function (selectedDate) {
+                                                                                if (!$(this).valid()) {
+                                                                                    $(this).val("");
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                </script>
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.PrecoUnitario, new { @class = "label" })
+                                                                    <label class="input">
+                                                                        @Html.TextBoxFor(m => m.PrecoUnitario, "{0:F5}", new { @readonly = "", @class = "text-right decimal-5-casas readonly" })
+                                                                    </label>
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-4">
+                                                                    <label class="label">Valor contratado</label>
+                                                                    <label class="input">
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Valor, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Valor, new { @class = "label" })
+                                                                    <label class="input">
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Valor, "{0:F2}", new { @class = "text-right decimal-2-casas required", @required = true })
+                                                                        <script type="text/javascript">
+                                                                            $(document).ready(function () {
+                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").on("change", function () {
+                                                                                    validaValorMedicaoAtual();
+                                                                                });
+                                                                            });
+                                                                        </script>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Valor, "", new { @class = "note note-error" })
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-4">
+                                                                    <label class="label">Quantidade contratada</label>
+                                                                    <label class="input">
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade, "{0:F7}", new { @readonly = "", @class = "text-right decimal-7-casas readonly" })
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Quantidade, new { @class = "label" })
+                                                                    <label class="input">
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Quantidade, "{0:F7}", new { @class = "text-right decimal-7-casas required", @required = true })
+                                                                        <script type="text/javascript">
+                                                                            $(document).ready(function () {
+                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").on("change", function () {
+                                                                                    validaQuantidadeMedicaoAtual();
+                                                                                });
+                                                                            });
+                                                                        </script>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Quantidade, "", new { @class = "note note-error" })
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Desconto, new { @class = "label" })
+                                                                    <label class="input">
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Desconto, "{0:F2}", new { @class = "text-right decimal-2-casas" })
+                                                                        <script type="text/javascript">
+                                                                            $(document).ready(function () {
+                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").on("change", function () {
+                                                                                    validaDesconto();
+                                                                                });
+                                                                            });
+                                                                        </script>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Desconto, "", new { @class = "note note-error" })
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-6">
+                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Observacao, new { @class = "label" })
+                                                                    <label class="textarea">
+                                                                        @Html.TextAreaFor(m => m.ContratoRetificacaoItemMedicao.Observacao, new { rows = 5, style = "height:104px;" })
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.Observacao, "", new { @class = "note note-error" })
+                                                                </section>
+                                                                <section class="col col-6">
+                                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto, new { @class = "label" })
+                                                                    <label class="input">
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto)
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto, "", new { @class = "note note-error" })
+                                                                </section>
+                                                            </div>
+                                                        </fieldset>
+							                        </div>
+						                        </div>
+					                        </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer>
+                            @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
+                            @{
+                                string disableBtnSalvar = string.Empty;
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
+                            }
+                            <button id="btnSalvar" type="submit" class="btn btn-primary right @disableBtnSalvar">
+                                Salvar
+                            </button>
+                        </footer>                        
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div> 
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(document).on("show.bs.modal", "#PesquisarMedicao_ModalPanel", function (e) {
+            var isRecuperou = false;
+            var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+            var sequencialItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)").val();            
+            var contratoRetificacaoItemId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)").val();
+
+            if (contratoRetificacaoItemId == "") {                
+                smartAlert("Erro", "Selecione um item !", "error");
+                return e.preventDefault()
+            }
+            else {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("RecuperaMedicaoPorSequencialItem", "MedicaoContrato", new { area = "Contrato" })',
+                        cache: false,
+                        async: false,
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({
+                            contratoId: contratoId,
+                            sequencialItem: sequencialItem
+                        }),
+                        success: function (result) {
+                            showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)'), result.errorMessage);
+                            if (result.ehRecuperou) {
+                                $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(result.listaContratoRetificacaoItemMedicao);
+                                jsonContratoRetificaoItemMedicaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)").val());
+                            }
+                            else {
+                                $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(result.listaContratoRetificacaoItemMedicao);
+                                jsonContratoRetificaoItemMedicaoArray = null;
+                            }
+                            isRecuperou = result.ehRecuperou;
+                        },
+                        error: function (result) {
+                            $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val();
+                            jsonContratoRetificaoItemMedicaoArray = null;
+                        }
+                    });
+
+                    preencheLstMedicao();
+            }
+        });
+
+        $(document).on("change", "#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)", function () {
+            recuperaContratoItem();
+        });
+
+        $(document).on("click", "#accordionMedicao", function () {
+            setarAbaProvisionamento();
+        });
+
+    });
+
+    function refresh() {
+        onSuccess();
+        recuperaContratoItem();
+    }
+
+    function recuperaContratoItem() {
+        var isRecuperou = false;
+        var codigoContratoRetificacaoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)").val(); 
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("RecuperaContratoRetificacaoItem", "MedicaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                codigo: codigoContratoRetificacaoItem
+            }),
+            success: function (result) {
+                showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
+                if (result.ehRecuperou) {
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val(result.complementoDescricao);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.descricaoNaturezaItem);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val(result.siglaUnidadeMedida);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                    if (result.valorItem != null) {
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.valorItem), 2));
+                    }
+                    $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
+                    if (result.retencaoItem != null) {
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val(roundDecimal(floatToString(result.retencaoItem), 5));
+                        $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(result.retencaoItem), 5));
+                    }
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
+                    if (result.baseRetencaoItem != null) {
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val(roundDecimal(floatToString(result.baseRetencaoItem), 5));
+                    }
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(result.precoUnitario), 5));
+
+                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(result.listaContratoRetificacaoProvisao);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(result.ehNaturezaItemPorPrecoGlobal);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.sequencialItem);
+                    jsonRetificaoProvisaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val());
+                }
+                else
+                {
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val("");
+                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(result.listaContratoRetificacaoProvisao);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
+                    jsonRetificaoProvisaoArray = null;
+                }
+                isRecuperou = result.ehRecuperou;
+            },
+            error: function (result) {
+                showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val("");
+                $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val();
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
+                jsonRetificaoProvisaoArray = null;
+            }
+        });
+
+        fillTable();
+        limpaAbaDadosMedicao();
+
+        return isRecuperou;
+    }
+
+    function fillTable() {
+        var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
+
+        $("#tableItens thead").empty();
+        var row = $('<tr role="row">');
+        $("#tableItens thead").append(row);
+        row.append($('<th style="min-width: 65px;">Seq</th>'));
+        row.append($('<th>Evento</th>'));
+        row.append($('<th class="text-center">Data</th>'));
+        if (jsonRetificaoProvisaoArray != null) {
+            if (!ehNaturezaItemPorPrecoGlobal) {
+                row.append($('<th class="text-right">Quantidade</th>'));
+                row.append($('<th class="text-right">Quantidade medida</th>'));
+                row.append($('<th class="text-right">Quantidade pendente</th>'));
+            }
+        }
+        else {
+            row.append($('<th class="text-right">Quantidade</th>'));
+            row.append($('<th class="text-right">Quantidade medida</th>'));
+            row.append($('<th class="text-right">Quantidade pendente</th>'));
+        }
+        row.append($('<th class="text-right">Valor</th>'));
+        row.append($('<th class="text-right">Valor medido</th>'));
+        row.append($('<th class="text-right">Valor pendente</th>'));
+        row.append($('<tr />'));
+
+        var totalQuantidade = 0;
+        var totalQuantidadeMedida = 0;
+        var totalQuantidadePendente = 0;
+        var totalValor = 0;
+        var totalValorMedido = 0;
+        var totalValorPendente = 0;
+
+        $("#tableItens tbody").empty();
+
+        if (jsonRetificaoProvisaoArray != null) {
+            for (var i = 0; i < jsonRetificaoProvisaoArray.length; i++) {
+
+                totalQuantidade = totalQuantidade + jsonRetificaoProvisaoArray[i].Quantidade;
+                totalQuantidadeMedida = totalQuantidadeMedida + jsonRetificaoProvisaoArray[i].Totalizadores.QuantidadeTotalMedida;
+                totalQuantidadePendente = totalQuantidadePendente + jsonRetificaoProvisaoArray[i].Totalizadores.QuantidadePendente;
+                totalValor = totalValor + jsonRetificaoProvisaoArray[i].Valor;
+                totalValorMedido = totalValorMedido + jsonRetificaoProvisaoArray[i].Totalizadores.ValorTotalMedido;
+                totalValorPendente = totalValorPendente + jsonRetificaoProvisaoArray[i].Totalizadores.ValorPendente;
+
+                var row = $('<tr />')
+
+                $("#tableItens tbody").append(row);
+                row.append($('<td class="text-nowrap">' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Sequencial + '</td>'));
+                row.append($('<td class="text-nowrap" onclick="carregaAbaDadosMedicao(' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Sequencial + ');">' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Descricao + '</td>'));
+                row.append($('<td class="text-center">' + new Date(jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.DataVencimento).toFormatDDMMYYYY() + '</td>'));
+                if (!ehNaturezaItemPorPrecoGlobal) {
+                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Quantidade), 7) + '</td>'));
+                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Totalizadores.QuantidadeTotalMedida), 7) + '</td>'));
+                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Totalizadores.QuantidadePendente), 7) + '</td>'));
+                }
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Valor), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Totalizadores.ValorTotalMedido), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Totalizadores.ValorPendente), 2) + '</td>'));
+            }
+
+            var row = $('<tr />')
+
+            $("#tableItens tbody").append(row);
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            if (!ehNaturezaItemPorPrecoGlobal) {
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(totalQuantidade), 7) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(totalQuantidadeMedida), 7) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(totalQuantidadePendente), 7) + '</td>'));
+            }
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorMedido), 2) + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorPendente), 2) + '</td>'));
+            var row = $('<tr />')
+            $("#tableItens tbody").append(row);
+        }
+
+        setarAbaProvisionamento();
+    }
+
+    function carregaAbaDadosMedicao(sequencial) {
+        jsonRetificaoProvisaoArray = JSON.parse($('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val());
+        var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
+        var precoUnitario = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val();
+
+        limpaAbaDadosMedicao();
+
+        if (jsonRetificaoProvisaoArray != null) {
+
+            var arr = jQuery.grep(jsonRetificaoProvisaoArray, function (item, i) {
+                return (item.ContratoRetificacaoItemCronograma.Sequencial == sequencial)
+            });
+
+            if (arr.length > 0) {
+                var item = arr[0];
+                var quantidadePendente = item.Quantidade - item.Totalizadores.QuantidadeTotalMedida;
+                var valorPendente = item.Valor - item.Totalizadores.ValorTotalMedido;
+
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)').val(item.ContratoRetificacaoItemCronogramaId);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)').val(item.ContratoRetificacaoItemCronograma.Sequencial);
+
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.ValorPendente)').val(roundDecimal(floatToString(valorPendente), 2));
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)").val(roundDecimal(floatToString(quantidadePendente), 7));
+
+                var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataEmissao);
+                if (!validaDataVencimento()){
+                    return;
+                }
+
+                //item.ContratoRetificacaoItem.PrecoUnitario = roundDecimal(floatToString(item.ContratoRetificacaoItem.PrecoUnitario), 2)
+
+                $("#@Html.IdFor(m => m.PrecoUnitario)").val(roundDecimal(floatToString(precoUnitario), 5));
+
+                if (ehNaturezaItemPorPrecoGlobal) {
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(1), 7));
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(1), 7));
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', true);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', false);
+
+                    document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').className = "text-right decimal-2-casas required";
+                    document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').className = "text-right decimal-7-casas readonly";
+
+                }
+                else {
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(item.ContratoRetificacaoItemCronograma.Quantidade), 7));
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(quantidadePendente), 7));
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', false);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', true);
+
+                    document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').className = "text-right decimal-2-casas readonly";
+                    document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').className = "text-right decimal-7-casas required";
+                }
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Valor)").val(roundDecimal(floatToString(item.ContratoRetificacaoItemCronograma.Valor), 2));
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(floatToString(0), 2));
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Observacao)").val("");
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto)").val("");
+
+                $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val(true);
+                $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(false);
+                $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(false);
+
+                setarAbaMedicao();
+            }
+        }
+    }
+
+    function limpaAbaDadosMedicao() {
+        var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataEmissao);
+        $("#@Html.IdFor(m => m.PrecoUnitario)").val(roundDecimal(floatToString(0), 5));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(0), 7));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(0), 7));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Valor)").val(roundDecimal(floatToString(0), 2));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(0), 2));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(floatToString(0), 2));
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Observacao)").val("");
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto)").val("");
+
+        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)').val("");
+        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)').val("");
+
+    }
+
+    function setarAbaProvisionamento() {
+        $('#AbaProvisionamentoId').click();
+    }
+
+    function setarAbaMedicao() {
+        $('#AbaMedicaoId').click();
+    }
+
+    function validaNumeroDocumento() {
+        var isValid = false;
+        var contratadoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)").val();
+        var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+        var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
+        var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
+
+        if (multiFornecedorId != "") {
+            contratadoId = multiFornecedorId;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ExisteNumeroDocumento", "MedicaoContrato", new { area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                dataEmissao: dataEmissao,
+                numeroDocumento: numeroDocumento,
+                contratadoId : contratadoId
+            })
+        })
+        .success(function (result) {
+            existeNumeroDocumento = result.existe;
+        })
+        .error(function (result) {
+            smartAlert("Erro", "Ocorreu erro na validação do número do documento", "error");
+            existeNumeroDocumento = false;
+        });
+
+        if (existeNumeroDocumento) {
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val("");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").focus();
+            smartAlert("Atenção", "Documento existente no contrato.", "warning");
+        }
+
+        isValid = !existeNumeroDocumento;
+
+        return isValid;
+
+    }
+
+    function validaDataVencimento() {
+        var dataVencimento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val();
+        var dataMedicao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val();
+
+        if ((dataMedicao != "") && (dataVencimento != "")) {
+            if (compararDatas(dataMedicao,dataVencimento) > 0){
+                smartAlert("Atenção", "Data de medição maior que data de vencimento !", "warning");
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataVencimento);
+                return false;
+            }
+
+            var ehSituacaoMedicaoAguardandoAprovacao = ($("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val() === "true");
+            var ehSituacaoMedicaoAguardandoLiberacao = ($("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val() === "true");
+
+            var diasPagamentoParametrosContrato = $("#@Html.IdFor(m => m.DiasPagamentoParametrosContrato)").val();
+
+            if ((ehSituacaoMedicaoAguardandoAprovacao || ehSituacaoMedicaoAguardandoLiberacao) && (diasPagamentoParametrosContrato > 0)) {
+                var numeroDias = diasDecorridos(dataMedicao,dataVencimento);
+                if (numeroDias < diasPagamentoParametrosContrato) {
+                    smartAlert("Atenção", "Data de vencimento fora do limite de pagamento !", "warning");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    function validaDataMedicao() {
+        var dataMedicao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val();
+
+        if (!validaDataVencimento()) {
+            return false;
+        }
+
+        if ((dataMedicao != "")) {
+
+            var ehSituacaoMedicaoAguardandoAprovacao = ($("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val() === "true");
+            var ehSituacaoMedicaoAguardandoLiberacao = ($("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val() === "true");
+
+            var dataLimiteMedicao = $("#@Html.IdFor(m => m.DataLimiteMedicao)").val();
+
+            if ((ehSituacaoMedicaoAguardandoAprovacao || ehSituacaoMedicaoAguardandoLiberacao) && (dataLimiteMedicao != "")) {
+                if (compararDatas(dataMedicao, dataLimiteMedicao) < 0) {
+                    smartAlert("Atenção", "Data de medição menor que data limite !", "warning");
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val("");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    function validaValorMedicaoAtual() {
+        var valorMedido = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val());
+        var valorPendente = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.ValorPendente)").val());
+        var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val()); 
+        var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val()); 
+        var quantidadeMedicao = 0;
+
+        if (isNaN(valorMedido)) valorMedido = 0;
+        if (isNaN(valorPendente)) valorPendente = 0;
+        if (isNaN(precoUnitario)) precoUnitario = 0;
+        if (isNaN(desconto)) desconto = 0;
+
+        if (valorMedido == 0)  {
+            smartAlert("Atenção", "Valor medido não pode ser zerado !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
+            return false;
+        }
+
+        if (valorMedido > valorPendente) {
+            smartAlert("Atenção", "Valor medido maior que valor pendente !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
+            return false;
+        }
+
+        if (valorMedido <= desconto) {
+            smartAlert("Atenção", "Valor medido menor que o valor do desconto !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(0, 2));
+            return false;
+        }
+
+        var ehNaturezaItemGenericoPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
+        if (!ehNaturezaItemGenericoPorPrecoGlobal)
+        {
+            quantidadeMedicao = valorMedido / precoUnitario;
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(quantidadeMedicao), 7));
+        }
+
+        return true;
+    }
+
+    function validaQuantidadeMedicaoAtual() {
+        var quantidadeMedida = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val());
+        var quantidadePendente = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)").val());
+        var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val());
+        var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val());
+        var valorMedido = 0;
+
+        if (isNaN(quantidadeMedida)) quantidadeMedida = 0;
+        if (isNaN(quantidadePendente)) quantidadePendente = 0;
+        if (isNaN(precoUnitario)) precoUnitario = 0;
+        if (isNaN(desconto)) desconto = 0;
+
+        if (quantidadeMedida == 0) {
+            smartAlert("Atenção", "A quantidade medida não pode ser zero!", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(quantidadePendente, 7));
+            return false;
+        }
+
+        if (quantidadeMedida > quantidadePendente) {
+            smartAlert("Atenção", "Quantidade medida maior que quantidade pendente !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(quantidadePendente, 7));
+            return false;
+        }
+
+        valorMedido = quantidadeMedida * precoUnitario;
+
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorMedido), 2));
+
+        if (valorMedido <= desconto) {
+            smartAlert("Atenção", "Valor medido menor que o valor do desconto !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(0, 2));
+            return false;
+        }
+
+        return true;
+    }
+
+    function validaDesconto() {
+        var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val());
+        var valorMedido = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val());
+
+        if (isNaN(valorMedido)) valorMedido = 0;
+        if (isNaN(desconto)) desconto = 0;
+
+        if (valorMedido == 0) {
+            smartAlert("Atenção", "O valor medido não pode ser zero !", "warning");
+            return false;
+        }
+
+        if (valorMedido <= desconto) {
+            smartAlert("Atenção", "Valor medido menor que o valor do desconto !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(0, 2));
+            return false;
+        }
+
+        return true;
+    }
+
+    function preencheLstMedicao() {
+        $("#tableLstMedicao thead").empty();
+        var row = $('<tr role="row">');
+        $("#tableLstMedicao thead").append(row);
+        row.append($('<th class="text-center" style="min-width: 65px;">Data</th>'));
+        row.append($('<th class="text-left">Tipo Doc.</th>'));
+        row.append($('<th class="text-left">No doc.</th>'));
+        row.append($('<th class="text-right">Valor</th>'));
+        row.append($('<th class="text-right">Valor retido</th>'));
+        row.append($('<tr />'));
+
+        $("#tableLstMedicao tbody").empty();
+
+        if (jsonContratoRetificaoItemMedicaoArray != null) {
+            for (var i = 0; i < jsonContratoRetificaoItemMedicaoArray.length; i++) {
+
+                var row = $('<tr />')
+
+                $("#tableLstMedicao tbody").append(row);
+                row.append($('<td class="text-center text-nowrap" data-dismiss="modal" onclick="recuperaDadosMedicao(' + jsonContratoRetificaoItemMedicaoArray[i].Id + ');">' + new Date(jsonContratoRetificaoItemMedicaoArray[i].DataMedicao).toFormatDDMMYYYY() + '</td>'));
+                row.append($('<td class="text-left text-nowrap">' + jsonContratoRetificaoItemMedicaoArray[i].TipoDocumento.Sigla + '</td>'));
+                row.append($('<td class="text-left">' + jsonContratoRetificaoItemMedicaoArray[i].NumeroDocumento + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].Valor), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].ValorRetido), 2) + '</td>'));
+            }
+
+            var row = $('<tr />')
+
+            setarAbaMedicao();
+        }
+    }
+
+    function recuperaDadosMedicao(ContratoRetificacaoItemMedicaoId) {
+        var isRecuperou = false;
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("RecuperaContratoRetificacaoItemMedicao", "MedicaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoRetificacaoItemMedicaoId: ContratoRetificacaoItemMedicaoId
+            }),
+            success: function (result) {
+                if (result.ehRecuperou) {
+                    jsonMedicao = JSON.parse(result.medicaoRecuperada);
+                    carregaAbaDadosMedicaoPesquisa();
+                    jsonMedicao = null;
+                }
+                else {
+                }
+                isRecuperou = result.ehRecuperou;
+            },
+            error: function (result) {
+                smartAlert("Atenção", result.errorMessage, "warning");
+            }
+        });
+
+        return isRecuperou;
+    }
+
+    function carregaAbaDadosMedicaoPesquisa() {
+        var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
+
+        limpaAbaDadosMedicao();
+
+        if (jsonMedicao != null) {
+
+            $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val(false);
+            $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(false);
+            $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(false);
+            if (jsonMedicao.Situacao == 0) {
+                $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val(true);
+                $("#@Html.IdFor(m => m.PodeSalvar)").val(true);
+                document.getElementById('btnSalvar').className = "btn btn-primary right";
+            }
+            else if (jsonMedicao.Situacao == 1) {
+                $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(true);
+                $("#@Html.IdFor(m => m.PodeSalvar)").val(true);
+                document.getElementById('btnSalvar').className = "btn btn-primary right";
+            }
+            else if (jsonMedicao.Situacao == 2) {
+                $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(true);
+                $("#@Html.IdFor(m => m.PodeSalvar)").val(false);
+                document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
+            }
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val(jsonMedicao.TipoDocumentoId);
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val(jsonMedicao.NumeroDocumento);
+            var dataEmissao = new Date(jsonMedicao.DataEmissao).toFormatDDMMYYYY();
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val(dataEmissao);
+            var dataVencimento = new Date(jsonMedicao.DataVencimento).toFormatDDMMYYYY();
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val(dataVencimento);
+            if (jsonMedicao.MultiFornecedorId != null) {
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val(jsonMedicao.MultiFornecedorId);
+            }
+            if (jsonMedicao.TipoCompraCodigo != null) {
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoCompraCodigo)").val(jsonMedicao.TipoCompraCodigo);
+            }
+            if (jsonMedicao.CifFobId != null) {
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CifFobId)").val(jsonMedicao.CifFobId);
+            }
+            if (jsonMedicao.NaturezaOperacaoCodigo != null) {
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NaturezaOperacaoCodigo)").val(jsonMedicao.NaturezaOperacaoCodigo);
+            }
+            if (jsonMedicao.SerieNFId != null) {
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SerieNFId)").val(jsonMedicao.SerieNFId);
+            }
+            if (jsonMedicao.CSTCodigo != null) {
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CSTCodigo)").val(jsonMedicao.CSTCodigo);
+            }
+            if (jsonMedicao.CodigoContribuicaoCodigo != null) {
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo)").val(jsonMedicao.CodigoContribuicaoCodigo);
+            }
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras)").val(jsonMedicao.CodigoBarras);
+
+            var dataMedicao = new Date(jsonMedicao.DataMedicao).toFormatDDMMYYYY();
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataMedicao);
+
+            var valor = roundDecimal(floatToString(jsonMedicao.Valor), 2);
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(valor);
+
+            var quantidade = roundDecimal(floatToString(jsonMedicao.Quantidade), 7);
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(quantidade);
+
+            if (jsonMedicao.Desconto != null) {
+                var desconto = roundDecimal(floatToString(jsonMedicao.Desconto), 2);
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(desconto);
+            }
+
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto)").val(jsonMedicao.MotivoDesconto);
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Observacao)").val(jsonMedicao.Observacao);
+
+            $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)').val(jsonMedicao.ContratoRetificacaoItemCronogramaId);
+            $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)').val(jsonMedicao.ContratoRetificacaoItemCronograma.Sequencial);
+         
+            var precoUnitario = $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)').val();
+            $('#@Html.IdFor(m => m.PrecoUnitario)').val(precoUnitario);           
+
+            if (ehNaturezaItemPorPrecoGlobal) {
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', true);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', false);
+
+                document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').className = "text-right decimal-2-casas required";
+                document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').className = "text-right decimal-7-casas readonly";
+            }
+            else {
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', false);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', true);
+
+                document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').className = "text-right decimal-2-casas readonly";
+                document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').className = "text-right decimal-7-casas required";
+            }
+
+            var valorItemCronograma = roundDecimal(floatToString(jsonMedicao.ContratoRetificacaoItemCronograma.Valor), 2);
+            $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Valor)').val(valorItemCronograma);
+
+            var quantidadeItemCronograma = roundDecimal(floatToString(jsonMedicao.ContratoRetificacaoItemCronograma.Quantidade), 7);
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(quantidadeItemCronograma);
+
+            setarAbaMedicao();
+
+        }
+    }
+
+</script>

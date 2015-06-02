@@ -22,11 +22,27 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             Property(l => l.MascaraClasseInsumo)
                 .HasMaxLength(18)
-                .HasColumnName("mascaraClasseInsumo");
+                .HasColumnName("mascaraClasseInsumo")
+                .HasColumnOrder(4);
 
             Property(l => l.IconeRelatorio)
                 .HasColumnType("image")
-                .HasColumnName("iconeRelatorio");
+                .HasColumnName("iconeRelatorio")
+                .HasColumnOrder(5);
+
+            Property(l => l.DiasMedicao)
+                .HasColumnName("diasMedicao")
+                .HasColumnOrder(23);
+
+            Property(l => l.DiasPagamento)
+                .HasColumnName("diasPagamento")
+                .HasColumnOrder(24);
+
+            Property(l => l.DadosSped)
+                .HasColumnName("dadosSped")
+                .HasColumnType("bit")
+                .HasColumnOrder(25);
+
         }
     }
 }

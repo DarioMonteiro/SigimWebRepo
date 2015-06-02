@@ -1,0 +1,67 @@
+﻿@using GIR.Sigim.Application.DTO.Financeiro
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<TipoRateioDTO> Lista = Model.Records as IEnumerable<TipoRateioDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector",
+                                @aria_controls = "dt_basic",
+                                @class = "form-control",
+                                onchange = "changePageSize();"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+        string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+        string idSortingSuffix = "sorting";
+        string descricaoSortingSuffix = "sorting";
+
+        switch (Model.OrderBy)
+        {
+            case "id":
+                idSortingSuffix += sortingSuffix;
+                break;
+            case "descricao":
+                descricaoSortingSuffix += sortingSuffix;
+                break;
+            default:
+                break;
+        }
+                        }
+                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="width:60px; ">Código</th>
+                        <th class="sorting @descricaoSortingSuffix text-center" data-order="descricao" style="min-width:65px;">Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString()</a></td>
+                            <td class="text-left">@item.Descricao</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model.Pagination)
+    }
+</div>

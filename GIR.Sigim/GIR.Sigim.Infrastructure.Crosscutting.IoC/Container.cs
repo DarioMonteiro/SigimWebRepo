@@ -72,14 +72,24 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #endregion
 
             #region Contrato
+            currentContainer.RegisterType<IContratoRepository, ContratoRepository>();
             currentContainer.RegisterType<IParametrosContratoRepository, ParametrosContratoRepository>();
+            currentContainer.RegisterType<IContratoRetificacaoItemRepository, ContratoRetificacaoItemRepository>();
+            currentContainer.RegisterType<IContratoRetificacaoProvisaoRepository, ContratoRetificacaoProvisaoRepository>();
+            currentContainer.RegisterType<IContratoRetificacaoItemMedicaoRepository, ContratoRetificacaoItemMedicaoRepository>();   
             #endregion
 
             #region Financeiro
             currentContainer.RegisterType<ICentroCustoRepository, CentroCustoRepository>();
             currentContainer.RegisterType<IClasseRepository, ClasseRepository>();
+            currentContainer.RegisterType<ICaixaRepository, CaixaRepository>();
             currentContainer.RegisterType<ITipoCompromissoRepository, TipoCompromissoRepository>();
+            currentContainer.RegisterType<IMotivoCancelamentoRepository, MotivoCancelamentoRepository>();
             currentContainer.RegisterType<IParametrosUsuarioFinanceiroRepository, ParametrosUsuarioFinanceiroRepository>();
+            currentContainer.RegisterType<IParametrosFinanceiroRepository, ParametrosFinanceiroRepository>();
+            currentContainer.RegisterType<ITipoDocumentoRepository, TipoDocumentoRepository>();
+            currentContainer.RegisterType<ITipoRateioRepository, TipoRateioRepository>();
+            currentContainer.RegisterType<ITituloPagarRepository, TituloPagarRepository>();
             #endregion
 
             #region Orçamento
@@ -97,9 +107,16 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #region Sigim
             currentContainer.RegisterType<IAssuntoContatoRepository, AssuntoContatoRepository>();
             currentContainer.RegisterType<IBancoLayoutRepository, BancoLayoutRepository>();
+            currentContainer.RegisterType<IBloqueioContabilRepository, BloqueioContabilRepository>();
             currentContainer.RegisterType<IClienteFornecedorRepository, ClienteFornecedorRepository>();
             currentContainer.RegisterType<ILogOperacaoRepository, LogOperacaoRepository>();
             currentContainer.RegisterType<IMaterialRepository, MaterialRepository>();
+            currentContainer.RegisterType<ITipoCompraRepository, TipoCompraRepository>();
+            currentContainer.RegisterType<ICifFobRepository, CifFobRepository>();
+            currentContainer.RegisterType<INaturezaOperacaoRepository, NaturezaOperacaoRepository>();
+            currentContainer.RegisterType<ISerieNFRepository, SerieNFRepository>();
+            currentContainer.RegisterType<ICSTRepository, CSTRepository>();
+            currentContainer.RegisterType<ICodigoContribuicaoRepository, CodigoContribuicaoRepository>();
             currentContainer.RegisterType<IUnidadeMedidaRepository, UnidadeMedidaRepository>();
             #endregion
 
@@ -118,14 +135,25 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #endregion
 
             #region Contrato
+            currentContainer.RegisterType<IContratoAppService, ContratoAppService>();
+            currentContainer.RegisterType<IContratoRetificacaoItemAppService, ContratoRetificacaoItemAppService>();
+            currentContainer.RegisterType<IContratoRetificacaoProvisaoAppService, ContratoRetificacaoProvisaoAppService>();
             currentContainer.RegisterType<IParametrosContratoAppService, ParametrosContratoAppService>();
+            currentContainer.RegisterType<IContratoRetificacaoItemMedicaoAppService, ContratoRetificacaoItemMedicaoAppService>();
+            currentContainer.RegisterType<IContratoRetificacaoAppService, ContratoRetificacaoAppService>();
             #endregion
 
             #region Financeiro
             currentContainer.RegisterType<ICentroCustoAppService, CentroCustoAppService>();
             currentContainer.RegisterType<IClasseAppService, ClasseAppService>();
+            currentContainer.RegisterType<ICaixaAppService, CaixaAppService>();
             currentContainer.RegisterType<ITipoCompromissoAppService, TipoCompromissoAppService>();
+            currentContainer.RegisterType<IMotivoCancelamentoAppService, MotivoCancelamentoAppService>();
             currentContainer.RegisterType<IParametrosUsuarioFinanceiroAppService, ParametrosUsuarioFinanceiroAppService>();
+            currentContainer.RegisterType<ITipoDocumentoAppService, TipoDocumentoAppService>();
+            currentContainer.RegisterType<ITipoRateioAppService, TipoRateioAppService>();
+            currentContainer.RegisterType<ITituloPagarAppService, TituloPagarAppService>();
+            currentContainer.RegisterType<IParametrosFinanceiroAppService, ParametrosFinanceiroAppService>();
             #endregion
 
             #region Orçamento
@@ -143,9 +171,16 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #region Sigim
             currentContainer.RegisterType<IAssuntoContatoAppService, AssuntoContatoAppService>();
             currentContainer.RegisterType<IBancoLayoutAppService, BancoLayoutAppService>();
+            currentContainer.RegisterType<IBloqueioContabilAppService, BloqueioContabilAppService>();
             currentContainer.RegisterType<IClienteFornecedorAppService, ClienteFornecedorAppService>();
             currentContainer.RegisterType<ILogOperacaoAppService, LogOperacaoAppService>();
             currentContainer.RegisterType<IMaterialAppService, MaterialAppService>();
+            currentContainer.RegisterType<ITipoCompraAppService, TipoCompraAppService>();
+            currentContainer.RegisterType<ICifFobAppService, CifFobAppService>();
+            currentContainer.RegisterType<INaturezaOperacaoAppService, NaturezaOperacaoAppService>();
+            currentContainer.RegisterType<ISerieNFAppService, SerieNFAppService>();
+            currentContainer.RegisterType<ICSTAppService, CSTAppService>();
+            currentContainer.RegisterType<ICodigoContribuicaoAppService, CodigoContribuicaoAppService>();
             currentContainer.RegisterType<IUnidadeMedidaAppService, UnidadeMedidaAppService>();
             #endregion
 

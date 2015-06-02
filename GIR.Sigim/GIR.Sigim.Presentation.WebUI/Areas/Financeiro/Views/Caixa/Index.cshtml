@@ -1,0 +1,150 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.CaixaViewModel
+
+@{
+    ViewBag.Title = "Caixa";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Salvar",
+                            "Caixa",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body no-padding">
+                        <fieldset>                                           
+                            <div class="row">
+                                <section class="col col-6">
+                                    @Html.HiddenFor(m => m.Caixa.Id)
+                                    @Html.LabelFor(m => m.Caixa.Descricao, new { @class = "label" })
+                                    <label class="input">
+                                     @Html.TextBoxFor(m => m.Caixa.Descricao, new { @maxlength = "50",  @class = "required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Caixa.Descricao, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-2" style="padding-top:30px">                                  
+                                    <label class="checkbox">
+                                        @Html.CheckBoxFor(m => m.Caixa.Inativo)<i></i>@Html.DisplayNameFor(m => m.Caixa.Inativo)
+                                    </label>                                                 
+                                </section>
+                                <section class="col col-4">
+                                    @Html.LabelFor(m => m.Caixa.CentroContabil, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Caixa.CentroContabil , new { @maxlength = "20" })
+                                    </label>
+                                 @Html.ValidationMessageFor(m => m.Caixa.CentroContabil, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
+                            <div class="row">
+                                @Html.EditorFor(m => m.Caixa.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de Custo" })                                
+                            </div>
+                        </fieldset>
+                    </div>
+                    <footer>
+                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                            Deletar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Salvar
+                        </button>
+                    </footer>
+                    }
+
+                    @using (Ajax.BeginForm(
+                            "Lista",
+                            "Caixa",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+    $("#btnDeletar").on("click", function() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletar", "Caixa")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: $('#@Html.IdFor(m => m.Caixa.Id)').val()
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
+            clearForm();
+            doFilter();
+        });
+    });
+
+    function clearForm() {
+        $('#@Html.IdFor(m => m.Caixa.Id)').val('');
+        $('#@Html.IdFor(m => m.Caixa.Descricao)').val('');
+        $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', false);
+        $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val('');
+        $('#@Html.IdFor(m => m.Caixa.CentroCusto.Codigo)').val('');
+        $('#@Html.IdFor(m => m.Caixa.CentroCusto.Descricao)').val('');        
+    }
+
+    function novo() {
+        clearForm();
+        $('#notificationMessages').html('');
+        $('#Caixa_Descricao-error').remove();
+    }
+
+    function refresh() {
+        onSuccess();
+        clearForm();
+        doFilter();
+    }
+
+    function loadItem(id) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CarregarItem", "Caixa")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: id
+            })
+        })
+        .success(function (result) {
+            $('#@Html.IdFor(m => m.Caixa.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.Caixa.Descricao)').val(result.Descricao);
+            $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', result.Situacao);
+            $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val(result.CentroContabil);            
+            $('#@Html.IdFor(m => m.Caixa.CentroCusto)').val(result.CentroCusto); 
+            goToTop();
+        });
+    }
+</script>

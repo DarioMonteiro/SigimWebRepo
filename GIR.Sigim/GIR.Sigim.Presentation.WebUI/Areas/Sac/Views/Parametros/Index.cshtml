@@ -1,0 +1,176 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Sac.ViewModel.ParametrosViewModel
+
+@{
+    ViewBag.Title = "Parâmetros";
+    ViewBag.IsUploadForm = true;
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-8 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>            
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Index",
+                            "Parametros",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formParametros", @class = "smart-form client-form", @novalidate = "novalidate", @enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Parametros.Id)
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseGeral" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Geral
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseGeral" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.Parametros.ClienteId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.Parametros.ClienteId, Model.ListaEmpresa, string.Empty)
+                                                        <i></i>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Parametros.PrazoAvaliacao, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Parametros.PrazoAvaliacao)
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Parametros.PrazoAvaliacao, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Parametros.PrazoConclusao, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Parametros.PrazoConclusao)
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Parametros.PrazoConclusao, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Parametros.Mascara, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Parametros.Mascara)
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Parametros.Mascara, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                          <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseIconeRelatorio" class="collapsed">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Ícone para relatórios
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseIconeRelatorio" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <div class="alert alert-warning fade in">
+                                                        <i class="fa-fw fa fa-warning"></i>
+                                                        <strong>Atenção!</strong> A imagem deve medir 48x48 pixels e ser do tipo PNG.
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-8">
+                                                    @*<input type="file" name="@Html.IdFor(m => m.IconeRelatorio)" id="IconeRelatorio" />*@
+                                                    @Html.TextBoxFor(m => m.Parametros.IconeRelatorio , new { type = "file" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.HiddenFor(m => m.Parametros.RemoverImagem)
+                                                    <div class="bgIconeRelatorio48x48">
+                                                        @{
+                                                            string imgPadrao = Url.Content("~/Content/img/48x48.png");
+                                                            string imageSrc = imgPadrao;
+                                                            if (Model.Parametros != null && Model.Parametros.IconeRelatorio != null && Model.Parametros.IconeRelatorio.Length > 0)
+                                                            {
+                                                                string imageBase64 = Convert.ToBase64String(Model.Parametros.IconeRelatorio);
+                                                                imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                                                            }
+                                                            <img id="icone" src="@imageSrc" width="96" height="96" alt="Ícone para relatórios" />
+                                                            <script type="text/javascript">
+                                                                function removerImagem() {
+                                                                    $("#IconeRelatorio").val('');
+                                                                    $('#icone').attr('src', '@imgPadrao');
+                                                                    $('#@Html.IdFor(m => m.Parametros.RemoverImagem)').val(true);
+                                                                }
+
+                                                                function exibirImagem(input) {
+                                                                    if (input.files && input.files[0]) {
+                                                                        var reader = new FileReader();
+
+                                                                        reader.onload = function (e) {
+                                                                            $('#icone').attr('src', e.target.result);
+                                                                        }
+
+                                                                        reader.readAsDataURL(input.files[0]);
+                                                                        $('#@Html.IdFor(m => m.Parametros.RemoverImagem)').val(false);
+                                                                    }
+                                                                    else
+                                                                        removerImagem();
+                                                                }
+
+                                                                $("#IconeRelatorio").on('change', function () {
+                                                                    exibirImagem(this);
+                                                                });
+                                                            </script>
+                                                        }
+                                                        <a class="btn btn-sm btn-danger btn-block" href="javascript:removerImagem();">Remover</a>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                           <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Salvar
+                            </button>
+                        </footer>
+                    
+                    </div>
+                </div>
+                    }
+            </div>                
+        </div>                  
+    </article>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#formParametros').ajaxForm({
+                success: function (d) {
+                    $('#IconeRelatorio').val('');
+                },
+                complete: function (xhr) {
+                    $('#notificationMessages').html(xhr.responseText);
+                }
+            });
+        });
+    </script>
+}

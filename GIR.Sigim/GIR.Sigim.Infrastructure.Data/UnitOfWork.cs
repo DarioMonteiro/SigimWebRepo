@@ -14,6 +14,7 @@ using GIR.Sigim.Infrastructure.Data.Configuration.Contrato;
 using GIR.Sigim.Infrastructure.Data.Configuration.Financeiro;
 using GIR.Sigim.Infrastructure.Data.Configuration.Orcamento;
 using GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra;
+using GIR.Sigim.Infrastructure.Data.Configuration.Sac;
 using GIR.Sigim.Infrastructure.Data.Configuration.Sigim;
 
 namespace GIR.Sigim.Infrastructure.Data
@@ -102,13 +103,29 @@ namespace GIR.Sigim.Infrastructure.Data
 
             //Contrato
             modelBuilder.Configurations.Add(new ParametrosContratoConfiguration());
+            modelBuilder.Configurations.Add(new LicitacaoDescricaoConfiguration());
+            modelBuilder.Configurations.Add(new LicitacaoConfiguration());
+            modelBuilder.Configurations.Add(new LicitacaoCronogramaConfiguration());
+            modelBuilder.Configurations.Add(new ContratoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoProvisaoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemCronogramaConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoConfiguration());
 
             //Financeiro
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());
             modelBuilder.Configurations.Add(new CentroCustoEmpresaConfiguration());
             modelBuilder.Configurations.Add(new ClasseConfiguration());
+            modelBuilder.Configurations.Add(new CaixaConfiguration());
             modelBuilder.Configurations.Add(new TipoCompromissoConfiguration());
+            modelBuilder.Configurations.Add(new MotivoCancelamentoConfiguration());
             modelBuilder.Configurations.Add(new ParametrosUsuarioFinanceiroConfiguration());
+            modelBuilder.Configurations.Add(new ParametrosFinanceiroConfiguration());
+            modelBuilder.Configurations.Add(new TipoDocumentoConfiguration());
+            modelBuilder.Configurations.Add(new TipoRateioConfiguration());
+            modelBuilder.Configurations.Add(new TituloPagarConfiguration());
+            modelBuilder.Configurations.Add(new TituloReceberConfiguration());
 
             //Orcamento
             modelBuilder.Configurations.Add(new ObraConfiguration());
@@ -135,14 +152,28 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new BancoConfiguration());
             modelBuilder.Configurations.Add(new BancoLayoutConfiguration());
             modelBuilder.Configurations.Add(new ClienteFornecedorConfiguration());
+            modelBuilder.Configurations.Add(new PessoaFisicaConfiguration());
+            modelBuilder.Configurations.Add(new PessoaJuridicaConfiguration()); 
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());
             modelBuilder.Configurations.Add(new LogOperacaoConfiguration());
             modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
             modelBuilder.Configurations.Add(new MaterialConfiguration());
+            modelBuilder.Configurations.Add(new ServicoConfiguration());  
             modelBuilder.Configurations.Add(new NCMConfiguration());
             modelBuilder.Configurations.Add(new SituacaoMercadoriaConfiguration());
             modelBuilder.Configurations.Add(new UnidadeMedidaConfiguration());
             modelBuilder.Configurations.Add(new UsuarioCentroCustoConfiguration());
+
+            //Sac
+            modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
+            
+            modelBuilder.Configurations.Add(new TipoCompraConfiguration());
+            modelBuilder.Configurations.Add(new CifFobConfiguration());
+            modelBuilder.Configurations.Add(new NaturezaOperacaoConfiguration());
+            modelBuilder.Configurations.Add(new SerieNFConfiguration());
+            modelBuilder.Configurations.Add(new CSTConfiguration());
+            modelBuilder.Configurations.Add(new CodigoContribuicaoConfiguration());
+            modelBuilder.Configurations.Add(new BloqueioContabilConfiguration());
         }
         #endregion
     }

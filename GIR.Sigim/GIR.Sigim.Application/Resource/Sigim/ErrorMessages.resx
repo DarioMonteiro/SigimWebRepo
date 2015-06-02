@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BloqueioContabilEncontrado" xml:space="preserve">
+    <value>Operações anteriores a data de {0} não poderão ser realizadas, pois foi cadastrado um bloqueio contábil para o centro de custo {1}.</value>
+  </data>
+  <data name="CampoInvalido" xml:space="preserve">
+    <value>O campo {0}  não é válido.</value>
+  </data>
   <data name="CampoObrigatorio" xml:space="preserve">
     <value>O campo {0} é obrigatório.</value>
   </data>
@@ -143,6 +149,9 @@
   </data>
   <data name="NenhumRegistroEncontrado" xml:space="preserve">
     <value>Nenhum registro encontrado.</value>
+  </data>
+  <data name="RegistroEmUso" xml:space="preserve">
+    <value>O registro [{0}] está sendo usado.</value>
   </data>
   <data name="TamanhoArquivoSuperior1MB" xml:space="preserve">
     <value>Escolha um arquivo com o tamanho menor ou igual a 1 MB.</value>
