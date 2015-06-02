@@ -147,7 +147,8 @@ jQuery.validator.addMethod(
 );
 
 function floatToString(value) {
-    return value.toString().replace(".", ",");
+    if (value !== null) value = value.toString().replace(".", ",");
+    return value;
 }
 
 function stringToFloat(value) {

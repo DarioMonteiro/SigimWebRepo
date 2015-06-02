@@ -64,6 +64,7 @@
     <Compile Include="DTO\Contrato\ContratoRetificacaoProvisaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
+    <Compile Include="DTO\Contrato\TotalizadoresMedicaoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />

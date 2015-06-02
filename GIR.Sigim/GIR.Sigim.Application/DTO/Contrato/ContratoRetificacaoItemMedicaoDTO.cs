@@ -97,8 +97,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
         [Display(Name = "Motivo desconto")]
         public string MotivoDesconto { get; set; }
 
-        public decimal ValorPendente { get; set; }
-        public decimal QuantidadePendente { get; set; }
+        public TotalizadoresMedicaoDTO Totalizadores { get; set; }
 
         public ContratoRetificacaoItemMedicaoDTO()
         {
@@ -124,6 +123,8 @@ namespace GIR.Sigim.Application.DTO.Contrato
             this.Desconto = 0;
 
             this.Situacao = 0;
+
+            this.Totalizadores = new TotalizadoresMedicaoDTO();
 
         }
     }

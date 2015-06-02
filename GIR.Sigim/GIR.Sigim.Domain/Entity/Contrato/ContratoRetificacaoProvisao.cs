@@ -26,10 +26,5 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public decimal Valor { get; set; }
         public decimal Quantidade { get; set; }
 
-        public decimal ValorTotalMedido { get; set; }
-        public decimal QuantidadeTotalMedida { get; set; }
-        public decimal ValorTotalLiberado { get; set; }
-        public decimal QuantidadeTotalLiberada { get; set; }
-
     }
 }

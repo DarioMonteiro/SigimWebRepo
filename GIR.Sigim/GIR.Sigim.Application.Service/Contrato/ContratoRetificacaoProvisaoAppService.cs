@@ -35,11 +35,11 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         #region Médodos IContratoRetificacaoProvisaoAppService
 
-        public List<ContratoRetificacaoProvisaoDTO> ObterListaCronograma(int id)
+        public List<ContratoRetificacaoProvisaoDTO> ObterListaCronograma(int ContratoRetificacaoItemId)
         {
 
             List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisaoDTO =
-                contratoRetificacaoProvisaoRepository.ListarPeloFiltro(l => l.ContratoRetificacaoItemId == id,
+                contratoRetificacaoProvisaoRepository.ListarPeloFiltro(l => l.ContratoRetificacaoItemId == ContratoRetificacaoItemId,
                                                                        l => l.ContratoRetificacaoItem.Servico,
                                                                        l => l.ContratoRetificacaoItem.RetencaoTipoCompromisso,
                                                                        l => l.ContratoRetificacaoItemCronograma).To<List<ContratoRetificacaoProvisaoDTO>>();
@@ -59,13 +59,13 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                           ref vlrTotalMedido,
                                                                                           ref qtdTotalLiberado,
                                                                                           ref vlrTotalLiberado);
-                provisao.QuantidadeTotalMedida = qtdTotalMedido;
-                provisao.ValorTotalMedido = vlrTotalMedido;
-                provisao.QuantidadeTotalLiberada = qtdTotalLiberado;
-                provisao.ValorTotalLiberado = vlrTotalLiberado;
+                provisao.Totalizadores.QuantidadeTotalMedida = qtdTotalMedido;
+                provisao.Totalizadores.ValorTotalMedido = vlrTotalMedido;
+                provisao.Totalizadores.QuantidadeTotalLiberada = qtdTotalLiberado;
+                provisao.Totalizadores.ValorTotalLiberado = vlrTotalLiberado;
 
-                provisao.QuantidadePendente = provisao.Quantidade - provisao.QuantidadeTotalMedida;
-                provisao.ValorPendente = provisao.Valor - provisao.ValorTotalMedido;
+                provisao.Totalizadores.QuantidadePendente = provisao.Quantidade - provisao.Totalizadores.QuantidadeTotalMedida;
+                provisao.Totalizadores.ValorPendente = provisao.Valor - provisao.Totalizadores.ValorTotalMedido;
 
                 novaLista.Add(provisao);
             }
