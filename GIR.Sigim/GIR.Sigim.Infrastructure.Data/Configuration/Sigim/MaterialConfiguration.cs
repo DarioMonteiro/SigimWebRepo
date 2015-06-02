@@ -129,6 +129,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 
             HasMany(l => l.ListaPreRequisicaoMaterialItem)
                 .WithRequired(l => l.Material);
+
+            HasMany(l => l.ListaRequisicaoMaterialItem)
+                .WithRequired(l => l.Material);
+
+            HasMany(l => l.ListaOrdemCompraItem)
+                .WithRequired(l => l.Material);
         }
     }
 }

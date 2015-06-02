@@ -20,6 +20,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterialItem> ListaRequisicaoMaterialItem { get; set; }
         public virtual ICollection<OrcamentoComposicao> ListaOrcamentoComposicao { get; set; }
+        public ICollection<OrdemCompraItem> ListaOrdemCompraItem { get; set; }
+        public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
 
         public Classe()
         {
@@ -27,6 +29,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaPreRequisicaoMaterialItem = new HashSet<PreRequisicaoMaterialItem>();
             this.ListaRequisicaoMaterialItem = new HashSet<RequisicaoMaterialItem>();
             this.ListaOrcamentoComposicao = new HashSet<OrcamentoComposicao>();
+            this.ListaOrdemCompraItem = new HashSet<OrdemCompraItem>();
+            this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
         }
     }
 }

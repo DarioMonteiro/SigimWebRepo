@@ -165,6 +165,7 @@
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialListaViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\PainelController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -179,6 +180,7 @@
     <Compile Include="Areas\OrdemCompra\ViewModel\ParametrosUsuarioViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\ParametrosViewModel.cs" />
     <Compile Include="ViewModel\ListaViewModel.cs" />
+    <Compile Include="ViewModel\MaterialListaViewModel.cs" />
     <Compile Include="ViewModel\Page.cs" />
     <Compile Include="ViewModel\Pagination.cs" />
   </ItemGroup>
@@ -191,6 +193,7 @@
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\img\48x48.png" />
+    <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\avatars\female.png" />
     <Content Include="Content\img\avatars\male.png" />
     <Content Include="Content\img\favicon\favicon.ico" />
@@ -687,6 +690,9 @@
     <Content Include="Views\Shared\EditorTemplates\Material.cshtml" />
     <Content Include="Views\Shared\Redirect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Imprimir.cshtml" />
+    <Content Include="Views\Material\Index.cshtml" />
+    <Content Include="Views\Material\ListaPartial.cshtml" />
+    <Content Include="Views\Shared\_LoadingPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

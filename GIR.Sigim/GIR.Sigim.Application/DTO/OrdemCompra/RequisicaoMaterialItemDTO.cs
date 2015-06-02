@@ -14,11 +14,26 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public int? RequisicaoMaterialId { get; set; }
         public int? PreRequisicaoMaterialItemId { get; set; }
         public SituacaoRequisicaoMaterialItem Situacao { get; set; }
+        public int? UltimaCotacao { get; set; }
+        public int? UltimaOrdemCompra { get; set; }
+        public bool TemInterfaceOrcamento { get; set; }
+        public string TemInterfaceOrcamentoDescricao
+        {
+            get { return TemInterfaceOrcamento ? "Sim" : "Não"; }
+        }
+        public List<CotacaoItemDTO> ListaCotacaoItem { get; set; }
+        public List<OrdemCompraItemDTO> ListaOrdemCompraItem { get; set; }
 
         [Display(Name = "Situação")]
         public string SituacaoDescricao
         {
             get { return this.Situacao.ObterDescricao(); }
+        }
+
+        public RequisicaoMaterialItemDTO()
+        {
+            this.ListaCotacaoItem = new List<CotacaoItemDTO>();
+            this.ListaOrdemCompraItem = new List<OrdemCompraItemDTO>();
         }
     }
 }

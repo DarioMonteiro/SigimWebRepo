@@ -75,12 +75,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 filtro.PaginationParameters.Ascending,
                 out totalRegistros,
                 l => l.ListaItens.Select(c => c.PreRequisicaoMaterial),
-                l => l.ListaItens.Select(c => c.CentroCusto.ListaUsuarioCentroCusto)).To<List<PreRequisicaoMaterialDTO>>();
+                l => l.ListaItens.Select(c => c.CentroCusto.ListaUsuarioCentroCusto),
+                l => l.ListaItens.Select(o => o.ListaRequisicaoMaterialItem.Select(s => s.RequisicaoMaterial))).To<List<PreRequisicaoMaterialDTO>>();
         }
 
         public PreRequisicaoMaterialDTO ObterPeloId(int? id)
         {
-            return ObterPeloIdEUsuario(id, AuthenticationService.GetUser().Id).To<PreRequisicaoMaterialDTO>();
+            return ObterPeloIdEUsuario(id, UsuarioLogado.Id).To<PreRequisicaoMaterialDTO>();
         }
 
         public bool Salvar(PreRequisicaoMaterialDTO dto)
@@ -96,7 +97,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 preRequisicaoMaterial = new PreRequisicaoMaterial();
                 preRequisicaoMaterial.Situacao = SituacaoPreRequisicaoMaterial.Requisitada;
                 preRequisicaoMaterial.DataCadastro = DateTime.Now;
-                preRequisicaoMaterial.LoginUsuarioCadastro = AuthenticationService.GetUser().Login;
+                preRequisicaoMaterial.LoginUsuarioCadastro = UsuarioLogado.Login;
                 novoItem = true;
             }
 
@@ -174,7 +175,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 requisicaoMaterial = new RequisicaoMaterial();
                 requisicaoMaterial.Situacao = SituacaoRequisicaoMaterial.Aprovada;
                 requisicaoMaterial.DataAprovacao = DateTime.Now;
-                requisicaoMaterial.LoginUsuarioAprovacao = AuthenticationService.GetUser().Login;
+                requisicaoMaterial.LoginUsuarioAprovacao = UsuarioLogado.Login;
 
                 requisicaoMaterial.CodigoCentroCusto = centroCusto;
                 requisicaoMaterial.Data = preRequisicaoMaterial.Data;
@@ -203,7 +204,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     item.ListaRequisicaoMaterialItem.Add(requisicaoMaterialItem);
                     item.Situacao = SituacaoPreRequisicaoMaterialItem.Aprovado;
                     item.DataAprovacao = DateTime.Now;
-                    item.LoginUsuarioAprovacao = AuthenticationService.GetUser().Login;
+                    item.LoginUsuarioAprovacao = UsuarioLogado.Login;
                     sequencial++;
                 }
                 requisicaoMaterialRepository.Inserir(requisicaoMaterial);
@@ -213,7 +214,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             preRequisicaoMaterialRepository.Alterar(preRequisicaoMaterial);
             preRequisicaoMaterialRepository.UnitOfWork.Commit();
-            messageQueue.Add(Resource.OrdemCompra.SuccessMessages.AprovacaoItensComSucesso, TypeMessage.Success);
+            messageQueue.Add(Resource.OrdemCompra.SuccessMessages.AprovacaoRealizadaComSucesso, TypeMessage.Success);
             return true;
         }
 
@@ -249,7 +250,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             preRequisicaoMaterial.MotivoCancelamento = motivo;
             preRequisicaoMaterial.Situacao = SituacaoPreRequisicaoMaterial.Cancelada;
             preRequisicaoMaterial.DataCancelamento = DateTime.Now;
-            preRequisicaoMaterial.LoginUsuarioCancelamento = AuthenticationService.GetUser().Login;
+            preRequisicaoMaterial.LoginUsuarioCancelamento = UsuarioLogado.Login;
 
             preRequisicaoMaterialRepository.Alterar(preRequisicaoMaterial);
             preRequisicaoMaterialRepository.UnitOfWork.Commit();
@@ -259,7 +260,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato)
         {
-            var preRequisicao = ObterPeloIdEUsuario(id, AuthenticationService.GetUser().Id);
+            var preRequisicao = ObterPeloIdEUsuario(id, UsuarioLogado.Id);
             relPreRequisicaoMaterial objRel = new relPreRequisicaoMaterial();
             objRel.Database.Tables["OrdemCompra_preRequisicaoMaterialRelatorio"].SetDataSource(PreRequisicaoToDataTable(preRequisicao));
             objRel.Database.Tables["OrdemCompra_preRequisicaoMaterialItemRelatorio"].SetDataSource(PreRequisicaoItemToDataTable(preRequisicao.ListaItens.ToList()));
@@ -281,129 +282,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 System.IO.File.Delete(caminhoImagem);
 
             return arquivo;
-        }
-
-        private DataTable PreRequisicaoToDataTable(PreRequisicaoMaterial preRequisicaoMaterial)
-        {
-            DataTable dta = new DataTable();
-            DataColumn codigo = new DataColumn("codigo");
-            DataColumn dataPreRequisicao = new DataColumn("dataPreRequisicao");
-            DataColumn observacao = new DataColumn("observacao");
-            DataColumn dataCadastro = new DataColumn("dataCadastro");
-            DataColumn usuarioCadastro = new DataColumn("usuarioCadastro");
-            DataColumn dataCancela = new DataColumn("dataCancela");
-            DataColumn usuarioCancela = new DataColumn("usuarioCancela");
-            DataColumn motivoCancela = new DataColumn("motivoCancela");
-            DataColumn situacao = new DataColumn("situacao");
-            DataColumn descricaoSituacao = new DataColumn("descricaoSituacao");
-
-            dta.Columns.Add(codigo);
-            dta.Columns.Add(dataPreRequisicao);
-            dta.Columns.Add(observacao);
-            dta.Columns.Add(dataCadastro);
-            dta.Columns.Add(usuarioCadastro);
-            dta.Columns.Add(dataCancela);
-            dta.Columns.Add(usuarioCancela);
-            dta.Columns.Add(motivoCancela);
-            dta.Columns.Add(situacao);
-            dta.Columns.Add(descricaoSituacao);
-
-            DataRow row = dta.NewRow();
-            row[codigo] = preRequisicaoMaterial.Id;
-            row[dataPreRequisicao] = preRequisicaoMaterial.Data.ToString("dd/MM/yyyy");
-            row[observacao] = preRequisicaoMaterial.Observacao;
-            row[dataCadastro] = preRequisicaoMaterial.DataCadastro.ToString("dd/MM/yyyy");
-            row[usuarioCadastro] = preRequisicaoMaterial.LoginUsuarioCadastro;
-            row[dataCancela] = preRequisicaoMaterial.DataCancelamento.HasValue ? preRequisicaoMaterial.DataCancelamento.Value.ToString("dd/MM/yyyy") : string.Empty;
-            row[usuarioCancela] = preRequisicaoMaterial.LoginUsuarioCancelamento;
-            row[motivoCancela] = preRequisicaoMaterial.MotivoCancelamento;
-            row[situacao] = preRequisicaoMaterial.Situacao;
-            row[descricaoSituacao] = preRequisicaoMaterial.Situacao.ObterDescricao();
-            dta.Rows.Add(row);
-            return dta;
-        }
-
-        private DataTable PreRequisicaoItemToDataTable(List<PreRequisicaoMaterialItem> listaPreRequisicaoMaterialItem)
-        {
-            DataTable dta = new DataTable();
-            DataColumn codigo = new DataColumn("codigo");
-            DataColumn preRequisicaoMaterial = new DataColumn("preRequisicaoMaterial");
-            DataColumn sequencial = new DataColumn("sequencial");
-            DataColumn complementoDescricao = new DataColumn("complementoDescricao");
-            DataColumn quantidade = new DataColumn("quantidade");
-            DataColumn quantidadeAprovada = new DataColumn("quantidadeAprovada");
-            DataColumn dataMinima = new DataColumn("dataMinima");
-            DataColumn dataMaxima = new DataColumn("dataMaxima");
-            DataColumn material = new DataColumn("material");
-            DataColumn descricaoMaterial = new DataColumn("descricaoMaterial");
-            DataColumn unidadeMedida = new DataColumn("unidadeMedida");
-            DataColumn descricaoUnidadeMedida = new DataColumn("descricaoUnidadeMedida");
-            DataColumn classe = new DataColumn("classe");
-            DataColumn descricaoClasse = new DataColumn("descricaoClasse");
-            DataColumn codigoDescricaoClasse = new DataColumn("codigoDescricaoClasse");
-            DataColumn centroCusto = new DataColumn("centroCusto");
-            DataColumn descricaoCentroCusto = new DataColumn("descricaoCentroCusto");
-            DataColumn codigoDescricaoCentroCusto = new DataColumn("codigoDescricaoCentroCusto");
-            DataColumn dataAprova = new DataColumn("dataAprova");
-            DataColumn usuarioAprova = new DataColumn("usuarioAprova");
-            DataColumn situacao = new DataColumn("situacao");
-            DataColumn descricaoSituacao = new DataColumn("descricaoSituacao");
-            DataColumn codigoRequisicaoMaterial = new DataColumn("codigoRequisicaoMaterial");
-
-            dta.Columns.Add(codigo);
-            dta.Columns.Add(preRequisicaoMaterial);
-            dta.Columns.Add(sequencial);
-            dta.Columns.Add(complementoDescricao);
-            dta.Columns.Add(quantidade);
-            dta.Columns.Add(quantidadeAprovada);
-            dta.Columns.Add(dataMinima);
-            dta.Columns.Add(dataMaxima);
-            dta.Columns.Add(material);
-            dta.Columns.Add(descricaoMaterial);
-            dta.Columns.Add(unidadeMedida);
-            dta.Columns.Add(descricaoUnidadeMedida);
-            dta.Columns.Add(classe);
-            dta.Columns.Add(descricaoClasse);
-            dta.Columns.Add(codigoDescricaoClasse);
-            dta.Columns.Add(centroCusto);
-            dta.Columns.Add(descricaoCentroCusto);
-            dta.Columns.Add(codigoDescricaoCentroCusto);
-            dta.Columns.Add(dataAprova);
-            dta.Columns.Add(usuarioAprova);
-            dta.Columns.Add(situacao);
-            dta.Columns.Add(descricaoSituacao);
-            dta.Columns.Add(codigoRequisicaoMaterial);
-
-            foreach (var item in listaPreRequisicaoMaterialItem)
-	        {
-                DataRow row = dta.NewRow();
-                row[codigo] = item.Id;
-                row[preRequisicaoMaterial] = item.PreRequisicaoMaterial.Id;
-                row[sequencial] = item.Sequencial;
-                row[complementoDescricao] = item.Complemento;
-                row[quantidade] = item.Quantidade;
-                row[quantidadeAprovada] = item.QuantidadeAprovada;
-                row[dataMinima] = item.DataMinima.HasValue ? item.DataMinima.Value.ToString("dd/MM/yyyy") : string.Empty;
-                row[dataMaxima] = item.DataMaxima.HasValue ? item.DataMaxima.Value.ToString("dd/MM/yyyy") : string.Empty;
-                row[material] = item.MaterialId;
-                row[descricaoMaterial] = item.Material.Descricao;
-                row[unidadeMedida] = item.UnidadeMedida;
-                row[descricaoUnidadeMedida] = item.Material.UnidadeMedida.Descricao;
-                row[classe] = item.CodigoClasse;
-                row[descricaoClasse] = item.Classe.Descricao;
-                row[codigoDescricaoClasse] = item.CodigoClasse + " - " + item.Classe.Descricao;
-                row[centroCusto] = item.CodigoCentroCusto;
-                row[descricaoCentroCusto] = item.CentroCusto.Descricao;
-                row[codigoDescricaoCentroCusto] = item.CodigoCentroCusto + " - " + item.CentroCusto.Descricao;
-                row[dataAprova] = item.DataAprovacao.HasValue ? item.DataAprovacao.Value.ToString("dd/MM/yyyy") : string.Empty;
-                row[usuarioAprova] = item.LoginUsuarioAprovacao;
-                row[situacao] = item.Situacao;
-                row[descricaoSituacao] = item.Situacao.ObterDescricao();
-                row[codigoRequisicaoMaterial] = item.ListaRequisicaoMaterialItem.Any() ? item.ListaRequisicaoMaterialItem.ToList()[0].Id.Value.ToString() : string.Empty;
-
-                dta.Rows.Add(row);
-            }
-            return dta;
         }
 
         public bool EhPermitidoSalvar(PreRequisicaoMaterialDTO dto)
@@ -528,7 +406,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
         }
 
-        private static void AlterarItens(PreRequisicaoMaterialDTO dto, PreRequisicaoMaterial preRequisicaoMaterial)
+        private void AlterarItens(PreRequisicaoMaterialDTO dto, PreRequisicaoMaterial preRequisicaoMaterial)
         {
             foreach (var item in preRequisicaoMaterial.ListaItens)
             {
@@ -553,7 +431,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
         }
 
-        private static void AdicionarItens(PreRequisicaoMaterialDTO dto, PreRequisicaoMaterial preRequisicaoMaterial)
+        private void AdicionarItens(PreRequisicaoMaterialDTO dto, PreRequisicaoMaterial preRequisicaoMaterial)
         {
             foreach (var item in dto.ListaItens.Where(l => !l.Id.HasValue))
             {
@@ -577,6 +455,129 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
 
             return existeItemJaAprovado;
+        }
+
+        private DataTable PreRequisicaoToDataTable(PreRequisicaoMaterial preRequisicaoMaterial)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo");
+            DataColumn dataPreRequisicao = new DataColumn("dataPreRequisicao");
+            DataColumn observacao = new DataColumn("observacao");
+            DataColumn dataCadastro = new DataColumn("dataCadastro");
+            DataColumn usuarioCadastro = new DataColumn("usuarioCadastro");
+            DataColumn dataCancela = new DataColumn("dataCancela");
+            DataColumn usuarioCancela = new DataColumn("usuarioCancela");
+            DataColumn motivoCancela = new DataColumn("motivoCancela");
+            DataColumn situacao = new DataColumn("situacao");
+            DataColumn descricaoSituacao = new DataColumn("descricaoSituacao");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(dataPreRequisicao);
+            dta.Columns.Add(observacao);
+            dta.Columns.Add(dataCadastro);
+            dta.Columns.Add(usuarioCadastro);
+            dta.Columns.Add(dataCancela);
+            dta.Columns.Add(usuarioCancela);
+            dta.Columns.Add(motivoCancela);
+            dta.Columns.Add(situacao);
+            dta.Columns.Add(descricaoSituacao);
+
+            DataRow row = dta.NewRow();
+            row[codigo] = preRequisicaoMaterial.Id;
+            row[dataPreRequisicao] = preRequisicaoMaterial.Data.ToString("dd/MM/yyyy");
+            row[observacao] = preRequisicaoMaterial.Observacao;
+            row[dataCadastro] = preRequisicaoMaterial.DataCadastro.ToString("dd/MM/yyyy");
+            row[usuarioCadastro] = preRequisicaoMaterial.LoginUsuarioCadastro;
+            row[dataCancela] = preRequisicaoMaterial.DataCancelamento.HasValue ? preRequisicaoMaterial.DataCancelamento.Value.ToString("dd/MM/yyyy") : string.Empty;
+            row[usuarioCancela] = preRequisicaoMaterial.LoginUsuarioCancelamento;
+            row[motivoCancela] = preRequisicaoMaterial.MotivoCancelamento;
+            row[situacao] = preRequisicaoMaterial.Situacao;
+            row[descricaoSituacao] = preRequisicaoMaterial.Situacao.ObterDescricao();
+            dta.Rows.Add(row);
+            return dta;
+        }
+
+        private DataTable PreRequisicaoItemToDataTable(List<PreRequisicaoMaterialItem> listaPreRequisicaoMaterialItem)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo");
+            DataColumn preRequisicaoMaterial = new DataColumn("preRequisicaoMaterial");
+            DataColumn sequencial = new DataColumn("sequencial");
+            DataColumn complementoDescricao = new DataColumn("complementoDescricao");
+            DataColumn quantidade = new DataColumn("quantidade");
+            DataColumn quantidadeAprovada = new DataColumn("quantidadeAprovada");
+            DataColumn dataMinima = new DataColumn("dataMinima");
+            DataColumn dataMaxima = new DataColumn("dataMaxima");
+            DataColumn material = new DataColumn("material");
+            DataColumn descricaoMaterial = new DataColumn("descricaoMaterial");
+            DataColumn unidadeMedida = new DataColumn("unidadeMedida");
+            DataColumn descricaoUnidadeMedida = new DataColumn("descricaoUnidadeMedida");
+            DataColumn classe = new DataColumn("classe");
+            DataColumn descricaoClasse = new DataColumn("descricaoClasse");
+            DataColumn codigoDescricaoClasse = new DataColumn("codigoDescricaoClasse");
+            DataColumn centroCusto = new DataColumn("centroCusto");
+            DataColumn descricaoCentroCusto = new DataColumn("descricaoCentroCusto");
+            DataColumn codigoDescricaoCentroCusto = new DataColumn("codigoDescricaoCentroCusto");
+            DataColumn dataAprova = new DataColumn("dataAprova");
+            DataColumn usuarioAprova = new DataColumn("usuarioAprova");
+            DataColumn situacao = new DataColumn("situacao");
+            DataColumn descricaoSituacao = new DataColumn("descricaoSituacao");
+            DataColumn codigoRequisicaoMaterial = new DataColumn("codigoRequisicaoMaterial");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(preRequisicaoMaterial);
+            dta.Columns.Add(sequencial);
+            dta.Columns.Add(complementoDescricao);
+            dta.Columns.Add(quantidade);
+            dta.Columns.Add(quantidadeAprovada);
+            dta.Columns.Add(dataMinima);
+            dta.Columns.Add(dataMaxima);
+            dta.Columns.Add(material);
+            dta.Columns.Add(descricaoMaterial);
+            dta.Columns.Add(unidadeMedida);
+            dta.Columns.Add(descricaoUnidadeMedida);
+            dta.Columns.Add(classe);
+            dta.Columns.Add(descricaoClasse);
+            dta.Columns.Add(codigoDescricaoClasse);
+            dta.Columns.Add(centroCusto);
+            dta.Columns.Add(descricaoCentroCusto);
+            dta.Columns.Add(codigoDescricaoCentroCusto);
+            dta.Columns.Add(dataAprova);
+            dta.Columns.Add(usuarioAprova);
+            dta.Columns.Add(situacao);
+            dta.Columns.Add(descricaoSituacao);
+            dta.Columns.Add(codigoRequisicaoMaterial);
+
+            foreach (var item in listaPreRequisicaoMaterialItem)
+            {
+                DataRow row = dta.NewRow();
+                row[codigo] = item.Id;
+                row[preRequisicaoMaterial] = item.PreRequisicaoMaterial.Id;
+                row[sequencial] = item.Sequencial;
+                row[complementoDescricao] = item.Complemento;
+                row[quantidade] = item.Quantidade;
+                row[quantidadeAprovada] = item.QuantidadeAprovada;
+                row[dataMinima] = item.DataMinima.HasValue ? item.DataMinima.Value.ToString("dd/MM/yyyy") : string.Empty;
+                row[dataMaxima] = item.DataMaxima.HasValue ? item.DataMaxima.Value.ToString("dd/MM/yyyy") : string.Empty;
+                row[material] = item.MaterialId;
+                row[descricaoMaterial] = item.Material.Descricao;
+                row[unidadeMedida] = item.UnidadeMedida;
+                row[descricaoUnidadeMedida] = item.Material.UnidadeMedida.Descricao;
+                row[classe] = item.CodigoClasse;
+                row[descricaoClasse] = item.Classe.Descricao;
+                row[codigoDescricaoClasse] = item.CodigoClasse + " - " + item.Classe.Descricao;
+                row[centroCusto] = item.CodigoCentroCusto;
+                row[descricaoCentroCusto] = item.CentroCusto.Descricao;
+                row[codigoDescricaoCentroCusto] = item.CodigoCentroCusto + " - " + item.CentroCusto.Descricao;
+                row[dataAprova] = item.DataAprovacao.HasValue ? item.DataAprovacao.Value.ToString("dd/MM/yyyy") : string.Empty;
+                row[usuarioAprova] = item.LoginUsuarioAprovacao;
+                row[situacao] = item.Situacao;
+                row[descricaoSituacao] = item.Situacao.ObterDescricao();
+                row[codigoRequisicaoMaterial] = item.ListaRequisicaoMaterialItem.Any(l => l.RequisicaoMaterial.Situacao != SituacaoRequisicaoMaterial.Cancelada) ? item.ListaRequisicaoMaterialItem.Where(l => l.RequisicaoMaterial.Situacao != SituacaoRequisicaoMaterial.Cancelada).ToList()[0].RequisicaoMaterial.Id.Value.ToString() : string.Empty;
+
+                dta.Rows.Add(row);
+            }
+            return dta;
         }
     }
 }

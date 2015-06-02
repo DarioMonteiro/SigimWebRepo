@@ -10,7 +10,23 @@ $(function () {
             location = '/Account/Login';
         }
     });
+
+    $(document).ajaxStart(function () {
+        showLoading();
+    });
+
+    $(document).ajaxStop(function () {
+        hideLoading();
+    });
 });
+
+function showLoading() {
+    $("#generalLoading").show();
+}
+
+function hideLoading() {
+    $("#generalLoading").hide();
+}
 
 $(document).ready(function () {
     $('input, select').not('input[type=button], input[type=hidden], .lastField').on("keypress", function (e) {
@@ -179,3 +195,21 @@ function smartAlert(title, message, type) {
 $('.numeric').on('input', function (event) {
     this.value = this.value.replace(/[^0-9]/g, '');
 });
+
+function dateDiffInDays(start, end) {
+    var days = (end - start) / 1000 / 60 / 60 / 24;
+    return days;
+}
+
+function isValidDate(format, value) {
+    var isValid = true;
+
+    try {
+        jQuery.datepicker.parseDate(format, value);
+    }
+    catch (error) {
+        isValid = false;
+    }
+
+    return isValid;
+}

@@ -94,16 +94,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.PodeEditarItem = preRequisicaoMaterialAppService.EhPermitidoEditarItem(preRequisicaoMaterial);
             model.PodeAprovarItem = preRequisicaoMaterialAppService.EhPermitidoAprovarItem(preRequisicaoMaterial);
 
-            ViewBag.ListaFormatoExportacaoArquivo = new SelectList(typeof(FormatoExportacaoArquivo).ToItemListaDTO(), "Id", "Descricao", (int)FormatoExportacaoArquivo.PDF);
-            
             return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult ListaMaterial(string descricao)
-        {
-            var model = materialAppService.ListarAtivosPeloTipoTabelaPropria(descricao).Take(15);
-            return Json(model);
         }
 
         [HttpPost]
@@ -137,7 +128,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        //[HttpPost]
         public ActionResult Imprimir(int? id, FormatoExportacaoArquivo formato)
         {
             var arquivo = preRequisicaoMaterialAppService.Exportar(id, formato);
@@ -148,7 +138,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 Response.ClearHeaders();
                 return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
             }
-            //    return PartialView("Redirect", Url.Action("Cadastro", "PreRequisicaoMaterial", new { id = id }));
 
             return PartialView("_NotificationMessagesPartial");
         }

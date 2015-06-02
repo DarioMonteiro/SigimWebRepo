@@ -1,21 +1,32 @@
 ﻿@model GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel.RequisicaoMaterialCadastroViewModel
 
 @{
-    ViewBag.Title = "Pré-requisição de material";
+    ViewBag.Title = "Requisição de material";
 }
 
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
     @{
-        string disablebtnAprovarItem = string.Empty;
-        if (!Model.PodeAprovarItem)
+        string disablebtnAprovarRequisicao = string.Empty;
+        if (!Model.PodeAprovarRequisicao)
         {
-            disablebtnAprovarItem = "disabled";
+            disablebtnAprovarRequisicao = "disabled";
         }
     }
-    <button id="btnAprovarItem" type="button" class="btn btn-primary @disablebtnAprovarItem">
-        Aprovar Pré-requisição
+    <button id="btnAprovarRequisicao" type="button" class="btn btn-primary @disablebtnAprovarRequisicao">
+        Aprovar Requisição
     </button>
+    @{
+        string disablebtnCancelarAprovacao = string.Empty;
+        if (!Model.PodeCancelarAprovacao)
+        {
+            disablebtnCancelarAprovacao = "disabled";
+        }
+    }
+    <button id="btnCancelarAprovacao" type="button" class="btn btn-primary @disablebtnCancelarAprovacao">
+        Cancelar Aprovação
+    </button>
+    @Html.ActionLink("Novo", "Cadastro", new { @id = "" }, new { @class = "btn btn-primary", @style = "float:right;" })
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -28,7 +39,7 @@
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
                         "Cadastro",
-                        "PreRequisicaoMaterial",
+                        "RequisicaoMaterial",
                         null,
                         new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
                         new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
@@ -46,7 +57,7 @@
                                     @Html.LabelFor(m => m.RequisicaoMaterial.Data, new { @class = "label" })
                                     <label class="input">
                                         <i class="icon-append fa fa-calendar"></i>
-                                        @Html.TextBoxFor(m => m.RequisicaoMaterial.Data, "{0:dd/MM/yyyy}")
+                                        @Html.TextBoxFor(m => m.RequisicaoMaterial.Data, "{0:dd/MM/yyyy}", new { @class = "required" })
                                     </label>
                                     @Html.ValidationMessageFor(m => m.RequisicaoMaterial.Data, "Informe uma data válida.", new { @class = "note note-error" })
                                 </section>
@@ -79,7 +90,7 @@
                             @Html.HiddenFor(m => m.ItemId)
                             @Html.HiddenFor(m => m.Sequencial)
                             <div class="row">
-                                @Html.EditorFor(m => m.Material, "Material", new { @sectionClass = "col col-6", @required = true })
+                                @Html.EditorFor(m => m.Material, "Material", new { @sectionClass = "col col-6", @required = true, @centroCustoRequerido = true })
                                 <section class="col col-6">
                                     @Html.LabelFor(m => m.Complemento, new { @class = "label" })
                                     <label class="input">
@@ -146,6 +157,7 @@
                                             changeYear: true,
                                             onClose: function (selectedDate) {
                                                 $('#@Html.IdFor(m => m.DataMaxima)').datepicker('option', 'minDate', selectedDate);
+                                                ajustarPrazo();
                                             }
                                         });
 
@@ -156,9 +168,42 @@
                                             changeYear: true,
                                             onClose: function (selectedDate) {
                                                 $('#@Html.IdFor(m => m.DataMinima)').datepicker('option', 'maxDate', selectedDate);
+                                                ajustarPrazo();
                                             }
                                         });
+
+                                        $(document).on("change", "#@Html.IdFor(m => m.Prazo)", function () {
+                                            ajustarDataMaxima();
+                                        });
                                     });
+
+                                    function ajustarPrazo() {
+                                        if ($("#@Html.IdFor(m => m.DataMinima)").val() != "" && $("#@Html.IdFor(m => m.DataMaxima)").val() != "") {
+                                            if (isValidDate("dd/mm/yy", $("#@Html.IdFor(m => m.DataMinima)").val()) && isValidDate("dd/mm/yy", $("#@Html.IdFor(m => m.DataMaxima)").val())) {
+                                                var start = $("#@Html.IdFor(m => m.DataMinima)").datepicker('getDate');
+                                                var end = $("#@Html.IdFor(m => m.DataMaxima)").datepicker('getDate');
+                                                var days = dateDiffInDays(start, end);
+                                                if (days < 0)
+                                                    smartAlert("Erro", "@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.DataMaximaMenorQueMinima", "error");
+                                                $("#@Html.IdFor(m => m.Prazo)").val(days);
+                                            }
+                                        }
+                                    }
+
+                                    function ajustarDataMaxima() {
+                                        var format = "dd/mm/yy";
+                                        var dataMinima = $("#@Html.IdFor(m => m.DataMinima)");
+                                        var dataMaxima = $("#@Html.IdFor(m => m.DataMaxima)");
+                                        var prazo = $("#@Html.IdFor(m => m.Prazo)");
+
+                                        if (dataMinima.val() != "" && prazo.val() != "") {
+                                            if (isValidDate(format, $("#@Html.IdFor(m => m.DataMinima)").val()) && $.isNumeric($("#@Html.IdFor(m => m.Prazo)").val())) {
+                                                var data = jQuery.datepicker.parseDate(format, dataMinima.val());
+                                                data.setDate(data.getDate(format) + parseInt(prazo.val()));
+                                                dataMaxima.datepicker('setDate', data);
+                                            }
+                                        }
+                                    }
                                 </script>
                             </div>
                             <div class="row">
@@ -200,9 +245,9 @@
                                             <th>Classe de despesa</th>
                                             <th class="text-center" style="min-width: 70px;">Data mínima</th>
                                             <th class="text-center" style="min-width: 70px;">Data máxima</th>
-                                            <th>Situação</th>
+                                            <th class="text-center">Situação</th>
                                             <th class="text-right">Cotação</th>
-                                            <th>Ordem de Compra</th>
+                                            <th class="text-center">Ordem de Compra</th>
                                             <th class="text-center">Interface Orçamento</th>
                                         </tr>
                                     </thead>
@@ -216,7 +261,7 @@
                                 <section class="col col-6">
                                     @Html.LabelFor(m => m.RequisicaoMaterial.Observacao, new { @class = "label" })
                                     <label class="textarea">
-                                        @Html.TextAreaFor(m => m.RequisicaoMaterial.Observacao, new { rows = 5, style = "height:104px;" })
+                                        @Html.TextAreaFor(m => m.RequisicaoMaterial.Observacao, new { rows = 5, style = "height:176px;" })
                                     </label>
                                     @Html.ValidationMessageFor(m => m.RequisicaoMaterial.Observacao, "", new { @class = "note note-error" })
                                 </section>
@@ -233,6 +278,21 @@
                                             <label class="input">
                                                 <i class="icon-append fa fa-calendar"></i>
                                                 @Html.TextBoxFor(m => m.RequisicaoMaterial.DataCadastro, "{0:dd/MM/yyyy}", new { @readonly = "", @class = "readonly" })
+                                            </label>
+                                        </section>
+                                    </section>
+                                    <section class="col col-12" style="padding: 0; margin: 0;">
+                                        <section class="col col-6">
+                                            @Html.LabelFor(m => m.RequisicaoMaterial.LoginUsuarioAprovacao, new { @class = "label" })
+                                            <label class="input">
+                                                @Html.TextBoxFor(m => m.RequisicaoMaterial.LoginUsuarioAprovacao, new { @readonly = "", @class = "readonly" })
+                                            </label>
+                                        </section>
+                                        <section class="col col-6">
+                                            @Html.LabelFor(m => m.RequisicaoMaterial.DataAprovacao, new { @class = "label" })
+                                            <label class="input">
+                                                <i class="icon-append fa fa-calendar"></i>
+                                                @Html.TextBoxFor(m => m.RequisicaoMaterial.DataAprovacao, "{0:dd/MM/yyyy}", new { @readonly = "", @class = "readonly" })
                                             </label>
                                         </section>
                                     </section>
@@ -258,13 +318,13 @@
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                             @{
                                 string disableBtnCancelar = string.Empty;
-                                if (!Model.PodeCancelar)
+                                if (!Model.PodeCancelarRequisicao)
                                 {
                                     disableBtnCancelar = "disabled";
                                 }
                             }
                             <a data-toggle="modal" href="#MotivoCancelamento_ModalPanel" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
-                            @if (Model.PodeCancelar) {
+                            @if (Model.PodeCancelarRequisicao) {
                                 <div class="modal fade" id="MotivoCancelamento_ModalPanel" tabindex="-1" role="dialog">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -282,19 +342,19 @@
                                                 </label>
                                             </div>
                                             <div class="modal-footer">
-								                <button type="button" id="btnCancelarPreRequisicao" class="btn btn-primary">
+								                <button type="button" id="btnCancelarRequisicao" class="btn btn-primary">
 									                Ok
 								                </button>
 							                </div>
                                         </div>
                                     </div>
                                     <script type="text/javascript">
-                                        $("#btnCancelarPreRequisicao").on("click", function () {
+                                        $("#btnCancelarRequisicao").on("click", function () {
                                             var motivo = $("#@Html.IdFor(m => m.RequisicaoMaterial.MotivoCancelamento)").val();
                                             if (motivo.length != 0) {
                                                 $.ajax({
                                                     type: 'POST',
-                                                    url: '@Url.Action("Cancelar", "PreRequisicaoMaterial")',
+                                                    url: '@Url.Action("Cancelar", "RequisicaoMaterial")',
                                                     cache: false,
                                                     async: false,
                                                     contentType: 'application/json; charset=utf-8',
@@ -308,14 +368,14 @@
                                                 });
                                             }
                                             else
-                                                smartAlert("Erro", "@GIR.Sigim.Application.Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoPreRequisicao", "error");
+                                                smartAlert("Erro", "@GIR.Sigim.Application.Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoRequisicao", "error");
                                         });
                                     </script>
                                 </div>
                             }
 
                             @{
-                                var url = Url.Action("Imprimir", "PreRequisicaoMaterial") + "/" + @Html.DisplayFor(m => m.RequisicaoMaterial.Id);
+                                var url = Url.Action("Imprimir", "RequisicaoMaterial") + "/" + @Html.DisplayFor(m => m.RequisicaoMaterial.Id);
                             }
                             @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url } )
                             
@@ -349,12 +409,7 @@
 
         $('#btnAddItem').on("click", function () {
             if ($('#formItem input').valid()) {
-                if (!ehItemRepetido()) {
-                    addItem();
-                }
-                else {
-                    smartAlert("Erro", "Esse material e essa classe já foram adicionados para esse centro de custo.", "error");
-                }
+                addItem();
             }
         });
 
@@ -362,8 +417,12 @@
             cancelarItensSelecionados();
         });
 
-        $('#btnAprovarItem').on("click", function () {
-            aprovarItensSelecionados();
+        $('#btnAprovarRequisicao').on("click", function () {
+            aprovarRequisicao();
+        });
+
+        $('#btnCancelarAprovacao').on("click", function () {
+            cancelarAprovacao();
         });
 
         jQuery.validator.addMethod(
@@ -384,6 +443,18 @@
             }, ''
         );
 
+        jQuery.validator.addMethod(
+            "dataMinimaMaiorQueMaxima",
+            function (value, element, params) {
+                var start = $("#@Html.IdFor(m => m.DataMinima)").datepicker('getDate');
+                var end = $("#@Html.IdFor(m => m.DataMaxima)").datepicker('getDate');
+                var days = dateDiffInDays(start, end);
+                if (days < 0)
+                    return false;
+                return true;
+            }, ''
+        );
+
         $('#formCadastro').validate({
             rules: {
                 '@Html.NameFor(m => m.RequisicaoMaterial.Data)': {
@@ -391,8 +462,8 @@
                     date: true
                 },
                 '@Html.NameFor(m => m.RequisicaoMaterial.CentroCusto.Codigo)': {
-                    required: true,
-                    ehCentroCustoValido: true
+                    ehCentroCustoValido: true,
+                    required: true
                 },
                 '@Html.NameFor(m => m.Classe.Codigo)': {
                     required: true,
@@ -400,8 +471,14 @@
                 },
                 '@Html.NameFor(m => m.Material.Id)': "required",
                 '@Html.NameFor(m => m.Quantidade)': "decimalGreaterThanZero",
-                '@Html.NameFor(m => m.DataMinima)': "date",
-                '@Html.NameFor(m => m.DataMaxima)': "date"
+                '@Html.NameFor(m => m.DataMinima)': {
+                    date: true,
+                    dataMinimaMaiorQueMaxima: true
+                },
+                '@Html.NameFor(m => m.DataMaxima)': {
+                    date: true,
+                    dataMinimaMaiorQueMaxima: true
+                }
             },
             messages: {
                 '@Html.NameFor(m => m.RequisicaoMaterial.Data)': {
@@ -418,13 +495,15 @@
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Material")'
                 },
                 '@Html.NameFor(m => m.Quantidade)': {
-                    decimalGreaterThanZero: "A Quantidade deve ser maior que zero."
+                    decimalGreaterThanZero: 'A Quantidade deve ser maior que zero.'
                 },
                 '@Html.NameFor(m => m.DataMinima)': {
-                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida',
+                    dataMinimaMaiorQueMaxima: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.DataMaximaMenorQueMinima'
                 },
                 '@Html.NameFor(m => m.DataMaxima)': {
-                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida',
+                    dataMinimaMaiorQueMaxima: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.DataMinimaMaiorQueMaxima'
                 }
             },
             errorPlacement: function (error, element) {
@@ -457,7 +536,6 @@
                 labelClass += ' state-disabled';
             }
             row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + jsonItemArray[i].Sequencial + '" ' + chkDisabled + '><i></i>' + jsonItemArray[i].Sequencial + '</label></td>'));
-
             row.append($('<td class="text-right">' + jsonItemArray[i].Material.Id + '</td>'));
             @if (Model.PodeEditarItem)
 	        {
@@ -475,14 +553,28 @@
             row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItemArray[i].Quantidade), 4) + '</td>'));
             row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItemArray[i].QuantidadeAprovada), 4) + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].Classe.Codigo + " - " + jsonItemArray[i].Classe.Descricao + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItemArray[i].CentroCusto.Codigo + " - " + jsonItemArray[i].CentroCusto.Descricao + '</td>'));
-            row.append($('<td>' + new Date(jsonItemArray[i].DataMinima).toFormatDDMMYYYY() + '</td>'));
-            row.append($('<td>' + new Date(jsonItemArray[i].DataMaxima).toFormatDDMMYYYY() + '</td>'));
-            row.append($('<td>' + jsonItemArray[i].SituacaoDescricao + '</td>'));
-            var rmGerada = "&nbsp;";
-            if (jsonItemArray[i].ListaRequisicaoMaterialItem.length > 0)
-                rmGerada = jsonItemArray[i].ListaRequisicaoMaterialItem[0].RequisicaoMaterialId;
-            row.append($('<td class="text-center">' + rmGerada + '</td>'));
+
+            if (jsonItemArray[i].DataMinima != null)
+                row.append($('<td>' + new Date(jsonItemArray[i].DataMinima).toFormatDDMMYYYY() + '</td>'));
+            else
+                row.append($('<td>&nbsp;</td>'));
+
+            if (jsonItemArray[i].DataMaxima != null)
+                row.append($('<td>' + new Date(jsonItemArray[i].DataMaxima).toFormatDDMMYYYY() + '</td>'));
+            else
+                row.append($('<td>&nbsp;</td>'));
+            
+            row.append($('<td class="text-center">' + jsonItemArray[i].SituacaoDescricao + '</td>'));
+            if (jsonItemArray[i].UltimaCotacao != null)
+                row.append($('<td class="text-center">' + jsonItemArray[i].UltimaCotacao + '</td>'));
+            else
+                row.append($('<td>&nbsp;</td>'));
+            
+            if (jsonItemArray[i].UltimaOrdemCompra != null)
+                row.append($('<td class="text-center">' + jsonItemArray[i].UltimaOrdemCompra + '</td>'));
+            else
+                row.append($('<td>&nbsp;</td>'));
+            row.append($('<td class="text-center">' + jsonItemArray[i].TemInterfaceOrcamentoDescricao + '</td>'));
         }
     }
 
@@ -511,8 +603,6 @@
             var item = arr[0];
             $("#@Html.IdFor(m => m.ItemId)").val(item.Id);
             $("#@Html.IdFor(m => m.Sequencial)").val(item.Sequencial);
-            $("#@Html.IdFor(m => m.RequisicaoMaterial.CentroCusto.Codigo)").val(item.CentroCusto.Codigo);
-            $("#@Html.IdFor(m => m.RequisicaoMaterial.CentroCusto.Descricao)").val(item.CentroCusto.Descricao);
             $("#@Html.IdFor(m => m.Classe.Codigo)").val(item.Classe.Codigo);
             $("#@Html.IdFor(m => m.Classe.Descricao)").val(item.Classe.Descricao);
             $("#@Html.IdFor(m => m.Material.Id)").val(item.Material.Id);
@@ -538,6 +628,7 @@
 
         item["Situacao"] = 0;
         item["SituacaoDescricao"] = "Requisitado";
+        item["TemInterfaceOrcamentoDescricao"] = "Não";
         item["ListaRequisicaoMaterialItem"] = [];
 
         var index = -1;
@@ -557,7 +648,6 @@
         fillTable();
         $("#@Html.IdFor(m => m.ItemId)").val('');
         $("#@Html.IdFor(m => m.Sequencial)").val('');
-        limpaCentroCusto();
     }
 
     function cancelarItensSelecionados() {
@@ -584,60 +674,36 @@
             smartAlert("Erro", "Selecione pelo menos 1 item para cancelamento.", "error");
     }
 
-    function aprovarItensSelecionados() {
-        var itemInvalidoSelecionado = false;
-        var arrSequencial = [];
-        var arrItemId = [];
-        $('#tableItens input[type=checkbox]:checked').each(function () {
-            arrSequencial.push(parseInt($(this).val()));
+    function aprovarRequisicao() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Aprovar", "RequisicaoMaterial")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: '@Model.RequisicaoMaterial.Id'
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
         });
-
-        if (arrSequencial.length > 0) {
-            $.SmartMessageBox({
-                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a aprovação dos itens selecionados?",
-                content: "Esta ação não poderá ser revertida.",
-                buttons: '[Não][Sim]'
-            }, function (ButtonPressed) {
-                if (ButtonPressed === "Sim") {
-
-                    $.each(jsonItemArray, function (i, obj) {
-                        if (jQuery.inArray(obj.Sequencial, arrSequencial) > -1) {
-                            if (obj.Id == '') {
-                                smartAlert("Erro", "O item " + obj.Sequencial + " ainda não foi salvo na pré requisição.", "error");
-                                itemInvalidoSelecionado = true;
-                            }
-                            else {
-                                arrItemId.push(parseInt(obj.Id));
-                            }
-                        }
-                    });
-
-                    if (!itemInvalidoSelecionado) {
-                        $.ajax({
-                            type: 'POST',
-                            url: '@Url.Action("Aprovar", "PreRequisicaoMaterial")',
-                            cache: false,
-                            async: false,
-                            contentType: 'application/json; charset=utf-8',
-                            data: JSON.stringify({
-                                itens: arrItemId,
-                                id: '@Model.RequisicaoMaterial.Id'
-                            })
-                        })
-                        .success(function (result) {
-                            $('#notificationMessages').html(result);
-                        })
-                    }
-                }
-            });
-        }
-        else
-            smartAlert("Erro", "Selecione pelo menos 1 item para aprovação.", "error");
     }
 
-    function limpaCentroCusto() {
-        $("#@Html.IdFor(m => m.RequisicaoMaterial.CentroCusto.Codigo)").val("");
-        $("#@Html.IdFor(m => m.RequisicaoMaterial.CentroCusto.Descricao)").val("");
+    function cancelarAprovacao() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CancelarAprovacao", "RequisicaoMaterial")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: '@Model.RequisicaoMaterial.Id'
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
+        });
     }
 
     function processData(node) {

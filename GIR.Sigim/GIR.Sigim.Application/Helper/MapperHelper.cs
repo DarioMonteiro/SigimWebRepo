@@ -64,8 +64,20 @@ namespace GIR.Sigim.Application.Helper
             #endregion
 
             #region Ordem de Compra
+            Mapper.CreateMap<Cotacao, CotacaoDTO>();
+            Mapper.CreateMap<CotacaoDTO, Cotacao>();
+
+            Mapper.CreateMap<CotacaoItem, CotacaoItemDTO>();
+            Mapper.CreateMap<CotacaoItemDTO, CotacaoItem>();
+
             Mapper.CreateMap<InterfaceCotacao, InterfaceCotacaoDTO>();
             Mapper.CreateMap<InterfaceCotacaoDTO, InterfaceCotacao>();
+
+            Mapper.CreateMap<OrdemCompra, OrdemCompraDTO>();
+            Mapper.CreateMap<OrdemCompraDTO, OrdemCompra>();
+
+            Mapper.CreateMap<OrdemCompraItem, OrdemCompraItemDTO>();
+            Mapper.CreateMap<OrdemCompraItemDTO, OrdemCompraItem>();
 
             Mapper.CreateMap<ParametrosOrdemCompra, ParametrosOrdemCompraDTO>();
             Mapper.CreateMap<ParametrosOrdemCompraDTO, ParametrosOrdemCompra>()
@@ -77,10 +89,11 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<PreRequisicaoMaterial, PreRequisicaoMaterialDTO>()
                 .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()))
-                .ForMember(d => d.RMGeradas,m => m.MapFrom(s => string.Join(", ", s.ListaItens.SelectMany(l => l.ListaRequisicaoMaterialItem.Select(c => c.RequisicaoMaterialId.ToString())).Distinct().OrderBy(o => o))));
+                .ForMember(d => d.RMGeradas, m => m.MapFrom(s => string.Join(", ", s.ListaItens.SelectMany(l => l.ListaRequisicaoMaterialItem.Where(r => r.RequisicaoMaterial.Situacao != SituacaoRequisicaoMaterial.Cancelada).Select(c => c.RequisicaoMaterialId.ToString())).Distinct().OrderBy(o => o))));
             Mapper.CreateMap<PreRequisicaoMaterialDTO, PreRequisicaoMaterial>();
 
-            Mapper.CreateMap<PreRequisicaoMaterialItem, PreRequisicaoMaterialItemDTO>();
+            Mapper.CreateMap<PreRequisicaoMaterialItem, PreRequisicaoMaterialItemDTO>()
+                .ForMember(d => d.ListaRequisicaoMaterialItem, m => m.MapFrom(s => s.ListaRequisicaoMaterialItem.Where(l => l.RequisicaoMaterial.Situacao != SituacaoRequisicaoMaterial.Cancelada)));
             Mapper.CreateMap<PreRequisicaoMaterialItemDTO, PreRequisicaoMaterialItem>()
                 .ForMember(d => d.CentroCusto, m => m.UseValue(null))
                 .ForMember(d => d.CodigoCentroCusto, m => m.MapFrom(s => s.CentroCusto.Codigo))
@@ -93,8 +106,16 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()));
             Mapper.CreateMap<RequisicaoMaterialDTO, RequisicaoMaterial>();
 
-            Mapper.CreateMap<RequisicaoMaterialItem, RequisicaoMaterialItemDTO>();
-            Mapper.CreateMap<RequisicaoMaterialItemDTO, RequisicaoMaterialItem>();
+            Mapper.CreateMap<RequisicaoMaterialItem, RequisicaoMaterialItemDTO>()
+                .ForMember(d => d.UltimaCotacao, m => m.MapFrom(s => s.ListaCotacaoItem.Where(l => l.Cotacao.Situacao != SituacaoCotacao.Cancelada).Max(c => c.CotacaoId)))
+                .ForMember(d => d.UltimaOrdemCompra, m => m.MapFrom(s => s.ListaOrdemCompraItem.Where(l => l.OrdemCompra.Situacao != SituacaoOrdemCompra.Cancelada).Max(c => c.OrdemCompraId)))
+                .ForMember(d => d.TemInterfaceOrcamento, m => m.MapFrom(s => s.ListaOrcamentoInsumoRequisitado.Any()));
+            Mapper.CreateMap<RequisicaoMaterialItemDTO, RequisicaoMaterialItem>()
+                .ForMember(d => d.Classe, m => m.UseValue(null))
+                .ForMember(d => d.CodigoClasse, m => m.MapFrom(s => s.Classe.Codigo))
+                .ForMember(d => d.UnidadeMedida, m => m.MapFrom(s => s.Material.SiglaUnidadeMedida))
+                .ForMember(d => d.Material, m => m.UseValue(null))
+                .ForMember(d => d.MaterialId, m => m.MapFrom(s => s.Material.Id));
             #endregion
 
             #region Sigim

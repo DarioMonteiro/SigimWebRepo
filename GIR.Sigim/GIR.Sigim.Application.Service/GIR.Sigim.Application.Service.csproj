@@ -71,6 +71,8 @@
     <Compile Include="Sigim\BancoLayoutAppService.cs" />
     <Compile Include="Sigim\ClienteFornecedorAppService.cs" />
     <Compile Include="Sigim\AssuntoContatoAppService.cs" />
+    <Compile Include="Sigim\LogOperacaoAppService.cs" />
+    <Compile Include="Sigim\UnidadeMedidaAppService.cs" />
     <Compile Include="Sigim\MaterialAppService.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -54,9 +54,17 @@
     <Compile Include="Entity\Orcamento\Orcamento.cs" />
     <Compile Include="Entity\Orcamento\Obra.cs" />
     <Compile Include="Entity\Orcamento\OrcamentoComposicao.cs" />
+    <Compile Include="Entity\Orcamento\OrcamentoComposicaoItem.cs" />
+    <Compile Include="Entity\Orcamento\OrcamentoInsumoRequisitado.cs" />
     <Compile Include="Entity\Orcamento\ParametrosOrcamento.cs" />
     <Compile Include="Entity\OrdemCompra\AbstractRequisicaoMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\AbstractRequisicaoMaterialItem.cs" />
+    <Compile Include="Entity\OrdemCompra\SituacaoOrdemCompra.cs" />
+    <Compile Include="Entity\OrdemCompra\OrdemCompraItem.cs" />
+    <Compile Include="Entity\OrdemCompra\OrdemCompra.cs" />
+    <Compile Include="Entity\OrdemCompra\CotacaoItem.cs" />
+    <Compile Include="Entity\OrdemCompra\Cotacao.cs" />
+    <Compile Include="Entity\OrdemCompra\SituacaoCotacao.cs" />
     <Compile Include="Entity\OrdemCompra\SituacaoRequisicaoMaterialItem.cs" />
     <Compile Include="Entity\OrdemCompra\SituacaoRequisicaoMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\RequisicaoMaterialItem.cs" />
@@ -73,6 +81,7 @@
     <Compile Include="Entity\Sigim\BancoLayout.cs" />
     <Compile Include="Entity\Sigim\ClienteFornecedor.cs" />
     <Compile Include="Entity\Sigim\Composicao.cs" />
+    <Compile Include="Entity\Sigim\LogOperacao.cs" />
     <Compile Include="Entity\Sigim\TipoTabela.cs" />
     <Compile Include="Entity\Sigim\NCM.cs" />
     <Compile Include="Entity\Sigim\Material.cs" />
@@ -97,6 +106,8 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\ILogOperacaoRepository.cs" />
+    <Compile Include="Repository\Sigim\IUnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sigim\IMaterialRepository.cs" />
     <Compile Include="Repository\Sigim\IBancoLayoutRepository.cs" />
     <Compile Include="Repository\Sigim\IAssuntoContatoRepository.cs" />

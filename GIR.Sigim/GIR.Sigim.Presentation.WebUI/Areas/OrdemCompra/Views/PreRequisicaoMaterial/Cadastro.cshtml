@@ -16,6 +16,7 @@
     <button id="btnAprovarItem" type="button" class="btn btn-primary @disablebtnAprovarItem">
         Aprovar Pré-requisição
     </button>
+    @Html.ActionLink("Novo", "Cadastro", new { @id = "" }, new { @class = "btn btn-primary", @style = "float:right;" })
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -46,7 +47,7 @@
                                     @Html.LabelFor(m => m.PreRequisicaoMaterial.Data, new { @class = "label" })
                                     <label class="input">
                                         <i class="icon-append fa fa-calendar"></i>
-                                        @Html.TextBoxFor(m => m.PreRequisicaoMaterial.Data, "{0:dd/MM/yyyy}")
+                                        @Html.TextBoxFor(m => m.PreRequisicaoMaterial.Data, "{0:dd/MM/yyyy}", new { @class = "required" })
                                     </label>
                                     @Html.ValidationMessageFor(m => m.PreRequisicaoMaterial.Data, "Informe uma data válida.", new { @class = "note note-error" })
                                 </section>
@@ -144,6 +145,7 @@
                                             changeYear: true,
                                             onClose: function (selectedDate) {
                                                 $('#@Html.IdFor(m => m.DataMaxima)').datepicker('option', 'minDate', selectedDate);
+                                                ajustarPrazo();
                                             }
                                         });
 
@@ -154,9 +156,42 @@
                                             changeYear: true,
                                             onClose: function (selectedDate) {
                                                 $('#@Html.IdFor(m => m.DataMinima)').datepicker('option', 'maxDate', selectedDate);
+                                                ajustarPrazo();
                                             }
                                         });
+
+                                        $(document).on("change", "#@Html.IdFor(m => m.Prazo)", function () {
+                                            ajustarDataMaxima();
+                                        });
                                     });
+
+                                    function ajustarPrazo() {
+                                        if ($("#@Html.IdFor(m => m.DataMinima)").val() != "" && $("#@Html.IdFor(m => m.DataMaxima)").val() != "") {
+                                            if (isValidDate("dd/mm/yy", $("#@Html.IdFor(m => m.DataMinima)").val()) && isValidDate("dd/mm/yy", $("#@Html.IdFor(m => m.DataMaxima)").val())) {
+                                                var start = $("#@Html.IdFor(m => m.DataMinima)").datepicker('getDate');
+                                                var end = $("#@Html.IdFor(m => m.DataMaxima)").datepicker('getDate');
+                                                var days = dateDiffInDays(start, end);
+                                                if (days < 0)
+                                                    smartAlert("Erro", "@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.DataMaximaMenorQueMinima", "error");
+                                                $("#@Html.IdFor(m => m.Prazo)").val(days);
+                                            }
+                                        }
+                                    }
+
+                                    function ajustarDataMaxima() {
+                                        var format = "dd/mm/yy";
+                                        var dataMinima = $("#@Html.IdFor(m => m.DataMinima)");
+                                        var dataMaxima = $("#@Html.IdFor(m => m.DataMaxima)");
+                                        var prazo = $("#@Html.IdFor(m => m.Prazo)");
+
+                                        if (dataMinima.val() != "" && prazo.val() != "") {
+                                            if (isValidDate(format, $("#@Html.IdFor(m => m.DataMinima)").val()) && $.isNumeric($("#@Html.IdFor(m => m.Prazo)").val())) {
+                                                var data = jQuery.datepicker.parseDate(format, dataMinima.val());
+                                                data.setDate(data.getDate(format) + parseInt(prazo.val()));
+                                                dataMaxima.datepicker('setDate', data);
+                                            }
+                                        }
+                                    }
                                 </script>
                             </div>
                             <div class="row">
@@ -381,6 +416,18 @@
             }, ''
         );
 
+        jQuery.validator.addMethod(
+            "dataMinimaMaiorQueMaxima",
+            function (value, element, params) {
+                var start = $("#@Html.IdFor(m => m.DataMinima)").datepicker('getDate');
+                var end = $("#@Html.IdFor(m => m.DataMaxima)").datepicker('getDate');
+                var days = dateDiffInDays(start, end);
+                if (days < 0)
+                    return false;
+                return true;
+            }, ''
+        );
+
         $('#formCadastro').validate({
             rules: {
                 '@Html.NameFor(m => m.PreRequisicaoMaterial.Data)': {
@@ -397,8 +444,14 @@
                 },
                 '@Html.NameFor(m => m.Material.Id)': "required",
                 '@Html.NameFor(m => m.Quantidade)': "decimalGreaterThanZero",
-                '@Html.NameFor(m => m.DataMinima)': "date",
-                '@Html.NameFor(m => m.DataMaxima)': "date"
+                '@Html.NameFor(m => m.DataMinima)': {
+                    date: true,
+                    dataMinimaMaiorQueMaxima: true
+                },
+                '@Html.NameFor(m => m.DataMaxima)': {
+                    date: true,
+                    dataMinimaMaiorQueMaxima: true
+                }
             },
             messages: {
                 '@Html.NameFor(m => m.PreRequisicaoMaterial.Data)': {
@@ -418,10 +471,12 @@
                     decimalGreaterThanZero: "A Quantidade deve ser maior que zero."
                 },
                 '@Html.NameFor(m => m.DataMinima)': {
-                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida',
+                    dataMinimaMaiorQueMaxima: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.DataMaximaMenorQueMinima'
                 },
                 '@Html.NameFor(m => m.DataMaxima)': {
-                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida',
+                    dataMinimaMaiorQueMaxima: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.DataMinimaMaiorQueMaxima'
                 }
             },
             errorPlacement: function (error, element) {
@@ -473,8 +528,17 @@
             row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItemArray[i].QuantidadeAprovada), 4) + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].Classe.Codigo + " - " + jsonItemArray[i].Classe.Descricao + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].CentroCusto.Codigo + " - " + jsonItemArray[i].CentroCusto.Descricao + '</td>'));
-            row.append($('<td>' + new Date(jsonItemArray[i].DataMinima).toFormatDDMMYYYY() + '</td>'));
-            row.append($('<td>' + new Date(jsonItemArray[i].DataMaxima).toFormatDDMMYYYY() + '</td>'));
+
+            if (jsonItemArray[i].DataMinima != null)
+                row.append($('<td>' + new Date(jsonItemArray[i].DataMinima).toFormatDDMMYYYY() + '</td>'));
+            else
+                row.append($('<td>&nbsp;</td>'));
+
+            if (jsonItemArray[i].DataMaxima != null)
+                row.append($('<td>' + new Date(jsonItemArray[i].DataMaxima).toFormatDDMMYYYY() + '</td>'));
+            else
+                row.append($('<td>&nbsp;</td>'));
+
             row.append($('<td>' + jsonItemArray[i].SituacaoDescricao + '</td>'));
             var rmGerada = "&nbsp;";
             if (jsonItemArray[i].ListaRequisicaoMaterialItem.length > 0)

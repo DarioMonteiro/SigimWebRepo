@@ -53,12 +53,18 @@
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ParametrosUsuarioFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoCompromissoConfiguration.cs" />
+    <Compile Include="Configuration\Orcamento\OrcamentoComposicaoItemConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoComposicaoConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\ObraConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\ParametrosOrcamentoConfiguration.cs" />
+    <Compile Include="Configuration\Orcamento\OrcamentoInsumoRequisitadoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialItemConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\OrdemCompraItemConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\OrdemCompraConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\CotacaoConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\CotacaoItemConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\RequisicaoMaterialItemConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\RequisicaoMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\PreRequisicaoMaterialItemConfiguration.cs" />
@@ -69,6 +75,7 @@
     <Compile Include="Configuration\Sigim\AssuntoContatoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ClienteFornecedorConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ComposicaoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\LogOperacaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\UnidadeMedidaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\SituacaoMercadoriaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\NCMConfiguration.cs" />
@@ -99,6 +106,8 @@
     <Compile Include="Repository\Sigim\ClienteFornecedorRepository.cs" />
     <Compile Include="Repository\Sigim\AssuntoContatoRepository.cs" />
     <Compile Include="Repository\Sigim\BancoLayoutRepository.cs" />
+    <Compile Include="Repository\Sigim\LogOperacaoRepository.cs" />
+    <Compile Include="Repository\Sigim\UnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sigim\MaterialRepository.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>

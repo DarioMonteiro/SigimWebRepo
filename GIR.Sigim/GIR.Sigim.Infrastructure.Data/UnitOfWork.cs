@@ -113,10 +113,16 @@ namespace GIR.Sigim.Infrastructure.Data
             //Orcamento
             modelBuilder.Configurations.Add(new ObraConfiguration());
             modelBuilder.Configurations.Add(new OrcamentoComposicaoConfiguration());
+            modelBuilder.Configurations.Add(new OrcamentoComposicaoItemConfiguration());
             modelBuilder.Configurations.Add(new OrcamentoConfiguration());
+            modelBuilder.Configurations.Add(new OrcamentoInsumoRequisitadoConfiguration());
             modelBuilder.Configurations.Add(new ParametrosOrcamentoConfiguration());
 
             //OrdemCompra
+            modelBuilder.Configurations.Add(new CotacaoConfiguration());
+            modelBuilder.Configurations.Add(new CotacaoItemConfiguration());
+            modelBuilder.Configurations.Add(new OrdemCompraConfiguration());
+            modelBuilder.Configurations.Add(new OrdemCompraItemConfiguration());
             modelBuilder.Configurations.Add(new ParametrosOrdemCompraConfiguration());
             modelBuilder.Configurations.Add(new ParametrosUsuarioConfiguration());
             modelBuilder.Configurations.Add(new PreRequisicaoMaterialConfiguration());
@@ -130,6 +136,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new BancoLayoutConfiguration());
             modelBuilder.Configurations.Add(new ClienteFornecedorConfiguration());
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());
+            modelBuilder.Configurations.Add(new LogOperacaoConfiguration());
             modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
             modelBuilder.Configurations.Add(new MaterialConfiguration());
             modelBuilder.Configurations.Add(new NCMConfiguration());

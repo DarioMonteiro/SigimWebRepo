@@ -66,6 +66,10 @@
     <Compile Include="DTO\Orcamento\ParametrosOrcamentoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\OrdemCompraDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\OrdemCompraItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\CotacaoDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\CotacaoItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\RequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialDTO.cs" />
@@ -87,12 +91,25 @@
     <Compile Include="Filtros\OrdemCompras\RequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\PaginationParameters.cs" />
+    <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />
     <Compile Include="Helper\MapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\OrdemCompra\relPreRequisicaoMaterial.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relPreRequisicaoMaterial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\OrdemCompra\relRequisicaoMaterial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relRequisicaoMaterial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\OrdemCompra\relRequisicaoMaterialItem.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relRequisicaoMaterialItem.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Resource\Admin\ErrorMessages.Designer.cs">
@@ -148,6 +165,8 @@
     <Compile Include="Service\OrdemCompra\IPreRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosOrdemCompraAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosUsuarioAppService.cs" />
+    <Compile Include="Service\Sigim\ILogOperacaoAppService.cs" />
+    <Compile Include="Service\Sigim\IUnidadeMedidaAppService.cs" />
     <Compile Include="Service\Sigim\IMaterialAppService.cs" />
     <Compile Include="Service\Sigim\IAssuntoContatoAppService.cs" />
     <Compile Include="Service\Sigim\IBancoLayoutAppService.cs" />
@@ -173,6 +192,14 @@
     <EmbeddedResource Include="Reports\OrdemCompra\relPreRequisicaoMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relPreRequisicaoMaterial.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OrdemCompra\relRequisicaoMaterial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relRequisicaoMaterial.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OrdemCompra\relRequisicaoMaterialItem.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relRequisicaoMaterialItem.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource\Admin\ErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

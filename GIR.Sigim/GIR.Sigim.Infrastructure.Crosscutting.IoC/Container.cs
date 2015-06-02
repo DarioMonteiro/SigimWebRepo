@@ -98,7 +98,9 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IAssuntoContatoRepository, AssuntoContatoRepository>();
             currentContainer.RegisterType<IBancoLayoutRepository, BancoLayoutRepository>();
             currentContainer.RegisterType<IClienteFornecedorRepository, ClienteFornecedorRepository>();
+            currentContainer.RegisterType<ILogOperacaoRepository, LogOperacaoRepository>();
             currentContainer.RegisterType<IMaterialRepository, MaterialRepository>();
+            currentContainer.RegisterType<IUnidadeMedidaRepository, UnidadeMedidaRepository>();
             #endregion
 
             #endregion
@@ -142,7 +144,9 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IAssuntoContatoAppService, AssuntoContatoAppService>();
             currentContainer.RegisterType<IBancoLayoutAppService, BancoLayoutAppService>();
             currentContainer.RegisterType<IClienteFornecedorAppService, ClienteFornecedorAppService>();
+            currentContainer.RegisterType<ILogOperacaoAppService, LogOperacaoAppService>();
             currentContainer.RegisterType<IMaterialAppService, MaterialAppService>();
+            currentContainer.RegisterType<IUnidadeMedidaAppService, UnidadeMedidaAppService>();
             #endregion
 
             #endregion

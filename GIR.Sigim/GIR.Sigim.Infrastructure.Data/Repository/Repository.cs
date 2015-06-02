@@ -141,6 +141,11 @@ namespace GIR.Sigim.Infrastructure.Data.Repository
             throw new NotImplementedException();
         }
 
+        public virtual IEnumerable<TEntity> ListarPeloFiltroComPaginacao(Expression<Func<TEntity, bool>> filtro, int pageIndex, int pageCount, string orderBy, bool ascending, out int totalRecords, params Expression<Func<TEntity, object>>[] includes)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region IDisposable Members

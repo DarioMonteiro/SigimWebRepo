@@ -61,6 +61,15 @@ namespace GIR.Sigim.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O preenchimento do campo {0} é obrigatório..
+        /// </summary>
+        public static string CampoObrigatorio {
+            get {
+                return ResourceManager.GetString("CampoObrigatorio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Senha do e-mail é obrigatória..
         /// </summary>
         public static string SenhaDoEmailObrigatoria {

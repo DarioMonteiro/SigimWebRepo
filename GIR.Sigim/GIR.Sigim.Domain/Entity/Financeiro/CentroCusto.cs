@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 
@@ -27,10 +28,11 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public virtual ICollection<CentroCusto> ListaFilhos { get; set; }
         public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
         public ICollection<ParametrosUsuario> ListaParametrosUsuario { get; set; }
-        public ICollection<UsuarioCentroCusto> ListaUsuarioCentroCusto { get; set; }
+        public virtual ICollection<UsuarioCentroCusto> ListaUsuarioCentroCusto { get; set; }
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterial> ListaRequisicaoMaterial { get; set; }
         public ICollection<Orcamento.Obra> ListaObra { get; set; }
+        public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
 
         public CentroCusto()
         {
@@ -41,6 +43,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaPreRequisicaoMaterialItem = new HashSet<PreRequisicaoMaterialItem>();
             this.ListaRequisicaoMaterial = new HashSet<RequisicaoMaterial>();
             this.ListaObra = new HashSet<Orcamento.Obra>();
+            this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)
