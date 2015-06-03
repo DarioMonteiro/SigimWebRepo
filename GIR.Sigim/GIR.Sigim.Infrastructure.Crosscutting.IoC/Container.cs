@@ -10,12 +10,14 @@ using GIR.Sigim.Application.Service.Financeiro;
 using GIR.Sigim.Application.Service.Orcamento;
 using GIR.Sigim.Application.Service.OrdemCompra;
 using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Application.Service.Sac;
 using GIR.Sigim.Domain.Repository.Admin;
 using GIR.Sigim.Domain.Repository.Contrato;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Domain.Repository.Orcamento;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
 using GIR.Sigim.Domain.Repository.Sigim;
+using GIR.Sigim.Domain.Repository.Sac;
 using GIR.Sigim.Infrastructure.Crosscutting.Adapter;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
@@ -27,6 +29,7 @@ using GIR.Sigim.Infrastructure.Data.Repository.Financeiro;
 using GIR.Sigim.Infrastructure.Data.Repository.Orcamento;
 using GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra;
 using GIR.Sigim.Infrastructure.Data.Repository.Sigim;
+using GIR.Sigim.Infrastructure.Data.Repository.Sac;
 using Microsoft.Practices.Unity;
 
 namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
@@ -115,6 +118,10 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ICodigoContribuicaoRepository, CodigoContribuicaoRepository>();
             #endregion
 
+            #region Sac
+            currentContainer.RegisterType<IParametrosSacRepository, ParametrosSacRepository>();
+            #endregion
+
             #endregion
 
             #region Adapters
@@ -172,6 +179,10 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ISerieNFAppService, SerieNFAppService>();
             currentContainer.RegisterType<ICSTAppService, CSTAppService>();
             currentContainer.RegisterType<ICodigoContribuicaoAppService, CodigoContribuicaoAppService>();
+            #endregion
+
+            #region Sac
+            currentContainer.RegisterType<IParametrosSacAppService, ParametrosSacAppService>();
             #endregion
 
             #endregion

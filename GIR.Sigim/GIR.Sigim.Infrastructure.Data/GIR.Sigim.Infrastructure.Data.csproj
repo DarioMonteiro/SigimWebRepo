@@ -128,6 +128,7 @@
     <Compile Include="Repository\OrdemCompra\ParametrosUsuarioRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Repository\Admin\UsuarioRepository.cs" />
+    <Compile Include="Repository\Sac\ParametrosSacRepository.cs" />
     <Compile Include="Repository\Sigim\BloqueioContabilRepository.cs" />
     <Compile Include="Repository\Sigim\CifFobRepository.cs" />
     <Compile Include="Repository\Sigim\ClienteFornecedorRepository.cs" />

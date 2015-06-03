@@ -157,6 +157,7 @@ namespace GIR.Sigim.Infrastructure.Data
             //Sac
             modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
             
+            
             modelBuilder.Configurations.Add(new TipoCompraConfiguration());
             modelBuilder.Configurations.Add(new CifFobConfiguration());
             modelBuilder.Configurations.Add(new NaturezaOperacaoConfiguration());
