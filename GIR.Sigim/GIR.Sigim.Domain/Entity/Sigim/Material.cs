@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Admin;
+using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
@@ -43,11 +44,17 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         }
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterialItem> ListaRequisicaoMaterialItem { get; set; }
+        public ICollection<OrdemCompraItem> ListaOrdemCompraItem { get; set; }
+        public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
+        public ICollection<OrcamentoComposicaoItem> ListaOrcamentoComposicaoItem { get; set; }
 
         public Material()
         {
             this.ListaPreRequisicaoMaterialItem = new HashSet<PreRequisicaoMaterialItem>();
             this.ListaRequisicaoMaterialItem = new HashSet<RequisicaoMaterialItem>();
+            this.ListaOrdemCompraItem = new HashSet<OrdemCompraItem>();
+            this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
+            this.ListaOrcamentoComposicaoItem = new HashSet<OrcamentoComposicaoItem>();
         }
     }
 }

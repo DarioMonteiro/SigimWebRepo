@@ -88,6 +88,24 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A data máxima não pode ser menor que a data mínima..
+        /// </summary>
+        public static string DataMaximaMenorQueMinima {
+            get {
+                return ResourceManager.GetString("DataMaximaMenorQueMinima", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A data mínima não pode ser maior que a data máxima..
+        /// </summary>
+        public static string DataMinimaMaiorQueMaxima {
+            get {
+                return ResourceManager.GetString("DataMinimaMaiorQueMaxima", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Por favor insira um endereço de email válido..
         /// </summary>
         public static string EmailInvalido {
@@ -147,6 +165,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         public static string RegistroEmUso {
             get {
                 return ResourceManager.GetString("RegistroEmUso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O registro [{0}] está protegido..
+        /// </summary>
+        public static string RegistroProtegido {
+            get {
+                return ResourceManager.GetString("RegistroProtegido", resourceCulture);
             }
         }
         

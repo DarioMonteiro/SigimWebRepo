@@ -20,5 +20,11 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
         public decimal? Preco { get; set; }
         public bool? EhSincronizada { get; set; }
         public string EspecificacaoTecnica { get; set; }
+        public ICollection<OrcamentoComposicaoItem> ListaOrcamentoComposicaoItem { get; set; }
+
+        public OrcamentoComposicao()
+        {
+            this.ListaOrcamentoComposicaoItem = new HashSet<OrcamentoComposicaoItem>();
+        }
     }
 }

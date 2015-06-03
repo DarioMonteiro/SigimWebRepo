@@ -10,7 +10,23 @@ $(function () {
             location = '/Account/Login';
         }
     });
+
+    $(document).ajaxStart(function () {
+        showLoading();
 });
+
+    $(document).ajaxStop(function () {
+        hideLoading();
+    });
+});
+
+function showLoading() {
+    $("#generalLoading").show();
+}
+
+function hideLoading() {
+    $("#generalLoading").hide();
+}
 
 $(document).ready(function () {
     $('input, select').not('input[type=button], input[type=hidden], .lastField').on("keypress", function (e) {
@@ -101,7 +117,7 @@ $(document).ready(function () {
 
     $("input.decimal-5-casas").on("focusout", function () {
         $(this).val(roundDecimal($(this).val(), 5));
-    });
+});
 
     $("input.decimal-7-casas").on("focusout", function () {
         $(this).val(roundDecimal($(this).val(), 7));
@@ -277,7 +293,20 @@ $('.numeric').on('input', function (event) {
     this.value = this.value.replace(/[^0-9]/g, '');
 });
 
-function goToTop()
-{
-    $('html, body').animate({ scrollTop: 0 }, 'slow');
+function dateDiffInDays(start, end) {
+    var days = (end - start) / 1000 / 60 / 60 / 24;
+    return days;
+}
+
+function isValidDate(format, value) {
+    var isValid = true;
+
+    try {
+        jQuery.datepicker.parseDate(format, value);
+    }
+    catch (error) {
+        isValid = false;
+    }
+
+    return isValid;
 }

@@ -10,6 +10,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
 {
     public class PreRequisicaoMaterialItem : AbstractRequisicaoMaterialItem
     {
+        public virtual Material Material { get; set; }
         public int? PreRequisicaoMaterialId { get; set; }
         public PreRequisicaoMaterial PreRequisicaoMaterial { get; set; }
         public string CodigoCentroCusto { get; set; }

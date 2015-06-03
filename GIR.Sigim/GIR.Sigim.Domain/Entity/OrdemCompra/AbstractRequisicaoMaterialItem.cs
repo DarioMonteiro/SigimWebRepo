@@ -11,7 +11,6 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
     public abstract class AbstractRequisicaoMaterialItem : BaseEntity
     {
         public int? MaterialId { get; set; }
-        public virtual Material Material { get; set; }
         public string CodigoClasse { get; set; }
         public virtual Classe Classe { get; set; }
         public int Sequencial { get; set; }

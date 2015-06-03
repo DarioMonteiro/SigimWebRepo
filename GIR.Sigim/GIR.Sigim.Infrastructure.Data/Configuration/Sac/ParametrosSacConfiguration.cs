@@ -45,9 +45,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sac
                 .HasColumnName("prazoConclusao")
                 .HasColumnOrder(10);
 
-            Property(l => l.HabilitaSSL)
-                .HasColumnName("habilitaSSL")
-                .HasColumnOrder(17);
+            //Property(l => l.HabilitaSSL)
+            //    .HasColumnName("habilitaSSL")
+            //    .HasColumnOrder(17);
         }
     }
 }
