@@ -134,6 +134,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             CarregarCombosMedicao(model);
  
             model.PodeSalvar = false;
+            model.PodeCancelar = false;
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
             if (parametros != null)

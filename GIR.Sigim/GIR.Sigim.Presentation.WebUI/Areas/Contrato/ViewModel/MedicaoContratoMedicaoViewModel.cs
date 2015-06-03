@@ -56,6 +56,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public bool EhSituacaoLiberado { get; set; }
 
         public bool PodeSalvar { get; set; }
+        public bool PodeCancelar { get; set; }
 
         [Display(Name = "Preço unitário")]
         public decimal PrecoUnitario { get; set; }

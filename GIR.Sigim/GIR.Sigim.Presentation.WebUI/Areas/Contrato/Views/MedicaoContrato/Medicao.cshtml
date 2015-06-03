@@ -551,6 +551,17 @@
                             <button id="btnSalvar" type="submit" class="btn btn-primary right @disableBtnSalvar">
                                 Salvar
                             </button>
+                            @{
+                                string disableBtnCancelar = string.Empty;
+                                if (!Model.PodeCancelar)
+                                {
+                                    disableBtnCancelar = "disabled";
+                                }
+                            }
+                            <button id="btnCancelar" type="submit" class="btn btn-danger @disableBtnCancelar">
+                                Cancelar
+                            </button>
+
                         </footer>                        
                     }
                 </div>
@@ -1143,16 +1154,23 @@
                 $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val(true);
                 $("#@Html.IdFor(m => m.PodeSalvar)").val(true);
                 document.getElementById('btnSalvar').className = "btn btn-primary right";
+                $("#@Html.IdFor(m => m.PodeCancelar)").val(true);
+                document.getElementById('btnCancelar').className = "btn btn-danger";
+
             }
             else if (jsonMedicao.Situacao == 1) {
                 $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(true);
                 $("#@Html.IdFor(m => m.PodeSalvar)").val(true);
                 document.getElementById('btnSalvar').className = "btn btn-primary right";
+                $("#@Html.IdFor(m => m.PodeCancelar)").val(true);
+                document.getElementById('btnCancelar').className = "btn btn-danger";
             }
             else if (jsonMedicao.Situacao == 2) {
                 $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(true);
                 $("#@Html.IdFor(m => m.PodeSalvar)").val(false);
                 document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
+                $("#@Html.IdFor(m => m.PodeCancelar)").val(true);
+                document.getElementById('btnCancelar').className = "btn btn-danger disabled";
             }
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val(jsonMedicao.TipoDocumentoId);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val(jsonMedicao.NumeroDocumento);
