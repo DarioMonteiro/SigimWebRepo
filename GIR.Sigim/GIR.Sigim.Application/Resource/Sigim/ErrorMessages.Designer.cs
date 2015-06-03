@@ -151,6 +151,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O registro [{0}] está protegido..
+        /// </summary>
+        public static string RegistroProtegido {
+            get {
+                return ResourceManager.GetString("RegistroProtegido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Escolha um arquivo com o tamanho menor ou igual a 1 MB..
         /// </summary>
         public static string TamanhoArquivoSuperior1MB {

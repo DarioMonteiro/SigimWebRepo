@@ -20,6 +20,7 @@ using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Entity.Sac;
 using GIR.Sigim.Infrastructure.Crosscutting.Adapter;
+using GIR.Sigim.Application.Enums;
 
 namespace GIR.Sigim.Application.Helper
 {
@@ -96,6 +97,66 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
             Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>();
+
+            Mapper.CreateMap<AssuntoContatoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.AssuntoContato));
+            Mapper.CreateMap<TabelaBasicaDTO, AssuntoContatoDTO>();
+
+            Mapper.CreateMap<InteresseBairroDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.BairroInteresse));
+            Mapper.CreateMap<TabelaBasicaDTO, InteresseBairroDTO>();
+
+            Mapper.CreateMap<EstadoCivilDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.EstadoCivil));
+            Mapper.CreateMap<TabelaBasicaDTO, EstadoCivilDTO>();
+
+            Mapper.CreateMap<FonteNegocioDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.FonteNegocio));
+            Mapper.CreateMap<TabelaBasicaDTO, FonteNegocioDTO>();
+
+            Mapper.CreateMap<GrupoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Grupo));
+            Mapper.CreateMap<TabelaBasicaDTO, GrupoDTO>();
+
+            Mapper.CreateMap<NacionalidadeDTO , TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Nacionalidade));
+            Mapper.CreateMap<TabelaBasicaDTO, NacionalidadeDTO>();
+
+            Mapper.CreateMap<ParentescoDTO , TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Parentesco));
+            Mapper.CreateMap<TabelaBasicaDTO, ParentescoDTO>();
+
+            Mapper.CreateMap<ProfissaoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Profissao));
+            Mapper.CreateMap<TabelaBasicaDTO, ProfissaoDTO>();
+
+            Mapper.CreateMap<RamoAtividadeDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.RamoAtividade ));
+            Mapper.CreateMap<TabelaBasicaDTO, RamoAtividadeDTO>();
+
+            Mapper.CreateMap<RelacionamentoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Relacionamento));
+            Mapper.CreateMap<TabelaBasicaDTO, RelacionamentoDTO>();
+
+            Mapper.CreateMap<TipologiaDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Tipologia));
+            Mapper.CreateMap<TabelaBasicaDTO, TipologiaDTO>();
+            
+            Mapper.CreateMap<TratamentoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Tratamento));
+            Mapper.CreateMap<TabelaBasicaDTO, TratamentoDTO>();
+
+            Mapper.CreateMap<TipoAreaDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoArea));
+            Mapper.CreateMap<TabelaBasicaDTO, TipoAreaDTO>();
+
+            Mapper.CreateMap<TipoCaracteristicaDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoCaracteristica));
+            Mapper.CreateMap<TabelaBasicaDTO, TipoCaracteristicaDTO>();
+
+            Mapper.CreateMap<TipoEspecificacaoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoEspecificacao));
+            Mapper.CreateMap<TabelaBasicaDTO, TipoEspecificacaoDTO>();
 
             #endregion
 
@@ -174,6 +235,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<CST, CSTDTO>();
             Mapper.CreateMap<CSTDTO, CST>();
 
+            Mapper.CreateMap<InteresseBairro, InteresseBairroDTO>();
+            Mapper.CreateMap<InteresseBairroDTO, InteresseBairro>();
+
             Mapper.CreateMap<Material, MaterialDTO>();
             Mapper.CreateMap<MaterialDTO, Material>();
 
@@ -204,6 +268,45 @@ namespace GIR.Sigim.Application.Helper
             
             Mapper.CreateMap<UnidadeMedida, UnidadeMedidaDTO>();
             Mapper.CreateMap<UnidadeMedidaDTO, UnidadeMedida>();
+
+            Mapper.CreateMap<EstadoCivil, EstadoCivilDTO>();
+            Mapper.CreateMap<EstadoCivilDTO, EstadoCivil>();
+
+            Mapper.CreateMap<FonteNegocio, FonteNegocioDTO>();
+            Mapper.CreateMap<FonteNegocioDTO, FonteNegocio>();
+
+            Mapper.CreateMap<Grupo, GrupoDTO>();
+            Mapper.CreateMap<GrupoDTO, Grupo>();
+
+            Mapper.CreateMap<Nacionalidade, NacionalidadeDTO>();
+            Mapper.CreateMap<NacionalidadeDTO, Nacionalidade>();
+
+            Mapper.CreateMap<Parentesco, ParentescoDTO>();
+            Mapper.CreateMap<ParentescoDTO, Parentesco>();
+
+            Mapper.CreateMap<Profissao, ProfissaoDTO>();
+            Mapper.CreateMap<ProfissaoDTO, Profissao>();
+
+            Mapper.CreateMap<RamoAtividade, RamoAtividadeDTO>();
+            Mapper.CreateMap<RamoAtividadeDTO, RamoAtividade>();
+
+            Mapper.CreateMap<Relacionamento, RelacionamentoDTO>();
+            Mapper.CreateMap<RelacionamentoDTO, Relacionamento>();
+
+            Mapper.CreateMap<Tipologia, TipologiaDTO>();
+            Mapper.CreateMap<TipologiaDTO, Tipologia>();
+
+            Mapper.CreateMap<Tratamento, TratamentoDTO>();
+            Mapper.CreateMap<TratamentoDTO, Tratamento>();
+
+            Mapper.CreateMap<TipoArea, TipoAreaDTO>();
+            Mapper.CreateMap<TipoAreaDTO, TipoArea>();
+
+            Mapper.CreateMap<TipoCaracteristica, TipoCaracteristicaDTO>();
+            Mapper.CreateMap<TipoCaracteristicaDTO, TipoCaracteristica>();
+
+            Mapper.CreateMap<TipoEspecificacao, TipoEspecificacaoDTO>();
+            Mapper.CreateMap<TipoEspecificacaoDTO, TipoEspecificacao>();
 
             #endregion
 

@@ -147,6 +147,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new PessoaFisicaConfiguration());
             modelBuilder.Configurations.Add(new PessoaJuridicaConfiguration()); 
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());
+            modelBuilder.Configurations.Add(new InteresseBairroConfiguration());
             modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
             modelBuilder.Configurations.Add(new MaterialConfiguration());
             modelBuilder.Configurations.Add(new ServicoConfiguration());  
@@ -154,6 +155,19 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new SituacaoMercadoriaConfiguration());
             modelBuilder.Configurations.Add(new UnidadeMedidaConfiguration());
             modelBuilder.Configurations.Add(new UsuarioCentroCustoConfiguration());
+            modelBuilder.Configurations.Add(new EstadoCivilConfiguration());
+            modelBuilder.Configurations.Add(new GrupoConfiguration());
+            modelBuilder.Configurations.Add(new FonteNegocioConfiguration());
+            modelBuilder.Configurations.Add(new NacionalidadeConfiguration());
+            modelBuilder.Configurations.Add(new ParentescoConfiguration());
+            modelBuilder.Configurations.Add(new ProfissaoConfiguration());
+            modelBuilder.Configurations.Add(new RamoAtividadeConfiguration());
+            modelBuilder.Configurations.Add(new RelacionamentoConfiguration());
+            modelBuilder.Configurations.Add(new TipologiaConfiguration());
+            modelBuilder.Configurations.Add(new TratamentoConfiguration());
+            modelBuilder.Configurations.Add(new TipoAreaConfiguration());
+            modelBuilder.Configurations.Add(new TipoCaracteristicaConfiguration());
+            modelBuilder.Configurations.Add(new TipoEspecificacaoConfiguration());
 
             //Sac
             modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
