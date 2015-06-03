@@ -20,6 +20,7 @@ using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Entity.Sac;
 using GIR.Sigim.Infrastructure.Crosscutting.Adapter;
+using GIR.Sigim.Application.Enums;
 
 namespace GIR.Sigim.Application.Helper
 {
@@ -65,7 +66,7 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
 
             #endregion
-
+            
             #region Financeiro
 
             Mapper.CreateMap<CentroCusto, CentroCustoDTO>();
@@ -73,6 +74,9 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<Classe, ClasseDTO>();
             Mapper.CreateMap<ClasseDTO, Classe>();
+
+            Mapper.CreateMap<Caixa, CaixaDTO>();
+            Mapper.CreateMap<CaixaDTO, Caixa>();
 
             Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
             Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
@@ -83,14 +87,82 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TipoDocumento, TipoDocumentoDTO>();
             Mapper.CreateMap<TipoDocumentoDTO, TipoDocumento>();
 
+            Mapper.CreateMap<TipoRateio, TipoRateioDTO>();
+            Mapper.CreateMap<TipoRateioDTO, TipoRateio>();
+
             Mapper.CreateMap<TituloPagar, TituloPagarDTO>();
             Mapper.CreateMap<TituloPagarDTO, TituloPagar>();
 
             Mapper.CreateMap<TituloReceber, TituloReceberDTO>();
             Mapper.CreateMap<TituloReceberDTO, TituloReceber>();
+            Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
+            Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
+
+            Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
+            Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
 
             Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
             Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>();
+
+            Mapper.CreateMap<AssuntoContatoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.AssuntoContato));
+            Mapper.CreateMap<TabelaBasicaDTO, AssuntoContatoDTO>();
+
+            Mapper.CreateMap<InteresseBairroDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.BairroInteresse));
+            Mapper.CreateMap<TabelaBasicaDTO, InteresseBairroDTO>();
+
+            Mapper.CreateMap<EstadoCivilDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.EstadoCivil));
+            Mapper.CreateMap<TabelaBasicaDTO, EstadoCivilDTO>();
+
+            Mapper.CreateMap<FonteNegocioDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.FonteNegocio));
+            Mapper.CreateMap<TabelaBasicaDTO, FonteNegocioDTO>();
+
+            Mapper.CreateMap<GrupoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Grupo));
+            Mapper.CreateMap<TabelaBasicaDTO, GrupoDTO>();
+
+            Mapper.CreateMap<NacionalidadeDTO , TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Nacionalidade));
+            Mapper.CreateMap<TabelaBasicaDTO, NacionalidadeDTO>();
+
+            Mapper.CreateMap<ParentescoDTO , TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Parentesco));
+            Mapper.CreateMap<TabelaBasicaDTO, ParentescoDTO>();
+
+            Mapper.CreateMap<ProfissaoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Profissao));
+            Mapper.CreateMap<TabelaBasicaDTO, ProfissaoDTO>();
+
+            Mapper.CreateMap<RamoAtividadeDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.RamoAtividade ));
+            Mapper.CreateMap<TabelaBasicaDTO, RamoAtividadeDTO>();
+
+            Mapper.CreateMap<RelacionamentoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Relacionamento));
+            Mapper.CreateMap<TabelaBasicaDTO, RelacionamentoDTO>();
+
+            Mapper.CreateMap<TipologiaDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Tipologia));
+            Mapper.CreateMap<TabelaBasicaDTO, TipologiaDTO>();
+            
+            Mapper.CreateMap<TratamentoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Tratamento));
+            Mapper.CreateMap<TabelaBasicaDTO, TratamentoDTO>();
+
+            Mapper.CreateMap<TipoAreaDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoArea));
+            Mapper.CreateMap<TabelaBasicaDTO, TipoAreaDTO>();
+
+            Mapper.CreateMap<TipoCaracteristicaDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoCaracteristica));
+            Mapper.CreateMap<TabelaBasicaDTO, TipoCaracteristicaDTO>();
+
+            Mapper.CreateMap<TipoEspecificacaoDTO, TabelaBasicaDTO>()
+                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoEspecificacao));
+            Mapper.CreateMap<TabelaBasicaDTO, TipoEspecificacaoDTO>();
 
             #endregion
 
@@ -109,8 +181,20 @@ namespace GIR.Sigim.Application.Helper
             #endregion
 
             #region Ordem de Compra
+            Mapper.CreateMap<Cotacao, CotacaoDTO>();
+            Mapper.CreateMap<CotacaoDTO, Cotacao>();
+
+            Mapper.CreateMap<CotacaoItem, CotacaoItemDTO>();
+            Mapper.CreateMap<CotacaoItemDTO, CotacaoItem>();
+
             Mapper.CreateMap<InterfaceCotacao, InterfaceCotacaoDTO>();
             Mapper.CreateMap<InterfaceCotacaoDTO, InterfaceCotacao>();
+
+            Mapper.CreateMap<OrdemCompra, OrdemCompraDTO>();
+            Mapper.CreateMap<OrdemCompraDTO, OrdemCompra>();
+
+            Mapper.CreateMap<OrdemCompraItem, OrdemCompraItemDTO>();
+            Mapper.CreateMap<OrdemCompraItemDTO, OrdemCompraItem>();
 
             Mapper.CreateMap<ParametrosOrdemCompra, ParametrosOrdemCompraDTO>();
             Mapper.CreateMap<ParametrosOrdemCompraDTO, ParametrosOrdemCompra>()
@@ -122,10 +206,11 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<PreRequisicaoMaterial, PreRequisicaoMaterialDTO>()
                 .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()))
-                .ForMember(d => d.RMGeradas, m => m.MapFrom(s => string.Join(", ", s.ListaItens.SelectMany(l => l.ListaRequisicaoMaterialItem.Select(c => c.RequisicaoMaterialId.ToString())).Distinct().OrderBy(o => o))));
+                .ForMember(d => d.RMGeradas, m => m.MapFrom(s => string.Join(", ", s.ListaItens.SelectMany(l => l.ListaRequisicaoMaterialItem.Where(r => r.RequisicaoMaterial.Situacao != SituacaoRequisicaoMaterial.Cancelada).Select(c => c.RequisicaoMaterialId.ToString())).Distinct().OrderBy(o => o))));
             Mapper.CreateMap<PreRequisicaoMaterialDTO, PreRequisicaoMaterial>();
 
-            Mapper.CreateMap<PreRequisicaoMaterialItem, PreRequisicaoMaterialItemDTO>();
+            Mapper.CreateMap<PreRequisicaoMaterialItem, PreRequisicaoMaterialItemDTO>()
+                .ForMember(d => d.ListaRequisicaoMaterialItem, m => m.MapFrom(s => s.ListaRequisicaoMaterialItem.Where(l => l.RequisicaoMaterial.Situacao != SituacaoRequisicaoMaterial.Cancelada)));
             Mapper.CreateMap<PreRequisicaoMaterialItemDTO, PreRequisicaoMaterialItem>()
                 .ForMember(d => d.CentroCusto, m => m.UseValue(null))
                 .ForMember(d => d.CodigoCentroCusto, m => m.MapFrom(s => s.CentroCusto.Codigo))
@@ -138,6 +223,16 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()));
             Mapper.CreateMap<RequisicaoMaterialDTO, RequisicaoMaterial>();
 
+            Mapper.CreateMap<RequisicaoMaterialItem, RequisicaoMaterialItemDTO>()
+                .ForMember(d => d.UltimaCotacao, m => m.MapFrom(s => s.ListaCotacaoItem.Where(l => l.Cotacao.Situacao != SituacaoCotacao.Cancelada).Max(c => c.CotacaoId)))
+                .ForMember(d => d.UltimaOrdemCompra, m => m.MapFrom(s => s.ListaOrdemCompraItem.Where(l => l.OrdemCompra.Situacao != SituacaoOrdemCompra.Cancelada).Max(c => c.OrdemCompraId)))
+                .ForMember(d => d.TemInterfaceOrcamento, m => m.MapFrom(s => s.ListaOrcamentoInsumoRequisitado.Any()));
+            Mapper.CreateMap<RequisicaoMaterialItemDTO, RequisicaoMaterialItem>()
+                .ForMember(d => d.Classe, m => m.UseValue(null))
+                .ForMember(d => d.CodigoClasse, m => m.MapFrom(s => s.Classe.Codigo))
+                .ForMember(d => d.UnidadeMedida, m => m.MapFrom(s => s.Material.SiglaUnidadeMedida))
+                .ForMember(d => d.Material, m => m.UseValue(null))
+                .ForMember(d => d.MaterialId, m => m.MapFrom(s => s.Material.Id));
             Mapper.CreateMap<RequisicaoMaterialItem, RequisicaoMaterialItemDTO>();
             Mapper.CreateMap<RequisicaoMaterialItemDTO, RequisicaoMaterialItem>();
 
@@ -168,6 +263,9 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<CST, CSTDTO>();
             Mapper.CreateMap<CSTDTO, CST>();
+
+            Mapper.CreateMap<InteresseBairro, InteresseBairroDTO>();
+            Mapper.CreateMap<InteresseBairroDTO, InteresseBairro>();
 
             Mapper.CreateMap<Material, MaterialDTO>();
             Mapper.CreateMap<MaterialDTO, Material>();
@@ -200,6 +298,45 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<UnidadeMedida, UnidadeMedidaDTO>();
             Mapper.CreateMap<UnidadeMedidaDTO, UnidadeMedida>();
 
+            Mapper.CreateMap<EstadoCivil, EstadoCivilDTO>();
+            Mapper.CreateMap<EstadoCivilDTO, EstadoCivil>();
+
+            Mapper.CreateMap<FonteNegocio, FonteNegocioDTO>();
+            Mapper.CreateMap<FonteNegocioDTO, FonteNegocio>();
+
+            Mapper.CreateMap<Grupo, GrupoDTO>();
+            Mapper.CreateMap<GrupoDTO, Grupo>();
+
+            Mapper.CreateMap<Nacionalidade, NacionalidadeDTO>();
+            Mapper.CreateMap<NacionalidadeDTO, Nacionalidade>();
+
+            Mapper.CreateMap<Parentesco, ParentescoDTO>();
+            Mapper.CreateMap<ParentescoDTO, Parentesco>();
+
+            Mapper.CreateMap<Profissao, ProfissaoDTO>();
+            Mapper.CreateMap<ProfissaoDTO, Profissao>();
+
+            Mapper.CreateMap<RamoAtividade, RamoAtividadeDTO>();
+            Mapper.CreateMap<RamoAtividadeDTO, RamoAtividade>();
+
+            Mapper.CreateMap<Relacionamento, RelacionamentoDTO>();
+            Mapper.CreateMap<RelacionamentoDTO, Relacionamento>();
+
+            Mapper.CreateMap<Tipologia, TipologiaDTO>();
+            Mapper.CreateMap<TipologiaDTO, Tipologia>();
+
+            Mapper.CreateMap<Tratamento, TratamentoDTO>();
+            Mapper.CreateMap<TratamentoDTO, Tratamento>();
+
+            Mapper.CreateMap<TipoArea, TipoAreaDTO>();
+            Mapper.CreateMap<TipoAreaDTO, TipoArea>();
+
+            Mapper.CreateMap<TipoCaracteristica, TipoCaracteristicaDTO>();
+            Mapper.CreateMap<TipoCaracteristicaDTO, TipoCaracteristica>();
+
+            Mapper.CreateMap<TipoEspecificacao, TipoEspecificacaoDTO>();
+            Mapper.CreateMap<TipoEspecificacaoDTO, TipoEspecificacao>();
+
             #endregion
 
             # region Sac
@@ -207,6 +344,6 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ParametrosSacDTO, ParametrosSac>()
                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
             # endregion
-        } 
+        }
     }
 }

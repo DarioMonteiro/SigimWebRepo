@@ -56,6 +56,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.Security
                 user.Id = serializeModel.Id;
                 user.Nome = serializeModel.Nome;
                 user.Login = serializeModel.Login;
+                user.HostName = serializeModel.HostName;
                 user.Roles = serializeModel.Roles;
 
                 HttpContext.Current.User = System.Threading.Thread.CurrentPrincipal = user;

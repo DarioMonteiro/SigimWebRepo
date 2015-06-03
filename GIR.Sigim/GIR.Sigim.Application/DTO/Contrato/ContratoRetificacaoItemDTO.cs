@@ -42,13 +42,20 @@ namespace GIR.Sigim.Application.DTO.Contrato
             get
             {
                 string sequencialDescricaoComplemento;
-                if (string.IsNullOrEmpty(ComplementoDescricao))
+                if (Servico != null)
                 {
-                    sequencialDescricaoComplemento = Sequencial.ToString() + " - " + Servico.Descricao;
+                    if (string.IsNullOrEmpty(ComplementoDescricao))
+                    {
+                        sequencialDescricaoComplemento = Sequencial.ToString() + " - " + Servico.Descricao;
+                    }
+                    else
+                    {
+                        sequencialDescricaoComplemento = Sequencial.ToString() + " - " + Servico.Descricao + " ( " + ComplementoDescricao + " ) ";
+                    }
                 }
                 else
                 {
-                    sequencialDescricaoComplemento = Sequencial.ToString() + " - " + Servico.Descricao + " ( " + ComplementoDescricao + " ) " ;
+                    sequencialDescricaoComplemento = Sequencial.ToString();
                 }
 
                 return sequencialDescricaoComplemento;

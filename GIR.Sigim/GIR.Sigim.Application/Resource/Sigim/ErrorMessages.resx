@@ -126,6 +126,12 @@
   <data name="CampoObrigatorio" xml:space="preserve">
     <value>O campo {0} é obrigatório.</value>
   </data>
+  <data name="DataMaximaMenorQueMinima" xml:space="preserve">
+    <value>A data máxima não pode ser menor que a data mínima.</value>
+  </data>
+  <data name="DataMinimaMaiorQueMaxima" xml:space="preserve">
+    <value>A data mínima não pode ser maior que a data máxima.</value>
+  </data>
   <data name="EmailInvalido" xml:space="preserve">
     <value>Por favor insira um endereço de email válido.</value>
   </data>
@@ -143,6 +149,12 @@
   </data>
   <data name="NenhumRegistroEncontrado" xml:space="preserve">
     <value>Nenhum registro encontrado.</value>
+  </data>
+  <data name="RegistroEmUso" xml:space="preserve">
+    <value>O registro [{0}] está sendo usado.</value>
+  </data>
+  <data name="RegistroProtegido" xml:space="preserve">
+    <value>O registro [{0}] está protegido.</value>
   </data>
   <data name="TamanhoArquivoSuperior1MB" xml:space="preserve">
     <value>Escolha um arquivo com o tamanho menor ou igual a 1 MB.</value>

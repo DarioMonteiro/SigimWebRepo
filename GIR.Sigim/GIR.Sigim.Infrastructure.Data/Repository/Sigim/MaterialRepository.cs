@@ -36,6 +36,35 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
                 .OrderBy(l => l.Descricao);
         }
 
+        public override IEnumerable<Material> ListarPeloFiltroComPaginacao(
+            Expression<Func<Material, bool>> filtro,
+            int pageIndex,
+            int pageCount,
+            string orderBy,
+            bool ascending,
+            out int totalRecords,
+            params Expression<Func<Material, object>>[] includes)
+        {
+            var set = CreateSetAsQueryable(includes);
+
+            set = set.Where(filtro);
+
+            totalRecords = set.Count();
+
+            switch (orderBy)
+            {
+                case "descricao":
+                    set = ascending ? set.OrderBy(l => l.Descricao) : set.OrderByDescending(l => l.Descricao);
+                    break;
+                case "id":
+                default:
+                    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
+                    break;
+            }
+
+            return set.Skip(pageCount * pageIndex).Take(pageCount);
+        }
+
         #endregion
     }
 }

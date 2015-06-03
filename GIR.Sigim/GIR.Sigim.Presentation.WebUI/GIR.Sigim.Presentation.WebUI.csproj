@@ -152,14 +152,24 @@
     <Compile Include="Areas\Contrato\ViewModel\MedicaoContratoMedicaoViewModel.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\CaixaController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\TabelaBasicaController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\TipoDocumentoController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\MotivoCancelamentoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\TipoCompromissoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\HomeController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ParametrosFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ParametrosUsuarioFinanceiroController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\TipoRateioController.cs" />
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\CaixaViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\TabelaBasicaViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\TipoDocumentoViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\MotivoCancelamentoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TipoCompromissoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ParametrosUsuarioFinanceiroViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ParametrosFinanceiroViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\TipoRateioViewModel.cs" />
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
@@ -178,6 +188,7 @@
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\PainelController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -192,6 +203,7 @@
     <Compile Include="Areas\OrdemCompra\ViewModel\ParametrosUsuarioViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\ParametrosViewModel.cs" />
     <Compile Include="ViewModel\ListaViewModel.cs" />
+    <Compile Include="ViewModel\MaterialListaViewModel.cs" />
     <Compile Include="ViewModel\Page.cs" />
     <Compile Include="ViewModel\Pagination.cs" />
   </ItemGroup>
@@ -204,6 +216,7 @@
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\img\48x48.png" />
+    <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\avatars\female.png" />
     <Content Include="Content\img\avatars\male.png" />
     <Content Include="Content\img\favicon\favicon.ico" />
@@ -275,6 +288,16 @@
     <Content Include="Areas\Sac\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Sac\Views\Home\Index.cshtml" />
     <Content Include="Areas\Sac\Views\Parametros\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\MotivoCancelamento\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\MotivoCancelamento\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoDocumento\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoDocumento\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoRateio\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoRateio\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\Caixa\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\Caixa\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TabelaBasica\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TabelaBasica\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
@@ -715,6 +738,9 @@
     <Content Include="Views\Shared\EditorTemplates\Material.cshtml" />
     <Content Include="Views\Shared\Redirect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Imprimir.cshtml" />
+    <Content Include="Views\Material\Index.cshtml" />
+    <Content Include="Views\Material\ListaPartial.cshtml" />
+    <Content Include="Views\Shared\_LoadingPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -37,5 +37,14 @@ namespace GIR.Sigim.Domain.Repository
             bool ascending,
             out int totalRecords,
             params Expression<Func<TEntity, object>>[] includes);
+
+        IEnumerable<TEntity> ListarPeloFiltroComPaginacao(
+            Expression<Func<TEntity, bool>> filtro,
+            int pageIndex,
+            int pageCount,
+            string orderBy,
+            bool ascending,
+            out int totalRecords,
+            params Expression<Func<TEntity, object>>[] includes);
     }
 }

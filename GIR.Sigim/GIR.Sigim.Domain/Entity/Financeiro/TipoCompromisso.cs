@@ -20,7 +20,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
         public ICollection<TituloPagar> ListaTituloPagar { get; set; }
         public ICollection<TituloReceber> ListaTituloReceber { get; set; }
-
+        
         public TipoCompromisso()
         {
             this.ListaParametrosOrdemCompra = new HashSet<ParametrosOrdemCompra>();

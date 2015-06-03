@@ -9,6 +9,7 @@ namespace GIR.Sigim.Application.DTO.Financeiro
 {
     public class TipoCompromissoDTO : BaseDTO
     {
+        [Required]
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Descrição")]
         public string Descricao { get; set; }
@@ -19,7 +20,17 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         [Display(Name = "Tipo a pagar")]
         public bool TipoPagar { get; set; }
 
+        public string TipoPagarDescricao
+        {
+            get { return TipoPagar == true ? "Sim" : "Não"; }
+        }
+
         [Display(Name = "Tipo a receber")]
         public bool TipoReceber { get; set; }
+
+        public string TipoReceberDescricao
+        {
+            get { return TipoReceber == true ? "Sim" : "Não"; }
+        }
     }
 }

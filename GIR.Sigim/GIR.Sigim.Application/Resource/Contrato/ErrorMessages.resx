@@ -132,6 +132,9 @@
   <data name="DocumentoExistente" xml:space="preserve">
     <value>O documento já existe no contrato.</value>
   </data>
+  <data name="MedicaoNaoEncontrada" xml:space="preserve">
+    <value>A medição pesquisada não foi encontrada.</value>
+  </data>
   <data name="RetificacaoItemSemProvisionamento" xml:space="preserve">
     <value>O ítem não possui provisionamento para ser medido.</value>
   </data>

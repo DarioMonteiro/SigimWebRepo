@@ -106,6 +106,15 @@ namespace GIR.Sigim.Application.Resource.Contrato {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A medição pesquisada não foi encontrada..
+        /// </summary>
+        public static string MedicaoNaoEncontrada {
+            get {
+                return ResourceManager.GetString("MedicaoNaoEncontrada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O ítem não possui provisionamento para ser medido..
         /// </summary>
         public static string RetificacaoItemSemProvisionamento {

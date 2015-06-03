@@ -88,14 +88,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasPrecision(18, 7)
                 .HasColumnOrder(11);
 
-            Ignore(l => l.QuantidadeTotalMedida);
-
-            Ignore(l => l.ValorTotalMedido);
-
-            Ignore(l => l.QuantidadeTotalLiberada);
-
-            Ignore(l => l.ValorTotalLiberado);
-
         }
 
     }

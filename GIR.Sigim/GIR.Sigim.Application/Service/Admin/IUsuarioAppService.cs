@@ -9,7 +9,7 @@ namespace GIR.Sigim.Application.Service.Admin
 {
     public interface IUsuarioAppService
     {
-        bool Login(string userName, string password, bool isPersistent, int timeout);
+        bool Login(string userName, string password, bool isPersistent, int timeout, string hostName);
         void Logout();
         bool ChangePassword(string currentPassword, string newPassword, string confirmPassword);
         bool UsuarioPossuiCentroCustoDefinidoNoModulo(int? idUsuario, string modulo);

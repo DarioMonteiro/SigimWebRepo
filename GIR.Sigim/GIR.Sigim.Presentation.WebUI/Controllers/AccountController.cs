@@ -38,7 +38,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             int timeout = Convert.ToInt32(ConfigurationManager.AppSettings["Timeout"]);
-            if (ModelState.IsValid && usuarioService.Login(model.UserName, model.Password, model.RememberMe, timeout))
+            if (ModelState.IsValid && usuarioService.Login(model.UserName, model.Password, model.RememberMe, timeout, Request.UserHostName))
                 return RedirectToLocal(returnUrl);
 
             ViewBag.ReturnUrl = returnUrl;

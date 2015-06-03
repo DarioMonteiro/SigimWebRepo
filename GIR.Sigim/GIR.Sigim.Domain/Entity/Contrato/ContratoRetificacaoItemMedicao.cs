@@ -66,7 +66,5 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public decimal? Desconto { get; set; }
         public string MotivoDesconto { get; set; }
 
-        public decimal QuantidadePendente { get; set; }
-        public decimal ValorPendente { get; set; }
     }
 }

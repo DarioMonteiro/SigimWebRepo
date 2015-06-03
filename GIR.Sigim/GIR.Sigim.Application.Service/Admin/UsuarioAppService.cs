@@ -26,9 +26,21 @@ namespace GIR.Sigim.Application.Service.Admin
             this.usuarioRepository = usuarioRepository;
         }
 
+        private IAuthenticationService authenticationService;
+        protected IAuthenticationService AuthenticationService
+        {
+            get
+            {
+                if (authenticationService == null)
+                    authenticationService = AuthenticationServiceFactory.Create();
+
+                return authenticationService;
+            }
+        }
+
         #region IUsuarioService Members
 
-        public bool Login(string login, string senha, bool permacenerLogado, int timeout)
+        public bool Login(string login, string senha, bool permacenerLogado, int timeout, string hostName)
         {
             if (string.IsNullOrEmpty(login))
                 throw new ArgumentNullException("login");
@@ -43,6 +55,7 @@ namespace GIR.Sigim.Application.Service.Admin
                 customPrincipal.Id = usuario.Id;
                 customPrincipal.Nome = usuario.Nome;
                 customPrincipal.Login = usuario.Login;
+                customPrincipal.HostName = hostName;
 
                 var serializer = new JavaScriptSerializer();
                 var dadosUsuario = serializer.Serialize(customPrincipal);
@@ -63,7 +76,7 @@ namespace GIR.Sigim.Application.Service.Admin
 
         public bool ChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
-            if (newPassword.Trim() == AuthenticationService.GetUser().Login)
+            if (newPassword.Trim() == UsuarioLogado.Login)
             {
                 messageQueue.Add(Resource.Admin.ErrorMessages.NovaSenhaIgualLogin, TypeMessage.Error);
                 return false;
@@ -75,7 +88,7 @@ namespace GIR.Sigim.Application.Service.Admin
                 return false;
             }
 
-            var usuario = usuarioRepository.ObterPeloLogin(AuthenticationService.GetUser().Login);
+            var usuario = usuarioRepository.ObterPeloLogin(UsuarioLogado.Login);
             if (usuario != null && CryptographyHelper.VerifyHashedPassword(currentPassword, usuario.Senha))
             {
                 if (IsValidPassword(newPassword))
