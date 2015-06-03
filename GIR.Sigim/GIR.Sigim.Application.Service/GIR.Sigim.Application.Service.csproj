@@ -90,6 +90,7 @@
     <Compile Include="Sigim\NaturezaOperacaoAppService.cs" />
     <Compile Include="Sigim\SerieNFAppService.cs" />
     <Compile Include="Sigim\TipoCompraAppService.cs" />
+    <Compile Include="Sigim\UnidadeMedidaAppService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GIR.Sigim.Application\GIR.Sigim.Application.csproj">

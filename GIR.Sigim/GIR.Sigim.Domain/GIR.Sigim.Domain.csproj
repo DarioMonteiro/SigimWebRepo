@@ -145,6 +145,7 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\IUnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sac\IParametrosSacRepository.cs" />
     <Compile Include="Repository\Sigim\IBloqueioContabilRepository.cs" />
     <Compile Include="Repository\Sigim\ICifFobRepository.cs" />

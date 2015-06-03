@@ -116,6 +116,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ISerieNFRepository, SerieNFRepository>();
             currentContainer.RegisterType<ICSTRepository, CSTRepository>();
             currentContainer.RegisterType<ICodigoContribuicaoRepository, CodigoContribuicaoRepository>();
+            currentContainer.RegisterType<IUnidadeMedidaRepository, UnidadeMedidaRepository>();
             #endregion
 
             #endregion
@@ -178,6 +179,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ISerieNFAppService, SerieNFAppService>();
             currentContainer.RegisterType<ICSTAppService, CSTAppService>();
             currentContainer.RegisterType<ICodigoContribuicaoAppService, CodigoContribuicaoAppService>();
+            currentContainer.RegisterType<IUnidadeMedidaAppService, UnidadeMedidaAppService>();
             #endregion
 
             #endregion

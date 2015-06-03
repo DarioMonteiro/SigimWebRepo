@@ -1,0 +1,136 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Sigim.ViewModel.UnidadeMedidaViewModel
+
+@{
+    ViewBag.Title = "Unidade de medida";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>        
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Salvar",
+                            "UnidadeMedida",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))                                            
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            <div class="row">
+                            <section class="col col-12">                             
+                                @Html.LabelFor(m => m.UnidadeMedida.Sigla, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.UnidadeMedida.Sigla, new { @maxlength = "10" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.UnidadeMedida.Sigla, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
+                            <div class="row">
+                            <section class="col col-12">
+                                @Html.LabelFor(m => m.UnidadeMedida.Descricao, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.UnidadeMedida.Descricao, new { @maxlength = "50" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.UnidadeMedida.Descricao, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <footer>                       
+                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                            Deletar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Salvar
+                        </button>
+                    </footer>
+                    }                        
+                    @using (Ajax.BeginForm(
+                            "Lista",
+                            "UnidadeMedida",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+    $("#btnDeletar").on("click", function () {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletar", "UnidadeMedida")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: $('#@Html.IdFor(m => m.UnidadeMedida.Sigla)').val()
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
+            clearForm();
+            doFilter();
+        });
+    });
+
+    function clearForm() {
+        $('#@Html.IdFor(m => m.UnidadeMedida.Sigla)').val('');
+        $('#@Html.IdFor(m => m.UnidadeMedida.Descricao)').val('');
+    }
+
+    function novo() {
+        clearForm();
+        $('#notificationMessages').html('');
+        $('#UnidadeMedida_Descricao-error').remove();
+    }
+
+    function refresh() {
+        onSuccess();
+        clearForm();
+        doFilter();
+    }
+
+    function loadItem(id) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CarregarItem", "UnidadeMedida")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: id
+            })
+        })
+        .success(function (result) {
+            $('#@Html.IdFor(m => m.UnidadeMedida.Sigla)').val(result.Id);
+            $('#@Html.IdFor(m => m.UnidadeMedida.Descricao)').val(result.Descricao);
+            goToTop();
+        });
+    }
+</script>
+

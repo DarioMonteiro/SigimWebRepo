@@ -12,6 +12,6 @@ namespace GIR.Sigim.Application.DTO.Sigim
     {
         //[Display(Name = "Unidade")]
         public string Sigla { get; set; }
-        public string Descricao { get; set; }
+        public string Descricao { get; set; }       
     }
 }

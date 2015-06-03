@@ -1,8 +1,8 @@
-﻿@using GIR.Sigim.Application.DTO.Financeiro
+﻿@using GIR.Sigim.Application.DTO.Sigim
 @model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
 
 @{
-    IEnumerable<MotivoCancelamentoDTO> Lista = Model.Records as IEnumerable<MotivoCancelamentoDTO>;    
+    IEnumerable<UnidadeMedidaDTO> Lista = Model.Records as IEnumerable<UnidadeMedidaDTO>;    
 }
 
 <div class="table-container">
@@ -32,22 +32,22 @@
                     <tr role="row">
                         @{
         string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
-        string idSortingSuffix = "sorting";
+        string siglaSortingSuffix = "sorting";
         string descricaoSortingSuffix = "sorting";        
 
         switch (Model.OrderBy)
-        {
-            case "id":
-                idSortingSuffix += sortingSuffix;
-                break;
-            case "descricao":
+        {            
+            case "sigla":
+                siglaSortingSuffix += sortingSuffix;
+                break;                
+            case "descricao":                
                 descricaoSortingSuffix += sortingSuffix;
                 break;           
             default:
                 break;
         }
                         }
-                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="width:60px;">Código</th>
+                        <th class="sorting @siglaSortingSuffix text-center" data-order="sigla" style="width:60px;">Sigla</th>
                         <th class="sorting @descricaoSortingSuffix text-center" data-order="descricao" style="min-width:100px;">Descrição</th>            
                     </tr>
                 </thead>
@@ -55,7 +55,7 @@
                     @foreach (var item in Lista)
                     {
                         <tr>
-                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString()</a></td>                            
+                            <td class="text-center"><a href="javascript:loadItem(@item.Sigla);">@item.Sigla</a></td>                             
                             <td class="text-center">@item.Descricao</td>                           
                         </tr>
                     }
