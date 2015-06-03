@@ -47,6 +47,10 @@ namespace GIR.Sigim.Application.Service.Sigim
             return unidadeMedidaRepository.ObterPeloCodigo(sigla).To<UnidadeMedidaDTO>();
         }
 
+        public List<UnidadeMedidaDTO> ListarTodos()
+        {
+            return unidadeMedidaRepository.ListarTodos().To<List<UnidadeMedidaDTO>>();
+        }
 
         //public bool Salvar(TipoCompromissoDTO dto)
         //{

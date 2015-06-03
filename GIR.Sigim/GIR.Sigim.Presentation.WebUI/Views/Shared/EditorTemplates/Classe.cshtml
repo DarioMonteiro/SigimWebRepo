@@ -5,7 +5,7 @@
         string labelText = !string.IsNullOrEmpty(ViewBag.labelText) ? ViewBag.labelText : Html.DisplayNameFor(m => m.Codigo).ToString();
     }
     @Html.LabelFor(m => m.Codigo, labelText, new { @class = "label" })
-    <input type="hidden" id="orcamentoId" value="0" />
+    <input type="hidden" id="orcamentoClasseDespesaId" value="0" />
     <div class="input-group">
         <label class="input">
             @{
@@ -59,7 +59,7 @@
                 cache: false,
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
-                    orcamentoId: $("#orcamentoId").val()
+                    orcamentoClasseDespesaId: $("#orcamentoClasseDespesaId").val()
                 })
             })
             .success(function (result) {
@@ -103,13 +103,12 @@
             }
         }
 
-        $(document).on("centroCustoValidado",
-            function (e) {
-                $("#orcamentoId").val(0);
+        $(document).on("centroCustoValidado",            function (e) {
+                $("#orcamentoClasseDespesaId").val(0);
                 if (e.codigo != '') {
                     $.ajax({
                         type: 'POST',
-                        url: '@Url.Action("ObterIdUltimoOrcamentoPeloCentroCusto", "Orcamento", new { area = "Orcamento" })',
+                        url: '@Url.Action("ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento", "Orcamento", new { area = "Orcamento" })',
                         cache: false,
                         async: false,
                         contentType: 'application/json; charset=utf-8',
@@ -118,42 +117,41 @@
                         })
                     })
                     .success(function (result) {
-                        $("#orcamentoId").val(result);
+                        $("#orcamentoClasseDespesaId").val(result);
                     });
                 }
 
                 @if (centroCustoRequerido.Value) {
                     @:if (e.isValid) {
                     @:  if (e.codigo != '')
-                    @:      unblockClasseForm();
-                    @:  else
-                    @:      blockClasseForm();
+                    @:      unblockClasseForm_@(Html.IdFor(m => m.Codigo))();
+                    @:  else {
+                    @:      blockClasseForm_@(Html.IdFor(m => m.Codigo))();
+                    @:      limpaClasseForm_@(Html.IdFor(m => m.Codigo))();
+                    @:  }
                     @:}
-                    @:else
-                    @:  blockClasseForm();
+                    @:else {
+                    @:  blockClasseForm_@(Html.IdFor(m => m.Codigo))();
+                    @:  limpaClasseForm_@(Html.IdFor(m => m.Codigo))();
+                    @:}
                 }
-            }
-        );
+            }        );        @if (centroCustoRequerido.Value) {            @:validaCentroCusto();        }    });
 
-        @if (centroCustoRequerido.Value) {
-            @:blockClasseForm();
-        }
-    });
+    function limpaClasseForm_@(Html.IdFor(m => m.Codigo))() {
+        $("#@Html.IdFor(m => m.Codigo)").val('');
+        $("#@Html.IdFor(m => m.Descricao)").val('');
+    }
 
-    function blockClasseForm() {
+    function blockClasseForm_@(Html.IdFor(m => m.Codigo))() {
         $("#@Html.IdFor(m => m.Codigo)").attr("readonly", true);
         $("#@Html.IdFor(m => m.Codigo)").addClass("readonly");
         $("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
     }
 
-    function unblockClasseForm() {
+    function unblockClasseForm_@(Html.IdFor(m => m.Codigo))() {
         $("#@Html.IdFor(m => m.Codigo)").attr("readonly", false);
         $("#@Html.IdFor(m => m.Codigo)").removeClass("readonly");
         $("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").attr('href', '@linkModal');
-    }
-
-    function notificarObrigatoriedadeCentroCusto() {
-        smartAlert("Erro", "Escolha o Centro de Custo!", "error");
     }
 
     function validaClasse() {
@@ -166,7 +164,7 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 codigo: $("#@Html.IdFor(m => m.Codigo)").val(),
-                orcamentoId: $("#orcamentoId").val(),
+                orcamentoClasseDespesaId: $("#orcamentoClasseDespesaId").val(),
                 somenteNivelFolha: '@somenteNivelFolha.Value'
             })
         })

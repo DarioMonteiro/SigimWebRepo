@@ -1,0 +1,171 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.TabelaBasicaViewModel
+
+@{
+    ViewBag.Title = "Tabela Básica";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Salvar",
+                            "TabelaBasica",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            <div class="row">
+                                <section class="col col-12">
+                                    @Html.LabelFor(m => m.TabelaBasica.TipoTabela, new { @class = "label" })
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.TabelaBasica.TipoTabela, Model.ListaTipoTabela, string.Empty)
+                                        <i></i>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                            <section class="col col-12">
+                                @Html.HiddenFor(m => m.TabelaBasica.Id)
+                                @Html.HiddenFor(m => m.TabelaBasica.Automatico)
+                                @Html.LabelFor(m => m.TabelaBasica.Descricao, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.TabelaBasica.Descricao, new { @maxlength = "50",  @class = "required" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.TabelaBasica.Descricao, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <footer>
+                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                            Deletar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Salvar
+                        </button>
+                    </footer>
+                    }
+
+                    @using (Ajax.BeginForm(
+                            "Lista",
+                            "TabelaBasica",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.TipoTabelaId)
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function ()
+    {
+        $("#@Html.IdFor(m => m.TabelaBasica.TipoTabela)").on("change", function () {
+            $("#@Html.IdFor(m => m.TipoTabelaId)").val($(this).val());
+            CarregaRegistros();
+        });
+    });
+
+    $("#btnDeletar").on("click", function() 
+    {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletar", "TabelaBasica")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: $('#@Html.IdFor(m => m.TabelaBasica.Id)').val(),
+                tipoTabela: $('#@Html.IdFor(m => m.TabelaBasica.TipoTabela)').val()
+            })
+        })
+        .success(function (result)
+        {
+            $('#notificationMessages').html(result);
+            limpaPaginacao();
+            clearForm();
+            doFilter();
+        });
+    });
+
+    function clearForm()
+    {
+        $('#@Html.IdFor(m => m.TabelaBasica.Id)').val('');
+        $('#@Html.IdFor(m => m.TabelaBasica.Descricao)').val('');
+        $('#@Html.IdFor(m => m.TabelaBasica.Automatico)').val('');
+    }
+
+    function novo()
+    {
+        clearForm();
+        $('#notificationMessages').html('');
+        $('#TabelaBasica_Descricao-error').remove();
+    }
+
+    function refresh() 
+    {
+        onSuccess();
+        clearForm();
+        doFilter();
+    }
+
+    function loadItem(id, tipoTabela) {
+        novo();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CarregarItem", "TabelaBasica")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: id,
+                tipoTabela: tipoTabela
+            })
+        })
+        .success(function (result) {
+            $('#@Html.IdFor(m => m.TabelaBasica.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.TabelaBasica.Descricao)').val(result.Descricao);
+            $('#@Html.IdFor(m => m.TabelaBasica.Automatico )').val(result.Automatico);
+            goToTop();
+        });
+    };
+
+    function CarregaRegistros() 
+    {
+        limpaPaginacao();
+        novo();
+        doFilter();
+    };
+
+    function limpaPaginacao() {
+        $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
+    };
+
+</script>

@@ -50,12 +50,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public string JsonItens { get; set; }
 
         public bool PodeSalvar { get; set; }
-        public bool PodeCancelar { get; set; }
+        public bool PodeCancelarRequisicao { get; set; }
         public bool PodeImprimir { get; set; }
         public bool PodeAdicionarItem { get; set; }
         public bool PodeCancelarItem { get; set; }
         public bool PodeEditarItem { get; set; }
-        public bool PodeAprovarItem { get; set; }
+        public bool PodeAprovarRequisicao { get; set; }
+        public bool PodeCancelarAprovacao { get; set; }
 
         public RequisicaoMaterialCadastroViewModel()
         {

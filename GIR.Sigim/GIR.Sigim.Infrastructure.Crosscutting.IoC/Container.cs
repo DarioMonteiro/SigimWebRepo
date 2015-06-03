@@ -109,6 +109,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IBancoLayoutRepository, BancoLayoutRepository>();
             currentContainer.RegisterType<IBloqueioContabilRepository, BloqueioContabilRepository>();
             currentContainer.RegisterType<IClienteFornecedorRepository, ClienteFornecedorRepository>();
+            currentContainer.RegisterType<ILogOperacaoRepository, LogOperacaoRepository>();
             currentContainer.RegisterType<IMaterialRepository, MaterialRepository>();
             currentContainer.RegisterType<ITipoCompraRepository, TipoCompraRepository>();
             currentContainer.RegisterType<ICifFobRepository, CifFobRepository>();
@@ -117,6 +118,20 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ICSTRepository, CSTRepository>();
             currentContainer.RegisterType<ICodigoContribuicaoRepository, CodigoContribuicaoRepository>();
             currentContainer.RegisterType<IUnidadeMedidaRepository, UnidadeMedidaRepository>();
+            currentContainer.RegisterType<IInteresseBairroRepository, InteresseBairroRepository>();
+            currentContainer.RegisterType<IEstadoCivilRepository, EstadoCivilRepository>();
+            currentContainer.RegisterType<IGrupoRepository, GrupoRepository>();
+            currentContainer.RegisterType<IFonteNegocioRepository, FonteNegocioRepository>();
+            currentContainer.RegisterType<INacionalidadeRepository, NacionalidadeRepository>();
+            currentContainer.RegisterType<IParentescoRepository, ParentescoRepository>();
+            currentContainer.RegisterType<IProfissaoRepository, ProfissaoRepository>();
+            currentContainer.RegisterType<IRamoAtividadeRepository, RamoAtividadeRepository>();
+            currentContainer.RegisterType<IRelacionamentoRepository, RelacionamentoRepository>();
+            currentContainer.RegisterType<ITipologiaRepository, TipologiaRepository>();
+            currentContainer.RegisterType<ITratamentoRepository, TratamentoRepository>();
+            currentContainer.RegisterType<ITipoAreaRepository, TipoAreaRepository>();
+            currentContainer.RegisterType<ITipoCaracteristicaRepository, TipoCaracteristicaRepository>();
+            currentContainer.RegisterType<ITipoEspecificacaoRepository, TipoEspecificacaoRepository>();
             #endregion
 
             #endregion
@@ -153,6 +168,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ITipoRateioAppService, TipoRateioAppService>();
             currentContainer.RegisterType<ITituloPagarAppService, TituloPagarAppService>();
             currentContainer.RegisterType<IParametrosFinanceiroAppService, ParametrosFinanceiroAppService>();
+            currentContainer.RegisterType<ITabelaBasicaAppService, TabelaBasicaAppService>();
             #endregion
 
             #region Orçamento
@@ -172,6 +188,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IBancoLayoutAppService, BancoLayoutAppService>();
             currentContainer.RegisterType<IBloqueioContabilAppService, BloqueioContabilAppService>();
             currentContainer.RegisterType<IClienteFornecedorAppService, ClienteFornecedorAppService>();
+            currentContainer.RegisterType<ILogOperacaoAppService, LogOperacaoAppService>();
             currentContainer.RegisterType<IMaterialAppService, MaterialAppService>();
             currentContainer.RegisterType<ITipoCompraAppService, TipoCompraAppService>();
             currentContainer.RegisterType<ICifFobAppService, CifFobAppService>();
@@ -179,6 +196,20 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ISerieNFAppService, SerieNFAppService>();
             currentContainer.RegisterType<ICSTAppService, CSTAppService>();
             currentContainer.RegisterType<ICodigoContribuicaoAppService, CodigoContribuicaoAppService>();
+            currentContainer.RegisterType<IInteresseBairroAppService, InteresseBairroAppService>();
+            currentContainer.RegisterType<IEstadoCivilAppService, EstadoCivilAppService>();
+            currentContainer.RegisterType<IGrupoAppService, GrupoAppService>();
+            currentContainer.RegisterType<IFonteNegocioAppService, FonteNegocioAppService>();
+            currentContainer.RegisterType<INacionalidadeAppService, NacionalidadeAppService>();
+            currentContainer.RegisterType<IParentescoAppService, ParentescoAppService>();
+            currentContainer.RegisterType<IProfissaoAppService, ProfissaoAppService>();
+            currentContainer.RegisterType<IRamoAtividadeAppService, RamoAtividadeAppService>();
+            currentContainer.RegisterType<IRelacionamentoAppService, RelacionamentoAppService>();
+            currentContainer.RegisterType<ITipologiaAppService, TipologiaAppService>();
+            currentContainer.RegisterType<ITratamentoAppService, TratamentoAppService>();
+            currentContainer.RegisterType<ITipoAreaAppService, TipoAreaAppService>();
+            currentContainer.RegisterType<ITipoCaracteristicaAppService, TipoCaracteristicaAppService>();
+            currentContainer.RegisterType<ITipoEspecificacaoAppService, TipoEspecificacaoAppService>();
             currentContainer.RegisterType<IUnidadeMedidaAppService, UnidadeMedidaAppService>();
             #endregion
 

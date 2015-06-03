@@ -21,7 +21,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
             this.orcamentoAppService = orcamentoAppService;
         }
 
-        public ActionResult ObterIdUltimoOrcamentoPeloCentroCusto(string codigoCentroCusto)
+        public ActionResult ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(string codigoCentroCusto)
         {
             var orcamento = orcamentoAppService.ObterUltimoOrcamentoPeloCentroCusto(codigoCentroCusto);
             return Json(orcamento != null ? orcamento.Id.Value : 0);

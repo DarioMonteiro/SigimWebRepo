@@ -70,6 +70,15 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Informe o motivo do cancelamento da Requisição..
+        /// </summary>
+        public static string InformeMotivoCancelamentoRequisicao {
+            get {
+                return ResourceManager.GetString("InformeMotivoCancelamentoRequisicao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O item {0} já foi aprovado..
         /// </summary>
         public static string ItemJaAprovado {
@@ -93,6 +102,15 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         public static string PreRequisicaoSituacaoInvalida {
             get {
                 return ResourceManager.GetString("PreRequisicaoSituacaoInvalida", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Requisição com itens não requisitados..
+        /// </summary>
+        public static string RequisicaoComItensNaoRequisitados {
+            get {
+                return ResourceManager.GetString("RequisicaoComItensNaoRequisitados", resourceCulture);
             }
         }
         

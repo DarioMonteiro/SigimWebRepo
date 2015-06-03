@@ -13,6 +13,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.Security
         public int? Id { get; set; }
         public string Login { get; set; }
         public string Nome { get; set; }
+        public string HostName { get; set; }
         public string[] Roles { get; set; }
 
         public CustomPrincipal(string login)

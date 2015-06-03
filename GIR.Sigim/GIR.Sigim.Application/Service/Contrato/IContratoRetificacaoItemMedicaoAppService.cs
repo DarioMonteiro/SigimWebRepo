@@ -20,5 +20,8 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         bool ExisteNumeroDocumento(Nullable<DateTime> DataEmissao, string NumeroDocumento, int? ContratadoId);
         bool Salvar(ContratoRetificacaoItemMedicaoDTO dto);
+        List<ContratoRetificacaoItemMedicaoDTO> ObtemPorSequencialItem(int contratoId, int sequencialItem);
+        ContratoRetificacaoItemMedicaoDTO ObterPeloId(int contratoRetificacaoItemMedicaoId);
+        bool EhValidaMedicaoRecuperada(ContratoRetificacaoItemMedicaoDTO dto);
     }
 }

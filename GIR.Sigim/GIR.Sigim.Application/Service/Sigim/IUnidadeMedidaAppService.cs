@@ -13,6 +13,7 @@ namespace GIR.Sigim.Application.Service.Sigim
     public interface IUnidadeMedidaAppService
     {
         List<UnidadeMedidaDTO> ListarPeloFiltro(UnidadeMedidaFiltro filtro, out int totalRegistros);
+        List<UnidadeMedidaDTO> ListarTodos();    
         UnidadeMedidaDTO ObterPeloCodigo(string sigla);
         //bool Salvar(MotivoCancelamentoDTO dto);
         //bool Deletar(int? id);

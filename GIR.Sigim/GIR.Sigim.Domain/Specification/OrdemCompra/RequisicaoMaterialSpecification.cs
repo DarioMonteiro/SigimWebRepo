@@ -30,7 +30,7 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
             {
                 var directSpecification = new DirectSpecification<RequisicaoMaterial>(l =>
                     l.CentroCusto.ListaUsuarioCentroCusto.Any(c =>
-                            c.UsuarioId == idUsuario && c.Modulo.Nome == modulo));
+                        c.UsuarioId == idUsuario && c.Modulo.Nome == modulo));
                 specification &= directSpecification;
             }
 

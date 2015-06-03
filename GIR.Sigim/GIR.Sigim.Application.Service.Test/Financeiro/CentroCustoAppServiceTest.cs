@@ -33,6 +33,7 @@ namespace GIR.Sigim.Application.Service.Test.Financeiro
 
             var unitOfWork = new UnitOfWork();
             centroCustoRepository = new CentroCustoRepository(unitOfWork);
+            usuarioRepository = new UsuarioRepository(unitOfWork);
             messageQueue = new MessageQueue();
             usuarioAppService = new UsuarioAppService(usuarioRepository, messageQueue);
             centroCustoService = new CentroCustoAppService(centroCustoRepository, usuarioAppService, messageQueue);

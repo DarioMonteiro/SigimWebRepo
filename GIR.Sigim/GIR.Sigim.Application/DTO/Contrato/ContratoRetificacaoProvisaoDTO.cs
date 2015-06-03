@@ -26,14 +26,12 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public decimal Valor { get; set; }
         public decimal Quantidade { get; set; }
 
-        public decimal ValorTotalMedido { get; set; }
-        public decimal QuantidadeTotalMedida { get; set; }
-        public decimal ValorTotalLiberado { get; set; }
-        public decimal QuantidadeTotalLiberada { get; set; }
+        public TotalizadoresMedicaoDTO Totalizadores { get; set; }
 
-        public decimal QuantidadePendente { get; set; }
-        public decimal ValorPendente { get; set; }
-
+        public ContratoRetificacaoProvisaoDTO()
+        {
+            this.Totalizadores = new TotalizadoresMedicaoDTO();
+        }
 
     }
 }
