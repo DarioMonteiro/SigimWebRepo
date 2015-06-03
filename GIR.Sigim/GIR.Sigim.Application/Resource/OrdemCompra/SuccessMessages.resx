@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AprovacaoItensComSucesso" xml:space="preserve">
-    <value>Aprovação dos itens realizada com sucesso.</value>
+  <data name="AprovacaoCanceladaComSucesso" xml:space="preserve">
+    <value>Aprovação cancelada com sucesso.</value>
+  </data>
+  <data name="AprovacaoRealizadaComSucesso" xml:space="preserve">
+    <value>Aprovação realizada com sucesso.</value>
   </data>
   <data name="CancelamentoComSucesso" xml:space="preserve">
     <value>Cancelamento realizado com sucesso.</value>

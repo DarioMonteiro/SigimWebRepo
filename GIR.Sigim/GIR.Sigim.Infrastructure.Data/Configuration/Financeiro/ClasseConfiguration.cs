@@ -44,6 +44,15 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             HasMany(l => l.ListaPreRequisicaoMaterialItem)
                 .WithRequired(l => l.Classe);
+
+            HasMany(l => l.ListaRequisicaoMaterialItem)
+                .WithRequired(l => l.Classe);
+
+            HasMany(l => l.ListaOrcamentoComposicao)
+                .WithRequired(l => l.Classe);
+
+            HasMany(l => l.ListaOrdemCompraItem)
+                .WithRequired(l => l.Classe);
         }
     }
 }

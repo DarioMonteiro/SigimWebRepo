@@ -10,5 +10,6 @@ namespace GIR.Sigim.Domain.Repository.Orcamento
     public interface IOrcamentoRepository : IRepository<Entity.Orcamento.Orcamento>
     {
         Domain.Entity.Orcamento.Orcamento ObterUltimoOrcamentoPeloCentroCusto(string codigoCentroCusto);
+        Domain.Entity.Orcamento.Orcamento ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(string codigoCentroCusto);
     }
 }

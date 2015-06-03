@@ -11,7 +11,7 @@
                 @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do material", @class = cssClass })
                 @Html.HiddenFor(m => m.Id)
             </label>
-            <a data-toggle="modal" href="javascript:alert('Em Construção');" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+            <a id="BtnShowModalPanel_@Html.IdFor(m => m.Id)" data-toggle="modal" href="javascript:alert('Em Construção');" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
         </div>
         @Html.ValidationMessageFor(m => m.Id, "", new { @id = Html.IdFor(m => m.Id) + "_ValidationMessage", @class = "note note-error" })
     </section>
@@ -23,14 +23,13 @@
     </section>
 </section>
 
-
 <script type="text/javascript">
     $(document).ready(function () {
         $("#@Html.IdFor(m => m.Descricao)").autocomplete({
             source: function (request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("ListaMaterial", "PreRequisicaoMaterial", new { area = "OrdemCompra" })',
+                    url: '@Url.Action("ListaPelaDescricao", "Material", new { area = "" })',
                     cache: false,
                     dataType: "json",
                     data: {
@@ -58,5 +57,50 @@
                 .append("<a>" + highlight(item.label, this.term) + " - " + item.unidade + "</a>")
                 .appendTo(ul);
         };
+
+        @{
+            bool? centroCustoRequerido = ViewBag.centroCustoRequerido as bool? ?? false;
+            string linkModal = "#" + Html.IdFor(m => m.Id) + "_ModalPanel";
+            string linkNotificarObrigatoriedadeCentroCusto = "javascript:notificarObrigatoriedadeCentroCusto();";
+            string href = linkModal;
+            if (centroCustoRequerido.Value) {
+                href = linkNotificarObrigatoriedadeCentroCusto;
+            }
+        }
+
+        $(document).on("centroCustoValidado",            function (e) {
+                @if (centroCustoRequerido.Value) {
+                    @:if (e.isValid) {
+                    @:  if (e.codigo != '')
+                    @:      unblockMaterialForm_@(Html.IdFor(m => m.Id))();
+                    @:  else {
+                    @:      blockMaterialForm_@(Html.IdFor(m => m.Id))();
+                    @:      limpaMaterialForm_@(Html.IdFor(m => m.Id))();
+                    @:  }
+                    @:}
+                    @:else {
+                    @:  blockMaterialForm_@(Html.IdFor(m => m.Id))();
+                    @:  limpaMaterialForm_@(Html.IdFor(m => m.Id))();
+                    @:}
+                }
+            }        );        @if (centroCustoRequerido.Value) {            @:validaCentroCusto();        }
     });
+
+    function limpaMaterialForm_@(Html.IdFor(m => m.Id))() {
+        $("#@Html.IdFor(m => m.Id)").val('');
+        $("#@Html.IdFor(m => m.Descricao)").val('');
+        $("#@Html.IdFor(m => m.SiglaUnidadeMedida)").val('');
+    }
+
+    function blockMaterialForm_@(Html.IdFor(m => m.Id))() {
+        $("#@Html.IdFor(m => m.Descricao)").attr("readonly", true);
+        $("#@Html.IdFor(m => m.Descricao)").addClass("readonly");
+        $("#BtnShowModalPanel_@Html.IdFor(m => m.Id)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+    }
+
+    function unblockMaterialForm_@(Html.IdFor(m => m.Id))() {
+        $("#@Html.IdFor(m => m.Descricao)").attr("readonly", false);
+        $("#@Html.IdFor(m => m.Descricao)").removeClass("readonly");
+        $("#BtnShowModalPanel_@Html.IdFor(m => m.Id)").attr('href', '@linkModal');
+    }
 </script>

@@ -61,11 +61,20 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aprovação dos itens realizada com sucesso..
+        ///   Looks up a localized string similar to Aprovação cancelada com sucesso..
         /// </summary>
-        public static string AprovacaoItensComSucesso {
+        public static string AprovacaoCanceladaComSucesso {
             get {
-                return ResourceManager.GetString("AprovacaoItensComSucesso", resourceCulture);
+                return ResourceManager.GetString("AprovacaoCanceladaComSucesso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aprovação realizada com sucesso..
+        /// </summary>
+        public static string AprovacaoRealizadaComSucesso {
+            get {
+                return ResourceManager.GetString("AprovacaoRealizadaComSucesso", resourceCulture);
             }
         }
         

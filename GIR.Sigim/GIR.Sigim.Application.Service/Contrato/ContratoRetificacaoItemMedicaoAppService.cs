@@ -74,20 +74,6 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                      c.SequencialCronograma == SequencialCronograma)
                                                                                 ).ToList <ContratoRetificacaoItemMedicao>();
 
-            //var queryMedido =
-            //            from c in listaContratoRetificacaoItemMedicao
-            //            where (
-            //                    ((c.Situacao == SituacaoMedicao.AguardandoAprovacao) ||
-            //                     (c.Situacao == SituacaoMedicao.AguardandoLiberacao))
-            //                  )
-            //            group c by c.ContratoRetificacaoItemId into g
-            //            select new
-            //            {
-            //                ContratoRetificacaoItemId   = g.Key,
-            //                QuantidadeTotalMedido       = g.Sum(i => i.Quantidade),
-            //                ValorTotalMedido            = g.Sum(i => i.Valor)
-            //            };
-
             var queryMedido =
                         from c in listaContratoRetificacaoItemMedicao
                         where (
@@ -126,24 +112,6 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             }
 
-            //var queryLiberado = 
-            //            from c in listaContratoRetificacaoItemMedicao
-            //            where (
-            //                    (c.Situacao == SituacaoMedicao.Liberado)
-            //                  )
-            //            group c by c.ContratoRetificacaoItemId into g
-            //            select new
-            //            {
-            //                ContratoRetificacaoItemId   = g.Key,
-            //                QuantidadeTotalLiberado     = g.Sum(i => i.Quantidade),
-            //                ValorTotalLiberado          = g.Sum(i => i.Valor)
-            //            };
-
-            //foreach (var item in queryLiberado)
-            //{
-            //    QuantidadeTotalLiberado = item.QuantidadeTotalLiberado;
-            //    ValorTotalLiberado = item.ValorTotalLiberado;
-            //}
         }
 
         public bool ExisteNumeroDocumento(Nullable<DateTime> dataEmissao, string numeroDocumento, int? contratadoId)
@@ -176,11 +144,20 @@ namespace GIR.Sigim.Application.Service.Contrato
                     {
                         var quantidadeDeZerosIniciais = item.NumeroDocumento.Length - numeroNotaFiscal.Length;
                         numeroDeZerosIniciais = item.NumeroDocumento.Substring(0, quantidadeDeZerosIniciais);
-                        if (Convert.ToInt32(numeroDeZerosIniciais) == 0)
+                        if (string.IsNullOrEmpty(numeroDeZerosIniciais))
                         {
-                            existe = true;
-                            break;
+                            numeroDeZerosIniciais = "0";
                         }
+                        int resultado;
+                        if (int.TryParse(numeroDeZerosIniciais,out resultado))
+                        {
+                            if (Convert.ToInt32(resultado) == 0)
+                            {
+                                existe = true;
+                                break;
+                            }
+                        }
+
                     }
                 }
             }
@@ -204,7 +181,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 novoRegistro = true;
                 contratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicao();
                 contratoRetificacaoItemMedicao.DataCadastro = DateTime.Now;
-                contratoRetificacaoItemMedicao.UsuarioMedicao = AuthenticationService.GetUser().Login;
+                contratoRetificacaoItemMedicao.UsuarioMedicao = UsuarioLogado.Login;
                 contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoAprovacao;
             }
 
@@ -215,8 +192,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 return false;
             }
 
-            MapearEntity(dto, contratoRetificacaoItemMedicao);
-
+            PopularEntity(dto, contratoRetificacaoItemMedicao);
 
             if (Validator.IsValid(contratoRetificacaoItemMedicao, out validationErrors))
             {
@@ -232,7 +208,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                     }
 
                     contratoRetificacaoItemMedicaoRepository.UnitOfWork.Commit();
-                    dto.Id = contratoRetificacaoItemMedicao.ContratoId;
+                    //dto.Id = contratoRetificacaoItemMedicao.Id;
                     messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
                     return true;
                 }
@@ -247,7 +223,59 @@ namespace GIR.Sigim.Application.Service.Contrato
             return false;
         }
 
+        public List<ContratoRetificacaoItemMedicaoDTO> ObtemPorSequencialItem(int contratoId, int sequencialItem)
+        {
+            List<ContratoRetificacaoItemMedicaoDTO> listaMedicao = null; 
+
+            listaMedicao = contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro(l => l.ContratoId == contratoId && l.SequencialItem == sequencialItem, l => l.TipoDocumento).OrderBy(l => l.DataVencimento).To<List<ContratoRetificacaoItemMedicaoDTO>>();
+
+            return listaMedicao;
+        }
+
+        public ContratoRetificacaoItemMedicaoDTO ObterPeloId(int contratoRetificacaoItemMedicaoId)
+        {
+            decimal quantidadeTotalMedido = 0;
+            decimal valorTotalMedido = 0;
+            decimal quantidadeTotalLiberado = 0;
+            decimal valorTotalLiberado = 0;
+
+
+            var medicao = contratoRetificacaoItemMedicaoRepository.ObterPeloId(contratoRetificacaoItemMedicaoId,
+                                                                                l => l.ContratoRetificacaoItemCronograma).To<ContratoRetificacaoItemMedicaoDTO>();
+
+            if (medicao != null)
+            {
+
+                ObterQuantidadesEhValoresMedicao(medicao.ContratoId,
+                                                 medicao.SequencialItem,
+                                                 medicao.SequencialCronograma,
+                                                 ref quantidadeTotalMedido,
+                                                 ref valorTotalMedido,
+                                                 ref quantidadeTotalLiberado,
+                                                 ref valorTotalLiberado);
+            }
+
+            medicao.Totalizadores.QuantidadeTotalMedida = quantidadeTotalMedido;
+            medicao.Totalizadores.ValorTotalMedido = valorTotalMedido;
+            medicao.Totalizadores.QuantidadeTotalLiberada = quantidadeTotalLiberado;
+            medicao.Totalizadores.ValorTotalLiberado = valorTotalLiberado;
+
+            return medicao;
+        }
+
+        public bool EhValidaMedicaoRecuperada(ContratoRetificacaoItemMedicaoDTO dto)
+        {
+            if (dto == null)
+            {
+                messageQueue.Add(Resource.Contrato.ErrorMessages.MedicaoNaoEncontrada, TypeMessage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
+
 
         #region Métodos privados
 
@@ -387,7 +415,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Valor medição atual"), TypeMessage.Error);
                     return false;
                 }
-                if (dto.Valor > dto.ValorPendente)
+                if (dto.Valor > dto.Totalizadores.ValorPendente)
                 {
                     string msg = string.Format(Resource.Contrato.ErrorMessages.ValorMaiorQue, "Valor medição atual", "Valor pendente");
                     messageQueue.Add(msg, TypeMessage.Error);
@@ -396,7 +424,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
             else if (dto.ContratoRetificacaoItem.NaturezaItem == NaturezaItem.PrecoUnitario)
             {
-                if (dto.Quantidade > dto.QuantidadePendente)
+                if (dto.Quantidade > dto.Totalizadores.QuantidadePendente)
                 {
                     string msg = string.Format(Resource.Contrato.ErrorMessages.ValorMaiorQue, "Quantidade medição atual", "Quantidade pendente");
                     messageQueue.Add(msg, TypeMessage.Error);
@@ -476,7 +504,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             return true;
         }
 
-        private static void MapearEntity(ContratoRetificacaoItemMedicaoDTO dto, ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao)
+        private void PopularEntity(ContratoRetificacaoItemMedicaoDTO dto, ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao)
         {
             contratoRetificacaoItemMedicao.Id = dto.Id;
             contratoRetificacaoItemMedicao.ContratoId = dto.ContratoId;
@@ -528,7 +556,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             return false;
         }
 
-        private static decimal CalculaValorRetido(ContratoRetificacaoItemMedicaoDTO medicao)
+        private decimal CalculaValorRetido(ContratoRetificacaoItemMedicaoDTO medicao)
         {
             decimal valorRetido = 0.0m;
             decimal percentualRetencao = 0.0m;

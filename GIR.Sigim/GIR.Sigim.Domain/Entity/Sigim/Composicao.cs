@@ -11,10 +11,12 @@ namespace GIR.Sigim.Domain.Entity.Sigim
     {
         public string Descricao { get; set; }
         public ICollection<OrcamentoComposicao> ListaOrcamentoComposicao { get; set; }
+        public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
 
         public Composicao()
         {
             this.ListaOrcamentoComposicao = new HashSet<OrcamentoComposicao>();
+            this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
         }
     }
 }

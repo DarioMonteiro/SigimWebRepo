@@ -64,15 +64,18 @@
     <Compile Include="DTO\Contrato\ContratoRetificacaoProvisaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
+    <Compile Include="DTO\Contrato\TotalizadoresMedicaoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
+    <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
     <Compile Include="DTO\Financeiro\TabelaBasicaDTO.cs" />
     <Compile Include="DTO\Financeiro\MotivoCancelamentoDTO.cs" />
     <Compile Include="DTO\Financeiro\ParametrosFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\ParametrosUsuarioFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoCompromissoDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoDocumentoDTO.cs" />
+    <Compile Include="DTO\Financeiro\TipoRateioDTO.cs" />
     <Compile Include="DTO\Financeiro\TituloPagarDTO.cs" />
     <Compile Include="DTO\Financeiro\TituloReceberDTO.cs" />
     <Compile Include="DTO\Orcamento\ObraDTO.cs" />
@@ -80,6 +83,10 @@
     <Compile Include="DTO\Orcamento\ParametrosOrcamentoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\OrdemCompraDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\OrdemCompraItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\CotacaoDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\CotacaoItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\RequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialDTO.cs" />
@@ -124,18 +131,32 @@
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
     <Compile Include="Enums\TabelaBasicaFinanceiro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
+    <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\RequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\PaginationParameters.cs" />
+    <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />
     <Compile Include="Helper\MapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\OrdemCompra\relPreRequisicaoMaterial.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relPreRequisicaoMaterial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\OrdemCompra\relRequisicaoMaterial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relRequisicaoMaterial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\OrdemCompra\relRequisicaoMaterialItem.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relRequisicaoMaterialItem.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Resource\Admin\ErrorMessages.Designer.cs">
@@ -190,6 +211,7 @@
     <Compile Include="Service\Contrato\IContratoRetificacaoItemMedicaoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoProvisaoAppService.cs" />
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
+    <Compile Include="Service\Financeiro\ICaixaAppService.cs" />
     <Compile Include="Service\Financeiro\ITabelaBasicaAppService.cs" />
     <Compile Include="Service\Financeiro\IMotivoCancelamentoAppService.cs" />
     <Compile Include="Service\Financeiro\IClasseAppService.cs" />
@@ -198,6 +220,7 @@
     <Compile Include="Service\Financeiro\IParametrosUsuarioFinanceiroAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoCompromissoAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoDocumentoAppService.cs" />
+    <Compile Include="Service\Financeiro\ITipoRateioAppService.cs" />
     <Compile Include="Service\Financeiro\ITituloPagarAppService.cs" />
     <Compile Include="Service\IBaseAppService.cs" />
     <Compile Include="Service\Orcamento\IOrcamentoAppService.cs" />
@@ -225,6 +248,8 @@
     <Compile Include="Service\Sigim\ICifFobAppService.cs" />
     <Compile Include="Service\Sigim\ICodigoContribuicaoAppService.cs" />
     <Compile Include="Service\Sigim\ICSTAppService.cs" />
+    <Compile Include="Service\Sigim\ILogOperacaoAppService.cs" />
+    <Compile Include="Service\Sigim\IUnidadeMedidaAppService.cs" />
     <Compile Include="Service\Sigim\IMaterialAppService.cs" />
     <Compile Include="Service\Sigim\IAssuntoContatoAppService.cs" />
     <Compile Include="Service\Sigim\IBancoLayoutAppService.cs" />
@@ -253,6 +278,14 @@
     <EmbeddedResource Include="Reports\OrdemCompra\relPreRequisicaoMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relPreRequisicaoMaterial.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OrdemCompra\relRequisicaoMaterial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relRequisicaoMaterial.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OrdemCompra\relRequisicaoMaterialItem.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relRequisicaoMaterialItem.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource\Admin\ErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

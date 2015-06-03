@@ -15,6 +15,19 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra
         public override void RegisterArea(AreaRegistrationContext context)
         {
             context.MapRoute(
+                "Material",
+                "OrdemCompra/Material/{action}/{id}",
+                new
+                {
+                    area = "",
+                    controller = "Material",
+                    action = "Index",
+                    id = UrlParameter.Optional
+                },
+                new [] { "GIR.Sigim.Presentation.WebUI.Controllers" }
+            );
+
+            context.MapRoute(
                 "OrdemCompra_default",
                 "OrdemCompra/{controller}/{action}/{id}",
                 new

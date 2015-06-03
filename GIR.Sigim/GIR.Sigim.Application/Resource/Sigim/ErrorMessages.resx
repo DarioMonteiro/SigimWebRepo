@@ -126,6 +126,12 @@
   <data name="CampoObrigatorio" xml:space="preserve">
     <value>O campo {0} é obrigatório.</value>
   </data>
+  <data name="DataMaximaMenorQueMinima" xml:space="preserve">
+    <value>A data máxima não pode ser menor que a data mínima.</value>
+  </data>
+  <data name="DataMinimaMaiorQueMaxima" xml:space="preserve">
+    <value>A data mínima não pode ser maior que a data máxima.</value>
+  </data>
   <data name="EmailInvalido" xml:space="preserve">
     <value>Por favor insira um endereço de email válido.</value>
   </data>

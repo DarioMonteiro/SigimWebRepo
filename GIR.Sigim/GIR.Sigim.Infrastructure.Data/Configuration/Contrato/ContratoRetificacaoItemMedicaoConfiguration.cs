@@ -276,9 +276,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasMaxLength(30)
                 .HasColumnOrder(42);
 
-            Ignore(l => l.QuantidadePendente);
-            Ignore(l => l.ValorPendente);
-
         }
     }
 }

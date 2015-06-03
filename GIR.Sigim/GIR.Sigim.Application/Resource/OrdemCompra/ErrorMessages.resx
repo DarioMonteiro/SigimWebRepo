@@ -120,6 +120,9 @@
   <data name="InformeMotivoCancelamentoPreRequisicao" xml:space="preserve">
     <value>Informe o motivo do cancelamento da Pré-requisicao.</value>
   </data>
+  <data name="InformeMotivoCancelamentoRequisicao" xml:space="preserve">
+    <value>Informe o motivo do cancelamento da Requisição.</value>
+  </data>
   <data name="ItemJaAprovado" xml:space="preserve">
     <value>O item {0} já foi aprovado.</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="PreRequisicaoSituacaoInvalida" xml:space="preserve">
     <value>Pré requisição \"{0}\".</value>
+  </data>
+  <data name="RequisicaoComItensNaoRequisitados" xml:space="preserve">
+    <value>Requisição com itens não requisitados.</value>
   </data>
   <data name="RequisicaoSituacaoInvalida" xml:space="preserve">
     <value>Requisição \"{0}\".</value>
