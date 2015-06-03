@@ -5,7 +5,7 @@
         string labelText = !string.IsNullOrEmpty(ViewBag.labelText) ? ViewBag.labelText : Html.DisplayNameFor(m => m.Codigo).ToString();
     }
     @Html.LabelFor(m => m.Codigo, labelText, new { @class = "label" })
-    <input type="hidden" id="orcamentoId" value="0" />
+    <input type="hidden" id="orcamentoClasseDespesaId" value="0" />
     <div class="input-group">
         <label class="input">
             @{
@@ -59,7 +59,7 @@
                 cache: false,
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
-                    orcamentoId: $("#orcamentoId").val()
+                    orcamentoClasseDespesaId: $("#orcamentoClasseDespesaId").val()
                 })
             })
             .success(function (result) {
@@ -104,11 +104,11 @@
         }
 
         $(document).on("centroCustoValidado",            function (e) {
-                $("#orcamentoId").val(0);
+                $("#orcamentoClasseDespesaId").val(0);
                 if (e.codigo != '') {
                     $.ajax({
                         type: 'POST',
-                        url: '@Url.Action("ObterIdUltimoOrcamentoPeloCentroCusto", "Orcamento", new { area = "Orcamento" })',
+                        url: '@Url.Action("ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento", "Orcamento", new { area = "Orcamento" })',
                         cache: false,
                         async: false,
                         contentType: 'application/json; charset=utf-8',
@@ -117,7 +117,7 @@
                         })
                     })
                     .success(function (result) {
-                        $("#orcamentoId").val(result);
+                        $("#orcamentoClasseDespesaId").val(result);
                     });
                 }
 
@@ -164,7 +164,7 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 codigo: $("#@Html.IdFor(m => m.Codigo)").val(),
-                orcamentoId: $("#orcamentoId").val(),
+                orcamentoClasseDespesaId: $("#orcamentoClasseDespesaId").val(),
                 somenteNivelFolha: '@somenteNivelFolha.Value'
             })
         })

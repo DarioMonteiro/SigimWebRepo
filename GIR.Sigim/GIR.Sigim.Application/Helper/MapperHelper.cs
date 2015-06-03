@@ -145,7 +145,6 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<PreRequisicaoMaterial, PreRequisicaoMaterialDTO>()
                 .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()))
-                .ForMember(d => d.RMGeradas, m => m.MapFrom(s => string.Join(", ", s.ListaItens.SelectMany(l => l.ListaRequisicaoMaterialItem.Select(c => c.RequisicaoMaterialId.ToString())).Distinct().OrderBy(o => o))));
                 .ForMember(d => d.RMGeradas, m => m.MapFrom(s => string.Join(", ", s.ListaItens.SelectMany(l => l.ListaRequisicaoMaterialItem.Where(r => r.RequisicaoMaterial.Situacao != SituacaoRequisicaoMaterial.Cancelada).Select(c => c.RequisicaoMaterialId.ToString())).Distinct().OrderBy(o => o))));
             Mapper.CreateMap<PreRequisicaoMaterialDTO, PreRequisicaoMaterial>();
 

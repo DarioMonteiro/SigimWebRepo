@@ -91,7 +91,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             bool novoItem = false;
 
-            var requisicaoMaterial = requisicaoMaterialRepository.ObterPeloId(dto.Id, l => l.ListaItens);
+            var requisicaoMaterial = requisicaoMaterialRepository.ObterPeloId(dto.Id, l => l.ListaItens.Select(o => o.ListaOrcamentoInsumoRequisitado));
             if (requisicaoMaterial == null)
             {
                 requisicaoMaterial = new RequisicaoMaterial();
@@ -429,6 +429,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     item.DataMaxima = itemDTO.DataMaxima;
                     item.DataMinima = itemDTO.DataMinima;
                     item.Situacao = itemDTO.Situacao;
+                    if (item.Situacao == SituacaoRequisicaoMaterialItem.Cancelado)
+                        item.ListaOrcamentoInsumoRequisitado.Clear();
                 }
             }
         }

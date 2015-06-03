@@ -26,6 +26,17 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Orcamento
             var set = CreateSetAsQueryable();
 
             set = set.Where(l => l.Situacao == "A"
+                && l.Obra.CentroCusto.Codigo == codigoCentroCusto);
+
+            set = set.OrderByDescending(l => l.Sequencial);
+            return set.FirstOrDefault();
+        }
+
+        public Domain.Entity.Orcamento.Orcamento ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(string codigoCentroCusto)
+        {
+            var set = CreateSetAsQueryable();
+
+            set = set.Where(l => l.Situacao == "A"
                 && l.Obra.CentroCusto.Codigo == codigoCentroCusto
                 && l.Obra.CentroCusto.ListaCentroCustoEmpresa.Any(s => s.EhClasseOrcamento.Value));
 

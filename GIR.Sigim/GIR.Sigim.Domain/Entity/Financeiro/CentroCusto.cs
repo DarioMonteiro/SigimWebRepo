@@ -39,7 +39,6 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<LicitacaoCronograma> ListaLicitacaoCronograma { get; set; }
         public ICollection<BloqueioContabil> ListaBloqueioContabil { get; set; }
         public ICollection<Caixa> ListaCaixa { get; set; }
-        public ICollection<Orcamento.Obra> ListaObra { get; set; }
         public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
 
         public CentroCusto()
@@ -56,7 +55,6 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaLicitacaoCronograma = new HashSet<LicitacaoCronograma>();
             this.ListaBloqueioContabil = new HashSet<BloqueioContabil>();
             this.ListaCaixa = new HashSet<Caixa>();
-            this.ListaObra = new HashSet<Orcamento.Obra>();
             this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
         }
 

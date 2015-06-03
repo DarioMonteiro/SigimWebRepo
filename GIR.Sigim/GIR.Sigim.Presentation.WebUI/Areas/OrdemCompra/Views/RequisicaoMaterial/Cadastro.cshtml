@@ -83,6 +83,7 @@
                             </div>
                             <div class="row">
                                 @Html.EditorFor(m => m.RequisicaoMaterial.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo", @somenteNivelFolha = true, @required = true })
+                                <input type="hidden" id="orcamentoId" value="0" />
                             </div>
                             @Html.HiddenFor(m => m.JsonItens)
                         </fieldset>
@@ -731,4 +732,23 @@
 
         return false;
     }
+
+    $(document).on("centroCustoValidado",        function (e) {
+            $("#orcamentoId").val(0);
+            if (e.codigo != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ObterIdUltimoOrcamentoPeloCentroCusto", "Orcamento", new { area = "Orcamento" })',
+                    cache: false,
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        codigoCentroCusto: e.codigo
+                    })
+                })
+                .success(function (result) {
+                    $("#orcamentoId").val(result);
+                });
+            }
+        });
 </script>

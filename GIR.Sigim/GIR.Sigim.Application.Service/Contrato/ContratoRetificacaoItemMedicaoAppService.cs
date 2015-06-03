@@ -181,7 +181,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 novoRegistro = true;
                 contratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicao();
                 contratoRetificacaoItemMedicao.DataCadastro = DateTime.Now;
-                contratoRetificacaoItemMedicao.UsuarioMedicao = AuthenticationService.GetUser().Login;
+                contratoRetificacaoItemMedicao.UsuarioMedicao = UsuarioLogado.Login;
                 contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoAprovacao;
             }
 
