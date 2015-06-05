@@ -187,7 +187,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             model.ListaServicoContratoRetificacaoItem = new SelectList(ListaItensUltimoContratoRetificacao, "Id", "SequencialDescricaoItemComplemento", ListaItensUltimoContratoRetificacao.Select(c => c.Id));
 
-            model.PodeSalvar = true;
+            //model.PodeSalvar = true;
 
             return View(model);
         }
@@ -232,7 +232,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                     precoUnitario = "",
                                     baseRetencaoItem = "",
                                     sequencialItem = "",
-                                    listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
+                                    listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao,
+                                    ehPodeSalvar = false,
+                                    ehPodeCancelar = false
                                 });
                 }
                 else
@@ -255,7 +257,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                         precoUnitario = contratoRetificacaoItem.PrecoUnitario,
                         baseRetencaoItem = contratoRetificacaoItem.BaseRetencaoItem,
                         sequencialItem = contratoRetificacaoItem.Sequencial,
-                        listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao)
+                        listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao),
+                        ehPodeSalvar = true,
+                        ehPodeCancelar = false
                     });
                 }
             }
@@ -272,7 +276,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 precoUnitario = "",
                 baseRetencaoItem = "",
                 sequencialItem = "",
-                listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
+                listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao,
+                ehPodeSalvar = true,
+                ehPodeCancelar = false
             });
         }
 
@@ -339,6 +345,31 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             {
                 ehRecuperou = false,
                 errorMessage = string.Empty
+            });
+        }
+
+        [HttpPost]
+        public ActionResult Cancelar(int? id)
+        {
+            bool cancelou = false;
+
+            cancelou = contratoRetificacaoItemMedicaoAppService.Cancelar(id);
+            var msg = messageQueue.GetAll()[0].Text;
+            messageQueue.Clear();
+
+            if (!cancelou)
+            {
+                return Json(new
+                {
+                    ehCancelou = false,
+                    message = msg
+                });
+            }
+
+            return Json(new
+            {
+                ehCancelou = true,
+                message = msg
             });
         }
 
