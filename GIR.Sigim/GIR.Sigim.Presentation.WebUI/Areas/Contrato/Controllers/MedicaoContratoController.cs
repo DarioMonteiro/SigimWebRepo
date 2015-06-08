@@ -135,6 +135,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
  
             model.PodeSalvar = false;
             model.PodeCancelar = false;
+            model.PodeImprimir = false;
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
             if (parametros != null)
@@ -187,8 +188,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             model.ListaServicoContratoRetificacaoItem = new SelectList(ListaItensUltimoContratoRetificacao, "Id", "SequencialDescricaoItemComplemento", ListaItensUltimoContratoRetificacao.Select(c => c.Id));
 
-            //model.PodeSalvar = true;
-
             return View(model);
         }
 
@@ -232,9 +231,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                     precoUnitario = "",
                                     baseRetencaoItem = "",
                                     sequencialItem = "",
-                                    listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao,
-                                    ehPodeSalvar = false,
-                                    ehPodeCancelar = false
+                                    listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
                                 });
                 }
                 else
@@ -257,9 +254,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                         precoUnitario = contratoRetificacaoItem.PrecoUnitario,
                         baseRetencaoItem = contratoRetificacaoItem.BaseRetencaoItem,
                         sequencialItem = contratoRetificacaoItem.Sequencial,
-                        listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao),
-                        ehPodeSalvar = true,
-                        ehPodeCancelar = false
+                        listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao)
                     });
                 }
             }
@@ -276,9 +271,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 precoUnitario = "",
                 baseRetencaoItem = "",
                 sequencialItem = "",
-                listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao,
-                ehPodeSalvar = true,
-                ehPodeCancelar = false
+                listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
             });
         }
 

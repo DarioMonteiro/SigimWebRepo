@@ -291,8 +291,12 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             try
             {
+
                 contratoRetificacaoItemMedicaoRepository.Remover(contratoRetificacaoItemMedicao);
                 contratoRetificacaoItemMedicaoRepository.UnitOfWork.Commit();
+
+                GravarLogOperacao(contratoRetificacaoItemMedicao, "DELETE");
+
                 messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
                 return true;
             }
@@ -654,6 +658,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             //sb.Append("<tipoDocumentoDescricao>" + contratoRetificacaoItemMedicao.TipoDocumento.Descricao + "</tipoDocumentoDescricao>");
             //sb.Append("<tipoDocumentoSigla>" + contratoRetificacaoItemMedicao.TipoDocumento.Sigla + "</tipoDocumentoSigla>");
             sb.Append("<numeroDocumento>" +  contratoRetificacaoItemMedicao.NumeroDocumento + "</numeroDocumento>");
+            sb.Append("<multiFornecedor>" + contratoRetificacaoItemMedicao.MultiFornecedorId.ToString() + "</multiFornecedor>");
             sb.Append("<dataCadastro>" + contratoRetificacaoItemMedicao.DataCadastro.ToString() + "</dataCadastro>");
             sb.Append("<dataVencimento>" + contratoRetificacaoItemMedicao.DataVencimento.ToString() + "</dataVencimento>");
             sb.Append("<dataEmissao>" +  contratoRetificacaoItemMedicao.DataEmissao.ToString() + "</dataEmissao>");
@@ -764,14 +769,30 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         private void GravarLogOperacao(ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao, string operacao)
         {
-            logOperacaoAppService.Gravar("Atualização da medição",
-                "Contrato.contratoRetificacaoItemMedicao_Atualiza",
+            string descricaoOperacao= "";
+            string nomeRotina="";
+            if (operacao == "INSERT" || operacao == "UPDATE")
+            {
+                descricaoOperacao = "Atualização da medição";
+                nomeRotina = "Contrato.contratoRetificacaoItemMedicao_Atualiza";
+            }
+            if (operacao == "DELETE")
+            {
+                descricaoOperacao = "Cancelamento da medição";
+                nomeRotina = "Contrato.contratoRetificacaoItemMedicao_Deleta";
+            }
+
+
+            logOperacaoAppService.Gravar(descricaoOperacao,
+                nomeRotina,
                 "Contrato.contratoRetificacaoItemMedicao",
                 operacao,
                 MedicaoToXML(contratoRetificacaoItemMedicao));
 
         }
 
+
+        
         #endregion
     }
 }

@@ -562,6 +562,12 @@
                                     disableBtnSalvar = "disabled";
                                 }
                             }
+
+                            @{
+                                var url = Url.Action("Imprimir", "MedicaoContrato") + "/" + @Html.DisplayFor(m => m.ContratoRetificacaoItemMedicao.Id);
+                            }
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url } )
+
                             <button id="btnSalvar" type="submit" class="btn btn-primary @disableBtnSalvar">
                                 Salvar
                             </button>
@@ -701,20 +707,6 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.sequencialItem);
                     jsonRetificaoProvisaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val());
                     $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
-                    $("#@Html.IdFor(m => m.PodeSalvar)").val(result.ehPodeSalvar);
-                    $("#@Html.IdFor(m => m.PodeCancelar)").val(result.ehPodeCancelar);
-                    if (result.ehPodeSalvar) {
-                        document.getElementById('btnSalvar').className = "btn btn-primary right";
-                    }
-                    else {
-                        document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
-                    }
-                    if (result.ehPodeCancelar) {
-                        document.getElementById('btnCancelar').className = "btn btn-danger";
-                    }
-                    else {
-                        document.getElementById('btnCancelar').className = "btn btn-danger disabled";
-                    }
                 }
                 else
                 {
@@ -730,20 +722,6 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
                     jsonRetificaoProvisaoArray = null;
                     $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
-                    $("#@Html.IdFor(m => m.PodeSalvar)").val(result.ehPodeSalvar);
-                    $("#@Html.IdFor(m => m.PodeCancelar)").val(result.ehPodeCancelar);
-                    if (result.ehPodeSalvar) {
-                        document.getElementById('btnSalvar').className = "btn btn-primary right";
-                    }
-                    else {
-                        document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
-                    }
-                    if (result.ehPodeCancelar) {
-                        document.getElementById('btnCancelar').className = "btn btn-danger";
-                    }
-                    else {
-                        document.getElementById('btnCancelar').className = "btn btn-danger disabled";
-                    }
                 }
                 isRecuperou = result.ehRecuperou;
             },
@@ -761,20 +739,6 @@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
                 jsonRetificaoProvisaoArray = null;
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
-                $("#@Html.IdFor(m => m.PodeSalvar)").val(result.ehPodeSalvar);
-                $("#@Html.IdFor(m => m.PodeCancelar)").val(result.ehPodeCancelar);
-                if (result.ehPodeSalvar) {
-                    document.getElementById('btnSalvar').className = "btn btn-primary right";
-                }
-                else {
-                    document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
-                }
-                if (result.ehPodeCancelar) {
-                    document.getElementById('btnCancelar').className = "btn btn-danger";
-                }
-                else {
-                    document.getElementById('btnCancelar').className = "btn btn-danger disabled";
-                }
             }
         });
 
@@ -929,8 +893,34 @@
                 $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(false);
                 $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(false);
 
+                tratarBotoes(true, false, false);
+
                 setarAbaMedicao();
             }
+        }
+    }
+
+    function tratarBotoes(condicaoSalvar, condicaoCancelar, condicaoImprimir) {
+        $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
+        $("#@Html.IdFor(m => m.PodeCancelar)").val(condicaoCancelar);
+        $("#@Html.IdFor(m => m.PodeImprimir)").val(condicaoImprimir);
+        if (condicaoSalvar) {
+            document.getElementById('btnSalvar').className = "btn btn-primary right";
+        }
+        else {
+            document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
+        }
+        if (condicaoCancelar) {
+            document.getElementById('btnCancelar').className = "btn btn-danger";
+        }
+        else {
+            document.getElementById('btnCancelar').className = "btn btn-danger disabled";
+        }
+        if (condicaoImprimir) {
+            document.getElementById('btnImprimir').className = "btn btn-primary";
+        }
+        else {
+            document.getElementById('btnImprimir').className = "btn btn-primary disabled";
         }
     }
 
@@ -949,6 +939,8 @@
         $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)').val(0);
         $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)').val(0);
         $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)').val(null);
+
+        tratarBotoes(false, false, false);
     }
 
     function setarAbaProvisionamento() {
@@ -1229,25 +1221,18 @@
             $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(false);
             if (jsonMedicao.Situacao == 0) {
                 $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val(true);
-                $("#@Html.IdFor(m => m.PodeSalvar)").val(true);
-                document.getElementById('btnSalvar').className = "btn btn-primary right";
-                $("#@Html.IdFor(m => m.PodeCancelar)").val(true);
-                document.getElementById('btnCancelar').className = "btn btn-danger";
-
+                tratarBotoes(true, true, true);
             }
             else if (jsonMedicao.Situacao == 1) {
                 $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(true);
-                $("#@Html.IdFor(m => m.PodeSalvar)").val(true);
-                document.getElementById('btnSalvar').className = "btn btn-primary right";
-                $("#@Html.IdFor(m => m.PodeCancelar)").val(true);
-                document.getElementById('btnCancelar').className = "btn btn-danger";
+                tratarBotoes(true, true, true);
             }
             else if (jsonMedicao.Situacao == 2) {
                 $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(true);
-                $("#@Html.IdFor(m => m.PodeSalvar)").val(false);
-                document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
-                $("#@Html.IdFor(m => m.PodeCancelar)").val(true);
-                document.getElementById('btnCancelar').className = "btn btn-danger disabled";
+                tratarBotoes(false, false, true);
+            }
+            else {
+                tratarBotoes(false, false, true);
             }
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val(jsonMedicao.TipoDocumentoId);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val(jsonMedicao.NumeroDocumento);
@@ -1323,6 +1308,8 @@
 
             var quantidadeItemCronograma = roundDecimal(floatToString(jsonMedicao.ContratoRetificacaoItemCronograma.Quantidade), 7);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(quantidadeItemCronograma);
+
+            tratarBotoes(true, true, true);
 
             setarAbaMedicao();
 
