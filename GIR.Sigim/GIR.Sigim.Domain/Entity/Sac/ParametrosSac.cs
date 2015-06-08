@@ -14,14 +14,14 @@ namespace GIR.Sigim.Domain.Entity.Sac
         public ClienteFornecedor Cliente { get; set; }
         public string Mascara { get; set; }
         public byte[] IconeRelatorio { get; set; }
-        public short? PrazoAvaliacao { get; set; }
-        public short? PrazoConclusao { get; set; }
-        public string EmailEnvio { get; set; }
-        public string SenhaEnvio { get; set; }
-        public string PortaEnvio { get; set; }
-        public string ServidorEnvio { get; set; }
-        public string corpoMensagemAutomaticaSacweb { get; set; }
-        public bool? HabilitaSSL { get; set; }
+        public int? PrazoAvaliacao { get; set; }
+        public int? PrazoConclusao { get; set; }
+        //public string EmailEnvio { get; set; }
+        //public string SenhaEnvio { get; set; }
+        //public string PortaEnvio { get; set; }
+        //public string ServidorEnvio { get; set; }
+       //public string corpoMensagemAutomaticaSacweb { get; set; }
+        //public bool? HabilitaSSL { get; set; }
         public ParametrosSac()
         {
             //this.InterfaceCotacao = new InterfaceCotacao();

@@ -134,6 +134,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             CarregarCombosMedicao(model);
  
             model.PodeSalvar = false;
+            model.PodeCancelar = false;
+            model.PodeImprimir = false;
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
             if (parametros != null)
@@ -185,8 +187,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             ListaItensUltimoContratoRetificacao = contratoRetificacao.ListaContratoRetificacaoItem;
 
             model.ListaServicoContratoRetificacaoItem = new SelectList(ListaItensUltimoContratoRetificacao, "Id", "SequencialDescricaoItemComplemento", ListaItensUltimoContratoRetificacao.Select(c => c.Id));
-
-            model.PodeSalvar = true;
 
             return View(model);
         }
@@ -338,6 +338,31 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             {
                 ehRecuperou = false,
                 errorMessage = string.Empty
+            });
+        }
+
+        [HttpPost]
+        public ActionResult Cancelar(int? id)
+        {
+            bool cancelou = false;
+
+            cancelou = contratoRetificacaoItemMedicaoAppService.Cancelar(id);
+            var msg = messageQueue.GetAll()[0].Text;
+            messageQueue.Clear();
+
+            if (!cancelou)
+            {
+                return Json(new
+                {
+                    ehCancelou = false,
+                    message = msg
+                });
+            }
+
+            return Json(new
+            {
+                ehCancelou = true,
+                message = msg
             });
         }
 

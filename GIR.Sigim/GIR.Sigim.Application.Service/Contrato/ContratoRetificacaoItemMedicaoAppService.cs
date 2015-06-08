@@ -27,6 +27,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         private ITituloPagarAppService tituloPagarAppService;
         private IParametrosContratoAppService parametrosContratoAppService;
         private IBloqueioContabilAppService bloqueioContabilAppService;
+        private ILogOperacaoAppService logOperacaoAppService;
 
         #endregion
 
@@ -39,6 +40,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                         ITituloPagarAppService tituloPagarAppService,
                                                         IParametrosContratoAppService parametrosContratoAppService,
                                                         IBloqueioContabilAppService bloqueioContabilAppService,
+                                                        ILogOperacaoAppService logOperacaoAppService,
                                                         MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -49,29 +51,30 @@ namespace GIR.Sigim.Application.Service.Contrato
             this.tituloPagarAppService = tituloPagarAppService;
             this.parametrosContratoAppService = parametrosContratoAppService;
             this.bloqueioContabilAppService = bloqueioContabilAppService;
+            this.logOperacaoAppService = logOperacaoAppService;
         }
 
         #endregion
 
         #region Métodos IContratoRetificacaoItemMedicaoAppService
 
-        public void ObterQuantidadesEhValoresMedicao(int ContratoId,
-                                                     int SequencialItem,
-                                                     int SequencialCronograma,
-                                                     ref decimal QuantidadeTotalMedido,
-                                                     ref decimal ValorTotalMedido,
-                                                     ref decimal QuantidadeTotalLiberado,
-                                                     ref decimal ValorTotalLiberado)
+        public void ObterQuantidadesEhValoresMedicao(int contratoId,
+                                                     int sequencialItem,
+                                                     int sequencialCronograma,
+                                                     ref decimal quantidadeTotalMedido,
+                                                     ref decimal valorTotalMedido,
+                                                     ref decimal quantidadeTotalLiberado,
+                                                     ref decimal valorTotalLiberado)
         {
 
             List<ContratoRetificacaoItemMedicao> listaContratoRetificacaoItemMedicao = 
                     contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro(  ( l => 
-                                                                                    l.ContratoId == ContratoId
+                                                                                    l.ContratoId == contratoId
                                                                                  ), 
                                                                                 l => l.ContratoRetificacaoItem,
                                                                                 l => l.ContratoRetificacaoItemCronograma).Where(c =>
-                                                                                    (c.SequencialItem == SequencialItem &&
-                                                                                     c.SequencialCronograma == SequencialCronograma)
+                                                                                    (c.SequencialItem == sequencialItem &&
+                                                                                     c.SequencialCronograma == sequencialCronograma)
                                                                                 ).ToList <ContratoRetificacaoItemMedicao>();
 
             var queryMedido =
@@ -84,10 +87,10 @@ namespace GIR.Sigim.Application.Service.Contrato
                         group c by c.Situacao into g
                         select g;
 
-            QuantidadeTotalMedido = 0;
-            ValorTotalMedido = 0;
-            QuantidadeTotalLiberado = 0;
-            ValorTotalLiberado = 0;
+            quantidadeTotalMedido = 0;
+            valorTotalMedido = 0;
+            quantidadeTotalLiberado = 0;
+            valorTotalLiberado = 0;
 
             foreach (var medicaoGrupo in queryMedido)
             {
@@ -96,8 +99,8 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                     foreach (var medicao in medicaoGrupo)
                     {
-                        QuantidadeTotalMedido = QuantidadeTotalMedido + medicao.Quantidade;
-                        ValorTotalMedido = ValorTotalMedido + medicao.Valor;
+                        quantidadeTotalMedido = quantidadeTotalMedido + medicao.Quantidade;
+                        valorTotalMedido = valorTotalMedido + medicao.Valor;
                     }
                 }
                 if (medicaoGrupo.Key == SituacaoMedicao.Liberado)
@@ -105,8 +108,8 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                     foreach (var medicao in medicaoGrupo)
                     {
-                        QuantidadeTotalLiberado = QuantidadeTotalLiberado + medicao.Quantidade;
-                        ValorTotalLiberado = ValorTotalLiberado + medicao.Valor;
+                        quantidadeTotalLiberado = quantidadeTotalLiberado + medicao.Quantidade;
+                        valorTotalLiberado = valorTotalLiberado + medicao.Valor;
                     }
                 }
 
@@ -187,7 +190,7 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             contratoRetificacaoItemMedicao.ContratoId = dto.ContratoId;
  
-            if (!EhValido(dto))
+            if (!EhValidoSalvar(dto))
             {
                 return false;
             }
@@ -208,7 +211,9 @@ namespace GIR.Sigim.Application.Service.Contrato
                     }
 
                     contratoRetificacaoItemMedicaoRepository.UnitOfWork.Commit();
-                    //dto.Id = contratoRetificacaoItemMedicao.Id;
+
+                    GravarLogOperacao(contratoRetificacaoItemMedicao, novoRegistro ? "INSERT" : "UPDATE");
+
                     messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
                     return true;
                 }
@@ -274,12 +279,40 @@ namespace GIR.Sigim.Application.Service.Contrato
             return true;
         }
 
+
+        public bool Cancelar(int? contratoRetificacaoItemMedicaoId)
+        {
+            if (!EhValidoCancelar(contratoRetificacaoItemMedicaoId))
+            {
+                return false;
+            }
+
+            var contratoRetificacaoItemMedicao = contratoRetificacaoItemMedicaoRepository.ObterPeloId(contratoRetificacaoItemMedicaoId);
+
+            try
+            {
+
+                contratoRetificacaoItemMedicaoRepository.Remover(contratoRetificacaoItemMedicao);
+                contratoRetificacaoItemMedicaoRepository.UnitOfWork.Commit();
+
+                GravarLogOperacao(contratoRetificacaoItemMedicao, "DELETE");
+
+                messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception)
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.GravacaoErro, TypeMessage.Error);
+                return false;
+            }
+        }
+
         #endregion
 
 
         #region Métodos privados
 
-        private bool EhValido(ContratoRetificacaoItemMedicaoDTO dto)
+        private bool EhValidoSalvar(ContratoRetificacaoItemMedicaoDTO dto)
         {
             int contratadoId;
 
@@ -339,21 +372,26 @@ namespace GIR.Sigim.Application.Service.Contrato
                 return false;
             }
 
-            if (ExisteNumeroDocumento(dto.DataEmissao, 
-                                      dto.NumeroDocumento,
-                                      contratadoId))
-            {
-                messageQueue.Add(Resource.Contrato.ErrorMessages.DocumentoExistente, TypeMessage.Error);
-                return false;
-            }
+            bool condicao = !dto.Id.HasValue ? true: ( dto.Id.Value == 0 ? true : false );
 
-            if (ExisteNumeroDocumentoTituloAPagar(dto.DataEmissao, 
-                                                  dto.DataVencimento, 
-                                                  dto.NumeroDocumento, 
-                                                  contratadoId))
+            if (condicao)
             {
-                messageQueue.Add(Resource.Contrato.ErrorMessages.DocumentoExistente, TypeMessage.Error);
-                return false;
+                if (ExisteNumeroDocumento(dto.DataEmissao,
+                                          dto.NumeroDocumento,
+                                          contratadoId))
+                {
+                    messageQueue.Add(Resource.Contrato.ErrorMessages.DocumentoExistente, TypeMessage.Error);
+                    return false;
+                }
+
+                if (ExisteNumeroDocumentoTituloAPagar(dto.DataEmissao,
+                                                      dto.DataVencimento,
+                                                      dto.NumeroDocumento,
+                                                      contratadoId))
+                {
+                    messageQueue.Add(Resource.Contrato.ErrorMessages.DocumentoExistente, TypeMessage.Error);
+                    return false;
+                }
             }
 
             if (dto.DataMedicao == null)
@@ -583,6 +621,178 @@ namespace GIR.Sigim.Application.Service.Contrato
             return valorRetido;
         }
 
+        private bool EhValidoCancelar(int? contratoRetificacaoItemMedicaoId)
+        {
+
+            if (!contratoRetificacaoItemMedicaoId.HasValue)
+            {
+                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.SelecioneUmaMedicao, TypeMessage.Error);
+                return false;
+            }
+
+
+            if (contratoRetificacaoItemMedicaoId.Value == 0)
+            {
+                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.SelecioneUmaMedicao, TypeMessage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private string MedicaoToXML(ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<contratoRetificacaoItemMedicao>");
+            sb.Append("<Contrato.contratoRetificacaoItemMedicao>");
+            sb.Append("<codigo>" + contratoRetificacaoItemMedicao.Id.ToString() + "</codigo>");
+            sb.Append("<contrato>" + contratoRetificacaoItemMedicao.ContratoId.ToString() + "</contrato>");
+            //sb.Append("<descricaoContrato>" + contratoRetificacaoItemMedicao.Contrato.ContratoDescricao.Descricao + "</descricaoContrato>");
+            sb.Append("<contratoRetificacao>" + contratoRetificacaoItemMedicao.ContratoRetificacaoId.ToString() +  "</contratoRetificacao>");
+            sb.Append("<contratoRetificacaoItem>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItemId.ToString() + "</contratoRetificacaoItem>");
+            sb.Append("<sequencialItem>" + contratoRetificacaoItemMedicao.SequencialItem.ToString() + "</sequencialItem>");
+            //sb.Append("<servico>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItem.ServicoId + "</servico>");
+            sb.Append("<contratoRetificacaoItemCronograma>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId.ToString() + "</contratoRetificacaoItemCronograma>");
+            sb.Append("<sequencialCronograma>" + contratoRetificacaoItemMedicao.SequencialCronograma.ToString() + "</sequencialCronograma>");
+            sb.Append("<tipoDocumento>" + contratoRetificacaoItemMedicao.TipoDocumentoId.ToString() + "</tipoDocumento>");
+            //sb.Append("<tipoDocumentoDescricao>" + contratoRetificacaoItemMedicao.TipoDocumento.Descricao + "</tipoDocumentoDescricao>");
+            //sb.Append("<tipoDocumentoSigla>" + contratoRetificacaoItemMedicao.TipoDocumento.Sigla + "</tipoDocumentoSigla>");
+            sb.Append("<numeroDocumento>" +  contratoRetificacaoItemMedicao.NumeroDocumento + "</numeroDocumento>");
+            sb.Append("<multiFornecedor>" + contratoRetificacaoItemMedicao.MultiFornecedorId.ToString() + "</multiFornecedor>");
+            sb.Append("<dataCadastro>" + contratoRetificacaoItemMedicao.DataCadastro.ToString() + "</dataCadastro>");
+            sb.Append("<dataVencimento>" + contratoRetificacaoItemMedicao.DataVencimento.ToString() + "</dataVencimento>");
+            sb.Append("<dataEmissao>" +  contratoRetificacaoItemMedicao.DataEmissao.ToString() + "</dataEmissao>");
+            sb.Append("<dataMedicao>" +  contratoRetificacaoItemMedicao.DataMedicao.ToString() + "</dataMedicao>");
+            sb.Append("<usuarioMedicao>" + contratoRetificacaoItemMedicao.UsuarioMedicao + "</usuarioMedicao>");
+            sb.Append("<valor>" + contratoRetificacaoItemMedicao.Valor.ToString("0.00000") + "</valor>");
+            sb.Append("<quantidade>" + contratoRetificacaoItemMedicao.Quantidade.ToString("0.00000") + "</quantidade>");
+            if (contratoRetificacaoItemMedicao.ValorRetido.HasValue)
+            {
+                sb.Append("<valorRetido>" + contratoRetificacaoItemMedicao.ValorRetido.Value.ToString("0.00000") + "</valorRetido>");
+            }
+            else{
+                sb.Append("<valorRetido />");
+            }
+            sb.Append("<observacao>" + contratoRetificacaoItemMedicao.Observacao + "</observacao>");
+            sb.Append("<situacao>" + ((int)contratoRetificacaoItemMedicao.Situacao).ToString()  + "</situacao>");
+            if (contratoRetificacaoItemMedicao.Desconto.HasValue)
+            {
+                sb.Append("<desconto>" +  contratoRetificacaoItemMedicao.Desconto.Value.ToString("0.00000") + "</desconto>");
+                sb.Append("<motivoDesconto>" + contratoRetificacaoItemMedicao.MotivoDesconto + "</motivoDesconto>");
+            }
+            else{
+                sb.Append("<desconto />");
+                sb.Append("<motivoDesconto />");
+            }
+            //sb.Append("<situacaoContrato>" + ((int)contratoRetificacaoItemMedicao.Contrato.Situacao).ToString() + "</situacaoContrato>");
+            //sb.Append("<tipoContrato>" + contratoRetificacaoItemMedicao.Contrato.TipoContrato.ToString() + "</tipoContrato>");
+            //sb.Append("<contratado>" + contratoRetificacaoItemMedicao.Contrato.ContratadoId.ToString() + "</contratado>");
+            //sb.Append("<nomeContratado>" + contratoRetificacaoItemMedicao.Contrato.Contratado.Nome + "</nomeContratado>");
+            //if (contratoRetificacaoItemMedicao.Contrato.Contratado.TipoPessoa == "F"){
+            //    sb.Append("<CPFCNPJContratado>" + contratoRetificacaoItemMedicao.Contrato.Contratado.PessoaFisica.Cpf + "</CPFCNPJContratado>");
+            //}
+            //else if (contratoRetificacaoItemMedicao.Contrato.Contratado.TipoPessoa == "J"){
+            //    sb.Append("<CPFCNPJContratado>" + contratoRetificacaoItemMedicao.Contrato.Contratado.PessoaJuridica.Cnpj + "</CPFCNPJContratado>");
+            //}
+            //sb.Append("<contratante>" + contratoRetificacaoItemMedicao.Contrato.ContratanteId + "</contratante>");
+            //sb.Append("<nomeContratante>" + contratoRetificacaoItemMedicao.Contrato.Contratante.Nome + "</nomeContratante>");
+            //if (contratoRetificacaoItemMedicao.Contrato.Contratante.TipoPessoa == "F"){
+            //    sb.Append("<CPFCNPJContratante>" + contratoRetificacaoItemMedicao.Contrato.Contratante.PessoaFisica.Cpf + "</CPFCNPJContratante>");
+            //}
+            //else if (contratoRetificacaoItemMedicao.Contrato.Contratado.TipoPessoa == "J"){
+            //    sb.Append("<CPFCNPJContratante>" + contratoRetificacaoItemMedicao.Contrato.Contratante.PessoaJuridica.Cnpj + "</CPFCNPJContratante>");
+            //}
+            //if (contratoRetificacaoItemMedicao.Contrato.TipoContrato == 0){
+            //    sb.Append("<codigoFornecedor>" + contratoRetificacaoItemMedicao.Contrato.ContratadoId + "</codigoFornecedor>");
+            //}
+            //else{
+            //    sb.Append("<codigoFornecedor>" + contratoRetificacaoItemMedicao.Contrato.ContratanteId + "</codigoFornecedor>");
+            //}
+
+            //A tag abaixo é um sum do campo valor para todas as medições que ocorreram no contrato, não fiz esse campo"
+            //sb.Append("<valorTotalMedidoLiberadoContrato>" +  + "</valorTotalMedidoLiberadoContrato>");
+            //decimal valorContrato = 0;
+            //if (contratoRetificacaoItemMedicao.Contrato.ValorContrato.HasValue){
+            //    sb.Append("<valorContrato>" + contratoRetificacaoItemMedicao.Contrato.ValorContrato.Value.ToString("0.00000") + "</valorContrato>");
+            //    valorContrato = contratoRetificacaoItemMedicao.Contrato.ValorContrato.Value;
+            //}
+            //else{
+            //    sb.Append("<valorContrato />");
+            //}
+            //decimal saldoContrato = 0;
+            //saldoContrato = valorContrato - <valorTotalMedidoLiberadoContrato>;
+            //sb.Append("<saldoContrato>" + saldoContrato.ToString("0.00000") + "</saldoContrato>");
+            //sb.Append("<centroCusto>" + contratoRetificacaoItemMedicao.Contrato.CodigoCentroCusto + "</centroCusto>");
+            //sb.Append("<descricaoCentroCusto>" + contratoRetificacaoItemMedicao.Contrato.CentroCusto.Descricao + "</descricaoCentroCusto>");
+            //sb.Append("<situacaoCentroCusto>" + contratoRetificacaoItemMedicao.Contrato.CentroCusto.Situacao + "</situacaoCentroCusto>");
+            //sb.Append("<classe>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItem.CodigoClasse + "</classe>");
+            //sb.Append("<descricaoClasse>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItem.Classe.Descricao + "</descricaoClasse>");
+            //sb.Append("<precoUnitario>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario.ToString("0.00000") + "</precoUnitario>");
+            //if (contratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem.HasValue){
+            //    sb.Append("<valorItem>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem.Value.ToString("0.00000") + "</valorItem>");
+            //}
+            //else{
+            //    sb.Append("<valorItem />");
+            //}
+            //if (contratoRetificacaoItemMedicao.ContratoRetificacaoItem.Quantidade.HasValue){
+            //    sb.Append("<quantidadeItem>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItem.Quantidade.Value.ToString("0.00000") + "</valorItem>");
+            //}
+            //else{
+            //    sb.Append("<quantidadeItem />");
+            //}
+            //sb.Append("<descricaoCronograma>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Descricao + "</descricaoCronograma>");
+            //sb.Append("<quantidadeCronograma>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade.ToString("0.00000") + "</quantidadeCronograma>");
+            //sb.Append("<valorCronograma>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Valor.ToString("0.00000") + "</valorCronograma>");
+            //sb.Append("<unidadeMedida>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida + "</unidadeMedida>");
+            //sb.Append("<descricaoItem>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.Descricao + "</descricaoItem>");
+            //sb.Append("<complementoDescricaoItem>" + contratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao + "</complementoDescricaoItem>");
+            sb.Append("<descricaoSituacaoMedicao>" + contratoRetificacaoItemMedicao.Situacao.ObterDescricao() + "</descricaoSituacaoMedicao>");
+            //sb.Append("<naturezaItem>" + ((int)contratoRetificacaoItemMedicao.ContratoRetificacaoItem.NaturezaItem).ToString() + "</naturezaItem>");
+            sb.Append("<codigoBarras>" + contratoRetificacaoItemMedicao.CodigoBarras + "</codigoBarras>");
+            //sb.Append("<valorTotalMedido>" +   + "</valorTotalMedido>");
+            //sb.Append("<quantidadeTotalMedida>" +  + "</quantidadeTotalMedida>");
+            //sb.Append("<valorTotalLiberado>" +  + "</valorTotalLiberado>");
+            //sb.Append("<quantidadeTotalLiberada>" + + "</quantidadeTotalLiberada>");
+            //sb.Append("<valorTotalMedidoLiberado>" + + "</valorTotalMedidoLiberado>");
+            //sb.Append("<quantidadeTotalMedidaLiberada>" +  + "</quantidadeTotalMedidaLiberada>");
+            //sb.Append("<valorImpostoRetido>" + + "</valorImpostoRetido>");
+            //sb.Append("<valorImpostoRetidoMedicao>" +  + "</valorImpostoRetidoMedicao>");
+            //sb.Append("<valorTotalMedidoNota>" + + "</valorTotalMedidoNota>");
+            //sb.Append("<valorImpostoIndiretoMedicao>" +  + "</valorImpostoIndiretoMedicao>");
+            //sb.Append("<valorTotalMedidoIndireto>" +  +"</valorTotalMedidoIndireto>");
+            sb.Append("</Contrato.contratoRetificacaoItemMedicao>");
+            sb.Append("</contratoRetificacaoItemMedicao>");
+
+            return sb.ToString();
+        }
+
+
+        private void GravarLogOperacao(ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao, string operacao)
+        {
+            string descricaoOperacao= "";
+            string nomeRotina="";
+            if (operacao == "INSERT" || operacao == "UPDATE")
+            {
+                descricaoOperacao = "Atualização da medição";
+                nomeRotina = "Contrato.contratoRetificacaoItemMedicao_Atualiza";
+            }
+            if (operacao == "DELETE")
+            {
+                descricaoOperacao = "Cancelamento da medição";
+                nomeRotina = "Contrato.contratoRetificacaoItemMedicao_Deleta";
+            }
+
+
+            logOperacaoAppService.Gravar(descricaoOperacao,
+                nomeRotina,
+                "Contrato.contratoRetificacaoItemMedicao",
+                operacao,
+                MedicaoToXML(contratoRetificacaoItemMedicao));
+
+        }
+
+
+        
         #endregion
     }
 }

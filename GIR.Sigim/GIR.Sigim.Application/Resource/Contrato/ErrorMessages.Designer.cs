@@ -142,6 +142,15 @@ namespace GIR.Sigim.Application.Resource.Contrato {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selecione uma medição..
+        /// </summary>
+        public static string SelecioneUmaMedicao {
+            get {
+                return ResourceManager.GetString("SelecioneUmaMedicao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O valor do campo &quot;{0}&quot; está maior que o valor do campo &quot;{1}&quot;.  .
         /// </summary>
         public static string ValorMaiorQue {
