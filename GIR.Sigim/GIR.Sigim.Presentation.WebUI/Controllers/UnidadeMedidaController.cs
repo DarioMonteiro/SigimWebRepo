@@ -7,11 +7,10 @@ using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
-using GIR.Sigim.Presentation.WebUI.Areas.Sigim.ViewModel;
-using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
+using GIR.Sigim.Presentation.WebUI.Controllers;
 
-namespace GIR.Sigim.Presentation.WebUI.Areas.Sigim.Controllers
+namespace GIR.Sigim.Presentation.WebUI.Controllers
 {
     public class UnidadeMedidaController : BaseController
     {
@@ -44,7 +43,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sigim.Controllers
             return View(model);
         }
 
-
         public ActionResult Lista(UnidadeMedidaViewModel model)
         {
             if (ModelState.IsValid)
@@ -59,6 +57,28 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sigim.Controllers
                 }
                 return PartialView("_EmptyListPartial");
             }
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+        public ActionResult CarregarItem(string sigla)
+        {
+            var unidadeMedida = unidadeMedidaAppService.ObterPeloCodigo(sigla) ?? new UnidadeMedidaDTO();
+            return Json(unidadeMedida);
+        }        
+
+        [HttpPost]
+        public ActionResult Salvar(UnidadeMedidaViewModel model)
+        {
+            if (ModelState.IsValid)
+                unidadeMedidaAppService.Salvar(model.UnidadeMedida);
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+        [HttpPost]
+        public ActionResult Deletar(string sigla)
+        {
+            unidadeMedidaAppService.Deletar(sigla);
             return PartialView("_NotificationMessagesPartial");
         }
 

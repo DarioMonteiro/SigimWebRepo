@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros.Sigim;
 
-namespace GIR.Sigim.Presentation.WebUI.Areas.Sigim.ViewModel
+namespace GIR.Sigim.Presentation.WebUI.ViewModel
 {
     public class UnidadeMedidaViewModel
     {

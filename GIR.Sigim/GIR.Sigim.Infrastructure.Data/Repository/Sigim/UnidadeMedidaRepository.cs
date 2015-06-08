@@ -47,7 +47,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
                     break;
                 case "sigla":
                 default:
-                    set = ascending ? set.OrderBy(l => l.Sigla) : set.OrderByDescending(l => l.Id);
+                    set = ascending ? set.OrderBy(l => l.Sigla) : set.OrderByDescending(l => l.Sigla);
                     break;
             }
 
@@ -61,9 +61,11 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
             if (includes.Any())
                 set = includes.Aggregate(set, (current, expression) => current.Include(expression));
 
+
             return set.Where(l => l.Sigla == sigla).SingleOrDefault();
         }
 
+        
         #endregion
     }
 }

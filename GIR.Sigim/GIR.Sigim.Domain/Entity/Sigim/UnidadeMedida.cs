@@ -16,7 +16,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public UnidadeMedida()
         {
             this.ListaMaterial = new HashSet<Material>();
-            //this.ListaServico = new HashSet<Servico>(); 
+            this.ListaServico = new HashSet<Servico>(); 
         }
     }
 }

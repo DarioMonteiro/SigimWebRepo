@@ -101,6 +101,7 @@
         })
         .success(function (result) {
             $('#notificationMessages').html(result);
+            limpaPaginacao();
             clearForm();
             doFilter();
         });
@@ -128,6 +129,7 @@
     }
 
     function loadItem(id) {
+        novo();
         $.ajax({
             type: 'POST',
             url: '@Url.Action("CarregarItem", "Caixa")',
@@ -141,10 +143,17 @@
         .success(function (result) {
             $('#@Html.IdFor(m => m.Caixa.Id)').val(result.Id);
             $('#@Html.IdFor(m => m.Caixa.Descricao)').val(result.Descricao);
-            $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', result.Situacao);
-            $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val(result.CentroContabil);            
-            $('#@Html.IdFor(m => m.Caixa.CentroCusto)').val(result.CentroCusto); 
+            $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', result.Inativo);
+            $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val(result.CentroContabil);                  
+            $('#@Html.IdFor(m => m.Caixa.CentroCusto.Codigo)').val(result.CentroCusto.Codigo);
+            $('#@Html.IdFor(m => m.Caixa.CentroCusto.Descricao)').val(result.CentroCusto.Descricao);
             goToTop();
         });
     }
+
+
+    function limpaPaginacao() {
+        $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
+    };
+
 </script>

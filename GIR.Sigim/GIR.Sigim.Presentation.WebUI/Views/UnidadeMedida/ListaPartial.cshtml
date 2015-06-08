@@ -54,9 +54,10 @@
                 <tbody>
                     @foreach (var item in Lista)
                     {
-                        <tr>
-                            <td class="text-center"><a href="javascript:loadItem(@item.Sigla);">@item.Sigla</a></td>                             
-                            <td class="text-center">@item.Descricao</td>                           
+                        <tr>                                      
+                            <td class="text-right"><a href="javascript:loadItem('@item.Sigla');">@item.Sigla</a></td>                            
+                            @*<td class="text-right"><a href="javascript:loadItem('%');">@item.Sigla</a></td>                            *@
+                            <td class="text-center">@item.Descricao</td>                            
                         </tr>
                     }
                 </tbody>

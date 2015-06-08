@@ -310,3 +310,7 @@ function isValidDate(format, value) {
 
     return isValid;
 }
+
+function goToTop() {
+    $('html, body').animate({ scrollTop: 0 }, 'slow');
+}

@@ -26,7 +26,7 @@ namespace GIR.Sigim.Application.Service.Sigim
             this.unidadeMedidaRepository = unidadeMedidaRepository;
         }
 
-        #region ITipoCompromissoAppService Members
+        #region IUnidadeMedidaAppService Members
 
         public List<UnidadeMedidaDTO> ListarPeloFiltro(UnidadeMedidaFiltro filtro, out int totalRegistros)
         {
@@ -52,64 +52,63 @@ namespace GIR.Sigim.Application.Service.Sigim
             return unidadeMedidaRepository.ListarTodos().To<List<UnidadeMedidaDTO>>();
         }
 
-        //public bool Salvar(TipoCompromissoDTO dto)
-        //{
-        //    if (dto == null)
-        //        throw new ArgumentNullException("dto");
+        public bool Salvar(UnidadeMedidaDTO dto)
+        {
+            if (dto == null)
+                throw new ArgumentNullException("dto");
 
-        //    bool novoItem = false;
+            bool novoItem = false;
 
-        //    var tipoCompromisso = tipoCompromissoRepository.ObterPeloId(dto.Id);
-        //    if (tipoCompromisso == null)
-        //    {
-        //        tipoCompromisso = new TipoCompromisso();
-        //        novoItem = true;
-        //    }
+            var unidadeMedida = unidadeMedidaRepository.ObterPeloCodigo(dto.Sigla);
+            if (unidadeMedida == null)
+            {
+                unidadeMedida = new UnidadeMedida();
+                novoItem = true;
+            }
 
-        //    tipoCompromisso.Descricao = dto.Descricao;
-        //    tipoCompromisso.TipoPagar = dto.TipoPagar;
-        //    tipoCompromisso.TipoReceber = dto.TipoReceber;
-            
-        //    if (Validator.IsValid(tipoCompromisso, out validationErrors))
-        //    {
-        //        if (novoItem)
-        //            tipoCompromissoRepository.Inserir(tipoCompromisso);
-        //        else
-        //            tipoCompromissoRepository.Alterar(tipoCompromisso);
+            unidadeMedida.Descricao = dto.Descricao;
+            unidadeMedida.Sigla = dto.Sigla;
 
-        //        tipoCompromissoRepository.UnitOfWork.Commit();
-        //        messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
-        //        return true;
-        //    }
-        //    else
-        //        messageQueue.AddRange(validationErrors, TypeMessage.Error);
+            if (Validator.IsValid(unidadeMedida, out validationErrors))
+            {
+                if (novoItem)                    
+                    unidadeMedidaRepository.Inserir(unidadeMedida);
+                else
+                    unidadeMedidaRepository.Alterar(unidadeMedida);
 
-        //    return false;
-        //}
+                unidadeMedidaRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            else
+                messageQueue.AddRange(validationErrors, TypeMessage.Error);
 
-        //public bool Deletar(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
-        //        return false;
-        //    }
+            return false;
+        }
 
-        //    var tipoCompromisso = tipoCompromissoRepository.ObterPeloId(id);
+        public bool Deletar(string sigla)
+        {           
+            if (sigla == null)
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
+                return false;
+            }
 
-        //    try
-        //    {
-        //        tipoCompromissoRepository.Remover(tipoCompromisso);
-        //        tipoCompromissoRepository.UnitOfWork.Commit();
-        //        messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
-        //        return true;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.RegistroEmUso, tipoCompromisso.Descricao), TypeMessage.Error);
-        //        return false;
-        //    }
-        //}
+            var unidadeMedida = unidadeMedidaRepository.ObterPeloCodigo(sigla);
+
+            try
+            {
+                unidadeMedidaRepository.Remover(unidadeMedida);
+                unidadeMedidaRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception)
+            {
+                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.RegistroEmUso, unidadeMedida.Descricao), TypeMessage.Error);
+                return false;
+            }
+        }
 
         #endregion
     }
