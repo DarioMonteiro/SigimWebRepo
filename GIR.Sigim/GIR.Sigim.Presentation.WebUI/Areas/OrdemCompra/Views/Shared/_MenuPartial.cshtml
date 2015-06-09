@@ -5,23 +5,15 @@
     <li>
         <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Sistema</span></a>
         <ul>
-            <li>
-                @Html.ActionLink("Parâmetros", "Index", "Parametros")
-            </li>
-            <li>
-                @Html.ActionLink("Parâmetros - usuário", "Index", "ParametrosUsuario")
-            </li>
+            <li>@Html.ActionLink("Parâmetros", "Index", "Parametros")</li>
+            <li>@Html.ActionLink("Parâmetros - usuário", "Index", "ParametrosUsuario")</li>
         </ul>
     </li>
     <li>
         <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Cadastros</span></a>
-        <ul>
-            <li>
-                <a href="#">Material</a>
-                <ul>
-                    <li>@Html.ActionLink("Cadastra", "Index", "Material")</li>
-                </ul>
-            </li>
+        <ul>            
+             <li>@Html.ActionLink("Unidade de medida", "", "UnidadeMedida" )</li>
+             <li>@Html.ActionLink("Cadastra", "Index", "Material")</li>                        
         </ul>
     </li>
     <li>
@@ -33,9 +25,7 @@
                     <li>@Html.ActionLink("Cadastro", "Index", "PreRequisicaoMaterial")</li>
                 </ul>
             </li>
-            <li>
-                @Html.ActionLink("Cadastro", "Index", "RequisicaoMaterial")
-            </li>
+            <li>@Html.ActionLink("Cadastro", "Index", "RequisicaoMaterial")</li>
         </ul>
     </li>
 </ul>

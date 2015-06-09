@@ -25,27 +25,27 @@ namespace GIR.Sigim.Application.DTO.Sac
         [Display(Name = "Mascara")]
         public string Mascara { get; set; }
 
-        [Display(Name = "Email")]
-        public string EmailEnvia { get; set; }
+        //[Display(Name = "Email")]
+        //public string EmailEnvia { get; set; }
 
-        [Display(Name = "Senha")]
-        public string senhaEnvio { get; set; }
+        //[Display(Name = "Senha")]
+        //public string senhaEnvio { get; set; }
 
-        [Display(Name = "Porta")]
-        public string PortaEnvio { get; set; }
+        //[Display(Name = "Porta")]
+        //public string PortaEnvio { get; set; }
 
-        [Display(Name = "SMTP")]
-        public string ServidorEnvio { get; set; }
+        //[Display(Name = "SMTP")]
+        //public string ServidorEnvio { get; set; }
 
         [Display(Name = "Ícone para relatórios")]
         public byte[] IconeRelatorio { get; set; }
         public bool RemoverImagem { get; set; }
 
-        [Display(Name = "Mensagem automatica Sac Web")]
-        public string CorpoMensagemAutomaticaSacweb { get; set; }
+        //[Display(Name = "Mensagem automatica Sac Web")]
+        //public string CorpoMensagemAutomaticaSacweb { get; set; }
 
-        [Display(Name = "Habilita SSL")]
-        public bool HabilitaSSL { get; set; }
+        //[Display(Name = "Habilita SSL")]
+        //public bool HabilitaSSL { get; set; }
 
      }
 }

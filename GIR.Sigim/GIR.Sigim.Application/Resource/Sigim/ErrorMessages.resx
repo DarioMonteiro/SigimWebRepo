@@ -138,6 +138,9 @@
   <data name="FormatoImagemInvalido" xml:space="preserve">
     <value>A imagem deve ter um dos seguintes formatos: BMP, JPG, GIF ou PNG.</value>
   </data>
+  <data name="GravacaoErro" xml:space="preserve">
+    <value>Erro ao efetuar a gravação !</value>
+  </data>
   <data name="InformeDataValida" xml:space="preserve">
     <value>Informe uma data válida.</value>
   </data>

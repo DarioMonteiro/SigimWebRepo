@@ -733,7 +733,8 @@
         return false;
     }
 
-    $(document).on("centroCustoValidado",        function (e) {
+    $(document).on("centroCustoValidado",
+        function (e) {
             $("#orcamentoId").val(0);
             if (e.codigo != '') {
                 $.ajax({

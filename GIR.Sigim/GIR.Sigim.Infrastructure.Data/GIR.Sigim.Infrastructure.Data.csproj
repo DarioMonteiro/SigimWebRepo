@@ -157,6 +157,7 @@
     <Compile Include="Repository\OrdemCompra\ParametrosUsuarioRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Repository\Admin\UsuarioRepository.cs" />
+    <Compile Include="Repository\Sac\ParametrosSacRepository.cs" />
     <Compile Include="Repository\Sigim\BloqueioContabilRepository.cs" />
     <Compile Include="Repository\Sigim\CifFobRepository.cs" />
     <Compile Include="Repository\Sigim\ClienteFornecedorRepository.cs" />
@@ -179,11 +180,11 @@
     <Compile Include="Repository\Sigim\InteresseBairroRepository.cs" />
     <Compile Include="Repository\Sigim\CSTRepository.cs" />
     <Compile Include="Repository\Sigim\LogOperacaoRepository.cs" />
-    <Compile Include="Repository\Sigim\UnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sigim\MaterialRepository.cs" />
     <Compile Include="Repository\Sigim\NaturezaOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\SerieNFRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCompraRepository.cs" />
+    <Compile Include="Repository\Sigim\UnidadeMedidaRepository.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup />

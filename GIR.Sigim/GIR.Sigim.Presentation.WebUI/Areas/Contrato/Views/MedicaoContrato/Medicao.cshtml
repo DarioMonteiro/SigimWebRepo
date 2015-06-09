@@ -22,6 +22,33 @@
                             new { @id = "formMedicao", @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
+
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.Codigo)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacao.RetencaoContratual)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)
+
+
+                        @Html.HiddenFor(m => m.JsonListaRetificacaoProvisao)
+                        @Html.HiddenFor(m => m.DiasMedicaoParametrosContrato)
+                        @Html.HiddenFor(m => m.DiasPagamentoParametrosContrato)
+                        @Html.HiddenFor(m => m.EhSituacaoAguardandoAprovacao)
+                        @Html.HiddenFor(m => m.EhSituacaoAguardandoLiberacao)
+                        @Html.HiddenFor(m => m.EhSituacaoLiberado)
+                        @Html.HiddenFor(m => m.DataLimiteMedicao)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoId)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)
+
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.ValorPendente)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)
+                        @Html.HiddenFor(m => m.JsonListaContratoRetificacaoItemMedicao)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Id)
+                        
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -51,14 +78,12 @@
                                                 </section>
                                             </div>
                                             <div class="row">
-                                                @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.Codigo)
                                                 <section class="col col-6">
                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.CentroCustoDescricao, new { @class = "label" })
                                                     <label class="input">
                                                         @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.CentroCustoDescricao, new {@class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section> 
-                                                @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacao.RetencaoContratual)
                                                 <section class="col col-6">
                                                     @Html.LabelFor(m => m.RetencaoContratual, new { @class = "label" })
                                                     <label class="input">
@@ -67,7 +92,6 @@
                                                 </section> 
                                             </div>
                                             <div class="row">
-                                                @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)
                                                 <section class="col col-6">
                                                     <label class="label">Contratado</label>
                                                     <label class="input">
@@ -131,19 +155,6 @@
                                                     </label>
                                                 </section>
                                             </div>
-                                            @Html.HiddenFor(m => m.JsonListaRetificacaoProvisao)
-                                            @Html.HiddenFor(m => m.DiasMedicaoParametrosContrato)
-                                            @Html.HiddenFor(m => m.DiasPagamentoParametrosContrato)
-                                            @Html.HiddenFor(m => m.EhSituacaoAguardandoAprovacao)
-                                            @Html.HiddenFor(m => m.EhSituacaoAguardandoLiberacao)
-                                            @Html.HiddenFor(m => m.EhSituacaoLiberado)
-                                            @Html.HiddenFor(m => m.DataLimiteMedicao)
-                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)
-                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)
-                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoId)
-                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)
-                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)
-                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)
                                         </fieldset>
                                     </div>
                                 </div>
@@ -383,11 +394,6 @@
 							                        </div>
 							                        <div class="tab-pane fade" id="AbaMedicao">
                                                         <fieldset>
-                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.ValorPendente)
-                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)
-                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)
-                                                            @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)
-                                                            @Html.HiddenFor(m => m.JsonListaContratoRetificacaoItemMedicao)
                                                             <div class="row">
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao, new { @class = "label" })
@@ -542,15 +548,30 @@
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                             @{
+                                string disableBtnCancelar = string.Empty;
+                                if (!Model.PodeCancelar)
+                                {
+                                    disableBtnCancelar = "disabled";
+                                }
+                            }
+                            <a data-toggle="modal" id="btnCancelar" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
+                            @{
                                 string disableBtnSalvar = string.Empty;
                                 if (!Model.PodeSalvar)
                                 {
                                     disableBtnSalvar = "disabled";
                                 }
                             }
-                            <button id="btnSalvar" type="submit" class="btn btn-primary right @disableBtnSalvar">
+
+                            @{
+                                var url = Url.Action("Imprimir", "MedicaoContrato") + "/" + @Html.DisplayFor(m => m.ContratoRetificacaoItemMedicao.Id);
+                            }
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url } )
+
+                            <button id="btnSalvar" type="submit" class="btn btn-primary @disableBtnSalvar">
                                 Salvar
                             </button>
+
                         </footer>                        
                     }
                 </div>
@@ -613,11 +634,38 @@
             setarAbaProvisionamento();
         });
 
+
+        $("#btnCancelar").on("click", function () {
+            var id = $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)').val();
+            var isCancelou = false;
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Cancelar", "MedicaoContrato")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    id: id
+                })
+            })
+            .success(function (result) {
+                //$('#notificationMessages').html(result.message);
+                smartAlert("Sucesso", result.message, "success");
+                isCancelou = result.ehCancelou;
+                if (isCancelou) {
+                    recuperaContratoItem();
+                }
+            });
+        });
     });
 
-    function refresh() {
+    function refresh(mensagem) {
         onSuccess();
-        recuperaContratoItem();
+        // se nehuma mensagem de erro retornou, eu executo o javascript recuperaContratoItem
+        if (mensagem.search('alert-danger') == -1) {
+            recuperaContratoItem();
+        }
     }
 
     function recuperaContratoItem() {
@@ -658,6 +706,7 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(result.ehNaturezaItemPorPrecoGlobal);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.sequencialItem);
                     jsonRetificaoProvisaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val());
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
                 }
                 else
                 {
@@ -667,11 +716,12 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val("");
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(0);
                     $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(result.listaContratoRetificacaoProvisao);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
                     jsonRetificaoProvisaoArray = null;
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
                 }
                 isRecuperou = result.ehRecuperou;
             },
@@ -683,11 +733,12 @@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
-                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val("");
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(0);
                 $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val();
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
                 jsonRetificaoProvisaoArray = null;
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
             }
         });
 
@@ -842,8 +893,34 @@
                 $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(false);
                 $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(false);
 
+                tratarBotoes(true, false, false);
+
                 setarAbaMedicao();
             }
+        }
+    }
+
+    function tratarBotoes(condicaoSalvar, condicaoCancelar, condicaoImprimir) {
+        $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
+        $("#@Html.IdFor(m => m.PodeCancelar)").val(condicaoCancelar);
+        $("#@Html.IdFor(m => m.PodeImprimir)").val(condicaoImprimir);
+        if (condicaoSalvar) {
+            document.getElementById('btnSalvar').className = "btn btn-primary right";
+        }
+        else {
+            document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
+        }
+        if (condicaoCancelar) {
+            document.getElementById('btnCancelar').className = "btn btn-danger";
+        }
+        else {
+            document.getElementById('btnCancelar').className = "btn btn-danger disabled";
+        }
+        if (condicaoImprimir) {
+            document.getElementById('btnImprimir').className = "btn btn-primary";
+        }
+        else {
+            document.getElementById('btnImprimir').className = "btn btn-primary disabled";
         }
     }
 
@@ -859,9 +936,11 @@
         $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Observacao)").val("");
         $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MotivoDesconto)").val("");
 
-        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)').val("");
-        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)').val("");
+        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)').val(0);
+        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)').val(0);
+        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)').val(null);
 
+        tratarBotoes(false, false, false);
     }
 
     function setarAbaProvisionamento() {
@@ -1024,13 +1103,13 @@
 
         if (quantidadeMedida == 0) {
             smartAlert("Atenção", "A quantidade medida não pode ser zero!", "warning");
-            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(quantidadePendente, 7));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(quantidadePendente), 7));
             return false;
         }
 
         if (quantidadeMedida > quantidadePendente) {
             smartAlert("Atenção", "Quantidade medida maior que quantidade pendente !", "warning");
-            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(quantidadePendente, 7));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(quantidadePendente), 7));
             return false;
         }
 
@@ -1136,23 +1215,24 @@
 
         if (jsonMedicao != null) {
 
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(jsonMedicao.Id);
             $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val(false);
             $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(false);
             $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(false);
             if (jsonMedicao.Situacao == 0) {
                 $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val(true);
-                $("#@Html.IdFor(m => m.PodeSalvar)").val(true);
-                document.getElementById('btnSalvar').className = "btn btn-primary right";
+                tratarBotoes(true, true, true);
             }
             else if (jsonMedicao.Situacao == 1) {
                 $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(true);
-                $("#@Html.IdFor(m => m.PodeSalvar)").val(true);
-                document.getElementById('btnSalvar').className = "btn btn-primary right";
+                tratarBotoes(true, true, true);
             }
             else if (jsonMedicao.Situacao == 2) {
                 $("#@Html.IdFor(m => m.EhSituacaoLiberado)").val(true);
-                $("#@Html.IdFor(m => m.PodeSalvar)").val(false);
-                document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
+                tratarBotoes(false, false, true);
+            }
+            else {
+                tratarBotoes(false, false, true);
             }
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val(jsonMedicao.TipoDocumentoId);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val(jsonMedicao.NumeroDocumento);
@@ -1188,9 +1268,11 @@
 
             var valor = roundDecimal(floatToString(jsonMedicao.Valor), 2);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(valor);
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.ValorPendente)").val(valor);
 
             var quantidade = roundDecimal(floatToString(jsonMedicao.Quantidade), 7);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(quantidade);
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)").val(quantidade);
 
             if (jsonMedicao.Desconto != null) {
                 var desconto = roundDecimal(floatToString(jsonMedicao.Desconto), 2);
@@ -1226,6 +1308,8 @@
 
             var quantidadeItemCronograma = roundDecimal(floatToString(jsonMedicao.ContratoRetificacaoItemCronograma.Quantidade), 7);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(quantidadeItemCronograma);
+
+            tratarBotoes(true, true, true);
 
             setarAbaMedicao();
 
