@@ -187,6 +187,24 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preencha o campo [{0}] com um valor maior que [{1}]..
+        /// </summary>
+        public static string ValorDeveSerMaiorQue {
+            get {
+                return ResourceManager.GetString("ValorDeveSerMaiorQue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preencha o campo [{0}] com um valor menor que [{1}]..
+        /// </summary>
+        public static string ValorDeveSerMenorQue {
+            get {
+                return ResourceManager.GetString("ValorDeveSerMenorQue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preencha o campo {0} com um valor numérico..
         /// </summary>
         public static string ValorDeveSerNumerico {

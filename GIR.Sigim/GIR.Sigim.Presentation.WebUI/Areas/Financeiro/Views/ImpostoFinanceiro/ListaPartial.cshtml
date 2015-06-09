@@ -1,0 +1,115 @@
+﻿@using GIR.Sigim.Application.DTO.Financeiro
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{IEnumerable<ImpostoFinanceiroDTO> Lista = Model.Records as IEnumerable<ImpostoFinanceiroDTO>;}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector",
+                                @aria_controls = "dt_basic",
+                                @class = "form-control",
+                                onchange = "changePageSize();"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string idSortingSuffix = "sorting";
+                            string descricaoSortingSuffix = "sorting";
+                            string siglaSortingSuffix = "sorting";
+                            string aliquotaSortingSuffix = "sorting";
+                            string compromissoSortingSuffix = "sorting";
+                            string clienteSortingSuffix = "sorting";
+                            string retidoDescricaoSortingSuffix = "sorting";
+                            string indiretoDescricaoSortingSuffix = "sorting";
+                            string pagamentoEletronicoDescricaoSortingSuffix = "sorting";
+
+                            switch (Model.OrderBy)
+                            {
+                                case "id":
+                                    idSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricao":
+                                    descricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "sigla":
+                                    siglaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "aliquota":
+                                    aliquotaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "compromisso":
+                                    compromissoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "cliente":
+                                    clienteSortingSuffix += sortingSuffix;
+                                    break;
+                                case "retidoDescricao":
+                                    retidoDescricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "indiretoDescricao":
+                                    indiretoDescricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "pagamentoEletronicoDescricao":
+                                    pagamentoEletronicoDescricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="width:50px; ">Código</th>
+                        <th class="sorting @siglaSortingSuffix text-center" data-order="sigla" style="width:50px;">Sigla</th>
+                        <th class="sorting @descricaoSortingSuffix text-center" data-order="descricao" style="min-width:50px;">Descrição</th>
+                        <th class="sorting @aliquotaSortingSuffix text-center" data-order="aliquota" style="min-width:50px;">Alíquota</th>
+                        <th class="sorting @compromissoSortingSuffix text-center" data-order="compromisso" style="min-width:50px;">Compromisso</th>
+                        <th class="sorting @clienteSortingSuffix text-center" data-order="cliente" style="min-width:50px;">Correntista</th>
+                        <th class="sorting @retidoDescricaoSortingSuffix text-center" data-order="retidoDescricao" style="min-width:50px;">Retido</th>
+                        <th class="sorting @indiretoDescricaoSortingSuffix text-center" data-order="indiretoDescricao" style="min-width:50px;">Indireto</th>
+                        <th class="sorting @pagamentoEletronicoDescricaoSortingSuffix text-center" data-order="pagamentoEletronicoDescricao" style="min-width:50px;">Pagto elet.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString()</a></td>
+                            <td class="text-left">@item.Sigla</td>
+                            <td class="text-left">@item.Descricao</td>
+                            <td class="text-right">@item.Aliquota</td>
+                            @{if (item.TipoCompromisso == null) 
+                                {<td class="text-left"></td>}
+                              else
+                                {<td class="text-left">@item.TipoCompromisso.Descricao</td>}
+                            }
+                            @{if (item.Cliente == null) 
+                                {<td class="text-left"></td>}
+                              else
+                                {<td class="text-left">@item.Cliente.Nome</td>}
+                            }
+                            <td class="text-center">@item.RetidoDescricao</td>
+                            <td class="text-center">@item.IndiretoDescricao</td>
+                            <td class="text-center">@item.PagamentoEletronicoDescricao</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model.Pagination)
+    }
+</div>

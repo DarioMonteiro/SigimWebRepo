@@ -126,6 +126,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new TipoRateioConfiguration());
             modelBuilder.Configurations.Add(new TituloPagarConfiguration());
             modelBuilder.Configurations.Add(new TituloReceberConfiguration());
+            modelBuilder.Configurations.Add(new ImpostoFinanceiroConfiguration());
 
             //Orcamento
             modelBuilder.Configurations.Add(new ObraConfiguration());

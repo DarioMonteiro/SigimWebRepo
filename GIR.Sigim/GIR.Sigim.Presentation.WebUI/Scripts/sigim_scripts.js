@@ -298,7 +298,8 @@ function dateDiffInDays(start, end) {
     return days;
 }
 
-function isValidDate(format, value) {
+function isValidDate(format, value)
+{
     var isValid = true;
 
     try {
@@ -309,4 +310,7 @@ function isValidDate(format, value) {
     }
 
     return isValid;
+}
+function goToTop() {
+    $('html, body').animate({ scrollTop: 0 }, 'slow');
 }
