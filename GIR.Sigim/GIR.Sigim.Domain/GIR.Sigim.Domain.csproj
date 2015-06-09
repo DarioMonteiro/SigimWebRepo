@@ -49,6 +49,7 @@
     <Compile Include="Entity\Contrato\ContratoRetificacao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItem.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemCronograma.cs" />
+    <Compile Include="Entity\Contrato\ContratoRetificacaoItemImposto.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
     <Compile Include="Entity\Financeiro\Caixa.cs" />
+    <Compile Include="Entity\Financeiro\ImpostoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Entity\Financeiro\ParametrosFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\ParametrosUsuarioFinanceiro.cs" />

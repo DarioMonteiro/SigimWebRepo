@@ -20,6 +20,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
         public ICollection<TituloPagar> ListaTituloPagar { get; set; }
         public ICollection<TituloReceber> ListaTituloReceber { get; set; }
+        public ICollection<ImpostoFinanceiro> ListaImpostoFinanceiro { get; set; }
         
         public TipoCompromisso()
         {
@@ -28,6 +29,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>();
             this.ListaTituloPagar = new HashSet<TituloPagar>();
             this.ListaTituloReceber = new HashSet<TituloReceber>();
+            this.ListaImpostoFinanceiro = new HashSet<ImpostoFinanceiro>();
         }
     }
 }
