@@ -140,6 +140,7 @@
     <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
+    <Compile Include="Repository\Financeiro\ImpostoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoRateioRepository.cs" />
     <Compile Include="Repository\Financeiro\CaixaRepository.cs" />
     <Compile Include="Repository\Financeiro\MotivoCancelamentoRepository.cs" />
@@ -180,11 +181,11 @@
     <Compile Include="Repository\Sigim\InteresseBairroRepository.cs" />
     <Compile Include="Repository\Sigim\CSTRepository.cs" />
     <Compile Include="Repository\Sigim\LogOperacaoRepository.cs" />
-    <Compile Include="Repository\Sigim\UnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sigim\MaterialRepository.cs" />
     <Compile Include="Repository\Sigim\NaturezaOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\SerieNFRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCompraRepository.cs" />
+    <Compile Include="Repository\Sigim\UnidadeMedidaRepository.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup />

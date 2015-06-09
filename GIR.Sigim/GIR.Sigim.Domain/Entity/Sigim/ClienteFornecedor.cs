@@ -39,7 +39,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<TituloPagar> ListaTituloPagar { get; set; }
         public ICollection<TituloReceber> ListaTituloReceber { get; set; }
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
-        public ICollection<ImpostoFinanceiro> ListaImpostoFinanceiro { get; set;}
+        public ICollection<ImpostoFinanceiro> ListaImpostoFinanceiro { get; set; }
 
 
         public ClienteFornecedor()

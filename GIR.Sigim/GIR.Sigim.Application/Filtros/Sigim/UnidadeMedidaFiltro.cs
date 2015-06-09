@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIR.Sigim.Domain.Entity.Financeiro
+namespace GIR.Sigim.Application.Filtros.Sigim
 {
-    public class MotivoCancelamento : BaseEntity
+    public class UnidadeMedidaFiltro : BaseFiltro
     {
-        public string Descricao { get; set; }
        
     }
 }

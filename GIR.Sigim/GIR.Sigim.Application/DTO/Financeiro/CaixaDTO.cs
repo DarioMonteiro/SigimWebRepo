@@ -29,7 +29,7 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public CentroCustoDTO CentroCusto { get; set; }
         public string CentroCustoDescricao
         {
-            get { return this.CentroCusto.Codigo + " - " + this.CentroCusto.Descricao; }
+            get { return CentroCusto != null ? this.CentroCusto.CentroCustoDescricao : string.Empty; }
         }
          
         public CaixaDTO()

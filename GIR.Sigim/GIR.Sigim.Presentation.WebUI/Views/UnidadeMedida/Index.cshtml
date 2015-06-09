@@ -1,12 +1,13 @@
-﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.CaixaViewModel
+﻿@model GIR.Sigim.Presentation.WebUI.ViewModel.UnidadeMedidaViewModel
 
 @{
-    ViewBag.Title = "Caixa";
+    ViewBag.Title = "Unidade de medida";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
-    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>        
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -19,42 +20,35 @@
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
                             "Salvar",
-                            "Caixa",
+                            "UnidadeMedida",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
-                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))                                            
                     {
                         @Html.AntiForgeryToken()
                     <div class="panel-body no-padding">
-                        <fieldset>                                           
+                        <fieldset>
                             <div class="row">
-                                <section class="col col-6">
-                                    @Html.HiddenFor(m => m.Caixa.Id)
-                                    @Html.LabelFor(m => m.Caixa.Descricao, new { @class = "label" })
-                                    <label class="input">
-                                     @Html.TextBoxFor(m => m.Caixa.Descricao, new { @maxlength = "50",  @class = "required" })
-                                    </label>
-                                    @Html.ValidationMessageFor(m => m.Caixa.Descricao, "", new { @class = "note note-error" })
-                                </section>
-                                <section class="col col-2" style="padding-top:30px">                                  
-                                    <label class="checkbox">
-                                        @Html.CheckBoxFor(m => m.Caixa.Inativo)<i></i>@Html.DisplayNameFor(m => m.Caixa.Inativo)
-                                    </label>                                                 
-                                </section>
-                                <section class="col col-4">
-                                    @Html.LabelFor(m => m.Caixa.CentroContabil, new { @class = "label" })
-                                    <label class="input">
-                                        @Html.TextBoxFor(m => m.Caixa.CentroContabil , new { @maxlength = "20" })
-                                    </label>
-                                 @Html.ValidationMessageFor(m => m.Caixa.CentroContabil, "", new { @class = "note note-error" })
+                            <section class="col col-6">                             
+                                @Html.LabelFor(m => m.UnidadeMedida.Sigla, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.UnidadeMedida.Sigla, new { @maxlength = "6", @class = "required" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.UnidadeMedida.Sigla, "", new { @class = "note note-error" })
                             </section>
                             </div>
                             <div class="row">
-                                @Html.EditorFor(m => m.Caixa.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de Custo" })                                
+                            <section class="col col-12">
+                                @Html.LabelFor(m => m.UnidadeMedida.Descricao, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.UnidadeMedida.Descricao, new { @maxlength = "50", @class = "required"})
+                                </label>
+                                @Html.ValidationMessageFor(m => m.UnidadeMedida.Descricao, "", new { @class = "note note-error" })
+                            </section>
                             </div>
                         </fieldset>
                     </div>
-                    <footer>
+                    <footer>                       
                         <button type="button" id="btnDeletar" class="btn btn-primary">
                             Deletar
                         </button>
@@ -62,11 +56,10 @@
                             Salvar
                         </button>
                     </footer>
-                    }
-
+                    }                        
                     @using (Ajax.BeginForm(
                             "Lista",
-                            "Caixa",
+                            "UnidadeMedida",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
                             new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
@@ -88,15 +81,15 @@
 }
 
 <script type="text/javascript">
-    $("#btnDeletar").on("click", function() {
+    $("#btnDeletar").on("click", function () {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("Deletar", "Caixa")',
+            url: '@Url.Action("Deletar", "UnidadeMedida")',
             cache: false,
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                id: $('#@Html.IdFor(m => m.Caixa.Id)').val()
+                sigla: $('#@Html.IdFor(m => m.UnidadeMedida.Sigla)').val()
             })
         })
         .success(function (result) {
@@ -108,18 +101,14 @@
     });
 
     function clearForm() {
-        $('#@Html.IdFor(m => m.Caixa.Id)').val('');
-        $('#@Html.IdFor(m => m.Caixa.Descricao)').val('');
-        $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', false);
-        $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val('');
-        $('#@Html.IdFor(m => m.Caixa.CentroCusto.Codigo)').val('');
-        $('#@Html.IdFor(m => m.Caixa.CentroCusto.Descricao)').val('');        
+        $('#@Html.IdFor(m => m.UnidadeMedida.Sigla)').val('');
+        $('#@Html.IdFor(m => m.UnidadeMedida.Descricao)').val('');
     }
 
     function novo() {
         clearForm();
         $('#notificationMessages').html('');
-        $('#Caixa_Descricao-error').remove();
+        $('#UnidadeMedida_Descricao-error').remove();
     }
 
     function refresh() {
@@ -128,32 +117,28 @@
         doFilter();
     }
 
-    function loadItem(id) {
+    function loadItem(sigla) {
         novo();
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("CarregarItem", "Caixa")',
+            url: '@Url.Action("CarregarItem", "UnidadeMedida")',
             cache: false,
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                id: id
+                sigla: sigla
             })
         })
         .success(function (result) {
-            $('#@Html.IdFor(m => m.Caixa.Id)').val(result.Id);
-            $('#@Html.IdFor(m => m.Caixa.Descricao)').val(result.Descricao);
-            $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', result.Inativo);
-            $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val(result.CentroContabil);                  
-            $('#@Html.IdFor(m => m.Caixa.CentroCusto.Codigo)').val(result.CentroCusto.Codigo);
-            $('#@Html.IdFor(m => m.Caixa.CentroCusto.Descricao)').val(result.CentroCusto.Descricao);
+            $('#@Html.IdFor(m => m.UnidadeMedida.Sigla)').val(result.Sigla);
+            $('#@Html.IdFor(m => m.UnidadeMedida.Descricao)').val(result.Descricao);
             goToTop();
         });
     }
-
 
     function limpaPaginacao() {
         $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
     };
 
 </script>
+

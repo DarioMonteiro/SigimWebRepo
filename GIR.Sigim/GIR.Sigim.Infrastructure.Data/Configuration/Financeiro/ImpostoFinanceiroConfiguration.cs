@@ -22,10 +22,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnOrder(1);
 
             Property(l => l.Sigla)
-                .HasColumnName("sigla")
-                .IsRequired()
-                .HasMaxLength(10)
-                .HasColumnOrder(2);
+               .HasColumnName("sigla")
+               .IsRequired()
+               .HasMaxLength(10)
+               .HasColumnOrder(2);
 
             Property(l => l.Descricao)
                 .HasColumnName("descricao")
@@ -34,32 +34,29 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnOrder(3);
 
             Property(l => l.Aliquota)
-                .IsRequired()
-                .HasColumnName("aliquota")
-                .HasPrecision(18, 5)
-                .HasColumnOrder(4);
+               .HasColumnName("aliquota")
+               .IsRequired()
+               .HasPrecision(18, 5)
+               .HasColumnOrder(4);
 
             Property(l => l.Retido)
-                .HasColumnName("retido")
-                .HasColumnType("bit")
-                .HasColumnOrder(5);
+               .HasColumnName("retido")
+               .HasColumnOrder(5);
 
-            Property(l => l.Indireto)
-                .HasColumnName("indireto")
-                .HasColumnType("bit")
-                .HasColumnOrder(6);
+            Property(l => l.Indireto )
+               .HasColumnName("indireto")
+               .HasColumnOrder(6);
 
             Property(l => l.PagamentoEletronico)
-                .HasColumnName("pagamentoEletronico")
-                .HasColumnType("bit")
-                .HasColumnOrder(7);
-
+               .HasColumnName("pagamentoEletronico")
+               .HasColumnOrder(7);
+            
             Property(l => l.TipoCompromissoId)
                 .HasColumnName("tipoCompromisso")
                 .HasColumnOrder(8);
 
             HasOptional<TipoCompromisso>(l => l.TipoCompromisso)
-                .WithMany(c => c.ListaImpostoFinanceiro)
+                .WithMany(l => l.ListaImpostoFinanceiro)
                 .HasForeignKey(l => l.TipoCompromissoId);
 
             Property(l => l.ClienteId)
@@ -67,36 +64,30 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnOrder(9);
 
             HasOptional<ClienteFornecedor>(l => l.Cliente)
-                .WithMany(c => c.ListaImpostoFinanceiro)
+                .WithMany(l => l.ListaImpostoFinanceiro)
                 .HasForeignKey(l => l.ClienteId);
 
             Property(l => l.ContaContabil)
-                .HasColumnName("contaContabil")
-                .HasMaxLength(20)
-                .HasColumnOrder(10);
+               .HasColumnName("contaContabil")
+               .HasMaxLength(20)
+               .HasColumnOrder(10);
 
             Property(l => l.Periodicidade)
-                .HasColumnName("periodicidade")
-                .HasColumnType("char")
-                .HasMaxLength(2)
-                .HasColumnOrder(11);
+               .HasColumnName("periodicidade")
+               .HasColumnOrder(11);
 
-            Property(l => l.FimDeSemana)
-                .HasColumnName("fimDeSemana")
-                .HasColumnType("char")
-                .HasMaxLength(2)
-                .HasColumnOrder(12);
+            Property(l => l.FimDeSemana )
+                 .HasColumnName("fimDeSemana")
+                 .HasColumnOrder(12);
 
             Property(l => l.FatoGerador)
-                .HasColumnName("fatoGerador")
-                .HasColumnType("char")
-                .HasMaxLength(2)
-                .HasColumnOrder(13);
+                 .HasColumnName("fatoGerador")
+                 .HasColumnOrder(13);
 
             Property(l => l.DiaVencimento)
-                .HasColumnName("DiaVencimento")
-                .HasColumnType("smallint")
-                .HasColumnOrder(14);
+               .HasColumnName("diaVencimento")
+               .HasColumnType("smallint")
+               .HasColumnOrder(14);
 
         }
     }

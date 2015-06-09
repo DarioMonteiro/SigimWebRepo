@@ -8,8 +8,8 @@ using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Domain.Repository.Sigim
 {
-    public interface IUnidadeMedidaRepository : IRepository<UnidadeMedida>
+    public interface IUnidadeMedidaRepository : IRepository<UnidadeMedida> 
     {
-        
+        UnidadeMedida ObterPeloCodigo(string sigla, params Expression<Func<UnidadeMedida, object>>[] includes);
     }
 }

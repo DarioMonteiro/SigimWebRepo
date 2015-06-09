@@ -65,6 +65,7 @@
     <Compile Include="Financeiro\CentroCustoAppService.cs" />
     <Compile Include="Financeiro\ClasseAppService.cs" />
     <Compile Include="Financeiro\CaixaAppService.cs" />
+    <Compile Include="Financeiro\ImpostoFinanceiroAppService.cs" />
     <Compile Include="Financeiro\TabelaBasicaAppService.cs" />
     <Compile Include="Financeiro\MotivoCancelamentoAppService.cs" />
     <Compile Include="Financeiro\ParametrosFinanceiroAppService.cs" />
@@ -103,11 +104,11 @@
     <Compile Include="Sigim\InteresseBairroAppService.cs" />
     <Compile Include="Sigim\CSTAppService.cs" />
     <Compile Include="Sigim\LogOperacaoAppService.cs" />
-    <Compile Include="Sigim\UnidadeMedidaAppService.cs" />
     <Compile Include="Sigim\MaterialAppService.cs" />
     <Compile Include="Sigim\NaturezaOperacaoAppService.cs" />
     <Compile Include="Sigim\SerieNFAppService.cs" />
     <Compile Include="Sigim\TipoCompraAppService.cs" />
+    <Compile Include="Sigim\UnidadeMedidaAppService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GIR.Sigim.Application\GIR.Sigim.Application.csproj">
