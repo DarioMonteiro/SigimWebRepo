@@ -304,6 +304,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<FonteNegocio, FonteNegocioDTO>();
             Mapper.CreateMap<FonteNegocioDTO, FonteNegocio>();
 
+            Mapper.CreateMap<FormaRecebimento, FormaRecebimentoDTO>();
+            Mapper.CreateMap<FormaRecebimentoDTO, FormaRecebimento>();
+
             Mapper.CreateMap<Grupo, GrupoDTO>();
             Mapper.CreateMap<GrupoDTO, Grupo>();
 

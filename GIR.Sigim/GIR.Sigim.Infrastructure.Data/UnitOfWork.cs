@@ -177,6 +177,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new TipoAreaConfiguration());
             modelBuilder.Configurations.Add(new TipoCaracteristicaConfiguration());
             modelBuilder.Configurations.Add(new TipoEspecificacaoConfiguration());
+            modelBuilder.Configurations.Add(new FormaRecebimentoConfiguration());
 
             //Sac
             modelBuilder.Configurations.Add(new ParametrosSacConfiguration());

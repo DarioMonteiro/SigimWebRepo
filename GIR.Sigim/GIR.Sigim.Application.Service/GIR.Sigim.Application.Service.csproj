@@ -87,6 +87,7 @@
     <Compile Include="Sigim\ClienteFornecedorAppService.cs" />
     <Compile Include="Sigim\AssuntoContatoAppService.cs" />
     <Compile Include="Sigim\CodigoContribuicaoAppService.cs" />
+    <Compile Include="Sigim\FormaRecebimentoAppService.cs" />
     <Compile Include="Sigim\TratamentoAppService.cs" />
     <Compile Include="Sigim\TipoAreaAppService.cs" />
     <Compile Include="Sigim\TipoCaracteristicaAppService.cs" />

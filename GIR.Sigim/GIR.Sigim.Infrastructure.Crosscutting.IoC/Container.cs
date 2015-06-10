@@ -135,6 +135,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ITipoAreaRepository, TipoAreaRepository>();
             currentContainer.RegisterType<ITipoCaracteristicaRepository, TipoCaracteristicaRepository>();
             currentContainer.RegisterType<ITipoEspecificacaoRepository, TipoEspecificacaoRepository>();
+            currentContainer.RegisterType<IFormaRecebimentoRepository, FormaRecebimentoRepository>();
             #endregion
 
             #region Sac
@@ -218,6 +219,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ITipoCaracteristicaAppService, TipoCaracteristicaAppService>();
             currentContainer.RegisterType<ITipoEspecificacaoAppService, TipoEspecificacaoAppService>();
             currentContainer.RegisterType<IUnidadeMedidaAppService, UnidadeMedidaAppService>();
+            currentContainer.RegisterType<IFormaRecebimentoAppService, FormaRecebimentoAppService>();
             #endregion
 
             #region Sac
