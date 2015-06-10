@@ -104,6 +104,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
             Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>();
 
+            Mapper.CreateMap<ImpostoFinanceiro, ImpostoFinanceiroDTO>();
+            Mapper.CreateMap<ImpostoFinanceiroDTO, ImpostoFinanceiro>();
+
             Mapper.CreateMap<AssuntoContatoDTO, TabelaBasicaDTO>()
                 .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.AssuntoContato));
             Mapper.CreateMap<TabelaBasicaDTO, AssuntoContatoDTO>();

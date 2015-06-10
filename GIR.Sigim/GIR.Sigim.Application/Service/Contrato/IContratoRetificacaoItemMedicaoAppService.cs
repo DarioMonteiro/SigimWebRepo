@@ -16,7 +16,9 @@ namespace GIR.Sigim.Application.Service.Contrato
                                               ref decimal quantidadeTotalMedido,
                                               ref decimal valorTotalMedido,
                                               ref decimal quantidadeTotalLiberado,
-                                              ref decimal valorTotalLiberado);
+                                              ref decimal valorTotalLiberado,
+                                              ref decimal quantidadeTotalMedidaLiberada,
+                                              ref decimal valorTotalMedidoLiberado);
 
         bool ExisteNumeroDocumento(Nullable<DateTime> dataEmissao, string numeroDocumento, int? contratadoId);
         bool Salvar(ContratoRetificacaoItemMedicaoDTO dto);
@@ -24,5 +26,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         ContratoRetificacaoItemMedicaoDTO ObterPeloId(int contratoRetificacaoItemMedicaoId);
         bool EhValidaMedicaoRecuperada(ContratoRetificacaoItemMedicaoDTO dto);
         bool Cancelar(int? contratoRetificacaoItemMedicaoId);
+        bool EhValidaVisualizacaoMedicao(int? contratoId, int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao, int? contratadoId);
+        List<ContratoRetificacaoItemMedicaoDTO> RecuperaMedicaoPorContratoDadosDaNota(int contratoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, int? contratadoId);
     }
 }

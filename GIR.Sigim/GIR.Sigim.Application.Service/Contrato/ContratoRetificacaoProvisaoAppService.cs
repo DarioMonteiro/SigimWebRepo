@@ -51,6 +51,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                 decimal vlrTotalMedido = 0;
                 decimal qtdTotalLiberado = 0;
                 decimal vlrTotalLiberado = 0;
+                decimal quantidadeTotalMedidaLiberada = 0;
+                decimal valorTotalMedidoLiberado = 0;
 
                 contratoRetificacaoItemMedicaoAppService.ObterQuantidadesEhValoresMedicao(provisao.ContratoId,
                                                                                           provisao.SequencialItem.Value,
@@ -58,11 +60,16 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                           ref qtdTotalMedido,
                                                                                           ref vlrTotalMedido,
                                                                                           ref qtdTotalLiberado,
-                                                                                          ref vlrTotalLiberado);
+                                                                                          ref vlrTotalLiberado,
+                                                                                          ref quantidadeTotalMedidaLiberada,
+                                                                                          ref valorTotalMedidoLiberado);
                 provisao.Totalizadores.QuantidadeTotalMedida = qtdTotalMedido;
                 provisao.Totalizadores.ValorTotalMedido = vlrTotalMedido;
                 provisao.Totalizadores.QuantidadeTotalLiberada = qtdTotalLiberado;
                 provisao.Totalizadores.ValorTotalLiberado = vlrTotalLiberado;
+
+                provisao.Totalizadores.QuantidadeTotalMedidaLiberada = quantidadeTotalMedidaLiberada;
+                provisao.Totalizadores.ValorTotalMedidoLiberado = valorTotalMedidoLiberado;
 
                 provisao.Totalizadores.QuantidadePendente = provisao.Quantidade - provisao.Totalizadores.QuantidadeTotalMedida;
                 provisao.Totalizadores.ValorPendente = provisao.Valor - provisao.Totalizadores.ValorTotalMedido;

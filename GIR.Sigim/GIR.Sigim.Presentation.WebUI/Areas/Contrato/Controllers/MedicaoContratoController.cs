@@ -346,9 +346,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         {
             bool cancelou = false;
 
+            string msg = "";
             cancelou = contratoRetificacaoItemMedicaoAppService.Cancelar(id);
-            var msg = messageQueue.GetAll()[0].Text;
-            messageQueue.Clear();
+            if (messageQueue.GetAll().Count > 0)
+            {
+                msg = messageQueue.GetAll()[0].Text;
+                messageQueue.Clear();
+            }
 
             if (!cancelou)
             {
@@ -363,8 +367,75 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             {
                 ehCancelou = true,
                 message = msg
-            });
+            });       
         }
+
+
+        [HttpPost]
+        public ActionResult RecuperaMedicaoPorContratoDadosDaNota(int? contratoId, 
+                                                                  int? tipoDocumentoId,
+                                                                  string numeroDocumento,
+                                                                  Nullable<DateTime> dataEmissao,
+                                                                  int? contratadoId)
+        {
+            List<ContratoRetificacaoItemMedicaoDTO> listaMedicao = null;
+
+            string msg = "";
+            bool ehValido = contratoRetificacaoItemMedicaoAppService.EhValidaVisualizacaoMedicao(contratoId,tipoDocumentoId,numeroDocumento,dataEmissao,contratadoId);
+            if (messageQueue.GetAll().Count > 0)
+            {
+                msg = messageQueue.GetAll()[0].Text;
+                messageQueue.Clear();
+            }
+
+            if (ehValido)
+            {
+                listaMedicao = contratoRetificacaoItemMedicaoAppService.RecuperaMedicaoPorContratoDadosDaNota(contratoId.Value, 
+                                                                                                              tipoDocumentoId.Value, 
+                                                                                                              numeroDocumento, 
+                                                                                                              dataEmissao.Value, 
+                                                                                                              contratadoId.Value);
+
+                if (listaMedicao.Count > 0)
+                {
+                    return Json(new
+                    {
+                        ehRecuperou = true,
+                        errorMessage = string.Empty,
+                        listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(listaMedicao)
+                    });
+                }
+
+            }
+
+            return Json(new
+            {
+                ehRecuperou = false,
+                errorMessage = msg,
+                listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(listaMedicao)
+            });
+
+        }
+
+        //public ActionResult Imprimir(   int? contratadoId, 
+        //                                int? contratoId, 
+        //                                int? tipoDocumentoId, 
+        //                                string numeroDocumento,
+        //                                Nullable<DateTime> dataEmissao,
+        //                                FormatoExportacaoArquivo formato)
+        //{
+        //    var arquivo = contratoRetificacaoItemMedicaoAppService.Exportar(contratadoId, contratoId,tipoDocumentoId,numeroDocumento,dataEmissao, formato);
+        //    if (arquivo != null)
+        //    {
+        //        Response.Buffer = false;
+        //        Response.ClearContent();
+        //        Response.ClearHeaders();
+        //        return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+        //    }
+
+        //    return PartialView("_NotificationMessagesPartial");
+        //}
+
 
         private void CarregarCombosFiltro(MedicaoContratoListaViewModel model) 
         {

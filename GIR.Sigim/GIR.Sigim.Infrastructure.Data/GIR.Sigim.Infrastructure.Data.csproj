@@ -52,6 +52,7 @@
     <Compile Include="Configuration\Contrato\ContratoRetificacaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemCronogramaConfiguration.cs" />
+    <Compile Include="Configuration\Contrato\ContratoRetificacaoItemImpostoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemMedicaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoProvisaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\LicitacaoConfiguration.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Configuration\Financeiro\ClasseConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CaixaConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\ImpostoFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\MotivoCancelamentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ParametrosFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ParametrosUsuarioFinanceiroConfiguration.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
+    <Compile Include="Repository\Financeiro\ImpostoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoRateioRepository.cs" />
     <Compile Include="Repository\Financeiro\CaixaRepository.cs" />
     <Compile Include="Repository\Financeiro\MotivoCancelamentoRepository.cs" />

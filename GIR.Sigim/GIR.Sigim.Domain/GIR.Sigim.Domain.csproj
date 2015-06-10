@@ -49,6 +49,7 @@
     <Compile Include="Entity\Contrato\ContratoRetificacao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItem.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemCronograma.cs" />
+    <Compile Include="Entity\Contrato\ContratoRetificacaoItemImposto.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />
@@ -64,9 +65,13 @@
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
     <Compile Include="Entity\Financeiro\Caixa.cs" />
+    <Compile Include="Entity\Financeiro\FatoGeradorImpostoFinanceiro.cs" />
+    <Compile Include="Entity\Financeiro\FimDeSemanaImpostoFinanceiro.cs" />
+    <Compile Include="Entity\Financeiro\ImpostoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Entity\Financeiro\ParametrosFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\ParametrosUsuarioFinanceiro.cs" />
+    <Compile Include="Entity\Financeiro\PeriodicidadeImpostoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\SituacaoTituloPagar.cs" />
     <Compile Include="Entity\Financeiro\TipoCompromisso.cs" />
     <Compile Include="Entity\Financeiro\TipoDocumento.cs" />
@@ -150,6 +155,7 @@
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
+    <Compile Include="Repository\Financeiro\IImpostoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\ICaixaRepository.cs" />
     <Compile Include="Repository\Financeiro\IMotivoCancelamentoRepository.cs" />
     <Compile Include="Repository\Financeiro\ICentroCustoEmpresaRepository.cs" />

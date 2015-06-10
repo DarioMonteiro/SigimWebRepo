@@ -173,7 +173,7 @@
                                     <div class="panel-body no-padding">
                                         <fieldset>
                                             <div class="row">
-                                                <section class="col col-3">
+                                                <section class="col col-2">
                                                     @Html.LabelFor(m => m.ListaTipoDocumento, new { @class = "label" })
                                                     <label class="select">
                                                         @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId, Model.ListaTipoDocumento, string.Empty, new { @class = "required", @required = true })  
@@ -210,22 +210,51 @@
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao, "Informe uma data válida.", new { @class = "note note-error" })
                                                 </section>
-                                                <section class="col col-3">
+                                                <section class="col col-4">
                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, new { @class = "label" })
-                                                    <label class="input">
-                                                        <i class="icon-append fa fa-calendar"></i>
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").on("change", function () {
-                                                                    var retorno = validaDataVencimento();
-                                                                    if (retorno == false) {
-                                                                        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val("");
-                                                                    }
+                                                    <div class="input-group">
+                                                        <label class="input">
+                                                            <i class="icon-append fa fa-calendar"></i>
+                                                            @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").on("change", function () {
+                                                                        var retorno = validaDataVencimento();
+                                                                        if (retorno == false) {
+                                                                            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val("");
+                                                                        }
+                                                                    });
                                                                 });
-                                                            });
-                                                        </script>
-                                                    </label>
+                                                            </script>
+                                                        </label>
+                                                        <a data-toggle="modal" href="#VisualizarMedicao_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+                                                        <div class="modal fade" id="VisualizarMedicao_ModalPanel" tabindex="-1" role="dialog">
+                                                            <div class="modal-dialog" style="width:100%;">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                                            &times;
+                                                                        </button>
+                                                                        <h4 class="modal-title">
+                                                                            Visualiza medição
+                                                                        </h4>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                                            <table id="tableLstVisMedicao" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                                <thead>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+							                                        </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento, "Informe uma data válida.", new { @class = "note note-error" })
                                                 </section>
                                                 <script type="text/javascript">
@@ -623,6 +652,83 @@
                     });
 
                     preencheLstMedicao();
+            }
+        });
+
+
+        $(document).on("show.bs.modal", "#VisualizarMedicao_ModalPanel", function (e) {
+            var isRecuperou = false;
+            var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+            var tipoDocumentoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val();
+            var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
+            var contratadoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)").val();
+            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+            if ((multiFornecedorId != "") && (multiFornecedorId > 0)) {
+                contratadoId = multiFornecedorId;
+            }
+            var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
+
+            if (contratoId == "") {
+                smartAlert("Atenção", "Informe o contrato", "warning");
+                return e.preventDefault()
+            }
+
+            if (contratoId == 0) {
+                smartAlert("Atenção", "Informe o contrato", "warning");
+                return e.preventDefault()
+            }
+
+            if (tipoDocumentoId == "") {
+                smartAlert("Atenção", "Informe o tipo da nota", "warning");
+                return e.preventDefault()
+            }
+            if (tipoDocumentoId == 0) {
+                smartAlert("Atenção", "Informe o tipo da nota", "warning");
+                return e.preventDefault()
+            }
+            if (numeroDocumento == "") {
+                smartAlert("Atenção", "Informe o número da nota", "warning");
+                return e.preventDefault()
+            }
+
+            if (dataEmissao == "") {
+                smartAlert("Atenção", "Informe a data de emissão", "warning");
+                return e.preventDefault()
+            }
+
+            if ((tipoDocumentoId != "") && (numeroDocumento != "")) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("RecuperaMedicaoPorContratoDadosDaNota", "MedicaoContrato", new { area = "Contrato" })',
+                        cache: false,
+                        async: false,
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({
+                            contratoId: contratoId,
+                            tipoDocumentoId: tipoDocumentoId,
+                            numeroDocumento: numeroDocumento,
+                            dataEmissao: dataEmissao,
+                            contratadoId: contratadoId
+                        }),
+                        success: function (result) {
+                            showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)'), result.errorMessage);
+                            if (result.ehRecuperou) {
+                                $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(result.listaContratoRetificacaoItemMedicao);
+                                jsonContratoRetificaoItemMedicaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)").val());
+                            }
+                            else {
+                                $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(result.listaContratoRetificacaoItemMedicao);
+                                jsonContratoRetificaoItemMedicaoArray = null;
+                            }
+                            isRecuperou = result.ehRecuperou;
+                        },
+                        error: function (result) {
+                            $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val();
+                            jsonContratoRetificaoItemMedicaoArray = null;
+                        }
+                });
+
+                preencheLstVisualizacaoMedicao();
             }
         });
 
@@ -1313,6 +1419,120 @@
 
             setarAbaMedicao();
 
+        }
+    }
+
+    function preencheLstVisualizacaoMedicao() {
+        $("#tableLstVisMedicao thead").empty();
+        var row = $('<tr role="row">');
+        $("#tableLstVisMedicao thead").append(row);
+        row.append($('<th class="text-left" style="min-width: 65px;">Item</th>'));
+        row.append($('<th class="text-left">Descrição item</th>'));
+        row.append($('<th class="text-center">Medição</th>'));
+        row.append($('<th class="text-right">Quantidade</th>'));
+        row.append($('<th class="text-right">Valor unitário</th>'));
+        row.append($('<th class="text-right">Valor bruto</th>'));
+        row.append($('<th class="text-right">Valor liberado</th>'));
+        row.append($('<th class="text-right">Valor retido</th>'));
+        row.append($('<th class="text-right">Valor imposto</th>'));
+        row.append($('<th class="text-right">Valor desconto</th>'));
+        row.append($('<th class="text-right">Valor liquido</th>'));
+        row.append($('<th class="text-right">Título</th>'));
+        row.append($('<tr />'));
+
+        $("#tableLstVisMedicao tbody").empty();
+
+        var totalValor = 0;
+        var totalValorLiberado = 0;
+        var totalValorRetido = 0;
+
+        if (jsonContratoRetificaoItemMedicaoArray != null) {
+            for (var i = 0; i < jsonContratoRetificaoItemMedicaoArray.length; i++) {
+
+                var row = $('<tr />')
+                var descricaoItem = jsonContratoRetificaoItemMedicaoArray[i].ContratoRetificacaoItem.Servico.Descricao;
+                var complementoDescricaoItem = jsonContratoRetificaoItemMedicaoArray[i].ContratoRetificacaoItem.ComplementoDescricao;
+                if (complementoDescricaoItem != "") descricaoItem = descricaoItem + " (" + complementoDescricaoItem + ")";
+                var dataMedicao = new Date(jsonContratoRetificaoItemMedicaoArray[i].DataMedicao).toFormatDDMMYYYY();
+                var valorUnitario = 0;
+                if (jsonContratoRetificaoItemMedicaoArray[i].ContratoRetificacaoItem.NaturezaItem == 1) {
+                    valorUnitario = jsonContratoRetificaoItemMedicaoArray[i].Valor;
+                }
+                else {
+                    valorUnitario = jsonContratoRetificaoItemMedicaoArray[i].ContratoRetificacaoItem.PrecoUnitario;
+                }
+                var valor = jsonContratoRetificaoItemMedicaoArray[i].Valor;
+                totalValor = totalValor + valor;
+                var valorRetido = jsonContratoRetificaoItemMedicaoArray[i].ValorRetido;
+                var valorLiberado = valor;
+                if (!isNaN(valorRetido)) {
+                    valorLiberado = valor - valorRetido;
+                }
+                else {
+                    valorRetido = 0;
+                }
+                totalValorLiberado = totalValorLiberado + valorLiberado;
+                totalValorRetido = totalValorRetido + valorRetido;
+
+                //Tenho que trazer esse valor da query
+                var valorImposto = "calcular";
+
+                var valorDesconto = jsonContratoRetificaoItemMedicaoArray[i].Desconto;
+                if (isNaN(valorDesconto)) {
+                    valorDesconto = 0;
+                }
+
+                var valorLiquido = "calcular";
+
+                var titulo = "";
+                var tituloPagar = "";
+                var tituloReceber = "";
+                if (jsonContratoRetificaoItemMedicaoArray[i].Contrato.TipoContrato == 1) {
+                    tituloReceber = jsonContratoRetificaoItemMedicaoArray[i].TituloReceberId;
+                    if (!isNaN(tituloReceber)) titulo = tituloReceber;
+                }
+                else {
+                    tituloPagar = jsonContratoRetificaoItemMedicaoArray[i].TituloPagarId;
+                    if (!isNaN(tituloPagar)) titulo = tituloPagar;
+                }
+
+                $("#tableLstVisMedicao tbody").append(row);
+                //row.append($('<td class="text-center text-nowrap" data-dismiss="modal" onclick="recuperaDadosMedicao(' + jsonContratoRetificaoItemMedicaoArray[i].Id + ');">' + new Date(jsonContratoRetificaoItemMedicaoArray[i].DataMedicao).toFormatDDMMYYYY() + '</td>'));
+
+                row.append($('<td class="text-left">' + jsonContratoRetificaoItemMedicaoArray[i].SequencialItem + '</td>'));
+                row.append($('<td class="text-left text-nowrap">' + descricaoItem + '</td>'));
+                row.append($('<td class="text-center">' + dataMedicao + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].Quantidade), 7) + '</td>'));               
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorUnitario), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(valor), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorLiberado), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorRetido), 2) + '</td>'));
+                //row.append($('<td class="text-right">' + roundDecimal(floatToString(valorImposto), 2) + '</td>'));
+                row.append($('<td class="text-right">' + valorImposto + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorDesconto), 2) + '</td>'));
+                row.append($('<td class="text-right">' + valorLiquido + '</td>'));
+                row.append($('<td class="text-right">' + titulo + '</td>'));
+            }
+
+            var row = $('<tr />')
+
+            $("#tableLstVisMedicao tbody").append(row);
+            row.append($('<td>Totais</td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td>' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorLiberado), 2) + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorRetido), 2) + '</td>'));
+            //row.append($('<td class="text-right">' + roundDecimal(floatToString(valorImposto), 2) + '</td>'));
+            row.append($('<td class="text-right">' + valorImposto + '</td>'));
+            row.append($('<td></td>'));
+            row.append($('<td class="text-right">' + valorLiquido + '</td>'));
+            row.append($('<td></td>'));
+
+            var row = $('<tr />')
+            $("#tableLstVisMedicao tbody").append(row);
         }
     }
 
