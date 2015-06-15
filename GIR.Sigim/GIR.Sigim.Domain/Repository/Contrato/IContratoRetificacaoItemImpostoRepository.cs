@@ -8,13 +8,14 @@ using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Domain.Repository.Contrato
 {
-    public interface IContratoRetificacaoItemMedicaoRepository : IRepository<ContratoRetificacaoItemMedicao>
+    public interface IContratoRetificacaoItemImpostoRepository : IRepository<ContratoRetificacaoItemImposto>
     {
-        IEnumerable<ContratoRetificacaoItemMedicao> RecuperaMedicaoPorContratoDadosDaNota(int contratoId,
+        IEnumerable<ContratoRetificacaoItemImposto> RecuperaImpostoPorContratoDadosDaNota(int contratoId,
                                                                                           int tipoDocumentoId,
                                                                                           string numeroDocumento,
                                                                                           DateTime dataEmissao,
                                                                                           int? contratadoId,
-                                                                                          params Expression<Func<ContratoRetificacaoItemMedicao, object>>[] includes);
+                                                                                          params Expression<Func<ContratoRetificacaoItemImposto, object>>[] includes);
+
     }
 }

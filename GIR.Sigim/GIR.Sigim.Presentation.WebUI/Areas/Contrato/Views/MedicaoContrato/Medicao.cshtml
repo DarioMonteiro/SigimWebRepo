@@ -584,6 +584,19 @@
                                 }
                             }
                             <a data-toggle="modal" id="btnCancelar" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
+
+                            @{
+                                var contratadoId = Model.ContratoRetificacaoItemMedicao.Contrato.ContratadoId;
+                                var contratoId = Model.ContratoRetificacaoItemMedicao.ContratoId;
+                                var tipoDocumentoId = Model.ContratoRetificacaoItemMedicao.TipoDocumentoId;
+                                var numeroDocumento = Model.ContratoRetificacaoItemMedicao.NumeroDocumento;
+                                var dataEmissao = Model.ContratoRetificacaoItemMedicao.DataEmissao;
+
+                                var url = Url.Action("Imprimir",
+                                                     "MedicaoContrato");
+                            }
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
+
                             @{
                                 string disableBtnSalvar = string.Empty;
                                 if (!Model.PodeSalvar)
@@ -591,12 +604,6 @@
                                     disableBtnSalvar = "disabled";
                                 }
                             }
-
-                            @{
-                                var url = Url.Action("Imprimir", "MedicaoContrato") + "/" + @Html.DisplayFor(m => m.ContratoRetificacaoItemMedicao.Id);
-                            }
-                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url } )
-
                             <button id="btnSalvar" type="submit" class="btn btn-primary @disableBtnSalvar">
                                 Salvar
                             </button>
@@ -611,6 +618,58 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        tratarBotoes(false, false, false);
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+
+            var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+            var tipoDocumentoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val();
+            var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
+            var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
+            var contratadoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)").val();
+            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+            if ((multiFornecedorId != "") && (multiFornecedorId > 0)) {
+                contratadoId = multiFornecedorId;
+            }
+            var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
+
+            if (contratoId == "") {
+                smartAlert("Atenção", "Informe o contrato", "warning");
+                e.event.preventDefault();
+            }
+
+            if (contratoId == 0) {
+                smartAlert("Atenção", "Informe o contrato", "warning");
+                e.event.preventDefault();
+            }
+
+            if (tipoDocumentoId == "") {
+                smartAlert("Atenção", "Informe o tipo da nota", "warning");
+                e.event.preventDefault();
+            }
+            if (tipoDocumentoId == 0) {
+                smartAlert("Atenção", "Informe o tipo da nota", "warning");
+                e.event.preventDefault();
+            }
+            if (numeroDocumento == "") {
+                smartAlert("Atenção", "Informe o número da nota", "warning");
+                $('#btnImprimir').prop('data-dismiss', 'modal');
+                e.event.preventDefault();
+            }
+
+            if (dataEmissao == "") {
+                smartAlert("Atenção", "Informe a data de emissão", "warning");
+                e.event.preventDefault();
+            }
+
+            parametrosUrlImpressao += '&contratadoId=' + contratadoId;
+            parametrosUrlImpressao += '&contratoId=' + contratoId;
+            parametrosUrlImpressao += '&tipoDocumentoId=' + tipoDocumentoId;
+            parametrosUrlImpressao += '&numeroDocumento=' + numeroDocumento;
+            parametrosUrlImpressao += '&dataEmissao=' + dataEmissao;
+            parametrosUrlImpressao += '&multiFornecedorId=' + multiFornecedorId;
+
+        });
 
         $(document).on("show.bs.modal", "#PesquisarMedicao_ModalPanel", function (e) {
             var isRecuperou = false;
@@ -670,30 +729,30 @@
 
             if (contratoId == "") {
                 smartAlert("Atenção", "Informe o contrato", "warning");
-                return e.preventDefault()
+                return e.preventDefault();
             }
 
             if (contratoId == 0) {
                 smartAlert("Atenção", "Informe o contrato", "warning");
-                return e.preventDefault()
+                return e.preventDefault();
             }
 
             if (tipoDocumentoId == "") {
                 smartAlert("Atenção", "Informe o tipo da nota", "warning");
-                return e.preventDefault()
+                return e.preventDefault();
             }
             if (tipoDocumentoId == 0) {
                 smartAlert("Atenção", "Informe o tipo da nota", "warning");
-                return e.preventDefault()
+                return e.preventDefault();
             }
             if (numeroDocumento == "") {
                 smartAlert("Atenção", "Informe o número da nota", "warning");
-                return e.preventDefault()
+                return e.preventDefault();
             }
 
             if (dataEmissao == "") {
                 smartAlert("Atenção", "Informe a data de emissão", "warning");
-                return e.preventDefault()
+                return e.preventDefault();
             }
 
             if ((tipoDocumentoId != "") && (numeroDocumento != "")) {
@@ -1010,6 +1069,7 @@
         $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
         $("#@Html.IdFor(m => m.PodeCancelar)").val(condicaoCancelar);
         $("#@Html.IdFor(m => m.PodeImprimir)").val(condicaoImprimir);
+
         if (condicaoSalvar) {
             document.getElementById('btnSalvar').className = "btn btn-primary right";
         }
@@ -1024,6 +1084,7 @@
         }
         if (condicaoImprimir) {
             document.getElementById('btnImprimir').className = "btn btn-primary";
+
         }
         else {
             document.getElementById('btnImprimir').className = "btn btn-primary disabled";
@@ -1320,7 +1381,6 @@
         limpaAbaDadosMedicao();
 
         if (jsonMedicao != null) {
-
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(jsonMedicao.Id);
             $("#@Html.IdFor(m => m.EhSituacaoAguardandoAprovacao)").val(false);
             $("#@Html.IdFor(m => m.EhSituacaoAguardandoLiberacao)").val(false);
@@ -1415,8 +1475,6 @@
             var quantidadeItemCronograma = roundDecimal(floatToString(jsonMedicao.ContratoRetificacaoItemCronograma.Quantidade), 7);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(quantidadeItemCronograma);
 
-            tratarBotoes(true, true, true);
-
             setarAbaMedicao();
 
         }
@@ -1497,8 +1555,6 @@
                 }
 
                 $("#tableLstVisMedicao tbody").append(row);
-                //row.append($('<td class="text-center text-nowrap" data-dismiss="modal" onclick="recuperaDadosMedicao(' + jsonContratoRetificaoItemMedicaoArray[i].Id + ');">' + new Date(jsonContratoRetificaoItemMedicaoArray[i].DataMedicao).toFormatDDMMYYYY() + '</td>'));
-
                 row.append($('<td class="text-left">' + jsonContratoRetificaoItemMedicaoArray[i].SequencialItem + '</td>'));
                 row.append($('<td class="text-left text-nowrap">' + descricaoItem + '</td>'));
                 row.append($('<td class="text-center">' + dataMedicao + '</td>'));
@@ -1510,6 +1566,7 @@
                 //row.append($('<td class="text-right">' + roundDecimal(floatToString(valorImposto), 2) + '</td>'));
                 row.append($('<td class="text-right">' + valorImposto + '</td>'));
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(valorDesconto), 2) + '</td>'));
+                //row.append($('<td class="text-right">' + roundDecimal(floatToString(valorLiquido), 2) + '</td>'));
                 row.append($('<td class="text-right">' + valorLiquido + '</td>'));
                 row.append($('<td class="text-right">' + titulo + '</td>'));
             }
@@ -1525,9 +1582,10 @@
             row.append($('<td>' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
             row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorLiberado), 2) + '</td>'));
             row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorRetido), 2) + '</td>'));
-            //row.append($('<td class="text-right">' + roundDecimal(floatToString(valorImposto), 2) + '</td>'));
+            //row.append($('<td class="text-right">' + roundDecimal(floatToString(totalImposto), 2) + '</td>'));
             row.append($('<td class="text-right">' + valorImposto + '</td>'));
             row.append($('<td></td>'));
+            //row.append($('<td class="text-right">' + roundDecimal(floatToString(totalLiquido), 2) + '</td>'));
             row.append($('<td class="text-right">' + valorLiquido + '</td>'));
             row.append($('<td></td>'));
 

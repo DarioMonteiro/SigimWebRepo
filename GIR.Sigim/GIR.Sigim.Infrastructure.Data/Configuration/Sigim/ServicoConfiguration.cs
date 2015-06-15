@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 {
@@ -42,6 +43,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("situacao")
                 .HasMaxLength(1)
                 .HasColumnOrder(15); 
+
+            HasMany<ContratoRetificacaoItem>(l => l.ListaContratoRetificacaoItem)
+                .WithRequired(c => c.Servico)
+                .HasForeignKey(c => c.ServicoId);
+
         }
     }
 }

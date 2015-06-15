@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 {
@@ -83,8 +86,50 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 
             Ignore(l => l.Ativo);
 
-            HasMany(l => l.ListaParametrosOrdemCompra)
-                .WithOptional(c => c.Cliente);
+            HasMany<ParametrosOrdemCompra>(l => l.ListaParametrosOrdemCompra)
+                .WithOptional(c => c.Cliente)
+                .HasForeignKey (c => c.ClienteId);
+
+            HasMany<CentroCustoEmpresa>(l => l.ListaCentroCustoEmpresa)
+                .WithRequired(c => c.Cliente)
+                .HasForeignKey(c => c.ClienteId);
+
+            HasMany<Domain.Entity.Contrato.Contrato>(l => l.ListaContratoContratante)
+                .WithRequired(c => c.Contratante)
+                .HasForeignKey(c => c.ContratanteId);
+
+            HasMany<Domain.Entity.Contrato.Contrato>(l => l.ListaContratoContratado)
+                .WithRequired(c => c.Contratado)
+                .HasForeignKey(c => c.ContratadoId);
+
+            HasMany<Domain.Entity.Contrato.Contrato>(l => l.ListaContratoInterveniente)
+                .WithOptional(c => c.Interveniente)
+                .HasForeignKey(c => c.IntervenienteId);
+
+            HasMany<Licitacao>(l => l.ListaLicitacao)
+                .WithOptional(c => c.ClienteFornecedor)
+                .HasForeignKey(c => c.ClienteFornecedorId);
+
+            HasMany<TituloPagar>(l => l.ListaTituloPagar)
+                .WithRequired(c => c.Cliente)
+                .HasForeignKey(c => c.ClienteId);
+
+            HasMany<TituloReceber>(l => l.ListaTituloReceber)
+                .WithRequired(c => c.Cliente)
+                .HasForeignKey(c => c.ClienteId);
+
+            HasMany<ContratoRetificacaoItemMedicao>(l => l.ListaContratoRetificacaoItemMedicao)
+                .WithOptional(c => c.MultiFornecedor)
+                .HasForeignKey(c => c.MultiFornecedorId);
+
+            HasMany<ImpostoFinanceiro>(l => l.ListaImpostoFinanceiro)
+                .WithOptional(c => c.Cliente)
+                .HasForeignKey(c => c.ClienteId);
+
+            HasMany<ParametrosContrato>(l => l.ListaParametrosContrato)
+                .WithOptional(c => c.Cliente)
+                .HasForeignKey(c => c.ClienteId);
+
         }
     }
 }

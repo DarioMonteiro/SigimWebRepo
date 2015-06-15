@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 {
@@ -14,13 +15,20 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
             ToTable("TituloReceber", "Financeiro");
 
             HasRequired(l => l.Cliente)
-                .WithMany(c => c.ListaTituloReceber);
+                .WithMany(c => c.ListaTituloReceber)
+                .HasForeignKey(l => l.ClienteId);
 
             HasOptional(l => l.TipoCompromisso)
-                .WithMany(c => c.ListaTituloReceber);
+                .WithMany(c => c.ListaTituloReceber)
+                .HasForeignKey(l => l.TipoCompromissoId);
 
             HasOptional(l => l.TipoDocumento)
-                .WithMany(c => c.ListaTituloReceber);
+                .WithMany(c => c.ListaTituloReceber)
+                .HasForeignKey(l => l.TipoDocumentoId);
+
+            HasMany<ContratoRetificacaoItemMedicao>(l => l.ListaContratoRetificacaoItemMedicao)
+                .WithOptional(l => l.TituloReceber)
+                .HasForeignKey(c => c.TituloReceberId);
 
         }
     }

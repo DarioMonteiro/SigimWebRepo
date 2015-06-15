@@ -48,7 +48,8 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 
             Ignore(l => l.Ativo);
 
-            HasMany(l => l.ListaBancoLayout).WithOptional(l => l.Banco);
+            HasMany(l => l.ListaBancoLayout)
+                .WithOptional(l => l.Banco);
         }
     }
 }

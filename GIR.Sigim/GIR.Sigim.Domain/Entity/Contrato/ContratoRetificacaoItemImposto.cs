@@ -18,5 +18,16 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public int ImpostoFinanceiroId { get; set; }
         public ImpostoFinanceiro ImpostoFinanceiro { get; set; }
         public decimal PercentualBaseCalculo { get; set; }
+
+        public decimal ValorImposto
+        {
+            //(MED.valor * (CTIMPT.percentualBaseCalculo / 100) * (IMPT.aliquota / 100)) AS valorImposto
+            get
+            {
+                //var valor = ContratoRetificacaoItem.ListaContratoRetificacaoItemMedicao.FirstOrDefault().Valor;
+                var valor = ContratoRetificacaoItem.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == 2).SingleOrDefault().Valor;
+                return valor * ImpostoFinanceiro.Aliquota;
+            }
+        }
     }
 }

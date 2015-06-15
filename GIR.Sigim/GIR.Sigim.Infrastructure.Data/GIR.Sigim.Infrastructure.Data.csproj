@@ -135,6 +135,7 @@
     <Compile Include="Configuration\OrdemCompra\ParametrosUsuarioConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
+    <Compile Include="Repository\Contrato\ContratoRetificacaoItemImpostoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />

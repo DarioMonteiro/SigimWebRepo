@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.Financeiro;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 {
@@ -82,21 +83,29 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("retencaoTipoCompromisso")
                 .HasColumnOrder(13);
 
-            HasOptional<Domain.Entity.Financeiro.TipoCompromisso>(l => l.RetencaoTipoCompromisso)
+            HasOptional<TipoCompromisso>(l => l.RetencaoTipoCompromisso)
                 .WithMany(c => c.ListaContratoRetificacao)
                 .HasForeignKey(l => l.RetencaoTipoCompromissoId);
 
-            HasMany<Domain.Entity.Contrato.ContratoRetificacaoItem>(l => l.ListaContratoRetificacaoItem)
+            HasMany<ContratoRetificacaoItem>(l => l.ListaContratoRetificacaoItem)
                 .WithRequired(c => c.ContratoRetificacao)
-                .HasForeignKey(l => l.ContratoRetificacaoId);
+                .HasForeignKey(c => c.ContratoRetificacaoId);
 
-            HasMany<Domain.Entity.Contrato.ContratoRetificacaoProvisao>(l => l.ListaContratoRetificacaoProvisao)
+            HasMany<ContratoRetificacaoProvisao>(l => l.ListaContratoRetificacaoProvisao)
                 .WithRequired(c => c.ContratoRetificacao)
-                .HasForeignKey(l => l.ContratoRetificacaoId);
+                .HasForeignKey(c => c.ContratoRetificacaoId);
 
-            HasMany<Domain.Entity.Contrato.ContratoRetificacaoItemCronograma>(l => l.ListaContratoRetificacaoItemCronograma)
+            HasMany<ContratoRetificacaoItemCronograma>(l => l.ListaContratoRetificacaoItemCronograma)
                 .WithRequired(c => c.ContratoRetificacao)
-                .HasForeignKey(l => l.ContratoRetificacaoId);
+                .HasForeignKey(c => c.ContratoRetificacaoId);
+
+            HasMany<ContratoRetificacaoItemMedicao>(l => l.ListaContratoRetificacaoItemMedicao)
+                .WithRequired(c => c.ContratoRetificacao)
+                .HasForeignKey(c => c.ContratoRetificacaoId);
+
+            HasMany<ContratoRetificacaoItemImposto>(l => l.ListaContratoRetificacaoItemImposto)
+                .WithRequired(c => c.ContratoRetificacao)
+                .HasForeignKey(c => c.ContratoRetificacaoId);
         }
     }
 }

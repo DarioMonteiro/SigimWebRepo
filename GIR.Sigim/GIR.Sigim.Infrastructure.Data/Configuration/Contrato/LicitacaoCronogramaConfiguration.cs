@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.Financeiro;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 {
@@ -25,16 +26,16 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("centroCusto")
                 .HasColumnOrder(2);
 
-            HasRequired<Domain.Entity.Financeiro.CentroCusto>(l => l.CentroCusto)
-                .WithMany(l => l.ListaLicitacaoCronograma)
+            HasRequired<CentroCusto>(l => l.CentroCusto)
+                .WithMany(c => c.ListaLicitacaoCronograma)
                 .HasForeignKey(l => l.CodigoCentroCusto);
 
             Property(l => l.LicitacaoDescricaoId)
                 .HasColumnName("licitacaoDescricao")
                 .HasColumnOrder(3);
 
-            HasRequired<Domain.Entity.Contrato.LicitacaoDescricao>(l => l.LicitacaoDescricao)
-                .WithMany(l => l.ListaLicitacaoCronograma)
+            HasRequired<LicitacaoDescricao>(l => l.LicitacaoDescricao)
+                .WithMany(c => c.ListaLicitacaoCronograma)
                 .HasForeignKey(l => l.LicitacaoDescricaoId);
 
             Property(l => l.DataInicioCartaConvite)
@@ -119,7 +120,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("dataInicioServicoRealizado")
                 .HasColumnOrder(21);
 
-        
+            HasMany<Licitacao>(l => l.ListaLicitacao)
+                .WithRequired(c => c.LicitacaoCronograma)
+                .HasForeignKey(c => c.LicitacaoCronogramaId);
         }
     }
 }

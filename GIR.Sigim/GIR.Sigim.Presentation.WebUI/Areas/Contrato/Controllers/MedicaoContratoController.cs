@@ -135,7 +135,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
  
             model.PodeSalvar = false;
             model.PodeCancelar = false;
-            model.PodeImprimir = false;
+            model.PodeImprimir = true;
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
             if (parametros != null)
@@ -417,25 +417,38 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
         }
 
-        //public ActionResult Imprimir(   int? contratadoId, 
-        //                                int? contratoId, 
-        //                                int? tipoDocumentoId, 
-        //                                string numeroDocumento,
-        //                                Nullable<DateTime> dataEmissao,
-        //                                FormatoExportacaoArquivo formato)
-        //{
-        //    var arquivo = contratoRetificacaoItemMedicaoAppService.Exportar(contratadoId, contratoId,tipoDocumentoId,numeroDocumento,dataEmissao, formato);
-        //    if (arquivo != null)
-        //    {
-        //        Response.Buffer = false;
-        //        Response.ClearContent();
-        //        Response.ClearHeaders();
-        //        return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
-        //    }
+        public ActionResult Imprimir(int? contratadoId,
+                                     int contratoId,
+                                     int tipoDocumentoId,
+                                     string numeroDocumento,
+                                     string dataEmissao,
+                                     int? multiFornecedorId,
+                                     FormatoExportacaoArquivo formato)
+        {
 
-        //    return PartialView("_NotificationMessagesPartial");
-        //}
+            if (multiFornecedorId.HasValue)
+            {
+                contratadoId = multiFornecedorId;
+            }
 
+            DateTime dtEmissao = DateTime.Parse(dataEmissao);
+
+
+            //if (contratoRetificacaoItemMedicaoAppService.EhValidaImpressao(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao))
+            //{
+            //}
+
+            var arquivo = contratoRetificacaoItemMedicaoAppService.Exportar(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
 
         private void CarregarCombosFiltro(MedicaoContratoListaViewModel model) 
         {
