@@ -89,6 +89,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                .HasColumnType("smallint")
                .HasColumnOrder(14);
 
+            HasMany(l => l.ListaContratoRetificacaoItemImposto)
+                .WithRequired(c => c.ImpostoFinanceiro)
+                .HasForeignKey(c => c.ImpostoFinanceiroId);
+
         }
     }
 }

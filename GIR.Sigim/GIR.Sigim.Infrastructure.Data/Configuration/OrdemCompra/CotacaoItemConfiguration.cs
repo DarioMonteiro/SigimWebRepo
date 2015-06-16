@@ -72,6 +72,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
             Property(l => l.DataEleicao)
                 .HasColumnName("dataEleicao")
                 .HasColumnOrder(12);
+
+            HasMany<OrdemCompraItem>(l => l.ListaOrdemCompraItem)
+                .WithOptional(l => l.CotacaoItem)
+                .HasForeignKey(c => c.CotacaoItemId);
+
         }
     }
 }

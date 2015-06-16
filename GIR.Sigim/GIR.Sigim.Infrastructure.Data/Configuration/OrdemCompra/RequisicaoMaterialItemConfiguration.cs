@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Orcamento;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
 {
@@ -37,6 +38,19 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
 
             HasOptional(l => l.PreRequisicaoMaterialItem)
                 .WithMany(l => l.ListaRequisicaoMaterialItem);
+
+            HasMany<CotacaoItem>(l => l.ListaCotacaoItem)
+                .WithRequired(l => l.RequisicaoMaterialItem)
+                .HasForeignKey(c => c.RequisicaoMaterialItemId);
+
+            HasMany<OrdemCompraItem>(l => l.ListaOrdemCompraItem)
+                .WithOptional(l => l.RequisicaoMaterialItem)
+                .HasForeignKey(c => c.RequisicaoMaterialItemId);
+
+            HasMany<OrcamentoInsumoRequisitado>(l => l.ListaOrcamentoInsumoRequisitado)
+                .WithOptional(l => l.RequisicaoMaterialItem)
+                .HasForeignKey(c => c.RequisicaoMaterialItemId);
+
         }
     }
 }

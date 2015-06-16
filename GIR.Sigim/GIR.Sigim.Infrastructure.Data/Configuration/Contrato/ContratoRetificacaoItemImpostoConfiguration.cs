@@ -25,6 +25,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("contrato")
                 .HasColumnOrder(2);
 
+            HasRequired<Domain.Entity.Contrato.Contrato>(l => l.Contrato)
+                .WithMany(c => c.ListaContratoRetificacaoItemImposto)
+                .HasForeignKey(l => l.ContratoId);
+
             Property(l => l.ContratoRetificacaoId)
                 .IsRequired()
                 .HasColumnName("contratoRetificacao")

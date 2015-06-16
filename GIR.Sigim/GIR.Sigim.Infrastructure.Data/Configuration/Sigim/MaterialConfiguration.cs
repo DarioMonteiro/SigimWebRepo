@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Orcamento;
+using GIR.Sigim.Domain.Entity.OrdemCompra;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 {
@@ -127,14 +129,30 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 
             Ignore(l => l.Ativo);
 
-            HasMany(l => l.ListaPreRequisicaoMaterialItem)
-                .WithRequired(l => l.Material);
+            HasMany<PreRequisicaoMaterialItem>(l => l.ListaPreRequisicaoMaterialItem)
+                .WithRequired(c => c.Material)
+                .HasForeignKey(c => c.MaterialId);
 
-            HasMany(l => l.ListaRequisicaoMaterialItem)
-                .WithRequired(l => l.Material);
+            HasMany<RequisicaoMaterialItem>(l => l.ListaRequisicaoMaterialItem)
+                .WithRequired(c => c.Material)
+                .HasForeignKey(c => c.MaterialId);
 
-            HasMany(l => l.ListaOrdemCompraItem)
-                .WithRequired(l => l.Material);
+            HasMany<OrdemCompraItem>(l => l.ListaOrdemCompraItem)
+                .WithRequired(c => c.Material)
+                .HasForeignKey(c => c.MaterialId);
+
+            HasMany<OrcamentoInsumoRequisitado>(l => l.ListaOrcamentoInsumoRequisitado)
+                .WithOptional(c => c.Material)
+                .HasForeignKey(c => c.MaterialId);
+
+            HasMany<OrcamentoInsumoRequisitado>(l => l.ListaOrcamentoInsumoRequisitado)
+                .WithOptional(c => c.Material)
+                .HasForeignKey(c => c.MaterialId);
+
+            HasMany<OrcamentoComposicaoItem>(l => l.ListaOrcamentoComposicaoItem)
+                .WithOptional(c => c.Material)
+                .HasForeignKey(c => c.MaterialId);
+
         }
     }
 }

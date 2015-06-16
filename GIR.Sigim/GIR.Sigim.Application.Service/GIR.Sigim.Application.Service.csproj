@@ -59,6 +59,7 @@
     <Compile Include="Contrato\ContratoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoItemAppService.cs" />
+    <Compile Include="Contrato\ContratoRetificacaoItemImpostoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoItemMedicaoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoProvisaoAppService.cs" />
     <Compile Include="Contrato\ParametrosContratoAppService.cs" />

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -28,5 +29,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool Cancelar(int? contratoRetificacaoItemMedicaoId);
         bool EhValidaVisualizacaoMedicao(int? contratoId, int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao, int? contratadoId);
         List<ContratoRetificacaoItemMedicaoDTO> RecuperaMedicaoPorContratoDadosDaNota(int contratoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, int? contratadoId);
+        FileDownloadDTO Exportar(int? contratadoId, int contratoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, FormatoExportacaoArquivo formato);
+        //bool EhValidaImpressao(int? contratadoId, int? contratoId, int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao);
     }
 }

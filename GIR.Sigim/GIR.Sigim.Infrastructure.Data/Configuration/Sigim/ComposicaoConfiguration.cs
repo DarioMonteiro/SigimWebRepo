@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Orcamento;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 {
@@ -23,6 +24,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasMaxLength(400)
                 .HasColumnName("descricao")
                 .HasColumnOrder(2);
+
+            HasMany<OrcamentoComposicao>(l => l.ListaOrcamentoComposicao)
+                .WithOptional(c => c.Composicao)
+                .HasForeignKey(c => c.ComposicaoId);
+
+            HasMany<OrcamentoInsumoRequisitado>(l => l.ListaOrcamentoInsumoRequisitado)
+                .WithOptional(c => c.Composicao)
+                .HasForeignKey(c => c.ComposicaoId);
         }
     }
 }

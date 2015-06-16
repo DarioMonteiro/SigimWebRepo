@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Repository.Contrato;
 using System.Threading.Tasks;
+using CrystalDecisions.Shared;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Domain.Entity.Contrato;
 using GIR.Sigim.Application.DTO.Contrato;
@@ -13,6 +16,7 @@ using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.Reports.Contrato;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -21,37 +25,31 @@ namespace GIR.Sigim.Application.Service.Contrato
         #region Declaração
 
         private IContratoRetificacaoItemMedicaoRepository contratoRetificacaoItemMedicaoRepository;
-        private ITituloPagarRepository tituloPagarRepository;
-        private IParametrosContratoRepository parametrosContratoRepository;
-        private IBloqueioContabilRepository bloqueioContabilRepository;
         private ITituloPagarAppService tituloPagarAppService;
         private IParametrosContratoAppService parametrosContratoAppService;
         private IBloqueioContabilAppService bloqueioContabilAppService;
         private ILogOperacaoAppService logOperacaoAppService;
+        private IContratoRetificacaoItemImpostoAppService contratoRetificacaoItemImpostoAppService;
 
         #endregion
 
         #region Construtor
 
         public ContratoRetificacaoItemMedicaoAppService(IContratoRetificacaoItemMedicaoRepository contratoRetificacaoItemMedicaoRepository,
-                                                        ITituloPagarRepository tituloPagarRepository,
-                                                        IParametrosContratoRepository parametrosContratoRepository,
-                                                        IBloqueioContabilRepository bloqueioContabilRepository,
                                                         ITituloPagarAppService tituloPagarAppService,
                                                         IParametrosContratoAppService parametrosContratoAppService,
                                                         IBloqueioContabilAppService bloqueioContabilAppService,
                                                         ILogOperacaoAppService logOperacaoAppService,
+                                                        IContratoRetificacaoItemImpostoAppService contratoRetificacaoItemImpostoAppService,
                                                         MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.contratoRetificacaoItemMedicaoRepository = contratoRetificacaoItemMedicaoRepository;
-            this.tituloPagarRepository = tituloPagarRepository;
-            this.parametrosContratoRepository = parametrosContratoRepository;
-            this.bloqueioContabilRepository = bloqueioContabilRepository;
             this.tituloPagarAppService = tituloPagarAppService;
             this.parametrosContratoAppService = parametrosContratoAppService;
             this.bloqueioContabilAppService = bloqueioContabilAppService;
             this.logOperacaoAppService = logOperacaoAppService;
+            this.contratoRetificacaoItemImpostoAppService = contratoRetificacaoItemImpostoAppService;
         }
 
         #endregion
@@ -390,85 +388,106 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                              DateTime dataEmissao,
                                                                                              int? contratadoId)
         {
-
-            List<ContratoRetificacaoItemMedicaoDTO> listaMedicao = null;
-            if ((contratadoId.HasValue) && (contratadoId.Value > 0))
-            {
-                listaMedicao = contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro(l => l.ContratoId == contratoId &&
-                                                                                              l.TipoDocumentoId == tipoDocumentoId &&
-                                                                                              l.NumeroDocumento == numeroDocumento &&
-                                                                                              l.DataEmissao == dataEmissao &&
-                                                                                              ((l.MultiFornecedorId == contratadoId) ||
-                                                                                              (l.MultiFornecedorId == null && l.Contrato.ContratadoId == contratadoId)),
-                                                                                         l => l.Contrato, 
-                                                                                         l=> l.ContratoRetificacaoItem,
-                                                                                         l=> l.ContratoRetificacaoItem.Servico).To<List<ContratoRetificacaoItemMedicaoDTO>>();
-            }
-            else
-            {
-
-                listaMedicao = contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro(l => l.ContratoId == contratoId &&
-                                                                                              l.TipoDocumentoId == tipoDocumentoId &&
-                                                                                              l.NumeroDocumento == numeroDocumento &&
-                                                                                              l.DataEmissao == dataEmissao,
-                                                                                         l => l.Contrato, 
-                                                                                         l=> l.ContratoRetificacaoItem,
-                                                                                         l=> l.ContratoRetificacaoItem.Servico).To<List<ContratoRetificacaoItemMedicaoDTO>>();
-
-            }
-
-            return listaMedicao;
-
+            return contratoRetificacaoItemMedicaoRepository.RecuperaMedicaoPorContratoDadosDaNota(contratoId, 
+                                                                                                  tipoDocumentoId, 
+                                                                                                  numeroDocumento, 
+                                                                                                  dataEmissao, 
+                                                                                                  contratadoId,
+                                                                                                  l => l.Contrato,
+                                                                                                  l => l.ContratoRetificacaoItem,
+                                                                                                  l => l.ContratoRetificacaoItem.Servico
+                                                                                                  ).To<List<ContratoRetificacaoItemMedicaoDTO>>();
         }
 
+        public FileDownloadDTO Exportar(int? contratadoId,
+                                        int contratoId,
+                                        int tipoDocumentoId,
+                                        string numeroDocumento,
+                                        DateTime dataEmissao,
+                                        FormatoExportacaoArquivo formato)
+        {
+            var listaMedicao = contratoRetificacaoItemMedicaoRepository.RecuperaMedicaoPorContratoDadosDaNota(contratoId, 
+                                                                                                              tipoDocumentoId, 
+                                                                                                              numeroDocumento, 
+                                                                                                              dataEmissao, 
+                                                                                                              contratadoId,
+                                                                                                              l => l.Contrato,
+                                                                                                              l => l.Contrato.Contratado.PessoaFisica,
+                                                                                                              l => l.Contrato.Contratado.PessoaJuridica,
+                                                                                                              l => l.Contrato.Contratante.PessoaFisica,
+                                                                                                              l => l.Contrato.Contratante.PessoaJuridica,
+                                                                                                              l => l.MultiFornecedor.PessoaFisica,
+                                                                                                              l => l.MultiFornecedor.PessoaJuridica,
+                                                                                                              l => l.TipoDocumento,
+                                                                                                              l => l.TituloPagar,
+                                                                                                              l => l.TituloReceber,
+                                                                                                              l => l.ContratoRetificacaoItem.Servico,
+                                                                                                              l => l.ContratoRetificacaoItem.Classe,
+                                                                                                              l => l.ContratoRetificacaoItemCronograma
+                                                                                                              ).To<List<ContratoRetificacaoItemMedicao>>();
+            relMedicao objRel = new relMedicao();
 
+            //var listaImposto = contratoRetificacaoItemImpostoAppService.RecuperaImpostoPorContratoDadosDaNota(contratoId, 
+            //                                                                                                  tipoDocumentoId, 
+            //                                                                                                  numeroDocumento, 
+            //                                                                                                  dataEmissao, 
+            //                                                                                                  contratadoId,
+            //                                                                                                  l => l.ImpostoFinanceiro,
+            //                                                                                                  l => l.ContratoRetificacaoItem,
+            //                                                                                                  l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemMedicao
+            //                                                                                                  ).To<List<ContratoRetificacaoItemImposto>>();
+            List<ContratoRetificacaoItemImposto> listaImposto = new List<ContratoRetificacaoItemImposto>();
 
-        //public FileDownloadDTO Exportar(int? contratadoId, 
-        //                                int? contratoId, 
-        //                                int? tipoDocumentoId, 
-        //                                string numeroDocumento, 
-        //                                Nullable<DateTime> dataEmissao,
-        //                                FormatoExportacaoArquivo formato)
-        //{
-        //    if (!EhValidaImpressao(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dataEmissao))
-        //    {
+            objRel.SetDataSource(MedicaoToDataTable(listaMedicao));
+            objRel.Subreports["contratoImposto"].SetDataSource(ImpostoToDataTable(listaImposto));
 
-        //    }
+            var parametros = parametrosContratoAppService.Obter();
 
-        //    var preRequisicao = ObterPeloIdEUsuario(id, UsuarioLogado.Id, l => l.ListaItens.Select(o => o.Material.MaterialClasseInsumo));
-        //    relRequisicaoMaterial objRel = new relRequisicaoMaterial();
-        //    objRel.SetDataSource(RequisicaoToDataTable(preRequisicao));
-        //    objRel.Subreports["requisicaoMaterialItem"].SetDataSource(RequisicaoItemToDataTable(preRequisicao.ListaItens.ToList()));
-        //    var parametros = parametrosOrdemCompraAppService.Obter();
-        //    objRel.SetParameterValue("nomeEmpresa", parametros.Cliente.Nome);
+            var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
+            System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
+            imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
 
-        //    var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
-        //    System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
-        //    imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
+            objRel.SetParameterValue("nomeEmpresa", parametros.Cliente.Nome);
+            objRel.SetParameterValue("parCentroCusto", caminhoImagem);
+            //objRel.SetParameterValue("parDescricaoCentroCusto", txtDescricaoCentroCusto.Text)
+            //objRel.SetParameterValue("parContratado", strContratado)
+            //objRel.SetParameterValue("parContrato", txtContrato.Text)
+            //objRel.SetParameterValue("parDescricaoContrato", cboDescricaoContrato.Text)
+            //objRel.SetParameterValue("parRetencao", txtRetencao.Text)
+            //objRel.SetParameterValue("parValorContratadoItem", txtValorContratadoItem.Text)
+            //objRel.SetParameterValue("parValorTotalImposto", decValorTotalImposto)
+            //objRel.SetParameterValue("parMultifornecedor", strMultifornecedor)
+            //objRel.SetParameterValue("assinaturaEletronicaMedicao", strCaminhoMedicao)
+            //objRel.SetParameterValue("assinaturaEletronicaLiberacao", strCaminhoLiberacao)
 
-        //    objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+            objRel.SetParameterValue("parDescricaoCentroCusto", "");
+            objRel.SetParameterValue("parContratado", "");
+            objRel.SetParameterValue("parContrato", "");
+            objRel.SetParameterValue("parDescricaoContrato", "");
+            objRel.SetParameterValue("parRetencao", "0");
+            objRel.SetParameterValue("parValorContratadoItem", "0");
+            objRel.SetParameterValue("parValorTotalImposto", 0);
+            objRel.SetParameterValue("parMultifornecedor", "");
+            objRel.SetParameterValue("assinaturaEletronicaMedicao", "");
+            objRel.SetParameterValue("assinaturaEletronicaLiberacao", "");
 
-        //    FileDownloadDTO arquivo = new FileDownloadDTO(
-        //        "RequisicaoMaterial_" + id.ToString(),
-        //        objRel.ExportToStream((ExportFormatType)formato),
-        //        formato);
+            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 
-        //    if (System.IO.File.Exists(caminhoImagem))
-        //        System.IO.File.Delete(caminhoImagem);
+            FileDownloadDTO arquivo = new FileDownloadDTO(
+                "Medicao",
+                objRel.ExportToStream((ExportFormatType)formato),
+                formato);
 
-        //    return arquivo;
-        //}
+            if (System.IO.File.Exists(caminhoImagem))
+                System.IO.File.Delete(caminhoImagem);
+            return arquivo;
+        }
 
-        #endregion
-
-
-        #region Métodos privados
-
-        //private bool EhValidaImpressao(int? contratadoId,
-        //                                int? contratoId,
-        //                                int? tipoDocumentoId,
-        //                                string numeroDocumento,
-        //                                Nullable<DateTime> dataEmissao)
+        //public bool EhValidaImpressao(int? contratadoId,
+        //                              int? contratoId,
+        //                              int? tipoDocumentoId,
+        //                              string numeroDocumento,
+        //                              Nullable<DateTime> dataEmissao)
         //{
         //    if (contratadoId == 0)
         //    {
@@ -476,13 +495,362 @@ namespace GIR.Sigim.Application.Service.Contrato
         //        return false;
         //    }
 
-        //    if (dto.MultiFornecedorId.HasValue)
+        //    if (contratoId == 0)
         //    {
-        //        contratadoId = dto.MultiFornecedorId.Value;
+        //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contrato"), TypeMessage.Error);
+        //        return false;
+        //    }
+
+        //    if (tipoDocumentoId == 0)
+        //    {
+        //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo"), TypeMessage.Error);
+        //        return false;
+        //    }
+
+        //    if (string.IsNullOrEmpty(numeroDocumento))
+        //    {
+        //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Nº"), TypeMessage.Error);
+        //        return false;
+        //    }
+
+        //    if (!dataEmissao.HasValue)
+        //    {
+        //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data emissão"), TypeMessage.Error);
+        //        return false;
         //    }
 
         //    return true;
         //}
+
+
+        #endregion
+
+        #region Métodos privados
+
+        private DataTable MedicaoToDataTable(List<ContratoRetificacaoItemMedicao> listaMedicao)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo");
+            DataColumn contrato = new DataColumn("contrato");
+            DataColumn contratoRetificacao = new DataColumn("contratoRetificacao");
+            DataColumn contratoRetificacaoItem = new DataColumn("contratoRetificacaoItem");
+            DataColumn sequencialItem = new DataColumn("sequencialItem");
+            DataColumn contratoRetificacaoItemCronograma = new DataColumn("contratoRetificacaoItemCronograma");
+            DataColumn sequencialCronograma = new DataColumn("sequencialCronograma");
+            DataColumn tipoDocumento = new DataColumn("tipoDocumento");
+            DataColumn tipoDcumentoDescricao = new DataColumn("tipoDcumentoDescricao");
+            DataColumn tipoDocumentoSigla = new DataColumn("tipoDocumentoSigla");
+            DataColumn numeroDocumento = new DataColumn("numeroDocumento");
+            DataColumn dataVencimento = new DataColumn("dataVencimento");
+            DataColumn dataEmissao = new DataColumn("dataEmissao");
+            DataColumn dataMedicao = new DataColumn("dataMedicao");
+            DataColumn usuarioMedicao = new DataColumn("usuarioMedicao");
+            DataColumn valor = new DataColumn("valor");
+            DataColumn quantidade = new DataColumn("quantidade");
+            DataColumn valorRetido = new DataColumn("valorRetido");
+            DataColumn observacao = new DataColumn("observacao");
+            DataColumn tituloPagar = new DataColumn("tituloPagar");
+            DataColumn tituloReceber = new DataColumn("tituloReceber");
+            DataColumn dataLiberacao = new DataColumn("dataLiberacao");
+            DataColumn usuarioLiberacao = new DataColumn("usuarioLiberacao");
+            DataColumn situacao = new DataColumn("situacao");
+            DataColumn multifornecedor = new DataColumn("multifornecedor");
+            DataColumn tipoContrato = new DataColumn("tipoContrato");
+            DataColumn contratado = new DataColumn("contratado");
+            DataColumn contratante = new DataColumn("contratante");
+            DataColumn valorTotalMedidoLiberadoContrato = new DataColumn("valorTotalMedidoLiberadoContrato");
+            DataColumn valorContrato = new DataColumn("valorContrato");
+            DataColumn saldoContrato = new DataColumn("saldoContrato");
+            DataColumn classe = new DataColumn("classe");
+            DataColumn codigoDescricaoClasse = new DataColumn("codigoDescricaoClasse");
+            DataColumn precoUnitario = new DataColumn("precoUnitario");
+            DataColumn descricaoCronograma = new DataColumn("descricaoCronograma");
+            DataColumn quantidadeCronograma = new DataColumn("quantidadeCronograma");
+            DataColumn valorCronograma = new DataColumn("valorCronograma");
+            DataColumn unidadeMedida = new DataColumn("unidadeMedida");
+            DataColumn descricaoItem = new DataColumn("descricaoItem");
+            DataColumn complementoDescricaoItem = new DataColumn("complementoDescricaoItem");
+            DataColumn descricaoSituacaoMedicao = new DataColumn("descricaoSituacaoMedicao");
+            DataColumn naturezaItem = new DataColumn("naturezaItem");
+            DataColumn valorTotalMedido = new DataColumn("valorTotalMedido");
+            DataColumn quantidadeTotalMedida = new DataColumn("quantidadeTotalMedida");
+            DataColumn valorTotalLiberado = new DataColumn("valorTotalLiberado");
+            DataColumn quantidadeTotalLiberada = new DataColumn("quantidadeTotalLiberada");
+            DataColumn valorTotalMedidoLiberado = new DataColumn("valorTotalMedidoLiberado");
+            DataColumn quantidadeTotalMedidaLiberada = new DataColumn("quantidadeTotalMedidaLiberada");
+            DataColumn valorImpostoRetido = new DataColumn("valorImpostoRetido");
+            DataColumn nomeContratado = new DataColumn("nomeContratado");
+            DataColumn nomeContratante = new DataColumn("nomeContratante");
+            DataColumn codigoDescricaoCentroCusto = new DataColumn("codigoDescricaoCentroCusto");
+            DataColumn centroCusto = new DataColumn("centroCusto");
+            DataColumn descricaoContratoDescricao = new DataColumn("descricaoContratoDescricao");
+            DataColumn valorItem = new DataColumn("valorItem");
+            DataColumn valorImpostoRetidoMedicao = new DataColumn("valorImpostoRetidoMedicao");
+            DataColumn descricaoSituacaoTituloPagar = new DataColumn("descricaoSituacaoTituloPagar");
+            DataColumn descricaoSituacaoTituloReceber = new DataColumn("descricaoSituacaoTituloReceber");
+            DataColumn CPFCNPJContratado = new DataColumn("CPFCNPJContratado");
+            DataColumn CPFCNPJContratante = new DataColumn("CPFCNPJContratante");
+            DataColumn CPFCNPJMultifornecedor = new DataColumn("CPFCNPJMultifornecedor");
+            DataColumn girErro = new DataColumn("girErro");
+            DataColumn desconto = new DataColumn("desconto");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(contrato);
+            dta.Columns.Add(contratoRetificacao);
+            dta.Columns.Add(contratoRetificacaoItem);
+            dta.Columns.Add(sequencialItem);
+            dta.Columns.Add(contratoRetificacaoItemCronograma);
+            dta.Columns.Add(sequencialCronograma);
+            dta.Columns.Add(tipoDocumento);
+            dta.Columns.Add(tipoDcumentoDescricao);
+            dta.Columns.Add(tipoDocumentoSigla);
+            dta.Columns.Add(numeroDocumento);
+            dta.Columns.Add(dataVencimento);
+            dta.Columns.Add(dataEmissao);
+            dta.Columns.Add(dataMedicao);
+            dta.Columns.Add(usuarioMedicao);
+            dta.Columns.Add(valor);
+            dta.Columns.Add(quantidade);
+            dta.Columns.Add(valorRetido);
+            dta.Columns.Add(observacao);
+            dta.Columns.Add(tituloPagar);
+            dta.Columns.Add(tituloReceber);
+            dta.Columns.Add(dataLiberacao);
+            dta.Columns.Add(usuarioLiberacao);
+            dta.Columns.Add(situacao);
+            dta.Columns.Add(multifornecedor);
+            dta.Columns.Add(tipoContrato);
+            dta.Columns.Add(contratado);
+            dta.Columns.Add(contratante);
+            dta.Columns.Add(valorTotalMedidoLiberadoContrato);
+            dta.Columns.Add(valorContrato);
+            dta.Columns.Add(saldoContrato);
+            dta.Columns.Add(classe);
+            dta.Columns.Add(codigoDescricaoClasse);
+            dta.Columns.Add(precoUnitario);
+            dta.Columns.Add(descricaoCronograma);
+            dta.Columns.Add(quantidadeCronograma);
+            dta.Columns.Add(valorCronograma);
+            dta.Columns.Add(unidadeMedida);
+            dta.Columns.Add(descricaoItem);
+            dta.Columns.Add(complementoDescricaoItem);
+            dta.Columns.Add(descricaoSituacaoMedicao);
+            dta.Columns.Add(naturezaItem);
+            dta.Columns.Add(valorTotalMedido);
+            dta.Columns.Add(quantidadeTotalMedida);
+            dta.Columns.Add(valorTotalLiberado);
+            dta.Columns.Add(quantidadeTotalLiberada);
+            dta.Columns.Add(valorTotalMedidoLiberado);
+            dta.Columns.Add(quantidadeTotalMedidaLiberada);
+            dta.Columns.Add(valorImpostoRetido);
+            dta.Columns.Add(nomeContratado);
+            dta.Columns.Add(nomeContratante);
+            dta.Columns.Add(codigoDescricaoCentroCusto);
+            dta.Columns.Add(centroCusto);
+            dta.Columns.Add(descricaoContratoDescricao);
+            dta.Columns.Add(valorItem);
+            dta.Columns.Add(valorImpostoRetidoMedicao);
+            dta.Columns.Add(descricaoSituacaoTituloPagar);
+            dta.Columns.Add(descricaoSituacaoTituloReceber);
+            dta.Columns.Add(CPFCNPJContratado);
+            dta.Columns.Add(CPFCNPJContratante);
+            dta.Columns.Add(CPFCNPJMultifornecedor);
+            dta.Columns.Add(girErro);
+            dta.Columns.Add(desconto);
+
+            foreach (var medicao in listaMedicao)
+            {
+                DataRow row = dta.NewRow();
+
+                row[codigo] = medicao.Id;
+                row[contrato] = medicao.ContratoId;
+                row[contratoRetificacao] = medicao.ContratoRetificacaoId;
+                row[contratoRetificacaoItem] = medicao.ContratoRetificacaoItemId;
+                row[sequencialItem] = medicao.SequencialItem;
+                row[contratoRetificacaoItemCronograma] = medicao.ContratoRetificacaoItemCronogramaId;
+                row[sequencialCronograma] = medicao.SequencialCronograma;
+                row[tipoDocumento] = medicao.TipoDocumentoId;
+                row[tipoDcumentoDescricao] = medicao.TipoDocumento.Descricao;
+                row[tipoDocumentoSigla] = medicao.TipoDocumento.Sigla;
+                row[numeroDocumento] = medicao.NumeroDocumento;
+                row[dataVencimento] = medicao.DataVencimento.ToString("dd/MM/yyyy");
+                row[dataEmissao] = medicao.DataEmissao.ToString("dd/MM/yyyy");
+                row[dataMedicao] = medicao.DataMedicao.ToString("dd/MM/yyyy");
+                row[usuarioMedicao] = medicao.UsuarioMedicao;
+                row[valor] = medicao.Valor;
+                row[quantidade] = medicao.Quantidade;
+                row[valorRetido] = medicao.ValorRetido;
+                row[observacao] = medicao.Observacao;
+                row[tituloPagar] = medicao.TituloPagarId;
+                row[tituloReceber] = medicao.TituloReceberId;
+                row[dataLiberacao] = medicao.DataLiberacao.HasValue ? medicao.DataLiberacao.Value.ToString("dd/MM/yyyy") : string.Empty;
+                row[usuarioLiberacao] = medicao.UsuarioLiberacao;
+                row[situacao] = medicao.Situacao;
+                row[multifornecedor] = medicao.MultiFornecedorId;
+                row[tipoContrato] = medicao.Contrato.TipoContrato;
+                row[contratado] = medicao.Contrato.ContratadoId;
+                row[contratante] = medicao.Contrato.ContratanteId;
+                //Esse valor é um campo customizado na procedure viw_contrato , ver como fazer com o wilson 
+                row[valorTotalMedidoLiberadoContrato] = -999999999999;
+                //Esse valor é um campo customizado na procedure viw_contrato , ver como fazer com o wilson 
+                decimal valorContratoAux = medicao.Contrato.ValorContrato.HasValue ? medicao.Contrato.ValorContrato.Value : 0;
+                row[valorContrato] = valorContratoAux;
+                row[saldoContrato] = (valorContratoAux - (-999999999999));
+                row[classe] = medicao.ContratoRetificacaoItem.CodigoClasse;
+                string codigoDescricaoClasseAux = medicao.ContratoRetificacaoItem.CodigoClasse + " - " + medicao.ContratoRetificacaoItem.Classe.Descricao;
+                row[codigoDescricaoClasse] = codigoDescricaoClasseAux;
+                row[precoUnitario] = medicao.ContratoRetificacaoItem.PrecoUnitario;
+                row[descricaoCronograma] = medicao.ContratoRetificacaoItemCronograma.Descricao;
+                row[quantidadeCronograma] = medicao.ContratoRetificacaoItemCronograma.Quantidade;
+                row[valorCronograma] = medicao.ContratoRetificacaoItemCronograma.Valor;
+                row[unidadeMedida] = medicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida;
+                row[descricaoItem] = medicao.ContratoRetificacaoItem.Servico.Descricao;
+                row[complementoDescricaoItem] = medicao.ContratoRetificacaoItem.ComplementoDescricao;
+                row[descricaoSituacaoMedicao] = medicao.Situacao.ObterDescricao(); ;
+                row[naturezaItem] = medicao.ContratoRetificacaoItem.NaturezaItem.ObterDescricao();
+                //Esse valor é um campo customizado na procedure viw_contrato , ver como fazer com o wilson 
+                row[valorTotalMedido] = -999999999999;
+                row[quantidadeTotalMedida] = -999999999999;
+                row[valorTotalLiberado] = -999999999999;
+                row[quantidadeTotalLiberada] = -999999999999;
+                row[valorTotalMedidoLiberado] = -999999999999;
+                row[quantidadeTotalMedidaLiberada] = -999999999999;
+                row[valorImpostoRetido] = - 999999999999;
+                //Esse valor é um campo customizado na procedure viw_contrato , ver como fazer com o wilson 
+                row[nomeContratado] = medicao.Contrato.Contratado.Nome;
+                row[nomeContratante] = medicao.Contrato.Contratante.Nome;
+                string codigoDescricaoCentroCustoAux = medicao.Contrato.CodigoCentroCusto + " - " + medicao.Contrato.CentroCusto.Descricao;
+                row[codigoDescricaoCentroCusto] = codigoDescricaoCentroCustoAux;
+                row[centroCusto] = medicao.Contrato.CodigoCentroCusto;
+                row[descricaoContratoDescricao] = medicao.Contrato.ContratoDescricao;
+                row[valorItem] = medicao.ContratoRetificacaoItem.ValorItem.HasValue ? medicao.ContratoRetificacaoItem.ValorItem.Value : 0;
+                //Esse valor é um campo customizado na procedure viw_contrato , ver como fazer com o wilson 
+                row[valorImpostoRetidoMedicao] = -999999999999;
+                //Esse valor é um campo customizado na procedure viw_contrato , ver como fazer com o wilson 
+                if (medicao.TituloPagarId.HasValue)
+                {
+                    row[descricaoSituacaoTituloPagar] = medicao.TituloPagar.Situacao.ObterDescricao();
+                }
+                else
+                {
+                    row[descricaoSituacaoTituloPagar] = "";
+                }
+                if (medicao.TituloReceberId.HasValue) {
+                    row[descricaoSituacaoTituloReceber] = medicao.TituloReceber.Situacao.ObterDescricao();
+                }
+                else{
+                    row[descricaoSituacaoTituloReceber] = "";
+                }
+                row[CPFCNPJContratado] = "";
+                if (medicao.Contrato.Contratado.TipoPessoa == "F")
+                {
+                    if (medicao.Contrato.Contratado.PessoaFisica != null)
+                    {
+                        row[CPFCNPJContratado] = medicao.Contrato.Contratado.PessoaFisica.Cpf;
+                    }
+                }
+                else if (medicao.Contrato.Contratado.TipoPessoa == "J")
+                {
+                    if (medicao.Contrato.Contratado.PessoaJuridica != null)
+                    {
+                        row[CPFCNPJContratado] = medicao.Contrato.Contratado.PessoaJuridica.Cnpj;
+                    }
+                }
+
+                row[CPFCNPJContratante] = "";
+                if (medicao.Contrato.Contratante.TipoPessoa == "F")
+                {
+                    if (medicao.Contrato.Contratante.PessoaFisica != null)
+                    {
+                        row[CPFCNPJContratante] = medicao.Contrato.Contratante.PessoaFisica.Cpf;
+                    }
+                }
+                else if (medicao.Contrato.Contratante.TipoPessoa == "J")
+                {
+                    if (medicao.Contrato.Contratante.PessoaJuridica != null)
+                    {
+                        row[CPFCNPJContratante] = medicao.Contrato.Contratante.PessoaJuridica.Cnpj;
+                    }
+                }
+
+                row[CPFCNPJMultifornecedor] = "";
+                if (medicao.MultiFornecedor != null)
+                {
+                    if (medicao.MultiFornecedor.TipoPessoa == "F")
+                    {
+                        if (medicao.MultiFornecedor.PessoaFisica != null)
+                        {
+                            row[CPFCNPJMultifornecedor] = medicao.MultiFornecedor.PessoaFisica.Cpf;
+                        }
+                    }
+                    else if (medicao.MultiFornecedor.TipoPessoa == "J")
+                    {
+                        if (medicao.MultiFornecedor.PessoaJuridica != null)
+                        {
+                            row[CPFCNPJMultifornecedor] = medicao.MultiFornecedor.PessoaJuridica.Cnpj;
+                        }
+                    }
+                }
+
+                row[girErro] = "";
+                row[desconto] = medicao.Desconto.HasValue ? medicao.Desconto.Value : 0;
+                dta.Rows.Add(row);
+            }
+
+            return dta;
+        }
+
+        private DataTable ImpostoToDataTable(List<ContratoRetificacaoItemImposto> listaImposto)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo");
+            DataColumn contrato = new DataColumn("contrato");
+            DataColumn contratoRetificacao = new DataColumn("contratoRetificacao");
+            DataColumn contratoRetificacaoItem = new DataColumn("contratoRetificacaoItem");
+            DataColumn impostoFinanceiro = new DataColumn("impostoFinanceiro");
+            DataColumn percentualBaseCalculo = new DataColumn("percentualBaseCalculo");
+            DataColumn aliquota = new DataColumn("aliquota");
+            DataColumn retido = new DataColumn("retido");
+            DataColumn descricaoImposto = new DataColumn("descricaoImposto");
+            DataColumn valorTotalMedido = new DataColumn("valorTotalMedido");
+            DataColumn sigla = new DataColumn("sigla");
+            DataColumn sequencialItem = new DataColumn("sequencialItem");
+            DataColumn descricaoItem = new DataColumn("descricaoItem");
+            DataColumn valorImposto = new DataColumn("valorImposto");
+            DataColumn indireto = new DataColumn("indireto");
+            DataColumn girErro = new DataColumn("girErro");
+
+            foreach (var imposto in listaImposto)
+            {
+                DataRow row = dta.NewRow();
+
+                row[codigo] = imposto.Id;
+                row[contrato] = imposto.ContratoId;
+                row[contratoRetificacao] = imposto.ContratoRetificacaoId;
+                row[contratoRetificacaoItem] = imposto.ContratoRetificacaoItemId;
+                row[impostoFinanceiro] = imposto.ImpostoFinanceiroId;
+                row[percentualBaseCalculo] = imposto.PercentualBaseCalculo;
+                row[aliquota] = imposto.ImpostoFinanceiro.Aliquota;
+                row[retido] = imposto.ImpostoFinanceiro.Retido;
+                row[descricaoImposto] =  imposto.ImpostoFinanceiro.Descricao;
+                //Esse campo está no rpt mais vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
+                //row[valorTotalMedido] = null;
+                //Esse campo está no rpt mais não vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
+                row[sigla] = imposto.ImpostoFinanceiro.Sigla;
+                //Esse campo está no rpt mais não vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
+                //row[sequencialItem] = null;
+                //row[descricaoItem] = null;
+                //Esse campo está no rpt mais não vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
+                decimal valorImpostoAux = 0;
+                row[valorImposto] = valorImpostoAux;
+                row[indireto] = imposto.ImpostoFinanceiro.Indireto;
+                row[girErro] = "";
+
+                dta.Rows.Add(row);
+            }
+
+            return dta;
+        }
 
 
         private bool EhValidoSalvar(ContratoRetificacaoItemMedicaoDTO dto)

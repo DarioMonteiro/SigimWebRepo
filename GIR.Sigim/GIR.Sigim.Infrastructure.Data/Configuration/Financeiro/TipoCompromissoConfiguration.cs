@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 {
@@ -41,11 +43,30 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnType("bit") 
                 .HasColumnOrder(5);
 
-            HasMany(l => l.ListaParametrosOrdemCompra)
-                .WithOptional(l => l.TipoCompromissoFrete);
+            HasMany<ParametrosOrdemCompra>(l => l.ListaParametrosOrdemCompra)
+                .WithOptional(l => l.TipoCompromissoFrete)
+                .HasForeignKey(c => c.TipoCompromissoFreteId);
 
-            HasMany(l => l.ListaContratoRetificacao)
-                .WithOptional(c => c.RetencaoTipoCompromisso); 
+            HasMany<ContratoRetificacao>(l => l.ListaContratoRetificacao)
+                .WithOptional(c => c.RetencaoTipoCompromisso)
+                .HasForeignKey(c => c.RetencaoTipoCompromissoId);
+
+            HasMany<ContratoRetificacaoItem>(l => l.ListaContratoRetificacaoItem)
+                .WithOptional(c => c.RetencaoTipoCompromisso)
+                .HasForeignKey(c => c.RetencaoTipoCompromissoId);
+
+            HasMany<TituloPagar>(l => l.ListaTituloPagar)
+                .WithOptional(c => c.TipoCompromisso)
+                .HasForeignKey(c => c.TipoCompromissoId);
+
+            HasMany<TituloReceber>(l => l.ListaTituloReceber)
+                .WithOptional(c => c.TipoCompromisso)
+                .HasForeignKey(c => c.TipoCompromissoId);
+
+            HasMany<ImpostoFinanceiro>(l => l.ListaImpostoFinanceiro)
+                .WithOptional(c => c.TipoCompromisso)
+                .HasForeignKey(c => c.TipoCompromissoId);
+
         }
     }
 }

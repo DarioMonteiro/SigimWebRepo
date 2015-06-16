@@ -40,7 +40,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<TituloReceber> ListaTituloReceber { get; set; }
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
         public ICollection<ImpostoFinanceiro> ListaImpostoFinanceiro { get; set; }
-
+        public ICollection<ParametrosContrato> ListaParametrosContrato { get; set; }
 
         public ClienteFornecedor()
         {
@@ -54,6 +54,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaTituloReceber = new HashSet<TituloReceber>();
             this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
             this.ListaImpostoFinanceiro = new HashSet<ImpostoFinanceiro>();
+            this.ListaParametrosContrato = new HashSet<ParametrosContrato>();
         }
     }
 }

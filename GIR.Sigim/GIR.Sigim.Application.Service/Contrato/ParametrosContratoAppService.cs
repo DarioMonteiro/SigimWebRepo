@@ -23,7 +23,8 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         public ParametrosContratoDTO Obter()
         {
-            return parametrosRepository.ListarTodos().FirstOrDefault().To<ParametrosContratoDTO>();
+            //return parametrosRepository.ListarTodos().FirstOrDefault().To<ParametrosContratoDTO>();
+            return parametrosRepository.Obter().To<ParametrosContratoDTO>();
         }
 
         public void AtualizarMascaraClasseInsumo(string mascaraClasseInsumo)
