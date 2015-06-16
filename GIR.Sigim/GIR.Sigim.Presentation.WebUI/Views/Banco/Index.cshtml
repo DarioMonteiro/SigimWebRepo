@@ -1,7 +1,7 @@
-﻿@model GIR.Sigim.Presentation.WebUI.ViewModel.FormaRecebimentoViewModel
+﻿@model GIR.Sigim.Presentation.WebUI.ViewModel.BancoViewModel
 
 @{
-    ViewBag.Title = "Forma de recebimento";
+    ViewBag.Title = "Banco";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -20,7 +20,7 @@
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
                             "Salvar",
-                            "FormaRecebimento",
+                            "Banco",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
                             new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))                                            
@@ -29,22 +29,40 @@
                     <div class="panel-body no-padding">
                         <fieldset>
                             <div class="row">
-                            <section class="col col-12">
-                                @Html.HiddenFor(m => m.FormaRecebimento.Id)
-                                @Html.LabelFor(m => m.FormaRecebimento.Descricao, new { @class = "label" })
+                            <section class="col col-3">                             
+                                @Html.LabelFor(m => m.Banco.Id, new { @class = "label" })
                                 <label class="input">
-                                    @Html.TextBoxFor(m => m.FormaRecebimento.Descricao, new { @maxlength = "50",  @class = "required" })
+                                    @Html.TextBoxFor(m => m.Banco.Id, new { @maxlength = "50",  @class = "required" })
                                 </label>
-                                @Html.ValidationMessageFor(m => m.FormaRecebimento.Descricao, "", new { @class = "note note-error" })
+                                @Html.ValidationMessageFor(m => m.Banco.Id, "", new { @class = "note note-error" })
                             </section>
-                            <section class="col col-6">
-                                @Html.LabelFor(m => m.FormaRecebimento.TipoRecebimento, new { @class = "label" })                                
-                                <label class="select">
-                                    @Html.DropDownListFor(m => m.FormaRecebimento.TipoRecebimento, Model.ListaTipoRecebimento, string.Empty, new { @class="required" })<i></i>
+                            <section class="col col-12">
+                                @Html.LabelFor(m => m.Banco.Nome, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.Banco.Nome, new { @maxlength = "50",  @class = "required" })
                                 </label>
-                                @Html.ValidationMessageFor(m => m.FormaRecebimento.TipoRecebimento, "", new { @class = "note note-error" })
+                                @Html.ValidationMessageFor(m => m.Banco.Nome, "", new { @class = "note note-error" })
                             </section>
-                            </div>                           
+                            </div>
+                            <div class="row">
+                                <section class="col col-4" style="padding-top:30px">                                                                      
+                                    <label class="checkbox">
+                                        @Html.CheckBoxFor(m => m.Banco.InterfaceEletronica)<i></i>@Html.DisplayNameFor(m => m.Banco.InterfaceEletronica)  
+                                    </label>                                                                                                      
+                                </section>
+                                <section class="col col-4">
+                                    @Html.LabelFor(m => m.Banco.NumeroRemessa, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Banco.NumeroRemessa)
+                                    </label>                              
+                                </section>
+                                <section class="col col-4">
+                                    @Html.LabelFor(m => m.Banco.NumeroRemessaPagamento , new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Banco.NumeroRemessaPagamento)
+                                    </label>                                   
+                                </section>
+                            </div>                                                       
                         </fieldset>
                     </div>
                     <footer>                       
@@ -58,7 +76,7 @@
                     }                        
                     @using (Ajax.BeginForm(
                             "Lista",
-                            "FormaRecebimento",
+                            "Banco",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
                             new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
@@ -83,12 +101,12 @@
     $("#btnDeletar").on("click", function () {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("Deletar", "FormaRecebimento")',
+            url: '@Url.Action("Deletar", "Banco")',
             cache: false,
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                id: $('#@Html.IdFor(m => m.FormaRecebimento.Id)').val()
+                id: $('#@Html.IdFor(m => m.Banco.Id)').val()
             })
         })
         .success(function (result) {
@@ -100,17 +118,18 @@
     });
 
     function clearForm() {
-        $('#@Html.IdFor(m => m.FormaRecebimento.Id)').val('');
-        $('#@Html.IdFor(m => m.FormaRecebimento.Descricao)').val('');
-        $('#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)').val('');
+        $('#@Html.IdFor(m => m.Banco.Id)').val('');
+        $('#@Html.IdFor(m => m.Banco.Nome)').val('');
+        $('#@Html.IdFor(m => m.Banco.InterfaceEletronica)').prop('checked', false);
+        $('#@Html.IdFor(m => m.Banco.NumeroRemessa)').val('');
+        $('#@Html.IdFor(m => m.Banco.NumeroRemessaPagamento)').val('');
     }
 
     function novo() {
         clearForm();
         $('#notificationMessages').html('');
-        $('#FormaRecebimento_Descricao-error').remove();
-        $('#FormaRecebimento_TipoRecebimento-error').remove();
-        tratarBotoes(true, true);
+        $('#Banco_Id-error').remove();
+        $('#Banco_Nome-error').remove();
     }
 
     function refresh() {
@@ -123,7 +142,7 @@
         novo();
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("CarregarItem", "FormaRecebimento")',
+            url: '@Url.Action("CarregarItem", "Banco")',
             cache: false,
             async: false,
             contentType: 'application/json; charset=utf-8',
@@ -132,12 +151,11 @@
             })
         })
         .success(function (result) {
-            $('#@Html.IdFor(m => m.FormaRecebimento.Id)').val(result.Id);
-            $('#@Html.IdFor(m => m.FormaRecebimento.Descricao)').val(result.Descricao);
-            $('#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)').val(result.TipoRecebimento);
-            $('#@Html.IdFor(m => m.FormaRecebimento.Automatico)').val(result.Automatico);
-            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').val(result.NumeroDias);
-            tratarBotoes(!result.Automatico, !result.Automatico);
+            $('#@Html.IdFor(m => m.Banco.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.Banco.Nome)').val(result.Nome);
+            $('#@Html.IdFor(m => m.Banco.InterfaceEletronica)').prop('checked', result.InterfaceEletronica);
+            $('#@Html.IdFor(m => m.Banco.NumeroRemessa)').val(result.NumeroRemessa);
+            $('#@Html.IdFor(m => m.Banco.NumeroRemessaPagamento)').val(result.NumeroRemessaPagamento);
             goToTop();
 
         });
@@ -147,22 +165,6 @@
         $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
     }
 
-    function tratarBotoes(condicaoSalvar, condicaoDeletar) {
-        $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
-         $("#@Html.IdFor(m => m.PodeDeletar)").val(condicaoDeletar);
-         if (condicaoSalvar) {
-             document.getElementById('btnSalvar').className = "btn btn-primary right";
-         }
-         else {
-             document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
-         }
-         if (condicaoDeletar) {
-             document.getElementById('btnDeletar').className = "btn btn-primary";
-         }
-         else {
-             document.getElementById('btnDeletar').className = "btn btn-primary disabled";
-         }
-    }
     
 </script>
 

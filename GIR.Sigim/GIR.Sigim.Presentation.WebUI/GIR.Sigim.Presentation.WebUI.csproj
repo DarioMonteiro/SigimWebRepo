@@ -174,6 +174,7 @@
     <Compile Include="Areas\Financeiro\ViewModel\TipoRateioViewModel.cs" />
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
+    <Compile Include="Controllers\BancoController.cs" />
     <Compile Include="Controllers\FormaRecebimentoController.cs" />
     <Compile Include="Controllers\UnidadeMedidaController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Areas\Sac\Controllers\ParametrosController.cs" />
     <Compile Include="Areas\Sac\SacAreaRegistration.cs" />
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
+    <Compile Include="ViewModel\BancoViewModel.cs" />
     <Compile Include="ViewModel\FormaRecebimentoViewModel.cs" />
     <Compile Include="ViewModel\UnidadeMedidaViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -753,6 +755,8 @@
     <Content Include="Views\Shared\_LoadingPartial.cshtml" />
     <Content Include="Views\FormaRecebimento\Index.cshtml" />
     <Content Include="Views\FormaRecebimento\ListaPartial.cshtml" />
+    <Content Include="Views\Banco\Index.cshtml" />
+    <Content Include="Views\Banco\ListaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

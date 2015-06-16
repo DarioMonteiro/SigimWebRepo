@@ -59,9 +59,15 @@ namespace GIR.Sigim.Application.Service.Sigim
                 formaRecebimento = new FormaRecebimento();
                 novoItem = true;
             }
-
+            if (formaRecebimento.Automatico == true)
+            {
+                return false;
+            }
+                       
             formaRecebimento.Descricao = dto.Descricao;
-            //formaRecebimento.Automatico = True;
+            formaRecebimento.Automatico = dto.Automatico;
+            formaRecebimento.TipoRecebimento = dto.TipoRecebimento;
+            formaRecebimento.NumeroDias = dto.NumeroDias;
 
             if (Validator.IsValid(formaRecebimento, out validationErrors))
             {
@@ -76,8 +82,7 @@ namespace GIR.Sigim.Application.Service.Sigim
             }
             else
                 messageQueue.AddRange(validationErrors, TypeMessage.Error);
-
-            return false;
+                return false;       
         }
 
         public bool Deletar(int? id)
@@ -90,12 +95,17 @@ namespace GIR.Sigim.Application.Service.Sigim
 
             var formaRecebimento = formaRecebimentoRepository.ObterPeloId(id);
 
-            try
+            if (formaRecebimento.Automatico == true)
             {
+                return false;
+            }
+
+            try
+            {                
                 formaRecebimentoRepository.Remover(formaRecebimento);
                 formaRecebimentoRepository.UnitOfWork.Commit();
                 messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
-                return true;
+                return true;                
             }
             catch (Exception)
             {
@@ -103,5 +113,9 @@ namespace GIR.Sigim.Application.Service.Sigim
                 return false;
             }
         }
+
+        public List<ItemListaDTO> ListarOpcoesTipoRecebimento()
+        { return typeof(TipoFormaRecebimento).ToItemListaDTO(); }
+
     }
 }

@@ -13,13 +13,17 @@ namespace GIR.Sigim.Presentation.WebUI.ViewModel
     public class FormaRecebimentoViewModel
     {
         public FormaRecebimentoDTO FormaRecebimento { get; set; }
+        public SelectList ListaTipoRecebimento { get; set; }
 
         public FormaRecebimentoFiltro Filtro { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
 
         public FormaRecebimentoViewModel()
         {
             Filtro = new FormaRecebimentoFiltro();
         }
+        
 
     }
 }

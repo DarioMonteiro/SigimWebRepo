@@ -14,5 +14,15 @@ namespace GIR.Sigim.Application.DTO.Sigim
         [Display(Name = "Descrição")]
         public string Descricao { get; set; }
 
+        public bool Automatico { get; set; }
+        
+        public string TipoRecebimento { get; set; }
+        public string TipoRecebimentoDescricao
+        {
+          get { return TipoRecebimento == "0" ? "Compensação imediata" : TipoRecebimento == "1" ? "Compensação posterior" : "Sem compensação"; }
+        }
+
+        public int? NumeroDias { get; set; }
+
     }
 }

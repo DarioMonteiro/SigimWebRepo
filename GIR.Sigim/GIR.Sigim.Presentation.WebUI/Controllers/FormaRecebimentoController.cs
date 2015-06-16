@@ -26,19 +26,22 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
         public ActionResult Index(int? id)
         {
+           
             var model = Session["Filtro"] as FormaRecebimentoViewModel;
             if (model == null)
             {
                 model = new FormaRecebimentoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
             }
-
+           
             var formaRecebimento = formaRecebimentoAppService.ObterPeloId(id) ?? new FormaRecebimentoDTO();
             
             if (id.HasValue && !formaRecebimento.Id.HasValue)
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
 
             model.FormaRecebimento = formaRecebimento;
+
+            CarregarCombos(model);
 
             return View(model);
         }
@@ -64,24 +67,29 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         {
             var formaRecebimento = formaRecebimentoAppService.ObterPeloId(id) ?? new FormaRecebimentoDTO();
             return Json(formaRecebimento);
-        }        
+        }
 
-        
-        //[HttpPost]
-        //public ActionResult Salvar(UnidadeMedidaViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //        unidadeMedidaAppService.Salvar(model.UnidadeMedida);
+        private void CarregarCombos(FormaRecebimentoViewModel model)
+        {
+            model.ListaTipoRecebimento = new SelectList(formaRecebimentoAppService.ListarOpcoesTipoRecebimento(),"Id", "Descricao", model.FormaRecebimento.TipoRecebimento);
+        }
 
-        //    return PartialView("_NotificationMessagesPartial");
-        //}
+        [HttpPost]
+        public ActionResult Salvar(FormaRecebimentoViewModel model)
+        {
+            if (ModelState.IsValid)
+               
+             formaRecebimentoAppService.Salvar(model.FormaRecebimento);
+               
+            return PartialView("_NotificationMessagesPartial");
+        }
 
-        //[HttpPost]
-        //public ActionResult Deletar(string sigla)
-        //{
-        //    unidadeMedidaAppService.Deletar(sigla);
-        //    return PartialView("_NotificationMessagesPartial");
-        //}
+        [HttpPost]
+        public ActionResult Deletar(int? id)
+        {
+            formaRecebimentoAppService.Deletar(id);
+            return PartialView("_NotificationMessagesPartial");
+        }
 
     }
 }

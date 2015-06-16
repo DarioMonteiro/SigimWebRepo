@@ -32,23 +32,33 @@
                     <tr role="row">
                         @{
         string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
-        string siglaSortingSuffix = "sorting";
-        string descricaoSortingSuffix = "sorting";        
+        string idSortingSuffix = "sorting";
+        string descricaoSortingSuffix = "sorting";
+        string tipoRecebimentoSortingSuffix = "sorting";
+        string numeroDiasSortingSuffix = "sorting";  
 
         switch (Model.OrderBy)
         {            
-            case "sigla":
-                siglaSortingSuffix += sortingSuffix;
+            case "id":
+                idSortingSuffix += sortingSuffix;
                 break;                
             case "descricao":                
                 descricaoSortingSuffix += sortingSuffix;
-                break;           
-            default:
+                break;
+            case "tipoRecebimento":
+                tipoRecebimentoSortingSuffix += sortingSuffix;
+                break;
+            case "numeroDias":
+                numeroDiasSortingSuffix += sortingSuffix;
+                break;       
+            default:                
                 break;
         }
                         }
-                        <th class="sorting @siglaSortingSuffix text-center" data-order="id" style="width:60px;">Código</th>
-                        <th class="sorting @descricaoSortingSuffix text-center" data-order="descricao" style="min-width:100px;">Descrição</th>            
+                        <th class="sorting @idSortingSuffix text-right" data-order="id" style="width:60px;">Código</th>
+                        <th class="sorting @descricaoSortingSuffix text-left" data-order="descricao" style="min-width:100px;">Descrição</th>   
+                        <th class="sorting @tipoRecebimentoSortingSuffix text-left" data-order="tipoRecebimento" style="min-width:100px;">Tipo de recebimento</th>  
+                        <th class="sorting @numeroDiasSortingSuffix text-right" data-order="numeroDias" style="min-width:100px;">Nº de dias</th>           
                     </tr>
                 </thead>
                 <tbody>
@@ -56,7 +66,9 @@
                     {
                         <tr>                                      
                             <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id</a></td>                                               
-                            <td class="text-center">@item.Descricao</td>                            
+                            <td class="text-left">@item.Descricao</td>                            
+                            <td class="text-left">@item.TipoRecebimentoDescricao</td>                            
+                            <td class="text-right">@item.NumeroDias</td>                            
                         </tr>
                     }
                 </tbody>

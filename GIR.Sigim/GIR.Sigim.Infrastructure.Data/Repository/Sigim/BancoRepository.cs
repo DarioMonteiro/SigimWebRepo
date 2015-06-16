@@ -5,18 +5,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using GIR.Sigim.Domain.Entity.Sigim ;
-using GIR.Sigim.Domain.Repository.Sigim ;
+using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Specification;
-
 
 namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
 {
-    public class FormaRecebimentoRepository : Repository<FormaRecebimento>, IFormaRecebimentoRepository
+    public class BancoRepository : Repository<Banco>, IBancoRepository
     {
         #region Constructor
 
-        public FormaRecebimentoRepository(UnitOfWork unitOfWork)
+        public BancoRepository(UnitOfWork unitOfWork)
             : base(unitOfWork)
         {
 
@@ -26,14 +25,14 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
 
         #region IRepository<TEntity> Members
 
-        public override IEnumerable<FormaRecebimento> ListarPeloFiltroComPaginacao(
-            ISpecification<FormaRecebimento> specification,
+        public override IEnumerable<Banco> ListarPeloFiltroComPaginacao(
+            ISpecification<Banco> specification,
             int pageIndex,
             int pageCount,
             string orderBy,
             bool ascending,
             out int totalRecords,
-            params Expression<Func<FormaRecebimento, object>>[] includes)
+            params Expression<Func<Banco, object>>[] includes)
         {
             var set = CreateSetAsQueryable(includes);
 
@@ -46,19 +45,22 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
                 case "id":
                     set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
                     break;
-                case "descricao":
-                    set = ascending ? set.OrderBy(l => l.Descricao) : set.OrderByDescending(l => l.Descricao);
+                case "nome":
+                    set = ascending ? set.OrderBy(l => l.Nome) : set.OrderByDescending(l => l.Nome);
                     break;
-                case "tipoRecebimento":
-                    set = ascending ? set.OrderBy(l => l.TipoRecebimento) : set.OrderByDescending(l => l.TipoRecebimento);
+                case "situacao":
+                    set = ascending ? set.OrderBy(l => l.Situacao) : set.OrderByDescending(l => l.Situacao);
                     break;
-                case "automatico":
-                    set = ascending ? set.OrderBy(l => l.Automatico) : set.OrderByDescending(l => l.Automatico);
+                case "numeroRemessa":
+                    set = ascending ? set.OrderBy(l => l.NumeroRemessa) : set.OrderByDescending(l => l.NumeroRemessa);
                     break;
-                case "numeroDias":
-                    set = ascending ? set.OrderBy(l => l.NumeroDias) : set.OrderByDescending(l => l.NumeroDias);
-                    break;                   
-                case "codigo":
+                case "interfaceEletronica":
+                    set = ascending ? set.OrderBy(l => l.InterfaceEletronica) : set.OrderByDescending(l => l.InterfaceEletronica);
+                    break;
+                case "numeroRemessaPagamento":
+                    set = ascending ? set.OrderBy(l => l.NumeroRemessaPagamento) : set.OrderByDescending(l => l.NumeroRemessaPagamento);
+                    break;
+                case "codigoBC":
                 default:
                     set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
                     break;
@@ -67,6 +69,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
             return set.Skip(pageCount * pageIndex).Take(pageCount);
         }
 
+        
         #endregion
     }
 }

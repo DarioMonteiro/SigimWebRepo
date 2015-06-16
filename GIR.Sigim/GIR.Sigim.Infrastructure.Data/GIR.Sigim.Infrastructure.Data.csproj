@@ -166,6 +166,7 @@
     <Compile Include="Repository\Sigim\AssuntoContatoRepository.cs" />
     <Compile Include="Repository\Sigim\BancoLayoutRepository.cs" />
     <Compile Include="Repository\Sigim\CodigoContribuicaoRepository.cs" />
+    <Compile Include="Repository\Sigim\BancoRepository.cs" />
     <Compile Include="Repository\Sigim\FormaRecebimentoRepository.cs" />
     <Compile Include="Repository\Sigim\TratamentoRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCaracteristicaRepository.cs" />

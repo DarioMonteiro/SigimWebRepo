@@ -28,7 +28,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
             Property(l => l.TipoRecebimento)
                 .HasColumnName("tipoRecebimento")
                 .HasColumnType("char")
-                .HasMaxLength(1)
                 .HasColumnOrder(3);
 
             Property(l => l.Automatico)
