@@ -60,9 +60,12 @@
     <Compile Include="DTO\Contrato\ContratoRetificacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoItemCronogramaDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoItemDTO.cs" />
+    <Compile Include="DTO\Contrato\ContratoRetificacaoItemImpostoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoItemMedicaoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoProvisaoDTO.cs" />
+    <Compile Include="DTO\Contrato\LicitacaoCronogramaDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
+    <Compile Include="DTO\Contrato\LicitacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
     <Compile Include="DTO\Contrato\TotalizadoresMedicaoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />

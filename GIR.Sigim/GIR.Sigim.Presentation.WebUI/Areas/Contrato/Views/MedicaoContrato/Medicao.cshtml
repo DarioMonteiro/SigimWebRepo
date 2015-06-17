@@ -586,11 +586,11 @@
                             <a data-toggle="modal" id="btnCancelar" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
 
                             @{
-                                var contratadoId = Model.ContratoRetificacaoItemMedicao.Contrato.ContratadoId;
-                                var contratoId = Model.ContratoRetificacaoItemMedicao.ContratoId;
-                                var tipoDocumentoId = Model.ContratoRetificacaoItemMedicao.TipoDocumentoId;
-                                var numeroDocumento = Model.ContratoRetificacaoItemMedicao.NumeroDocumento;
-                                var dataEmissao = Model.ContratoRetificacaoItemMedicao.DataEmissao;
+                                //var contratadoId = Model.ContratoRetificacaoItemMedicao.Contrato.ContratadoId;
+                                //var contratoId = Model.ContratoRetificacaoItemMedicao.ContratoId;
+                                //var tipoDocumentoId = Model.ContratoRetificacaoItemMedicao.TipoDocumentoId;
+                                //var numeroDocumento = Model.ContratoRetificacaoItemMedicao.NumeroDocumento;
+                                //var dataEmissao = Model.ContratoRetificacaoItemMedicao.DataEmissao;
 
                                 var url = Url.Action("Imprimir",
                                                      "MedicaoContrato");
@@ -628,6 +628,9 @@
             var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
             var contratadoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)").val();
             var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+            var retencaoContratual = $("#@Html.IdFor(m => m.RetencaoContratual)").val();
+            var valorContratadoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)").val();
+
             if ((multiFornecedorId != "") && (multiFornecedorId > 0)) {
                 contratadoId = multiFornecedorId;
             }
@@ -668,6 +671,8 @@
             parametrosUrlImpressao += '&numeroDocumento=' + numeroDocumento;
             parametrosUrlImpressao += '&dataEmissao=' + dataEmissao;
             parametrosUrlImpressao += '&multiFornecedorId=' + multiFornecedorId;
+            parametrosUrlImpressao += '&retencaoContratual=' + retencaoContratual;
+            parametrosUrlImpressao += '&valorContratadoItem=' + valorContratadoItem;
 
         });
 
@@ -713,7 +718,6 @@
                     preencheLstMedicao();
             }
         });
-
 
         $(document).on("show.bs.modal", "#VisualizarMedicao_ModalPanel", function (e) {
             var isRecuperou = false;

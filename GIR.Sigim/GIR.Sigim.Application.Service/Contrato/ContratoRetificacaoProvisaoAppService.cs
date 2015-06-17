@@ -37,11 +37,12 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         public List<ContratoRetificacaoProvisaoDTO> ObterListaCronograma(int ContratoRetificacaoItemId)
         {
-
             List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisaoDTO =
                 contratoRetificacaoProvisaoRepository.ListarPeloFiltro(l => l.ContratoRetificacaoItemId == ContratoRetificacaoItemId,
+                                                                       //l => l.Contrato,
                                                                        l => l.ContratoRetificacaoItem.Servico,
                                                                        l => l.ContratoRetificacaoItem.RetencaoTipoCompromisso,
+                                                                       //l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemMedicao,
                                                                        l => l.ContratoRetificacaoItemCronograma).To<List<ContratoRetificacaoProvisaoDTO>>();
 
             List<ContratoRetificacaoProvisaoDTO> novaLista = new List<ContratoRetificacaoProvisaoDTO>();

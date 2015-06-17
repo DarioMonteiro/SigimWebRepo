@@ -46,17 +46,27 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ContratoRetificacao, ContratoRetificacaoDTO>();
             Mapper.CreateMap<ContratoRetificacaoDTO, ContratoRetificacao>();
 
+            Mapper.CreateMap<ContratoRetificacaoItem, ContratoRetificacaoItemDTO>();
+            Mapper.CreateMap<ContratoRetificacaoItemDTO, ContratoRetificacaoItem>();
+
             Mapper.CreateMap<ContratoRetificacaoItemCronograma, ContratoRetificacaoItemCronogramaDTO>();
             Mapper.CreateMap<ContratoRetificacaoItemCronogramaDTO, ContratoRetificacaoItemCronograma>();
 
-            Mapper.CreateMap<ContratoRetificacaoItem, ContratoRetificacaoItemDTO>();
-            Mapper.CreateMap<ContratoRetificacaoItemDTO, ContratoRetificacaoItem>();
+            Mapper.CreateMap<ContratoRetificacaoItemImposto, ContratoRetificacaoItemImpostoDTO>();
+            Mapper.CreateMap<ContratoRetificacaoItemImpostoDTO, ContratoRetificacaoItemImposto>();
 
             Mapper.CreateMap<ContratoRetificacaoItemMedicao, ContratoRetificacaoItemMedicaoDTO>();
             Mapper.CreateMap<ContratoRetificacaoItemMedicaoDTO, ContratoRetificacaoItemMedicao>();
 
-            Mapper.CreateMap<ContratoRetificacaoProvisao, ContratoRetificacaoProvisaoDTO>();
+            Mapper.CreateMap<ContratoRetificacaoProvisao, ContratoRetificacaoProvisaoDTO>()
+                .ForMember(d => d.ValorTotalMedido, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedido(s.SequencialItem, s.SequencialCronograma)));
             Mapper.CreateMap<ContratoRetificacaoProvisaoDTO, ContratoRetificacaoProvisao>();
+
+            Mapper.CreateMap<Licitacao, LicitacaoDTO>();
+            Mapper.CreateMap<LicitacaoDTO, Licitacao>();
+
+            Mapper.CreateMap<LicitacaoCronograma, LicitacaoCronogramaDTO>();
+            Mapper.CreateMap<LicitacaoCronogramaDTO, LicitacaoCronograma>();
 
             Mapper.CreateMap<LicitacaoDescricao, LicitacaoDescricaoDTO>();
             Mapper.CreateMap<LicitacaoDescricaoDTO, LicitacaoDescricao>();
@@ -95,6 +105,7 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<TituloReceber, TituloReceberDTO>();
             Mapper.CreateMap<TituloReceberDTO, TituloReceber>();
+
             Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
             Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
 

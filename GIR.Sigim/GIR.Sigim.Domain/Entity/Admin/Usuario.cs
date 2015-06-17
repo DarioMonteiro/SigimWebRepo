@@ -21,6 +21,8 @@ namespace GIR.Sigim.Domain.Entity.Admin
             get { return Situacao == "A"; }
             set { Situacao = value ? "A" : "I"; }
         }
+        public byte[] AssinaturaEletronica { get; set; }
+
         public int? ParametrosUsuarioId { get; set; }
         public int? ParametrosUsuarioFinanceiroId { get; set; }
         public ParametrosUsuario ParametrosUsuario { get; set; }

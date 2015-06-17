@@ -17,6 +17,7 @@ using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Reports.Contrato;
+using GIR.Sigim.Application.Service.Admin;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -30,6 +31,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         private IBloqueioContabilAppService bloqueioContabilAppService;
         private ILogOperacaoAppService logOperacaoAppService;
         private IContratoRetificacaoItemImpostoAppService contratoRetificacaoItemImpostoAppService;
+        private IUsuarioAppService usuarioAppService;
 
         #endregion
 
@@ -41,6 +43,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                         IBloqueioContabilAppService bloqueioContabilAppService,
                                                         ILogOperacaoAppService logOperacaoAppService,
                                                         IContratoRetificacaoItemImpostoAppService contratoRetificacaoItemImpostoAppService,
+                                                        IUsuarioAppService usuarioAppService,
                                                         MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -50,6 +53,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             this.bloqueioContabilAppService = bloqueioContabilAppService;
             this.logOperacaoAppService = logOperacaoAppService;
             this.contratoRetificacaoItemImpostoAppService = contratoRetificacaoItemImpostoAppService;
+            this.usuarioAppService = usuarioAppService;
         }
 
         #endregion
@@ -404,6 +408,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                                         int tipoDocumentoId,
                                         string numeroDocumento,
                                         DateTime dataEmissao,
+                                        string retencaoContratual,
+                                        string valorContratadoItem,
                                         FormatoExportacaoArquivo formato)
         {
             var listaMedicao = contratoRetificacaoItemMedicaoRepository.RecuperaMedicaoPorContratoDadosDaNota(contratoId, 
@@ -411,7 +417,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                                               numeroDocumento, 
                                                                                                               dataEmissao, 
                                                                                                               contratadoId,
-                                                                                                              l => l.Contrato,
+                                                                                                              l => l.Contrato.ContratoDescricao,
                                                                                                               l => l.Contrato.Contratado.PessoaFisica,
                                                                                                               l => l.Contrato.Contratado.PessoaJuridica,
                                                                                                               l => l.Contrato.Contratante.PessoaFisica,
@@ -427,10 +433,10 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                                               ).To<List<ContratoRetificacaoItemMedicao>>();
             relMedicao objRel = new relMedicao();
 
-            //var listaImposto = contratoRetificacaoItemImpostoAppService.RecuperaImpostoPorContratoDadosDaNota(contratoId, 
-            //                                                                                                  tipoDocumentoId, 
-            //                                                                                                  numeroDocumento, 
-            //                                                                                                  dataEmissao, 
+            //var listaImposto = contratoRetificacaoItemImpostoAppService.RecuperaImpostoPorContratoDadosDaNota(contratoId,
+            //                                                                                                  tipoDocumentoId,
+            //                                                                                                  numeroDocumento,
+            //                                                                                                  dataEmissao,
             //                                                                                                  contratadoId,
             //                                                                                                  l => l.ImpostoFinanceiro,
             //                                                                                                  l => l.ContratoRetificacaoItem,
@@ -439,7 +445,8 @@ namespace GIR.Sigim.Application.Service.Contrato
             List<ContratoRetificacaoItemImposto> listaImposto = new List<ContratoRetificacaoItemImposto>();
 
             objRel.SetDataSource(MedicaoToDataTable(listaMedicao));
-            objRel.Subreports["contratoImposto"].SetDataSource(ImpostoToDataTable(listaImposto));
+            objRel.Subreports["contratoImposto"].Database.Tables["Contrato_contratoImpostoMedidoRelatorio"].SetDataSource(ImpostoToDataTable(listaImposto));
+            //objRel.Subreports["contratoImposto"].SetDataSource(ImpostoToDataTable(listaImposto));
 
             var parametros = parametrosContratoAppService.Obter();
 
@@ -448,28 +455,67 @@ namespace GIR.Sigim.Application.Service.Contrato
             imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
 
             objRel.SetParameterValue("nomeEmpresa", parametros.Cliente.Nome);
-            objRel.SetParameterValue("parCentroCusto", caminhoImagem);
-            //objRel.SetParameterValue("parDescricaoCentroCusto", txtDescricaoCentroCusto.Text)
-            //objRel.SetParameterValue("parContratado", strContratado)
-            //objRel.SetParameterValue("parContrato", txtContrato.Text)
-            //objRel.SetParameterValue("parDescricaoContrato", cboDescricaoContrato.Text)
-            //objRel.SetParameterValue("parRetencao", txtRetencao.Text)
-            //objRel.SetParameterValue("parValorContratadoItem", txtValorContratadoItem.Text)
-            //objRel.SetParameterValue("parValorTotalImposto", decValorTotalImposto)
-            //objRel.SetParameterValue("parMultifornecedor", strMultifornecedor)
-            //objRel.SetParameterValue("assinaturaEletronicaMedicao", strCaminhoMedicao)
-            //objRel.SetParameterValue("assinaturaEletronicaLiberacao", strCaminhoLiberacao)
+            objRel.SetParameterValue("parCentroCusto", listaMedicao.ElementAt(0).Contrato.CentroCusto.Codigo);            
+            objRel.SetParameterValue("parDescricaoCentroCusto", listaMedicao.ElementAt(0).Contrato.CentroCusto.Descricao);
+            string contratado = listaMedicao.ElementAt(0).Contrato.Contratado.Nome;               
+            if (listaMedicao.ElementAt(0).Contrato.Contratado.TipoPessoa == "F")
+            {
+                contratado += " - " + listaMedicao.ElementAt(0).Contrato.Contratado.PessoaFisica.Cpf;
+            }
+            if (listaMedicao.ElementAt(0).Contrato.Contratado.TipoPessoa == "J")
+            {
+                contratado += " - " + listaMedicao.ElementAt(0).Contrato.Contratado.PessoaJuridica.Cnpj;
+            }
+            objRel.SetParameterValue("parContratado", contratado);
+            objRel.SetParameterValue("parContrato", listaMedicao.ElementAt(0).ContratoId);
+            objRel.SetParameterValue("parDescricaoContrato", listaMedicao.ElementAt(0).Contrato.ContratoDescricao.Descricao);
+            objRel.SetParameterValue("parRetencao", retencaoContratual);
+            objRel.SetParameterValue("parValorContratadoItem", valorContratadoItem);
+            objRel.SetParameterValue("parValorTotalImposto", 0M);
 
-            objRel.SetParameterValue("parDescricaoCentroCusto", "");
-            objRel.SetParameterValue("parContratado", "");
-            objRel.SetParameterValue("parContrato", "");
-            objRel.SetParameterValue("parDescricaoContrato", "");
-            objRel.SetParameterValue("parRetencao", "0");
-            objRel.SetParameterValue("parValorContratadoItem", "0");
-            objRel.SetParameterValue("parValorTotalImposto", 0);
-            objRel.SetParameterValue("parMultifornecedor", "");
-            objRel.SetParameterValue("assinaturaEletronicaMedicao", "");
-            objRel.SetParameterValue("assinaturaEletronicaLiberacao", "");
+            string multiFornecedor = "";
+            if (listaMedicao.ElementAt(0).MultiFornecedorId > 0)
+            {
+                multiFornecedor = listaMedicao.ElementAt(0).MultiFornecedor.Nome;
+                if (listaMedicao.ElementAt(0).MultiFornecedor.TipoPessoa == "F")
+                {
+                    multiFornecedor += " - " + listaMedicao.ElementAt(0).MultiFornecedor.PessoaFisica.Cpf;
+                }
+                if (listaMedicao.ElementAt(0).MultiFornecedor.TipoPessoa == "J")
+                {
+                    multiFornecedor += " - " + listaMedicao.ElementAt(0).MultiFornecedor.PessoaJuridica.Cnpj;
+                }
+
+            }
+            objRel.SetParameterValue("parMultifornecedor", multiFornecedor);
+
+            string assinaturaEletronicaMedicao = listaMedicao.ElementAt(0).UsuarioMedicao;
+            string caminhoImagemAssinaturaMedicao = "";
+            if (!string.IsNullOrEmpty(assinaturaEletronicaMedicao))
+            {
+                var usuarioMedicao = usuarioAppService.ObterUsuarioPorLogin(assinaturaEletronicaMedicao);
+                if (usuarioMedicao != null && usuarioMedicao.AssinaturaEletronica != null && usuarioMedicao.AssinaturaEletronica.Length > 0)
+                {
+                    caminhoImagemAssinaturaMedicao = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
+                    System.Drawing.Image imagemAssinaturaMedicao = usuarioMedicao.AssinaturaEletronica.ToImage();
+                    imagemAssinaturaMedicao.Save(caminhoImagemAssinaturaMedicao, System.Drawing.Imaging.ImageFormat.Bmp);
+                }
+            }
+            objRel.SetParameterValue("assinaturaEletronicaMedicao", caminhoImagemAssinaturaMedicao);
+
+            string assinaturaEletronicaLiberacao = listaMedicao.ElementAt(0).UsuarioLiberacao;
+            string caminhoImagemAssinaturaLiberacao = "";
+            if (!string.IsNullOrEmpty(assinaturaEletronicaLiberacao))
+            {
+                var usuarioLiberacao = usuarioAppService.ObterUsuarioPorLogin(assinaturaEletronicaLiberacao);
+                if (usuarioLiberacao != null && usuarioLiberacao.AssinaturaEletronica != null && usuarioLiberacao.AssinaturaEletronica.Length > 0)
+                {
+                    caminhoImagemAssinaturaLiberacao = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
+                    System.Drawing.Image imagemAssinaturaLiberacao = usuarioLiberacao.AssinaturaEletronica.ToImage();
+                    imagemAssinaturaLiberacao.Save(caminhoImagemAssinaturaLiberacao, System.Drawing.Imaging.ImageFormat.Bmp);
+                }
+            }
+            objRel.SetParameterValue("assinaturaEletronicaLiberacao", caminhoImagemAssinaturaLiberacao);
 
             objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 
@@ -541,58 +587,58 @@ namespace GIR.Sigim.Application.Service.Contrato
             DataColumn tipoDcumentoDescricao = new DataColumn("tipoDcumentoDescricao");
             DataColumn tipoDocumentoSigla = new DataColumn("tipoDocumentoSigla");
             DataColumn numeroDocumento = new DataColumn("numeroDocumento");
-            DataColumn dataVencimento = new DataColumn("dataVencimento");
-            DataColumn dataEmissao = new DataColumn("dataEmissao");
-            DataColumn dataMedicao = new DataColumn("dataMedicao");
+            DataColumn dataVencimento = new DataColumn("dataVencimento", System.Type.GetType("System.DateTime"));
+            DataColumn dataEmissao = new DataColumn("dataEmissao", System.Type.GetType("System.DateTime"));
+            DataColumn dataMedicao = new DataColumn("dataMedicao", System.Type.GetType("System.DateTime"));
             DataColumn usuarioMedicao = new DataColumn("usuarioMedicao");
-            DataColumn valor = new DataColumn("valor");
-            DataColumn quantidade = new DataColumn("quantidade");
-            DataColumn valorRetido = new DataColumn("valorRetido");
+            DataColumn valor = new DataColumn("valor",System.Type.GetType("System.Decimal"));
+            DataColumn quantidade = new DataColumn("quantidade",System.Type.GetType("System.Decimal"));
+            DataColumn valorRetido = new DataColumn("valorRetido", System.Type.GetType("System.Decimal"));
             DataColumn observacao = new DataColumn("observacao");
-            DataColumn tituloPagar = new DataColumn("tituloPagar");
-            DataColumn tituloReceber = new DataColumn("tituloReceber");
-            DataColumn dataLiberacao = new DataColumn("dataLiberacao");
+            DataColumn tituloPagar = new DataColumn("tituloPagar", System.Type.GetType("System.String"));
+            DataColumn tituloReceber = new DataColumn("tituloReceber", System.Type.GetType("System.String"));
+            DataColumn dataLiberacao = new DataColumn("dataLiberacao", System.Type.GetType("System.DateTime"));
             DataColumn usuarioLiberacao = new DataColumn("usuarioLiberacao");
             DataColumn situacao = new DataColumn("situacao");
             DataColumn multifornecedor = new DataColumn("multifornecedor");
-            DataColumn tipoContrato = new DataColumn("tipoContrato");
+            DataColumn tipoContrato = new DataColumn("tipoContrato", System.Type.GetType("System.Int32"));
             DataColumn contratado = new DataColumn("contratado");
             DataColumn contratante = new DataColumn("contratante");
             DataColumn valorTotalMedidoLiberadoContrato = new DataColumn("valorTotalMedidoLiberadoContrato");
-            DataColumn valorContrato = new DataColumn("valorContrato");
-            DataColumn saldoContrato = new DataColumn("saldoContrato");
+            DataColumn valorContrato = new DataColumn("valorContrato", System.Type.GetType("System.Decimal"));
+            DataColumn saldoContrato = new DataColumn("saldoContrato", System.Type.GetType("System.Decimal"));
             DataColumn classe = new DataColumn("classe");
             DataColumn codigoDescricaoClasse = new DataColumn("codigoDescricaoClasse");
-            DataColumn precoUnitario = new DataColumn("precoUnitario");
+            DataColumn precoUnitario = new DataColumn("precoUnitario", System.Type.GetType("System.Decimal"));
             DataColumn descricaoCronograma = new DataColumn("descricaoCronograma");
-            DataColumn quantidadeCronograma = new DataColumn("quantidadeCronograma");
-            DataColumn valorCronograma = new DataColumn("valorCronograma");
+            DataColumn quantidadeCronograma = new DataColumn("quantidadeCronograma", System.Type.GetType("System.Decimal"));
+            DataColumn valorCronograma = new DataColumn("valorCronograma", System.Type.GetType("System.Decimal"));
             DataColumn unidadeMedida = new DataColumn("unidadeMedida");
             DataColumn descricaoItem = new DataColumn("descricaoItem");
             DataColumn complementoDescricaoItem = new DataColumn("complementoDescricaoItem");
             DataColumn descricaoSituacaoMedicao = new DataColumn("descricaoSituacaoMedicao");
-            DataColumn naturezaItem = new DataColumn("naturezaItem");
-            DataColumn valorTotalMedido = new DataColumn("valorTotalMedido");
-            DataColumn quantidadeTotalMedida = new DataColumn("quantidadeTotalMedida");
-            DataColumn valorTotalLiberado = new DataColumn("valorTotalLiberado");
-            DataColumn quantidadeTotalLiberada = new DataColumn("quantidadeTotalLiberada");
-            DataColumn valorTotalMedidoLiberado = new DataColumn("valorTotalMedidoLiberado");
-            DataColumn quantidadeTotalMedidaLiberada = new DataColumn("quantidadeTotalMedidaLiberada");
-            DataColumn valorImpostoRetido = new DataColumn("valorImpostoRetido");
+            DataColumn naturezaItem = new DataColumn("naturezaItem", System.Type.GetType("System.Int32"));
+            DataColumn valorTotalMedido = new DataColumn("valorTotalMedido", System.Type.GetType("System.Decimal"));
+            DataColumn quantidadeTotalMedida = new DataColumn("quantidadeTotalMedida", System.Type.GetType("System.Decimal"));
+            DataColumn valorTotalLiberado = new DataColumn("valorTotalLiberado", System.Type.GetType("System.Decimal"));
+            DataColumn quantidadeTotalLiberada = new DataColumn("quantidadeTotalLiberada", System.Type.GetType("System.Decimal"));
+            DataColumn valorTotalMedidoLiberado = new DataColumn("valorTotalMedidoLiberado", System.Type.GetType("System.Decimal"));
+            DataColumn quantidadeTotalMedidaLiberada = new DataColumn("quantidadeTotalMedidaLiberada", System.Type.GetType("System.Decimal"));
+            DataColumn valorImpostoRetido = new DataColumn("valorImpostoRetido", System.Type.GetType("System.Decimal"));
             DataColumn nomeContratado = new DataColumn("nomeContratado");
             DataColumn nomeContratante = new DataColumn("nomeContratante");
             DataColumn codigoDescricaoCentroCusto = new DataColumn("codigoDescricaoCentroCusto");
             DataColumn centroCusto = new DataColumn("centroCusto");
             DataColumn descricaoContratoDescricao = new DataColumn("descricaoContratoDescricao");
-            DataColumn valorItem = new DataColumn("valorItem");
-            DataColumn valorImpostoRetidoMedicao = new DataColumn("valorImpostoRetidoMedicao");
+            DataColumn valorItem = new DataColumn("valorItem", System.Type.GetType("System.Decimal"));
+            DataColumn valorImpostoRetidoMedicao = new DataColumn("valorImpostoRetidoMedicao", System.Type.GetType("System.Decimal"));
             DataColumn descricaoSituacaoTituloPagar = new DataColumn("descricaoSituacaoTituloPagar");
             DataColumn descricaoSituacaoTituloReceber = new DataColumn("descricaoSituacaoTituloReceber");
             DataColumn CPFCNPJContratado = new DataColumn("CPFCNPJContratado");
             DataColumn CPFCNPJContratante = new DataColumn("CPFCNPJContratante");
             DataColumn CPFCNPJMultifornecedor = new DataColumn("CPFCNPJMultifornecedor");
             DataColumn girErro = new DataColumn("girErro");
-            DataColumn desconto = new DataColumn("desconto");
+            DataColumn desconto = new DataColumn("desconto", System.Type.GetType("System.Decimal"));
 
             dta.Columns.Add(codigo);
             dta.Columns.Add(contrato);
@@ -679,11 +725,42 @@ namespace GIR.Sigim.Application.Service.Contrato
                 row[usuarioMedicao] = medicao.UsuarioMedicao;
                 row[valor] = medicao.Valor;
                 row[quantidade] = medicao.Quantidade;
-                row[valorRetido] = medicao.ValorRetido;
+                if (medicao.ValorRetido.HasValue)
+                {
+                    row[valorRetido] = medicao.ValorRetido.Value;
+                }
+                else
+                {
+                    row[valorRetido] = 0M;
+                }
                 row[observacao] = medicao.Observacao;
-                row[tituloPagar] = medicao.TituloPagarId;
-                row[tituloReceber] = medicao.TituloReceberId;
-                row[dataLiberacao] = medicao.DataLiberacao.HasValue ? medicao.DataLiberacao.Value.ToString("dd/MM/yyyy") : string.Empty;
+                if (medicao.TituloPagarId.HasValue)
+                {
+                    row[tituloPagar] = medicao.TituloPagarId.Value;
+                }
+                else
+                {
+                    row[tituloPagar] = DBNull.Value;
+                }
+                
+                if (medicao.TituloReceberId.HasValue)
+                {
+                    row[tituloReceber] = medicao.TituloReceberId.Value.ToString();
+                }
+                else
+                {
+                    row[tituloReceber] = DBNull.Value;
+                }
+
+                if (medicao.DataLiberacao.HasValue)
+                {
+                    row[dataLiberacao] = medicao.DataLiberacao.Value.ToString("dd/MM/yyyy");
+                }
+                else
+                {
+                    row[dataLiberacao] = DBNull.Value;
+                }
+                //row[dataLiberacao] = medicao.DataLiberacao.HasValue ? medicao.DataLiberacao.Value.ToString("dd/MM/yyyy") : DBNull.Value;
                 row[usuarioLiberacao] = medicao.UsuarioLiberacao;
                 row[situacao] = medicao.Situacao;
                 row[multifornecedor] = medicao.MultiFornecedorId;
@@ -707,7 +784,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 row[descricaoItem] = medicao.ContratoRetificacaoItem.Servico.Descricao;
                 row[complementoDescricaoItem] = medicao.ContratoRetificacaoItem.ComplementoDescricao;
                 row[descricaoSituacaoMedicao] = medicao.Situacao.ObterDescricao(); ;
-                row[naturezaItem] = medicao.ContratoRetificacaoItem.NaturezaItem.ObterDescricao();
+                row[naturezaItem] = (int)medicao.ContratoRetificacaoItem.NaturezaItem; //medicao.ContratoRetificacaoItem.NaturezaItem.ObterDescricao();
                 //Esse valor é um campo customizado na procedure viw_contrato , ver como fazer com o wilson 
                 row[valorTotalMedido] = -999999999999;
                 row[quantidadeTotalMedida] = -999999999999;
@@ -807,18 +884,65 @@ namespace GIR.Sigim.Application.Service.Contrato
             DataColumn contrato = new DataColumn("contrato");
             DataColumn contratoRetificacao = new DataColumn("contratoRetificacao");
             DataColumn contratoRetificacaoItem = new DataColumn("contratoRetificacaoItem");
-            DataColumn impostoFinanceiro = new DataColumn("impostoFinanceiro");
-            DataColumn percentualBaseCalculo = new DataColumn("percentualBaseCalculo");
-            DataColumn aliquota = new DataColumn("aliquota");
-            DataColumn retido = new DataColumn("retido");
+            DataColumn impostoFinanceiro = new DataColumn("impostoFinanceiro", System.Type.GetType("System.Int32"));
+            DataColumn percentualBaseCalculo = new DataColumn("percentualBaseCalculo", System.Type.GetType("System.Decimal"));
+            DataColumn aliquota = new DataColumn("aliquota", System.Type.GetType("System.Decimal"));
+            DataColumn retido = new DataColumn("retido", System.Type.GetType("System.Boolean"));
             DataColumn descricaoImposto = new DataColumn("descricaoImposto");
-            DataColumn valorTotalMedido = new DataColumn("valorTotalMedido");
+            DataColumn valorTotalMedido = new DataColumn("valorTotalMedido", System.Type.GetType("System.Decimal"));
             DataColumn sigla = new DataColumn("sigla");
             DataColumn sequencialItem = new DataColumn("sequencialItem");
             DataColumn descricaoItem = new DataColumn("descricaoItem");
-            DataColumn valorImposto = new DataColumn("valorImposto");
-            DataColumn indireto = new DataColumn("indireto");
+            DataColumn valorImposto = new DataColumn("valorImposto", System.Type.GetType("System.Decimal"));
+            DataColumn indireto = new DataColumn("indireto", System.Type.GetType("System.Boolean"));
             DataColumn girErro = new DataColumn("girErro");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(contrato);
+            dta.Columns.Add(contratoRetificacao);
+            dta.Columns.Add(contratoRetificacaoItem);
+            dta.Columns.Add(impostoFinanceiro);
+            dta.Columns.Add(percentualBaseCalculo);
+            dta.Columns.Add(aliquota);
+            dta.Columns.Add(retido);
+            dta.Columns.Add(descricaoImposto);
+            dta.Columns.Add(valorTotalMedido);
+            dta.Columns.Add(sigla);
+            dta.Columns.Add(sequencialItem);
+            dta.Columns.Add(descricaoItem);
+            dta.Columns.Add(valorImposto);
+            dta.Columns.Add(indireto);
+            dta.Columns.Add(girErro);
+
+            //if (listaImposto.Count()==0)
+            //{
+            //    DataRow row = dta.NewRow();
+
+            //    //row[codigo] = 0;
+            //    //row[contrato] = 0;
+            //    //row[contratoRetificacao] = 0;
+            //    //row[contratoRetificacaoItem] = 0;
+            //    row[impostoFinanceiro] = 0;
+            //    //row[percentualBaseCalculo] = 0;
+            //    row[aliquota] = 0;
+            //    //row[retido] = false;
+            //    //row[descricaoImposto] = "";
+            //    //Esse campo está no rpt mais vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
+            //    //row[valorTotalMedido] = null;
+            //    //Esse campo está no rpt mais não vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
+            //    row[sigla] = "";
+            //    //Esse campo está no rpt mais não vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
+            //    //row[sequencialItem] = null;
+            //    //row[descricaoItem] = null;
+            //    //Esse campo está no rpt mais não vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
+            //    decimal valorImpostoAux = 0;
+            //    row[valorImposto] = valorImpostoAux;
+            //    row[indireto] = false;
+            //    //row[girErro] = "";
+
+            //    dta.Rows.Add(row);
+
+            //}
 
             foreach (var imposto in listaImposto)
             {

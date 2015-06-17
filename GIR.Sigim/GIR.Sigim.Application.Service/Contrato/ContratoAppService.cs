@@ -78,6 +78,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                   l => l.Contratado.PessoaFisica, 
                                                   l => l.Contratado.PessoaJuridica , 
                                                   l => l.ContratoDescricao, 
+                                                  l => l.ListaContratoRetificacaoItemMedicao,
                                                   l => l.ListaContratoRetificacao.Select(c => c.ListaContratoRetificacaoItem.Select(d => d.Servico))).To<ContratoDTO>();
 
         }

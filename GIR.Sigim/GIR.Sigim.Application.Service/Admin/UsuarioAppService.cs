@@ -10,6 +10,7 @@ using GIR.Sigim.Application.DTO;
 using GIR.Sigim.Domain.Repository.Admin;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
+using GIR.Sigim.Application.DTO.Admin;
 
 namespace GIR.Sigim.Application.Service.Admin
 {
@@ -122,6 +123,11 @@ namespace GIR.Sigim.Application.Service.Admin
         {
             var usuario = usuarioRepository.ObterPeloId(idUsuario, l => l.ListaUsuarioCentroCusto);
             return usuario.ListaUsuarioCentroCusto.Any(l => l.Modulo.Nome == modulo);
+        }
+
+        public UsuarioDTO ObterUsuarioPorLogin(string login)
+        {
+            return usuarioRepository.ObterPeloLogin(login).To<UsuarioDTO>();
         }
 
         #endregion

@@ -240,7 +240,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
                     bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
                     bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
-                    
+
                     return Json(new
                     {
                         ehRecuperou = true,
@@ -255,6 +255,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                         baseRetencaoItem = contratoRetificacaoItem.BaseRetencaoItem,
                         sequencialItem = contratoRetificacaoItem.Sequencial,
                         listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao)
+
+                        //listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao,
+                        //                                                                               Formatting.Indented,
+                        //                                                                               new JsonSerializerSettings
+                        //                                                                               {
+                        //                                                                                   ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        //                                                                                   //ReferenceLoopHandling = ReferenceLoopHandling.Serialize
+                        //                                                                                   //PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                        //                                                                               })
                     });
                 }
             }
@@ -395,6 +404,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                                                                                               numeroDocumento, 
                                                                                                               dataEmissao.Value, 
                                                                                                               contratadoId.Value);
+                var novaListaMedicao = listaMedicao;
+                foreach (var medicao in novaListaMedicao)
+                {
+                    medicao.Contrato.ListaContratoRetificacao.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoItem.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoItemCronograma.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoItemImposto.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoItemMedicao.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoProvisao.Clear();
+                }
+
 
                 if (listaMedicao.Count > 0)
                 {
@@ -402,7 +422,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         ehRecuperou = true,
                         errorMessage = string.Empty,
-                        listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(listaMedicao)
+                        listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(novaListaMedicao)
                     });
                 }
 
@@ -423,6 +443,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                      string numeroDocumento,
                                      string dataEmissao,
                                      int? multiFornecedorId,
+                                     string retencaoContratual,
+                                     string valorContratadoItem,
                                      FormatoExportacaoArquivo formato)
         {
 
@@ -438,7 +460,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             //{
             //}
 
-            var arquivo = contratoRetificacaoItemMedicaoAppService.Exportar(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao, formato);
+            var arquivo = contratoRetificacaoItemMedicaoAppService.Exportar(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao,retencaoContratual,valorContratadoItem, formato);
             if (arquivo != null)
             {
                 Response.Buffer = false;

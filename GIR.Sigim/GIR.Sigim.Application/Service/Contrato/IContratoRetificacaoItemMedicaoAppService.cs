@@ -29,7 +29,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool Cancelar(int? contratoRetificacaoItemMedicaoId);
         bool EhValidaVisualizacaoMedicao(int? contratoId, int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao, int? contratadoId);
         List<ContratoRetificacaoItemMedicaoDTO> RecuperaMedicaoPorContratoDadosDaNota(int contratoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, int? contratadoId);
-        FileDownloadDTO Exportar(int? contratadoId, int contratoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, FormatoExportacaoArquivo formato);
+        FileDownloadDTO Exportar(int? contratadoId, int contratoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, string retencaoContratual, string valorContratadoItem, FormatoExportacaoArquivo formato);
         //bool EhValidaImpressao(int? contratadoId, int? contratoId, int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao);
     }
 }
