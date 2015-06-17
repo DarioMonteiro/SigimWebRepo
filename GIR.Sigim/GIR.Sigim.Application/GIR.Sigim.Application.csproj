@@ -151,6 +151,13 @@
     <Compile Include="Filtros\Sigim\FormaRecebimentoFiltro.cs" />
     <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />
     <Compile Include="Filtros\Sigim\UnidadeMedidaFiltro.cs" />
+    <Compile Include="Helper\AdminMapperHelper.cs" />
+    <Compile Include="Helper\ContratoMapperHelper.cs" />
+    <Compile Include="Helper\SacMapperHelper.cs" />
+    <Compile Include="Helper\SigimMapperHelper.cs" />
+    <Compile Include="Helper\OrdemCompraMapperHelper.cs" />
+    <Compile Include="Helper\OrcamentoMapperHelper.cs" />
+    <Compile Include="Helper\FinanceiroMapperHelper.cs" />
     <Compile Include="Helper\MapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\Contrato\relMedicao.cs">
