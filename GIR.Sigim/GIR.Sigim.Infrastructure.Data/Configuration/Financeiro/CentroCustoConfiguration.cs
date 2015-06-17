@@ -7,6 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Orcamento;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 {
@@ -58,6 +62,51 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             HasMany(l => l.ListaPreRequisicaoMaterialItem)
                 .WithRequired(l => l.CentroCusto);
+
+        HasMany<CentroCustoEmpresa>(l => l.ListaCentroCustoEmpresa)
+            .WithRequired(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<ParametrosUsuario>(l => l.ListaParametrosUsuario)
+            .WithOptional(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<UsuarioCentroCusto>(l => l.ListaUsuarioCentroCusto)
+            .WithRequired(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<RequisicaoMaterial>(l => l.ListaRequisicaoMaterial)
+            .WithRequired(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<Obra>(l => l.ListaObra)
+            .WithOptional(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<Domain.Entity.Contrato.Contrato>(l => l.ListaContrato)
+            .WithRequired(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<Licitacao>(l => l.ListaLicitacao)
+            .WithRequired(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<LicitacaoCronograma>(l => l.ListaLicitacaoCronograma)
+            .WithRequired(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<BloqueioContabil>(l => l.ListaBloqueioContabil)
+            .WithOptional(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<Caixa>(l => l.ListaCaixa)
+            .WithOptional(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
+        HasMany<OrcamentoInsumoRequisitado>(l => l.ListaOrcamentoInsumoRequisitado)
+            .WithRequired(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
         }
     }
 }

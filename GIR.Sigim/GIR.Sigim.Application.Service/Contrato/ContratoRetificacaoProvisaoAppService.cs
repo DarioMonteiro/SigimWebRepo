@@ -37,11 +37,12 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         public List<ContratoRetificacaoProvisaoDTO> ObterListaCronograma(int ContratoRetificacaoItemId)
         {
-
             List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisaoDTO =
                 contratoRetificacaoProvisaoRepository.ListarPeloFiltro(l => l.ContratoRetificacaoItemId == ContratoRetificacaoItemId,
+                                                                       //l => l.Contrato,
                                                                        l => l.ContratoRetificacaoItem.Servico,
                                                                        l => l.ContratoRetificacaoItem.RetencaoTipoCompromisso,
+                                                                       //l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemMedicao,
                                                                        l => l.ContratoRetificacaoItemCronograma).To<List<ContratoRetificacaoProvisaoDTO>>();
 
             List<ContratoRetificacaoProvisaoDTO> novaLista = new List<ContratoRetificacaoProvisaoDTO>();
@@ -51,6 +52,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                 decimal vlrTotalMedido = 0;
                 decimal qtdTotalLiberado = 0;
                 decimal vlrTotalLiberado = 0;
+                decimal quantidadeTotalMedidaLiberada = 0;
+                decimal valorTotalMedidoLiberado = 0;
 
                 contratoRetificacaoItemMedicaoAppService.ObterQuantidadesEhValoresMedicao(provisao.ContratoId,
                                                                                           provisao.SequencialItem.Value,
@@ -58,11 +61,16 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                           ref qtdTotalMedido,
                                                                                           ref vlrTotalMedido,
                                                                                           ref qtdTotalLiberado,
-                                                                                          ref vlrTotalLiberado);
+                                                                                          ref vlrTotalLiberado,
+                                                                                          ref quantidadeTotalMedidaLiberada,
+                                                                                          ref valorTotalMedidoLiberado);
                 provisao.Totalizadores.QuantidadeTotalMedida = qtdTotalMedido;
                 provisao.Totalizadores.ValorTotalMedido = vlrTotalMedido;
                 provisao.Totalizadores.QuantidadeTotalLiberada = qtdTotalLiberado;
                 provisao.Totalizadores.ValorTotalLiberado = vlrTotalLiberado;
+
+                provisao.Totalizadores.QuantidadeTotalMedidaLiberada = quantidadeTotalMedidaLiberada;
+                provisao.Totalizadores.ValorTotalMedidoLiberado = valorTotalMedidoLiberado;
 
                 provisao.Totalizadores.QuantidadePendente = provisao.Quantidade - provisao.Totalizadores.QuantidadeTotalMedida;
                 provisao.Totalizadores.ValorPendente = provisao.Valor - provisao.Totalizadores.ValorTotalMedido;

@@ -4,11 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.Filtros;
 
 namespace GIR.Sigim.Application.Service.Sigim
 {
     public interface IAssuntoContatoAppService
     {
         List<AssuntoContatoDTO> ListarTodos();
+        List<AssuntoContatoDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros);
+        AssuntoContatoDTO ObterPeloId(int? id);
+        bool Salvar(AssuntoContatoDTO dto);
+        bool Deletar(int? id);
     }
 }

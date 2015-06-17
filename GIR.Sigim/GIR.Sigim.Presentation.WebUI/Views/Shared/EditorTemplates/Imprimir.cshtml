@@ -8,7 +8,7 @@
         disableBtnImprimir = "disabled";
     }
 }
-<a data-toggle="modal" href="#FormatoImpressao_ModalPanel" class="btn btn-primary @disableBtnImprimir">Imprimir</a>
+<a data-toggle="modal" href="#FormatoImpressao_ModalPanel" id="btnImprimir" class="btn btn-primary @disableBtnImprimir">Imprimir</a>
 @if (Model) {
     <div class="modal fade" id="FormatoImpressao_ModalPanel" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -43,16 +43,24 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-					<button type="button" id="btnImprimirPreRequisicao" class="btn btn-primary" data-dismiss="modal">
+					<button type="button" id="btnConfirmarImpressao" class="btn btn-primary" data-dismiss="modal">
 						Ok
 					</button>
 				</div>
             </div>
         </div>
         <script type="text/javascript">
+            var parametrosUrlImpressao = '';
             $(document).ready(function () {
-                $("#btnImprimirPreRequisicao").on("click", function () {
-                    window.open('@ViewBag.url?formato=' + $("input:radio[name=formatoExportacaoArquivo]:checked").val());
+                $(document).on("show.bs.modal", "#FormatoImpressao_ModalPanel", function (e) {
+                    $.event.trigger({
+                        type: "showFormatoImpressaoModalPanel",
+                        event: e
+                    });
+                });
+
+                $("#btnConfirmarImpressao").on("click", function () {
+                    window.open('@ViewBag.url?formato=' + $("input:radio[name=formatoExportacaoArquivo]:checked").val() + parametrosUrlImpressao);
                 });
             });
         </script>

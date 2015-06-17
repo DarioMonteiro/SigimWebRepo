@@ -112,6 +112,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ContratoRetificacaoProvisaoConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemCronogramaConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemImpostoConfiguration());
 
             //Financeiro
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());
@@ -126,6 +127,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new TipoRateioConfiguration());
             modelBuilder.Configurations.Add(new TituloPagarConfiguration());
             modelBuilder.Configurations.Add(new TituloReceberConfiguration());
+            modelBuilder.Configurations.Add(new ImpostoFinanceiroConfiguration());
 
             //Orcamento
             modelBuilder.Configurations.Add(new ObraConfiguration());
@@ -156,6 +158,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new PessoaJuridicaConfiguration()); 
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());
             modelBuilder.Configurations.Add(new LogOperacaoConfiguration());
+            modelBuilder.Configurations.Add(new InteresseBairroConfiguration());
             modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
             modelBuilder.Configurations.Add(new MaterialConfiguration());
             modelBuilder.Configurations.Add(new ServicoConfiguration());  
@@ -163,9 +166,24 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new SituacaoMercadoriaConfiguration());
             modelBuilder.Configurations.Add(new UnidadeMedidaConfiguration());
             modelBuilder.Configurations.Add(new UsuarioCentroCustoConfiguration());
+            modelBuilder.Configurations.Add(new EstadoCivilConfiguration());
+            modelBuilder.Configurations.Add(new GrupoConfiguration());
+            modelBuilder.Configurations.Add(new FonteNegocioConfiguration());
+            modelBuilder.Configurations.Add(new NacionalidadeConfiguration());
+            modelBuilder.Configurations.Add(new ParentescoConfiguration());
+            modelBuilder.Configurations.Add(new ProfissaoConfiguration());
+            modelBuilder.Configurations.Add(new RamoAtividadeConfiguration());
+            modelBuilder.Configurations.Add(new RelacionamentoConfiguration());
+            modelBuilder.Configurations.Add(new TipologiaConfiguration());
+            modelBuilder.Configurations.Add(new TratamentoConfiguration());
+            modelBuilder.Configurations.Add(new TipoAreaConfiguration());
+            modelBuilder.Configurations.Add(new TipoCaracteristicaConfiguration());
+            modelBuilder.Configurations.Add(new TipoEspecificacaoConfiguration());
+            modelBuilder.Configurations.Add(new FormaRecebimentoConfiguration());
 
             //Sac
             modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
+            
             
             modelBuilder.Configurations.Add(new TipoCompraConfiguration());
             modelBuilder.Configurations.Add(new CifFobConfiguration());

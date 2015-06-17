@@ -15,25 +15,36 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
             ToTable("Usuario", "Sigim");
 
             Property(l => l.Id)
-                .HasColumnName("codigo");
+                .HasColumnName("codigo")
+                .HasColumnOrder(1);
 
             Property(l => l.Nome)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(100)
+                .HasColumnOrder(2);
 
             Property(l => l.Login)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(50)
+                .HasColumnOrder(3);
 
-            Property(l => l.Senha)
-                .HasMaxLength(64)
-                .HasColumnName("senhaWeb");
+            Property(l => l.AssinaturaEletronica)
+                .HasColumnType("image")
+                .HasColumnName("assinaturaEletronica")
+                .HasColumnOrder(5);
 
             Property(l => l.Situacao)
                 .IsRequired()
                 .HasColumnType("char")
                 .HasMaxLength(1)
-                .HasColumnName("situacao");
+                .HasColumnName("situacao")
+                .HasColumnOrder(6);
+
+            Property(l => l.Senha)
+                .HasMaxLength(64)
+                .HasColumnName("senhaWeb")
+                .HasMaxLength(64)
+                .HasColumnOrder(7);
 
             Ignore(l => l.Ativo);
 

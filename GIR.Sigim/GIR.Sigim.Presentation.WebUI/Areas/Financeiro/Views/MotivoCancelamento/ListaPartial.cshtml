@@ -55,7 +55,7 @@
                     @foreach (var item in Lista)
                     {
                         <tr>
-                            <td class="text-center">@Html.ActionLink(item.Id.ToString(), "Index", new { id = item.Id })</td>
+                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString()</a></td>                            
                             <td class="text-center">@item.Descricao</td>                           
                         </tr>
                     }

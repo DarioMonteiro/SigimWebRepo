@@ -50,6 +50,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasMaxLength(50)
                 .HasColumnName("usuarioAprova")
                 .HasColumnOrder(15);
+
+            HasMany<RequisicaoMaterialItem>(l => l.ListaRequisicaoMaterialItem)
+                .WithOptional(l => l.PreRequisicaoMaterialItem)
+                .HasForeignKey(c => c.PreRequisicaoMaterialItemId);
+
         }
     }
 }

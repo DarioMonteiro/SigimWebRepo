@@ -20,6 +20,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("codigo")
                 .HasColumnOrder(1);
 
+            Property(l => l.ClienteId)
+                .HasColumnName("cliente")
+                .HasColumnOrder(2);
+
+            HasOptional<Domain.Entity.Sigim.ClienteFornecedor>(l => l.Cliente)
+                .WithMany(l => l.ListaParametrosContrato)
+                .HasForeignKey(l => l.ClienteId);
+
             Property(l => l.MascaraClasseInsumo)
                 .HasMaxLength(18)
                 .HasColumnName("mascaraClasseInsumo")

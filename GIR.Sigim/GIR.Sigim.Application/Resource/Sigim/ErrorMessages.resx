@@ -138,6 +138,9 @@
   <data name="FormatoImagemInvalido" xml:space="preserve">
     <value>A imagem deve ter um dos seguintes formatos: BMP, JPG, GIF ou PNG.</value>
   </data>
+  <data name="GravacaoErro" xml:space="preserve">
+    <value>Erro ao efetuar a gravação !</value>
+  </data>
   <data name="InformeDataValida" xml:space="preserve">
     <value>Informe uma data válida.</value>
   </data>
@@ -153,8 +156,17 @@
   <data name="RegistroEmUso" xml:space="preserve">
     <value>O registro [{0}] está sendo usado.</value>
   </data>
+  <data name="RegistroProtegido" xml:space="preserve">
+    <value>O registro [{0}] está protegido.</value>
+  </data>
   <data name="TamanhoArquivoSuperior1MB" xml:space="preserve">
     <value>Escolha um arquivo com o tamanho menor ou igual a 1 MB.</value>
+  </data>
+  <data name="ValorDeveSerMaiorQue" xml:space="preserve">
+    <value>Preencha o campo [{0}] com um valor maior que [{1}].</value>
+  </data>
+  <data name="ValorDeveSerMenorQue" xml:space="preserve">
+    <value>Preencha o campo [{0}] com um valor menor que [{1}].</value>
   </data>
   <data name="ValorDeveSerNumerico" xml:space="preserve">
     <value>Preencha o campo {0} com um valor numérico.</value>

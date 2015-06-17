@@ -1,0 +1,257 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.ImpostoFinanceiroViewModel
+
+@{
+    ViewBag.Title = "Imposto financeiro";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Salvar",
+                            "ImpostoFinanceiro",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            <div class="row">
+                                <section class="col col-3">
+                                    @Html.HiddenFor(m => m.ImpostoFinanceiro.Id)
+                                    @Html.LabelFor(m => m.ImpostoFinanceiro.Sigla, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.ImpostoFinanceiro.Sigla, new { @maxlength = "50", @class = "required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.ImpostoFinanceiro.Sigla, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-9">
+                                    @Html.LabelFor(m => m.ImpostoFinanceiro.Descricao, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.ImpostoFinanceiro.Descricao, new { @maxlength = "50", @class = "required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.ImpostoFinanceiro.Descricao, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.ImpostoFinanceiro.Aliquota, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.ImpostoFinanceiro.Aliquota, "{0:F5}", new { @class = "text-right decimal-5-casas required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.ImpostoFinanceiro.Aliquota, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-9">
+                                    @Html.LabelFor(m => m.ImpostoFinanceiro.TipoCompromissoId, new { @class = "label" })
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.ImpostoFinanceiro.TipoCompromissoId, Model.ListaTipoCompromisso, string.Empty)<i></i>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.ImpostoFinanceiro.ContaContabil, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.ImpostoFinanceiro.ContaContabil, new { @class = "label" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.ImpostoFinanceiro.ContaContabil, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-9">
+                                    @Html.LabelFor(m => m.ImpostoFinanceiro.ClienteId, new { @class = "label" })
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.ImpostoFinanceiro.ClienteId, Model.ListaCorrentista, string.Empty)<i></i>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-5">
+                                    <div class="inline-group">
+                                        <label class="checkbox">@Html.CheckBoxFor(m => m.ImpostoFinanceiro.Retido)<i></i>@Html.DisplayNameFor(m => m.ImpostoFinanceiro.Retido) </label>
+                                        <label class="checkbox">@Html.CheckBoxFor(m => m.ImpostoFinanceiro.Indireto)<i></i>@Html.DisplayNameFor(m => m.ImpostoFinanceiro.Indireto) </label>
+                                        <label class="checkbox">@Html.CheckBoxFor(m => m.ImpostoFinanceiro.PagamentoEletronico)<i></i>@Html.DisplayNameFor(m => m.ImpostoFinanceiro.PagamentoEletronico) </label>
+                                    </div>
+                                </section>
+                                <section class="col col-3"> <label class="label">Periodicidade</label>
+									<div class="inline-group">
+                                        @foreach (var item in Model.ListaOpcoesPeriodicidade)
+                                        {
+                                            <label class="radio">@Html.RadioButtonFor(m => m.ImpostoFinanceiro.Periodicidade, @item.Value) <i></i>@item.Text</label>
+                                        }
+									</div>
+								</section>
+                                <section class="col col-1"> <label class="label"> </label>
+									@Html.LabelFor(m => m.ImpostoFinanceiro.DiaVencimento, new { @class = "label" })
+                                    <label class="input">@Html.TextBoxFor(m => m.ImpostoFinanceiro.DiaVencimento, new { @maxlength = "2" })</label>
+                                    @Html.ValidationMessageFor(m => m.ImpostoFinanceiro.DiaVencimento, "", new { @class = "note note-error" })
+								</section>
+                            </div>
+                            <div class="row" >
+                                <section class="col col-3"> <label class="label">Fim de semana</label>
+									<div class="inline-group">
+                                        @foreach (var item in Model.ListarOpcoesFimDeSemana)
+                                        {
+                                            <label class="radio">@Html.RadioButtonFor(m => m.ImpostoFinanceiro.FimDeSemana, @item.Value) <i></i>@item.Text</label>
+                                        }
+										@*<label class="radio">@Html.RadioButtonFor(m => m.ImpostoFinanceiro.FimDeSemana, "A ") <i></i>Antecipa</label>
+										<label class="radio">@Html.RadioButtonFor(m => m.ImpostoFinanceiro.FimDeSemana, "P ") <i></i>Posterga</label>*@
+									</div>
+								</section>
+                                <section class="col col-6"> <label class="label">Fato gerador</label>
+									<div class="inline-group">
+                                        @foreach (var item in Model.ListarOpcoesFatoGerador)
+                                        {
+                                            <label class="radio">@Html.RadioButtonFor(m => m.ImpostoFinanceiro.FatoGerador, @item.Value) <i></i>@item.Text</label>
+                                        }
+										@*<label class="radio">@Html.RadioButtonFor(m => m.ImpostoFinanceiro.FatoGerador, "E ") <i></i>Emissão de documento</label>
+										<label class="radio">@Html.RadioButtonFor(m => m.ImpostoFinanceiro.FatoGerador, "P ") <i></i>Pagamento</label>*@
+									</div>
+								</section>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <footer>
+                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                            Deletar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Salvar
+                        </button>
+                    </footer>
+                    }
+
+                    @using (Ajax.BeginForm(
+                            "Lista",
+                            "ImpostoFinanceiro",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+    $("#btnDeletar").on("click", function() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletar", "ImpostoFinanceiro")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').val()
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
+            clearForm();
+            doFilter();
+        });
+    });
+
+    function clearForm()
+    {
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').val('');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Descricao)').val('');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Sigla)').val('');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Aliquota)').val(roundDecimal(floatToString(0), 5));
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.ContaContabil)').val('');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(0);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.ClienteId)').val(0);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Retido)').prop('checked', false);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)').prop('checked', false);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.PagamentoEletronico)').prop('checked', false);
+        $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.Periodicidade)']").each(function (i) {
+            this.checked = false;
+        });
+        $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FimDeSemana)']").each(function (i) {
+            this.checked = false;
+        });
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').val('');
+        $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FatoGerador)']").each(function (i) {
+            this.checked = false;
+        });
+    }
+
+    function novo()
+    {
+        clearForm();
+        $('#notificationMessages').html('');
+        $('#ImpostoFinanceiro_Descricao-error').remove();
+        $('#ImpostoFinanceiro_Sigla-error').remove();
+    }
+
+    function refresh()
+    {
+        onSuccess();
+        clearForm();
+        doFilter();
+    }
+
+    function loadItem(id) 
+    {
+        novo();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CarregarItem", "ImpostoFinanceiro")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: id
+            })
+        })
+        .success(function (result) {
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.Descricao)').val(result.Descricao);
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.Sigla)').val(result.Sigla);
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.Aliquota)').val(roundDecimal(floatToString(result.Aliquota), 5));
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.ContaContabil)').val(result.ContaContabil);
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.ClienteId)').val(result.ClienteId);
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(result.TipoCompromissoId);
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.Retido)').prop('checked', result.Retido);
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)').prop('checked', result.Indireto);
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.PagamentoEletronico)').prop('checked', result.PagamentoEletronico);
+            $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.Periodicidade)']").each(function (i)
+            {
+                if ($(this).val() == result.Periodicidade)
+                    $(this).prop('checked', true);
+            });
+            $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FimDeSemana)']").each(function (i) {
+                if ($(this).val() == result.FimDeSemana)
+                    $(this).prop('checked', true);
+            });
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').val(result.DiaVencimento);
+            $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FatoGerador)']").each(function (i) {
+                if ($(this).val() == result.FatoGerador)
+                    $(this).prop('checked', true);
+            });
+                    
+            goToTop();
+        });
+    }
+
+</script>

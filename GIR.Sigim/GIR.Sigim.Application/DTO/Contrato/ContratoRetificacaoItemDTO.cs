@@ -14,9 +14,9 @@ namespace GIR.Sigim.Application.DTO.Contrato
     public class ContratoRetificacaoItemDTO : BaseDTO 
     {
         public int ContratoId { get; set; }
-        public ContratoDTO Contrato { get; set; }
+        //public ContratoDTO Contrato { get; set; }
         public int ContratoRetificacaoId { get; set; }
-        public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
+        //public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
         public Int16 Sequencial { get; set; }
         public string ComplementoDescricao { get; set; }
         public NaturezaItem NaturezaItem { get; set; }
@@ -76,8 +76,8 @@ namespace GIR.Sigim.Application.DTO.Contrato
 
         public ContratoRetificacaoItemDTO()
         {
-            this.Contrato = new ContratoDTO();
-            this.ContratoRetificacao = new ContratoRetificacaoDTO();
+            //this.Contrato = new ContratoDTO();
+            //this.ContratoRetificacao = new ContratoRetificacaoDTO();
             this.Servico = new ServicoDTO();
             this.Classe = new ClasseDTO();
             this.RetencaoTipoCompromisso = new TipoCompromissoDTO();

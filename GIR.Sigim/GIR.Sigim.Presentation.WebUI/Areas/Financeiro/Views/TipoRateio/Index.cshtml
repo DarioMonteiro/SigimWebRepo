@@ -86,6 +86,7 @@
         })
         .success(function (result) {
             $('#notificationMessages').html(result);
+            limpaPaginacao();
             clearForm();
             doFilter();
         });
@@ -109,6 +110,7 @@
     }
 
     function loadItem(id) {
+        novo();
         $.ajax({
             type: 'POST',
             url: '@Url.Action("CarregarItem", "TipoRateio")',
@@ -125,4 +127,9 @@
             goToTop();
         });
     }
+
+    function limpaPaginacao() {
+        $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
+    };
+
 </script>

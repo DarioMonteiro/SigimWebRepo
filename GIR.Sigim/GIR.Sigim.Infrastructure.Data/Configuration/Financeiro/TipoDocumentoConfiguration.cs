@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 {
@@ -31,6 +32,19 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .IsRequired()
                 .HasMaxLength(50) 
                 .HasColumnOrder(3);
+
+            HasMany<TituloPagar>(l => l.ListaTituloPagar)
+                .WithOptional(l => l.TipoDocumento)
+                .HasForeignKey(c => c.TipoDocumentoId);
+
+            HasMany<TituloReceber>(l => l.ListaTituloReceber)
+                .WithOptional(l => l.TipoDocumento)
+                .HasForeignKey(c => c.TipoDocumentoId);
+
+            HasMany<ContratoRetificacaoItemMedicao>(l => l.ListaContratoRetificacaoItemMedicao)
+                .WithRequired(l => l.TipoDocumento)
+                .HasForeignKey(c => c.TipoDocumentoId);
+
         }
     }
 }

@@ -134,6 +134,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             CarregarCombosMedicao(model);
  
             model.PodeSalvar = false;
+            model.PodeCancelar = false;
+            model.PodeImprimir = true;
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
             if (parametros != null)
@@ -185,8 +187,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             ListaItensUltimoContratoRetificacao = contratoRetificacao.ListaContratoRetificacaoItem;
 
             model.ListaServicoContratoRetificacaoItem = new SelectList(ListaItensUltimoContratoRetificacao, "Id", "SequencialDescricaoItemComplemento", ListaItensUltimoContratoRetificacao.Select(c => c.Id));
-
-            model.PodeSalvar = true;
 
             return View(model);
         }
@@ -240,7 +240,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
                     bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
                     bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
-                    
+
                     return Json(new
                     {
                         ehRecuperou = true,
@@ -255,6 +255,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                         baseRetencaoItem = contratoRetificacaoItem.BaseRetencaoItem,
                         sequencialItem = contratoRetificacaoItem.Sequencial,
                         listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao)
+
+                        //listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao,
+                        //                                                                               Formatting.Indented,
+                        //                                                                               new JsonSerializerSettings
+                        //                                                                               {
+                        //                                                                                   ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        //                                                                                   //ReferenceLoopHandling = ReferenceLoopHandling.Serialize
+                        //                                                                                   //PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                        //                                                                               })
                     });
                 }
             }
@@ -339,6 +348,128 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 ehRecuperou = false,
                 errorMessage = string.Empty
             });
+        }
+
+        [HttpPost]
+        public ActionResult Cancelar(int? id)
+        {
+            bool cancelou = false;
+
+            string msg = "";
+            cancelou = contratoRetificacaoItemMedicaoAppService.Cancelar(id);
+            if (messageQueue.GetAll().Count > 0)
+            {
+                msg = messageQueue.GetAll()[0].Text;
+                messageQueue.Clear();
+            }
+
+            if (!cancelou)
+            {
+                return Json(new
+                {
+                    ehCancelou = false,
+                    message = msg
+                });
+            }
+
+            return Json(new
+            {
+                ehCancelou = true,
+                message = msg
+            });       
+        }
+
+
+        [HttpPost]
+        public ActionResult RecuperaMedicaoPorContratoDadosDaNota(int? contratoId, 
+                                                                  int? tipoDocumentoId,
+                                                                  string numeroDocumento,
+                                                                  Nullable<DateTime> dataEmissao,
+                                                                  int? contratadoId)
+        {
+            List<ContratoRetificacaoItemMedicaoDTO> listaMedicao = null;
+
+            string msg = "";
+            bool ehValido = contratoRetificacaoItemMedicaoAppService.EhValidaVisualizacaoMedicao(contratoId,tipoDocumentoId,numeroDocumento,dataEmissao,contratadoId);
+            if (messageQueue.GetAll().Count > 0)
+            {
+                msg = messageQueue.GetAll()[0].Text;
+                messageQueue.Clear();
+            }
+
+            if (ehValido)
+            {
+                listaMedicao = contratoRetificacaoItemMedicaoAppService.RecuperaMedicaoPorContratoDadosDaNota(contratoId.Value, 
+                                                                                                              tipoDocumentoId.Value, 
+                                                                                                              numeroDocumento, 
+                                                                                                              dataEmissao.Value, 
+                                                                                                              contratadoId.Value);
+                var novaListaMedicao = listaMedicao;
+                foreach (var medicao in novaListaMedicao)
+                {
+                    medicao.Contrato.ListaContratoRetificacao.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoItem.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoItemCronograma.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoItemImposto.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoItemMedicao.Clear();
+                    medicao.Contrato.ListaContratoRetificacaoProvisao.Clear();
+                }
+
+
+                if (listaMedicao.Count > 0)
+                {
+                    return Json(new
+                    {
+                        ehRecuperou = true,
+                        errorMessage = string.Empty,
+                        listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(novaListaMedicao)
+                    });
+                }
+
+            }
+
+            return Json(new
+            {
+                ehRecuperou = false,
+                errorMessage = msg,
+                listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(listaMedicao)
+            });
+
+        }
+
+        public ActionResult Imprimir(int? contratadoId,
+                                     int contratoId,
+                                     int tipoDocumentoId,
+                                     string numeroDocumento,
+                                     string dataEmissao,
+                                     int? multiFornecedorId,
+                                     string retencaoContratual,
+                                     string valorContratadoItem,
+                                     FormatoExportacaoArquivo formato)
+        {
+
+            if (multiFornecedorId.HasValue)
+            {
+                contratadoId = multiFornecedorId;
+            }
+
+            DateTime dtEmissao = DateTime.Parse(dataEmissao);
+
+
+            //if (contratoRetificacaoItemMedicaoAppService.EhValidaImpressao(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao))
+            //{
+            //}
+
+            var arquivo = contratoRetificacaoItemMedicaoAppService.Exportar(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao,retencaoContratual,valorContratadoItem, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
         }
 
         private void CarregarCombosFiltro(MedicaoContratoListaViewModel model) 

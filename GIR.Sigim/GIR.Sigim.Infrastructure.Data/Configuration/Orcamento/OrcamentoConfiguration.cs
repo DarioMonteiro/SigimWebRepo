@@ -52,6 +52,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
             Property(l => l.EhControlado)
                 .HasColumnName("controlado")
                 .HasColumnOrder(8);
+
+            HasMany<OrcamentoComposicao>(l => l.ListaOrcamentoComposicao)
+                .WithRequired(l => l.Orcamento)
+                .HasForeignKey(c => c.OrcamentoId);
+
         }
     }
 }

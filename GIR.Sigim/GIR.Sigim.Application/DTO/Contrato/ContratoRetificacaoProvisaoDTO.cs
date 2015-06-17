@@ -26,6 +26,10 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public decimal Valor { get; set; }
         public decimal Quantidade { get; set; }
 
+        //*****************
+        public decimal ValorTotalMedido { get; set; }
+        //*****************
+
         public TotalizadoresMedicaoDTO Totalizadores { get; set; }
 
         public ContratoRetificacaoProvisaoDTO()
