@@ -200,6 +200,7 @@
     <Compile Include="ViewModel\Admin\LoginViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\ParametrosUsuarioViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\ParametrosViewModel.cs" />
+    <Compile Include="ViewModel\InterfaceOrcamentoViewModel.cs" />
     <Compile Include="ViewModel\ListaViewModel.cs" />
     <Compile Include="ViewModel\MaterialListaViewModel.cs" />
     <Compile Include="ViewModel\Page.cs" />

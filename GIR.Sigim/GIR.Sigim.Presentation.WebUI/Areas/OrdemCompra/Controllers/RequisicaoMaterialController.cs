@@ -103,6 +103,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.PodeEditarItem = requisicaoMaterialAppService.EhPermitidoEditarItem(requisicaoMaterial);
             model.PodeAprovarRequisicao = requisicaoMaterialAppService.EhPermitidoAprovarRequisicao(requisicaoMaterial);
             model.PodeCancelarAprovacao = requisicaoMaterialAppService.EhPermitidoCancelarAprovacao(requisicaoMaterial);
+            model.PodeEditarCentroCusto = requisicaoMaterialAppService.EhPermitidoEditarCentroCusto(requisicaoMaterial);
             
             return View(model);
         }

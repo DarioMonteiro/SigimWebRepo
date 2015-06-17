@@ -39,7 +39,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         }
 
         [HttpPost]
-        public ActionResult TreeView(int orcamentoId)
+        public ActionResult TreeView(int? orcamentoId)
         {
             var model = classeAppService.ListarPeloOrcamento(orcamentoId);
             ViewBag.FirstNode = "Classe";

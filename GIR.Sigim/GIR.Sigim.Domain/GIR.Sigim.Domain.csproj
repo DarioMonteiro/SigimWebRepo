@@ -187,13 +187,13 @@
     <Compile Include="Specification\OrdemCompra\PreRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrSpecification.cs" />
     <Compile Include="Specification\ParameterRebinder.cs" />
+    <Compile Include="Specification\Sigim\MaterialSpecification.cs" />
     <Compile Include="Specification\Specification.cs" />
     <Compile Include="Specification\TrueSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\Sigim\" />
     <Folder Include="Specification\Financeiro\" />
-    <Folder Include="Specification\Sigim\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\ErrorMessages.resx">

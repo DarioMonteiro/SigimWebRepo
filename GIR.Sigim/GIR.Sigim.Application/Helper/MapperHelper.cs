@@ -110,8 +110,19 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<Obra, ObraDTO>();
             Mapper.CreateMap<ObraDTO, Obra>();
 
+            Mapper.CreateMap<OrcamentoComposicao, OrcamentoComposicaoDTO>();
+            Mapper.CreateMap<OrcamentoComposicaoDTO, OrcamentoComposicao>();
+
+            Mapper.CreateMap<OrcamentoComposicaoItem, OrcamentoComposicaoItemDTO>()
+                .ForMember(d => d.Classe, m => m.MapFrom(s => s.OrcamentoComposicao.Classe))
+                .ForMember(d => d.Composicao, m => m.MapFrom(s => s.OrcamentoComposicao.Composicao));
+            Mapper.CreateMap<OrcamentoComposicaoItemDTO, OrcamentoComposicaoItem>();
+
             Mapper.CreateMap<Orcamento, OrcamentoDTO>();
             Mapper.CreateMap<OrcamentoDTO, Orcamento>();
+
+            Mapper.CreateMap<OrcamentoInsumoRequisitado, OrcamentoInsumoRequisitadoDTO>();
+            Mapper.CreateMap<OrcamentoInsumoRequisitadoDTO, OrcamentoInsumoRequisitado>();
 
             Mapper.CreateMap<ParametrosOrcamento, ParametrosOrcamentoDTO>();
             Mapper.CreateMap<ParametrosOrcamentoDTO, ParametrosOrcamento>()
@@ -165,7 +176,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<RequisicaoMaterialItem, RequisicaoMaterialItemDTO>()
                 .ForMember(d => d.UltimaCotacao, m => m.MapFrom(s => s.ListaCotacaoItem.Where(l => l.Cotacao.Situacao != SituacaoCotacao.Cancelada).Max(c => c.CotacaoId)))
                 .ForMember(d => d.UltimaOrdemCompra, m => m.MapFrom(s => s.ListaOrdemCompraItem.Where(l => l.OrdemCompra.Situacao != SituacaoOrdemCompra.Cancelada).Max(c => c.OrdemCompraId)))
-                .ForMember(d => d.TemInterfaceOrcamento, m => m.MapFrom(s => s.ListaOrcamentoInsumoRequisitado.Any()));
+                //.ForMember(d => d.InterfaceOrcamentoId, m => m.MapFrom(s => s.ListaOrcamentoInsumoRequisitado.Any() ? s.ListaOrcamentoInsumoRequisitado.FirstOrDefault().Id : null))
+                //.ForMember(d => d.ComposicaoId, m => m.MapFrom(s => s.ListaOrcamentoInsumoRequisitado.Any() ? s.ListaOrcamentoInsumoRequisitado.FirstOrDefault().ComposicaoId : null));
+                .ForMember(d => d.OrcamentoInsumoRequisitado, m => m.MapFrom(s => s.ListaOrcamentoInsumoRequisitado.FirstOrDefault()));
             Mapper.CreateMap<RequisicaoMaterialItemDTO, RequisicaoMaterialItem>()
                 .ForMember(d => d.Classe, m => m.UseValue(null))
                 .ForMember(d => d.CodigoClasse, m => m.MapFrom(s => s.Classe.Codigo))
@@ -199,6 +212,9 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<CodigoContribuicao, CodigoContribuicaoDTO>();
             Mapper.CreateMap<CodigoContribuicaoDTO, CodigoContribuicao>();
+
+            Mapper.CreateMap<Composicao, ComposicaoDTO>();
+            Mapper.CreateMap<ComposicaoDTO, Composicao>();
 
             Mapper.CreateMap<CST, CSTDTO>();
             Mapper.CreateMap<CSTDTO, CST>();

@@ -77,6 +77,9 @@
     <Compile Include="DTO\Financeiro\TipoRateioDTO.cs" />
     <Compile Include="DTO\Financeiro\TituloPagarDTO.cs" />
     <Compile Include="DTO\Financeiro\TituloReceberDTO.cs" />
+    <Compile Include="DTO\Orcamento\OrcamentoInsumoRequisitadoDTO.cs" />
+    <Compile Include="DTO\Orcamento\OrcamentoComposicaoDTO.cs" />
+    <Compile Include="DTO\Orcamento\OrcamentoComposicaoItemDTO.cs" />
     <Compile Include="DTO\Orcamento\ObraDTO.cs" />
     <Compile Include="DTO\Orcamento\OrcamentoDTO.cs" />
     <Compile Include="DTO\Orcamento\ParametrosOrcamentoDTO.cs" />
@@ -98,6 +101,7 @@
     <Compile Include="DTO\Sigim\BancoDTO.cs" />
     <Compile Include="DTO\Sigim\BancoLayoutDTO.cs" />
     <Compile Include="DTO\Sigim\BloqueioContabilDTO.cs" />
+    <Compile Include="DTO\Sigim\ComposicaoDTO.cs" />
     <Compile Include="DTO\Sigim\FormatoExportacaoArquivo.cs" />
     <Compile Include="DTO\Sigim\CifFobDTO.cs" />
     <Compile Include="DTO\Sigim\ClienteFornecedorDTO.cs" />

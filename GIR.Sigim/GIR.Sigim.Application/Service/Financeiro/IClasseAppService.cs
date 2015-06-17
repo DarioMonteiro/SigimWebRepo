@@ -13,6 +13,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
         ClasseDTO ObterPeloCodigoEOrcamento(string codigo, int orcamentoId);
         bool EhClasseValida(ClasseDTO Classe, int orcamentoId);
         bool EhClasseUltimoNivelValida(ClasseDTO Classe, int orcamentoId);
-        List<TreeNodeDTO> ListarPeloOrcamento(int orcamentoId);
+        List<TreeNodeDTO> ListarPeloOrcamento(int? orcamentoId);
     }
 }
