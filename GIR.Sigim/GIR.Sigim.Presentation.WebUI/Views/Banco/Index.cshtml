@@ -1,0 +1,170 @@
+﻿@model GIR.Sigim.Presentation.WebUI.ViewModel.BancoViewModel
+
+@{
+    ViewBag.Title = "Banco";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>        
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Salvar",
+                            "Banco",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))                                            
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            <div class="row">
+                            <section class="col col-3">                             
+                                @Html.LabelFor(m => m.Banco.Id, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.Banco.Id, new { @maxlength = "50",  @class = "required" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.Banco.Id, "", new { @class = "note note-error" })
+                            </section>
+                            <section class="col col-12">
+                                @Html.LabelFor(m => m.Banco.Nome, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.Banco.Nome, new { @maxlength = "50",  @class = "required" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.Banco.Nome, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-4" style="padding-top:30px">                                                                      
+                                    <label class="checkbox">
+                                        @Html.CheckBoxFor(m => m.Banco.InterfaceEletronica)<i></i>@Html.DisplayNameFor(m => m.Banco.InterfaceEletronica)  
+                                    </label>                                                                                                      
+                                </section>
+                                <section class="col col-4">
+                                    @Html.LabelFor(m => m.Banco.NumeroRemessa, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Banco.NumeroRemessa)
+                                    </label>                              
+                                </section>
+                                <section class="col col-4">
+                                    @Html.LabelFor(m => m.Banco.NumeroRemessaPagamento , new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Banco.NumeroRemessaPagamento)
+                                    </label>                                   
+                                </section>
+                            </div>                                                       
+                        </fieldset>
+                    </div>
+                    <footer>                       
+                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                            Deletar
+                        </button>
+                        <button type="submit" id="btnSalvar" class="btn btn-primary">
+                            Salvar
+                        </button>
+                    </footer>
+                    }                        
+                    @using (Ajax.BeginForm(
+                            "Lista",
+                            "Banco",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+    $("#btnDeletar").on("click", function () {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletar", "Banco")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: $('#@Html.IdFor(m => m.Banco.Id)').val()
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
+            limpaPaginacao();
+            clearForm();
+            doFilter();
+        });
+    });
+
+    function clearForm() {
+        $('#@Html.IdFor(m => m.Banco.Id)').val('');
+        $('#@Html.IdFor(m => m.Banco.Nome)').val('');
+        $('#@Html.IdFor(m => m.Banco.InterfaceEletronica)').prop('checked', false);
+        $('#@Html.IdFor(m => m.Banco.NumeroRemessa)').val('');
+        $('#@Html.IdFor(m => m.Banco.NumeroRemessaPagamento)').val('');
+    }
+
+    function novo() {
+        clearForm();
+        $('#notificationMessages').html('');
+        $('#Banco_Id-error').remove();
+        $('#Banco_Nome-error').remove();
+    }
+
+    function refresh() {
+        onSuccess();
+        clearForm();
+        doFilter();
+    }
+
+    function loadItem(id) {
+        novo();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CarregarItem", "Banco")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: id
+            })
+        })
+        .success(function (result) {
+            $('#@Html.IdFor(m => m.Banco.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.Banco.Nome)').val(result.Nome);
+            $('#@Html.IdFor(m => m.Banco.InterfaceEletronica)').prop('checked', result.InterfaceEletronica);
+            $('#@Html.IdFor(m => m.Banco.NumeroRemessa)').val(result.NumeroRemessa);
+            $('#@Html.IdFor(m => m.Banco.NumeroRemessaPagamento)').val(result.NumeroRemessaPagamento);
+            goToTop();
+
+        });
+    }
+
+    function limpaPaginacao() {
+        $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
+    }
+
+    
+</script>
+

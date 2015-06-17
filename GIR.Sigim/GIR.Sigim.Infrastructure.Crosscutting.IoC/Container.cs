@@ -111,6 +111,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
 
             #region Sigim
             currentContainer.RegisterType<IAssuntoContatoRepository, AssuntoContatoRepository>();
+            currentContainer.RegisterType<IBancoRepository, BancoRepository>();
             currentContainer.RegisterType<IBancoLayoutRepository, BancoLayoutRepository>();
             currentContainer.RegisterType<IBloqueioContabilRepository, BloqueioContabilRepository>();
             currentContainer.RegisterType<IClienteFornecedorRepository, ClienteFornecedorRepository>();
@@ -137,6 +138,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ITipoAreaRepository, TipoAreaRepository>();
             currentContainer.RegisterType<ITipoCaracteristicaRepository, TipoCaracteristicaRepository>();
             currentContainer.RegisterType<ITipoEspecificacaoRepository, TipoEspecificacaoRepository>();
+            currentContainer.RegisterType<IFormaRecebimentoRepository, FormaRecebimentoRepository>();
             #endregion
 
             #region Sac
@@ -196,6 +198,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
 
             #region Sigim
             currentContainer.RegisterType<IAssuntoContatoAppService, AssuntoContatoAppService>();
+            currentContainer.RegisterType<IBancoAppService, BancoAppService>();
             currentContainer.RegisterType<IBancoLayoutAppService, BancoLayoutAppService>();
             currentContainer.RegisterType<IBloqueioContabilAppService, BloqueioContabilAppService>();
             currentContainer.RegisterType<IClienteFornecedorAppService, ClienteFornecedorAppService>();
@@ -222,6 +225,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ITipoCaracteristicaAppService, TipoCaracteristicaAppService>();
             currentContainer.RegisterType<ITipoEspecificacaoAppService, TipoEspecificacaoAppService>();
             currentContainer.RegisterType<IUnidadeMedidaAppService, UnidadeMedidaAppService>();
+            currentContainer.RegisterType<IFormaRecebimentoAppService, FormaRecebimentoAppService>();
             #endregion
 
             #region Sac
