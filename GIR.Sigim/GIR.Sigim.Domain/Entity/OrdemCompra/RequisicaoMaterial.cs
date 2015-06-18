@@ -36,6 +36,14 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
             {
                 yield return new ValidationResult(string.Format(ErrorMessages.CampoObrigatorio, "Data"));
             }
+
+            foreach (var item in ListaItens)
+            {
+                if (item.QuantidadeAprovada > item.Quantidade)
+                {
+                    yield return new ValidationResult(string.Format(ErrorMessages.QuantidadeAprovadaMaiorQueQuantidade, item.Sequencial.ToString()));
+                }
+            }
         }
     }
 }

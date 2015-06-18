@@ -425,7 +425,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
         }
 
-        private static void AlterarItens(RequisicaoMaterialDTO dto, RequisicaoMaterial requisicaoMaterial)
+        private void AlterarItens(RequisicaoMaterialDTO dto, RequisicaoMaterial requisicaoMaterial)
         {
             foreach (var item in requisicaoMaterial.ListaItens)
             {
@@ -455,13 +455,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
         }
 
-        private static void AdicionarItens(RequisicaoMaterialDTO dto, RequisicaoMaterial requisicaoMaterial)
+        private void AdicionarItens(RequisicaoMaterialDTO dto, RequisicaoMaterial requisicaoMaterial)
         {
             foreach (var item in dto.ListaItens.Where(l => !l.Id.HasValue))
             {
                 var itemLista = item.To<RequisicaoMaterialItem>();
                 itemLista.RequisicaoMaterial = requisicaoMaterial;
-                if (item.OrcamentoInsumoRequisitado != null)
+                if (PossuiInsumoRequisitado(item))
                 {
                     var orcamentoInsumoRequisitado = new OrcamentoInsumoRequisitado();
                     orcamentoInsumoRequisitado.CodigoCentroCusto = dto.CentroCusto.Codigo;
@@ -474,6 +474,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 }
                 requisicaoMaterial.ListaItens.Add(itemLista);
             }
+        }
+
+        private bool PossuiInsumoRequisitado(RequisicaoMaterialItemDTO item)
+        {
+            return (item.OrcamentoInsumoRequisitado != null)
+                && (item.OrcamentoInsumoRequisitado.Material != null)
+                && (item.OrcamentoInsumoRequisitado.Material.Id.HasValue);
         }
 
         private void AjustarSituacaoRequisicao(RequisicaoMaterial requisicao)

@@ -430,6 +430,7 @@
             clearFormItem();
             $("#@Html.IdFor(m => m.Classe.Codigo)").val('');
             $("#@Html.IdFor(m => m.Classe.Descricao)").val('');
+            validaClasse();
         });
 
         $('#btnAprovarRequisicao').on("click", function () {
@@ -455,6 +456,15 @@
                 var isValid = validaClasse();
                 $.validator.messages.ehClasseValida = $('#@Html.IdFor(m => m.Classe.Codigo)_ValidationMessage').html();
                 return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
+            "quantidadeAprovadaMenorOuIgualQuantidade",
+            function (value, element, params) {
+                var quantidade = stringToFloat($("#@Html.IdFor(m => m.Quantidade)").val());
+                var quantidadeAprovada = stringToFloat($("#@Html.IdFor(m => m.QuantidadeAprovada)").val());
+                return quantidadeAprovada <= quantidade;
             }, ''
         );
 
@@ -486,6 +496,7 @@
                 },
                 '@Html.NameFor(m => m.Material.Id)': "required",
                 '@Html.NameFor(m => m.Quantidade)': "decimalGreaterThanZero",
+                '@Html.NameFor(m => m.QuantidadeAprovada)': "quantidadeAprovadaMenorOuIgualQuantidade",
                 '@Html.NameFor(m => m.DataMinima)': {
                     date: true,
                     dataMinimaMaiorQueMaxima: true
@@ -511,6 +522,9 @@
                 },
                 '@Html.NameFor(m => m.Quantidade)': {
                     decimalGreaterThanZero: 'A Quantidade deve ser maior que zero.'
+                },
+                '@Html.NameFor(m => m.QuantidadeAprovada)': {
+                    quantidadeAprovadaMenorOuIgualQuantidade: 'A quantidade aprovada não pode ser maior que a quantidade.'
                 },
                 '@Html.NameFor(m => m.DataMinima)': {
                     date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida',
@@ -598,6 +612,8 @@
             return (item.Sequencial == sequencial);
         });
 
+        clearFormItem();
+
         if (arr.length > 0) {
             var item = arr[0];
             $("#@Html.IdFor(m => m.ItemId)").val(item.Id);
@@ -612,8 +628,10 @@
             $("#@Html.IdFor(m => m.QuantidadeAprovada)").val(roundDecimal(floatToString(item.QuantidadeAprovada), 4));
             $("#@Html.IdFor(m => m.DataMinima)").val(new Date(item.DataMinima).toFormatDDMMYYYY());
             $("#@Html.IdFor(m => m.DataMaxima)").val(new Date(item.DataMaxima).toFormatDDMMYYYY());
+            $("#@Html.IdFor(m => m.QuantidadeAprovada)").prop('readonly', false);
+            $("#@Html.IdFor(m => m.QuantidadeAprovada)").removeClass('readonly');
 
-            if (item.OrcamentoInsumoRequisitado != null) {
+            if ((item.OrcamentoInsumoRequisitado != null) && (item.OrcamentoInsumoRequisitado.Material.Id != '')) {
                 $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Id)").val(item.OrcamentoInsumoRequisitado.Id);
                 $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Composicao.Id)").val(item.OrcamentoInsumoRequisitado.Composicao.Id);
                 $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Material.Id)").val(item.OrcamentoInsumoRequisitado.Material.Id);
@@ -621,8 +639,7 @@
                 blockMaterialForm_@(Html.IdFor(m => m.Material.Id))();
                 $("#@Html.IdFor(m => m.Quantidade)").prop('readonly', true);
                 $("#@Html.IdFor(m => m.Quantidade)").addClass('readonly');
-                $("#@Html.IdFor(m => m.QuantidadeAprovada)").prop('readonly', false);
-                $("#@Html.IdFor(m => m.QuantidadeAprovada)").removeClass('readonly');
+                
                 blockClasseForm_@(Html.IdFor(m => m.Classe.Codigo))();
             }
         }
@@ -684,6 +701,7 @@
         $("#@Html.IdFor(m => m.QuantidadeAprovada)").prop('readonly', true);
         $("#@Html.IdFor(m => m.QuantidadeAprovada)").addClass('readonly');
         unblockClasseForm_@(Html.IdFor(m => m.Classe.Codigo))();
+        validaCentroCusto();
     }
 
     function cancelarItensSelecionados() {

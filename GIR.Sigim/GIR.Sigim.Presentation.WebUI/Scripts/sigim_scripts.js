@@ -130,7 +130,7 @@ function initializeDecimalBehaviour() {
 
 function roundDecimal(value, precision) {
     var originalValue = 0 + value;
-    var roundedValue = parseFloat(originalValue.toString().replace(".", "").replace(",", ".")).toFixed(precision);
+    var roundedValue = parseFloat(stringToFloat(originalValue.toString())).toFixed(precision);
     return roundedValue.replace(".", ",");
 }
 
