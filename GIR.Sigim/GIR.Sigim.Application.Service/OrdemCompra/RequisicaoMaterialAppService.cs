@@ -450,9 +450,20 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     item.DataMinima = itemDTO.DataMinima;
                     item.Situacao = itemDTO.Situacao;
                     if (item.Situacao == SituacaoRequisicaoMaterialItem.Cancelado)
-                        item.ListaOrcamentoInsumoRequisitado.Clear();
+                        RemoverInsumoRequisitado(item);
                 }
             }
+        }
+
+        private void RemoverInsumoRequisitado(RequisicaoMaterialItem item)
+        {
+            for (int i = item.ListaOrcamentoInsumoRequisitado.Count - 1; i >= 0; i--)
+            {
+                var insumoRequisitado = item.ListaOrcamentoInsumoRequisitado.ToList()[i];
+                requisicaoMaterialRepository.RemoverInsumoRequisitado(insumoRequisitado);
+            }
+
+            item.ListaOrcamentoInsumoRequisitado.Clear();
         }
 
         private void AdicionarItens(RequisicaoMaterialDTO dto, RequisicaoMaterial requisicaoMaterial)

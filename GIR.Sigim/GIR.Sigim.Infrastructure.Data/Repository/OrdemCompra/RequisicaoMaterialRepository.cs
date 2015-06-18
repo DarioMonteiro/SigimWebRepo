@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
 using GIR.Sigim.Domain.Specification;
@@ -74,6 +75,15 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra
             {
                 QueryableUnitOfWork.Attach(item);
                 QueryableUnitOfWork.CreateSet<RequisicaoMaterialItem>().Remove(item);
+            }
+        }
+
+        public void RemoverInsumoRequisitado(OrcamentoInsumoRequisitado insumoRequisitado)
+        {
+            if (insumoRequisitado != (OrcamentoInsumoRequisitado)null)
+            {
+                QueryableUnitOfWork.Attach(insumoRequisitado);
+                QueryableUnitOfWork.CreateSet<OrcamentoInsumoRequisitado>().Remove(insumoRequisitado);
             }
         }
 
