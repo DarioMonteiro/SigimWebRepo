@@ -177,11 +177,6 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new TipoAreaConfiguration());
             modelBuilder.Configurations.Add(new TipoCaracteristicaConfiguration());
             modelBuilder.Configurations.Add(new TipoEspecificacaoConfiguration());
-
-            //Sac
-            modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
-            
-            
             modelBuilder.Configurations.Add(new TipoCompraConfiguration());
             modelBuilder.Configurations.Add(new CifFobConfiguration());
             modelBuilder.Configurations.Add(new NaturezaOperacaoConfiguration());
@@ -189,6 +184,13 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new CSTConfiguration());
             modelBuilder.Configurations.Add(new CodigoContribuicaoConfiguration());
             modelBuilder.Configurations.Add(new BloqueioContabilConfiguration());
+
+            //Sac
+            modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
+            modelBuilder.Configurations.Add(new SetorConfiguration());
+            modelBuilder.Configurations.Add(new ParametrosEmailSacConfiguration());
+            
+            
         }
         #endregion
     }

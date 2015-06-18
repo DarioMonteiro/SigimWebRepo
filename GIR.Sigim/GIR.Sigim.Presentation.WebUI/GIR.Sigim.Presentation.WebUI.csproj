@@ -183,8 +183,10 @@
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialListaViewModel.cs" />
     <Compile Include="Areas\Sac\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Sac\Controllers\SetorController.cs" />
     <Compile Include="Areas\Sac\Controllers\ParametrosController.cs" />
     <Compile Include="Areas\Sac\SacAreaRegistration.cs" />
+    <Compile Include="Areas\Sac\ViewModel\SetorViewModel.cs" />
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -298,6 +300,8 @@
     <Content Include="Areas\Financeiro\Views\Caixa\ListaPartial.cshtml" />
     <Content Include="Areas\Financeiro\Views\TabelaBasica\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\TabelaBasica\ListaPartial.cshtml" />
+    <Content Include="Areas\Sac\Views\Setor\Index.cshtml" />
+    <Content Include="Areas\Sac\Views\Setor\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />

@@ -80,6 +80,7 @@
     <Compile Include="OrdemCompra\ParametrosUsuarioAppService.cs" />
     <Compile Include="OrdemCompra\PreRequisicaoMaterialAppService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sac\SetorAppService.cs" />
     <Compile Include="Sac\ParametrosSacAppService.cs" />
     <Compile Include="Sigim\BancoLayoutAppService.cs" />
     <Compile Include="Sigim\BloqueioContabilAppService.cs" />

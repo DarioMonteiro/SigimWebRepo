@@ -94,6 +94,8 @@
     <Compile Include="DTO\OrdemCompra\ParametrosOrdemCompraDTO.cs" />
     <Compile Include="DTO\OrdemCompra\ParametrosUsuarioDTO.cs" />
     <Compile Include="DTO\OrdemCompra\RequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\Sac\ParametrosEmailSacDTO.cs" />
+    <Compile Include="DTO\Sac\SetorDTO.cs" />
     <Compile Include="DTO\Sac\ParametrosSacDTO.cs" />
     <Compile Include="DTO\Sigim\AssuntoContatoDTO.cs" />
     <Compile Include="DTO\Sigim\BancoDTO.cs" />
@@ -138,6 +140,7 @@
     <Compile Include="Filtros\OrdemCompras\RequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\PaginationParameters.cs" />
+    <Compile Include="Filtros\Sac\Setor.cs" />
     <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />
     <Compile Include="Helper\MapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -229,6 +232,7 @@
     <Compile Include="Service\OrdemCompra\IPreRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosOrdemCompraAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosUsuarioAppService.cs" />
+    <Compile Include="Service\Sac\ISetorAppService.cs" />
     <Compile Include="Service\Sac\IParametrosSacAppService.cs" />
     <Compile Include="Service\Sigim\ITratamentoAppService.cs" />
     <Compile Include="Service\Sigim\ITipoAreaAppService.cs" />

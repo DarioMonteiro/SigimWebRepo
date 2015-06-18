@@ -342,7 +342,14 @@ namespace GIR.Sigim.Application.Helper
             # region Sac
             Mapper.CreateMap<ParametrosSac, ParametrosSacDTO>();
             Mapper.CreateMap<ParametrosSacDTO, ParametrosSac>()
-                .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
+                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
+
+            Mapper.CreateMap<Setor, SetorDTO>();
+            Mapper.CreateMap<SetorDTO, Setor>();
+
+            Mapper.CreateMap<ParametrosEmailSac, ParametrosEmailSacDTO>();
+            Mapper.CreateMap<ParametrosEmailSacDTO, ParametrosEmailSac>();
+                           
             # endregion
         }
     }

@@ -8,12 +8,11 @@ using GIR.Sigim.Domain.Repository.Sac;
 
 namespace GIR.Sigim.Infrastructure.Data.Repository.Sac
 {
-    public class ParametrosSacRepository : Repository<ParametrosSac>, IParametrosSacRepository
+    public class ParametrosEmailSacRepository : Repository<ParametrosEmailSac>, IParametrosEmailSacRepository
     {
         #region Constructor
 
-        public ParametrosSacRepository(UnitOfWork unitOfWork)
-            : base(unitOfWork)
+        public ParametrosEmailSacRepository(UnitOfWork unitOfWork) : base(unitOfWork)
         {
 
         }
@@ -22,11 +21,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sac
 
         #region IParametrosSacRepository Members
 
-        public ParametrosSac Obter()
-        {
-            var set = CreateSetAsQueryable(l => l.Cliente, s => s.ListaParametrosEmailSac.Select(c => c.Setor));
-            return set.FirstOrDefault();
-        }
+       
 
         #endregion
     }

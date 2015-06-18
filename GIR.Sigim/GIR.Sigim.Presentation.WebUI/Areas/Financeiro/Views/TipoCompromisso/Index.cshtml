@@ -6,7 +6,7 @@
 
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
-    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
+    <a href="javascript:novo();" class="btn btn-primary" style="float: right;">Novo</a>
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -25,40 +25,40 @@
                             new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
-                    <div class="panel-body no-padding">
-                        <fieldset>
-                            <div class="row">
-                            <section class="col col-12">
-                                @Html.HiddenFor(m => m.TipoCompromisso.Id)
-                                @Html.LabelFor(m => m.TipoCompromisso.Descricao, new { @class = "label" })
-                                <label class="input">
-                                    @Html.TextBoxFor(m => m.TipoCompromisso.Descricao, new { @maxlength = "50",  @class = "required" })
-                                </label>
-                                @Html.ValidationMessageFor(m => m.TipoCompromisso.Descricao, "", new { @class = "note note-error" })
-                            </section>
-                            </div>
-                            <div class="row">
-                                <section class="col col-12">
-                                    <div class="inline-group">
-                                        <label class="checkbox">
-                                            @Html.CheckBoxFor(m => m.TipoCompromisso.TipoPagar)<i></i>@Html.DisplayNameFor(m => m.TipoCompromisso.TipoPagar)
+                        <div class="panel-body no-padding">
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-12">
+                                        @Html.HiddenFor(m => m.TipoCompromisso.Id)
+                                        @Html.LabelFor(m => m.TipoCompromisso.Descricao, new { @class = "label" })
+                                        <label class="input">
+                                            @Html.TextBoxFor(m => m.TipoCompromisso.Descricao, new { @maxlength = "50", @class = "required" })
                                         </label>
-                                        <label class="checkbox">
-                                            @Html.CheckBoxFor(m => m.TipoCompromisso.TipoReceber)<i></i>@Html.DisplayNameFor(m => m.TipoCompromisso.TipoReceber)
-                                        </label>
-                                    </div>
-                                </section>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <footer>
-                        <button type="button" id="btnDeletar" class="btn btn-primary">
-                            Deletar
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            Salvar
-                        </button>
-                    </footer>
+                                        @Html.ValidationMessageFor(m => m.TipoCompromisso.Descricao, "", new { @class = "note note-error" })
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-12">
+                                        <div class="inline-group">
+                                            <label class="checkbox">
+                                                @Html.CheckBoxFor(m => m.TipoCompromisso.TipoPagar)<i></i>@Html.DisplayNameFor(m => m.TipoCompromisso.TipoPagar)
+                                            </label>
+                                            <label class="checkbox">
+                                                @Html.CheckBoxFor(m => m.TipoCompromisso.TipoReceber)<i></i>@Html.DisplayNameFor(m => m.TipoCompromisso.TipoReceber)
+                                            </label>
+                                        </div>
+                                    </section>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <footer>
+                            <button type="button" id="btnDeletar" class="btn btn-primary">
+                                Deletar
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                Salvar
+                            </button>
+                        </footer>
                     }
 
                     @using (Ajax.BeginForm(
@@ -85,7 +85,7 @@
 }
 
 <script type="text/javascript">
-    $("#btnDeletar").on("click", function() {
+    $("#btnDeletar").on("click", function () {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Deletar", "TipoCompromisso")',

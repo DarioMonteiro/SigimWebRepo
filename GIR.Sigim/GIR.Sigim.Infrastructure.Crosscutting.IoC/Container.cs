@@ -139,6 +139,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
 
             #region Sac
             currentContainer.RegisterType<IParametrosSacRepository, ParametrosSacRepository>();
+            currentContainer.RegisterType<ISetorRepository, SetorRepository>();
             #endregion
 
             #endregion
@@ -151,6 +152,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #endregion
 
             #region Application services
+
             #region Admin
             currentContainer.RegisterType<IUsuarioAppService, UsuarioAppService>();
             #endregion
@@ -222,6 +224,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
 
             #region Sac
             currentContainer.RegisterType<IParametrosSacAppService, ParametrosSacAppService>();
+            currentContainer.RegisterType<ISetorAppService, SetorAppService>(); 
             #endregion
 
             #endregion

@@ -30,7 +30,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
         public ActionResult Index()
         {
             ParametrosViewModel model = new ParametrosViewModel();
-            model.Parametros = parametrosAppService.Obter() ?? new ParametrosSacDTO();
+            var parametrosSac = parametrosAppService.Obter() ?? new ParametrosSacDTO();
+            foreach (var parametrosEmail in parametrosSac.ListaParametrosEmailSac)
+            {
+                parametrosEmail.ParametrosSac = new ParametrosSacDTO();
+            }
+            model.ParametrosSac = parametrosSac; 
+            model.JsonListaEmail = Newtonsoft.Json.JsonConvert.SerializeObject(model.ParametrosSac.ListaParametrosEmailSac);
+
             CarregarCombos(model);
             return View(model);
         }
@@ -51,10 +58,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
                             memoryStream = new MemoryStream();
                             inputStream.CopyTo(memoryStream);
                         }
-                        model.Parametros.IconeRelatorio = memoryStream.ToArray();
+                        model.ParametrosSac.IconeRelatorio = memoryStream.ToArray();
                     }
                 }
-                parametrosAppService.Salvar(model.Parametros);
+                parametrosAppService.Salvar(model.ParametrosSac);
             }
 
             return PartialView("_NotificationMessagesPartial");
@@ -63,11 +70,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
         {
             int? clienteId = null;
 
-            if (model.Parametros != null)
+            if (model.ParametrosSac != null)
             {
-                clienteId = model.Parametros.ClienteId;
+                clienteId = model.ParametrosSac.ClienteId;
             }
-            model.ListaEmpresa = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.Parametros.ClienteId);
+            model.ListaEmpresa = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.ParametrosSac.ClienteId);
         }
     }   
 }
