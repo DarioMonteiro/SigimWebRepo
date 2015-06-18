@@ -32,7 +32,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
                 .HasColumnName("composicao")
                 .HasColumnOrder(3);
 
-            HasRequired(l => l.Composicao)
+            HasOptional(l => l.Composicao)
                 .WithMany(l => l.ListaOrcamentoComposicao)
                 .HasForeignKey(l => l.ComposicaoId);
 
@@ -63,6 +63,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
                 .HasMaxLength(200)
                 .HasColumnName("especificacaoTecnica")
                 .HasColumnOrder(8);
+
+            HasMany<OrcamentoComposicaoItem>(l => l.ListaOrcamentoComposicaoItem)
+                .WithRequired(l => l.OrcamentoComposicao)
+                .HasForeignKey(c => c.OrcamentoComposicaoId);
         }
     }
 }

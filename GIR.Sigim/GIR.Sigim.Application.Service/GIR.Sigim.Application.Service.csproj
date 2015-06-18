@@ -59,12 +59,14 @@
     <Compile Include="Contrato\ContratoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoItemAppService.cs" />
+    <Compile Include="Contrato\ContratoRetificacaoItemImpostoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoItemMedicaoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoProvisaoAppService.cs" />
     <Compile Include="Contrato\ParametrosContratoAppService.cs" />
     <Compile Include="Financeiro\CentroCustoAppService.cs" />
     <Compile Include="Financeiro\ClasseAppService.cs" />
     <Compile Include="Financeiro\CaixaAppService.cs" />
+    <Compile Include="Financeiro\ImpostoFinanceiroAppService.cs" />
     <Compile Include="Financeiro\TabelaBasicaAppService.cs" />
     <Compile Include="Financeiro\MotivoCancelamentoAppService.cs" />
     <Compile Include="Financeiro\ParametrosFinanceiroAppService.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="Sigim\ClienteFornecedorAppService.cs" />
     <Compile Include="Sigim\AssuntoContatoAppService.cs" />
     <Compile Include="Sigim\CodigoContribuicaoAppService.cs" />
+    <Compile Include="Sigim\BancoAppService.cs" />
+    <Compile Include="Sigim\FormaRecebimentoAppService.cs" />
     <Compile Include="Sigim\TratamentoAppService.cs" />
     <Compile Include="Sigim\TipoAreaAppService.cs" />
     <Compile Include="Sigim\TipoCaracteristicaAppService.cs" />
@@ -104,11 +108,11 @@
     <Compile Include="Sigim\InteresseBairroAppService.cs" />
     <Compile Include="Sigim\CSTAppService.cs" />
     <Compile Include="Sigim\LogOperacaoAppService.cs" />
-    <Compile Include="Sigim\UnidadeMedidaAppService.cs" />
     <Compile Include="Sigim\MaterialAppService.cs" />
     <Compile Include="Sigim\NaturezaOperacaoAppService.cs" />
     <Compile Include="Sigim\SerieNFAppService.cs" />
     <Compile Include="Sigim\TipoCompraAppService.cs" />
+    <Compile Include="Sigim\UnidadeMedidaAppService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GIR.Sigim.Application\GIR.Sigim.Application.csproj">

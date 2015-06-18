@@ -34,18 +34,56 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public string MotivoCancela { get; set; }
         public int TipoContrato { get; set; }
 
+
+        //************************************************************************************************
+        ////(SELECT ISNULL(SUM(AUX.valor), 0) FROM Contrato.contratoRetificacaoItemMedicao AUX
+        //// INNER JOIN Contrato.ContratoRetificacaoItem			AUX2	ON AUX2.codigo = MED.contratoRetificacaoItem	
+        //// INNER JOIN Contrato.ContratoRetificacaoItemCronograma	AUX3	ON AUX3.codigo = MED.contratoRetificacaoItemCronograma
+        //// WHERE (AUX.sequencialItem = AUX2.sequencial) AND (AUX.sequencialCronograma = AUX3.sequencial) 
+        //// AND (AUX.Contrato = MED.contrato) AND (AUX.situacao IN (0,1))) AS valorTotalMedido,
+
+        //public decimal ValorTotalMedido
+        //{
+        //    get
+        //    {
+        //        return ListaContratoRetificacaoItemMedicao
+        //            .Where(l => l.Situacao == SituacaoMedicao.AguardandoAprovacao || l.Situacao == SituacaoMedicao.AguardandoLiberacao)
+        //            .Where(l => ListaContratoRetificacaoItem.Any(c => c.Sequencial == l.SequencialItem))
+        //            .Where(l => ListaContratoRetificacaoItemMedicao.Any(c => c.ContratoRetificacaoItemCronograma.Sequencial == l.SequencialCronograma))
+        //            .Sum(l => l.Valor);
+        //    }
+        //}
+
+        public decimal ObterValorTotalMedido(int? sequencialItem, int? sequencialCronograma) {
+            var valorTotalMedido = (from med in ListaContratoRetificacaoItemMedicao
+                     join item in ListaContratoRetificacaoItem on med.SequencialItem equals item.Sequencial
+                     join cron in ListaContratoRetificacaoItemCronograma on med.SequencialCronograma equals cron.Sequencial
+                     where (med.Situacao == SituacaoMedicao.AguardandoAprovacao
+                        || med.Situacao == SituacaoMedicao.AguardandoLiberacao)
+                        && item.Sequencial == sequencialItem
+                        && cron.Sequencial == sequencialCronograma
+                     select med.Valor).Sum();
+
+            return valorTotalMedido;
+        }
+        //***************************************************************************************************
+
         public ICollection<ContratoRetificacao> ListaContratoRetificacao { get; set; }
-        //public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
-        //public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
-
-
+        public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
+        public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
+        public ICollection<ContratoRetificacaoItemCronograma> ListaContratoRetificacaoItemCronograma { get; set; }
+        public ICollection<ContratoRetificacaoItemImposto> ListaContratoRetificacaoItemImposto { get; set; }
+        public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
 
         public Contrato()
         {
             this.Situacao = SituacaoContrato.Minuta;
             this.ListaContratoRetificacao = new HashSet<ContratoRetificacao>();
-            //this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>(); 
-            //this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
+            this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>(); 
+            this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
+            this.ListaContratoRetificacaoItemCronograma = new HashSet<ContratoRetificacaoItemCronograma>();
+            this.ListaContratoRetificacaoItemImposto = new HashSet<ContratoRetificacaoItemImposto>();
+            this.ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisao>();
         }
 
     }

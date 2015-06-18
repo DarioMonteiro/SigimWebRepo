@@ -10,7 +10,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
     public class ContratoRetificacaoItemCronogramaDTO : BaseDTO
     {
         public int ContratoId { get; set; }
-        public ContratoDTO Contrato { get; set; }
+        //public ContratoDTO Contrato { get; set; }
         public int ContratoRetificacaoId { get; set; }
         public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
         public int ContratoRetificacaoItemId { get; set; }
@@ -22,6 +22,5 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public decimal Quantidade { get; set; }
         public decimal PercentualExecucao { get; set; }
         public decimal Valor { get; set; }
-
     }
 }

@@ -44,6 +44,25 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         }
 
         [HttpPost]
+        public ActionResult ListarAtivosPeloCentroCustoEDescricao(string codigoCentroCusto, string descricao)
+        {
+            var model = materialAppService.ListarAtivosPeloCentroCustoEDescricao(codigoCentroCusto, descricao);
+            return Json(model);
+        }
+
+        [HttpPost]
+        public ActionResult ObterInterfaceOrcamento(int? materialId, string codigoCentroCusto, string codigoClasse)
+        {
+            InterfaceOrcamentoViewModel model = new InterfaceOrcamentoViewModel();
+            bool possuiInterfaceOrcamento;
+            model.ListaItens = materialAppService.ListarOrcamentoComposicaoItem(materialId, codigoCentroCusto, codigoClasse, out possuiInterfaceOrcamento);
+            model.ExibirTelaInterfaceOrcamento = possuiInterfaceOrcamento;
+            model.ErrorMessages = messageQueue.GetAll().Where(l => l.Type == TypeMessage.Error).ToList();
+            messageQueue.Clear();
+            return Json(model);
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Lista(MaterialListaViewModel model)
         {

@@ -52,6 +52,7 @@
     <Compile Include="Configuration\Contrato\ContratoRetificacaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemCronogramaConfiguration.cs" />
+    <Compile Include="Configuration\Contrato\ContratoRetificacaoItemImpostoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemMedicaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoProvisaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\LicitacaoConfiguration.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Configuration\Financeiro\ClasseConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CaixaConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\ImpostoFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\MotivoCancelamentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ParametrosFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ParametrosUsuarioFinanceiroConfiguration.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Configuration\Sigim\ClienteFornecedorConfiguration.cs" />
     <Compile Include="Configuration\Sigim\CodigoContribuicaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ComposicaoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\FormaRecebimentoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\TipoAreaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\TipoCaracteristicaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\TipoEspecificacaoConfiguration.cs" />
@@ -135,11 +138,13 @@
     <Compile Include="Configuration\OrdemCompra\ParametrosUsuarioConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
+    <Compile Include="Repository\Contrato\ContratoRetificacaoItemImpostoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
+    <Compile Include="Repository\Financeiro\ImpostoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoRateioRepository.cs" />
     <Compile Include="Repository\Financeiro\CaixaRepository.cs" />
     <Compile Include="Repository\Financeiro\MotivoCancelamentoRepository.cs" />
@@ -166,6 +171,8 @@
     <Compile Include="Repository\Sigim\AssuntoContatoRepository.cs" />
     <Compile Include="Repository\Sigim\BancoLayoutRepository.cs" />
     <Compile Include="Repository\Sigim\CodigoContribuicaoRepository.cs" />
+    <Compile Include="Repository\Sigim\BancoRepository.cs" />
+    <Compile Include="Repository\Sigim\FormaRecebimentoRepository.cs" />
     <Compile Include="Repository\Sigim\TratamentoRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCaracteristicaRepository.cs" />
     <Compile Include="Repository\Sigim\TipoEspecificacaoRepository.cs" />
@@ -182,11 +189,11 @@
     <Compile Include="Repository\Sigim\InteresseBairroRepository.cs" />
     <Compile Include="Repository\Sigim\CSTRepository.cs" />
     <Compile Include="Repository\Sigim\LogOperacaoRepository.cs" />
-    <Compile Include="Repository\Sigim\UnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sigim\MaterialRepository.cs" />
     <Compile Include="Repository\Sigim\NaturezaOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\SerieNFRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCompraRepository.cs" />
+    <Compile Include="Repository\Sigim\UnidadeMedidaRepository.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup />

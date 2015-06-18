@@ -39,20 +39,32 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnName("pai");
 
             HasOptional(l => l.ClassePai)
-                .WithMany(l => l.ListaFilhos)
-                .HasForeignKey(l => l.CodigoPai);
+                .WithMany(c => c.ListaFilhos)
+                .HasForeignKey(c => c.CodigoPai);
 
             HasMany(l => l.ListaPreRequisicaoMaterialItem)
-                .WithRequired(l => l.Classe);
+                .WithRequired(c => c.Classe)
+                .HasForeignKey(c => c.CodigoClasse);
 
             HasMany(l => l.ListaRequisicaoMaterialItem)
-                .WithRequired(l => l.Classe);
+                .WithRequired(c => c.Classe)
+                .HasForeignKey(c => c.CodigoClasse);
 
             HasMany(l => l.ListaOrcamentoComposicao)
-                .WithRequired(l => l.Classe);
+                .WithRequired(c => c.Classe)
+                .HasForeignKey(c => c.codigoClasse);
 
             HasMany(l => l.ListaOrdemCompraItem)
-                .WithRequired(l => l.Classe);
+                .WithRequired(c => c.Classe)
+                .HasForeignKey(c => c.CodigoClasse);
+
+            HasMany(l => l.ListaContratoRetificacaoItem)
+                .WithRequired(c => c.Classe)
+                .HasForeignKey(c => c.CodigoClasse);
+
+            HasMany(l => l.ListaOrcamentoInsumoRequisitado)
+                .WithRequired(c => c.Classe)
+                .HasForeignKey(c => c.CodigoClasse);
         }
     }
 }

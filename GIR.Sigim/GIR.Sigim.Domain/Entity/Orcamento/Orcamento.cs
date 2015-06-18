@@ -14,13 +14,8 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
         public int? Sequencial { get; set; }
         public string Descricao { get; set; }
         public Nullable<DateTime> Data { get; set; }
-        //[Obsolete("Esta propriedade será removida em uma versão futura. Caso NÃO esteja codificando em um repositório, utilize a propriedade \"Ativo\"")]
+        //TODO: Alterar o campo situação no BD para int e criar um enum para representar a situação.
         public string Situacao { get; set; }
-        //public bool Ativo
-        //{
-        //    get { return Situacao == "A"; }
-        //    set { Situacao = value ? "A" : "I"; }
-        //}
         public bool? EhControlado { get; set; }
         public ICollection<OrcamentoComposicao> ListaOrcamentoComposicao { get; set; }
 

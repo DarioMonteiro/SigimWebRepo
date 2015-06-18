@@ -56,7 +56,8 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasColumnOrder(9);
 
             HasMany(l => l.ListaItens)
-                .WithRequired(l => l.Cotacao);
+                .WithRequired(c => c.Cotacao)
+                .HasForeignKey(c => c.CotacaoId);
         }
     }
 }

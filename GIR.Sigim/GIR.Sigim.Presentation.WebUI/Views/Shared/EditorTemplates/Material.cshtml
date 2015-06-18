@@ -23,16 +23,61 @@
     </section>
 </section>
 
+<div class="modal fade" id="@Html.IdFor(m => m.Id)_ModalPanel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Insumos controlados
+                </h4>
+            </div>
+            <div id="@Html.IdFor(m => m.Id)_ModalBody" class="modal-body no-padding">
+                <div class="table-responsive" style="max-height: 350px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                    <table id="@Html.IdFor(m => m.Id)_tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                        <thead>
+                            <tr role="row">
+                                <th>Composição</th>
+                                <th>Classe</th>
+                                <th>Material</th>
+                                <th class="text-right">Qtd. orçada</th>
+                                <th class="text-right">Qtd. requisitada</th>
+                                <th class="text-right">Qtd. saldo</th>
+                                <th class="text-right">Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+				<button type="button" id="btnAdicionarInterfaceOrcamentoItem" class="btn btn-primary">
+					Ok
+				</button>
+			</div>
+        </div>
+    </div>
+</div>
+@{
+    bool? insumoControlado = ViewBag.insumoControlado as bool? ?? false;
+}
 <script type="text/javascript">
+    var codigoCentroCusto_@Html.IdFor(m => m.Id);
+    var codigoClasse_@Html.IdFor(m => m.Id);
+    var itemInsumoSelecionado = false;
+
     $(document).ready(function () {
         $("#@Html.IdFor(m => m.Descricao)").autocomplete({
             source: function (request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("ListaPelaDescricao", "Material", new { area = "" })',
+                    url: '@Url.Action("ListarAtivosPeloCentroCustoEDescricao", "Material", new { area = "" })',
                     cache: false,
                     dataType: "json",
                     data: {
+                        codigoCentroCusto: codigoCentroCusto_@Html.IdFor(m => m.Id),
                         descricao: request.term
                     },
                     success: function (data) {
@@ -51,6 +96,11 @@
             select: function (event, ui) {
                 $('#@Html.IdFor(m => m.Id)').val(ui.item.id);
                 $('#@Html.IdFor(m => m.SiglaUnidadeMedida)').val(ui.item.unidade);
+
+                @if (insumoControlado.Value) {
+                    @:itemInsumoSelecionado = false;
+                    @:ObterInterfaceOrcamento_@(Html.IdFor(m => m.Id))();
+                }
             }
         }).data("ui-autocomplete")._renderItem = function (ul, item) {
             return $("<li>")
@@ -58,9 +108,45 @@
                 .appendTo(ul);
         };
 
+        $(document).on("click", "#btnAdicionarInterfaceOrcamentoItem", function () {
+            $('td[class=quantidadeInsumo] input[type=text]').each(function () {
+                if (parseFloat($(this).val().replace(".", "").replace(",", ".")) > 0) {
+                    itemInsumoSelecionado = true;
+                    $('#@Html.IdFor(m => m.Id)_ModalPanel').modal('hide');
+
+                    $.event.trigger({
+                        type: "interfaceOrcamentoSelecionado",
+                        composicaoId: $(this).data('composicao'),
+                        materialId: $(this).data('material'),
+                        quantidade: $(this).val(),
+                        codigoClasse: $(this).data('codigo-classe'),
+                        descricaoClasse: $(this).data('descricao-classe')
+                    });
+
+                    return false;
+                }
+            });
+
+            if (!itemInsumoSelecionado)
+                smartAlert("Erro", "Selecione um insumo para requisitar.", "error");
+        });
+
+        $(document).on("hide.bs.modal", "#@Html.IdFor(m => m.Id)_ModalPanel", function () {
+            if (!itemInsumoSelecionado) {
+                $.event.trigger({
+                    type: "interfaceOrcamentoSelecionado",
+                    composicaoId: null,
+                    materialId: null,
+                    quantidade: null,
+                    codigoClasse: null,
+                    descricaoClasse: null
+                });
+            }
+        });
+
         @{
             bool? centroCustoRequerido = ViewBag.centroCustoRequerido as bool? ?? false;
-            string linkModal = "#" + Html.IdFor(m => m.Id) + "_ModalPanel";
+            string linkModal = "#";
             string linkNotificarObrigatoriedadeCentroCusto = "javascript:notificarObrigatoriedadeCentroCusto();";
             string href = linkModal;
             if (centroCustoRequerido.Value) {
@@ -69,6 +155,8 @@
         }
 
         $(document).on("centroCustoValidado",            function (e) {
+                codigoCentroCusto_@Html.IdFor(m => m.Id) = e.codigo;
+
                 @if (centroCustoRequerido.Value) {
                     @:if (e.isValid) {
                     @:  if (e.codigo != '')
@@ -83,8 +171,58 @@
                     @:  limpaMaterialForm_@(Html.IdFor(m => m.Id))();
                     @:}
                 }
+            }        );        $(document).on("classeValidada",            function (e) {
+                codigoClasse_@Html.IdFor(m => m.Id) = e.isValid ? e.codigo : '';
             }        );        @if (centroCustoRequerido.Value) {            @:validaCentroCusto();        }
     });
+
+    function fillTableInterfaceOrcamentoItem_@(Html.IdFor(m => m.Id))(listaInterfaceOrcamentoItem) {
+        $("#@Html.IdFor(m => m.Id)_tableItens tbody").empty();
+        for (var i = 0; i < listaInterfaceOrcamentoItem.length; i++) {
+            var row = $('<tr />')
+            $("#@Html.IdFor(m => m.Id)_tableItens tbody").append(row);
+
+            row.append($('<td class="text-nowrap">' + listaInterfaceOrcamentoItem[i].Composicao.Descricao + '</td>'));
+            row.append($('<td class="text-nowrap">' + listaInterfaceOrcamentoItem[i].Classe.Codigo + ' - ' + listaInterfaceOrcamentoItem[i].Classe.Descricao + '</td>'));
+            row.append($('<td class="text-nowrap">' + listaInterfaceOrcamentoItem[i].Material.Descricao + '</td>'));
+            row.append($('<td class="text-nowrap text-right">' + roundDecimal(floatToString(listaInterfaceOrcamentoItem[i].QuantidadeOrcada), 5) + '</td>'));
+            row.append($('<td class="text-nowrap text-right">' + roundDecimal(floatToString(listaInterfaceOrcamentoItem[i].QuantidadeRequisitada), 4) + '</td>'));
+            var saldo = roundDecimal(floatToString(listaInterfaceOrcamentoItem[i].QuantidadeOrcada - listaInterfaceOrcamentoItem[i].QuantidadeRequisitada), 4);
+            row.append($('<td class="text-nowrap text-right">' + saldo + '</td>'));
+            row.append($('<td class="quantidadeInsumo"><input type="text" class="text-right decimal-4-casas" style="width:100px;" value="0,0000" data-saldo="' + saldo + '" data-material="' + listaInterfaceOrcamentoItem[i].Material.Id + '" data-composicao="' + listaInterfaceOrcamentoItem[i].Composicao.Id + '" data-codigo-classe="' + listaInterfaceOrcamentoItem[i].Classe.Codigo + '" data-descricao-classe="' + listaInterfaceOrcamentoItem[i].Classe.Descricao + '"></td>'));
+        }
+    }
+
+    function ObterInterfaceOrcamento_@(Html.IdFor(m => m.Id))() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ObterInterfaceOrcamento", "Material", new { area = "" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                materialId: $("#@Html.IdFor(m => m.Id)").val(),
+                codigoCentroCusto: codigoCentroCusto_@Html.IdFor(m => m.Id),
+                codigoClasse: codigoClasse_@Html.IdFor(m => m.Id)
+            })
+        })
+        .success(function (result) {
+            var interfaceOrcamento = result;
+            if (interfaceOrcamento.ErrorMessages.length !== 0) {
+                for (var i = 0; i < interfaceOrcamento.ErrorMessages.length; i++) {
+                    smartAlert("Erro", interfaceOrcamento.ErrorMessages[i].Text, "error");
+                    limpaMaterialForm_@(Html.IdFor(m => m.Id))();
+                }
+            }
+            else {
+                if (interfaceOrcamento.ExibirTelaInterfaceOrcamento) {
+                    fillTableInterfaceOrcamentoItem_@(Html.IdFor(m => m.Id))(interfaceOrcamento.ListaItens);
+                    initializeFieldBehaviour();
+                    $('#@Html.IdFor(m => m.Id)_ModalPanel').modal('show');
+                }
+            }
+        });
+    }
 
     function limpaMaterialForm_@(Html.IdFor(m => m.Id))() {
         $("#@Html.IdFor(m => m.Id)").val('');
@@ -102,5 +240,17 @@
         $("#@Html.IdFor(m => m.Descricao)").attr("readonly", false);
         $("#@Html.IdFor(m => m.Descricao)").removeClass("readonly");
         $("#BtnShowModalPanel_@Html.IdFor(m => m.Id)").attr('href', '@linkModal');
+    }
+
+    function initializeFieldBehaviour() {
+        initializeDecimalBehaviour();
+        $('td[class=quantidadeInsumo] input[type=text]').each(function () {
+            $(this).on("focusout", function () {
+                if (parseFloat($(this).val()) > parseFloat($(this).data('saldo'))) {
+                    smartAlert("Erro", "A quantidade informada está maior que o saldo disponível para ser requisitado.", "error");
+                    $(this).val(roundDecimal(0, 4));
+                }
+            });
+        });
     }
 </script>

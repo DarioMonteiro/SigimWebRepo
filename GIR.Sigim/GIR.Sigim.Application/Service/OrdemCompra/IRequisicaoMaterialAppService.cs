@@ -26,5 +26,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         bool EhPermitidoEditarItem(RequisicaoMaterialDTO dto);
         bool EhPermitidoAprovarRequisicao(RequisicaoMaterialDTO dto);
         bool EhPermitidoCancelarAprovacao(RequisicaoMaterialDTO dto);
+        bool EhPermitidoEditarCentroCusto(RequisicaoMaterialDTO dto);
     }
 }

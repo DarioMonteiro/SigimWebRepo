@@ -144,6 +144,9 @@
   <data name="RetificacaoNaoExiste" xml:space="preserve">
     <value>O contrato não possui retificação.</value>
   </data>
+  <data name="SelecioneUmaMedicao" xml:space="preserve">
+    <value>Selecione uma medição.</value>
+  </data>
   <data name="ValorMaiorQue" xml:space="preserve">
     <value>O valor do campo "{0}" está maior que o valor do campo "{1}".  </value>
   </data>

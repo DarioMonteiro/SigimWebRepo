@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using GIR.Sigim.Application.DTO.Financeiro;
+using GIR.Sigim.Application.DTO.Orcamento;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros.OrdemCompras;
@@ -24,6 +25,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
 
         public MaterialDTO Material { get; set; }
 
+        //public int? InsumoId { get; set; }
+
+        //public int? ComposicaoId { get; set; }
+
+        public OrcamentoInsumoRequisitadoDTO OrcamentoInsumoRequisitado { get; set; }
+
         [Display(Name = "Sequencial")]
         public string Sequencial { get; set; }
 
@@ -34,6 +41,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         [Display(Name = "Quantidade")]
         public decimal Quantidade { get; set; }
 
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Qtd. aprovada")]
         public decimal QuantidadeAprovada { get; set; }
 
@@ -57,6 +65,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public bool PodeEditarItem { get; set; }
         public bool PodeAprovarRequisicao { get; set; }
         public bool PodeCancelarAprovacao { get; set; }
+        public bool PodeEditarCentroCusto { get; set; }
 
         public RequisicaoMaterialCadastroViewModel()
         {

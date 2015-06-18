@@ -32,6 +32,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 
             HasMany(l => l.ListaMaterial)
                 .WithOptional(l => l.UnidadeMedida);
+
+            HasMany(l => l.ListaServico)
+                .WithOptional(l => l.UnidadeMedida);
         }
     }
 }

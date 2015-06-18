@@ -13,6 +13,7 @@ using GIR.Sigim.Application.Filtros.OrdemCompras;
 using GIR.Sigim.Application.Reports.OrdemCompra;
 using GIR.Sigim.Application.Service.Admin;
 using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
 using GIR.Sigim.Domain.Repository.Sigim;
@@ -81,7 +82,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public RequisicaoMaterialDTO ObterPeloId(int? id)
         {
-            return ObterPeloIdEUsuario(id, UsuarioLogado.Id, l => l.ListaItens.Select(s => s.ListaCotacaoItem), l => l.ListaItens.Select(s => s.ListaOrdemCompraItem), l => l.ListaItens.Select(s => s.Material.MaterialClasseInsumo)).To<RequisicaoMaterialDTO>();
+            return ObterPeloIdEUsuario(id,
+                UsuarioLogado.Id,
+                l => l.ListaItens.Select(s => s.ListaCotacaoItem),
+                l => l.ListaItens.Select(s => s.ListaOrdemCompraItem),
+                l => l.ListaItens.Select(s => s.Material.MaterialClasseInsumo),
+                l => l.ListaItens.Select(s => s.ListaOrcamentoInsumoRequisitado.Select(o => o.Composicao)),
+                l => l.ListaItens.Select(s => s.ListaOrcamentoInsumoRequisitado.Select(o => o.Material))).To<RequisicaoMaterialDTO>();
         }
 
         public bool Salvar(RequisicaoMaterialDTO dto)
@@ -347,6 +354,14 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return true;
         }
 
+        public bool EhPermitidoEditarCentroCusto(RequisicaoMaterialDTO dto)
+        {
+            if (dto.Id.HasValue)
+                return false;
+
+            return true;
+        }
+
         #endregion
 
         #region Métodos Privados
@@ -417,14 +432,19 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 if (item.Situacao == SituacaoRequisicaoMaterialItem.Requisitado)
                 {
                     var itemDTO = dto.ListaItens.Where(l => l.Id == item.Id).SingleOrDefault();
+
+                    if (itemDTO.OrcamentoInsumoRequisitado == null)
+                    {
+                        item.Material = null;
+                        item.MaterialId = itemDTO.Material.Id;
+                        item.UnidadeMedida = itemDTO.Material.SiglaUnidadeMedida.Trim();
+                        item.Quantidade = itemDTO.Quantidade;
+                        item.Classe = null;
+                        item.CodigoClasse = itemDTO.Classe.Codigo;
+                    }
+
                     item.Sequencial = itemDTO.Sequencial;
-                    item.Material = null;
-                    item.MaterialId = itemDTO.Material.Id;
-                    item.UnidadeMedida = itemDTO.Material.SiglaUnidadeMedida.Trim();
                     item.Complemento = itemDTO.Complemento.Trim();
-                    item.Classe = null;
-                    item.CodigoClasse = itemDTO.Classe.Codigo;
-                    item.Quantidade = itemDTO.Quantidade;
                     item.QuantidadeAprovada = itemDTO.QuantidadeAprovada;
                     item.DataMaxima = itemDTO.DataMaxima;
                     item.DataMinima = itemDTO.DataMinima;
@@ -441,6 +461,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 var itemLista = item.To<RequisicaoMaterialItem>();
                 itemLista.RequisicaoMaterial = requisicaoMaterial;
+                if (item.OrcamentoInsumoRequisitado != null)
+                {
+                    var orcamentoInsumoRequisitado = new OrcamentoInsumoRequisitado();
+                    orcamentoInsumoRequisitado.CodigoCentroCusto = dto.CentroCusto.Codigo;
+                    orcamentoInsumoRequisitado.CodigoClasse = item.Classe.Codigo;
+                    orcamentoInsumoRequisitado.ComposicaoId = item.OrcamentoInsumoRequisitado.Composicao.Id;
+                    orcamentoInsumoRequisitado.MaterialId = item.OrcamentoInsumoRequisitado.Material.Id;
+                    orcamentoInsumoRequisitado.Quantidade = item.Quantidade;
+                    orcamentoInsumoRequisitado.RequisicaoMaterialItem = itemLista;
+                    itemLista.ListaOrcamentoInsumoRequisitado.Add(orcamentoInsumoRequisitado);
+                }
                 requisicaoMaterial.ListaItens.Add(itemLista);
             }
         }

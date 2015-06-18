@@ -49,6 +49,7 @@
     <Compile Include="Entity\Contrato\ContratoRetificacao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItem.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemCronograma.cs" />
+    <Compile Include="Entity\Contrato\ContratoRetificacaoItemImposto.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />
@@ -64,9 +65,13 @@
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
     <Compile Include="Entity\Financeiro\Caixa.cs" />
+    <Compile Include="Entity\Financeiro\FatoGeradorImpostoFinanceiro.cs" />
+    <Compile Include="Entity\Financeiro\FimDeSemanaImpostoFinanceiro.cs" />
+    <Compile Include="Entity\Financeiro\ImpostoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Entity\Financeiro\ParametrosFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\ParametrosUsuarioFinanceiro.cs" />
+    <Compile Include="Entity\Financeiro\PeriodicidadeImpostoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\SituacaoTituloPagar.cs" />
     <Compile Include="Entity\Financeiro\TipoCompromisso.cs" />
     <Compile Include="Entity\Financeiro\TipoDocumento.cs" />
@@ -111,6 +116,8 @@
     <Compile Include="Entity\Sigim\ClienteFornecedor.cs" />
     <Compile Include="Entity\Sigim\CodigoContribuicao.cs" />
     <Compile Include="Entity\Sigim\Composicao.cs" />
+    <Compile Include="Entity\Sigim\FormaRecebimento.cs" />
+    <Compile Include="Entity\Sigim\TipoFormaRecebimento.cs" />
     <Compile Include="Entity\Sigim\TipoArea.cs" />
     <Compile Include="Entity\Sigim\TipoCaracteristica.cs" />
     <Compile Include="Entity\Sigim\TipoEspecificacao.cs" />
@@ -148,10 +155,12 @@
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Contrato\IContratoRepository.cs" />
+    <Compile Include="Repository\Contrato\IContratoRetificacaoItemImpostoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
+    <Compile Include="Repository\Financeiro\IImpostoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\ICaixaRepository.cs" />
     <Compile Include="Repository\Financeiro\IMotivoCancelamentoRepository.cs" />
     <Compile Include="Repository\Financeiro\ICentroCustoEmpresaRepository.cs" />
@@ -171,6 +180,8 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\IBancoRepository.cs" />
+    <Compile Include="Repository\Sigim\IFormaRecebimentoRepository.cs" />
     <Compile Include="Repository\Sac\IParametrosEmailSacRepository.cs" />
     <Compile Include="Repository\Sac\ISetorRepository.cs" />
     <Compile Include="Repository\Sigim\ILogOperacaoRepository.cs" />
@@ -220,13 +231,13 @@
     <Compile Include="Specification\OrdemCompra\PreRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrSpecification.cs" />
     <Compile Include="Specification\ParameterRebinder.cs" />
+    <Compile Include="Specification\Sigim\MaterialSpecification.cs" />
     <Compile Include="Specification\Specification.cs" />
     <Compile Include="Specification\TrueSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\Sigim\" />
     <Folder Include="Specification\Financeiro\" />
-    <Folder Include="Specification\Sigim\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\ErrorMessages.resx">

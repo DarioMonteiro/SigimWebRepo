@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 {
@@ -23,16 +25,16 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("centroCusto")
                 .HasColumnOrder(2);
 
-            HasRequired<Domain.Entity.Financeiro.CentroCusto>(l => l.CentroCusto)
-                .WithMany(l => l.ListaLicitacao)
+            HasRequired<CentroCusto>(l => l.CentroCusto)
+                .WithMany(c => c.ListaLicitacao)
                 .HasForeignKey(l => l.CodigoCentroCusto);
 
             Property(l => l.LicitacaoCronogramaId)
                 .HasColumnName("licitacaoCronograma")
                 .HasColumnOrder(3);
 
-            HasRequired<Domain.Entity.Contrato.LicitacaoCronograma>(l => l.LicitacaoCronograma)
-                .WithMany(l => l.ListaLicitacao)
+            HasRequired<LicitacaoCronograma>(l => l.LicitacaoCronograma)
+                .WithMany(c => c.ListaLicitacao)
                 .HasForeignKey(l => l.LicitacaoCronogramaId);
 
             Property(l => l.DataLicitacao)
@@ -55,8 +57,8 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("clienteFornecedor")
                 .HasColumnOrder(7);
 
-            HasOptional<Domain.Entity.Sigim.ClienteFornecedor>(l => l.ClienteFornecedor)
-                .WithMany(l => l.ListaLicitacao)
+            HasOptional<ClienteFornecedor>(l => l.ClienteFornecedor)
+                .WithMany(c => c.ListaLicitacao)
                 .HasForeignKey(l => l.ClienteFornecedorId);
 
             Property(l => l.DataLimiteEmail)
@@ -91,6 +93,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("motivoCancela")
                 .HasMaxLength(255) 
                 .HasColumnOrder(14);
+
+            HasMany<Domain.Entity.Contrato.Contrato>(l => l.ListaContrato)
+                .WithOptional(c => c.Licitacao)
+                .HasForeignKey(c => c.LicitacaoId);
+
+
         }
 
 

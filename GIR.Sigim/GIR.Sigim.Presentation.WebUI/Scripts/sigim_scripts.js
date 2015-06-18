@@ -107,6 +107,10 @@ jQuery.extend(jQuery.validator.methods, {
 });
 
 $(document).ready(function () {
+    initializeDecimalBehaviour();
+});
+
+function initializeDecimalBehaviour() {
     $("input.decimal-2-casas").on("focusout", function () {
         $(this).val(roundDecimal($(this).val(), 2));
     });
@@ -117,14 +121,12 @@ $(document).ready(function () {
 
     $("input.decimal-5-casas").on("focusout", function () {
         $(this).val(roundDecimal($(this).val(), 5));
-});
+    });
 
     $("input.decimal-7-casas").on("focusout", function () {
         $(this).val(roundDecimal($(this).val(), 7));
     });
-
-
-});
+}
 
 function roundDecimal(value, precision) {
     var originalValue = 0 + value;
@@ -298,7 +300,8 @@ function dateDiffInDays(start, end) {
     return days;
 }
 
-function isValidDate(format, value) {
+function isValidDate(format, value)
+{
     var isValid = true;
 
     try {
@@ -309,4 +312,7 @@ function isValidDate(format, value) {
     }
 
     return isValid;
+}
+function goToTop() {
+    $('html, body').animate({ scrollTop: 0 }, 'slow');
 }

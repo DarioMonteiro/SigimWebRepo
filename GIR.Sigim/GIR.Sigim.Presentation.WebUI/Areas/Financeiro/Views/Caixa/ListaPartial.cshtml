@@ -58,7 +58,7 @@
             default:
                 break;
         }
-                        }
+                        }                        
                         <th class="sorting @idSortingSuffix text-center" data-order="id" style="width:60px;">Código</th>
                         <th class="sorting @descricaoSortingSuffix text-center" data-order="descricao" style="min-width:100px;">Descrição</th> 
                         <th class="sorting @situacaoSortingSuffix text-center" data-order="descricao" style="min-width:100px;">Situação</th>
@@ -70,22 +70,12 @@
                     @foreach (var item in Lista)
                        
                     {
-                        <tr>
-                            <td class="text-center">@Html.ActionLink(item.Id.ToString(), "Index", new { id = item.Id })</td>
+                        <tr>                                                
+                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString()</a></td>                          
                             <td class="text-center">@item.Descricao</td>     
                             <td class="text-center">@item.Situacao</td>                      
                             <td class="text-center">@item.CentroContabil</td>
-                            @{
-                                if (item.CentroCusto == null)
-                                {
-                                    <td class="text-center"></td>
-                                }
-                                else
-                                {
-                                    <td class="text-center">@item.CentroCusto.CentroCustoDescricao</td>
-                                }
-                             }
-
+                            <td class="text-center">@item.CentroCustoDescricao</td>
                         </tr>
                     }
                 </tbody>

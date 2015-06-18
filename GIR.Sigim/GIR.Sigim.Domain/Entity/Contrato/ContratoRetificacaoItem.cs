@@ -34,12 +34,14 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
         public ICollection<ContratoRetificacaoItemCronograma> ListaContratoRetificacaoItemCronograma { get; set; }
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
+        public ICollection<ContratoRetificacaoItemImposto> ListaContratoRetificacaoItemImposto { get; set; }
 
         public ContratoRetificacaoItem()
         {
             ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisao>();
             ListaContratoRetificacaoItemCronograma = new HashSet<ContratoRetificacaoItemCronograma>();
             ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
+            ListaContratoRetificacaoItemImposto = new HashSet<ContratoRetificacaoItemImposto>();
         }
     }
 }

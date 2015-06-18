@@ -25,6 +25,5 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public TituloReceber TituloReceber { get; set; }
         public decimal Valor { get; set; }
         public decimal Quantidade { get; set; }
-
     }
 }

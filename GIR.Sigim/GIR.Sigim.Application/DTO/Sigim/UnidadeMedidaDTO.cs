@@ -10,8 +10,14 @@ namespace GIR.Sigim.Application.DTO.Sigim
 {
     public class UnidadeMedidaDTO : BaseDTO
     {
-        //[Display(Name = "Unidade")]
+        [Required]
+        [StringLength(6, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        [Display(Name = "Sigla")]
         public string Sigla { get; set; }
-        public string Descricao { get; set; }
+
+        [Required]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        [Display(Name = "Descrição")]
+        public string Descricao { get; set; }       
     }
 }
