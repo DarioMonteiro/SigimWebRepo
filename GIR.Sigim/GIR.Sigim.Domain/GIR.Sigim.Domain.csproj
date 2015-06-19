@@ -113,6 +113,7 @@
     <Compile Include="Entity\Sigim\ClienteFornecedor.cs" />
     <Compile Include="Entity\Sigim\CodigoContribuicao.cs" />
     <Compile Include="Entity\Sigim\Composicao.cs" />
+    <Compile Include="Entity\Sigim\LogAcesso.cs" />
     <Compile Include="Entity\Sigim\FormaRecebimento.cs" />
     <Compile Include="Entity\Sigim\TipoFormaRecebimento.cs" />
     <Compile Include="Entity\Sigim\TipoArea.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\ILogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\IBancoRepository.cs" />
     <Compile Include="Repository\Sigim\IFormaRecebimentoRepository.cs" />
     <Compile Include="Repository\Sigim\ILogOperacaoRepository.cs" />

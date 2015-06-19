@@ -11,20 +11,29 @@ using GIR.Sigim.Domain.Repository.Admin;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using GIR.Sigim.Application.DTO.Admin;
+using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Repository.Sigim;
 
 namespace GIR.Sigim.Application.Service.Admin
 {
     public class UsuarioAppService : BaseAppService, IUsuarioAppService
     {
         private IUsuarioRepository usuarioRepository;
+        private ILogAcessoRepository logAcessoRepository;
 
-        public UsuarioAppService(IUsuarioRepository usuarioRepository, MessageQueue messageQueue)
+        public UsuarioAppService(IUsuarioRepository usuarioRepository,
+            ILogAcessoRepository logAcessoRepository,
+            MessageQueue messageQueue)
             : base(messageQueue)
         {
             if (usuarioRepository == null)
                 throw new ArgumentNullException("usuarioRepository");
 
+            if (logAcessoRepository == null)
+                throw new ArgumentNullException("logAcessoRepository");
+
             this.usuarioRepository = usuarioRepository;
+            this.logAcessoRepository = logAcessoRepository;
         }
 
         private IAuthenticationService authenticationService;
@@ -62,7 +71,7 @@ namespace GIR.Sigim.Application.Service.Admin
                 var dadosUsuario = serializer.Serialize(customPrincipal);
 
                 AuthenticationService.Login(customPrincipal.Nome, permacenerLogado, dadosUsuario, timeout);
-
+                GravarLogAcesso(hostName, login, "IN");
                 return true;
             }
 
@@ -73,6 +82,7 @@ namespace GIR.Sigim.Application.Service.Admin
         public void Logout()
         {
             AuthenticationServiceFactory.Create().Logout();
+            GravarLogAcesso(UsuarioLogado.HostName, UsuarioLogado.Login, "OUT");
         }
 
         public bool ChangePassword(string currentPassword, string newPassword, string confirmPassword)
@@ -171,6 +181,34 @@ namespace GIR.Sigim.Application.Service.Admin
             }
 
             return true;
+        }
+
+        private void GravarLogAcesso(string hostName, string login, string tipo)
+        {
+            try
+            {
+                var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                System.Data.SqlClient.SqlConnectionStringBuilder connectionStringBuilder = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString);
+                
+                LogAcesso log = new LogAcesso()
+                {
+                    Data = DateTime.Now,
+                    HostName = hostName.ToUpper(),
+                    LoginUsuario = login.ToUpper(),
+                    NomeBaseDados = connectionStringBuilder.InitialCatalog.ToUpper(),
+                    Servidor = connectionStringBuilder.DataSource.ToUpper(),
+                    Sistema = "SIGIMWEB",
+                    Tipo = tipo.ToUpper(),
+                    Versao = System.Reflection.Assembly.GetCallingAssembly().GetName().Version.ToString()
+                };
+
+                logAcessoRepository.Inserir(log);
+                logAcessoRepository.UnitOfWork.Commit();
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
         }
     }
 }

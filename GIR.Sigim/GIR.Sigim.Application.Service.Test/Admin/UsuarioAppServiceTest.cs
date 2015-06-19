@@ -12,6 +12,8 @@ using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Data.Repository.Admin;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
+using GIR.Sigim.Infrastructure.Data.Repository.Sigim;
+using GIR.Sigim.Domain.Repository.Sigim;
 
 namespace GIR.Sigim.Application.Service.Test.Admin
 {
@@ -20,6 +22,7 @@ namespace GIR.Sigim.Application.Service.Test.Admin
     {
         private MessageQueue messageQueue;
         private IUsuarioRepository usuarioRepository;
+        private ILogAcessoRepository logAcessoRepository;
         private UnitOfWork unitOfWork;
         private IUsuarioAppService usuarioService;
 
@@ -36,8 +39,9 @@ namespace GIR.Sigim.Application.Service.Test.Admin
 
             unitOfWork = new UnitOfWork();
             usuarioRepository = new UsuarioRepository(unitOfWork);
+            logAcessoRepository = new LogAcessoRepository(unitOfWork);
 
-            usuarioService = new UsuarioAppService(usuarioRepository, messageQueue);
+            usuarioService = new UsuarioAppService(usuarioRepository, logAcessoRepository, messageQueue);
         }
 
         //[TestMethod]

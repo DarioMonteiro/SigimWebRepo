@@ -8,6 +8,7 @@ using GIR.Sigim.Application.Service.OrdemCompra;
 using GIR.Sigim.Domain.Repository.Admin;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
+using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Adapter;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
@@ -16,6 +17,7 @@ using GIR.Sigim.Infrastructure.Data;
 using GIR.Sigim.Infrastructure.Data.Repository.Admin;
 using GIR.Sigim.Infrastructure.Data.Repository.Financeiro;
 using GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra;
+using GIR.Sigim.Infrastructure.Data.Repository.Sigim;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GIR.Sigim.Application.Service.Test.OrdemCompra
@@ -26,6 +28,7 @@ namespace GIR.Sigim.Application.Service.Test.OrdemCompra
         private IParametrosUsuarioRepository parametrosUsuarioRepository;
         private ICentroCustoRepository centroCustoRepository;
         private IUsuarioRepository usuarioRepository;
+        private ILogAcessoRepository logAcessoRepository;
         private IUsuarioAppService usuarioAppService;
         private ICentroCustoAppService centroCustoService;
         private MessageQueue messageQueue;
@@ -42,9 +45,10 @@ namespace GIR.Sigim.Application.Service.Test.OrdemCompra
             var unitOfWork = new UnitOfWork();
             parametrosUsuarioRepository = new ParametrosUsuarioRepository(unitOfWork);
             usuarioRepository = new UsuarioRepository(unitOfWork);
+            logAcessoRepository = new LogAcessoRepository(unitOfWork);
             centroCustoRepository = new CentroCustoRepository(unitOfWork);
             messageQueue = new MessageQueue();
-            usuarioAppService = new UsuarioAppService(usuarioRepository, messageQueue);
+            usuarioAppService = new UsuarioAppService(usuarioRepository, logAcessoRepository, messageQueue);
             centroCustoService = new CentroCustoAppService(centroCustoRepository, usuarioAppService, messageQueue);
         }
 
