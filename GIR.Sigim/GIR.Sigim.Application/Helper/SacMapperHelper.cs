@@ -16,6 +16,12 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ParametrosSac, ParametrosSacDTO>();
             Mapper.CreateMap<ParametrosSacDTO, ParametrosSac>()
                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
+
+            Mapper.CreateMap<Setor, SetorDTO>();
+            Mapper.CreateMap<SetorDTO, Setor>();
+
+            Mapper.CreateMap<ParametrosEmailSac, ParametrosEmailSacDTO>();
+            Mapper.CreateMap<ParametrosEmailSacDTO, ParametrosEmailSac>();
         }
     }
 }

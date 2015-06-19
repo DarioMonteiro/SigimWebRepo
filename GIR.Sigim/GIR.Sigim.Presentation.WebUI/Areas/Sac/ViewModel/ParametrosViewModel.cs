@@ -11,9 +11,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.ViewModel
 {
     public class ParametrosViewModel
     {
-    public ParametrosSacDTO Parametros { get; set; }
-
+    public ParametrosSacDTO ParametrosSac { get; set; }
+    public ParametrosEmailSacDTO ParametrosEmailSac { get; set; }
     public IEnumerable<System.Web.Mvc.SelectListItem> ListaEmpresa { get; set; }
     public HttpPostedFileBase IconeRelatorio { get; set; }
+
+    public string JsonListaEmail { get; set; }
+
     }
 }
