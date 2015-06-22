@@ -114,6 +114,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IBancoLayoutRepository, BancoLayoutRepository>();
             currentContainer.RegisterType<IBloqueioContabilRepository, BloqueioContabilRepository>();
             currentContainer.RegisterType<IClienteFornecedorRepository, ClienteFornecedorRepository>();
+            currentContainer.RegisterType<ILogAcessoRepository, LogAcessoRepository>();
             currentContainer.RegisterType<ILogOperacaoRepository, LogOperacaoRepository>();
             currentContainer.RegisterType<IMaterialRepository, MaterialRepository>();
             currentContainer.RegisterType<ITipoCompraRepository, TipoCompraRepository>();
