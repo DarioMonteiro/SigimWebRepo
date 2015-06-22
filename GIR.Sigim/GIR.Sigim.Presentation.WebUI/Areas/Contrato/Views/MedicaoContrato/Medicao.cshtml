@@ -23,9 +23,10 @@
                     {
                         @Html.AntiForgeryToken()
 
-                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.Codigo)
+                        @Html.HiddenFor(m => m.Contrato.CentroCusto.Codigo)
                         @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacao.RetencaoContratual)
-                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)
+                        @Html.HiddenFor(m => m.Contrato.ContratadoId)
+                        @Html.HiddenFor(m => m.Contrato.TipoContrato)
 
 
                         @Html.HiddenFor(m => m.JsonListaRetificacaoProvisao)
@@ -46,7 +47,7 @@
                         @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)
                         @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)
                         @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)
-                        @Html.HiddenFor(m => m.JsonListaContratoRetificacaoItemMedicao)
+                        //@Html.HiddenFor(m => m.JsonListaContratoRetificacaoItemMedicao)
                         @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Id)
                         
                         <div class="panel-group smart-accordion-default" id="accordion">
@@ -73,15 +74,15 @@
                                                 <section class="col col-6">
                                                     <label class="label">Descrição Contrato</label>
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratoDescricao.Descricao, new { @class="readonly", @readonly = "" })  
+                                                        @Html.TextBoxFor(m => m.Contrato.ContratoDescricao.Descricao, new { @class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section>
                                             </div>
                                             <div class="row">
                                                 <section class="col col-6">
-                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.CentroCustoDescricao, new { @class = "label" })
+                                                    @Html.LabelFor(m => m.Contrato.CentroCusto.CentroCustoDescricao, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.CentroCusto.CentroCustoDescricao, new {@class="readonly", @readonly = "" })  
+                                                        @Html.TextBoxFor(m => m.Contrato.CentroCusto.CentroCustoDescricao, new {@class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section> 
                                                 <section class="col col-6">
@@ -95,23 +96,23 @@
                                                 <section class="col col-6">
                                                     <label class="label">Contratado</label>
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.Nome, new {@class="readonly", @readonly = "" })  
+                                                        @Html.TextBoxFor(m => m.Contrato.Contratado.Nome, new {@class="readonly", @readonly = "" })  
                                                     </label>
                                                 </section>
                                                 <section class="col col-6">
                                                 @{
-                                                    if (Model.ContratoRetificacaoItemMedicao.Contrato.Contratado.TipoPessoa == "J")
+                                                    if (Model.Contrato.Contratado.TipoPessoa == "J")
                                                     {
-                                                        @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaJuridica.Cnpj, new { @class = "label" })
+                                                        @Html.LabelFor(m => m.Contrato.Contratado.PessoaJuridica.Cnpj, new { @class = "label" })
                                                         <label class="input">
-                                                            @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaJuridica.Cnpj , new {@class="readonly", @readonly = "" })  
+                                                            @Html.TextBoxFor(m => m.Contrato.Contratado.PessoaJuridica.Cnpj , new {@class="readonly", @readonly = "" })  
                                                         </label>
                                                     }
                                                     else
                                                     {
-                                                        @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaFisica.Cpf, new { @class = "label" })
+                                                        @Html.LabelFor(m => m.Contrato.Contratado.PessoaFisica.Cpf, new { @class = "label" })
                                                         <label class="input">
-                                                            @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Contrato.Contratado.PessoaFisica.Cpf, new {@class="readonly", @readonly = "" })  
+                                                            @Html.TextBoxFor(m => m.Contrato.Contratado.PessoaFisica.Cpf, new {@class="readonly", @readonly = "" })  
                                                         </label>
                                                     }
                                                 }
@@ -414,6 +415,7 @@
                                                                         <th class="text-right">Valor</th>
                                                                         <th class="text-right">Valor medido</th>
                                                                         <th class="text-right">Valor pendente</th>
+                                                                        <th class="text-right">Pagamento antecipado</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -586,14 +588,7 @@
                             <a data-toggle="modal" id="btnCancelar" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
 
                             @{
-                                //var contratadoId = Model.ContratoRetificacaoItemMedicao.Contrato.ContratadoId;
-                                //var contratoId = Model.ContratoRetificacaoItemMedicao.ContratoId;
-                                //var tipoDocumentoId = Model.ContratoRetificacaoItemMedicao.TipoDocumentoId;
-                                //var numeroDocumento = Model.ContratoRetificacaoItemMedicao.NumeroDocumento;
-                                //var dataEmissao = Model.ContratoRetificacaoItemMedicao.DataEmissao;
-
-                                var url = Url.Action("Imprimir",
-                                                     "MedicaoContrato");
+                                var url = Url.Action("Imprimir","MedicaoContrato");
                             }
                             @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
 
@@ -626,7 +621,7 @@
             var tipoDocumentoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val();
             var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
             var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
-            var contratadoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)").val();
+            var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
             var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
             var retencaoContratual = $("#@Html.IdFor(m => m.RetencaoContratual)").val();
             var valorContratadoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)").val();
@@ -700,17 +695,17 @@
                         success: function (result) {
                             showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)'), result.errorMessage);
                             if (result.ehRecuperou) {
-                                $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(result.listaContratoRetificacaoItemMedicao);
-                                jsonContratoRetificaoItemMedicaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)").val());
+                                @*$('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(JSON.stringify(result.listaContratoRetificacaoItemMedicao));*@
+                                jsonContratoRetificaoItemMedicaoArray = result.listaContratoRetificacaoItemMedicao;
                             }
                             else {
-                                $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(result.listaContratoRetificacaoItemMedicao);
+                                @*$('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val("");*@
                                 jsonContratoRetificaoItemMedicaoArray = null;
                             }
                             isRecuperou = result.ehRecuperou;
                         },
                         error: function (result) {
-                            $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val();
+                            @*$('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val("");*@
                             jsonContratoRetificaoItemMedicaoArray = null;
                         }
                     });
@@ -724,11 +719,11 @@
             var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
             var tipoDocumentoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val();
             var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
-            var contratadoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)").val();
+            var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
             var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
-            if ((multiFornecedorId != "") && (multiFornecedorId > 0)) {
-                contratadoId = multiFornecedorId;
-            }
+            //if ((multiFornecedorId != "") && (multiFornecedorId > 0)) {
+            //    contratadoId = multiFornecedorId;
+            //}
             var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
 
             if (contratoId == "") {
@@ -771,22 +766,20 @@
                             tipoDocumentoId: tipoDocumentoId,
                             numeroDocumento: numeroDocumento,
                             dataEmissao: dataEmissao,
-                            contratadoId: contratadoId
+                            contratadoId: contratadoId,
+                            multiFornecedorId: multiFornecedorId
                         }),
                         success: function (result) {
                             showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)'), result.errorMessage);
                             if (result.ehRecuperou) {
-                                $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(result.listaContratoRetificacaoItemMedicao);
-                                jsonContratoRetificaoItemMedicaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)").val());
+                                jsonContratoRetificaoItemMedicaoArray = result.listaContratoRetificacaoItemMedicao;
                             }
                             else {
-                                $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(result.listaContratoRetificacaoItemMedicao);
                                 jsonContratoRetificaoItemMedicaoArray = null;
                             }
                             isRecuperou = result.ehRecuperou;
                         },
                         error: function (result) {
-                            $('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val();
                             jsonContratoRetificaoItemMedicaoArray = null;
                         }
                 });
@@ -840,6 +833,7 @@
     function recuperaContratoItem() {
         var isRecuperou = false;
         var codigoContratoRetificacaoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)").val(); 
+        var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(); 
         $.ajax({
             type: 'POST',
             url: '@Url.Action("RecuperaContratoRetificacaoItem", "MedicaoContrato", new { Area = "Contrato" })',
@@ -847,34 +841,35 @@
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                codigo: codigoContratoRetificacaoItem
+                contratoId: contratoId,
+                contratoRetificacaoItemId: codigoContratoRetificacaoItem
             }),
             success: function (result) {
                 showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
                 if (result.ehRecuperou) {
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val(result.complementoDescricao);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.descricaoNaturezaItem);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val(result.siglaUnidadeMedida);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val(result.contratoRetificacaoItem.ComplementoDescricao);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.contratoRetificacaoItem.DescricaoNaturezaItem);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val(result.contratoRetificacaoItem.Servico.SiglaUnidadeMedida);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
-                    if (result.valorItem != null) {
-                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.valorItem), 2));
+                    if (result.contratoRetificacaoItem.ValorItem != null) {
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.ValorItem), 2));
                     }
                     $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                     if (result.retencaoItem != null) {
-                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val(roundDecimal(floatToString(result.retencaoItem), 5));
-                        $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(result.retencaoItem), 5));
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));
+                        $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));
                     }
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
-                    if (result.baseRetencaoItem != null) {
-                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val(roundDecimal(floatToString(result.baseRetencaoItem), 5));
+                    if (result.contratoRetificacaoItem.BaseRetencaoItem != null) {
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.BaseRetencaoItem), 5));
                     }
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(result.precoUnitario), 5));
-
-                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(result.listaContratoRetificacaoProvisao);
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(result.contratoRetificacaoItem.PrecoUnitario), 5));
+                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(JSON.stringify(result.listaContratoRetificacaoProvisao));
+                    jsonRetificaoProvisaoArray = result.listaContratoRetificacaoProvisao;
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(result.ehNaturezaItemPorPrecoGlobal);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.sequencialItem);
-                    jsonRetificaoProvisaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)").val());
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(result.ehNaturezaItemPorPrecoUnitario);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.contratoRetificacaoItem.Sequencial);
                     $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
                 }
                 else
@@ -886,10 +881,11 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
                     $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(0);
-                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(result.listaContratoRetificacaoProvisao);
+                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
-                    jsonRetificaoProvisaoArray = null;
+                    jsonRetificaoProvisaoArray = "[]";
                     $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
                 }
                 isRecuperou = result.ehRecuperou;
@@ -903,10 +899,11 @@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(0);
-                $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val();
+                $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val("");
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
-                jsonRetificaoProvisaoArray = null;
+                jsonRetificaoProvisaoArray = "[]";
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
             }
         });
@@ -941,6 +938,7 @@
         row.append($('<th class="text-right">Valor</th>'));
         row.append($('<th class="text-right">Valor medido</th>'));
         row.append($('<th class="text-right">Valor pendente</th>'));
+        row.append($('<th class="text-center">Pagamento antecipado</th>'));
         row.append($('<tr />'));
 
         var totalQuantidade = 0;
@@ -955,27 +953,35 @@
         if (jsonRetificaoProvisaoArray != null) {
             for (var i = 0; i < jsonRetificaoProvisaoArray.length; i++) {
 
+                Valor = jsonRetificaoProvisaoArray[i].Valor;
+                ValorAdiantadoDescontado = jsonRetificaoProvisaoArray[i].ValorAdiantadoDescontado;
+                if (Valor == 0) continue;
+                if (ValorAdiantadoDescontado == null) ValorAdiantadoDescontado = 0;
+                if ((Valor - ValorAdiantadoDescontado) <= 0) continue;
+
+
                 totalQuantidade = totalQuantidade + jsonRetificaoProvisaoArray[i].Quantidade;
-                totalQuantidadeMedida = totalQuantidadeMedida + jsonRetificaoProvisaoArray[i].Totalizadores.QuantidadeTotalMedida;
-                totalQuantidadePendente = totalQuantidadePendente + jsonRetificaoProvisaoArray[i].Totalizadores.QuantidadePendente;
+                totalQuantidadeMedida = totalQuantidadeMedida + jsonRetificaoProvisaoArray[i].QuantidadeTotalMedida;
+                totalQuantidadePendente = totalQuantidadePendente + jsonRetificaoProvisaoArray[i].QuantidadePendente;
                 totalValor = totalValor + jsonRetificaoProvisaoArray[i].Valor;
-                totalValorMedido = totalValorMedido + jsonRetificaoProvisaoArray[i].Totalizadores.ValorTotalMedido;
-                totalValorPendente = totalValorPendente + jsonRetificaoProvisaoArray[i].Totalizadores.ValorPendente;
+                totalValorMedido = totalValorMedido + jsonRetificaoProvisaoArray[i].ValorTotalMedido;
+                totalValorPendente = totalValorPendente + jsonRetificaoProvisaoArray[i].ValorPendente;
 
                 var row = $('<tr />')
 
                 $("#tableItens tbody").append(row);
                 row.append($('<td class="text-nowrap">' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Sequencial + '</td>'));
                 row.append($('<td class="text-nowrap" onclick="carregaAbaDadosMedicao(' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Sequencial + ');">' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Descricao + '</td>'));
-                row.append($('<td class="text-center">' + new Date(jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.DataVencimento).toFormatDDMMYYYY() + '</td>'));
+                row.append($('<td class="text-center">' + new Date(parseInt(jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.DataVencimento.substr(6))).toFormatDDMMYYYY() + '</td>'));
                 if (!ehNaturezaItemPorPrecoGlobal) {
                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Quantidade), 7) + '</td>'));
-                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Totalizadores.QuantidadeTotalMedida), 7) + '</td>'));
-                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Totalizadores.QuantidadePendente), 7) + '</td>'));
+                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadeTotalMedida), 7) + '</td>'));
+                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadePendente), 7) + '</td>'));
                 }
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Valor), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Totalizadores.ValorTotalMedido), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Totalizadores.ValorPendente), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorTotalMedido), 2) + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorPendente), 2) + '</td>'));
+                row.append($('<td class="text-center">' + jsonRetificaoProvisaoArray[i].DescricaoPagamentoAntecipado + '</td>'));
             }
 
             var row = $('<tr />')
@@ -992,15 +998,19 @@
             row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
             row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorMedido), 2) + '</td>'));
             row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorPendente), 2) + '</td>'));
+            row.append($('<td></td>'));
             var row = $('<tr />')
             $("#tableItens tbody").append(row);
         }
 
         setarAbaProvisionamento();
+
+        jsonRetificaoProvisaoArray = null;
     }
 
     function carregaAbaDadosMedicao(sequencial) {
         jsonRetificaoProvisaoArray = JSON.parse($('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val());
+
         var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
         var precoUnitario = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val();
 
@@ -1014,8 +1024,8 @@
 
             if (arr.length > 0) {
                 var item = arr[0];
-                var quantidadePendente = item.Quantidade - item.Totalizadores.QuantidadeTotalMedida;
-                var valorPendente = item.Valor - item.Totalizadores.ValorTotalMedido;
+                var quantidadePendente = item.Quantidade - item.QuantidadeTotalMedida;
+                var valorPendente = item.Valor - item.ValorTotalMedido;
 
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)').val(item.ContratoRetificacaoItemCronogramaId);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)').val(item.ContratoRetificacaoItemCronograma.Sequencial);
@@ -1028,8 +1038,6 @@
                 if (!validaDataVencimento()){
                     return;
                 }
-
-                //item.ContratoRetificacaoItem.PrecoUnitario = roundDecimal(floatToString(item.ContratoRetificacaoItem.PrecoUnitario), 2)
 
                 $("#@Html.IdFor(m => m.PrecoUnitario)").val(roundDecimal(floatToString(precoUnitario), 5));
 
@@ -1124,14 +1132,14 @@
 
     function validaNumeroDocumento() {
         var isValid = false;
-        var contratadoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Contrato.ContratadoId)").val();
+        var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
         var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
         var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
         var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
 
-        if (multiFornecedorId != "") {
-            contratadoId = multiFornecedorId;
-        }
+        //if (multiFornecedorId != "") {
+        //    contratadoId = multiFornecedorId;
+        //}
 
         $.ajax({
             type: 'POST',
@@ -1142,7 +1150,8 @@
             data: JSON.stringify({
                 dataEmissao: dataEmissao,
                 numeroDocumento: numeroDocumento,
-                contratadoId : contratadoId
+                contratadoId: contratadoId,
+                multiFornecedorId: multiFornecedorId
             })
         })
         .success(function (result) {
@@ -1337,7 +1346,7 @@
                 var row = $('<tr />')
 
                 $("#tableLstMedicao tbody").append(row);
-                row.append($('<td class="text-center text-nowrap" data-dismiss="modal" onclick="recuperaDadosMedicao(' + jsonContratoRetificaoItemMedicaoArray[i].Id + ');">' + new Date(jsonContratoRetificaoItemMedicaoArray[i].DataMedicao).toFormatDDMMYYYY() + '</td>'));
+                row.append($('<td class="text-center text-nowrap" data-dismiss="modal" onclick="recuperaDadosMedicao(' + jsonContratoRetificaoItemMedicaoArray[i].Id + ');">' + new Date(parseInt(jsonContratoRetificaoItemMedicaoArray[i].DataMedicao.substr(6))).toFormatDDMMYYYY() + '</td>'));
                 row.append($('<td class="text-left text-nowrap">' + jsonContratoRetificaoItemMedicaoArray[i].TipoDocumento.Sigla + '</td>'));
                 row.append($('<td class="text-left">' + jsonContratoRetificaoItemMedicaoArray[i].NumeroDocumento + '</td>'));
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].Valor), 2) + '</td>'));
@@ -1351,6 +1360,7 @@
     }
 
     function recuperaDadosMedicao(ContratoRetificacaoItemMedicaoId) {
+        var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
         var isRecuperou = false;
         $.ajax({
             type: 'POST',
@@ -1359,15 +1369,14 @@
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
+                contratoId: contratoId,
                 contratoRetificacaoItemMedicaoId: ContratoRetificacaoItemMedicaoId
             }),
             success: function (result) {
                 if (result.ehRecuperou) {
-                    jsonMedicao = JSON.parse(result.medicaoRecuperada);
+                    jsonMedicao = result.medicaoRecuperada;
                     carregaAbaDadosMedicaoPesquisa();
                     jsonMedicao = null;
-                }
-                else {
                 }
                 isRecuperou = result.ehRecuperou;
             },
@@ -1406,9 +1415,9 @@
             }
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val(jsonMedicao.TipoDocumentoId);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val(jsonMedicao.NumeroDocumento);
-            var dataEmissao = new Date(jsonMedicao.DataEmissao).toFormatDDMMYYYY();
+            var dataEmissao = new Date(parseInt(jsonMedicao.DataEmissao.substr(6))).toFormatDDMMYYYY();
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val(dataEmissao);
-            var dataVencimento = new Date(jsonMedicao.DataVencimento).toFormatDDMMYYYY();
+            var dataVencimento = new Date(parseInt(jsonMedicao.DataVencimento.substr(6))).toFormatDDMMYYYY();
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val(dataVencimento);
             if (jsonMedicao.MultiFornecedorId != null) {
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val(jsonMedicao.MultiFornecedorId);
@@ -1433,7 +1442,7 @@
             }
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras)").val(jsonMedicao.CodigoBarras);
 
-            var dataMedicao = new Date(jsonMedicao.DataMedicao).toFormatDDMMYYYY();
+            var dataMedicao = new Date(parseInt(jsonMedicao.DataMedicao.substr(6))).toFormatDDMMYYYY();
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataMedicao);
 
             var valor = roundDecimal(floatToString(jsonMedicao.Valor), 2);
@@ -1515,7 +1524,7 @@
                 var descricaoItem = jsonContratoRetificaoItemMedicaoArray[i].ContratoRetificacaoItem.Servico.Descricao;
                 var complementoDescricaoItem = jsonContratoRetificaoItemMedicaoArray[i].ContratoRetificacaoItem.ComplementoDescricao;
                 if (complementoDescricaoItem != "") descricaoItem = descricaoItem + " (" + complementoDescricaoItem + ")";
-                var dataMedicao = new Date(jsonContratoRetificaoItemMedicaoArray[i].DataMedicao).toFormatDDMMYYYY();
+                var dataMedicao = new Date(parseInt(jsonContratoRetificaoItemMedicaoArray[i].DataMedicao.substr(6))).toFormatDDMMYYYY();
                 var valorUnitario = 0;
                 if (jsonContratoRetificaoItemMedicaoArray[i].ContratoRetificacaoItem.NaturezaItem == 1) {
                     valorUnitario = jsonContratoRetificaoItemMedicaoArray[i].Valor;
@@ -1549,7 +1558,8 @@
                 var titulo = "";
                 var tituloPagar = "";
                 var tituloReceber = "";
-                if (jsonContratoRetificaoItemMedicaoArray[i].Contrato.TipoContrato == 1) {
+                var tipoContrato = $("#@Html.IdFor(m => m.Contrato.TipoContrato)").val();
+                if (tipoContrato == 1) {
                     tituloReceber = jsonContratoRetificaoItemMedicaoArray[i].TituloReceberId;
                     if (!isNaN(tituloReceber)) titulo = tituloReceber;
                 }

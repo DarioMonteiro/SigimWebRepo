@@ -26,7 +26,9 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         #region Construtor
 
-        public ContratoAppService(IContratoRepository contratoRepository, IUsuarioAppService usuarioAppService, MessageQueue messageQueue)
+        public ContratoAppService(IContratoRepository contratoRepository, 
+                                  IUsuarioAppService usuarioAppService, 
+                                  MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.contratoRepository = contratoRepository;
@@ -36,6 +38,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         #endregion
 
         #region Métodos IContratoAppService
+
 
         public List<ContratoDTO> ListarPeloFiltro(MedicaoContratoFiltro filtro,int? idUsuario, out int totalRegistros)
         {
@@ -60,6 +63,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 filtro.PaginationParameters.OrderBy,
                 filtro.PaginationParameters.Ascending,
                 out totalRegistros,
+                l => l.CentroCusto,
                 l => l.ContratoDescricao.ListaContrato,
                 l => l.Contratante.ListaContratoContratante,
                 l => l.Contratado.ListaContratoContratado).To<List<ContratoDTO>>();
@@ -78,9 +82,9 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                   l => l.Contratado.PessoaFisica, 
                                                   l => l.Contratado.PessoaJuridica , 
                                                   l => l.ContratoDescricao, 
-                                                  l => l.ListaContratoRetificacaoItemMedicao,
-                                                  l => l.ListaContratoRetificacao.Select(c => c.ListaContratoRetificacaoItem.Select(d => d.Servico))).To<ContratoDTO>();
-
+                                                  l => l.ListaContratoRetificacao,
+                                                  l => l.ListaContratoRetificacaoItem.Select(d => d.Servico),
+                                                  l => l.ListaContratoRetificacaoItemMedicao).To<ContratoDTO>();
         }
 
         public bool EhContratoAssinado(ContratoDTO dto)
@@ -115,6 +119,161 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             return true;
         }
+
+
+        public List<ContratoRetificacaoProvisaoDTO> ObterListaCronograma(int contratoId, int contratoRetificacaoItemId)
+        {
+            var contrato = contratoRepository.ObterPeloId(contratoId, 
+                                                          l => l.ListaContratoRetificacaoItem.Select(i => i.Servico),
+                                                          l => l.ListaContratoRetificacaoItem.Select(i => i.RetencaoTipoCompromisso),
+                                                          l => l.ListaContratoRetificacaoProvisao,
+                                                          l => l.ListaContratoRetificacaoItemCronograma,
+                                                          l => l.ListaContratoRetificacaoItemMedicao);
+            return contrato.ListaContratoRetificacaoProvisao
+                .Where(l => l.ContratoRetificacaoItemId == contratoRetificacaoItemId)
+                .To<List<ContratoRetificacaoProvisaoDTO>>();
+        }
+
+        public List<ContratoRetificacaoItemMedicaoDTO> ObtemMedicaoPorSequencialItem(int contratoId, int sequencialItem)
+        {
+            var contrato = contratoRepository.ObterPeloId(contratoId,
+                                                          l => l.ListaContratoRetificacaoItemMedicao.Select(i => i.TipoDocumento));
+
+            return contrato.ListaContratoRetificacaoItemMedicao
+                    .Where(l => l.SequencialItem == sequencialItem).OrderBy(l => l.DataVencimento)
+                    .To<List<ContratoRetificacaoItemMedicaoDTO>>();
+        }
+
+        public ContratoRetificacaoItemMedicaoDTO ObtemMedicaoPorId(int contratoId, int contratoRetificacaoItemMedicaoId)
+        {
+            var contrato = contratoRepository.ObterPeloId(contratoId,
+                                                          l => l.ListaContratoRetificacaoItemCronograma,
+                                                          l => l.ListaContratoRetificacaoItemMedicao);
+
+            var medicao =  contrato.ListaContratoRetificacaoItemMedicao
+                            .Where(l => l.Id.Value == contratoRetificacaoItemMedicaoId).SingleOrDefault()
+                            .To<ContratoRetificacaoItemMedicaoDTO>();
+            return medicao;
+        }
+
+        public bool ExisteContratoRetificacaoProvisao(List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisao)
+        {
+            if (listaContratoRetificacaoProvisao == null)
+            {
+                messageQueue.Add(Resource.Contrato.ErrorMessages.RetificacaoItemSemProvisionamento, TypeMessage.Error);
+                return false;
+            }
+            if (listaContratoRetificacaoProvisao.Count == 0)
+            {
+                messageQueue.Add(Resource.Contrato.ErrorMessages.RetificacaoItemSemProvisionamento, TypeMessage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool ExisteMedicao(ContratoRetificacaoItemMedicaoDTO dto)
+        {
+            if (dto == null)
+            {
+                messageQueue.Add(Resource.Contrato.ErrorMessages.MedicaoNaoEncontrada, TypeMessage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool EhValidoParametrosVisualizacaoMedicao(int? contratoId,
+                                                          int? tipoDocumentoId,
+                                                          string numeroDocumento,
+                                                          Nullable<DateTime> dataEmissao,
+                                                          int? contratadoId)
+        {
+            if (!contratadoId.HasValue)
+            {
+                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contrato"), TypeMessage.Error);
+                return false;
+            }
+
+            if (contratadoId == 0)
+            {
+                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contrato"), TypeMessage.Error);
+                return false;
+            }
+
+            if (!tipoDocumentoId.HasValue)
+            {
+                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo"), TypeMessage.Error);
+                return false;
+            }
+
+            if (tipoDocumentoId == 0)
+            {
+                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo"), TypeMessage.Error);
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(numeroDocumento))
+            {
+                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Nº"), TypeMessage.Error);
+                return false;
+            }
+
+            if (!dataEmissao.HasValue)
+            {
+                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data emissão"), TypeMessage.Error);
+                return false;
+            }
+
+            if (!contratadoId.HasValue)
+            {
+                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contratado"), TypeMessage.Error);
+                return false;
+            }
+
+            return true;
+
+        }
+
+        public List<ContratoRetificacaoItemMedicaoDTO> RecuperaMedicaoPorDadosDaNota(int contratoId,
+                                                                                     int tipoDocumentoId,
+                                                                                     string numeroDocumento,
+                                                                                     DateTime dataEmissao,
+                                                                                     int? contratadoId)
+        {
+            List<ContratoRetificacaoItemMedicaoDTO> listaMedicao;
+            var contrato = contratoRepository.ObterPeloId(contratoId,
+                                                          l => l.ListaContratoRetificacaoItem.Select(i => i.Servico),
+                                                          l => l.ListaContratoRetificacaoItemMedicao);
+            
+            if ((contratadoId.HasValue) && (contratadoId.Value > 0) && (contrato != null))
+            {
+                listaMedicao =
+                contrato.ListaContratoRetificacaoItemMedicao.Where(i => i.TipoDocumentoId == tipoDocumentoId &&
+                                                                        i.NumeroDocumento == numeroDocumento &&
+                                                                        i.DataEmissao == dataEmissao &&
+                                                                        ((i.MultiFornecedorId == contratadoId) ||
+                                                                        (i.MultiFornecedorId == null && 
+                                                                         i.Contrato.ContratadoId == contratadoId))
+                                                                   ).To<List<ContratoRetificacaoItemMedicaoDTO>>();
+            }
+            else{
+                listaMedicao =
+                contrato.ListaContratoRetificacaoItemMedicao.Where(i => i.TipoDocumentoId == tipoDocumentoId &&
+                                                                        i.NumeroDocumento == numeroDocumento &&
+                                                                        i.DataEmissao == dataEmissao
+                                                                   ).To<List<ContratoRetificacaoItemMedicaoDTO>>();
+            }
+
+            return listaMedicao;
+        }
+
+        public bool ExisteBlaBlaBla()
+        {
+            return contratoRepository.ListarPeloFiltro(l => l.ListaContratoRetificacaoItemMedicao
+                .Any(s => s.NumeroDocumento == "51")).Any();
+        }
+
 
         #endregion
 

@@ -10,7 +10,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
     public class ContratoRetificacaoProvisaoDTO : BaseDTO
     {
         public int ContratoId { get; set; }
-        public ContratoDTO Contrato { get; set; }
+        //public ContratoDTO Contrato { get; set; }
         public int ContratoRetificaocaoId { get; set; }
         public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
         public int? ContratoRetificacaoItemId { get; set; }
@@ -25,17 +25,41 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public TituloReceberDTO TituloReceber { get; set; }
         public decimal Valor { get; set; }
         public decimal Quantidade { get; set; }
-
-        //*****************
+        public decimal QuantidadeTotalMedida { get; set; }
         public decimal ValorTotalMedido { get; set; }
-        //*****************
-
-        public TotalizadoresMedicaoDTO Totalizadores { get; set; }
-
-        public ContratoRetificacaoProvisaoDTO()
+        public decimal QuantidadeTotalLiberada { get; set; }
+        public decimal ValorTotalLiberado { get; set; }
+        public decimal QuantidadeTotalMedidaLiberada { get; set; }
+        public decimal ValorTotalMedidoLiberado { get; set; }
+        public decimal QuantidadePendente
         {
-            this.Totalizadores = new TotalizadoresMedicaoDTO();
+            get { 
+                    return Quantidade - QuantidadeTotalMedida; 
+                }
         }
+        public decimal ValorPendente
+        {
+            get { return (Valor - ValorTotalMedido); }
+        }
+
+        public bool? PagamentoAntecipado { get; set; }
+        public string DescricaoPagamentoAntecipado 
+        {
+            get { return !PagamentoAntecipado.HasValue ? "Não" : (PagamentoAntecipado.Value ? "Sim" : "Não") ; }
+        }
+
+        public decimal? ValorAdiantadoDescontado { get; set; }
+        public Nullable<DateTime> DataAntecipacao { get; set; }
+        public string UsuarioAntecipacao { get; set; }
+        public string DocumentoAntecipacao { get; set; }
+
+
+        //public TotalizadoresMedicaoDTO Totalizadores { get; set; }
+
+        //public ContratoRetificacaoProvisaoDTO()
+        //{
+        //    this.Totalizadores = new TotalizadoresMedicaoDTO();
+        //}
 
     }
 }

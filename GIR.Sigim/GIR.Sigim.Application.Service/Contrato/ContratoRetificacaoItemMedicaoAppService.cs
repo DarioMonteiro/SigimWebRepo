@@ -247,65 +247,6 @@ namespace GIR.Sigim.Application.Service.Contrato
             return false;
         }
 
-        public List<ContratoRetificacaoItemMedicaoDTO> ObtemPorSequencialItem(int contratoId, int sequencialItem)
-        {
-            List<ContratoRetificacaoItemMedicaoDTO> listaMedicao = null; 
-
-            listaMedicao = contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro(l => l.ContratoId == contratoId && l.SequencialItem == sequencialItem, l => l.TipoDocumento).OrderBy(l => l.DataVencimento).To<List<ContratoRetificacaoItemMedicaoDTO>>();
-
-            return listaMedicao;
-        }
-
-        public ContratoRetificacaoItemMedicaoDTO ObterPeloId(int contratoRetificacaoItemMedicaoId)
-        {
-            decimal quantidadeTotalMedido = 0;
-            decimal valorTotalMedido = 0;
-            decimal quantidadeTotalLiberado = 0;
-            decimal valorTotalLiberado = 0;
-            decimal quantidadeTotalMedidaLiberada = 0;
-            decimal valorTotalMedidoLiberado = 0;
-
-
-
-            var medicao = contratoRetificacaoItemMedicaoRepository.ObterPeloId(contratoRetificacaoItemMedicaoId,
-                                                                                l => l.ContratoRetificacaoItemCronograma).To<ContratoRetificacaoItemMedicaoDTO>();
-
-            if (medicao != null)
-            {
-
-                ObterQuantidadesEhValoresMedicao(medicao.ContratoId,
-                                                 medicao.SequencialItem,
-                                                 medicao.SequencialCronograma,
-                                                 ref quantidadeTotalMedido,
-                                                 ref valorTotalMedido,
-                                                 ref quantidadeTotalLiberado,
-                                                 ref valorTotalLiberado,
-                                                 ref quantidadeTotalMedidaLiberada,
-                                                 ref valorTotalMedidoLiberado);
-            }
-
-            medicao.Totalizadores.QuantidadeTotalMedida = quantidadeTotalMedido;
-            medicao.Totalizadores.ValorTotalMedido = valorTotalMedido;
-            medicao.Totalizadores.QuantidadeTotalLiberada = quantidadeTotalLiberado;
-            medicao.Totalizadores.ValorTotalLiberado = valorTotalLiberado;
-            medicao.Totalizadores.QuantidadeTotalMedidaLiberada = quantidadeTotalMedidaLiberada;
-            medicao.Totalizadores.ValorTotalMedidoLiberado = valorTotalMedidoLiberado;
-
-            return medicao;
-        }
-
-        public bool EhValidaMedicaoRecuperada(ContratoRetificacaoItemMedicaoDTO dto)
-        {
-            if (dto == null)
-            {
-                messageQueue.Add(Resource.Contrato.ErrorMessages.MedicaoNaoEncontrada, TypeMessage.Error);
-                return false;
-            }
-
-            return true;
-        }
-
-
         public bool Cancelar(int? contratoRetificacaoItemMedicaoId)
         {
             if (!EhValidoCancelar(contratoRetificacaoItemMedicaoId))
@@ -333,76 +274,6 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
         }
 
-        public bool EhValidaVisualizacaoMedicao(int? contratoId,
-                                                int? tipoDocumentoId,
-                                                string numeroDocumento,
-                                                Nullable<DateTime> dataEmissao,
-                                                int? contratadoId)
-        {
-
-            if (!contratadoId.HasValue)
-            {
-                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contrato"), TypeMessage.Error);
-                return false;
-            }
-
-            if (contratadoId == 0)
-            {
-                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contrato"), TypeMessage.Error);
-                return false;
-            }
-
-            if (!tipoDocumentoId.HasValue)
-            {
-                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo"), TypeMessage.Error);
-                return false;
-            }
-
-            if (tipoDocumentoId == 0)
-            {
-                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo"), TypeMessage.Error);
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(numeroDocumento))
-            {
-                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Nº"), TypeMessage.Error);
-                return false;
-            }
-
-            if (!dataEmissao.HasValue)
-            {
-                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data emissão"), TypeMessage.Error);
-                return false;
-            }
-
-            if (!contratadoId.HasValue)
-            {
-                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contratado"), TypeMessage.Error);
-                return false;
-            }
-
-            return true;
-
-        }
-
-        public List<ContratoRetificacaoItemMedicaoDTO> RecuperaMedicaoPorContratoDadosDaNota(int contratoId,
-                                                                                             int tipoDocumentoId,
-                                                                                             string numeroDocumento,
-                                                                                             DateTime dataEmissao,
-                                                                                             int? contratadoId)
-        {
-            return contratoRetificacaoItemMedicaoRepository.RecuperaMedicaoPorContratoDadosDaNota(contratoId, 
-                                                                                                  tipoDocumentoId, 
-                                                                                                  numeroDocumento, 
-                                                                                                  dataEmissao, 
-                                                                                                  contratadoId,
-                                                                                                  l => l.Contrato,
-                                                                                                  l => l.ContratoRetificacaoItem,
-                                                                                                  l => l.ContratoRetificacaoItem.Servico
-                                                                                                  ).To<List<ContratoRetificacaoItemMedicaoDTO>>();
-        }
-
         public FileDownloadDTO Exportar(int? contratadoId,
                                         int contratoId,
                                         int tipoDocumentoId,
@@ -417,6 +288,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                                               numeroDocumento, 
                                                                                                               dataEmissao, 
                                                                                                               contratadoId,
+                                                                                                              l => l.Contrato.CentroCusto,
                                                                                                               l => l.Contrato.ContratoDescricao,
                                                                                                               l => l.Contrato.Contratado.PessoaFisica,
                                                                                                               l => l.Contrato.Contratado.PessoaJuridica,
@@ -528,45 +400,6 @@ namespace GIR.Sigim.Application.Service.Contrato
                 System.IO.File.Delete(caminhoImagem);
             return arquivo;
         }
-
-        //public bool EhValidaImpressao(int? contratadoId,
-        //                              int? contratoId,
-        //                              int? tipoDocumentoId,
-        //                              string numeroDocumento,
-        //                              Nullable<DateTime> dataEmissao)
-        //{
-        //    if (contratadoId == 0)
-        //    {
-        //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contratado"), TypeMessage.Error);
-        //        return false;
-        //    }
-
-        //    if (contratoId == 0)
-        //    {
-        //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contrato"), TypeMessage.Error);
-        //        return false;
-        //    }
-
-        //    if (tipoDocumentoId == 0)
-        //    {
-        //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo"), TypeMessage.Error);
-        //        return false;
-        //    }
-
-        //    if (string.IsNullOrEmpty(numeroDocumento))
-        //    {
-        //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Nº"), TypeMessage.Error);
-        //        return false;
-        //    }
-
-        //    if (!dataEmissao.HasValue)
-        //    {
-        //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data emissão"), TypeMessage.Error);
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
 
 
         #endregion
@@ -979,9 +812,9 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         private bool EhValidoSalvar(ContratoRetificacaoItemMedicaoDTO dto)
         {
-            int contratadoId;
+            int contratadoId = 0;
 
-            contratadoId = dto.Contrato.ContratadoId;
+            //contratadoId = dto.Contrato.ContratadoId;
 
             if (contratadoId == 0)
             {
@@ -1151,12 +984,14 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
 
             Nullable<DateTime> dataBloqueio;
+            string codigoCentroCusto = "";
+            //codigoCentroCusto = dto.Contrato.CentroCusto.Codigo;
 
-            if (!bloqueioContabilAppService.ValidaBloqueioContabil(dto.Contrato.CentroCusto.Codigo, 
+            if (!bloqueioContabilAppService.ValidaBloqueioContabil(codigoCentroCusto, 
                                                                    dto.DataEmissao,
                                                                    out dataBloqueio))
             {
-                string msg = string.Format(Resource.Sigim.ErrorMessages.BloqueioContabilEncontrado, dataBloqueio.Value.ToShortDateString(), dto.Contrato.CentroCusto.Codigo);
+                string msg = string.Format(Resource.Sigim.ErrorMessages.BloqueioContabilEncontrado, dataBloqueio.Value.ToShortDateString(), codigoCentroCusto);
                 messageQueue.Add(msg, TypeMessage.Error);
                 return false;
             }

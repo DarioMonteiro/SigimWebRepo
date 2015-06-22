@@ -11,7 +11,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
     public class Contrato : BaseEntity
     {
         public string CodigoCentroCusto { get; set; }
-        public virtual CentroCusto CentroCusto { get; set; }
+        public CentroCusto CentroCusto { get; set; }
         public int? LicitacaoId { get; set; }
         public Licitacao Licitacao { get; set; }
         public int ContratanteId { get; set; }
@@ -36,6 +36,17 @@ namespace GIR.Sigim.Domain.Entity.Contrato
 
 
         //************************************************************************************************
+        public decimal ObterQuantidadeTotalMedida(int? sequencialItem, int? sequencialCronograma)
+        {
+            var quantidadeTotalMedida = (from med in ListaContratoRetificacaoItemMedicao
+                                         where (med.Situacao == SituacaoMedicao.AguardandoAprovacao || med.Situacao == SituacaoMedicao.AguardandoLiberacao) &&
+                                               (med.SequencialItem == sequencialItem && med.SequencialCronograma == sequencialCronograma)
+                                         select med.Quantidade).Sum();
+
+            return quantidadeTotalMedida;
+        }
+
+
         ////(SELECT ISNULL(SUM(AUX.valor), 0) FROM Contrato.contratoRetificacaoItemMedicao AUX
         //// INNER JOIN Contrato.ContratoRetificacaoItem			AUX2	ON AUX2.codigo = MED.contratoRetificacaoItem	
         //// INNER JOIN Contrato.ContratoRetificacaoItemCronograma	AUX3	ON AUX3.codigo = MED.contratoRetificacaoItemCronograma
@@ -56,16 +67,59 @@ namespace GIR.Sigim.Domain.Entity.Contrato
 
         public decimal ObterValorTotalMedido(int? sequencialItem, int? sequencialCronograma) {
             var valorTotalMedido = (from med in ListaContratoRetificacaoItemMedicao
-                     join item in ListaContratoRetificacaoItem on med.SequencialItem equals item.Sequencial
-                     join cron in ListaContratoRetificacaoItemCronograma on med.SequencialCronograma equals cron.Sequencial
-                     where (med.Situacao == SituacaoMedicao.AguardandoAprovacao
-                        || med.Situacao == SituacaoMedicao.AguardandoLiberacao)
-                        && item.Sequencial == sequencialItem
-                        && cron.Sequencial == sequencialCronograma
-                     select med.Valor).Sum();
+                                     //join item in ListaContratoRetificacaoItem on med.SequencialItem equals item.Sequencial
+                                     //join cron in ListaContratoRetificacaoItemCronograma on med.SequencialCronograma equals cron.Sequencial
+                                    where (med.Situacao == SituacaoMedicao.AguardandoAprovacao || med.Situacao == SituacaoMedicao.AguardandoLiberacao) &&
+                                          (med.SequencialItem == sequencialItem &&  med.SequencialCronograma == sequencialCronograma)
+                                        //&& (item.Sequencial == sequencialItem 
+                                        //&&  cron.Sequencial == sequencialCronograma)
+                                    select med.Valor).Sum();
 
             return valorTotalMedido;
         }
+
+        public decimal ObterQuantidadeTotalLiberada(int? sequencialItem, int? sequencialCronograma)
+        {
+            var quantidadeTotalLiberada = (from med in ListaContratoRetificacaoItemMedicao
+                                           where med.Situacao == SituacaoMedicao.Liberado &&
+                                                (med.SequencialItem == sequencialItem && med.SequencialCronograma == sequencialCronograma)
+                                           select med.Quantidade).Sum();
+
+            return quantidadeTotalLiberada;
+        }
+
+        public decimal ObterValorTotalLiberado(int? sequencialItem, int? sequencialCronograma)
+        {
+            var valorTotalLiberado = (from med in ListaContratoRetificacaoItemMedicao
+                                      where med.Situacao == SituacaoMedicao.Liberado &&
+                                           (med.SequencialItem == sequencialItem && med.SequencialCronograma == sequencialCronograma)
+                                      select med.Valor).Sum();
+
+            return valorTotalLiberado;
+        }
+
+        public decimal ObterQuantidadeTotalMedidaLiberada(int? sequencialItem, int? sequencialCronograma)
+        {
+            var quantidadeTotalMedidaLiberada = 
+                                        (from med in ListaContratoRetificacaoItemMedicao
+                                         where (med.Situacao == SituacaoMedicao.AguardandoAprovacao || med.Situacao == SituacaoMedicao.AguardandoLiberacao || med.Situacao == SituacaoMedicao.Liberado) &&
+                                               (med.SequencialItem == sequencialItem && med.SequencialCronograma == sequencialCronograma)
+                                         select med.Quantidade).Sum();
+
+            return quantidadeTotalMedidaLiberada;
+        }
+
+        public decimal ObterValorTotalMedidoLiberado(int? sequencialItem, int? sequencialCronograma)
+        {
+            var valorTotalMedidoLiberado = (from med in ListaContratoRetificacaoItemMedicao
+                                    where (med.Situacao == SituacaoMedicao.AguardandoAprovacao || med.Situacao == SituacaoMedicao.AguardandoLiberacao || med.Situacao == SituacaoMedicao.Liberado) &&
+                                          (med.SequencialItem == sequencialItem && med.SequencialCronograma == sequencialCronograma)
+                                    select med.Valor).Sum();
+
+            return valorTotalMedidoLiberado;
+        }
+
+
         //***************************************************************************************************
 
         public ICollection<ContratoRetificacao> ListaContratoRetificacao { get; set; }

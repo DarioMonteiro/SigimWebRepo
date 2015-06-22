@@ -36,7 +36,12 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ContratoRetificacaoItemMedicaoDTO, ContratoRetificacaoItemMedicao>();
 
             Mapper.CreateMap<ContratoRetificacaoProvisao, ContratoRetificacaoProvisaoDTO>()
-                .ForMember(d => d.ValorTotalMedido, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedido(s.SequencialItem, s.SequencialCronograma)));
+                .ForMember(d => d.QuantidadeTotalMedida, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalMedida(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorTotalMedido, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedido(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.QuantidadeTotalLiberada, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalLiberada(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorTotalLiberado, m => m.MapFrom(s => s.Contrato.ObterValorTotalLiberado(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.QuantidadeTotalMedidaLiberada, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalMedidaLiberada(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorTotalMedidoLiberado, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedidoLiberado(s.SequencialItem, s.SequencialCronograma)));
             Mapper.CreateMap<ContratoRetificacaoProvisaoDTO, ContratoRetificacaoProvisao>();
 
             Mapper.CreateMap<Licitacao, LicitacaoDTO>();

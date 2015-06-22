@@ -141,7 +141,6 @@
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemImpostoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemRepository.cs" />
-    <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\ImpostoFinanceiroRepository.cs" />
