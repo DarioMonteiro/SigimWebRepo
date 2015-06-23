@@ -97,6 +97,19 @@ namespace GIR.Sigim.Application.DTO.Contrato
         [Display(Name = "Motivo desconto")]
         public string MotivoDesconto { get; set; }
 
+        public decimal QuantidadeTotalMedida { get; set; }
+        public decimal ValorTotalMedido { get; set; }
+        public decimal QuantidadeTotalLiberada { get; set; }
+        public decimal ValorTotalLiberado { get; set; }
+        public decimal QuantidadeTotalMedidaLiberada { get; set; }
+        public decimal ValorTotalMedidoLiberado { get; set; }
+        public decimal ValorImpostoRetido { get; set; }
+        public decimal ValorImpostoRetidoMedicao { get; set; }
+
+        public decimal ValorImpostoIndiretoMedicao { get; set; }
+        public decimal ValorTotalMedidoIndireto { get; set; }
+        public decimal ValorTotalMedidoNota { get; set; }
+
         public TotalizadoresMedicaoDTO Totalizadores { get; set; }
 
         public ContratoRetificacaoItemMedicaoDTO()

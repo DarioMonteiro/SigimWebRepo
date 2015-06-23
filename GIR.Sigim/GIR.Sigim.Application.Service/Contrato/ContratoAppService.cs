@@ -244,6 +244,8 @@ namespace GIR.Sigim.Application.Service.Contrato
             List<ContratoRetificacaoItemMedicaoDTO> listaMedicao;
             var contrato = contratoRepository.ObterPeloId(contratoId,
                                                           l => l.ListaContratoRetificacaoItem.Select(i => i.Servico),
+                                                          l => l.ListaContratoRetificacaoItemCronograma,
+                                                          l => l.ListaContratoRetificacaoItemImposto.Select(ip => ip.ImpostoFinanceiro),
                                                           l => l.ListaContratoRetificacaoItemMedicao);
             
             if ((contratadoId.HasValue) && (contratadoId.Value > 0) && (contrato != null))
@@ -268,10 +270,61 @@ namespace GIR.Sigim.Application.Service.Contrato
             return listaMedicao;
         }
 
-        public bool ExisteBlaBlaBla()
+        public bool ExisteNumeroDocumento(Nullable<DateTime> dataEmissao, string numeroDocumento, int? contratadoId)
         {
-            return contratoRepository.ListarPeloFiltro(l => l.ListaContratoRetificacaoItemMedicao
-                .Any(s => s.NumeroDocumento == "51")).Any();
+            bool existe = false;
+
+            if (!string.IsNullOrEmpty(numeroDocumento) && (contratadoId.HasValue))
+            {
+                List<Domain.Entity.Contrato.Contrato> listaContrato;
+
+                string numeroNotaFiscal = RetiraZerosIniciaisNumeroDocumento(numeroDocumento);
+
+                //traz uma lista de contrato que possuem na lista de medições do contrato pelo menos um documento existente
+                listaContrato = contratoRepository.ListarPeloFiltro(l => 
+                                                                        l.ListaContratoRetificacaoItemMedicao
+                                                                        .Any(s => s.NumeroDocumento.EndsWith(numeroNotaFiscal) && 
+                                                                        (
+                                                                            (dataEmissao == null) ||
+                                                                            ((dataEmissao != null) && (s.DataEmissao.Year == dataEmissao.Value.Year))
+                                                                        ) &&
+                                                                        (
+                                                                            (s.MultiFornecedorId == contratadoId) ||
+                                                                            (s.MultiFornecedorId == null && l.ContratadoId == contratadoId)
+                                                                        )),
+                                                                    l => l.ListaContratoRetificacaoItemMedicao).To<List<Domain.Entity.Contrato.Contrato>>();
+                if (listaContrato.Count() > 0)
+                {
+                    string numeroDeZerosIniciais;
+                    foreach (var contrato in listaContrato)
+                    {
+                        foreach (var medicao in contrato.ListaContratoRetificacaoItemMedicao)
+                        {
+                            //descarta as mediçoes que possuem o documento diferente do procurado
+                            if ((medicao.DataEmissao != dataEmissao) || (!medicao.NumeroDocumento.EndsWith(numeroNotaFiscal))) continue; 
+
+                            //verifica se o documento foi digitado com zeros na frente
+                            var quantidadeDeZerosIniciais = medicao.NumeroDocumento.Length - numeroNotaFiscal.Length;
+                            numeroDeZerosIniciais = medicao.NumeroDocumento.Substring(0, quantidadeDeZerosIniciais);
+                            if (string.IsNullOrEmpty(numeroDeZerosIniciais))
+                            {
+                                numeroDeZerosIniciais = "0";
+                            }
+                            int resultado;
+                            if (int.TryParse(numeroDeZerosIniciais, out resultado))
+                            {
+                                if (Convert.ToInt32(resultado) == 0)
+                                {
+                                    existe = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return existe;
         }
 
 

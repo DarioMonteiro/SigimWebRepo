@@ -7,7 +7,6 @@ using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Entity.Contrato;
-using GIR.Sigim.Domain.Entity.Orcamento; 
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {

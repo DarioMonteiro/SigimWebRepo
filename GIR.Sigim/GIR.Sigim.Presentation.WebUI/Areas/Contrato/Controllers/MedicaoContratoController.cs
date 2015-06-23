@@ -498,11 +498,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                                     int? contratadoId,
                                                     int? multiFornecedorId)
         {
-            if (!multiFornecedorId.HasValue)
+            if (multiFornecedorId.HasValue)
             {
                 contratadoId = multiFornecedorId.Value;
             }
-            bool existeNumeroDocumento = contratoRetificacaoItemMedicaoAppService.ExisteNumeroDocumento(dataEmissao, numeroDocumento, contratadoId);
+            bool existeNumeroDocumento = contratoAppService.ExisteNumeroDocumento(dataEmissao, numeroDocumento, contratadoId);
+
             if (!existeNumeroDocumento) tituloPagarAppService.ExisteNumeroDocumento(dataEmissao, dataVencimento, numeroDocumento, contratadoId);
 
             return Json(new

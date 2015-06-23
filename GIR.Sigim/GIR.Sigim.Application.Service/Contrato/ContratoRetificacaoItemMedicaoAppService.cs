@@ -60,82 +60,6 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         #region Métodos IContratoRetificacaoItemMedicaoAppService
 
-        public void ObterQuantidadesEhValoresMedicao(int contratoId,
-                                                     int sequencialItem,
-                                                     int sequencialCronograma,
-                                                     ref decimal quantidadeTotalMedida,
-                                                     ref decimal valorTotalMedido,
-                                                     ref decimal quantidadeTotalLiberada,
-                                                     ref decimal valorTotalLiberado,
-                                                     ref decimal quantidadeTotalMedidaLiberada,
-                                                     ref decimal valorTotalMedidoLiberado)
-        {
-
-            List<ContratoRetificacaoItemMedicao> listaContratoRetificacaoItemMedicao =
-                    contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro((l =>
-                                                                                    l.ContratoId == contratoId && 
-                                                                                    l.SequencialItem == sequencialItem &&
-                                                                                    l.SequencialCronograma == sequencialCronograma
-                                                                                 ),
-                                                                                l => l.ContratoRetificacaoItem,
-                                                                                l => l.ContratoRetificacaoItemCronograma).ToList<ContratoRetificacaoItemMedicao>();
-
-
-            var queryMedido =
-                        from c in listaContratoRetificacaoItemMedicao
-                        where (
-                                ((c.Situacao == SituacaoMedicao.AguardandoAprovacao) ||
-                                 (c.Situacao == SituacaoMedicao.AguardandoLiberacao) ||
-                                 (c.Situacao == SituacaoMedicao.Liberado))
-                              )
-                        group c by c.Situacao into g
-                        select g;
-
-            quantidadeTotalMedida = 0;
-            valorTotalMedido = 0;
-            quantidadeTotalLiberada = 0;
-            valorTotalLiberado = 0;
-            quantidadeTotalMedidaLiberada = 0;
-            valorTotalMedidoLiberado = 0;
-
-            foreach (var medicaoGrupo in queryMedido)
-            {
-
-                if ((medicaoGrupo.Key == SituacaoMedicao.AguardandoAprovacao) || 
-                    (medicaoGrupo.Key == SituacaoMedicao.AguardandoLiberacao) || 
-                    (medicaoGrupo.Key == SituacaoMedicao.Liberado))
-                {
-
-                    foreach (var medicao in medicaoGrupo)
-                    {
-                        quantidadeTotalMedidaLiberada = quantidadeTotalMedidaLiberada + medicao.Quantidade;
-                        valorTotalMedidoLiberado = valorTotalMedidoLiberado + medicao.Valor;
-                    }
-                }
-
-                if ((medicaoGrupo.Key == SituacaoMedicao.AguardandoAprovacao) || (medicaoGrupo.Key == SituacaoMedicao.AguardandoLiberacao))
-                {
-
-                    foreach (var medicao in medicaoGrupo)
-                    {
-                        quantidadeTotalMedida = quantidadeTotalMedida + medicao.Quantidade;
-                        valorTotalMedido = valorTotalMedido + medicao.Valor;
-                    }
-                }
-                if (medicaoGrupo.Key == SituacaoMedicao.Liberado)
-                {
-
-                    foreach (var medicao in medicaoGrupo)
-                    {
-                        quantidadeTotalLiberada = quantidadeTotalLiberada + medicao.Quantidade;
-                        valorTotalLiberado = valorTotalLiberado + medicao.Valor;
-                    }
-                }
-
-            }
-
-        }
-
         public bool ExisteNumeroDocumento(Nullable<DateTime> dataEmissao, string numeroDocumento, int? contratadoId)
         {
             bool existe = false;
@@ -149,7 +73,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro((l =>
                                                                                 l.NumeroDocumento.EndsWith(numeroNotaFiscal) &&
                                                                                 (
-                                                                                    (dataEmissao == null) || 
+                                                                                    (dataEmissao == null) ||
                                                                                     ((dataEmissao != null) && (l.DataEmissao.Year == dataEmissao.Value.Year))
                                                                                 ) &&
                                                                                 (
@@ -171,7 +95,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                             numeroDeZerosIniciais = "0";
                         }
                         int resultado;
-                        if (int.TryParse(numeroDeZerosIniciais,out resultado))
+                        if (int.TryParse(numeroDeZerosIniciais, out resultado))
                         {
                             if (Convert.ToInt32(resultado) == 0)
                             {

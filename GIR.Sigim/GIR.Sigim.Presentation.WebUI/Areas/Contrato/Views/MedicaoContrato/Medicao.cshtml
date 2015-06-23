@@ -1516,6 +1516,9 @@
         var totalValor = 0;
         var totalValorLiberado = 0;
         var totalValorRetido = 0;
+        var totalValorImposto = 0;
+        var totalValorLiquido = 0;
+
 
         if (jsonContratoRetificaoItemMedicaoArray != null) {
             for (var i = 0; i < jsonContratoRetificaoItemMedicaoArray.length; i++) {
@@ -1536,7 +1539,7 @@
                 totalValor = totalValor + valor;
                 var valorRetido = jsonContratoRetificaoItemMedicaoArray[i].ValorRetido;
                 var valorLiberado = valor;
-                if (!isNaN(valorRetido)) {
+                if (!isNaN(valorRetido && valorRetido != null) ) {
                     valorLiberado = valor - valorRetido;
                 }
                 else {
@@ -1545,15 +1548,29 @@
                 totalValorLiberado = totalValorLiberado + valorLiberado;
                 totalValorRetido = totalValorRetido + valorRetido;
 
-                //Tenho que trazer esse valor da query
-                var valorImposto = "calcular";
+                var valorImpostoRetido = jsonContratoRetificaoItemMedicaoArray[i].ValorImpostoRetidoMedicao;
+                var valorImpostoIndireto = jsonContratoRetificaoItemMedicaoArray[i].ValorImpostoIndiretoMedicao;
+                var valorTotalMedidoIndireto = jsonContratoRetificaoItemMedicaoArray[i].ValorTotalMedidoIndireto;
+                if (valorTotalMedidoIndireto < 5000.0) valorImpostoIndireto = 0;
+
+                var valorImposto = 0;
+                var valorLiquido = 0;
+
+                if (valorImpostoRetido > 0 || valorImpostoIndireto > 0) {
+                    valorImposto = valorImpostoIndireto + valorImpostoRetido;
+                    totalValorImposto = totalValorImposto + valorImposto;
+                    valorLiquido = valorLiberado - valorImposto;
+                }
+                else {
+                    valorLiquido = valorLiberado;
+                }
+                totalValorLiquido = totalValorLiquido + valorLiquido;
 
                 var valorDesconto = jsonContratoRetificaoItemMedicaoArray[i].Desconto;
-                if (isNaN(valorDesconto)) {
+                if (isNaN(valorDesconto) || valorDesconto == null) {
                     valorDesconto = 0;
                 }
-
-                var valorLiquido = "calcular";
+                valorLiquido = valorLiquido - valorDesconto;
 
                 var titulo = "";
                 var tituloPagar = "";
@@ -1561,11 +1578,11 @@
                 var tipoContrato = $("#@Html.IdFor(m => m.Contrato.TipoContrato)").val();
                 if (tipoContrato == 1) {
                     tituloReceber = jsonContratoRetificaoItemMedicaoArray[i].TituloReceberId;
-                    if (!isNaN(tituloReceber)) titulo = tituloReceber;
+                    if ((tituloReceber!= null)&&!isNaN(tituloReceber)) titulo = tituloReceber;
                 }
                 else {
                     tituloPagar = jsonContratoRetificaoItemMedicaoArray[i].TituloPagarId;
-                    if (!isNaN(tituloPagar)) titulo = tituloPagar;
+                    if ((tituloPagar != null) && !isNaN(tituloPagar)) titulo = tituloPagar;
                 }
 
                 $("#tableLstVisMedicao tbody").append(row);
@@ -1577,11 +1594,9 @@
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(valor), 2) + '</td>'));
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(valorLiberado), 2) + '</td>'));
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(valorRetido), 2) + '</td>'));
-                //row.append($('<td class="text-right">' + roundDecimal(floatToString(valorImposto), 2) + '</td>'));
-                row.append($('<td class="text-right">' + valorImposto + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorImposto), 2) + '</td>'));
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(valorDesconto), 2) + '</td>'));
-                //row.append($('<td class="text-right">' + roundDecimal(floatToString(valorLiquido), 2) + '</td>'));
-                row.append($('<td class="text-right">' + valorLiquido + '</td>'));
+                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorLiquido), 2) + '</td>'));
                 row.append($('<td class="text-right">' + titulo + '</td>'));
             }
 
@@ -1593,14 +1608,12 @@
             row.append($('<td></td>'));
             row.append($('<td></td>'));
             row.append($('<td></td>'));
-            row.append($('<td>' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
             row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorLiberado), 2) + '</td>'));
             row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorRetido), 2) + '</td>'));
-            //row.append($('<td class="text-right">' + roundDecimal(floatToString(totalImposto), 2) + '</td>'));
-            row.append($('<td class="text-right">' + valorImposto + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorImposto), 2) + '</td>'));
             row.append($('<td></td>'));
-            //row.append($('<td class="text-right">' + roundDecimal(floatToString(totalLiquido), 2) + '</td>'));
-            row.append($('<td class="text-right">' + valorLiquido + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorLiquido), 2) + '</td>'));
             row.append($('<td></td>'));
 
             var row = $('<tr />')

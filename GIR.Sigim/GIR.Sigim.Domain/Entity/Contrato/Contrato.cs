@@ -112,13 +112,101 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public decimal ObterValorTotalMedidoLiberado(int? sequencialItem, int? sequencialCronograma)
         {
             var valorTotalMedidoLiberado = (from med in ListaContratoRetificacaoItemMedicao
-                                    where (med.Situacao == SituacaoMedicao.AguardandoAprovacao || med.Situacao == SituacaoMedicao.AguardandoLiberacao || med.Situacao == SituacaoMedicao.Liberado) &&
-                                          (med.SequencialItem == sequencialItem && med.SequencialCronograma == sequencialCronograma)
-                                    select med.Valor).Sum();
+                                            where (med.Situacao == SituacaoMedicao.AguardandoAprovacao || med.Situacao == SituacaoMedicao.AguardandoLiberacao || med.Situacao == SituacaoMedicao.Liberado) &&
+                                                  (med.SequencialItem == sequencialItem && med.SequencialCronograma == sequencialCronograma)
+                                            select med.Valor).Sum();
 
             return valorTotalMedidoLiberado;
         }
 
+        public decimal ObterValorTotalImpostoRetido(int? sequencialItem, 
+                                                    int? sequencialCronograma, 
+                                                    int? contratoRetificacaoItemId)
+        {
+            //var teste = (from med in ListaContratoRetificacaoItemMedicao
+            //             join itemImposto in ListaContratoRetificacaoItemImposto on med.ContratoRetificacaoItemId equals itemImposto.ContratoRetificacaoItemId
+            //             where (itemImposto.ImpostoFinanceiro.Retido == true &&
+            //                    med.SequencialItem == sequencialItem &&
+            //                    med.SequencialCronograma == sequencialCronograma &&
+            //                    med.ContratoRetificacaoItemId == contratoRetificacaoItemId)
+            //             select (((med.Valor * itemImposto.PercentualBaseCalculo) / 100) * itemImposto.ImpostoFinanceiro.Aliquota) / 100).ToList();
+
+            var valorTotalImpostoRetido = (from med in ListaContratoRetificacaoItemMedicao
+                                            join itemImposto in ListaContratoRetificacaoItemImposto on med.ContratoRetificacaoItemId equals itemImposto.ContratoRetificacaoItemId
+                                           where (itemImposto.ImpostoFinanceiro.Retido == true) &&
+                                                  ( med.SequencialItem == sequencialItem && 
+                                                    med.SequencialCronograma == sequencialCronograma &&
+                                                    med.ContratoRetificacaoItemId == contratoRetificacaoItemId) 
+                                           select ((((med.Valor * itemImposto.PercentualBaseCalculo) / 100) * itemImposto.ImpostoFinanceiro.Aliquota) / 100)).Sum();
+
+            return valorTotalImpostoRetido;
+        }
+
+        public decimal ObterValorTotalImpostoRetidoMedicao(int? sequencialItem,
+                                                           int? sequencialCronograma,
+                                                           int? contratoRetificacaoItemId,
+                                                           int? id)
+        {
+            var valorTotalImpostoRetidoMedicao = (from med in ListaContratoRetificacaoItemMedicao
+                                                  join itemImposto in ListaContratoRetificacaoItemImposto on med.ContratoRetificacaoItemId equals itemImposto.ContratoRetificacaoItemId
+                                                  where (itemImposto.ImpostoFinanceiro.Retido == true) &&
+                                                        (med.SequencialItem == sequencialItem &&
+                                                        med.SequencialCronograma == sequencialCronograma &&
+                                                        med.ContratoRetificacaoItemId == contratoRetificacaoItemId &&
+                                                        med.Id == id)
+                                                  select ((((med.Valor * itemImposto.PercentualBaseCalculo) / 100) * itemImposto.ImpostoFinanceiro.Aliquota) / 100)).Sum();
+
+            return valorTotalImpostoRetidoMedicao;
+        }
+
+        public decimal ObterValorTotalImpostoIndiretoMedicao(int? sequencialItem,
+                                                             int? sequencialCronograma,
+                                                             int? contratoRetificacaoItemId,
+                                                             int? id)
+        {
+            var valorTotalImpostoRetidoMedicao = (from med in ListaContratoRetificacaoItemMedicao
+                                                  join itemImposto in ListaContratoRetificacaoItemImposto on med.ContratoRetificacaoItemId equals itemImposto.ContratoRetificacaoItemId
+                                                  where (itemImposto.ImpostoFinanceiro.Indireto == true) &&
+                                                        (med.SequencialItem == sequencialItem &&
+                                                        med.SequencialCronograma == sequencialCronograma &&
+                                                        med.ContratoRetificacaoItemId == contratoRetificacaoItemId &&
+                                                        med.Id == id)
+                                                  select ((((med.Valor * itemImposto.PercentualBaseCalculo) / 100) * itemImposto.ImpostoFinanceiro.Aliquota) / 100)).Sum();
+
+            return valorTotalImpostoRetidoMedicao;
+        }
+
+        public decimal ObterValorTotalMedidoIndireto(int? contratoId,
+                                                     string numeroDocumento,
+                                                     int? tipoDocumentoId,
+                                                     Nullable<DateTime> dataVencimento)
+        {
+            var valorTotalMedidoIndireto = (from med in ListaContratoRetificacaoItemMedicao
+                                                join itemImposto in ListaContratoRetificacaoItemImposto on med.ContratoRetificacaoItemId equals itemImposto.ContratoRetificacaoItemId
+                                            where (itemImposto.ImpostoFinanceiro.Indireto == true) &&
+                                                  (med.ContratoId == contratoId &&
+                                                   med.TipoDocumentoId == tipoDocumentoId &&
+                                                   med.NumeroDocumento == numeroDocumento &&
+                                                   med.DataVencimento == dataVencimento)
+                                            select med.Valor).Sum();
+
+            return valorTotalMedidoIndireto;
+        }
+
+        public decimal ObterValorTotalMedidoNota(int? contratoId,
+                                                 string numeroDocumento,
+                                                 int? tipoDocumentoId,
+                                                 Nullable<DateTime> dataVencimento)
+        {
+            var valorTotalTotalMedidoNota = (from med in ListaContratoRetificacaoItemMedicao
+                                             where (med.ContratoId == contratoId &&
+                                                    med.TipoDocumentoId == tipoDocumentoId &&
+                                                    med.NumeroDocumento == numeroDocumento &&
+                                                    med.DataVencimento == dataVencimento)
+                                             select med.Valor).Sum();
+
+            return valorTotalTotalMedidoNota;
+        }
 
         //***************************************************************************************************
 
