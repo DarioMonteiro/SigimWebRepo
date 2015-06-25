@@ -695,17 +695,14 @@
                         success: function (result) {
                             showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)'), result.errorMessage);
                             if (result.ehRecuperou) {
-                                @*$('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val(JSON.stringify(result.listaContratoRetificacaoItemMedicao));*@
                                 jsonContratoRetificaoItemMedicaoArray = result.listaContratoRetificacaoItemMedicao;
                             }
                             else {
-                                @*$('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val("");*@
                                 jsonContratoRetificaoItemMedicaoArray = null;
                             }
                             isRecuperou = result.ehRecuperou;
                         },
                         error: function (result) {
-                            @*$('#@Html.IdFor(m => m.JsonListaContratoRetificacaoItemMedicao)').val("");*@
                             jsonContratoRetificaoItemMedicaoArray = null;
                         }
                     });

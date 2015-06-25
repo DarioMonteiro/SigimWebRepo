@@ -14,6 +14,5 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool ExisteNumeroDocumento(Nullable<DateTime> dataEmissao, string numeroDocumento, int? contratadoId);
         bool Salvar(ContratoRetificacaoItemMedicaoDTO dto);
         bool Cancelar(int? contratoRetificacaoItemMedicaoId);
-        FileDownloadDTO Exportar(int? contratadoId, int contratoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, string retencaoContratual, string valorContratadoItem, FormatoExportacaoArquivo formato);
     }
 }

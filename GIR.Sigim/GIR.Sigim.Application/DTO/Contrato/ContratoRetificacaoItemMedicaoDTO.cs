@@ -109,6 +109,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public decimal ValorImpostoIndiretoMedicao { get; set; }
         public decimal ValorTotalMedidoIndireto { get; set; }
         public decimal ValorTotalMedidoNota { get; set; }
+        public decimal ValorTotalMedidoLiberadoContrato { get; set; }
 
         public TotalizadoresMedicaoDTO Totalizadores { get; set; }
 

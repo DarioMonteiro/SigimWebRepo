@@ -10,11 +10,5 @@ namespace GIR.Sigim.Application.Service.Contrato
 {
     public interface IContratoRetificacaoItemImpostoAppService : IBaseAppService
     {
-        List<ContratoRetificacaoItemImposto> RecuperaImpostoPorContratoDadosDaNota(int contratoId, 
-                                                                                   int tipoDocumentoId, 
-                                                                                   string numeroDocumento, 
-                                                                                   DateTime dataEmissao,
-                                                                                   int? contratadoId,
-                                                                                   params Expression<Func<ContratoRetificacaoItemImposto, object>>[] includes);
     }
 }

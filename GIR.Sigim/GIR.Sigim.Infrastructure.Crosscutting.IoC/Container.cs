@@ -77,9 +77,8 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #region Contrato
             currentContainer.RegisterType<IContratoRepository, ContratoRepository>();
             currentContainer.RegisterType<IParametrosContratoRepository, ParametrosContratoRepository>();
-            currentContainer.RegisterType<IContratoRetificacaoItemRepository, ContratoRetificacaoItemRepository>();
             currentContainer.RegisterType<IContratoRetificacaoItemMedicaoRepository, ContratoRetificacaoItemMedicaoRepository>();
-            currentContainer.RegisterType<IContratoRetificacaoItemImpostoRepository, ContratoRetificacaoItemImpostoRepository>();
+            currentContainer.RegisterType<IContratoRetificacaoItemRepository, ContratoRetificacaoItemRepository>();
             #endregion
 
             #region Financeiro
@@ -167,7 +166,6 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IParametrosContratoAppService, ParametrosContratoAppService>();
             currentContainer.RegisterType<IContratoRetificacaoItemMedicaoAppService, ContratoRetificacaoItemMedicaoAppService>();
             currentContainer.RegisterType<IContratoRetificacaoAppService, ContratoRetificacaoAppService>();
-            currentContainer.RegisterType<IContratoRetificacaoItemImpostoAppService, ContratoRetificacaoItemImpostoAppService>();
             #endregion
 
             #region Financeiro

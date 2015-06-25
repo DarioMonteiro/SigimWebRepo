@@ -413,11 +413,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             DateTime dtEmissao = DateTime.Parse(dataEmissao);
 
 
-            //if (contratoRetificacaoItemMedicaoAppService.EhValidaImpressao(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao))
-            //{
-            //}
+            var arquivo = contratoAppService.ExportarMedicao(contratoId, contratadoId, tipoDocumentoId, numeroDocumento, dtEmissao, retencaoContratual, valorContratadoItem, formato);
 
-            var arquivo = contratoRetificacaoItemMedicaoAppService.Exportar(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao,retencaoContratual,valorContratadoItem, formato);
             if (arquivo != null)
             {
                 Response.Buffer = false;
