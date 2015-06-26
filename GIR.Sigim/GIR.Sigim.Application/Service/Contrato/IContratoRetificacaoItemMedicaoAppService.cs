@@ -13,6 +13,6 @@ namespace GIR.Sigim.Application.Service.Contrato
     {
         bool ExisteNumeroDocumento(Nullable<DateTime> dataEmissao, string numeroDocumento, int? contratadoId);
         bool Salvar(ContratoRetificacaoItemMedicaoDTO dto);
-        bool Cancelar(int? contratoRetificacaoItemMedicaoId);
+        string MedicaoToXML(ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao);
     }
 }

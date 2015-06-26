@@ -47,7 +47,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public SelectList ListaCodigoContribuicao { get; set; }
 
         public string JsonListaRetificacaoProvisao { get; set; }
-        //public string JsonListaContratoRetificacaoItemMedicao { get; set; }
         public int? DiasPagamentoParametrosContrato { get; set; }
         public int? DiasMedicaoParametrosContrato { get; set; }
         public Nullable<DateTime> DataLimiteMedicao { get; set; }

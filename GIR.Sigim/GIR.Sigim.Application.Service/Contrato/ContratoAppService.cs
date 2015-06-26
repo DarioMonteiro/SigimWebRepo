@@ -16,6 +16,7 @@ using GIR.Sigim.Domain.Repository.Contrato;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Domain.Specification.Contrato;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
+using GIR.Sigim.Application.Service.Sigim;
 using CrystalDecisions.Shared;
 
 namespace GIR.Sigim.Application.Service.Contrato
@@ -24,9 +25,11 @@ namespace GIR.Sigim.Application.Service.Contrato
     {
         #region Declaração
 
-        private IContratoRepository contratoRepository;
+        private IContratoRepository  contratoRepository;
         private IUsuarioAppService usuarioAppService;
         private IParametrosContratoAppService parametrosContratoAppService;
+        private ILogOperacaoAppService logOperacaoAppService;
+        private ContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
 
         #endregion
 
@@ -35,18 +38,21 @@ namespace GIR.Sigim.Application.Service.Contrato
         public ContratoAppService(IContratoRepository contratoRepository, 
                                   IUsuarioAppService usuarioAppService, 
                                   IParametrosContratoAppService parametrosContratoAppService,
+                                  ILogOperacaoAppService logOperacaoAppService,
+                                  ContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
                                   MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.contratoRepository = contratoRepository;
             this.usuarioAppService = usuarioAppService;
             this.parametrosContratoAppService = parametrosContratoAppService;
+            this.logOperacaoAppService = logOperacaoAppService;
+            this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
         }
 
         #endregion
 
         #region Métodos IContratoAppService
-
 
         public List<ContratoDTO> ListarPeloFiltro(MedicaoContratoFiltro filtro,int? idUsuario, out int totalRegistros)
         {
@@ -468,9 +474,101 @@ namespace GIR.Sigim.Application.Service.Contrato
             return arquivo;
         }
 
+
+        public bool ExcluirMedicao(int? contratoId,int? contratoRetificacaoItemMedicaoId)
+        {
+            var contrato = contratoRepository.ObterPeloId(contratoId,l => l.ListaContratoRetificacaoItemMedicao);
+            if (!EhValidoExcluirMedicao(contrato,contratoRetificacaoItemMedicaoId))
+            {
+                return false;
+            }
+
+            try
+            {
+                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == contratoRetificacaoItemMedicaoId).SingleOrDefault();
+                contrato.ListaContratoRetificacaoItemMedicao.Remove(contratoRetificacaoItemMedicao);
+                contratoRepository.RemoverItemMedicao(contratoRetificacaoItemMedicao);
+
+                contratoRepository.Alterar(contrato);
+                contratoRepository.UnitOfWork.Commit();
+
+                GravarLogOperacao(contratoRetificacaoItemMedicao, "DELETE");
+
+                messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+                messageQueue.Add(Resource.Sigim.ErrorMessages.ExclusaoErro, TypeMessage.Error);
+                return false;
+            }
+        }
+
         #endregion
 
         #region Métodos Privados
+
+        private void GravarLogOperacao(ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao, string operacao)
+        {
+            string descricaoOperacao = "";
+            string nomeRotina = "";
+            if (operacao == "INSERT" || operacao == "UPDATE")
+            {
+                descricaoOperacao = "Atualização da medição";
+                nomeRotina = "Contrato.contratoRetificacaoItemMedicao_Atualiza";
+            }
+            if (operacao == "DELETE")
+            {
+                descricaoOperacao = "Cancelamento da medição";
+                nomeRotina = "Contrato.contratoRetificacaoItemMedicao_Deleta";
+            }
+
+
+            logOperacaoAppService.Gravar(descricaoOperacao,
+                nomeRotina,
+                "Contrato.contratoRetificacaoItemMedicao",
+                operacao,
+                contratoRetificacaoItemMedicaoAppService.MedicaoToXML(contratoRetificacaoItemMedicao));
+
+        }
+
+        private bool EhValidoExcluirMedicao(Domain.Entity.Contrato.Contrato contrato,int? contratoRetificacaoItemMedicaoId)
+        {
+
+            if (!contratoRetificacaoItemMedicaoId.HasValue)
+            {
+                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.SelecioneUmaMedicao, TypeMessage.Error);
+                return false;
+            }
+
+
+            if (contratoRetificacaoItemMedicaoId.Value == 0)
+            {
+                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.SelecioneUmaMedicao, TypeMessage.Error);
+                return false;
+            }
+
+            if (contrato == null)
+            {
+                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.MedicaoNaoEncontrada, TypeMessage.Error);
+                return false;
+            }
+
+            if (contrato.ListaContratoRetificacaoItemMedicao == null)
+            {
+                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.MedicaoNaoEncontrada, TypeMessage.Error);
+                return false;
+            }
+
+            if (!contrato.ListaContratoRetificacaoItemMedicao.Any(l => l.Id == contratoRetificacaoItemMedicaoId))
+            {
+                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.MedicaoNaoEncontrada, TypeMessage.Error);
+                return false;
+            }
+
+            return true;
+        }
 
         private bool PodeSerUmContratoAssinado(SituacaoContrato situacao)
         {

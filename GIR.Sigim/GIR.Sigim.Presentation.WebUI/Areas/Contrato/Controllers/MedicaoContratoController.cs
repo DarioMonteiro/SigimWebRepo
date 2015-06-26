@@ -310,12 +310,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         }
 
         [HttpPost]
-        public ActionResult Cancelar(int? id)
+        public ActionResult Cancelar(int? id,int? contratoId)
         {
             bool cancelou = false;
 
             string msg = "";
-            cancelou = contratoRetificacaoItemMedicaoAppService.Cancelar(id);
+            cancelou = contratoAppService.ExcluirMedicao(contratoId, id);
             if (messageQueue.GetAll().Count > 0)
             {
                 msg = messageQueue.GetAll()[0].Text;

@@ -47,7 +47,6 @@
                         @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)
                         @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId)
                         @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)
-                        //@Html.HiddenFor(m => m.JsonListaContratoRetificacaoItemMedicao)
                         @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicao.Id)
                         
                         <div class="panel-group smart-accordion-default" id="accordion">
@@ -795,6 +794,7 @@
 
 
         $("#btnCancelar").on("click", function () {
+            var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
             var id = $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)').val();
             var isCancelou = false;
 
@@ -805,15 +805,20 @@
                 async: false,
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
-                    id: id
+                    id: id,
+                    contratoId: contratoId
                 })
             })
             .success(function (result) {
-                //$('#notificationMessages').html(result.message);
-                smartAlert("Sucesso", result.message, "success");
+                $('#notificationMessages').html(result.message);
+                
                 isCancelou = result.ehCancelou;
                 if (isCancelou) {
+                    smartAlert("Sucesso", result.message, "success");
                     recuperaContratoItem();
+                }
+                else {
+                    smartAlert("Ocorreu erro na exclusão", result.message, "error");
                 }
             });
         });
@@ -1567,7 +1572,7 @@
                 if (isNaN(valorDesconto) || valorDesconto == null) {
                     valorDesconto = 0;
                 }
-                valorLiquido = valorLiquido - valorDesconto;
+                valorLiquido = valorLiberado - valorDesconto;
 
                 var titulo = "";
                 var tituloPagar = "";

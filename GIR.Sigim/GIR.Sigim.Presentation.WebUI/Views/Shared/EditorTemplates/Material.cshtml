@@ -154,7 +154,8 @@
             }
         }
 
-        $(document).on("centroCustoValidado",            function (e) {
+        $(document).on("centroCustoValidado",
+            function (e) {
                 codigoCentroCusto_@Html.IdFor(m => m.Id) = e.codigo;
 
                 @if (centroCustoRequerido.Value) {
@@ -171,9 +172,18 @@
                     @:  limpaMaterialForm_@(Html.IdFor(m => m.Id))();
                     @:}
                 }
-            }        );        $(document).on("classeValidada",            function (e) {
+            }
+        );
+
+        $(document).on("classeValidada",
+            function (e) {
                 codigoClasse_@Html.IdFor(m => m.Id) = e.isValid ? e.codigo : '';
-            }        );        @if (centroCustoRequerido.Value) {            @:validaCentroCusto();        }
+            }
+        );
+
+        @if (centroCustoRequerido.Value) {
+            @:validaCentroCusto();
+        }
     });
 
     function fillTableInterfaceOrcamentoItem_@(Html.IdFor(m => m.Id))(listaInterfaceOrcamentoItem) {

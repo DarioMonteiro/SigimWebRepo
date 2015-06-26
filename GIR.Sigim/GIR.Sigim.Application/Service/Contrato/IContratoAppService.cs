@@ -24,15 +24,8 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool EhValidoParametrosVisualizacaoMedicao(int? contratoId, int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao, int? contratadoId);
         List<ContratoRetificacaoItemMedicaoDTO> RecuperaMedicaoPorDadosDaNota(int contratoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, int? contratadoId);
         bool ExisteNumeroDocumento(Nullable<DateTime> dataEmissao, string numeroDocumento, int? contratadoId);
-
-        FileDownloadDTO ExportarMedicao(int contratoId,
-                                        int? contratadoId,
-                                        int tipoDocumentoId,
-                                        string numeroDocumento,
-                                        DateTime dataEmissao,
-                                        string retencaoContratual,
-                                        string valorContratadoItem,
-                                        FormatoExportacaoArquivo formato);
+        FileDownloadDTO ExportarMedicao(int contratoId,int? contratadoId,int tipoDocumentoId,string numeroDocumento,DateTime dataEmissao,string retencaoContratual,string valorContratadoItem,FormatoExportacaoArquivo formato);
+        bool ExcluirMedicao(int? contratoId, int? contratoRetificacaoItemMedicaoId);
 
     }
 }

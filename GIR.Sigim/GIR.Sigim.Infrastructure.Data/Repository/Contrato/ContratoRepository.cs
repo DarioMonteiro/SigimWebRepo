@@ -170,5 +170,14 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Contrato
         //}
 
         #endregion
+
+        public void RemoverItemMedicao(ContratoRetificacaoItemMedicao item)
+        {
+            if (item != (ContratoRetificacaoItemMedicao)null)
+            {
+                QueryableUnitOfWork.Attach(item);
+                QueryableUnitOfWork.CreateSet<ContratoRetificacaoItemMedicao>().Remove(item);
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
 {
     public class ContratoRetificacaoItemMedicao : BaseEntity
     {
-        public int ContratoId { get; set; }
+        public int? ContratoId { get; set; }
         public Contrato Contrato { get; set; }
         public int ContratoRetificacaoId { get; set; }
         public ContratoRetificacao ContratoRetificacao { get; set; }
