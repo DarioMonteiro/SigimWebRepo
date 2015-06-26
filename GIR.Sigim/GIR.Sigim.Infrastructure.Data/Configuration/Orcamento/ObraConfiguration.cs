@@ -39,6 +39,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
             HasOptional(l => l.CentroCusto)
                 .WithMany(l => l.ListaObra)
                 .HasForeignKey(l => l.CodigoCentroCusto);
+
+            HasMany<Domain.Entity.Orcamento.Orcamento>(l => l.ListaOrcamento)
+                .WithRequired(l => l.Obra)
+                .HasForeignKey(c => c.ObraId);
+
+
         }
     }
 }

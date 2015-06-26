@@ -25,6 +25,10 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public TituloReceber TituloReceber { get; set; }
         public decimal Valor { get; set; }
         public decimal Quantidade { get; set; }
-
+        public bool? PagamentoAntecipado { get; set; }
+        public decimal? ValorAdiantadoDescontado { get; set; }
+        public Nullable<DateTime> DataAntecipacao { get; set; }
+        public string UsuarioAntecipacao { get; set; }
+        public string DocumentoAntecipacao { get; set; }
     }
 }

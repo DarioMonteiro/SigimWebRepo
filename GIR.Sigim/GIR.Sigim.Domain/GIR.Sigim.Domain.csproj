@@ -49,6 +49,7 @@
     <Compile Include="Entity\Contrato\ContratoRetificacao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItem.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemCronograma.cs" />
+    <Compile Include="Entity\Contrato\ContratoRetificacaoItemImposto.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />
@@ -104,6 +105,9 @@
     <Compile Include="Entity\OrdemCompra\PreRequisicaoMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\PreRequisicaoMaterialItem.cs" />
     <Compile Include="Entity\OrdemCompra\SituacaoPreRequisicaoMaterial.cs" />
+    <Compile Include="Entity\Sac\SituacaoSolicitacaoSac.cs" />
+    <Compile Include="Entity\Sac\ParametrosEmailSac.cs" />
+    <Compile Include="Entity\Sac\Setor.cs" />
     <Compile Include="Entity\Sac\ParametrosSac.cs" />
     <Compile Include="Entity\Sigim\AssuntoContato.cs" />
     <Compile Include="Entity\Sigim\Banco.cs" />
@@ -113,6 +117,9 @@
     <Compile Include="Entity\Sigim\ClienteFornecedor.cs" />
     <Compile Include="Entity\Sigim\CodigoContribuicao.cs" />
     <Compile Include="Entity\Sigim\Composicao.cs" />
+    <Compile Include="Entity\Sigim\LogAcesso.cs" />
+    <Compile Include="Entity\Sigim\FormaRecebimento.cs" />
+    <Compile Include="Entity\Sigim\TipoFormaRecebimento.cs" />
     <Compile Include="Entity\Sigim\TipoArea.cs" />
     <Compile Include="Entity\Sigim\TipoCaracteristica.cs" />
     <Compile Include="Entity\Sigim\TipoEspecificacao.cs" />
@@ -152,7 +159,6 @@
     <Compile Include="Repository\Contrato\IContratoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemRepository.cs" />
-    <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\IRateioAutomaticoRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoFinanceiroRepository.cs" />
@@ -175,6 +181,11 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\ILogAcessoRepository.cs" />
+    <Compile Include="Repository\Sigim\IBancoRepository.cs" />
+    <Compile Include="Repository\Sigim\IFormaRecebimentoRepository.cs" />
+    <Compile Include="Repository\Sac\IParametrosEmailSacRepository.cs" />
+    <Compile Include="Repository\Sac\ISetorRepository.cs" />
     <Compile Include="Repository\Sigim\ILogOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\IUnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sac\IParametrosSacRepository.cs" />
@@ -222,13 +233,13 @@
     <Compile Include="Specification\OrdemCompra\PreRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrSpecification.cs" />
     <Compile Include="Specification\ParameterRebinder.cs" />
+    <Compile Include="Specification\Sigim\MaterialSpecification.cs" />
     <Compile Include="Specification\Specification.cs" />
     <Compile Include="Specification\TrueSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\Sigim\" />
     <Folder Include="Specification\Financeiro\" />
-    <Folder Include="Specification\Sigim\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\ErrorMessages.resx">

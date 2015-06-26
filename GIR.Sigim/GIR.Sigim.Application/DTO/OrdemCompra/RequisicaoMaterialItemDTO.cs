@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.DTO.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 
 namespace GIR.Sigim.Application.DTO.OrdemCompra
@@ -16,10 +17,10 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public SituacaoRequisicaoMaterialItem Situacao { get; set; }
         public int? UltimaCotacao { get; set; }
         public int? UltimaOrdemCompra { get; set; }
-        public bool TemInterfaceOrcamento { get; set; }
+        public OrcamentoInsumoRequisitadoDTO OrcamentoInsumoRequisitado { get; set; }
         public string TemInterfaceOrcamentoDescricao
         {
-            get { return TemInterfaceOrcamento ? "Sim" : "Não"; }
+            get { return (OrcamentoInsumoRequisitado != null) ? "Sim" : "Não"; }
         }
         public List<CotacaoItemDTO> ListaCotacaoItem { get; set; }
         public List<OrdemCompraItemDTO> ListaOrdemCompraItem { get; set; }

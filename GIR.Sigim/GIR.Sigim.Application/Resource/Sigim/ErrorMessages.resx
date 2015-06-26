@@ -135,6 +135,9 @@
   <data name="EmailInvalido" xml:space="preserve">
     <value>Por favor insira um endereço de email válido.</value>
   </data>
+  <data name="ExclusaoErro" xml:space="preserve">
+    <value>Erro ao efetuar a exclusão !</value>
+  </data>
   <data name="FormatoImagemInvalido" xml:space="preserve">
     <value>A imagem deve ter um dos seguintes formatos: BMP, JPG, GIF ou PNG.</value>
   </data>

@@ -13,18 +13,18 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sac
         #region Constructor
 
         public ParametrosSacRepository(UnitOfWork unitOfWork)
-               : base(unitOfWork)
+            : base(unitOfWork)
         {
 
         }
 
         #endregion
 
-        #region IParametrosOrdemCompraRepository Members
+        #region IParametrosSacRepository Members
 
         public ParametrosSac Obter()
         {
-            var set = CreateSetAsQueryable(l => l.Cliente);
+            var set = CreateSetAsQueryable(l => l.Cliente, s => s.ListaParametrosEmailSac.Select(c => c.Setor));
             return set.FirstOrDefault();
         }
 

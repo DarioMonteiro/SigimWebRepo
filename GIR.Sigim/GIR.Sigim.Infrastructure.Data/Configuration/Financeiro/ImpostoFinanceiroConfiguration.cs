@@ -36,6 +36,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
             Property(l => l.Aliquota)
                .HasColumnName("aliquota")
                .IsRequired()
+               .HasPrecision(18, 5)
                .HasColumnOrder(4);
 
             Property(l => l.Retido)
@@ -87,6 +88,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                .HasColumnName("diaVencimento")
                .HasColumnType("smallint")
                .HasColumnOrder(14);
+
+            HasMany(l => l.ListaContratoRetificacaoItemImposto)
+                .WithRequired(c => c.ImpostoFinanceiro)
+                .HasForeignKey(c => c.ImpostoFinanceiroId);
 
         }
     }

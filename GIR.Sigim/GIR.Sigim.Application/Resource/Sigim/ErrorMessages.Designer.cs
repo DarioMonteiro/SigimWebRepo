@@ -115,6 +115,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Erro ao efetuar a exclusão !.
+        /// </summary>
+        public static string ExclusaoErro {
+            get {
+                return ResourceManager.GetString("ExclusaoErro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A imagem deve ter um dos seguintes formatos: BMP, JPG, GIF ou PNG..
         /// </summary>
         public static string FormatoImagemInvalido {

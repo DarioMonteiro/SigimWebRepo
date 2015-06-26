@@ -23,31 +23,53 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sac
             Property(l => l.ClienteId)
                 .HasColumnName("cliente")
                 .HasColumnOrder(2);
-
-            //HasOptional(l => l.Cliente)
-            //    .WithMany(l => l.ListaParametrosSac);
-            
+                        
             Property(l => l.Mascara)
                 .HasMaxLength(18)
                 .HasColumnName("mascara")
-                .HasColumnOrder(4);
+                .HasColumnOrder(3);
 
             Property(l => l.IconeRelatorio)
                 .HasColumnType("image")
                 .HasColumnName("iconeRelatorio")
-                .HasColumnOrder(5);
+                .HasColumnOrder(4);
             
             Property(l => l.PrazoAvaliacao )
                 .HasColumnName("prazoAvaliacao")
-                .HasColumnOrder(9);
+                .HasColumnOrder(5);
 
             Property(l => l.PrazoConclusao)
                 .HasColumnName("prazoConclusao")
+                .HasColumnOrder(6);
+
+            Property(l => l.EmailEnvio)
+                .HasColumnName("emailEnvio")
+                .HasColumnOrder(7);
+
+            Property(l => l.SenhaEnvio)
+                .HasColumnName("senhaEnvio")
+                .HasColumnOrder(8);
+
+            Property(l => l.PortaEnvio)
+                .HasColumnName("portaEnvio")
+                .HasColumnOrder(9);
+                       
+            Property(l => l.ServidorEnvio)
+                .HasColumnName("servidorEnvio")
                 .HasColumnOrder(10);
 
-            //Property(l => l.HabilitaSSL)
-            //    .HasColumnName("habilitaSSL")
-            //    .HasColumnOrder(17);
+            Property(l => l.CorpoMensagemAutomaticaSacweb)
+                .HasColumnName("corpoMensagemAutomaticaSacweb")
+                .HasColumnOrder(11);
+
+            Property(l => l.HabilitaSSL)
+                .HasColumnName("habilitaSSL")
+                .HasColumnType ("bit")
+                .HasColumnOrder(12);
+
+            HasMany<ParametrosEmailSac>(l => l.ListaParametrosEmailSac)
+                .WithOptional(l => l.Parametros)
+                .HasForeignKey(l => l.ParametrosId);
         }
     }
 }

@@ -176,6 +176,8 @@
     <Compile Include="Areas\Financeiro\ViewModel\TipoRateioViewModel.cs" />
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
+    <Compile Include="Controllers\BancoController.cs" />
+    <Compile Include="Controllers\FormaRecebimentoController.cs" />
     <Compile Include="Controllers\UnidadeMedidaController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\HomeController.cs" />
@@ -188,9 +190,13 @@
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialListaViewModel.cs" />
     <Compile Include="Areas\Sac\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Sac\Controllers\SetorController.cs" />
     <Compile Include="Areas\Sac\Controllers\ParametrosController.cs" />
     <Compile Include="Areas\Sac\SacAreaRegistration.cs" />
+    <Compile Include="Areas\Sac\ViewModel\SetorViewModel.cs" />
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
+    <Compile Include="ViewModel\BancoViewModel.cs" />
+    <Compile Include="ViewModel\FormaRecebimentoViewModel.cs" />
     <Compile Include="ViewModel\UnidadeMedidaViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -208,6 +214,7 @@
     <Compile Include="ViewModel\Admin\LoginViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\ParametrosUsuarioViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\ParametrosViewModel.cs" />
+    <Compile Include="ViewModel\InterfaceOrcamentoViewModel.cs" />
     <Compile Include="ViewModel\ListaViewModel.cs" />
     <Compile Include="ViewModel\MaterialListaViewModel.cs" />
     <Compile Include="ViewModel\Page.cs" />
@@ -263,6 +270,19 @@
     <Content Include="Areas\OrdemCompra\Views\Home\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\Web.config" />
     <Content Include="Areas\Financeiro\Views\_ViewStart.cshtml" />
+    <Content Include="ImagemRelatorio\0446ee22-6fef-41da-8567-0b24a44901c3.bmp" />
+    <Content Include="ImagemRelatorio\13bc62f1-5a09-444b-9cab-56b8560663b2.bmp" />
+    <Content Include="ImagemRelatorio\257b9d2b-4b4f-4327-ba9c-402d6525d0a9.bmp" />
+    <Content Include="ImagemRelatorio\5913a6f7-da5e-4777-a306-345d1b0ba955.bmp" />
+    <Content Include="ImagemRelatorio\69cdfcef-13fd-467f-95d6-433ed2150637.bmp" />
+    <Content Include="ImagemRelatorio\7e5ac06d-1c86-4e91-8cbe-18e880403053.bmp" />
+    <Content Include="ImagemRelatorio\915b820b-243e-496a-afb7-276e5505b83a.bmp" />
+    <Content Include="ImagemRelatorio\99a04b31-d778-4204-9c66-8693d87e4a6c.bmp" />
+    <Content Include="ImagemRelatorio\9f20a014-8ad4-4b46-81ee-12454c248a68.bmp" />
+    <Content Include="ImagemRelatorio\d24fe3a9-acb2-4417-94f0-164b2240703c.bmp" />
+    <Content Include="ImagemRelatorio\f65b74b2-7d71-469f-b689-185e2653a169.bmp" />
+    <Content Include="ImagemRelatorio\fdb71d6e-b92a-4235-a0cc-2bae133e8a5c.bmp" />
+    <Content Include="Scripts\libs\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\plugin\form-to-json\form2js.js" />
     <Content Include="Scripts\plugin\form-to-json\jquery.toObject.js" />
     <Content Include="Scripts\sigim_scripts.js" />
@@ -309,6 +329,8 @@
     <Content Include="Areas\Financeiro\Views\ImpostoFinanceiro\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\ImpostoFinanceiro\ListaPartial.cshtml" />
     <Content Include="Areas\Financeiro\Views\RateioAutomatico\Index.cshtml" />
+    <Content Include="Areas\Sac\Views\Setor\Index.cshtml" />
+    <Content Include="Areas\Sac\Views\Setor\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
@@ -752,6 +774,10 @@
     <Content Include="Views\Material\Index.cshtml" />
     <Content Include="Views\Material\ListaPartial.cshtml" />
     <Content Include="Views\Shared\_LoadingPartial.cshtml" />
+    <Content Include="Views\FormaRecebimento\Index.cshtml" />
+    <Content Include="Views\FormaRecebimento\ListaPartial.cshtml" />
+    <Content Include="Views\Banco\Index.cshtml" />
+    <Content Include="Views\Banco\ListaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

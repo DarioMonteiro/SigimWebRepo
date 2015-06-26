@@ -22,7 +22,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.Notification
 
         public List<Message> GetAll()
         {
-            return notificationMessages;
+            return notificationMessages.Select(l => l).ToList();
         }
 
         public void Add(string text, TypeMessage type)

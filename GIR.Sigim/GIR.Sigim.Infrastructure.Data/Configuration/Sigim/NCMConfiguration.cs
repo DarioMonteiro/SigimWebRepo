@@ -29,8 +29,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("descricao")
                 .HasColumnOrder(2);
 
-            HasMany(l => l.ListaMaterial)
-                .WithOptional(l => l.NCM);
+            HasMany<Material>(l => l.ListaMaterial)
+                .WithOptional(c => c.NCM)
+                .HasForeignKey(c => c.CodigoNCM);
+
+
         }
     }
 }

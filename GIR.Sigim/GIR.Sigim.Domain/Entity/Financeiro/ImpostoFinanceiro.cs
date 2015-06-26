@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Sigim;
-
+using GIR.Sigim.Domain.Entity.Contrato;
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
     public class ImpostoFinanceiro : BaseEntity
@@ -26,6 +26,11 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public int? FimDeSemana { get; set; }
         public int? FatoGerador { get; set; }
 
-        public ImpostoFinanceiro(){}
+        public ICollection<ContratoRetificacaoItemImposto> ListaContratoRetificacaoItemImposto { get; set; }
+
+        public ImpostoFinanceiro()
+        {
+            this.ListaContratoRetificacaoItemImposto = new HashSet<ContratoRetificacaoItemImposto>();
+        }
     }
 }

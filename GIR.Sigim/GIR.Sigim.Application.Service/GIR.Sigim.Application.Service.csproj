@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.Extensions" />
@@ -60,7 +61,6 @@
     <Compile Include="Contrato\ContratoRetificacaoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoItemAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoItemMedicaoAppService.cs" />
-    <Compile Include="Contrato\ContratoRetificacaoProvisaoAppService.cs" />
     <Compile Include="Contrato\ParametrosContratoAppService.cs" />
     <Compile Include="Financeiro\CentroCustoAppService.cs" />
     <Compile Include="Financeiro\ClasseAppService.cs" />
@@ -82,6 +82,7 @@
     <Compile Include="OrdemCompra\ParametrosUsuarioAppService.cs" />
     <Compile Include="OrdemCompra\PreRequisicaoMaterialAppService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sac\SetorAppService.cs" />
     <Compile Include="Sac\ParametrosSacAppService.cs" />
     <Compile Include="Sigim\BancoLayoutAppService.cs" />
     <Compile Include="Sigim\BloqueioContabilAppService.cs" />
@@ -89,6 +90,8 @@
     <Compile Include="Sigim\ClienteFornecedorAppService.cs" />
     <Compile Include="Sigim\AssuntoContatoAppService.cs" />
     <Compile Include="Sigim\CodigoContribuicaoAppService.cs" />
+    <Compile Include="Sigim\BancoAppService.cs" />
+    <Compile Include="Sigim\FormaRecebimentoAppService.cs" />
     <Compile Include="Sigim\TratamentoAppService.cs" />
     <Compile Include="Sigim\TipoAreaAppService.cs" />
     <Compile Include="Sigim\TipoCaracteristicaAppService.cs" />

@@ -81,7 +81,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             else
             {
                 rateioAutomaticoRepository.UnitOfWork.RollbackChanges();
-                messageQueue.AddRange(validationErrors, TypeMessage.Error);
+                messageQueue.Add("Erro na exclusão !", TypeMessage.Error);
             }
 
             return bolOK;
@@ -107,16 +107,24 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 try
                 {
                     rateioAutomaticoRepository.Remover(rateioAutomatico);
-                    rateioAutomaticoRepository.UnitOfWork.Commit();
-                    messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
                     bolOK = true;
                 }
                 catch (Exception)
                 {
-                    messageQueue.Add("Erro na exclusão !", TypeMessage.Error);
                     bolOK = false;
                     break;
                 }
+            }
+
+            if (bolOK == true)
+            {
+                rateioAutomaticoRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
+            }
+            else
+            {
+                rateioAutomaticoRepository.UnitOfWork.RollbackChanges();
+                messageQueue.Add("Erro na exclusão !", TypeMessage.Error);
             }
 
             return bolOK;

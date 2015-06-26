@@ -62,10 +62,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return true;
         }
 
-        public List<TreeNodeDTO> ListarPeloOrcamento(int orcamentoId)
+        public List<TreeNodeDTO> ListarPeloOrcamento(int? orcamentoId)
         {
             var arvore = ClasseRepository.ListarRaizes();
-            if (orcamentoId > 0)
+            if (orcamentoId.HasValue && orcamentoId > 0)
                 return RemoverClassesNaoPertencentesAoOrcamento(arvore.ToList(), orcamentoId).To<List<TreeNodeDTO>>();
             else
                 return arvore.To<List<TreeNodeDTO>>();;
@@ -73,7 +73,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         #endregion
 
-        private List<Classe> RemoverClassesNaoPertencentesAoOrcamento(List<Classe> arvore, int orcamentoId)
+        private List<Classe> RemoverClassesNaoPertencentesAoOrcamento(List<Classe> arvore, int? orcamentoId)
         {
             for (int i = arvore.Count - 1; i >= 0; i--)
             {

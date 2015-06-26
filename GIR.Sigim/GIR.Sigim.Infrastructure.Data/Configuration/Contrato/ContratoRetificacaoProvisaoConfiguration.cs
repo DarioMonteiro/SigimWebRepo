@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.Financeiro;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 {
@@ -25,12 +26,16 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("contrato")
                 .HasColumnOrder(2);
 
+            HasRequired<Domain.Entity.Contrato.Contrato>(l => l.Contrato)
+                .WithMany(c => c.ListaContratoRetificacaoProvisao)
+                .HasForeignKey(l => l.ContratoId);
+
             Property(l => l.ContratoRetificacaoId)
                 .IsRequired()
                 .HasColumnName("contratoRetificacao")
                 .HasColumnOrder(3);
 
-            HasRequired<Domain.Entity.Contrato.ContratoRetificacao>(l => l.ContratoRetificacao)
+            HasRequired<ContratoRetificacao>(l => l.ContratoRetificacao)
                 .WithMany(c => c.ListaContratoRetificacaoProvisao)
                 .HasForeignKey(l => l.ContratoRetificacaoId);
 
@@ -38,7 +43,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("contratoRetificacaoItem")
                 .HasColumnOrder(4);
 
-            HasOptional<Domain.Entity.Contrato.ContratoRetificacaoItem>(l => l.ContratoRetificacaoItem)
+            HasOptional<ContratoRetificacaoItem>(l => l.ContratoRetificacaoItem)
                 .WithMany(c => c.ListaContratoRetificacaoProvisao)
                 .HasForeignKey(l => l.ContratoRetificacaoItemId);
 
@@ -53,7 +58,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
             //TODO: O RELACIONAMENTO DEVERIA SER 1 PARA 1 , ONDE A CHAVE PRIMARIA DE CONTRATORETIFICACAOITEMCRONOGRAMA
             //      DEVERIA SER FOREING KEY PARA A CHAVE PRIMARIA DE CONTRATORETIFICACAOPROVISAO, MAS DEVIDO
             //      A MODELAGEM DA TABELA ELA É 1 PARA MUITOS
-            HasOptional<Domain.Entity.Contrato.ContratoRetificacaoItemCronograma>(l => l.ContratoRetificacaoItemCronograma)
+            HasOptional<ContratoRetificacaoItemCronograma>(l => l.ContratoRetificacaoItemCronograma)
                 .WithMany(c => c.ListaContratoRetificacaoProvisao)
                 .HasForeignKey(l => l.ContratoRetificacaoItemCronogramaId); 
                //.WithRequired(c => c.ContratoRetificacaoProvisao);
@@ -66,14 +71,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("tituloPagar")
                 .HasColumnOrder(8);
 
-            HasOptional<Domain.Entity.Financeiro.TituloPagar>(l => l.TituloPagar)
+            HasOptional<TituloPagar>(l => l.TituloPagar)
                 .WithRequired(c => c.ContratoRetificacaoProvisao);
 
             Property(l => l.TituloReceberId)
                 .HasColumnName("tituloReceber")
                 .HasColumnOrder(9);
 
-            HasOptional<Domain.Entity.Financeiro.TituloReceber>(l => l.TituloReceber)
+            HasOptional<TituloReceber>(l => l.TituloReceber)
                 .WithRequired(c => c.ContratoRetificacaoProvisao);
 
             Property(l => l.Valor)
@@ -87,6 +92,33 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .IsRequired()
                 .HasPrecision(18, 7)
                 .HasColumnOrder(11);
+
+            Property(l => l.PagamentoAntecipado)
+                .HasColumnName("pagamentoAntecipado")
+                .HasColumnType("bit")
+                .HasColumnOrder(12);
+
+            Property(l => l.ValorAdiantadoDescontado)
+                .HasColumnName("valorAdiantadoDescontado")
+                .HasPrecision(18, 5)
+                .HasColumnOrder(13);
+
+            Property(l => l.DataAntecipacao)
+                .HasColumnName("dataAntecipacao")
+                .HasColumnOrder(14);
+
+
+            Property(l => l.UsuarioAntecipacao)
+                .HasColumnName("usuarioAntecipacao")
+                .HasMaxLength(50) 
+                .HasColumnOrder(15);
+
+            Property(l => l.DocumentoAntecipacao)
+                .HasColumnName("documentoAntecipacao")
+                .HasMaxLength(100) 
+                .HasColumnOrder(16);
+
+
 
         }
 

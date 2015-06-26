@@ -112,6 +112,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ContratoRetificacaoProvisaoConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemCronogramaConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemImpostoConfiguration());
 
             //Financeiro
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());
@@ -157,6 +158,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new PessoaFisicaConfiguration());
             modelBuilder.Configurations.Add(new PessoaJuridicaConfiguration()); 
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());
+            modelBuilder.Configurations.Add(new LogAcessoConfiguration());
             modelBuilder.Configurations.Add(new LogOperacaoConfiguration());
             modelBuilder.Configurations.Add(new InteresseBairroConfiguration());
             modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
@@ -179,11 +181,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new TipoAreaConfiguration());
             modelBuilder.Configurations.Add(new TipoCaracteristicaConfiguration());
             modelBuilder.Configurations.Add(new TipoEspecificacaoConfiguration());
-
-            //Sac
-            modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
-            
-            
+            modelBuilder.Configurations.Add(new FormaRecebimentoConfiguration());
             modelBuilder.Configurations.Add(new TipoCompraConfiguration());
             modelBuilder.Configurations.Add(new CifFobConfiguration());
             modelBuilder.Configurations.Add(new NaturezaOperacaoConfiguration());
@@ -191,6 +189,13 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new CSTConfiguration());
             modelBuilder.Configurations.Add(new CodigoContribuicaoConfiguration());
             modelBuilder.Configurations.Add(new BloqueioContabilConfiguration());
+
+            //Sac
+            modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
+            modelBuilder.Configurations.Add(new SetorConfiguration());
+            modelBuilder.Configurations.Add(new ParametrosEmailSacConfiguration());
+            
+            
         }
         #endregion
     }

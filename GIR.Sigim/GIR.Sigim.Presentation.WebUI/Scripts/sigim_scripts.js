@@ -107,6 +107,10 @@ jQuery.extend(jQuery.validator.methods, {
 });
 
 $(document).ready(function () {
+    initializeDecimalBehaviour();
+});
+
+function initializeDecimalBehaviour() {
     $("input.decimal-2-casas").on("focusout", function () {
         $(this).val(roundDecimal($(this).val(), 2));
     });
@@ -117,18 +121,16 @@ $(document).ready(function () {
 
     $("input.decimal-5-casas").on("focusout", function () {
         $(this).val(roundDecimal($(this).val(), 5));
-});
+    });
 
     $("input.decimal-7-casas").on("focusout", function () {
         $(this).val(roundDecimal($(this).val(), 7));
     });
-
-
-});
+}
 
 function roundDecimal(value, precision) {
     var originalValue = 0 + value;
-    var roundedValue = parseFloat(originalValue.toString().replace(".", "").replace(",", ".")).toFixed(precision);
+    var roundedValue = parseFloat(stringToFloat(originalValue.toString())).toFixed(precision);
     return roundedValue.replace(".", ",");
 }
 

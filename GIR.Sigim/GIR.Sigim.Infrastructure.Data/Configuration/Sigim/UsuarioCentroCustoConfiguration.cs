@@ -20,23 +20,28 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
             Property(l => l.UsuarioId)
                 .HasColumnName("usuario");
 
-            Property(l => l.ModuloId)
-                .HasColumnName("sistema");
-
-            Property(l => l.CodigoCentroCusto)
-                .HasColumnName("centroCusto");
-
             HasRequired(l => l.Usuario)
                 .WithMany(l => l.ListaUsuarioCentroCusto)
                 .HasForeignKey(l => l.UsuarioId);
+
+            Property(l => l.ModuloId)
+                .HasColumnName("sistema");
 
             HasOptional(l => l.Modulo)
                 .WithMany(l => l.ListaUsuarioCentroCusto)
                 .HasForeignKey(l => l.ModuloId);
 
+            Property(l => l.CodigoCentroCusto)
+                .IsRequired()
+                .HasMaxLength(18)
+                .HasColumnName("centroCusto");
+
             HasRequired(l => l.CentroCusto)
-                .WithMany(l => l.ListaUsuarioCentroCusto)
+                .WithMany(c => c.ListaUsuarioCentroCusto)
                 .HasForeignKey(l => l.CodigoCentroCusto);
+
+
+
         }
     }
 }

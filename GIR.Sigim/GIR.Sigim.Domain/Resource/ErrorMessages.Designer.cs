@@ -70,6 +70,15 @@ namespace GIR.Sigim.Domain.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A quantidade aprovada do item [{0}] não pode ser maior que a quantidade..
+        /// </summary>
+        public static string QuantidadeAprovadaMaiorQueQuantidade {
+            get {
+                return ResourceManager.GetString("QuantidadeAprovadaMaiorQueQuantidade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Senha do e-mail é obrigatória..
         /// </summary>
         public static string SenhaDoEmailObrigatoria {

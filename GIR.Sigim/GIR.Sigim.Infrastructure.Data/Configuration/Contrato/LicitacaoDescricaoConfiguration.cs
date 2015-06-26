@@ -25,6 +25,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                .HasMaxLength(100) 
                .HasColumnOrder(2);
 
+            HasMany<Domain.Entity.Contrato.Contrato>(l => l.ListaContrato)
+            .WithRequired(c => c.ContratoDescricao)
+            .HasForeignKey(c => c.ContratoDescricaoId);
+
+            HasMany<LicitacaoCronograma>(l => l.ListaLicitacaoCronograma)
+            .WithRequired(c => c.LicitacaoDescricao)
+            .HasForeignKey(c => c.LicitacaoDescricaoId);
+
         }
     }
 }

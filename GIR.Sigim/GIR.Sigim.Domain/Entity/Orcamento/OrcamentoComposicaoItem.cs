@@ -17,5 +17,22 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
         public decimal? PercentualPerda { get; set; }
         public decimal? Preco { get; set; }
         public bool? EhControlado { get; set; }
+        public decimal? QuantidadeOrcada
+        {
+            get
+            {
+                return (Consumo + (Consumo * PercentualPerda / 100)) * OrcamentoComposicao.Quantidade;
+            }
+        }
+
+        public decimal? QuantidadeRequisitada
+        {
+            get
+            {
+                return Material.ListaOrcamentoInsumoRequisitado.Where(l => l.CodigoCentroCusto == OrcamentoComposicao.Orcamento.Obra.CodigoCentroCusto
+                    && l.CodigoClasse == OrcamentoComposicao.codigoClasse
+                    && l.ComposicaoId == OrcamentoComposicao.ComposicaoId).Sum(l => l.Quantidade);
+            }
+        }
     }
 }

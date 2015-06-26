@@ -9,5 +9,6 @@ namespace GIR.Sigim.Domain.Repository.Contrato
 {
     public interface IParametrosContratoRepository : IRepository<ParametrosContrato>
     {
+        ParametrosContrato Obter();
     }
 }

@@ -16,9 +16,9 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             get { return Situacao == "A"; }
             set { Situacao = value ? "A" : "I"; }
         }
-        public int NumeroRemessa { get; set; }
-        public int NumeroRemessaPagamento { get; set; }
-        public bool InterfaceEletronica { get; set; }
+        public int? NumeroRemessa { get; set; }
+        public int? NumeroRemessaPagamento { get; set; }
+        public bool? InterfaceEletronica { get; set; }
         public ICollection<BancoLayout> ListaBancoLayout { get; set; }
 
         public Banco()

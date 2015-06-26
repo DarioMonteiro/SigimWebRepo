@@ -19,5 +19,16 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Contrato
         }
 
         #endregion
+
+        #region IParametrosContratoRepository Members
+
+        public ParametrosContrato Obter()
+        {
+            var set = CreateSetAsQueryable(l => l.Cliente);
+            return set.FirstOrDefault();
+        }
+
+        #endregion
+
     }
 }
