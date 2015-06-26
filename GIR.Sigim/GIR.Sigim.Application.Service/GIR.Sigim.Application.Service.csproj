@@ -65,6 +65,7 @@
     <Compile Include="Financeiro\CentroCustoAppService.cs" />
     <Compile Include="Financeiro\ClasseAppService.cs" />
     <Compile Include="Financeiro\CaixaAppService.cs" />
+    <Compile Include="Financeiro\RateioAutomaticoAppService.cs" />
     <Compile Include="Financeiro\ImpostoFinanceiroAppService.cs" />
     <Compile Include="Financeiro\TabelaBasicaAppService.cs" />
     <Compile Include="Financeiro\MotivoCancelamentoAppService.cs" />

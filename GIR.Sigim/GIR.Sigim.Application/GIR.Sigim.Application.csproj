@@ -69,6 +69,7 @@
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
+    <Compile Include="DTO\Financeiro\RateioAutomaticoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\TabelaBasicaDTO.cs" />
     <Compile Include="DTO\Financeiro\MotivoCancelamentoDTO.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Service\Contrato\IContratoRetificacaoItemMedicaoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoProvisaoAppService.cs" />
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
+    <Compile Include="Service\Financeiro\IRateioAutomaticoAppService.cs" />
     <Compile Include="Service\Financeiro\IImpostoFinanceiroAppService.cs" />
     <Compile Include="Service\Financeiro\ICaixaAppService.cs" />
     <Compile Include="Service\Financeiro\ITabelaBasicaAppService.cs" />

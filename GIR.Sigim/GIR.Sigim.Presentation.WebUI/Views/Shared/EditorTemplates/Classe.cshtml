@@ -103,7 +103,8 @@
             }
         }
 
-        $(document).on("centroCustoValidado",            function (e) {
+        $(document).on("centroCustoValidado",
+            function (e) {
                 $("#orcamentoClasseDespesaId").val(0);
                 if (e.codigo != '') {
                     $.ajax({
@@ -135,7 +136,13 @@
                     @:  limpaClasseForm_@(Html.IdFor(m => m.Codigo))();
                     @:}
                 }
-            }        );        @if (centroCustoRequerido.Value) {            @:validaCentroCusto();        }    });
+            }
+        );
+
+        @if (centroCustoRequerido.Value) {
+            @:validaCentroCusto();
+        }
+    });
 
     function limpaClasseForm_@(Html.IdFor(m => m.Codigo))() {
         $("#@Html.IdFor(m => m.Codigo)").val('');
@@ -164,7 +171,7 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 codigo: $("#@Html.IdFor(m => m.Codigo)").val(),
-                orcamentoClasseDespesaId: $("#orcamentoClasseDespesaId").val(),
+                orcamentoId: $("#orcamentoClasseDespesaId").val(),
                 somenteNivelFolha: '@somenteNivelFolha.Value'
             })
         })
