@@ -14,6 +14,13 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public string Codigo { get; set; }
 
         public string Descricao { get; set; }
+
+        [Display(Name = "Classe")]
+        public string ClasseDescricao
+        {
+            get { return this.Codigo + " - " + this.Descricao; }
+        }
+
         public string CentroContabil { get; set; }
         public int? AnoMes { get; set; }
         public int? TipoTabela { get; set; }

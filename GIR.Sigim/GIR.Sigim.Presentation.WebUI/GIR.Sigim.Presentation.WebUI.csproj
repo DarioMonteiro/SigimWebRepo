@@ -153,6 +153,7 @@
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CaixaController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\RateioAutomaticoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ImpostoFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\TabelaBasicaController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\TipoDocumentoController.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Areas\Financeiro\Controllers\TipoRateioController.cs" />
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\CaixaViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\RateioAutomaticoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ImpostoFinanceiroViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TabelaBasicaViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TipoDocumentoViewModel.cs" />
@@ -326,6 +328,7 @@
     <Content Include="Views\UnidadeMedida\ListaPartial.cshtml" />
     <Content Include="Areas\Financeiro\Views\ImpostoFinanceiro\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\ImpostoFinanceiro\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\RateioAutomatico\Index.cshtml" />
     <Content Include="Areas\Sac\Views\Setor\Index.cshtml" />
     <Content Include="Areas\Sac\Views\Setor\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />

@@ -65,6 +65,7 @@
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
     <Compile Include="Entity\Financeiro\Caixa.cs" />
+    <Compile Include="Entity\Financeiro\RateioAutomatico.cs" />
     <Compile Include="Entity\Financeiro\FatoGeradorImpostoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\FimDeSemanaImpostoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\ImpostoFinanceiro.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
+    <Compile Include="Repository\Financeiro\IRateioAutomaticoRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\ICaixaRepository.cs" />
     <Compile Include="Repository\Financeiro\IMotivoCancelamentoRepository.cs" />
