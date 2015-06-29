@@ -194,7 +194,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         {
             if (ModelState.IsValid)
             {
-                contratoRetificacaoItemMedicaoAppService.Salvar(model.ContratoRetificacaoItemMedicao);
+                contratoAppService.SalvarMedicao(model.ContratoRetificacaoItemMedicao);
+                //contratoRetificacaoItemMedicaoAppService.Salvar(model.ContratoRetificacaoItemMedicao);
             }
             return PartialView("_NotificationMessagesPartial");
         }

@@ -212,7 +212,17 @@
     <Compile Include="Repository\Sigim\INaturezaOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\ISerieNFRepository.cs" />
     <Compile Include="Repository\Sigim\ITipoCompraRepository.cs" />
-    <Compile Include="Resource\ErrorMessages.Designer.cs">
+    <Compile Include="Resource\Contrato\ErrorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resource\OrdemCompra\ErrorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resource\Sigim\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
@@ -240,7 +250,15 @@
     <Folder Include="Specification\Financeiro\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resource\ErrorMessages.resx">
+    <EmbeddedResource Include="Resource\Contrato\ErrorMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\OrdemCompra\ErrorMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Sigim\ErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>

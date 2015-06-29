@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Admin;
 using GIR.Sigim.Domain.Entity.Financeiro;
-using GIR.Sigim.Domain.Resource;
 
 namespace GIR.Sigim.Domain.Entity.OrdemCompra
 {
@@ -22,7 +21,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         {
             if (!string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(Senha))
             {
-                yield return new ValidationResult(ErrorMessages.SenhaDoEmailObrigatoria, new[] { "Senha" });
+                yield return new ValidationResult(Domain.Resource.OrdemCompra.ErrorMessages.SenhaDoEmailObrigatoria, new[] { "Senha" });
             }
         }
     }

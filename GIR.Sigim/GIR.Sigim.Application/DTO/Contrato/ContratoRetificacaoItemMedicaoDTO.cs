@@ -103,6 +103,14 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public decimal ValorTotalLiberado { get; set; }
         public decimal QuantidadeTotalMedidaLiberada { get; set; }
         public decimal ValorTotalMedidoLiberado { get; set; }
+        public decimal QuantidadePendente
+        {
+            get { return Quantidade - QuantidadeTotalMedida; }
+        }
+        public decimal ValorPendente
+        {
+            get { return (Valor - ValorTotalMedido); }
+        }
         public decimal ValorImpostoRetido { get; set; }
         public decimal ValorImpostoRetidoMedicao { get; set; }
 
@@ -110,8 +118,6 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public decimal ValorTotalMedidoIndireto { get; set; }
         public decimal ValorTotalMedidoNota { get; set; }
         public decimal ValorTotalMedidoLiberadoContrato { get; set; }
-
-        public TotalizadoresMedicaoDTO Totalizadores { get; set; }
 
         public ContratoRetificacaoItemMedicaoDTO()
         {
@@ -137,8 +143,6 @@ namespace GIR.Sigim.Application.DTO.Contrato
             this.Desconto = 0;
 
             this.Situacao = 0;
-
-            this.Totalizadores = new TotalizadoresMedicaoDTO();
 
         }
     }
