@@ -113,6 +113,8 @@
     <Compile Include="Entity\Sigim\ClienteFornecedor.cs" />
     <Compile Include="Entity\Sigim\CodigoContribuicao.cs" />
     <Compile Include="Entity\Sigim\Composicao.cs" />
+    <Compile Include="Entity\Sigim\Agencia.cs" />
+    <Compile Include="Entity\Sigim\ContaCorrente.cs" />
     <Compile Include="Entity\Sigim\FormaRecebimento.cs" />
     <Compile Include="Entity\Sigim\TipoFormaRecebimento.cs" />
     <Compile Include="Entity\Sigim\TipoArea.cs" />
@@ -177,6 +179,8 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\IContaCorrenteRepository.cs" />
+    <Compile Include="Repository\Sigim\IAgenciaRepository.cs" />
     <Compile Include="Repository\Sigim\IBancoRepository.cs" />
     <Compile Include="Repository\Sigim\IFormaRecebimentoRepository.cs" />
     <Compile Include="Repository\Sigim\ILogOperacaoRepository.cs" />
@@ -226,13 +230,15 @@
     <Compile Include="Specification\OrdemCompra\PreRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrSpecification.cs" />
     <Compile Include="Specification\ParameterRebinder.cs" />
+    <Compile Include="Specification\Sigim\AgendaSpecification.cs" />
+    <Compile Include="Specification\Sigim\BancoSpecification.cs" />
+    <Compile Include="Specification\Sigim\ContaCorrenteSpecification.cs" />
     <Compile Include="Specification\Specification.cs" />
     <Compile Include="Specification\TrueSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\Sigim\" />
     <Folder Include="Specification\Financeiro\" />
-    <Folder Include="Specification\Sigim\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\ErrorMessages.resx">

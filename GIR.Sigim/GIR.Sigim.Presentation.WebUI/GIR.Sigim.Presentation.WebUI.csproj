@@ -175,6 +175,8 @@
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Controllers\BancoController.cs" />
+    <Compile Include="Controllers\AgenciaController.cs" />
+    <Compile Include="Controllers\ContaCorrenteController.cs" />
     <Compile Include="Controllers\FormaRecebimentoController.cs" />
     <Compile Include="Controllers\UnidadeMedidaController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
@@ -192,7 +194,10 @@
     <Compile Include="Areas\Sac\SacAreaRegistration.cs" />
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
     <Compile Include="ViewModel\BancoViewModel.cs" />
+    <Compile Include="ViewModel\ContaCorrenteListaViewModel.cs" />
     <Compile Include="ViewModel\FormaRecebimentoViewModel.cs" />
+    <Compile Include="ViewModel\AgenciaListaViewModel.cs" />
+    <Compile Include="ViewModel\AgenciaCadastroViewModel.cs" />
     <Compile Include="ViewModel\UnidadeMedidaViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -757,6 +762,11 @@
     <Content Include="Views\FormaRecebimento\ListaPartial.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
+    <Content Include="Views\Agencia\Index.cshtml" />
+    <Content Include="Views\Agencia\ListaPartial.cshtml" />
+    <Content Include="Views\Agencia\Cadastro.cshtml" />
+    <Content Include="Views\ContaCorrente\Index.cshtml" />
+    <Content Include="Views\ContaCorrente\ListaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

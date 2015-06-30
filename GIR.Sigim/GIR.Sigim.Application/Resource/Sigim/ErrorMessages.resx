@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BancoCarteira" xml:space="preserve">
+    <value>Banco usado para carteira !</value>
+  </data>
   <data name="BloqueioContabilEncontrado" xml:space="preserve">
     <value>Operações anteriores a data de {0} não poderão ser realizadas, pois foi cadastrado um bloqueio contábil para o centro de custo {1}.</value>
   </data>

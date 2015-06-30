@@ -7,21 +7,19 @@ using System.Web;
 using System.Web.Mvc;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros.Sigim;
+using GIR.Sigim.Presentation.WebUI.ViewModel;
 
 namespace GIR.Sigim.Presentation.WebUI.ViewModel
 {
-    public class BancoViewModel
+    public class AgenciaListaViewModel
     {
-        public BancoDTO Banco { get; set; }
+        public AgenciaFiltro Filtro { get; set; }
         public SelectList ListaBanco { get; set; }
 
-        public BancoFiltro Filtro { get; set; }
-
-        public BancoViewModel()
+        public AgenciaListaViewModel()
         {
-            Filtro = new BancoFiltro();
+            Filtro = new AgenciaFiltro();
         }
-        
-
     }
+
 }

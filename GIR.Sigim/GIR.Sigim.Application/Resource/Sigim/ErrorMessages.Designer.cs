@@ -61,6 +61,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Banco usado para carteira !.
+        /// </summary>
+        public static string BancoCarteira {
+            get {
+                return ResourceManager.GetString("BancoCarteira", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Operações anteriores a data de {0} não poderão ser realizadas, pois foi cadastrado um bloqueio contábil para o centro de custo {1}..
         /// </summary>
         public static string BloqueioContabilEncontrado {
