@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GIR.Sigim.Domain.Resource {
+namespace GIR.Sigim.Domain.Resource.OrdemCompra {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace GIR.Sigim.Domain.Resource {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GIR.Sigim.Domain.Resource.ErrorMessages", typeof(ErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GIR.Sigim.Domain.Resource.OrdemCompra.ErrorMessages", typeof(ErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,11 @@ namespace GIR.Sigim.Domain.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to O preenchimento do campo {0} é obrigatório..
+        ///   Looks up a localized string similar to A quantidade aprovada do item [{0}] não pode ser maior que a quantidade..
         /// </summary>
-        public static string CampoObrigatorio {
+        public static string QuantidadeAprovadaMaiorQueQuantidade {
             get {
-                return ResourceManager.GetString("CampoObrigatorio", resourceCulture);
+                return ResourceManager.GetString("QuantidadeAprovadaMaiorQueQuantidade", resourceCulture);
             }
         }
         

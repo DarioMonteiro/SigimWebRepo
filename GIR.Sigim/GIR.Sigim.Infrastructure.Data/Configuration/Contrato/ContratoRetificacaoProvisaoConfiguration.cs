@@ -93,6 +93,33 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasPrecision(18, 7)
                 .HasColumnOrder(11);
 
+            Property(l => l.PagamentoAntecipado)
+                .HasColumnName("pagamentoAntecipado")
+                .HasColumnType("bit")
+                .HasColumnOrder(12);
+
+            Property(l => l.ValorAdiantadoDescontado)
+                .HasColumnName("valorAdiantadoDescontado")
+                .HasPrecision(18, 5)
+                .HasColumnOrder(13);
+
+            Property(l => l.DataAntecipacao)
+                .HasColumnName("dataAntecipacao")
+                .HasColumnOrder(14);
+
+
+            Property(l => l.UsuarioAntecipacao)
+                .HasColumnName("usuarioAntecipacao")
+                .HasMaxLength(50) 
+                .HasColumnOrder(15);
+
+            Property(l => l.DocumentoAntecipacao)
+                .HasColumnName("documentoAntecipacao")
+                .HasMaxLength(100) 
+                .HasColumnOrder(16);
+
+
+
         }
 
     }

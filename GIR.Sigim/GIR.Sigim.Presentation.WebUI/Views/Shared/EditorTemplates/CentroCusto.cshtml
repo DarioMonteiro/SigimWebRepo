@@ -12,7 +12,7 @@
             }
             @Html.TextBoxFor(m => m.Codigo, new { @class = cssClass })
         </label>
-        <a data-toggle="modal" href="#@Html.IdFor(m => m.Codigo)_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-sitemap"></i></a>
+        <a id="BtnShowModalPanel_@Html.IdFor(m => m.Codigo)" data-toggle="modal" href="#@Html.IdFor(m => m.Codigo)_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-sitemap"></i></a>
     </div>
     @Html.ValidationMessageFor(m => m.Codigo, "", new { @id = Html.IdFor(m => m.Codigo) + "_ValidationMessage", @class = "note note-error" })
 </section>
@@ -44,6 +44,7 @@
 <script type="text/javascript">
     @{
         bool? somenteNivelFolha = ViewBag.somenteNivelFolha as bool? ?? false;
+        bool? podeEdidar = ViewBag.podeEdidar as bool? ?? true;
     }
     $(document).ready(function () {
         $(document).on("change", "#@Html.IdFor(m => m.Codigo)", function () {
@@ -87,6 +88,14 @@
 
             });
         });
+
+        @if (!podeEdidar.Value)
+        {
+            @:$("#@Html.IdFor(m => m.Codigo)").attr("readonly", true);
+            @:$("#@Html.IdFor(m => m.Codigo)").addClass("readonly");
+            @:$("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").attr('href', 'javascript:void(0);');
+            @:$("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").removeAttr('data-toggle');
+        }
     });
 
     function validaCentroCusto() {

@@ -12,5 +12,6 @@ namespace GIR.Sigim.Application.DTO.Admin
         public string Login { get; set; }
         //TODO: Inverter para Ativo
         public bool Inativo { get; set; }
+        public byte[] AssinaturaEletronica { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
     public class ContratoRetificacaoItemMedicaoDTO : BaseDTO
     {
         public int ContratoId { get; set; }
-        public ContratoDTO Contrato { get; set; }
+        //public ContratoDTO Contrato { get; set; }
         public int ContratoRetificacaoId { get; set; }
         public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
         [Required]
@@ -97,11 +97,31 @@ namespace GIR.Sigim.Application.DTO.Contrato
         [Display(Name = "Motivo desconto")]
         public string MotivoDesconto { get; set; }
 
-        public TotalizadoresMedicaoDTO Totalizadores { get; set; }
+        public decimal QuantidadeTotalMedida { get; set; }
+        public decimal ValorTotalMedido { get; set; }
+        public decimal QuantidadeTotalLiberada { get; set; }
+        public decimal ValorTotalLiberado { get; set; }
+        public decimal QuantidadeTotalMedidaLiberada { get; set; }
+        public decimal ValorTotalMedidoLiberado { get; set; }
+        public decimal QuantidadePendente
+        {
+            get { return Quantidade - QuantidadeTotalMedida; }
+        }
+        public decimal ValorPendente
+        {
+            get { return (Valor - ValorTotalMedido); }
+        }
+        public decimal ValorImpostoRetido { get; set; }
+        public decimal ValorImpostoRetidoMedicao { get; set; }
+
+        public decimal ValorImpostoIndiretoMedicao { get; set; }
+        public decimal ValorTotalMedidoIndireto { get; set; }
+        public decimal ValorTotalMedidoNota { get; set; }
+        public decimal ValorTotalMedidoLiberadoContrato { get; set; }
 
         public ContratoRetificacaoItemMedicaoDTO()
         {
-            this.Contrato = new ContratoDTO();
+            //this.Contrato = new ContratoDTO();
             this.ContratoRetificacao = new ContratoRetificacaoDTO();
             this.ContratoRetificacaoItem = new ContratoRetificacaoItemDTO();
             this.ContratoRetificacaoItemCronograma = new ContratoRetificacaoItemCronogramaDTO();
@@ -123,8 +143,6 @@ namespace GIR.Sigim.Application.DTO.Contrato
             this.Desconto = 0;
 
             this.Situacao = 0;
-
-            this.Totalizadores = new TotalizadoresMedicaoDTO();
 
         }
     }

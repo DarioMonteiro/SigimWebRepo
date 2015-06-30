@@ -14,5 +14,11 @@ namespace GIR.Sigim.Application.DTO.Orcamento
         public Nullable<DateTime> Data { get; set; }
         public bool Ativo { get; set; }
         public bool EhControlado { get; set; }
+        public ICollection<OrcamentoComposicaoDTO> ListaOrcamentoComposicao { get; set; }
+
+        public OrcamentoDTO()
+        {
+            this.ListaOrcamentoComposicao = new HashSet<OrcamentoComposicaoDTO>();
+        }
     }
 }

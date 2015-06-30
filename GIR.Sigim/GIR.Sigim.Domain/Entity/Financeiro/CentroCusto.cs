@@ -7,7 +7,6 @@ using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Entity.Contrato;
-using GIR.Sigim.Domain.Entity.Orcamento; 
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -40,6 +39,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<BloqueioContabil> ListaBloqueioContabil { get; set; }
         public ICollection<Caixa> ListaCaixa { get; set; }
         public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
+        public ICollection<RateioAutomatico> ListaRateioAutomatico { get; set; }
 
         public CentroCusto()
         {
@@ -56,6 +56,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaBloqueioContabil = new HashSet<BloqueioContabil>();
             this.ListaCaixa = new HashSet<Caixa>();
             this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
+            this.ListaRateioAutomatico = new HashSet<RateioAutomatico>();  
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)

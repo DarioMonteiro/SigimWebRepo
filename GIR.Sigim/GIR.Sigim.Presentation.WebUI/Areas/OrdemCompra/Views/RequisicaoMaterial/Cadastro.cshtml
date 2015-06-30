@@ -82,7 +82,7 @@
                                 </section>
                             </div>
                             <div class="row">
-                                @Html.EditorFor(m => m.RequisicaoMaterial.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo", @somenteNivelFolha = true, @required = true })
+                                @Html.EditorFor(m => m.RequisicaoMaterial.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo", @somenteNivelFolha = true, @required = true, @podeEdidar = Model.PodeEditarCentroCusto })
                                 <input type="hidden" id="orcamentoId" value="0" />
                             </div>
                             @Html.HiddenFor(m => m.JsonItens)
@@ -90,8 +90,11 @@
                         <fieldset id="formItem">
                             @Html.HiddenFor(m => m.ItemId)
                             @Html.HiddenFor(m => m.Sequencial)
+                            @Html.HiddenFor(m => m.OrcamentoInsumoRequisitado.Id)
+                            @Html.HiddenFor(m => m.OrcamentoInsumoRequisitado.Composicao.Id)
+                            @Html.HiddenFor(m => m.OrcamentoInsumoRequisitado.Material.Id)
                             <div class="row">
-                                @Html.EditorFor(m => m.Material, "Material", new { @sectionClass = "col col-6", @required = true, @centroCustoRequerido = true })
+                                @Html.EditorFor(m => m.Material, "Material", new { @sectionClass = "col col-6", @required = true, @centroCustoRequerido = true, @insumoControlado = true })
                                 <section class="col col-6">
                                     @Html.LabelFor(m => m.Complemento, new { @class = "label" })
                                     <label class="input">
@@ -111,7 +114,8 @@
                                         <script type="text/javascript">
                                             $(document).ready(function () {
                                                 $("#@Html.IdFor(m => m.Quantidade)").on("focusout", function () {
-                                                    $("#@Html.IdFor(m => m.QuantidadeAprovada)").val(roundDecimal($(this).val(), 4));
+                                                    if (!$(this).hasClass("readonly"))
+                                                        $("#@Html.IdFor(m => m.QuantidadeAprovada)").val(roundDecimal($(this).val(), 4));
                                                 });
                                             });
                                         </script>
@@ -229,6 +233,10 @@
                                     }
                                     <button id="btnCancelarItem" type="button" class="btn btn-danger @disableBtnCancelarItem">
                                         Cancelar Item
+                                    </button>
+
+                                    <button id="btnNovoItem" type="button" class="btn btn-primary">
+                                        Novo Item
                                     </button>
                                 </section>
                             </div>
@@ -418,6 +426,13 @@
             cancelarItensSelecionados();
         });
 
+        $('#btnNovoItem').on("click", function () {
+            clearFormItem();
+            $("#@Html.IdFor(m => m.Classe.Codigo)").val('');
+            $("#@Html.IdFor(m => m.Classe.Descricao)").val('');
+            validaClasse();
+        });
+
         $('#btnAprovarRequisicao').on("click", function () {
             aprovarRequisicao();
         });
@@ -441,6 +456,15 @@
                 var isValid = validaClasse();
                 $.validator.messages.ehClasseValida = $('#@Html.IdFor(m => m.Classe.Codigo)_ValidationMessage').html();
                 return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
+            "quantidadeAprovadaMenorOuIgualQuantidade",
+            function (value, element, params) {
+                var quantidade = stringToFloat($("#@Html.IdFor(m => m.Quantidade)").val());
+                var quantidadeAprovada = stringToFloat($("#@Html.IdFor(m => m.QuantidadeAprovada)").val());
+                return quantidadeAprovada <= quantidade;
             }, ''
         );
 
@@ -472,6 +496,7 @@
                 },
                 '@Html.NameFor(m => m.Material.Id)': "required",
                 '@Html.NameFor(m => m.Quantidade)': "decimalGreaterThanZero",
+                '@Html.NameFor(m => m.QuantidadeAprovada)': "quantidadeAprovadaMenorOuIgualQuantidade",
                 '@Html.NameFor(m => m.DataMinima)': {
                     date: true,
                     dataMinimaMaiorQueMaxima: true
@@ -497,6 +522,9 @@
                 },
                 '@Html.NameFor(m => m.Quantidade)': {
                     decimalGreaterThanZero: 'A Quantidade deve ser maior que zero.'
+                },
+                '@Html.NameFor(m => m.QuantidadeAprovada)': {
+                    quantidadeAprovadaMenorOuIgualQuantidade: 'A quantidade aprovada não pode ser maior que a quantidade.'
                 },
                 '@Html.NameFor(m => m.DataMinima)': {
                     date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida',
@@ -579,26 +607,12 @@
         }
     }
 
-    function ehItemRepetido() {
-        var result = false;
-        $.each(jsonItemArray, function (i, obj) {
-            var ehMesmoMaterial = (obj.Material.Id == $('#@Html.IdFor(m => m.Material.Id)').val());
-            var ehMesmaClasse = (obj.Classe.Codigo == $('#@Html.IdFor(m => m.Classe.Codigo)').val());
-            var ehMesmoCentroCusto = (obj.CentroCusto.Codigo == $('#@Html.IdFor(m => m.RequisicaoMaterial.CentroCusto.Codigo)').val());
-            var ehMesmoSequencial = (obj.Sequencial == $('#@Html.IdFor(m => m.Sequencial)').val());
-
-            if (ehMesmoMaterial && ehMesmaClasse && ehMesmoCentroCusto && !ehMesmoSequencial) {
-                result = true;
-                return false;
-            }
-        });
-        return result;
-    }
-
-    function loadItem(sequancial) {
+    function loadItem(sequencial) {
         var arr = jQuery.grep(jsonItemArray, function (item, i) {
-            return (item.Sequencial == sequancial);
+            return (item.Sequencial == sequencial);
         });
+
+        clearFormItem();
 
         if (arr.length > 0) {
             var item = arr[0];
@@ -614,6 +628,20 @@
             $("#@Html.IdFor(m => m.QuantidadeAprovada)").val(roundDecimal(floatToString(item.QuantidadeAprovada), 4));
             $("#@Html.IdFor(m => m.DataMinima)").val(new Date(item.DataMinima).toFormatDDMMYYYY());
             $("#@Html.IdFor(m => m.DataMaxima)").val(new Date(item.DataMaxima).toFormatDDMMYYYY());
+            $("#@Html.IdFor(m => m.QuantidadeAprovada)").prop('readonly', false);
+            $("#@Html.IdFor(m => m.QuantidadeAprovada)").removeClass('readonly');
+
+            if ((item.OrcamentoInsumoRequisitado != null) && (item.OrcamentoInsumoRequisitado.Material.Id != '')) {
+                $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Id)").val(item.OrcamentoInsumoRequisitado.Id);
+                $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Composicao.Id)").val(item.OrcamentoInsumoRequisitado.Composicao.Id);
+                $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Material.Id)").val(item.OrcamentoInsumoRequisitado.Material.Id);
+
+                blockMaterialForm_@(Html.IdFor(m => m.Material.Id))();
+                $("#@Html.IdFor(m => m.Quantidade)").prop('readonly', true);
+                $("#@Html.IdFor(m => m.Quantidade)").addClass('readonly');
+                
+                blockClasseForm_@(Html.IdFor(m => m.Classe.Codigo))();
+            }
         }
     }
 
@@ -629,7 +657,7 @@
 
         item["Situacao"] = 0;
         item["SituacaoDescricao"] = "Requisitado";
-        item["TemInterfaceOrcamentoDescricao"] = "Não";
+        item["TemInterfaceOrcamentoDescricao"] = $('#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Composicao.Id)').val() != '' ? "Sim" : "Não";
         item["ListaRequisicaoMaterialItem"] = [];
 
         var index = -1;
@@ -647,8 +675,33 @@
 
         $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(jsonItemArray));
         fillTable();
+        clearFormItem();
+    }
+
+    function clearFormItem() {
         $("#@Html.IdFor(m => m.ItemId)").val('');
         $("#@Html.IdFor(m => m.Sequencial)").val('');
+        $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Id)").val('');
+        $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Composicao.Id)").val('');
+        $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Material.Id)").val('');
+        $("#@Html.IdFor(m => m.Complemento)").val('');
+        $("#@Html.IdFor(m => m.Quantidade)").val(roundDecimal(0, 4));
+        $("#@Html.IdFor(m => m.QuantidadeAprovada)").val(roundDecimal(0, 4));
+        $("#@Html.IdFor(m => m.QuantidadeAprovada)").prop('readonly', true);
+
+        limpaMaterialForm_@(Html.IdFor(m => m.Material.Id))();
+
+        $("#@Html.IdFor(m => m.DataMinima)").val('@Model.DataMinima.Value.ToString("dd/MM/yyyy")');
+        $("#@Html.IdFor(m => m.DataMaxima)").val('@Model.DataMaxima.Value.ToString("dd/MM/yyyy")');
+        $("#@Html.IdFor(m => m.Prazo)").val('@Html.DisplayFor(m => m.Prazo)');
+
+        unblockMaterialForm_@(Html.IdFor(m => m.Material.Id))();
+        $("#@Html.IdFor(m => m.Quantidade)").prop('readonly', false);
+        $("#@Html.IdFor(m => m.Quantidade)").removeClass('readonly');
+        $("#@Html.IdFor(m => m.QuantidadeAprovada)").prop('readonly', true);
+        $("#@Html.IdFor(m => m.QuantidadeAprovada)").addClass('readonly');
+        unblockClasseForm_@(Html.IdFor(m => m.Classe.Codigo))();
+        validaCentroCusto();
     }
 
     function cancelarItensSelecionados() {
@@ -663,7 +716,7 @@
                     if (obj.Id == '')
                         jsonItemArray.splice(i, 1);
                     else {
-                        obj.Situacao = 2;
+                        obj.Situacao = 4;
                         obj.SituacaoDescricao = 'Cancelado';
                     }
                 }
@@ -739,7 +792,7 @@
             if (e.codigo != '') {
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("ObterIdUltimoOrcamentoPeloCentroCusto", "Orcamento", new { area = "Orcamento" })',
+                    url: '@Url.Action("ObterUltimoOrcamentoPeloCentroCusto", "Orcamento", new { area = "Orcamento" })',
                     cache: false,
                     async: false,
                     contentType: 'application/json; charset=utf-8',
@@ -752,4 +805,47 @@
                 });
             }
         });
+
+    $(document).on("interfaceOrcamentoSelecionado",
+        function (e) {
+            if (e.composicaoId == null) {
+                limpaMaterialForm_@(Html.IdFor(m => m.Material.Id))();
+                smartAlert("Alerta", "Nenhum material foi selecionado.", "warning");
+            }
+            else {
+                if (!ehItemRepetido(e.codigoClasse)) {
+                    $('#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Composicao.Id)').val(e.composicaoId);
+                    $("#@Html.IdFor(m => m.OrcamentoInsumoRequisitado.Material.Id)").val(e.materialId);
+                    $('#@Html.IdFor(m => m.Quantidade)').val(e.quantidade);
+                    $('#@Html.IdFor(m => m.QuantidadeAprovada)').val(e.quantidade);
+                    $('#@Html.IdFor(m => m.Classe.Codigo)').val(e.codigoClasse);
+                    $('#@Html.IdFor(m => m.Classe.Descricao)').val(e.descricaoClasse);
+                    $('#@Html.IdFor(m => m.Complemento)').val('');
+
+                    addItem();
+                    clearFormItem();
+                    $("#@Html.IdFor(m => m.Classe.Codigo)").val('');
+                    $("#@Html.IdFor(m => m.Classe.Descricao)").val('');
+                }
+                else {
+                    limpaMaterialForm_@(Html.IdFor(m => m.Material.Id))();
+                    smartAlert("Erro", "Esse material e essa classe já foram adicionados.", "error");
+                }
+            }
+        });
+
+    function ehItemRepetido(codigoClasse) {
+        var result = false;
+        $.each(jsonItemArray, function (i, obj) {
+            var ehMesmoMaterial = (obj.Material.Id == $('#@Html.IdFor(m => m.Material.Id)').val());
+            var ehMesmaClasse = (obj.Classe.Codigo == codigoClasse);
+            var ehMesmoSequencial = (obj.Sequencial == $('#@Html.IdFor(m => m.Sequencial)').val());
+
+            if (ehMesmoMaterial && ehMesmaClasse && !ehMesmoSequencial) {
+                result = true;
+                return false;
+            }
+        });
+        return result;
+    }
 </script>

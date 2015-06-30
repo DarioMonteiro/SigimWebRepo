@@ -49,8 +49,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
                 .HasColumnName("situacao")
                 .HasColumnOrder(7);
 
-            //Ignore(l => l.Ativo);
-
             Property(l => l.EhControlado)
                 .HasColumnName("controlado")
                 .HasColumnOrder(8);

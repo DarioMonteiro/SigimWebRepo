@@ -10,6 +10,6 @@ namespace GIR.Sigim.Application.Service.Sigim
     public interface IBloqueioContabilAppService
     {
 
-        bool ValidaBloqueioContabil(string codigoCentroCusto, DateTime dataOperacao, out Nullable<DateTime> dataBloqueio);
+        bool OcorreuBloqueioContabil(string codigoCentroCusto, DateTime dataOperacao, out Nullable<DateTime> dataBloqueio);
     }
 }

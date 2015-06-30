@@ -6,7 +6,6 @@
 }
 
 @Html.Partial("_NotificationMessagesPartial")
-
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-8 sortable-grid ui-sortable centerBox">
         <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
@@ -14,7 +13,7 @@
                 <span class="widget-icon"><i class="fa fa-cog"></i></span>
                 <h2>@ViewBag.Title</h2>
             </header>
-            <div>            
+            <div>
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
                             "Index",
@@ -24,7 +23,7 @@
                             new { @id = "formParametros", @class = "smart-form client-form", @novalidate = "novalidate", @enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken()
-                        @Html.HiddenFor(m => m.Parametros.Id)
+                        @Html.HiddenFor(m => m.ParametrosSac.Id)
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -41,40 +40,135 @@
                                         <fieldset>
                                             <div class="row">
                                                 <section class="col col-12">
-                                                    @Html.LabelFor(m => m.Parametros.ClienteId, new { @class = "label" })
+                                                    @Html.LabelFor(m => m.ParametrosSac.ClienteId, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.Parametros.ClienteId, Model.ListaEmpresa, string.Empty)
+                                                        @Html.DropDownListFor(m => m.ParametrosSac.ClienteId, Model.ListaEmpresa, string.Empty)
                                                         <i></i>
                                                     </label>
                                                 </section>
                                             </div>
                                             <div class="row">
-                                                <section class="col col-6">
-                                                    @Html.LabelFor(m => m.Parametros.PrazoAvaliacao, new { @class = "label" })
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ParametrosSac.Mascara, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Parametros.PrazoAvaliacao)
+                                                        @Html.TextBoxFor(m => m.ParametrosSac.Mascara, new { @class = "required" })
                                                     </label>
-                                                    @Html.ValidationMessageFor(m => m.Parametros.PrazoAvaliacao, "", new { @class = "note note-error" })
+                                                    @Html.ValidationMessageFor(m => m.ParametrosSac.Mascara, "", new { @class = "note note-error" })
                                                 </section>
-                                                <section class="col col-6">
-                                                    @Html.LabelFor(m => m.Parametros.PrazoConclusao, new { @class = "label" })
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ParametrosSac.PrazoAvaliacao, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Parametros.PrazoConclusao)
+                                                        @Html.TextBoxFor(m => m.ParametrosSac.PrazoAvaliacao, new { @class = "required" })
                                                     </label>
-                                                    @Html.ValidationMessageFor(m => m.Parametros.PrazoConclusao, "", new { @class = "note note-error" })
+                                                    @Html.ValidationMessageFor(m => m.ParametrosSac.PrazoAvaliacao, "", new { @class = "note note-error" })
                                                 </section>
-                                                <section class="col col-6">
-                                                    @Html.LabelFor(m => m.Parametros.Mascara, new { @class = "label" })
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ParametrosSac.PrazoConclusao, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Parametros.Mascara)
+                                                        @Html.TextBoxFor(m => m.ParametrosSac.PrazoConclusao, new { @class = "required" })
                                                     </label>
-                                                    @Html.ValidationMessageFor(m => m.Parametros.Mascara, "", new { @class = "note note-error" })
+                                                    @Html.ValidationMessageFor(m => m.ParametrosSac.PrazoConclusao, "", new { @class = "note note-error" })
                                                 </section>
                                             </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.ParametrosSac.EmailEnvio, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ParametrosSac.EmailEnvio, new { @class = "required" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ParametrosSac.EmailEnvio, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.ParametrosSac.senhaEnvio, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ParametrosSac.senhaEnvio, new { @class = "required" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ParametrosSac.senhaEnvio, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ParametrosSac.PortaEnvio, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ParametrosSac.PortaEnvio, new { @class = "required" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ParametrosSac.PortaEnvio, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ParametrosSac.ServidorEnvio, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ParametrosSac.ServidorEnvio, new { @class = "required" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ParametrosSac.ServidorEnvio, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4" style="padding-top: 30px;">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.ParametrosSac.HabilitaSSL)<i></i>@Html.DisplayNameFor(m => m.ParametrosSac.HabilitaSSL)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.ParametrosSac.CorpoMensagemAutomaticaSacweb, new { @class = "label" })
+                                                    <label class="textarea">
+                                                        @Html.TextAreaFor(m => m.ParametrosSac.CorpoMensagemAutomaticaSacweb, new { rows = 5, style = "height:104px;Width:740px" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ParametrosSac.CorpoMensagemAutomaticaSacweb, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                             @Html.HiddenFor(m => m.JsonListaEmail)
                                         </fieldset>
                                     </div>
                                 </div>
-                          <div class="panel panel-default">
+                            </div>
+                        <fieldset id="formItem">
+                           @* @Html.HiddenFor(m => m.ParametrosEmailSac.Id )
+                            <div class="row">
+                               <section class="col col-12">
+                                    @Html.LabelFor(m => m.ParametrosEmailSac.Email, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m =>m.ParametrosEmailSac.Email)
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.ParametrosEmailSac, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-4">
+                                    @Html.LabelFor(m => m.ParametrosEmailSac.SetorId, new { @class = "label" })
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.ParametrosEmailSac.SetorId, Model.ListaEmpresa, string.Empty)
+                                        <i></i>
+                                    </label>
+                                </section>
+                                <section class="col col-4">
+                                    @Html.LabelFor(m => m.ParametrosSac.ServidorEnvio, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.ParametrosSac.ServidorEnvio, new { @class = "required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.ParametrosSac.ServidorEnvio, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-4" style="padding-top: 30px;">
+                                    <label class="checkbox">
+                                        @Html.CheckBoxFor(m => m.ParametrosSac.HabilitaSSL)<i></i>@Html.DisplayNameFor(m => m.ParametrosSac.HabilitaSSL)
+                                    </label>
+                                </section>
+                            </div>*@
+                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                    <thead>
+                                        <tr role="row">
+                                            <th>Email</th>
+                                            <th>Tipo</th>
+                                            <th>Setor</th>
+                                            <th>Anexo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                            <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseIconeRelatorio" class="collapsed">
@@ -98,17 +192,17 @@
                                             <div class="row">
                                                 <section class="col col-8">
                                                     @*<input type="file" name="@Html.IdFor(m => m.IconeRelatorio)" id="IconeRelatorio" />*@
-                                                    @Html.TextBoxFor(m => m.Parametros.IconeRelatorio , new { type = "file" })
+                                                    @Html.TextBoxFor(m => m.ParametrosSac.IconeRelatorio, new { type = "file" })
                                                 </section>
                                                 <section class="col col-4">
-                                                    @Html.HiddenFor(m => m.Parametros.RemoverImagem)
+                                                    @Html.HiddenFor(m => m.ParametrosSac.RemoverImagem)
                                                     <div class="bgIconeRelatorio48x48">
                                                         @{
                                                             string imgPadrao = Url.Content("~/Content/img/48x48.png");
                                                             string imageSrc = imgPadrao;
-                                                            if (Model.Parametros != null && Model.Parametros.IconeRelatorio != null && Model.Parametros.IconeRelatorio.Length > 0)
+                                                            if (Model.ParametrosSac != null && Model.ParametrosSac.IconeRelatorio != null && Model.ParametrosSac.IconeRelatorio.Length > 0)
                                                             {
-                                                                string imageBase64 = Convert.ToBase64String(Model.Parametros.IconeRelatorio);
+                                                                string imageBase64 = Convert.ToBase64String(Model.ParametrosSac.IconeRelatorio);
                                                                 imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
                                                             }
                                                             <img id="icone" src="@imageSrc" width="96" height="96" alt="Ícone para relatórios" />
@@ -116,7 +210,7 @@
                                                                 function removerImagem() {
                                                                     $("#IconeRelatorio").val('');
                                                                     $('#icone').attr('src', '@imgPadrao');
-                                                                    $('#@Html.IdFor(m => m.Parametros.RemoverImagem)').val(true);
+                                                                    $('#@Html.IdFor(m => m.ParametrosSac.RemoverImagem)').val(true);
                                                                 }
 
                                                                 function exibirImagem(input) {
@@ -128,7 +222,7 @@
                                                                         }
 
                                                                         reader.readAsDataURL(input.files[0]);
-                                                                        $('#@Html.IdFor(m => m.Parametros.RemoverImagem)').val(false);
+                                                                        $('#@Html.IdFor(m => m.ParametrosSac.RemoverImagem)').val(false);
                                                                     }
                                                                     else
                                                                         removerImagem();
@@ -147,18 +241,15 @@
                                     </div>
                                 </div>
                             </div>
-                           <footer>
+                        </div>    
+                        <footer>
                             <button type="submit" class="btn btn-primary">
                                 Salvar
                             </button>
                         </footer>
-                    
-                    </div>
-                </div>
                     }
-            </div>                
+                </div>
             </div>
-        </div>                  
     </article>
 </div>
 
@@ -174,5 +265,60 @@
                 }
             });
         });
+             
+        jsonListaEmailArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaEmail)").val());
+        $(document).ready(function () {
+            fillTable();
+              
+        });
+
+        function fillTable() {
+            $("#tableItens tbody").empty();
+            for (var i = 0; i < jsonListaEmailArray.length; i++) {
+                var row = $('<tr />')
+                $("#tableItens tbody").append(row);
+
+                var chkDisabled = '';
+                var labelClass = 'checkbox';
+                if (jsonListaEmailArray[i].situacao != 0) { //Sem anexo
+                    chkDisabled = 'disabled';
+                    labelClass += ' state-disabled';
+                }
+                //row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + jsonListaEmailArray[i].Sequencial + '" ' + chkDisabled + '><i></i>' + jsonListaEmailArray[i].Sequencial + '</label></td>'));
+
+                //row.append($('<td class="text-right">' + jsonListaEmailArray[i].Email + '</td>'));
+                @* @if (Model.PodeEditarItem)
+	        {
+                @:if (jsonListaEmailArray[i].situacao == 0) //Com anexo
+                		        @:row.append($('<td class="text-nowrap" onclick="loadItem(' + jsonListaEmailArray[i].Sequencial + ');">' + jsonListaEmailArray[i].Material.Descricao + '</td>'));
+                                                @:else
+                @:row.append($('<td class="text-nowrap">' + jsonListaEmailArray[i].Material.Descricao + '</td>'));
+	        }
+            else
+            {
+                @:row.append($('<td class="text-nowrap">' + jsonListaEmailArray[i].Material.Descricao + '</td>'));
+            }*@
+                row.append($('<td>' + jsonListaEmailArray[i].Email + '</td>'));
+                row.append($('<td>' + jsonListaEmailArray[i].Tipo + '</td>'));
+                row.append($('<td>' + jsonListaEmailArray[i].Setor.Descricao + '</td>'));
+                row.append($('<td>' + jsonListaEmailArray[i].Anexo + '</td>'));
+
+            //    if (jsonListaEmailArray[i].DataMinima != null)
+            //    row.append($('<td>' + new Date(jsonListaEmailArray[i].DataMinima).toFormatDDMMYYYY() + '</td>'));
+            //else
+            //    row.append($('<td>&nbsp;</td>'));
+
+            //    if (jsonListaEmailArray[i].DataMaxima != null)
+            //        row.append($('<td>' + new Date(jsonListaEmailArray[i].DataMaxima).toFormatDDMMYYYY() + '</td>'));
+            //else
+            //    row.append($('<td>&nbsp;</td>'));
+
+            //    row.append($('<td>' + jsonListaEmailArray[i].SituacaoDescricao + '</td>'));
+            //var rmGerada = "&nbsp;";
+            //if (jsonListaEmailArray[i].ListaRequisicaoMaterialItem.length > 0)
+            //    rmGerada = jsonListaEmailArray[i].ListaRequisicaoMaterialItem[0].RequisicaoMaterialId;
+            //row.append($('<td class="text-center">' + rmGerada + '</td>'));
+        }
+    }
     </script>
 }

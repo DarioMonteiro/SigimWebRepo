@@ -59,7 +59,7 @@
                 cache: false,
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
-                    orcamentoClasseDespesaId: $("#orcamentoClasseDespesaId").val()
+                    orcamentoId: $("#orcamentoClasseDespesaId").val()
                 })
             })
             .success(function (result) {
@@ -156,6 +156,7 @@
 
     function validaClasse() {
         var isValid = false;
+        var codigoClasse = $("#@Html.IdFor(m => m.Codigo)").val();
         $.ajax({
             type: 'POST',
             url: '@Url.Action("ValidaClasse", "Classe", new { area = "Financeiro" })',
@@ -163,8 +164,8 @@
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                codigo: $("#@Html.IdFor(m => m.Codigo)").val(),
-                orcamentoClasseDespesaId: $("#orcamentoClasseDespesaId").val(),
+                codigo: codigoClasse,
+                orcamentoId: $("#orcamentoClasseDespesaId").val(),
                 somenteNivelFolha: '@somenteNivelFolha.Value'
             })
         })
@@ -172,6 +173,12 @@
             showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.Codigo)'), result.errorMessage);
             $('#@Html.IdFor(m => m.Descricao)').val(result.descricao);
             isValid = result.ehValido;
+        });
+
+        $.event.trigger({
+            type: "classeValidada",
+            codigo: codigoClasse,
+            isValid: isValid
         });
 
         return isValid;

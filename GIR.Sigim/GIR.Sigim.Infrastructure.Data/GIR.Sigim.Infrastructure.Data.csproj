@@ -63,6 +63,7 @@
     <Compile Include="Configuration\Financeiro\ClasseConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CaixaConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\RateioAutomaticoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ImpostoFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\MotivoCancelamentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ParametrosFinanceiroConfiguration.cs" />
@@ -89,6 +90,8 @@
     <Compile Include="Configuration\OrdemCompra\PreRequisicaoMaterialItemConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\PreRequisicaoMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\ParametrosOrdemCompraConfiguration.cs" />
+    <Compile Include="Configuration\Sac\ParametrosEmailSacConfiguration.cs" />
+    <Compile Include="Configuration\Sac\SetorConfiguration.cs" />
     <Compile Include="Configuration\Sac\ParametrosSacConfiguration.cs" />
     <Compile Include="Configuration\Sigim\BancoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\BancoLayoutConfiguration.cs" />
@@ -98,6 +101,7 @@
     <Compile Include="Configuration\Sigim\ClienteFornecedorConfiguration.cs" />
     <Compile Include="Configuration\Sigim\CodigoContribuicaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ComposicaoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\LogAcessoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AgenciaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ContaCorrenteConfiguration.cs" />
     <Compile Include="Configuration\Sigim\FormaRecebimentoConfiguration.cs" />
@@ -138,12 +142,11 @@
     <Compile Include="Configuration\OrdemCompra\ParametrosUsuarioConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
-    <Compile Include="Repository\Contrato\ContratoRetificacaoItemImpostoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemRepository.cs" />
-    <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
+    <Compile Include="Repository\Financeiro\RateioAutomaticoRepository.cs" />
     <Compile Include="Repository\Financeiro\ImpostoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoRateioRepository.cs" />
     <Compile Include="Repository\Financeiro\CaixaRepository.cs" />
@@ -162,6 +165,8 @@
     <Compile Include="Repository\OrdemCompra\ParametrosUsuarioRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Repository\Admin\UsuarioRepository.cs" />
+    <Compile Include="Repository\Sac\ParametrosEmailSacRepository.cs" />
+    <Compile Include="Repository\Sac\SetorRepository.cs" />
     <Compile Include="Repository\Sac\ParametrosSacRepository.cs" />
     <Compile Include="Repository\Sigim\BloqueioContabilRepository.cs" />
     <Compile Include="Repository\Sigim\CifFobRepository.cs" />
@@ -172,6 +177,7 @@
     <Compile Include="Repository\Sigim\BancoRepository.cs" />
     <Compile Include="Repository\Sigim\AgenciaRepository.cs" />
     <Compile Include="Repository\Sigim\ContaCorrenteRepository.cs" />
+    <Compile Include="Repository\Sigim\LogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\FormaRecebimentoRepository.cs" />
     <Compile Include="Repository\Sigim\TratamentoRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCaracteristicaRepository.cs" />

@@ -22,7 +22,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Contrato
 
         #endregion
 
-        #region IRepository<TEntity> Members
+        #region IRepository<Contrato> Members
 
         public override IEnumerable<Domain.Entity.Contrato.Contrato> ListarPeloFiltroComPaginacao(
             ISpecification<Domain.Entity.Contrato.Contrato> specification,
@@ -66,6 +66,31 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Contrato
             }
 
             return set.Skip(pageCount * pageIndex).Take(pageCount);
+        }
+
+        public void AdicionarItemMedicao(ContratoRetificacaoItemMedicao item)
+        {
+            if (item != (ContratoRetificacaoItemMedicao)null)
+            {
+                QueryableUnitOfWork.CreateSet<ContratoRetificacaoItemMedicao>().Add(item);
+            }
+        }
+
+        public void RemoverItemMedicao(ContratoRetificacaoItemMedicao item)
+        {
+            if (item != (ContratoRetificacaoItemMedicao)null)
+            {
+                QueryableUnitOfWork.Attach(item);
+                QueryableUnitOfWork.CreateSet<ContratoRetificacaoItemMedicao>().Remove(item);
+            }
+        }
+
+        public void AlterarItemMedicao(ContratoRetificacaoItemMedicao item)
+        {
+            if (item != (ContratoRetificacaoItemMedicao)null)
+            {
+                QueryableUnitOfWork.SetModified(item);
+            }
         }
 
         //public IEnumerable<Domain.Entity.Contrato.Contrato> ListarContratosPorAtributos(    string situacao,
@@ -170,5 +195,6 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Contrato
         //}
 
         #endregion
+
     }
 }

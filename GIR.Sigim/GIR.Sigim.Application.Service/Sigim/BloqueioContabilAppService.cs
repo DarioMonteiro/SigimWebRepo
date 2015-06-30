@@ -27,7 +27,7 @@ namespace GIR.Sigim.Application.Service.Sigim
 
         #region IBloqueioContabilAppService
 
-            public bool ValidaBloqueioContabil(string codigoCentroCusto, DateTime dataOperacao, out Nullable<DateTime> dataBloqueio)
+            public bool OcorreuBloqueioContabil(string codigoCentroCusto, DateTime dataOperacao, out Nullable<DateTime> dataBloqueio)
             {
 
                 dataBloqueio = BloqueioContabilRepository.ListarPeloFiltro((l => l.CodigoCentroCusto == codigoCentroCusto),
@@ -35,10 +35,10 @@ namespace GIR.Sigim.Application.Service.Sigim
 
                 if (dataBloqueio.HasValue)
                 {
-                    if (dataOperacao <= dataBloqueio) return false;
+                    if (dataOperacao <= dataBloqueio) return true;
                 }
 
-                return true;
+                return false;
             }
 
         #endregion
