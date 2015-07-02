@@ -117,13 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CampoObrigatorio" xml:space="preserve">
-    <value>O preenchimento do campo {0} é obrigatório.</value>
-  </data>
-  <data name="QuantidadeAprovadaMaiorQueQuantidade" xml:space="preserve">
-    <value>A quantidade aprovada do item [{0}] não pode ser maior que a quantidade.</value>
-  </data>
-  <data name="SenhaDoEmailObrigatoria" xml:space="preserve">
-    <value>Senha do e-mail é obrigatória.</value>
-  </data>
 </root>

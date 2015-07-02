@@ -14,6 +14,9 @@ namespace GIR.Sigim.Application.Helper
     {
         public static void Initialise()
         {
+            Mapper.CreateMap<Agencia, AgenciaDTO>();
+            Mapper.CreateMap<AgenciaDTO, Agencia>();
+
             Mapper.CreateMap<AssuntoContato, AssuntoContatoDTO>();
             Mapper.CreateMap<AssuntoContatoDTO, AssuntoContato>();
 
@@ -34,6 +37,9 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<CodigoContribuicao, CodigoContribuicaoDTO>();
             Mapper.CreateMap<CodigoContribuicaoDTO, CodigoContribuicao>();
+
+            Mapper.CreateMap<ContaCorrente, ContaCorrenteDTO>();
+            Mapper.CreateMap<ContaCorrenteDTO, ContaCorrente>();
 
             Mapper.CreateMap<Composicao, ComposicaoDTO>();
             Mapper.CreateMap<ComposicaoDTO, Composicao>();

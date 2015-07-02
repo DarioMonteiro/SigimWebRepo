@@ -20,10 +20,12 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public int? NumeroRemessaPagamento { get; set; }
         public bool? InterfaceEletronica { get; set; }
         public ICollection<BancoLayout> ListaBancoLayout { get; set; }
+        public ICollection<Agencia> ListaAgencia { get; set; }
 
         public Banco()
         {
             this.ListaBancoLayout = new HashSet<BancoLayout>();
+            this.ListaAgencia = new HashSet<Agencia>();
         }
     }
 }

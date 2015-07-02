@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,5 +67,168 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public decimal? Desconto { get; set; }
         public string MotivoDesconto { get; set; }
 
+        private bool ValidaData(string Data)
+        {
+            DateTime dataValida;
+
+            if (!DateTime.TryParse(Data, out dataValida))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected int ComparaDatas(string Data1, string Data2)
+        {
+            int result = 0;
+            DateTime data1, data2;
+
+            if (!DateTime.TryParseExact(Data1, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out data1))
+            {
+                return 1;
+            }
+
+            if (!DateTime.TryParseExact(Data2, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out data2))
+            {
+                return -1;
+            }
+
+            if (data1 > data2) result = -1;
+            else if (data1 < data2) result = 1;
+
+            return result;
+        }
+
+
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            bool condicao = false;
+
+            condicao = ((DataMedicao == null) || (DataMedicao == DateTime.MinValue));
+            if (condicao)
+            {
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data emissão"));
+            }
+            else
+            {
+                if (!ValidaData(DataMedicao.ToShortDateString()))
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoInvalido, "Data emissão"));
+                }
+            }
+
+            condicao = ((DataVencimento == null) || (DataVencimento == DateTime.MinValue));
+            if (condicao)
+            {
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data vencimento"));
+            }
+            else
+            {
+                if (!ValidaData(DataVencimento.ToShortDateString()))
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoInvalido, "Data vencimento"));
+                }
+            }
+
+            if ((DataEmissao != null) && (DataVencimento != null))
+            {
+                if (ComparaDatas(DataEmissao.ToShortDateString(), DataVencimento.ToShortDateString()) < 0)
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.DataMaiorQue, "Data emissão", "Data vencimento"));
+                }
+            }
+
+            if (TipoDocumentoId == 0)
+            {
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo"));
+            }
+
+            if (string.IsNullOrEmpty(NumeroDocumento))
+            {
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Documento"));
+            }
+
+            condicao = ((DataMedicao == null) || (DataMedicao == DateTime.MinValue));
+            if (condicao)
+            {
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data medição"));
+            }
+            else
+            {
+                if (!ValidaData(DataMedicao.ToShortDateString()))
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoInvalido, "Data medição"));
+                }
+            }
+
+            if ((DataMedicao != null) && (DataVencimento != null))
+            {
+                if (ComparaDatas(DataMedicao.ToShortDateString(), DataVencimento.ToShortDateString()) < 0)
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.DataMaiorQue, "Data medição", "Data vencimento"));
+                }
+            }
+
+            if (Quantidade == 0 )
+            {
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Quantidade medição atual"));
+            }
+
+            if (ContratoRetificacaoItem.NaturezaItem == NaturezaItem.PrecoGlobal)
+            {
+                if (Valor == 0)
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Valor medição atual"));
+                }
+
+                decimal valorTotalMedido = Contrato.ObterValorTotalMedido(SequencialItem, SequencialCronograma);
+                decimal valorItem = 0;
+                if (ContratoRetificacaoItem.ValorItem.HasValue)
+                {
+                    valorItem = ContratoRetificacaoItem.ValorItem.Value;
+                }
+
+                decimal valorPendente = valorItem - valorTotalMedido;
+
+                if (Valor > valorPendente)
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.ValorMaiorQue, "Valor medição atual", "Valor pendente"));
+                }
+            }
+            else if (ContratoRetificacaoItem.NaturezaItem == NaturezaItem.PrecoUnitario)
+            {
+
+                decimal quantidadeTotalMedida = Contrato.ObterQuantidadeTotalMedida(SequencialItem, SequencialCronograma);
+                decimal quantidadePendente = ContratoRetificacaoItem.Quantidade - quantidadeTotalMedida;
+
+                if (Quantidade > quantidadePendente)
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.ValorMaiorQue, "Quantidade medição atual", "Quantidade pendente"));
+                }
+            }
+
+            if (Desconto > 0)
+            {
+                if (string.IsNullOrEmpty(MotivoDesconto))
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Motivo desconto"));
+                }
+                if (Desconto > Valor)
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.ValorMaiorQue, "Desconto", "Valor medição atual"));
+                }
+            }
+
+            if (!string.IsNullOrEmpty(MotivoDesconto))
+            {
+                if (Desconto == 0)
+                {
+                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Desconto"));
+                }
+            }
+
+
+        }
     }
 }

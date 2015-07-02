@@ -11,8 +11,6 @@ namespace GIR.Sigim.Application.Service.Contrato
 {
     public interface IContratoRetificacaoItemMedicaoAppService : IBaseAppService
     {
-        bool ExisteNumeroDocumento(Nullable<DateTime> dataEmissao, string numeroDocumento, int? contratadoId);
-        bool Salvar(ContratoRetificacaoItemMedicaoDTO dto);
         string MedicaoToXML(ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao);
     }
 }

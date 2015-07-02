@@ -67,7 +67,6 @@
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
-    <Compile Include="DTO\Contrato\TotalizadoresMedicaoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
@@ -111,6 +110,8 @@
     <Compile Include="DTO\Sigim\BancoLayoutDTO.cs" />
     <Compile Include="DTO\Sigim\BloqueioContabilDTO.cs" />
     <Compile Include="DTO\Sigim\ComposicaoDTO.cs" />
+    <Compile Include="DTO\Sigim\AgenciaDTO.cs" />
+    <Compile Include="DTO\Sigim\ContaCorrenteDTO.cs" />
     <Compile Include="DTO\Sigim\FormaRecebimentoDTO.cs" />
     <Compile Include="DTO\Sigim\TipoAreaDTO.cs" />
     <Compile Include="DTO\Sigim\TipoCaracteristicaDTO.cs" />
@@ -152,6 +153,8 @@
     <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\PaginationParameters.cs" />
     <Compile Include="Filtros\Sigim\BancoFiltro.cs" />
+    <Compile Include="Filtros\Sigim\AgenciaFiltro.cs" />
+    <Compile Include="Filtros\Sigim\ContaCorrenteFiltro.cs" />
     <Compile Include="Filtros\Sigim\FormaRecebimentoFiltro.cs" />
     <Compile Include="Filtros\Sac\Setor.cs" />
     <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />
@@ -264,6 +267,8 @@
     <Compile Include="Service\OrdemCompra\IParametrosUsuarioAppService.cs" />
     <Compile Include="Service\Sac\ISetorAppService.cs" />
     <Compile Include="Service\Sac\IParametrosSacAppService.cs" />
+    <Compile Include="Service\Sigim\IContaCorrenteAppService.cs" />
+    <Compile Include="Service\Sigim\IAgenciaAppService.cs" />
     <Compile Include="Service\Sigim\IBancoAppService.cs" />
     <Compile Include="Service\Sigim\IFormaRecebimentoAppService.cs" />
     <Compile Include="Service\Sigim\ITratamentoAppService.cs" />

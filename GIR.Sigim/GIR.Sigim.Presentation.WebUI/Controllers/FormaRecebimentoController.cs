@@ -71,7 +71,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
         private void CarregarCombos(FormaRecebimentoViewModel model)
         {
-            model.ListaTipoRecebimento = new SelectList(formaRecebimentoAppService.ListarOpcoesTipoRecebimento(),"Id", "Descricao", model.FormaRecebimento.TipoRecebimento);
+            model.ListaTipoRecebimento = new SelectList(formaRecebimentoAppService.ListarTipoRecebimento(),"Id", "Descricao", model.FormaRecebimento.TipoRecebimento);
         }
 
         [HttpPost]
