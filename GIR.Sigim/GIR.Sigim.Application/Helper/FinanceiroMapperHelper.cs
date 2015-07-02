@@ -57,6 +57,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<RateioAutomatico, RateioAutomaticoDTO>();
             Mapper.CreateMap<RateioAutomaticoDTO, RateioAutomatico>();
 
+            Mapper.CreateMap<TaxaAdministracao, TaxaAdministracaoDTO>();
+            Mapper.CreateMap<TaxaAdministracaoDTO, TaxaAdministracao>();
+
             Mapper.CreateMap<AssuntoContatoDTO, TabelaBasicaDTO>()
                 .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.AssuntoContato));
             Mapper.CreateMap<TabelaBasicaDTO, AssuntoContatoDTO>();

@@ -94,6 +94,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ITituloPagarRepository, TituloPagarRepository>();
             currentContainer.RegisterType<IImpostoFinanceiroRepository, ImpostoFinanceiroRepository>();
             currentContainer.RegisterType<IRateioAutomaticoRepository, RateioAutomaticoRepository>();
+            currentContainer.RegisterType<ITaxaAdministracaoRepository, TaxaAdministracaoRepository>();
             #endregion
 
             #region Orçamento
@@ -183,6 +184,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ITabelaBasicaAppService, TabelaBasicaAppService>();
             currentContainer.RegisterType<IImpostoFinanceiroAppService, ImpostoFinanceiroAppService>();
             currentContainer.RegisterType<IRateioAutomaticoAppService, RateioAutomaticoAppService>();
+            currentContainer.RegisterType<ITaxaAdministracaoAppService, TaxaAdministracaoAppService>();
             #endregion
 
             #region Orçamento
