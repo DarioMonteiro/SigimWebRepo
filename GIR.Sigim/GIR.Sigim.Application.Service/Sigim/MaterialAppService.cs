@@ -60,7 +60,7 @@ namespace GIR.Sigim.Application.Service.Sigim
             return materialRepository.ListarPeloFiltro(specification).To<List<MaterialDTO>>();
         }
 
-        public List<MaterialDTO> PesquisarMaterial(MaterialPesquisaFiltro filtro)
+        public List<MaterialDTO> PesquisarAtivosPeloFiltro(MaterialPesquisaFiltro filtro)
         {
             var specification = (Specification<Material>)new TrueSpecification<Material>();
             specification &= MaterialSpecification.EhAtivo();
@@ -94,7 +94,7 @@ namespace GIR.Sigim.Application.Service.Sigim
                     break;
             }
 
-            var x = materialRepository.PesquisarRange(
+            var x = materialRepository.Pesquisar(
                 specification,
                 filtro.PaginationParameters.OrderBy,
                 filtro.PaginationParameters.Ascending);

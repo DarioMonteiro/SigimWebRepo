@@ -12,14 +12,7 @@ namespace GIR.Sigim.Domain.Repository.Sigim
 {
     public interface IMaterialRepository : IRepository<Material>
     {
-        //IEnumerable<Material> ListarAtivosPeloTipoTabelaPropria(string descricao, params Expression<Func<Material, object>>[] includes);
         IEnumerable<Material> Pesquisar(
-            string campo,
-            string texto,
-            string orderBy,
-            bool ascending,
-            params Expression<Func<Material, object>>[] includes);
-        IEnumerable<Material> PesquisarRange(
             ISpecification<Material> specification,
             string orderBy,
             bool ascending,

@@ -171,7 +171,7 @@ namespace GIR.Sigim.Domain.Specification.Sigim
 
         public static Specification<Material> EhAtivo()
         {
-            return new DirectSpecification<Material>(l => l.Situacao == "A");
+            return new DirectSpecification<Material>(l => l.Situacao == "A" || l.Situacao == null);
         }
 
         public static Specification<Material> EhTipoTabela(TipoTabela tipoTabela)

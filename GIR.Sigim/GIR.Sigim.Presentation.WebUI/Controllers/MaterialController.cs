@@ -55,7 +55,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         public ActionResult PesquisarMaterial(MaterialPesquisaFiltro filtro)
         {
             //var model = materialAppService.PesquisarMaterial(filtro);
-            var result = materialAppService.PesquisarMaterial(filtro);
+            var result = materialAppService.PesquisarAtivosPeloFiltro(filtro);
             if (result.Any())
             {
                 var listaViewModel = CreateListaViewModel(filtro.PaginationParameters, 0, result);

@@ -63,41 +63,6 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
         }
 
         public IEnumerable<Material> Pesquisar(
-            string campo,
-            string texto,
-            string orderBy,
-            bool ascending,
-            params Expression<Func<Material, object>>[] includes)
-        {
-            var set = CreateSetAsQueryable(includes);
-
-            switch (campo)
-            {
-                case "unidadeMedida":
-                    set = set.Where(l => l.SiglaUnidadeMedida.Contains(texto));
-                        //: set.Where(l => l.SiglaUnidadeMedida.StartsWith(textoInicio) && l.SiglaUnidadeMedida.EndsWith(textoFim));
-                    break;
-                case "id":
-                    set = set.Where(l => l.Id == Convert.ToInt32(texto));
-                    break;
-                case "classeInsumo":
-                    set = set.Where(l => l.CodigoMaterialClasseInsumo.Contains(texto));
-                    break;
-                case "codigoExterno":
-                    set = set.Where(l => l.CodigoExterno.Contains(texto));
-                    break;
-                case "descricao":
-                default:
-                    set = set.Where(l => l.Descricao.Contains(texto));
-                    break;
-            }
-
-            set = ConfigurarOrdenacao(set, orderBy, ascending);
-
-            return set;
-        }
-
-        public IEnumerable<Material> PesquisarRange(
             ISpecification<Material> specification,
             string orderBy,
             bool ascending,
