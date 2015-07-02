@@ -15,6 +15,32 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro
         public override void RegisterArea(AreaRegistrationContext context)
         {
             context.MapRoute(
+             "ContaCorrente",
+             "Financeiro/ContaCorrente/{action}/{id}",
+             new
+             {
+                 area = "",
+                 controller = "ContaCorrente",
+                 action = "Index",
+                 id = UrlParameter.Optional
+             },
+             new[] { "GIR.Sigim.Presentation.WebUI.Controllers" }
+         );
+
+            context.MapRoute(
+             "Agencia",
+             "Financeiro/Agencia/{action}/{id}",
+             new
+             {
+                 area = "",
+                 controller = "Agencia",
+                 action = "Index",
+                 id = UrlParameter.Optional
+             },
+             new[] { "GIR.Sigim.Presentation.WebUI.Controllers" }
+         );
+
+            context.MapRoute(
               "Banco",
               "Financeiro/Banco/{action}/{id}",
               new

@@ -114,7 +114,7 @@ namespace GIR.Sigim.Application.Service.Sigim
             }
         }
 
-        public List<ItemListaDTO> ListarOpcoesTipoRecebimento()
+        public List<ItemListaDTO> ListarTipoRecebimento()
         { return typeof(TipoFormaRecebimento).ToItemListaDTO(); }
 
     }

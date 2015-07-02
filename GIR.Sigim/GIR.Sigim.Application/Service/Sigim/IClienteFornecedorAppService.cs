@@ -12,6 +12,7 @@ namespace GIR.Sigim.Application.Service.Sigim
     {
         List<ClienteFornecedorDTO> ListarAtivos();
         List<ClienteFornecedorDTO> ListarAtivosDeContrato();
+        ClienteFornecedorDTO ObterPeloId(int? id);
         //List<ClienteFornecedorDTO> ListarClienteFornecedor(ClassificacaoClienteFornecedor classificacaoClienteFornecedor, SituacaoClienteFornecedor situacaoClienteFornecedor, TipoPessoa tipoPessoa);
     }
 }

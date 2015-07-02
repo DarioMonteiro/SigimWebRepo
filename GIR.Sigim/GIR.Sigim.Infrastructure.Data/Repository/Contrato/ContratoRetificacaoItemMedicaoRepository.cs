@@ -22,33 +22,6 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Contrato
 
         #region IRepository<TEntity> Members
 
-        public IEnumerable<ContratoRetificacaoItemMedicao> RecuperaMedicaoPorContratoDadosDaNota(int contratoId,
-                                                                                                 int tipoDocumentoId,
-                                                                                                 string numeroDocumento,
-                                                                                                 DateTime dataEmissao,
-                                                                                                 int? contratadoId,
-                                                                                                 params Expression<Func<ContratoRetificacaoItemMedicao, object>>[] includes)
-                                                                                          
-        {
-            var set = CreateSetAsQueryable(includes);
-            if ((contratadoId.HasValue) && (contratadoId.Value > 0))
-            {
-                set = set.Where(l => l.ContratoId == contratoId &&
-                                l.TipoDocumentoId == tipoDocumentoId &&
-                                l.NumeroDocumento == numeroDocumento &&
-                                l.DataEmissao == dataEmissao &&
-                                ((l.MultiFornecedorId == contratadoId) ||
-                                (l.MultiFornecedorId == null && l.Contrato.ContratadoId == contratadoId)));
-            }
-            else
-            {
-                set = set.Where(l => l.ContratoId == contratoId &&
-                                l.TipoDocumentoId == tipoDocumentoId &&
-                                l.NumeroDocumento == numeroDocumento &&
-                                l.DataEmissao == dataEmissao);
-            }
-            return set;
-        }
 
         #endregion
     }

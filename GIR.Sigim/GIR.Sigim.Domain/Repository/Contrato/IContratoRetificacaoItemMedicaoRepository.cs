@@ -10,11 +10,5 @@ namespace GIR.Sigim.Domain.Repository.Contrato
 {
     public interface IContratoRetificacaoItemMedicaoRepository : IRepository<ContratoRetificacaoItemMedicao>
     {
-        IEnumerable<ContratoRetificacaoItemMedicao> RecuperaMedicaoPorContratoDadosDaNota(int contratoId,
-                                                                                          int tipoDocumentoId,
-                                                                                          string numeroDocumento,
-                                                                                          DateTime dataEmissao,
-                                                                                          int? contratadoId,
-                                                                                          params Expression<Func<ContratoRetificacaoItemMedicao, object>>[] includes);
     }
 }

@@ -13,6 +13,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Sigim;
 using System.Linq.Expressions;
+using GIR.Sigim.Domain.Specification.Sigim;
 
 namespace GIR.Sigim.Application.Service.Sigim
 {
@@ -31,7 +32,8 @@ namespace GIR.Sigim.Application.Service.Sigim
         public List<BancoDTO> ListarPeloFiltro(BancoFiltro filtro, out int totalRegistros)
         {
             var specification = (Specification<Banco>)new TrueSpecification<Banco>();
-
+           
+            specification = BancoSpecification.EhBanco();
 
             return bancoRepository.ListarPeloFiltroComPaginacao(
                 specification,
@@ -39,7 +41,8 @@ namespace GIR.Sigim.Application.Service.Sigim
                 filtro.PaginationParameters.PageSize,
                 filtro.PaginationParameters.OrderBy,
                 filtro.PaginationParameters.Ascending,
-                out totalRegistros).To<List<BancoDTO>>();
+                out totalRegistros,
+                l => l.ListaAgencia).To<List<BancoDTO>>();
         }
 
         public BancoDTO ObterPeloId(int? id)
@@ -49,8 +52,9 @@ namespace GIR.Sigim.Application.Service.Sigim
 
         public List<BancoDTO> ListarTodos()
         {
-            return bancoRepository.ListarTodos().To<List<BancoDTO>>();
+            return bancoRepository.ListarTodos().Where(l => l.Id != 999).To<List<BancoDTO>>();
         }
+
 
         public bool Salvar(BancoDTO dto)
         {
@@ -59,6 +63,8 @@ namespace GIR.Sigim.Application.Service.Sigim
 
             bool novoItem = false;
 
+            dto.Id = Int32.Parse(dto.BancoCodigo);
+           
             var banco = bancoRepository.ObterPeloId(dto.Id);
             if (banco == null)
             {

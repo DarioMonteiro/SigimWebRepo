@@ -32,11 +32,28 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ContratoRetificacaoItemImposto, ContratoRetificacaoItemImpostoDTO>();
             Mapper.CreateMap<ContratoRetificacaoItemImpostoDTO, ContratoRetificacaoItemImposto>();
 
-            Mapper.CreateMap<ContratoRetificacaoItemMedicao, ContratoRetificacaoItemMedicaoDTO>();
+            Mapper.CreateMap<ContratoRetificacaoItemMedicao, ContratoRetificacaoItemMedicaoDTO>()
+                .ForMember(d => d.QuantidadeTotalMedida, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalMedida(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorTotalMedido, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedido(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.QuantidadeTotalLiberada, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalLiberada(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorTotalLiberado, m => m.MapFrom(s => s.Contrato.ObterValorTotalLiberado(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.QuantidadeTotalMedidaLiberada, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalMedidaLiberada(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorTotalMedidoLiberado, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedidoLiberado(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorImpostoRetido, m => m.MapFrom(s => s.Contrato.ObterValorImpostoRetido(s.SequencialItem, s.SequencialCronograma, s.ContratoRetificacaoItemId)))
+                .ForMember(d => d.ValorImpostoRetidoMedicao, m => m.MapFrom(s => s.Contrato.ObterValorImpostoRetidoMedicao(s.SequencialItem, s.SequencialCronograma, s.ContratoRetificacaoItemId,s.Id)))
+                .ForMember(d => d.ValorImpostoIndiretoMedicao, m => m.MapFrom(s => s.Contrato.ObterValorTotalImpostoIndiretoMedicao(s.SequencialItem, s.SequencialCronograma, s.ContratoRetificacaoItemId, s.Id)))
+                .ForMember(d => d.ValorTotalMedidoIndireto, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedidoIndireto(s.ContratoId, s.NumeroDocumento, s.TipoDocumentoId, s.DataVencimento)))
+                .ForMember(d => d.ValorTotalMedidoNota, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedidoNota(s.ContratoId, s.NumeroDocumento, s.TipoDocumentoId, s.DataVencimento)))
+                .ForMember(d => d.ValorTotalMedidoLiberadoContrato, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedidoLiberadoContrato(s.ContratoId)));
             Mapper.CreateMap<ContratoRetificacaoItemMedicaoDTO, ContratoRetificacaoItemMedicao>();
 
             Mapper.CreateMap<ContratoRetificacaoProvisao, ContratoRetificacaoProvisaoDTO>()
-                .ForMember(d => d.ValorTotalMedido, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedido(s.SequencialItem, s.SequencialCronograma)));
+                .ForMember(d => d.QuantidadeTotalMedida, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalMedida(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorTotalMedido, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedido(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.QuantidadeTotalLiberada, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalLiberada(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorTotalLiberado, m => m.MapFrom(s => s.Contrato.ObterValorTotalLiberado(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.QuantidadeTotalMedidaLiberada, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalMedidaLiberada(s.SequencialItem, s.SequencialCronograma)))
+                .ForMember(d => d.ValorTotalMedidoLiberado, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedidoLiberado(s.SequencialItem, s.SequencialCronograma)));
             Mapper.CreateMap<ContratoRetificacaoProvisaoDTO, ContratoRetificacaoProvisao>();
 
             Mapper.CreateMap<Licitacao, LicitacaoDTO>();

@@ -9,6 +9,7 @@ using GIR.Sigim.Domain.Repository.Admin;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
 using GIR.Sigim.Domain.Repository.Sigim;
+using GIR.Sigim.Domain.Resource.OrdemCompra;
 using GIR.Sigim.Infrastructure.Crosscutting.Adapter;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
@@ -114,7 +115,7 @@ namespace GIR.Sigim.Application.Service.Test.OrdemCompra
             service.Salvar(dto);
             Assert.AreEqual(1, messageQueue.GetAll().Count);
             Assert.AreEqual(TypeMessage.Error, messageQueue.GetAll()[0].Type);
-            Assert.AreEqual(Domain.Resource.ErrorMessages.SenhaDoEmailObrigatoria, messageQueue.GetAll()[0].Text);
+            Assert.AreEqual(Domain.Resource.OrdemCompra.ErrorMessages.SenhaDoEmailObrigatoria, messageQueue.GetAll()[0].Text);
         }
 
         [TestMethod]

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GIR.Sigim.Domain.Entity.Contrato;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,8 @@ namespace GIR.Sigim.Domain.Repository.Contrato
 {
     public interface IContratoRepository : IRepository<Entity.Contrato.Contrato> 
     {
-
-
+        void AdicionarItemMedicao(ContratoRetificacaoItemMedicao item);
+        void RemoverItemMedicao(ContratoRetificacaoItemMedicao item);
+        void AlterarItemMedicao(ContratoRetificacaoItemMedicao item);
     }
 }

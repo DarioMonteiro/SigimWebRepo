@@ -1,0 +1,435 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.TaxaAdministracaoViewModel
+
+@{
+    ViewBag.Title = "Taxa de administração";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Cadastro",
+                            "TaxaAdministracao",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            <div class="row">
+                                <section class="col col-12">
+                                    @Html.LabelFor(m => m.ClienteId, new { @class = "label" })
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.ClienteId, Model.ListaCliente, string.Empty)<i></i>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                                @Html.EditorFor(m => m.CentroCusto, "CentroCusto", new { @sectionClass = "col col-4", @labelText = "Centro de Custo", @somenteNivelFolha = true })
+                            </div>
+                        </fieldset>
+                        <fieldset id="formItem">
+                            @Html.HiddenFor(m => m.JsonItens)
+                            @Html.HiddenFor(m => m.IndexSelecionado)
+                            <div class="row" style="padding-top:0px;">
+                                @Html.EditorFor(m => m.Classe, "Classe", new { @sectionClass = "col col-4", @somenteNivelFolha = false, @centroCustoRequerido = true})
+                            @*</div>
+                            <div class="row">*@
+                                <section class="col col-2">
+                                    @Html.LabelFor(m => m.Percentual, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Percentual, "{0:F5}", new { @class = "text-right decimal-5-casas required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Percentual, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                             <div class="row">
+                                <section class="col col-6">
+                                    <button id="btnAddItem" type="button" class="btn btn-primary">Adicionar</button>
+                                    <button id="btnRemoverItem" type="button" class="btn btn-danger">Remover</button>
+                                </section>
+                            </div>
+                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="text-center" style="width: 30px;">...</th>
+                                            <th class="text-left">Classe</th>
+                                            <th class="text-right">Percentual</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                    <footer>
+                        @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
+                        <button type="button" id="btnDeletar" class="btn btn-danger">
+                            Deletar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Salvar
+                        </button>
+                    </footer>
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@*@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}*@
+
+<script type="text/javascript">
+    jsonItemArray = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+
+    $(document).ready(function ()
+    {
+        CarregaRegistros(true);
+
+        $("#@Html.IdFor(m => m.ClienteId)").on("change", function ()
+        {
+            CarregaRegistros(true);
+        });
+
+        $("#@Html.IdFor(m => m.CentroCusto.Codigo)").on("change", function () {
+            CarregaRegistros(true);
+        });
+
+        jQuery.validator.setDefaults({
+            ignore: '#formItem *'
+        });
+
+        jQuery.validator.addMethod(
+            "ehClasseValida",
+            function (value, element, params) {
+                var isValid = validaClasse();
+                $.validator.messages.ehClasseValida = $('#@Html.IdFor(m => m.Classe.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
+            "ehCentroCustoValido",
+            function (value, element, params) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.ehCentroCustoValido = $('#@Html.IdFor(m => m.CentroCusto.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
+
+        $('#formCadastro').validate({
+            rules:
+            {
+                '@Html.NameFor(m => m.Classe.Codigo)':
+                    {
+                        ehClasseValida: true,
+                        required: true
+                    },
+                '@Html.NameFor(m => m.CentroCusto.Codigo)': 
+                    {
+                        ehCentroCustoValido: true,
+                        required: true
+                    }
+            },
+            messages: {
+                '@Html.NameFor(m => m.CentroCusto.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo")'
+                },
+                '@Html.NameFor(m => m.Classe.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Classe")'
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
+
+
+            });
+    });
+
+    $("#btnDeletar").on("click", function ()
+    {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletar", "TaxaAdministracao")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                centroCustoId: $('#@Html.IdFor(m => m.CentroCusto.Codigo )').val(),
+                clienteId: $('#@Html.IdFor(m => m.ClienteId)').val()
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
+            clearForm();
+        });
+    });
+
+    $('#btnAddItem').on("click", function ()
+    {
+        if ($('#formItem input').valid()) {
+            if (validaAdicionar() == true) {
+                addItem();
+            }
+        }
+    });
+
+    $('#btnRemoverItem').on("click", function ()
+    {
+        removerItem();
+    });
+
+    function clearForm()
+    {
+        $('#@Html.IdFor(m => m.ClienteId)').val(0);
+        $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val('');
+        $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val('');
+       @* $("#@Html.IdFor(m => m.ClienteId)").prop('disabled', false);
+        $("#@Html.IdFor(m => m.CentroCusto.Codigo)").prop('disabled', false);
+        $("#BtnShowModalPanel_CentroCusto_Codigo").prop('disabled', false);*@
+        limpaItem();
+        $("#tableItens tbody").empty();
+    }
+
+    function limpaItem()
+    {
+        $('#@Html.IdFor(m => m.Classe.Codigo)').val('');
+        $('#@Html.IdFor(m => m.Classe.Descricao)').val('');
+        $('#@Html.IdFor(m => m.Percentual)').val(roundDecimal(floatToString(0), 5));
+        $('#@Html.IdFor(m => m.IndexSelecionado)').val(-1);
+    }
+
+    function novo()
+    {
+        clearForm();
+        limpaMsg();
+        validaCentroCusto();
+    }
+
+    function limpaMsg()
+    {
+        $('#notificationMessages').html('');
+        $('#Classe_Codigo-error').remove();
+        $('#CentroCusto_Codigo-error').remove();
+    }
+
+    function refresh()
+    {
+        onSuccess();
+        CarregaRegistros(false);
+    }
+
+    function loadItem(index)
+    {
+        $('#@Html.IdFor(m => m.Classe.Codigo)').val(jsonItemArray[index].Classe.Codigo);
+        $('#@Html.IdFor(m => m.Classe.Descricao)').val(jsonItemArray[index].Classe.Descricao);
+        @*$('#@Html.IdFor(m => m.CentroCusto.Codigo)').val(jsonItemArray[index].CentroCusto.Codigo);
+        $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val(jsonItemArray[index].CentroCusto.Descricao);*@
+        $('#@Html.IdFor(m => m.Percentual)').val(roundDecimal(floatToString(jsonItemArray[index].Percentual), 5));
+        $('#@Html.IdFor(m => m.IndexSelecionado)').val(index);
+        goToTop();
+    }
+
+    function CarregaRegistros(bolLimpaMsg)
+    {
+        var centroCustoId = $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val();
+        var clienteId = parseInt($('#@Html.IdFor(m => m.ClienteId)').val());
+        if ((centroCustoId != "") && (clienteId != 0))
+        {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CarregarItem", "TaxaAdministracao")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    centroCustoId: centroCustoId,
+                    clienteId: clienteId
+                })
+            })
+            .success(function (result) {
+                if (bolLimpaMsg == true) { limpaMsg(); }
+                limpaItem();
+                jsonItemArray = result;
+                $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(result));
+                fillTable();
+                goToTop();
+            });
+        }
+    };
+
+    function fillTable()
+    {
+        $("#tableItens tbody").empty();
+        for (var intIndex = 0; intIndex < jsonItemArray.length; intIndex++) {
+            var row = $('<tr />')
+            $("#tableItens tbody").append(row);
+
+            var chkDisabled = '';
+            var labelClass = 'checkbox';
+            row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + intIndex + '" ' + chkDisabled + '><i></i>' + '' + '</label></td>'));
+            row.append($('<td class="text-left">' + jsonItemArray[intIndex].Classe.Codigo + ' - ' + jsonItemArray[intIndex].Classe.Descricao + '</td>'));
+            //row.append($('<td class="text-left">' + jsonItemArray[intIndex].CentroCusto.Codigo + ' - ' + jsonItemArray[intIndex].CentroCusto.Descricao + '</td>'));
+            row.append($('<td class="text-right" onclick="loadItem(' + intIndex + ');">' + roundDecimal(floatToString(jsonItemArray[intIndex].Percentual), 5) + '</td>'));
+        }
+    }
+
+    function addItem()
+    {
+        var item = $("#formItem").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
+
+        var index = -1;
+        $.each(jsonItemArray, function (i, obj) {
+            if ($('#@Html.IdFor(m => m.IndexSelecionado)').val() == i) {
+                index = i;
+                return false;
+            }
+        });
+
+        if (index >= 0) {
+            jsonItemArray.splice(index, 1, item);
+        }
+        else {
+            jsonItemArray.push(item);
+        }
+
+        $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(jsonItemArray));
+        fillTable();
+        limpaItem();
+    }
+
+    function processData(node)
+    {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+
+        if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.Percentual)")) {
+            var value = $("#" + fieldId).val();
+            return { name: fieldName, value: parseFloat(value.toString().replace(".", "").replace(",", ".")) };
+        }
+
+        return false;
+    }
+
+    function validaAdicionar()
+    {
+        var result = true;
+        var clienteId = '';
+
+        if (validaClasse() == false)
+        {
+            result = false;
+            smartAlert("Erro", "Informe uma classe válida.", "error");
+            return false;
+        }
+
+        if (validaCentroCusto() == false) {
+            result = false;
+            smartAlert("Erro", "Informe um centro de custo válido.", "error");
+            return false;
+        }
+
+        clienteId = $('#@Html.IdFor(m => m.ClienteId)').val();
+        if (clienteId == '')
+        {
+            result = false;
+            smartAlert("Erro", "Informe o campo cliente.", "error");
+            return false;
+        }
+        if (($('#@Html.IdFor(m => m.CentroCusto.Codigo)').val() == ''))
+        {
+            result = false;
+            smartAlert("Erro", "Informe o campo centro de custo.", "error");
+            return false;
+        }
+        if (($('#@Html.IdFor(m => m.Classe.Codigo)').val() == ''))
+        {
+            result = false;
+            smartAlert("Erro", "Informe o campo classe.", "error");
+            return false;
+        }
+        if ((parseFloat($('#@Html.IdFor(m => m.Percentual)').val()) <= 0))
+        {
+            result = false;
+            smartAlert("Erro", "Informe um percentual maior que zero.", "error");
+            return false;
+        }
+
+        var percentualTotal = parseFloat(0);
+        $.each(jsonItemArray, function (index, obj) {
+            var ehMesmaClasse = (obj.Classe.Codigo == $('#@Html.IdFor(m => m.Classe.Codigo)').val());
+            @*var ehMesmoCentroCusto = (obj.CentroCusto.Codigo == $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val());*@
+            var ehMesmoIndex = (index == $('#@Html.IdFor(m => m.IndexSelecionado)').val());
+            var percentual = parseFloat(obj.Percentual);
+            var percentualModel = parseFloat($('#@Html.IdFor(m => m.Percentual)').val());
+
+            if (ehMesmaClasse /*&& ehMesmoCentroCusto*/ && !ehMesmoIndex) {
+                result = false;
+                smartAlert("Erro", "Item repetido.", "error");
+                return false;
+            }
+
+            if (!ehMesmoIndex) {
+                percentualTotal = parseFloat(percentualTotal) + parseFloat(percentual);
+                if ((percentualTotal + percentualModel) > 100) {
+                    result = false;
+                    smartAlert("Erro", "O percentual não deve ultrapassar os 100 % .", "error");
+                    return false;
+                }
+            }
+        });
+
+        return result;
+    }
+
+    function removerItem()
+    {
+        var arrSequencial = [];
+        var index;
+        $($('#tableItens input[type=checkbox]:checked').get().reverse()).each(function () {
+            index = parseInt($(this).val());
+            arrSequencial.push(index);
+            jsonItemArray.splice(index, 1);
+        });
+
+        if (arrSequencial.length > 0)
+        {
+            $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(jsonItemArray));
+            fillTable();
+        }
+        else
+        {
+            smartAlert("Erro", "Selecione pelo menos 1 item para remover.", "error");
+        }
+    }
+
+</script>
