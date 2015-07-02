@@ -140,6 +140,7 @@
     <Compile Include="DTO\Sigim\UnidadeMedidaDTO.cs" />
     <Compile Include="DTO\Sigim\MaterialDTO.cs" />
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
+    <Compile Include="Enums\TipoPesquisa.cs" />
     <Compile Include="Enums\TabelaBasicaFinanceiro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
     <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\PaginationParameters.cs" />
     <Compile Include="Filtros\Sigim\BancoFiltro.cs" />
+    <Compile Include="Filtros\Sigim\MaterialPesquisaFiltro.cs" />
     <Compile Include="Filtros\Sigim\FormaRecebimentoFiltro.cs" />
     <Compile Include="Filtros\Sac\Setor.cs" />
     <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />

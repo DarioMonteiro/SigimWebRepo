@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Sigim;
@@ -44,7 +45,8 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<InteresseBairro, InteresseBairroDTO>();
             Mapper.CreateMap<InteresseBairroDTO, InteresseBairro>();
 
-            Mapper.CreateMap<Material, MaterialDTO>();
+            Mapper.CreateMap<Material, MaterialDTO>()
+                .ForMember(d => d.DescricaoTipoTabela, m => m.MapFrom(s => s.TipoTabela.ObterDescricao()));
             Mapper.CreateMap<MaterialDTO, Material>();
 
             Mapper.CreateMap<NaturezaOperacao, NaturezaOperacaoDTO>();

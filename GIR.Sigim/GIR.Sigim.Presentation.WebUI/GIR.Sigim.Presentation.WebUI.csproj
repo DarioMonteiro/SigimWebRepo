@@ -268,6 +268,7 @@
     <Content Include="Areas\OrdemCompra\Views\Home\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\Web.config" />
     <Content Include="Areas\Financeiro\Views\_ViewStart.cshtml" />
+    <Content Include="Scripts\libs\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\plugin\form-to-json\form2js.js" />
     <Content Include="Scripts\plugin\form-to-json\jquery.toObject.js" />
     <Content Include="Scripts\sigim_scripts.js" />
@@ -762,6 +763,7 @@
     <Content Include="Views\FormaRecebimento\ListaPartial.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
+    <Content Include="Views\Material\ListaPesquisaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

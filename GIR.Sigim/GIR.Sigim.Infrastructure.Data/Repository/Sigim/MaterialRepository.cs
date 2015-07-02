@@ -8,6 +8,7 @@ using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Specification;
+using GIR.Sigim.Domain.Specification.Sigim;
 
 namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
 {
@@ -24,18 +25,6 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
         #endregion
 
         #region IMaterialRepository Members
-
-        public IEnumerable<Material> ListarAtivosPeloTipoTabelaPropria(string descricao, params Expression<Func<Material, object>>[] includes)
-        {
-            var set = CreateSetAsQueryable(includes);
-
-            if (!string.IsNullOrEmpty(descricao))
-                set = set.Where(l => l.Descricao.Contains(descricao));
-
-            //TODO: Alterar no banco os materiais com situação == NULL para "A", para simplificar a consulta.
-            return set.Where(l => l.TipoTabela == TipoTabela.Propria && (l.Situacao == "A" || string.IsNullOrEmpty(l.Situacao)))
-                .OrderBy(l => l.Descricao);
-        }
 
         public IEnumerable<Material> ListarPeloFiltro(ISpecification<Material> specification, params Expression<Func<Material, object>>[] includes)
         {
@@ -73,6 +62,87 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
             return set.Skip(pageCount * pageIndex).Take(pageCount);
         }
 
+        public IEnumerable<Material> Pesquisar(
+            string campo,
+            string texto,
+            string orderBy,
+            bool ascending,
+            params Expression<Func<Material, object>>[] includes)
+        {
+            var set = CreateSetAsQueryable(includes);
+
+            switch (campo)
+            {
+                case "unidadeMedida":
+                    set = set.Where(l => l.SiglaUnidadeMedida.Contains(texto));
+                        //: set.Where(l => l.SiglaUnidadeMedida.StartsWith(textoInicio) && l.SiglaUnidadeMedida.EndsWith(textoFim));
+                    break;
+                case "id":
+                    set = set.Where(l => l.Id == Convert.ToInt32(texto));
+                    break;
+                case "classeInsumo":
+                    set = set.Where(l => l.CodigoMaterialClasseInsumo.Contains(texto));
+                    break;
+                case "codigoExterno":
+                    set = set.Where(l => l.CodigoExterno.Contains(texto));
+                    break;
+                case "descricao":
+                default:
+                    set = set.Where(l => l.Descricao.Contains(texto));
+                    break;
+            }
+
+            set = ConfigurarOrdenacao(set, orderBy, ascending);
+
+            return set;
+        }
+
+        public IEnumerable<Material> PesquisarRange(
+            ISpecification<Material> specification,
+            string orderBy,
+            bool ascending,
+            params Expression<Func<Material, object>>[] includes)
+        {
+            var set = CreateSetAsQueryable(includes);
+            set = set.Where(specification.SatisfiedBy());
+            set = ConfigurarOrdenacao(set, orderBy, ascending);
+
+            return set.ToList();
+        }
+
         #endregion
+
+        private static IQueryable<Material> ConfigurarOrdenacao(IQueryable<Material> set, string orderBy, bool ascending)
+        {
+            switch (orderBy)
+            {
+                case "unidadeMedida":
+                    set = ascending ? set.OrderBy(l => l.SiglaUnidadeMedida) : set.OrderByDescending(l => l.SiglaUnidadeMedida);
+                    break;
+                case "id":
+                    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
+                    break;
+                case "classeInsumo":
+                    set = ascending ? set.OrderBy(l => l.CodigoMaterialClasseInsumo) : set.OrderByDescending(l => l.MaterialClasseInsumo);
+                    break;
+                case "precoUnitario":
+                    set = ascending ? set.OrderBy(l => l.PrecoUnitario) : set.OrderByDescending(l => l.PrecoUnitario);
+                    break;
+                case "tipoTabela":
+                    set = ascending ? set.OrderBy(l => l.TipoTabela) : set.OrderByDescending(l => l.TipoTabela);
+                    break;
+                case "mesAno":
+                    set = ascending ? set.OrderBy(l => l.AnoMes) : set.OrderByDescending(l => l.AnoMes);
+                    break;
+                case "codigoExterno":
+                    set = ascending ? set.OrderBy(l => l.CodigoExterno) : set.OrderByDescending(l => l.CodigoExterno);
+                    break;
+                case "descricao":
+                default:
+                    set = ascending ? set.OrderBy(l => l.Descricao) : set.OrderByDescending(l => l.Descricao);
+                    break;
+            }
+            return set;
+        }
     }
 }

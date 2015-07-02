@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GIR.Sigim.Application.Filtros.Sigim;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
@@ -36,18 +37,31 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public ActionResult ListaPelaDescricao(string descricao)
-        {
-            var model = materialAppService.ListarAtivosPeloTipoTabelaPropria(descricao);
-            return Json(model);
-        }
+        //[HttpPost]
+        //public ActionResult ListaPelaDescricao(string descricao)
+        //{
+        //    var model = materialAppService.ListarAtivosPeloTipoTabelaPropria(descricao);
+        //    return Json(model);
+        //}
 
         [HttpPost]
         public ActionResult ListarAtivosPeloCentroCustoEDescricao(string codigoCentroCusto, string descricao)
         {
             var model = materialAppService.ListarAtivosPeloCentroCustoEDescricao(codigoCentroCusto, descricao);
             return Json(model);
+        }
+
+        [HttpPost]
+        public ActionResult PesquisarMaterial(MaterialPesquisaFiltro filtro)
+        {
+            //var model = materialAppService.PesquisarMaterial(filtro);
+            var result = materialAppService.PesquisarMaterial(filtro);
+            if (result.Any())
+            {
+                var listaViewModel = CreateListaViewModel(filtro.PaginationParameters, 0, result);
+                return PartialView("ListaPesquisaPartial", listaViewModel);
+            }
+            return PartialView("_EmptyListPartial");
         }
 
         [HttpPost]
