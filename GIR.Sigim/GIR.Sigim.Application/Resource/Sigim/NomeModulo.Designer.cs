@@ -77,5 +77,7 @@ namespace GIR.Sigim.Application.Resource.Sigim {
                 return ResourceManager.GetString("OrdemCompra", resourceCulture);
             }
         }
+
+        public static object Financeiro { get; set; }
     }
 }

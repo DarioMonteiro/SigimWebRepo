@@ -129,6 +129,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new TituloReceberConfiguration());
             modelBuilder.Configurations.Add(new ImpostoFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new RateioAutomaticoConfiguration());
+            modelBuilder.Configurations.Add(new TaxaAdministracaoConfiguration());
 
             //Orcamento
             modelBuilder.Configurations.Add(new ObraConfiguration());
@@ -152,9 +153,11 @@ namespace GIR.Sigim.Infrastructure.Data
 
             //Sigim
             modelBuilder.Configurations.Add(new AssuntoContatoConfiguration());
+            modelBuilder.Configurations.Add(new AgenciaConfiguration());
             modelBuilder.Configurations.Add(new BancoConfiguration());
             modelBuilder.Configurations.Add(new BancoLayoutConfiguration());
             modelBuilder.Configurations.Add(new ClienteFornecedorConfiguration());
+            modelBuilder.Configurations.Add(new ContaCorrenteConfiguration());
             modelBuilder.Configurations.Add(new PessoaFisicaConfiguration());
             modelBuilder.Configurations.Add(new PessoaJuridicaConfiguration()); 
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());

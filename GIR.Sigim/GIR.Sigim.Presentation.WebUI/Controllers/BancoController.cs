@@ -14,7 +14,13 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 {
     public class BancoController : BaseController
     {
-        private IBancoAppService bancoAppService;               
+        #region Declaration
+
+        private IBancoAppService bancoAppService;
+
+        #endregion
+
+        #region Constructor
 
         public BancoController(
             IBancoAppService bancoAppService,            
@@ -24,6 +30,10 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             this.bancoAppService = bancoAppService;            
         }
 
+        #endregion
+
+        #region Methods
+        
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as BancoViewModel;
@@ -71,17 +81,23 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         public ActionResult Salvar(BancoViewModel model)
         {
             if (ModelState.IsValid)
-                bancoAppService.Salvar(model.Banco);
-
+            {
+                if (model.Banco.BancoCodigo == "999")               
+                    messageQueue.Add(Application.Resource.Sigim.ErrorMessages.BancoCarteira, TypeMessage.Info);
+                else
+                    bancoAppService.Salvar(model.Banco);                              
+            }
             return PartialView("_NotificationMessagesPartial");
         }
 
         [HttpPost]
-        public ActionResult Deletar(int? id)
-        {
-            bancoAppService.Deletar(id);
+        public ActionResult Deletar(string id)
+        {          
+            bancoAppService.Deletar(Int32.Parse(id));
             return PartialView("_NotificationMessagesPartial");
         }
 
+       
+        #endregion
     }
 }

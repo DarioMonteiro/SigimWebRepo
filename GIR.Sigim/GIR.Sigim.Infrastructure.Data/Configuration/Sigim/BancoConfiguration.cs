@@ -15,7 +15,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
         {
             ToTable("Banco", "Sigim");
 
-            Property(l => l.Id)
+            Property(l => l.Id)                
                 .HasColumnName("codigoBC")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None)
                 .HasColumnOrder(1);
@@ -48,8 +48,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 
             Ignore(l => l.Ativo);
 
-            HasMany(l => l.ListaBancoLayout)
+            HasMany<BancoLayout>(l => l.ListaBancoLayout)
                 .WithOptional(l => l.Banco);
+
+            HasMany<Agencia>(l => l.ListaAgencia)
+                .WithOptional(c => c.Banco)
+                .HasForeignKey(c => c.BancoId);  
         }
     }
 }

@@ -1,0 +1,107 @@
+﻿@using GIR.Sigim.Application.DTO.Sigim
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<ContaCorrenteDTO> Lista = Model.Records as IEnumerable<ContaCorrenteDTO>;
+}
+
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector",
+                                @aria_controls = "dt_basic",
+                                @class = "form-control",
+                                onchange = "changePageSize();"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string bancoIdSortingSuffix = "sorting";
+                            string bancoNomeSortingSuffix = "sorting";
+                            string contaCodigoSortingSuffix = "sorting";
+                            string DVContaSortingSuffix = "sorting";
+                            string nomeAgenciaSortingSuffix = "sorting";
+                            string DVAgenciaSortingSuffix = "sorting";
+                            string descricaoSortingSuffix = "sorting";
+                            string situacaoSortingSuffix = "sorting";
+
+                            switch (Model.OrderBy)
+                            {
+                                case "id":
+                                    bancoIdSortingSuffix += sortingSuffix;
+                                    break;
+                                case "bancoId":
+                                    bancoIdSortingSuffix += sortingSuffix;
+                                    break;
+                                case "bancoNome":
+                                    bancoNomeSortingSuffix += sortingSuffix;
+                                    break;                          
+                                case "contaCodigo":
+                                    contaCodigoSortingSuffix += sortingSuffix;
+                                    break;                               
+                                case "DVConta":
+                                    DVContaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "nomeAgencia":
+                                    nomeAgenciaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "DVAgencia":
+                                    DVAgenciaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricao":
+                                    descricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "situacao":
+                                    situacaoSortingSuffix += sortingSuffix;
+                                    break;                                                                                             
+                                default:
+                                    break;
+                            }
+                        
+                        }
+                        <th class="sorting @bancoIdSortingSuffix text-center" data-order="bancoId" style="width:60px; ">Banco</th>  
+                        <th class="sorting @bancoNomeSortingSuffix text-left" data-order="bancoNome" style="min-width:65px;">Nome banco</th>                  
+                        <th class="sorting @contaCodigoSortingSuffix text-center" data-order="contaCodigo" style="min-width:65px;">Conta</th>
+                        <th class="sorting @DVContaSortingSuffix text-center" data-order="DVConta" style="min-width:75px;">DV conta</th>
+                        <th class="sorting @nomeAgenciaSortingSuffix text-left" data-order="nomeAgencia" style="min-width:75px;">Nome agência</th>
+                        <th class="sorting @DVAgenciaSortingSuffix text-left" data-order="DVAgencia" style="min-width:75px;">DV agência</th>
+                        <th class="sorting @descricaoSortingSuffix text-left" data-order="descricao" style="min-width:75px;">Descrição</th>
+                        <th class="sorting @situacaoSortingSuffix text-left" data-order="situacao" style="min-width:75px;">Situação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>                       
+                            <td class="text-center">@item.BancoId</td>
+                            <td class="text-left">@item.Banco.Nome</td>
+                            <td class="text-center">@Html.ActionLink(item.ContaCodigo.ToString(), "Cadastro", new { id = item.Id })</td>                                                       
+                            <td class="text-center">@item.DVConta</td>
+                            <td class="text-left">@item.Agencia.Nome</td>
+                            <td class="text-left">@item.Agencia.DVAgencia</td>
+                            <td class="text-left">@item.Descricao</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model.Pagination)
+    }
+</div>

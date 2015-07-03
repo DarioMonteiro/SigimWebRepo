@@ -63,6 +63,7 @@
     <Compile Include="Configuration\Financeiro\ClasseConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CaixaConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\TaxaAdministracaoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\RateioAutomaticoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ImpostoFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\MotivoCancelamentoConfiguration.cs" />
@@ -102,6 +103,8 @@
     <Compile Include="Configuration\Sigim\CodigoContribuicaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ComposicaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\LogAcessoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\AgenciaConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\ContaCorrenteConfiguration.cs" />
     <Compile Include="Configuration\Sigim\FormaRecebimentoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\TipoAreaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\TipoCaracteristicaConfiguration.cs" />
@@ -143,6 +146,7 @@
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
+    <Compile Include="Repository\Financeiro\TaxaAdministracaoRepository.cs" />
     <Compile Include="Repository\Financeiro\RateioAutomaticoRepository.cs" />
     <Compile Include="Repository\Financeiro\ImpostoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoRateioRepository.cs" />
@@ -172,6 +176,8 @@
     <Compile Include="Repository\Sigim\BancoLayoutRepository.cs" />
     <Compile Include="Repository\Sigim\CodigoContribuicaoRepository.cs" />
     <Compile Include="Repository\Sigim\BancoRepository.cs" />
+    <Compile Include="Repository\Sigim\AgenciaRepository.cs" />
+    <Compile Include="Repository\Sigim\ContaCorrenteRepository.cs" />
     <Compile Include="Repository\Sigim\LogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\FormaRecebimentoRepository.cs" />
     <Compile Include="Repository\Sigim\TratamentoRepository.cs" />

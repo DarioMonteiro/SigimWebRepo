@@ -13,7 +13,7 @@ namespace GIR.Sigim.Application.Service.Sigim
         List<FormaRecebimentoDTO> ListarTodos();
         List<FormaRecebimentoDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros);
         FormaRecebimentoDTO ObterPeloId(int? id);
-        List<ItemListaDTO> ListarOpcoesTipoRecebimento();
+        List<ItemListaDTO> ListarTipoRecebimento();
         bool Salvar(FormaRecebimentoDTO dto);
         bool Deletar(int? id);
     }
