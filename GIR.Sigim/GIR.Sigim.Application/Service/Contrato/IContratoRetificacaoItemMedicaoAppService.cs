@@ -14,6 +14,6 @@ namespace GIR.Sigim.Application.Service.Contrato
     {
         string MedicaoToXML(ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao);
         List<RelNotaFiscalLiberadaDTO> ListarPeloFiltroRelNotaFiscalLiberada(RelNotaFiscalLiberadaFiltro filtro, int? idUsuario, out int totalRegistros);
-        FileDownloadDTO ExportarRelNotaFiscalLiberada(DateTime dataInicial, DateTime dataFinal, int? contratoId, int? fornecedorClienteId, string documento, string codigoCentroCusto, int? idUsuario, FormatoExportacaoArquivo formato);
+        FileDownloadDTO ExportarRelNotaFiscalLiberada(RelNotaFiscalLiberadaFiltro filtro, int? usuarioId, FormatoExportacaoArquivo formato);
     }
 }

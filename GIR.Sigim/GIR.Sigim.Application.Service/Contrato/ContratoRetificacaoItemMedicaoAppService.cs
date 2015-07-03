@@ -177,23 +177,7 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         public List<RelNotaFiscalLiberadaDTO> ListarPeloFiltroRelNotaFiscalLiberada(RelNotaFiscalLiberadaFiltro filtro, int? idUsuario, out int totalRegistros)
         {
-            var specification = (Specification<ContratoRetificacaoItemMedicao>)new TrueSpecification<ContratoRetificacaoItemMedicao>();
-
-            if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
-                specification &= ContratoRetificacaoItemMedicaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
-
-            if (filtro.ContratoId.HasValue)
-                specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoContratoComSituacaoLiberado(filtro.ContratoId);
-            else
-            {
-                specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMaiorOuIgual(filtro.DataInicial);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMenorOuIgual(filtro.DataFinal);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.DocumentoPertenceAhMedicao(filtro.Documento);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.FornecedorClientePertenceAhMedicao(filtro.FornecedorClienteId);
-            }
-
-            specification &= ContratoRetificacaoItemMedicaoSpecification.SituacaoIgualLiberado();
+            var specification = MontarSpecificationRelNotaFiscalLiberada(filtro, idUsuario);
 
             var listaMedicao =
              contratoRetificacaoItemMedicaoRepository.ListarPeloFiltroComPaginacao(specification,
@@ -282,46 +266,39 @@ namespace GIR.Sigim.Application.Service.Contrato
             return listaRelNotaFiscalLiberadaDTO;
         }
 
-        public FileDownloadDTO ExportarRelNotaFiscalLiberada(DateTime dataInicial,
-                                                             DateTime dataFinal,
-                                                             int? contratoId,
-                                                             int? fornecedorClienteId,
-                                                             string documento,
-                                                             string codigoCentroCusto,
-                                                             int? idUsuario,
+        private Specification<ContratoRetificacaoItemMedicao> MontarSpecificationRelNotaFiscalLiberada(RelNotaFiscalLiberadaFiltro filtro, int? idUsuario)
+        {
+            var specification = (Specification<ContratoRetificacaoItemMedicao>)new TrueSpecification<ContratoRetificacaoItemMedicao>();
+
+            if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
+                specification &= ContratoRetificacaoItemMedicaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+
+            if (filtro.ContratoId.HasValue)
+                specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoContratoComSituacaoLiberado(filtro.ContratoId);
+            else
+            {
+                specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMaiorOuIgual(filtro.DataInicial);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMenorOuIgual(filtro.DataFinal);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.DocumentoPertenceAhMedicao(filtro.Documento);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.FornecedorClientePertenceAhMedicao(filtro.FornecedorClienteId);
+            }
+
+            specification &= ContratoRetificacaoItemMedicaoSpecification.SituacaoIgualLiberado();
+            return specification;
+        }
+
+        public FileDownloadDTO ExportarRelNotaFiscalLiberada(RelNotaFiscalLiberadaFiltro filtro,
+                                                             int? usuarioId,
                                                              FormatoExportacaoArquivo formato)
         {
 
+            var specification = MontarSpecificationRelNotaFiscalLiberada(filtro, usuarioId);
 
             var listaMedicao =
-             contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro(l =>
-                                                                        (
-                                                                         (l.Contrato.CentroCusto.ListaUsuarioCentroCusto.Any(c =>
-                                                                                        c.UsuarioId == idUsuario && 
-                                                                                        c.Modulo.Nome == Resource.Sigim.NomeModulo.Contrato && 
-                                                                                        c.CentroCusto.Situacao == "A")) &&
-                                                                         (l.Situacao == SituacaoMedicao.Liberado) &&
-                                                                         (
-                                                                             (contratoId != null && l.ContratoId == contratoId) ||
-                                                                             (contratoId == null && 
-                                                                              ((l.DataLiberacao >= dataInicial && l.DataLiberacao <= dataFinal) ||
-                                                                               (!string.IsNullOrEmpty(codigoCentroCusto) && l.Contrato.CentroCusto.Codigo.StartsWith(codigoCentroCusto)) ||
-                                                                               (!string.IsNullOrEmpty(documento) && l.NumeroDocumento.Contains(documento)) ||
-                                                                               (fornecedorClienteId != null &&
-                                                                                ((l.MultiFornecedorId != null && l.MultiFornecedorId == fornecedorClienteId) ||
-                                                                                 (l.MultiFornecedorId == null &&
-                                                                                     ((l.Contrato.TipoContrato == 0 && l.Contrato.ContratadoId == fornecedorClienteId) ||
-                                                                                      (l.Contrato.TipoContrato != 0 && l.Contrato.ContratanteId == fornecedorClienteId))
-                                                                                 )
-                                                                                )
-                                                                               )
-                                                                              )
-                                                                             )
-                                                                         )
-                                                                        )
-                                                                        ,
+             contratoRetificacaoItemMedicaoRepository.ListarPeloFiltro(specification,
                                                                         l => l.Contrato.ContratoDescricao,
-                                                                        l => l.Contrato.CentroCusto.ListaUsuarioCentroCusto,
+                                                                        l => l.Contrato.CentroCusto.ListaUsuarioCentroCusto.Select(u => u.Modulo),
                                                                         l => l.Contrato.Contratado.PessoaFisica,
                                                                         l => l.Contrato.Contratado.PessoaJuridica,
                                                                         l => l.Contrato.Contratante.PessoaFisica,
@@ -342,7 +319,7 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             objRel.SetDataSource(RelNotaFiscalLiberadaToDataTable(listaMedicao));
 
-            string periodo = dataInicial.ToString("dd/MM/yyyy") + "  a  " + dataFinal.ToString("dd/MM/yyyy");
+            string periodo = filtro.DataInicial.Value.ToString("dd/MM/yyyy") + "  a  " + filtro.DataFinal.Value.ToString("dd/MM/yyyy");
 
             var parametros = parametrosContratoAppService.Obter();
 

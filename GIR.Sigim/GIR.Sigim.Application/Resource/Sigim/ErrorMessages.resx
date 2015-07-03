@@ -156,6 +156,9 @@
   <data name="LimiteMinimoCaracteresNaoAtingido" xml:space="preserve">
     <value>Preencha o campo com no mínimo {1} caracteres.</value>
   </data>
+  <data name="NaoExistemRegistros" xml:space="preserve">
+    <value>Não existem registros.</value>
+  </data>
   <data name="NenhumRegistroEncontrado" xml:space="preserve">
     <value>Nenhum registro encontrado.</value>
   </data>

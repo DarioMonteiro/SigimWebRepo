@@ -72,29 +72,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        public ActionResult Imprimir(string dataInicial,
-                                     string dataFinal,
-                                     int? contratoId,
-                                     int? fornecedorClienteId,
-                                     string documento,
-                                     string codigoCentroCusto,
-                                     FormatoExportacaoArquivo formato)
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
         {
+            var model = Session["Filtro"] as RelNotaFiscalLiberadaListaViewModel;
+            if (model == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NaoExistemRegistros, TypeMessage.Error);
+                return PartialView("_NotificationMessagesPartial");
+            }
 
-            DateTime dtInicial;
-            DateTime dtFinal;
-            
-            dtInicial =  DateTime.Parse(dataInicial);
-            dtFinal = DateTime.Parse(dataFinal);
-
-            var arquivo = contratoRetificacaoItemMedicaoAppService.ExportarRelNotaFiscalLiberada(dtInicial, 
-                                                                                                 dtFinal, 
-                                                                                                 contratoId, 
-                                                                                                 fornecedorClienteId, 
-                                                                                                 documento,
-                                                                                                 codigoCentroCusto, 
-                                                                                                 Usuario.Id, 
-                                                                                                 formato);
+            var arquivo = contratoRetificacaoItemMedicaoAppService.ExportarRelNotaFiscalLiberada(model.Filtro, Usuario.Id,formato);
             if (arquivo != null)
             {
                 Response.Buffer = false;
@@ -104,6 +91,31 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             }
 
             return PartialView("_NotificationMessagesPartial");
+        }
+
+        [HttpPost]
+        public ActionResult RecuperaDescricaoContrato(int? contratoId)
+        {
+            if (contratoId.HasValue)
+            {
+                GIR.Sigim.Application.DTO.Contrato.ContratoDTO contrato = null;
+
+                contrato = contratoAppService.ObterPeloId(contratoId,Usuario.Id);
+
+                if (contrato != null)
+                {
+                    return Json(new
+                    {
+                        errorMessage = string.Empty,
+                        descricaoContrato = contrato.ContratoDescricao.Descricao
+                    });
+                }
+            }
+            return Json(new
+            {
+                errorMessage = string.Empty
+            });
+
         }
 
 
