@@ -141,7 +141,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
-    <Compile Include="Repository\Contrato\ContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\RateioAutomaticoRepository.cs" />

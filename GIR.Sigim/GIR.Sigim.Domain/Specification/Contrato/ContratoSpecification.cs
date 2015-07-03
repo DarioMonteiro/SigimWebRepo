@@ -10,7 +10,7 @@ namespace GIR.Sigim.Domain.Specification.Contrato
 {
     public class ContratoSpecification : BaseSpecification<Domain.Entity.Contrato.Contrato>
     {
-        public static Specification<Domain.Entity.Contrato.Contrato> PertenceAoCentroCusto(string centroCustoId)
+        public static Specification<Domain.Entity.Contrato.Contrato> PertenceAoCentroCustoIniciadoPor(string centroCustoId)
         {
             Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
 
@@ -63,7 +63,6 @@ namespace GIR.Sigim.Domain.Specification.Contrato
 
             return specification;
         }
-
 
     }
 }

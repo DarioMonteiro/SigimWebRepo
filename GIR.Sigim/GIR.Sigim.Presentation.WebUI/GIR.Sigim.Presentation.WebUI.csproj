@@ -148,8 +148,10 @@
     <Compile Include="Areas\Contrato\ContratoAreaRegistration.cs" />
     <Compile Include="Areas\Contrato\Controllers\HomeController.cs" />
     <Compile Include="Areas\Contrato\Controllers\MedicaoContratoController.cs" />
+    <Compile Include="Areas\Contrato\Controllers\RelNotaFiscalLiberadaController.cs" />
     <Compile Include="Areas\Contrato\ViewModel\MedicaoContratoListaViewModel.cs" />
     <Compile Include="Areas\Contrato\ViewModel\MedicaoContratoMedicaoViewModel.cs" />
+    <Compile Include="Areas\Contrato\ViewModel\RelNotaFiscalLiberadaListaViewModel.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CaixaController.cs" />
@@ -331,6 +333,8 @@
     <Content Include="Areas\Financeiro\Views\RateioAutomatico\Index.cshtml" />
     <Content Include="Areas\Sac\Views\Setor\Index.cshtml" />
     <Content Include="Areas\Sac\Views\Setor\ListaPartial.cshtml" />
+    <Content Include="Areas\Contrato\Views\RelNotaFiscalLiberada\Index.cshtml" />
+    <Content Include="Areas\Contrato\Views\RelNotaFiscalLiberada\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />

@@ -67,6 +67,7 @@
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
+    <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
     <Compile Include="Enums\TabelaBasicaFinanceiro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
+    <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
@@ -167,6 +169,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relMedicao.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Contrato\relNotaFiscalLiberada.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relNotaFiscalLiberada.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\OrdemCompra\relPreRequisicaoMaterial.cs">
@@ -311,6 +319,10 @@
     <EmbeddedResource Include="Reports\Contrato\relMedicao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relMedicao.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Contrato\relNotaFiscalLiberada.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relNotaFiscalLiberada.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\OrdemCompra\relPreRequisicaoMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
