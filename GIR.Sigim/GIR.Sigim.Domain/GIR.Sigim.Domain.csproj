@@ -163,7 +163,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Contrato\IContratoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
-    <Compile Include="Repository\Contrato\IContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ITaxaAdministracaoRepository.cs" />
     <Compile Include="Repository\Financeiro\IRateioAutomaticoRepository.cs" />
@@ -241,6 +240,7 @@
     <Compile Include="Specification\AndSpecification.cs" />
     <Compile Include="Specification\BaseSpecification.cs" />
     <Compile Include="Specification\CompositeSpecification.cs" />
+    <Compile Include="Specification\Contrato\ContratoRetificacaoItemMedicaoSpecification.cs" />
     <Compile Include="Specification\Contrato\ContratoSpecification.cs" />
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />

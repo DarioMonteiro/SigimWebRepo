@@ -78,7 +78,6 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IContratoRepository, ContratoRepository>();
             currentContainer.RegisterType<IParametrosContratoRepository, ParametrosContratoRepository>();
             currentContainer.RegisterType<IContratoRetificacaoItemMedicaoRepository, ContratoRetificacaoItemMedicaoRepository>();
-            currentContainer.RegisterType<IContratoRetificacaoItemRepository, ContratoRetificacaoItemRepository>();
             #endregion
 
             #region Financeiro
