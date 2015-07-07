@@ -99,24 +99,26 @@
                                             <div class="row">
                                                     @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo" })
                                                 <section class="col col-6">
-                                                    <label class="label">Situação</label>
-                                                    <div class="inline-group">
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhRequisitada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhRequisitada)
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhFechada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhAprovada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhAprovada)
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhCancelada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhCancelada)
-                                                        </label>
+                                                    <div style="border:1px solid lightgray; width:350px;">
+                                                        <label class="label">Situação</label>
+                                                        <div class="inline-group" style="padding-left:10px;">
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhRequisitada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhRequisitada)
+                                                            </label>
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhFechada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
+                                                            </label>
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhAprovada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhAprovada)
+                                                            </label>
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhCancelada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhCancelada)
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </section>
                                             </div>
@@ -133,5 +135,21 @@
     </article>
 </div>
 @section scripts{
-    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+    @{
+        bool condicao = ((Model.Filtro.CentroCusto !=null) && !string.IsNullOrEmpty(Model.Filtro.CentroCusto.Codigo));
+            condicao = condicao || (Model.Filtro.DataInicial != null);
+            condicao = condicao || (Model.Filtro.DataFinal != null);
+            condicao = condicao || (Model.Filtro.EhAprovada == true);
+            condicao = condicao || (Model.Filtro.EhCancelada == true);
+            condicao = condicao || (Model.Filtro.EhFechada == true);
+            condicao = condicao || (Model.Filtro.EhRequisitada == true);
+            condicao = condicao || (Model.Filtro.Id != null);
+    }
+    @if (!condicao)
+    {
+        @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScriptExtra")
+    }
+    else{
+        @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+    }
 }

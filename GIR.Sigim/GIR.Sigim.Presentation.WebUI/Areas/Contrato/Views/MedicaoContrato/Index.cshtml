@@ -86,5 +86,17 @@
     </article>
 </div>
 @section scripts{
-    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")  
+    @{
+        bool condicao = ((Model.Filtro.CentroCusto !=null) && !string.IsNullOrEmpty(Model.Filtro.CentroCusto.Codigo));
+            condicao = condicao || (Model.Filtro.ContratadoId != null);
+            condicao = condicao || (Model.Filtro.ContratanteId != null);
+            condicao = condicao || (Model.Filtro.Id != null);
+    }
+    @if (!condicao)
+    {
+        @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScriptExtra")
+    }
+    else{
+        @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+    }
 }

@@ -152,6 +152,7 @@
     <Compile Include="Filtros\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
+    <Compile Include="Filtros\OrdemCompras\RelOcItensOrdemCompraFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\RequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\PaginationParameters.cs" />
