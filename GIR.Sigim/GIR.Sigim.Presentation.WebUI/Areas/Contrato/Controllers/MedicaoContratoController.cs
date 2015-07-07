@@ -213,7 +213,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         public ActionResult RecuperaContratoRetificacaoItem(int? contratoId,int? contratoRetificacaoItemId)
         {
             List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisao = null;
-            ContratoRetificacaoItemDTO contratoRetificacaoItem = null;
+            ContratoRetificacaoItemDTO contratoRetificacaoItem = new ContratoRetificacaoItemDTO();
 
             if (contratoId.HasValue && contratoRetificacaoItemId.HasValue)
             {
@@ -221,12 +221,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
                 if (!contratoAppService.ExisteContratoRetificacaoProvisao(listaContratoRetificacaoProvisao))
                 {
+                    ContratoDTO contrato = contratoAppService.ObterPeloId(contratoId.Value, Usuario.Id);
+                    contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemId).SingleOrDefault();
+
+                    bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
+                    bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
+
                     var msg = messageQueue.GetAll()[0].Text;
                     messageQueue.Clear();
                     return Json(new
                                 {
                                     ehRecuperou = false,
-                                    errorMessage = msg
+                                    errorMessage = msg,
+                                    ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
+                                    ehNaturezaItemPorPrecoUnitario = EhNaturezaItemPorPrecoUnitario,
+                                    contratoRetificacaoItem = contratoRetificacaoItem,
                                 });
                 }
                 else
@@ -249,8 +258,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             }
             return Json(new 
             {
-                ehRecuperou = false, 
-                errorMessage = string.Empty, 
+                ehRecuperou = false,
+                errorMessage = string.Empty,
+                ehNaturezaItemPorPrecoGlobal = true,
+                ehNaturezaItemPorPrecoUnitario = false,
+                contratoRetificacaoItem = contratoRetificacaoItem,
             });
         }
 

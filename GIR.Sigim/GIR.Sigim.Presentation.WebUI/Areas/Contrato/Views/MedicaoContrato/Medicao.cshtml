@@ -844,8 +844,32 @@
             }),
             success: function (result) {
                 showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
+
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val(result.contratoRetificacaoItem.ComplementoDescricao);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.contratoRetificacaoItem.DescricaoNaturezaItem);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val(result.contratoRetificacaoItem.Servico.SiglaUnidadeMedida);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                if (result.contratoRetificacaoItem.ValorItem != null) {
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.ValorItem), 2));
+                    }
+                @*$('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));*@
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
+                if (result.contratoRetificacaoItem.RetencaoItem != null) {
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));
+                        $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));
+                    }
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
+                if (result.contratoRetificacaoItem.BaseRetencaoItem != null) {
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.BaseRetencaoItem), 5));
+                    }
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(result.contratoRetificacaoItem.PrecoUnitario), 5));
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(result.ehNaturezaItemPorPrecoGlobal);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(result.ehNaturezaItemPorPrecoUnitario);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.contratoRetificacaoItem.Sequencial);
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
+
                 if (result.ehRecuperou) {
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val(result.contratoRetificacaoItem.ComplementoDescricao);
+                    @*                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val(result.contratoRetificacaoItem.ComplementoDescricao);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.contratoRetificacaoItem.DescricaoNaturezaItem);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val(result.contratoRetificacaoItem.Servico.SiglaUnidadeMedida);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
@@ -868,23 +892,27 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(result.ehNaturezaItemPorPrecoGlobal);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(result.ehNaturezaItemPorPrecoUnitario);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.contratoRetificacaoItem.Sequencial);
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);*@
+
+                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(JSON.stringify(result.listaContratoRetificacaoProvisao));
+                    jsonRetificaoProvisaoArray = result.listaContratoRetificacaoProvisao;
+
                 }
                 else
                 {
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val("");
+@*                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
                     $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(0);
-                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val("");
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
-                    jsonRetificaoProvisaoArray = "[]";
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);*@
+                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(null);
+                    jsonRetificaoProvisaoArray = null;
                 }
                 isRecuperou = result.ehRecuperou;
             },
@@ -897,11 +925,11 @@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(0);
-                $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val("");
+                $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(null);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
-                jsonRetificaoProvisaoArray = "[]";
+                jsonRetificaoProvisaoArray = null;
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
             }
         });
@@ -1547,19 +1575,21 @@
 
                 if (valorImpostoRetido > 0 || valorImpostoIndireto > 0) {
                     valorImposto = valorImpostoIndireto + valorImpostoRetido;
+                    valorImposto = parseFloat(valorImposto.toFixed(2));
                     totalValorImposto = totalValorImposto + valorImposto;
                     valorLiquido = valorLiberado - valorImposto;
                 }
                 else {
                     valorLiquido = valorLiberado;
                 }
-                totalValorLiquido = totalValorLiquido + valorLiquido;
 
                 var valorDesconto = jsonContratoRetificaoItemMedicaoArray[i].Desconto;
                 if (isNaN(valorDesconto) || valorDesconto == null) {
                     valorDesconto = 0;
                 }
                 valorLiquido = valorLiberado - valorDesconto;
+
+                totalValorLiquido = totalValorLiquido + valorLiquido;
 
                 var titulo = "";
                 var tituloPagar = "";

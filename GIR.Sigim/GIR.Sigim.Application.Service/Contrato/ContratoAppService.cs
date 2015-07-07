@@ -548,15 +548,16 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             PopularEntityMedicao(dto, contratoRetificacaoItemMedicao);
 
-            if (!EhValidoSalvarMedicao(contratoRetificacaoItemMedicao))
-            {
-                return false;
-            }
-
-            contrato.ListaContratoRetificacaoItemMedicao.Add(contratoRetificacaoItemMedicao);
-
             try
             {
+                if (!EhValidoSalvarMedicao(contratoRetificacaoItemMedicao))
+                {
+                    return false;
+                }
+
+                contrato.ListaContratoRetificacaoItemMedicao.Add(contratoRetificacaoItemMedicao);
+
+
                 if (Validator.IsValid(contratoRetificacaoItemMedicao, out validationErrors))
                 {
 

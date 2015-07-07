@@ -100,3 +100,39 @@
         @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
     }
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.validator.addMethod(
+            "centroCustoValido",
+            function (value, element) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.centroCustoValido = getErrorMessageContainer(element.name).html();
+                return isValid;
+            }, ''
+        );
+
+        $('#formFilter').validate({
+            rules: {
+                '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
+                    centroCustoValido: true
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
+        });
+
+    });
+</script>
