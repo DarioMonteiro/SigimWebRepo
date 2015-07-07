@@ -788,6 +788,7 @@
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ListPageScriptExtra.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Contratado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
