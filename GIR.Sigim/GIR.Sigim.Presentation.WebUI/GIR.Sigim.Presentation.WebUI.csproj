@@ -178,6 +178,8 @@
     <Compile Include="Areas\Financeiro\ViewModel\TipoRateioViewModel.cs" />
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
+    <Compile Include="Areas\OrdemCompra\Controllers\EntradaMaterialController.cs" />
+    <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialListaViewModel.cs" />
     <Compile Include="Controllers\BancoController.cs" />
     <Compile Include="Controllers\AgenciaController.cs" />
     <Compile Include="Controllers\ContaCorrenteController.cs" />
@@ -287,8 +289,8 @@
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\ListaPartial.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\Cadastro.cshtml" />
-    <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Index.cshtml" />
-    <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\ListaPartial.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\EntradaMaterial\Index.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\EntradaMaterial\ListaPartial.cshtml" />
     <Content Include="Areas\Orcamento\Views\Web.config" />
     <Content Include="Areas\Financeiro\Views\ParametrosUsuarioFinanceiro\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\Shared\_MenuPartial.cshtml" />
@@ -329,6 +331,8 @@
     <Content Include="Areas\Financeiro\Views\TaxaAdministracao\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\TaxaAdministracao\ListaPartial.cshtml" />
     <Content Include="Areas\Financeiro\Views\TaxaAdministracao\Cadastro.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Index.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
