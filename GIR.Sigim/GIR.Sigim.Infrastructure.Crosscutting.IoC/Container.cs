@@ -102,6 +102,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #endregion
 
             #region Ordem de Compra
+            currentContainer.RegisterType<IEntradaMaterialRepository, EntradaMaterialRepository>();
             currentContainer.RegisterType<IParametrosOrdemCompraRepository, ParametrosOrdemCompraRepository>();
             currentContainer.RegisterType<IParametrosUsuarioRepository, ParametrosUsuarioRepository>();
             currentContainer.RegisterType<IPreRequisicaoMaterialRepository, PreRequisicaoMaterialRepository>();
@@ -193,6 +194,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #endregion
 
             #region Ordem de Compra
+            currentContainer.RegisterType<IEntradaMaterialAppService, EntradaMaterialAppService>();
             currentContainer.RegisterType<IParametrosOrdemCompraAppService, ParametrosOrdemCompraAppService>();
             currentContainer.RegisterType<IParametrosUsuarioAppService, ParametrosUsuarioAppService>();
             currentContainer.RegisterType<IPreRequisicaoMaterialAppService, PreRequisicaoMaterialAppService>();

@@ -1,0 +1,132 @@
+﻿@using GIR.Sigim.Application.DTO.OrdemCompra
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<EntradaMaterialDTO> Lista = Model.Records as IEnumerable<EntradaMaterialDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new {
+                                @id = "pageSizeSelector",
+                                @aria_controls="dt_basic",
+                                @class="form-control",
+                                onchange="changePageSize();"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="width:100%; overflow-x:auto;">
+            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string idSortingSuffix = "sorting";
+                            string situacaoSortingSuffix = "sorting";
+                            string dataSortingSuffix = "sorting";
+                            string centroCustoSortingSuffix = "sorting";
+                            string notaFiscalSortingSuffix = "sorting";
+                            string observacaoSortingSuffix = "sorting";
+                            string fornecedorSortingSuffix = "sorting";
+                            string motivoCancelamentoSortingSuffix = "sorting";
+                            string responsavelCancelamentoSortingSuffix = "sorting";
+                            string responsavelLiberacaoSortingSuffix = "sorting";
+                            string responsavelConferenciaSortingSuffix = "sorting";
+                            string dataConferenciaSortingSuffix = "sorting";
+
+                            switch (Model.OrderBy)
+                            {
+                                case "situacao":
+                                    situacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "data":
+                                    dataSortingSuffix += sortingSuffix;
+                                    break;
+                                case "centroCusto":
+                                    centroCustoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "notaFiscal":
+                                    notaFiscalSortingSuffix += sortingSuffix;
+                                    break;
+                                case "observacao":
+                                    observacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                //case "fornecedor":
+                                //    fornecedorSortingSuffix += sortingSuffix;
+                                //    break;
+                                case "motivoCancelamento":
+                                    motivoCancelamentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "responsavelCancelamento":
+                                    responsavelCancelamentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "responsavelLiberacao":
+                                    responsavelLiberacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "responsavelConferencia":
+                                    responsavelConferenciaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataConferencia":
+                                    dataConferenciaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "id":
+                                default:
+                                    idSortingSuffix += sortingSuffix;
+                                    break;
+                            }
+                        }
+                        
+                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="min-width:65px;">Código</th>
+                        <th class="sorting @situacaoSortingSuffix text-center" data-order="situacao" style="min-width:75px;">Situação</th>
+                        <th class="sorting @dataSortingSuffix text-center" data-order="data" style="min-width:70px;">Data</th>
+                        <th class="sorting @centroCustoSortingSuffix" data-order="centroCusto">Centro de Custo</th>
+                        <th class="sorting @notaFiscalSortingSuffix" data-order="notaFiscal">Nota Fiscal</th>
+                        <th class="sorting @observacaoSortingSuffix" data-order="observacao" style="min-width:85px;">Observação</th>
+                        <th data-order="fornecedor">Fornecedor</th>
+                        <th class="sorting @motivoCancelamentoSortingSuffix text-center" data-order="motivoCancelamento" style="min-width:105px;">Motivo cancelamento</th>
+                        <th class="sorting @responsavelCancelamentoSortingSuffix text-center" data-order="responsavelCancelamento" style="min-width:105px;">Responsável cancelamento</th>
+                        <th class="sorting @responsavelLiberacaoSortingSuffix text-center" data-order="responsavelLiberacao" style="min-width:105px;">Responsável liberação</th>
+                        <th class="sorting @responsavelConferenciaSortingSuffix text-center" data-order="responsavelConferencia" style="min-width:105px;">Responsável conferência</th>
+                        <th class="sorting @dataConferenciaSortingSuffix text-center" data-order="dataConferencia" style="min-width:90px;">Data conferência</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td class="text-center">@Html.ActionLink(item.Id.ToString(), "Cadastro", new { id = item.Id })</td>
+                            <td class="text-center">@item.SituacaoDescricao</td>
+                            <td class="text-center">@item.Data.ToShortDateString()</td>
+                            <td class="text-nowrap">@item.CentroCustoDescricao</td>
+                            <td>@item.NumeroNotaFiscal</td>
+                            <td>@item.Observacao</td>
+                            <td class="text-nowrap">@item.FornecedorNome</td>
+                            <td>@item.MotivoCancelamento</td>
+                            <td>@item.LoginUsuarioCancelamento</td>
+                            <td>@item.LoginUsuarioLiberacao</td>
+                            <td>@item.LoginUsuarioConferencia</td>
+                            <td class="text-center text-nowrap">
+                                @if (item.DataConferencia.HasValue)
+                                {
+                                    @item.DataConferencia.Value.ToString("dd/MM/yyyy");
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model.Pagination)
+    }
+</div>

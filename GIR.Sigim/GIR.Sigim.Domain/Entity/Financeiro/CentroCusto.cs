@@ -41,6 +41,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
         public ICollection<RateioAutomatico> ListaRateioAutomatico { get; set; }
         public ICollection<TaxaAdministracao> ListaTaxaAdministracao { get; set; }
+        public ICollection<EntradaMaterial> ListaEntradaMaterial { get; set; }
 
         public CentroCusto()
         {
@@ -58,7 +59,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaCaixa = new HashSet<Caixa>();
             this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
             this.ListaRateioAutomatico = new HashSet<RateioAutomatico>();
-            this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();  
+            this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();
+            this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)
