@@ -86,7 +86,7 @@
                                                 <section class="col col-3">
                                                     @Html.LabelFor(m => m.Filtro.Id, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10" })
+                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10", @class = "numeric" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.Id, "", new { @class = "note note-error" })
                                                 </section>
