@@ -182,6 +182,8 @@
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\EntradaMaterialController.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialListaViewModel.cs" />
+    <Compile Include="Areas\OrdemCompra\Controllers\RelOCItensOrdemCompraController.cs" />
+    <Compile Include="Areas\OrdemCompra\ViewModel\RelOcItensOrdemCompraListaViewModel.cs" />
     <Compile Include="Controllers\BancoController.cs" />
     <Compile Include="Controllers\AgenciaController.cs" />
     <Compile Include="Controllers\ContaCorrenteController.cs" />
@@ -337,6 +339,7 @@
     <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\ListaPartial.cshtml" />
     <Content Include="Areas\Contrato\Views\RelNotaFiscalLiberada\Index.cshtml" />
     <Content Include="Areas\Contrato\Views\RelNotaFiscalLiberada\ListaPartial.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\RelOCItensOrdemCompra\Index.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
@@ -784,6 +787,8 @@
     <Content Include="Views\FormaRecebimento\ListaPartial.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ListPageScriptExtra.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Contratado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

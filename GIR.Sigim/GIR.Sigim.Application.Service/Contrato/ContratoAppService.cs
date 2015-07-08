@@ -390,7 +390,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 }
                 bool indireto = false;
                 if (linha["indireto"] != DBNull.Value){
-                    retido = (bool)linha["indireto"];
+                    indireto = (bool)linha["indireto"];
                 }
                 if (retido || (indireto && valorIndireto > 4999.99m)){
                     valorTotalImposto += valorImposto;
@@ -548,15 +548,16 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             PopularEntityMedicao(dto, contratoRetificacaoItemMedicao);
 
-            if (!EhValidoSalvarMedicao(contratoRetificacaoItemMedicao))
-            {
-                return false;
-            }
-
-            contrato.ListaContratoRetificacaoItemMedicao.Add(contratoRetificacaoItemMedicao);
-
             try
             {
+                if (!EhValidoSalvarMedicao(contratoRetificacaoItemMedicao))
+                {
+                    return false;
+                }
+
+                contrato.ListaContratoRetificacaoItemMedicao.Add(contratoRetificacaoItemMedicao);
+
+
                 if (Validator.IsValid(contratoRetificacaoItemMedicao, out validationErrors))
                 {
 
@@ -923,7 +924,9 @@ namespace GIR.Sigim.Application.Service.Contrato
                             select i;
             }
 
-            return resultJoin.To<List<ContratoRetificacaoItemImposto>>(); 
+            List<ContratoRetificacaoItemImposto> listaImposto = resultJoin.Distinct().To<List<ContratoRetificacaoItemImposto>>();
+
+            return listaImposto; 
 
         }
 
