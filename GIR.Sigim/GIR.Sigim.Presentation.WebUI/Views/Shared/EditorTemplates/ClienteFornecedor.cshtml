@@ -1,0 +1,72 @@
+﻿@model GIR.Sigim.Application.DTO.Sigim.ClienteFornecedorDTO
+@{
+    string uniqueIdentifier = Html.IdFor(m => m.Id).ToHtmlString();
+}
+<section class="@ViewBag.sectionClass" style="margin: 0;">
+    <label class="label">@ViewBag.label</label>
+    <label class="input">
+        @{
+            string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+        }
+        @Html.TextBoxFor(m => m.Nome, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+        @Html.HiddenFor(m => m.Id)
+    </label>
+    @Html.ValidationMessageFor(m => m.Id, "", new { @id = Html.IdFor(m => m.Id) + "_ValidationMessage", @class = "note note-error" })
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#@Html.IdFor(m => m.Nome)").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ListarClienteContratoAtivosPorNome", "ClienteFornecedor", new { area = "" })',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        nome: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                id: item.Id,
+                                label: item.Nome,
+                                value: item.Nome
+                            }
+                        }));
+                    }
+                });
+            },
+            autoFocus: true,
+            autoSelect: true,
+            minLength: 2,
+            select: function (event, ui) {
+                TratarSelecaoClienteFornecedor@(uniqueIdentifier)(ui.item.id, ui.item.label);
+                $.event.trigger({
+                    type: "multiFornecedorSelecionado"
+                });
+
+            },
+            change: function (event, ui) {
+                if (ui.item == null) {
+                    LimpaSelecaoClienteFornecedor@(uniqueIdentifier)();
+                }
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+        };
+    });
+
+    function TratarSelecaoClienteFornecedor@(uniqueIdentifier)(id, nome) {
+        $('#@(uniqueIdentifier)').val(id);
+        $('#@Html.IdFor(m => m.Nome)').val(nome);
+    }
+
+    function LimpaSelecaoClienteFornecedor@(uniqueIdentifier)() {
+        $('#@(uniqueIdentifier)').val(null);
+        $('#@Html.IdFor(m => m.Nome)').val("");
+    }
+
+</script>

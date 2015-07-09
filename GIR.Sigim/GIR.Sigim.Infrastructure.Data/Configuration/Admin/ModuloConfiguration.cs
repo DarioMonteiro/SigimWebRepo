@@ -39,7 +39,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
                 .HasColumnOrder(5);
 
             //TODO: Implementar controle de acesso
-            Ignore(l => l.ListaFuncionalidade);
+            //Ignore(l => l.ListaFuncionalidade);
             Ignore(l => l.ListaPerfil);
             //HasMany(l => l.ListaFuncionalidade).WithRequired(l => l.Modulo);
 

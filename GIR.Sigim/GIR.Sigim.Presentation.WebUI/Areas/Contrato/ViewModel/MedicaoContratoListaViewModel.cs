@@ -10,8 +10,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
     public class MedicaoContratoListaViewModel 
     {
         public MedicaoContratoFiltro Filtro { get; set; }
-        public SelectList ListaContratante { get; set; }
-        public SelectList ListaContratado { get; set; }
 
         public MedicaoContratoListaViewModel()
         {

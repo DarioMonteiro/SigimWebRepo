@@ -88,11 +88,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;  
             }
 
-            CarregarCombosFiltro(model);
+            //CarregarCombosFiltro(model);
 
             return View(model);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -448,23 +447,23 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        private void CarregarCombosFiltro(MedicaoContratoListaViewModel model) 
-        {
-            int? contratanteId = null;
-            int? contratadoId = null;
+        //private void CarregarCombosFiltro(MedicaoContratoListaViewModel model) 
+        //{
+        //    //int? contratanteId = null;
+        //    //int? contratadoId = null;
 
-            if (model.Filtro != null) 
-            {
-                contratanteId = model.Filtro.ContratanteId;
-                contratadoId = model.Filtro.ContratadoId;
-            }
+        //    //if (model.Filtro != null) 
+        //    //{
+        //    //    contratanteId = model.Filtro.ContratanteId;
+        //    //    contratadoId = model.Filtro.ContratadoId;
+        //    //}
 
-            model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratanteId);
-            model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratadoId);
+        //    //model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratanteId);
+        //    //model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratadoId);
 
-            //model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3,0,2), "Id", "Nome", contratanteId);
-            //model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3, 0, 2), "Id", "Nome", contratadoId); 
-        }
+        //    //model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3,0,2), "Id", "Nome", contratanteId);
+        //    //model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3, 0, 2), "Id", "Nome", contratadoId); 
+        //}
 
         private void CarregarCombosMedicao(MedicaoContratoMedicaoViewModel model)
         {
@@ -479,9 +478,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             tipoDocumentoId = model.ContratoRetificacaoItemMedicao.TipoDocumentoId;
 
-            if (model.ContratoRetificacaoItemMedicao.MultiFornecedorId.HasValue)
+            if (model.ContratoRetificacaoItemMedicao.MultiFornecedor.Id.HasValue)
             {
-                multifornecedorId = model.ContratoRetificacaoItemMedicao.MultiFornecedorId.Value;
+                multifornecedorId = model.ContratoRetificacaoItemMedicao.MultiFornecedor.Id.Value;
             }
 
             tipoCompraCodigo = model.ContratoRetificacaoItemMedicao.TipoCompraCodigo;

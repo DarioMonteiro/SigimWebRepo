@@ -58,8 +58,8 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
 
 
             //TODO: Implementar controle de acesso
-            Ignore(l => l.ListaFuncionalidade);
-            Ignore(l => l.ListaPerfil);
+            //Ignore(l => l.ListaFuncionalidade);
+            //Ignore(l => l.ListaPerfil);
             //HasMany(l => l.ListaFuncionalidade).WithMany(l => l.ListaUsuario)
             //    .Map(m =>
             //    {

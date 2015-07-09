@@ -27,14 +27,12 @@ namespace GIR.Sigim.Domain.Entity.Admin
         public int? ParametrosUsuarioFinanceiroId { get; set; }
         public ParametrosUsuario ParametrosUsuario { get; set; }
         public ParametrosUsuarioFinanceiro ParametrosUsuarioFinanceiro { get; set; }
-        public ICollection<Funcionalidade> ListaFuncionalidade { get; set; }
-        public ICollection<Perfil> ListaPerfil { get; set; }
+        //public ICollection<Perfil> ListaPerfil { get; set; }
         public ICollection<UsuarioCentroCusto> ListaUsuarioCentroCusto { get; set; }
 
         public Usuario()
         {
-            this.ListaFuncionalidade = new HashSet<Funcionalidade>();
-            this.ListaPerfil = new HashSet<Perfil>();
+            //this.ListaPerfil = new HashSet<Perfil>();
             this.ListaUsuarioCentroCusto = new HashSet<UsuarioCentroCusto>();
         }
     }
