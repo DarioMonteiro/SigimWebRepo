@@ -113,6 +113,7 @@
     <Compile Include="Entity\Sac\Setor.cs" />
     <Compile Include="Entity\Sac\ParametrosSac.cs" />
     <Compile Include="Entity\Sigim\AssuntoContato.cs" />
+    <Compile Include="Entity\Sigim\AvaliacaoFornecedor.cs" />
     <Compile Include="Entity\Sigim\Banco.cs" />
     <Compile Include="Entity\Sigim\BancoLayout.cs" />
     <Compile Include="Entity\Sigim\BloqueioContabil.cs" />
@@ -122,6 +123,8 @@
     <Compile Include="Entity\Sigim\Composicao.cs" />
     <Compile Include="Entity\Sigim\Agencia.cs" />
     <Compile Include="Entity\Sigim\ContaCorrente.cs" />
+    <Compile Include="Entity\Sigim\AvaliacaoModelo.cs" />
+    <Compile Include="Entity\Sigim\TipoValidade.cs" />
     <Compile Include="Entity\Sigim\LogAcesso.cs" />
     <Compile Include="Entity\Sigim\FormaRecebimento.cs" />
     <Compile Include="Entity\Sigim\TipoFormaRecebimento.cs" />

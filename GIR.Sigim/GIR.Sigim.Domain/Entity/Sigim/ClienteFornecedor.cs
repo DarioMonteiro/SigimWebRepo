@@ -27,7 +27,6 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public string ClienteContrato { get; set; }
         public string ClienteAluguel { get; set; }
         public string ClienteEmpreitada { get; set; }
-
         public PessoaJuridica PessoaJuridica { get; set; }
         public PessoaFisica PessoaFisica { get; set; }
 
@@ -45,7 +44,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<TaxaAdministracao> ListaTaxaAdministracao { get; set; }
         public ICollection<EntradaMaterial> ListaEntradaMaterial { get; set; }
         public ICollection<EntradaMaterial> ListaEntradaMaterialNota { get; set; }
-
+        public ICollection<AvaliacaoFornecedor> ListaAvaliacaoFornecedor { get; set; }
 
         public ClienteFornecedor()
         {
@@ -63,6 +62,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();
             this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();
             this.ListaEntradaMaterialNota = new HashSet<EntradaMaterial>();
+            this.ListaAvaliacaoFornecedor = new HashSet<AvaliacaoFornecedor>();
         }
     }
 }

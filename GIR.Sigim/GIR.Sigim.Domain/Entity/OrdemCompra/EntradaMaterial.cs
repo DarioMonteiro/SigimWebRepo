@@ -44,20 +44,27 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public string NumeroNotaFrete { get; set; }
         public int? OrdemCompraFrete { get; set; }
         public int? TituloFrete { get; set; }
-        //TipoCompra
-        //CIFFOB
-        //NaturezaOperacao
-        //SerieNF
-        //CST
-        //CodigoContribuicao
+        public string CodigoTipoCompra { get; set; }
+        public TipoCompra TipoCompra { get; set; }
+        public int? CifFobId { get; set; }
+        public CifFob CifFob { get; set; }
+        public string CodigoNaturezaOperacao { get; set; }
+        public NaturezaOperacao NaturezaOperacao { get; set; }
+        public int? SerieNFId { get; set; }
+        public SerieNF SerieNF { get; set; }
+        public string CodigoCST { get; set; }
+        public CST CST { get; set; }
+        public string CodigoContribuicaoId { get; set; }
+        public CodigoContribuicao CodigoContribuicao { get; set; }
         public string CodigoBarras { get; set; }
         public bool? EhConferido { get; set; }
         public Nullable<DateTime> DataConferencia { get; set; }
         public string LoginUsuarioConferencia { get; set; }
-        
+        public ICollection<AvaliacaoFornecedor> ListaAvaliacaoFornecedor { get; set; }
+       
         public EntradaMaterial()
         {
-            
+            this.ListaAvaliacaoFornecedor = new HashSet<AvaliacaoFornecedor>();
         }
     }
 }

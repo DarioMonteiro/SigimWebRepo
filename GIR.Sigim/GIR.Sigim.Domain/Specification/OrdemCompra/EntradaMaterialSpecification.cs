@@ -48,6 +48,19 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
             return specification;
         }
 
+        public static Specification<EntradaMaterial> MatchingNumeroNotaFiscal(string numeroNotaFiscal)
+        {
+            Specification<EntradaMaterial> specification = new TrueSpecification<EntradaMaterial>();
+
+            if (!string.IsNullOrEmpty(numeroNotaFiscal))
+            {
+                var idSpecification = new DirectSpecification<EntradaMaterial>(l => l.NumeroNotaFiscal == numeroNotaFiscal);
+                specification &= idSpecification;
+            }
+
+            return specification;
+        }
+
         public static Specification<EntradaMaterial> UsuarioPossuiAcessoAoCentroCusto(int? idUsuario, string modulo)
         {
             Specification<EntradaMaterial> specification = new TrueSpecification<EntradaMaterial>();

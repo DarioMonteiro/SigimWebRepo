@@ -104,6 +104,8 @@
     <Compile Include="Configuration\Sigim\ClienteFornecedorConfiguration.cs" />
     <Compile Include="Configuration\Sigim\CodigoContribuicaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ComposicaoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\AvaliacaoModeloConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\AvaliacaoFornecedorConfiguration.cs" />
     <Compile Include="Configuration\Sigim\LogAcessoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AgenciaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ContaCorrenteConfiguration.cs" />

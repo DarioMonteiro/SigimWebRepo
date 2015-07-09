@@ -140,12 +140,51 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
             Property(l => l.TituloFrete)
                 .HasColumnName("tituloFrete");
 
-            //TipoCompra
-            //CIFFOB
-            //NaturezaOperacao
-            //SerieNF
-            //CST
-            //CodigoContribuicao
+            Property(l => l.CodigoTipoCompra)
+                .HasMaxLength(10)
+                .HasColumnName("tipoCompra");
+
+            HasRequired(l => l.TipoCompra)
+                .WithMany(l => l.ListaEntradaMaterial)
+                .HasForeignKey(l => l.CodigoTipoCompra);
+
+            Property(l => l.CifFobId)
+                .HasColumnName("CIFFOB");
+
+            HasRequired(l => l.CifFob)
+                .WithMany(l => l.ListaEntradaMaterial)
+                .HasForeignKey(l => l.CifFobId);
+
+            Property(l => l.CodigoNaturezaOperacao)
+                .HasMaxLength(10)
+                .HasColumnName("naturezaOperacao");
+
+            HasRequired(l => l.NaturezaOperacao)
+                .WithMany(l => l.ListaEntradaMaterial)
+                .HasForeignKey(l => l.CodigoNaturezaOperacao);
+
+            Property(l => l.SerieNFId)
+                .HasColumnName("serieNF");
+
+            HasRequired(l => l.SerieNF)
+                .WithMany(l => l.ListaEntradaMaterial)
+                .HasForeignKey(l => l.SerieNFId);
+
+            Property(l => l.CodigoCST)
+                .HasMaxLength(10)
+                .HasColumnName("CST");
+
+            HasRequired(l => l.CST)
+                .WithMany(l => l.ListaEntradaMaterial)
+                .HasForeignKey(l => l.CodigoCST);
+
+            Property(l => l.CodigoContribuicaoId)
+                .HasMaxLength(10)
+                .HasColumnName("codigoContribuicao");
+
+            HasRequired(l => l.CodigoContribuicao)
+                .WithMany(l => l.ListaEntradaMaterial)
+                .HasForeignKey(l => l.CodigoContribuicaoId);
 
             Property(l => l.CodigoBarras)
                 .HasMaxLength(50)
