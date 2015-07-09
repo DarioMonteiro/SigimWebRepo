@@ -59,8 +59,6 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Financeiro
                     break;
             }
 
-
-
             return set.Skip(pageCount * pageIndex).Take(pageCount);
         }
 

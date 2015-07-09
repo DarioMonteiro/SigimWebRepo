@@ -15,6 +15,15 @@ namespace GIR.Sigim.Application.Helper
         {
             Mapper.CreateMap<Usuario, UsuarioDTO>();
             Mapper.CreateMap<UsuarioDTO, Usuario>();
+
+            Mapper.CreateMap<Modulo, ModuloDTO>();
+            Mapper.CreateMap<ModuloDTO, Modulo>();
+
+            Mapper.CreateMap<Perfil, PerfilDTO>();
+            Mapper.CreateMap<PerfilDTO, Perfil>();
+
+            Mapper.CreateMap<PerfilFuncionalidade, PerfilFuncionalidadeDTO>();
+            Mapper.CreateMap<PerfilFuncionalidadeDTO, PerfilFuncionalidade>();
         }
     }
 }

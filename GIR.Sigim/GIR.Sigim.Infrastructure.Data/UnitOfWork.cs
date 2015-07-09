@@ -96,10 +96,10 @@ namespace GIR.Sigim.Infrastructure.Data
                 .Configure(p => p.HasColumnType("varchar"));
 
             //Admin
-            //modelBuilder.Configurations.Add(new FuncionalidadeConfiguration());
             modelBuilder.Configurations.Add(new ModuloConfiguration());
-            //modelBuilder.Configurations.Add(new PerfilConfiguration());
             modelBuilder.Configurations.Add(new UsuarioConfiguration());
+            modelBuilder.Configurations.Add(new PerfilConfiguration());
+            modelBuilder.Configurations.Add(new PerfilFuncionalidadeConfiguration());
 
             //Contrato
             modelBuilder.Configurations.Add(new ParametrosContratoConfiguration());
