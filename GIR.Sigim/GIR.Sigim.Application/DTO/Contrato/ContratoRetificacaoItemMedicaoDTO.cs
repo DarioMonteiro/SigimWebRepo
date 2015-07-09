@@ -75,6 +75,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public CSTDTO CST { get; set; }
         public string CodigoContribuicaoCodigo { get; set; }
         public CodigoContribuicaoDTO CodigoContribuicao { get; set; }
+        [RegularExpression(@"[0-9 ]+", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumericoEOuEspaco")]
         [Display(Name = "Código de barras")]
         [StringLength(50, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         public string CodigoBarras { get; set; }

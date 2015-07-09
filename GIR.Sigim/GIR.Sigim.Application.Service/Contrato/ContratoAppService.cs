@@ -739,40 +739,46 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             if (parametros.DadosSped.Value)
             {
+                bool estaCorreto = true;
                 if (string.IsNullOrEmpty(medicao.TipoCompraCodigo))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo compra"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((!medicao.CifFobId.HasValue) || (medicao.CifFobId.Value == 0))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "CIF/FOB"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((string.IsNullOrEmpty(medicao.NaturezaOperacaoCodigo)))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Natureza de operação"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((!medicao.SerieNFId.HasValue) || (medicao.SerieNFId.Value == 0))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Série"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((string.IsNullOrEmpty(medicao.CSTCodigo)))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "CST"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((string.IsNullOrEmpty(medicao.CodigoContribuicaoCodigo)))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contribuição"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
+                }
+
+                if (!estaCorreto)
+                {
+                    return estaCorreto;
                 }
             }
 

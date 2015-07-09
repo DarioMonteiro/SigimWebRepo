@@ -88,8 +88,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;  
             }
 
-            //CarregarCombosFiltro(model);
-
             return View(model);
         }
 
@@ -173,13 +171,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (!contratoRetificacaoAppService.EhRetificacaoAprovada(contratoRetificacao))
             {
-                return View(model);
+                //return View(model);
             }
 
-            if (!contratoAppService.EhContratoAssinado(contrato))
-            {
-                return View(model);
-            }
+            //if (!contratoAppService.EhContratoAssinado(contrato))
+            //{
+            //    //return View(model);
+            //}
 
             model.RetencaoContratual = 0;
             if (contratoRetificacao.RetencaoContratual.HasValue)
@@ -218,13 +216,29 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             {
                 listaContratoRetificacaoProvisao = contratoAppService.ObterListaCronograma(contratoId.Value, contratoRetificacaoItemId.Value);
 
+                ContratoDTO contrato = contratoAppService.ObterPeloId(contratoId.Value, Usuario.Id);
+                contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemId).SingleOrDefault();
+
+                bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
+                bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
+
+                if (!contratoAppService.EhContratoAssinado(contrato))
+                {
+                    var msg = messageQueue.GetAll()[0].Text;
+                    messageQueue.Clear();
+                    return Json(new
+                    {
+                        ehRecuperou = false,
+                        errorMessage = msg,
+                        ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
+                        ehNaturezaItemPorPrecoUnitario = EhNaturezaItemPorPrecoUnitario,
+                        contratoRetificacaoItem = contratoRetificacaoItem,
+                    });
+                }
+
+
                 if (!contratoAppService.ExisteContratoRetificacaoProvisao(listaContratoRetificacaoProvisao))
                 {
-                    ContratoDTO contrato = contratoAppService.ObterPeloId(contratoId.Value, Usuario.Id);
-                    contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemId).SingleOrDefault();
-
-                    bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
-                    bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
 
                     var msg = messageQueue.GetAll()[0].Text;
                     messageQueue.Clear();
@@ -241,8 +255,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 {
                     contratoRetificacaoItem = listaContratoRetificacaoProvisao.ElementAt(0).ContratoRetificacaoItem;
 
-                    bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
-                    bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
+                    EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
+                    EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
 
                     return Json(new
                     {
@@ -447,28 +461,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        //private void CarregarCombosFiltro(MedicaoContratoListaViewModel model) 
-        //{
-        //    //int? contratanteId = null;
-        //    //int? contratadoId = null;
-
-        //    //if (model.Filtro != null) 
-        //    //{
-        //    //    contratanteId = model.Filtro.ContratanteId;
-        //    //    contratadoId = model.Filtro.ContratadoId;
-        //    //}
-
-        //    //model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratanteId);
-        //    //model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratadoId);
-
-        //    //model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3,0,2), "Id", "Nome", contratanteId);
-        //    //model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3, 0, 2), "Id", "Nome", contratadoId); 
-        //}
-
         private void CarregarCombosMedicao(MedicaoContratoMedicaoViewModel model)
         {
             int? tipoDocumentoId = null;
-            int? multifornecedorId = null;
             string tipoCompraCodigo = null;
             int? cifFobId = null;
             string naturezaOperacaoCodigo = null;
@@ -477,11 +472,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             string codigoContribuicaoCodigo = null;
 
             tipoDocumentoId = model.ContratoRetificacaoItemMedicao.TipoDocumentoId;
-
-            if (model.ContratoRetificacaoItemMedicao.MultiFornecedor.Id.HasValue)
-            {
-                multifornecedorId = model.ContratoRetificacaoItemMedicao.MultiFornecedor.Id.Value;
-            }
 
             tipoCompraCodigo = model.ContratoRetificacaoItemMedicao.TipoCompraCodigo;
 
@@ -500,7 +490,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             codigoContribuicaoCodigo = model.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo;
 
             model.ListaTipoDocumento = new SelectList(tipoDocumentoAppService.ListarTodos(), "Id", "Sigla", tipoDocumentoId);
-            model.ListaMultiFornecedor = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", multifornecedorId);
             model.ListaTipoCompra = new SelectList(tipoCompraAppService.ListarTodos(), "Codigo", "Descricao", tipoCompraCodigo);
             model.ListaCifFob = new SelectList(cifFobAppService.ListarTodos(), "Id", "Descricao", cifFobId);
             model.ListaNaturezaOperacao = new SelectList(naturezaOperacaoAppService.ListarTodos(), "Codigo", "Descricao", naturezaOperacaoCodigo);
