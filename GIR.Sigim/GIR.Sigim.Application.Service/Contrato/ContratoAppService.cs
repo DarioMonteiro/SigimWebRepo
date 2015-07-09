@@ -73,8 +73,8 @@ namespace GIR.Sigim.Application.Service.Contrato
             else
             {
                 specification &= ContratoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
-                specification &= ContratoSpecification.PertenceAoContratante(filtro.ContratanteId);
-                specification &= ContratoSpecification.PertenceAoContratado(filtro.ContratadoId);
+                specification &= ContratoSpecification.PertenceAoContratante(filtro.Contratante.Id);
+                specification &= ContratoSpecification.PertenceAoContratado(filtro.Contratado.Id);
             }
 
             return contratoRepository.ListarPeloFiltroComPaginacao(
@@ -169,11 +169,11 @@ namespace GIR.Sigim.Application.Service.Contrato
         {
             var contrato = contratoRepository.ObterPeloId(contratoId,
                                                           l => l.ListaContratoRetificacaoItemCronograma,
-                                                          l => l.ListaContratoRetificacaoItemMedicao);
+                                                          l => l.ListaContratoRetificacaoItemMedicao.Select(i => i.MultiFornecedor));
 
             var medicao =  contrato.ListaContratoRetificacaoItemMedicao
-                            .Where(l => l.Id.Value == contratoRetificacaoItemMedicaoId).SingleOrDefault()
-                            .To<ContratoRetificacaoItemMedicaoDTO>();
+                            .Where(l => l.Id.Value == contratoRetificacaoItemMedicaoId).SingleOrDefault().To<ContratoRetificacaoItemMedicaoDTO>();
+
             return medicao;
         }
 
@@ -617,7 +617,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             contratoRetificacaoItemMedicao.DataVencimento = dto.DataVencimento;
             contratoRetificacaoItemMedicao.Quantidade = dto.Quantidade;
             contratoRetificacaoItemMedicao.Valor = dto.Valor;
-            contratoRetificacaoItemMedicao.MultiFornecedorId = dto.MultiFornecedorId;
+            contratoRetificacaoItemMedicao.MultiFornecedorId = dto.MultiFornecedor.Id;
             contratoRetificacaoItemMedicao.Observacao = dto.Observacao;
             contratoRetificacaoItemMedicao.Desconto = dto.Desconto;
             contratoRetificacaoItemMedicao.MotivoDesconto = dto.MotivoDesconto;
@@ -1308,7 +1308,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 row[sequencialItem] = item.Imposto.ContratoRetificacaoItem.Sequencial;
                 row[descricaoItem] = item.Imposto.ContratoRetificacaoItem.Servico.Descricao;
                 //Esse campo está no rpt mais não vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
-                row[valorImposto] = item.ValorImposto;
+                row[valorImposto] = Math.Round(item.ValorImposto,2);
                 row[valorTotalMedidoIndireto] = item.Medicao.Contrato.ObterValorTotalMedidoIndireto(item.Medicao.ContratoId,
                                                                                                     item.Medicao.NumeroDocumento,
                                                                                                     item.Medicao.TipoDocumentoId,

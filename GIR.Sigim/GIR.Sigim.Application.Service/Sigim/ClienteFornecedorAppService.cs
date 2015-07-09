@@ -8,6 +8,8 @@ using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
+using GIR.Sigim.Domain.Specification;
+using GIR.Sigim.Domain.Specification.Sigim;
 
 namespace GIR.Sigim.Application.Service.Sigim
 {
@@ -41,6 +43,16 @@ namespace GIR.Sigim.Application.Service.Sigim
             
         //    return clienteFornecedorRepository.ListarClienteFornecedor(classificacaoClienteFornecedor, situacaoClienteFornecedor, tipoPessoa).To<List<ClienteFornecedorDTO>>();  
         //}
+
+        public List<ClienteFornecedorDTO> ListarClienteContratoAtivosPorNome(string nome)
+        {
+            var specification = (Specification<ClienteFornecedor>)new TrueSpecification<ClienteFornecedor>();
+            specification &= ClienteFornecedorSpecification.NomeContem(nome);
+            specification &= ClienteFornecedorSpecification.EhAtivo();
+            specification &= ClienteFornecedorSpecification.EhClienteContrato();
+
+            return clienteFornecedorRepository.ListarPeloFiltro(specification).To<List<ClienteFornecedorDTO>>();
+        }
 
     }
 }

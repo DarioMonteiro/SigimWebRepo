@@ -255,6 +255,7 @@
     <Compile Include="Specification\ParameterRebinder.cs" />
     <Compile Include="Specification\Sigim\AgendaSpecification.cs" />
     <Compile Include="Specification\Sigim\BancoSpecification.cs" />
+    <Compile Include="Specification\Sigim\ClienteFornecedorSpecification.cs" />
     <Compile Include="Specification\Sigim\ContaCorrenteSpecification.cs" />
     <Compile Include="Specification\Sigim\MaterialSpecification.cs" />
     <Compile Include="Specification\Specification.cs" />

@@ -51,7 +51,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
         [Display(Name = "Data medição")]
         public DateTime DataMedicao { get; set; }
         public string UsuarioMedicao { get; set; }
-        public int? MultiFornecedorId { get; set; }
+        //public int? MultiFornecedorId { get; set; }
         public ClienteFornecedorDTO MultiFornecedor { get; set; }
         [StringLength(255, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Observação")]
