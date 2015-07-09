@@ -20,7 +20,8 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<CotacaoItem, CotacaoItemDTO>();
             Mapper.CreateMap<CotacaoItemDTO, CotacaoItem>();
 
-            Mapper.CreateMap<EntradaMaterial, EntradaMaterialDTO>();
+            Mapper.CreateMap<EntradaMaterial, EntradaMaterialDTO>()
+                .ForMember(d => d.PossuiAvaliacaoFornecedor, m => m.MapFrom(s => s.ListaAvaliacaoFornecedor.Any()));
             Mapper.CreateMap<EntradaMaterialDTO, EntradaMaterial>();
 
             Mapper.CreateMap<InterfaceCotacao, InterfaceCotacaoDTO>();

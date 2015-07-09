@@ -76,5 +76,6 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public bool? EhConferido { get; set; }
         public Nullable<DateTime> DataConferencia { get; set; }
         public string LoginUsuarioConferencia { get; set; }
+        public bool PossuiAvaliacaoFornecedor { get; set; }
     }
 }

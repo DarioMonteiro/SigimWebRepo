@@ -54,6 +54,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 specification &= EntradaMaterialSpecification.DataMaiorOuIgual(filtro.DataInicial);
                 specification &= EntradaMaterialSpecification.DataMenorOuIgual(filtro.DataFinal);
                 specification &= EntradaMaterialSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
+                specification &= EntradaMaterialSpecification.MatchingNumeroNotaFiscal(filtro.NumeroNotaFiscal);
 
                 if (filtro.EhPendente || filtro.EhCancelada || filtro.EhFechada)
                 {
@@ -72,7 +73,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 out totalRegistros,
                 l => l.CentroCusto,
                 l => l.ClienteFornecedor,
-                l => l.FornecedorNota).To<List<EntradaMaterialDTO>>();
+                l => l.FornecedorNota,
+                l => l.ListaAvaliacaoFornecedor).To<List<EntradaMaterialDTO>>();
         }
 
 
