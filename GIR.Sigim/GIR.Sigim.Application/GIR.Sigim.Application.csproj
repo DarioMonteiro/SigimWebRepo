@@ -53,7 +53,13 @@
     <Compile Include="Adapter\Adapter.cs" />
     <Compile Include="Adapter\ImageAdapter.cs" />
     <Compile Include="Adapter\EnumAdapter.cs" />
+    <Compile Include="Constantes\Modulo.cs" />
+    <Compile Include="Constantes\Funcionalidade.cs" />
     <Compile Include="CustomAttribute\RequiredIfNotEmptyAttribute.cs" />
+    <Compile Include="DTO\Admin\FuncionalidadeDTO.cs" />
+    <Compile Include="DTO\Admin\PerfilFuncionalidadeDTO.cs" />
+    <Compile Include="DTO\Admin\ModuloDTO.cs" />
+    <Compile Include="DTO\Admin\PerfilDTO.cs" />
     <Compile Include="DTO\Admin\UsuarioDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoDTO.cs" />
@@ -147,6 +153,7 @@
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
     <Compile Include="Enums\TipoPesquisa.cs" />
     <Compile Include="Enums\TabelaBasicaFinanceiro.cs" />
+    <Compile Include="Filtros\Admin\PerfilFiltro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
     <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
@@ -250,6 +257,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Service\Admin\IFuncionalidadeAppService.cs" />
+    <Compile Include="Service\Admin\IModuloAppService.cs" />
+    <Compile Include="Service\Admin\IPerfilAppService.cs" />
     <Compile Include="Service\Admin\IUsuarioAppService.cs" />
     <Compile Include="Service\Contrato\IContratoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoAppService.cs" />

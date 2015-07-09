@@ -165,6 +165,9 @@
   <data name="RegistroEmUso" xml:space="preserve">
     <value>O registro [{0}] está sendo usado.</value>
   </data>
+  <data name="RegistroNaoRecuperado" xml:space="preserve">
+    <value>Selecione o registro.</value>
+  </data>
   <data name="RegistroProtegido" xml:space="preserve">
     <value>O registro [{0}] está protegido.</value>
   </data>

@@ -72,6 +72,9 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
 
             #region Admin
             currentContainer.RegisterType<IUsuarioRepository, UsuarioRepository>();
+            currentContainer.RegisterType<IPerfilRepository, PerfilRepository>();
+            currentContainer.RegisterType<IPerfilFuncionalidadeRepository, PerfilFuncionalidadeRepository>();
+            currentContainer.RegisterType<IModuloRepository, ModuloRepository>();
             #endregion
 
             #region Contrato
@@ -160,7 +163,10 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
 
             #region Application services
             #region Admin
+            currentContainer.RegisterType<IFuncionalidadeAppService, FuncionalidadeAppService>();
+            currentContainer.RegisterType<IModuloAppService, ModuloAppService>();
             currentContainer.RegisterType<IUsuarioAppService, UsuarioAppService>();
+            currentContainer.RegisterType<IPerfilAppService, PerfilAppService>();
             #endregion
 
             #region Contrato

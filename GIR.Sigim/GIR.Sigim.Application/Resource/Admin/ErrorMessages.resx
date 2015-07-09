@@ -120,6 +120,9 @@
   <data name="ConfirmacaoNovaSenhaNaoConfere" xml:space="preserve">
     <value>A nova senha e a confirmação não correspondem.</value>
   </data>
+  <data name="FuncionalidadesNaoMarcadas" xml:space="preserve">
+    <value>Selecione as funcionalidades.</value>
+  </data>
   <data name="NovaSenhaIgualAtual" xml:space="preserve">
     <value>A nova senha deve ser diferante da atual.</value>
   </data>

@@ -90,7 +90,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Deletar(int TipoRateioId)
         {
-            if (TipoRateioId == null)
+            if (TipoRateioId == 0)
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
                 return false;

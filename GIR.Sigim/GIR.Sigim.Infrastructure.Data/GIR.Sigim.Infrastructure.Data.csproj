@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Admin\PerfilFuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemConfiguration.cs" />
@@ -139,10 +140,12 @@
     <Compile Include="Configuration\Admin\UsuarioConfiguration.cs" />
     <Compile Include="Configuration\Admin\PerfilConfiguration.cs" />
     <Compile Include="Configuration\Admin\ModuloConfiguration.cs" />
-    <Compile Include="Configuration\Admin\FuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\ParametrosUsuarioConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\Admin\PerfilFuncionalidadeRepository.cs" />
+    <Compile Include="Repository\Admin\ModuloRepository.cs" />
+    <Compile Include="Repository\Admin\PerfilRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />

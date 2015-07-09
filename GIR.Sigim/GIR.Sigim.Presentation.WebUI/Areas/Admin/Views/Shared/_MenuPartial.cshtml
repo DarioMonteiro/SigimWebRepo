@@ -1,0 +1,12 @@
+﻿<ul style="">
+    <li>
+        <a href="@Url.Content("~/Admin/Home")" title="Painel"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Home</span></a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Acessos</span></a>
+        <ul>
+            <li>@Html.ActionLink("Perfil", "", "Perfil")</li>
+            @*<li>@Html.ActionLink("Parâmetros - usuário", "Index", "ParametrosUsuarioFinanceiro")</li>*@
+        </ul>
+    </li>
+</ul>

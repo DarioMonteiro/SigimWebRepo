@@ -9,6 +9,6 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
 {
     public class TipoCompromissoFiltro : BaseFiltro
     {
-       
+        
     }
 }
