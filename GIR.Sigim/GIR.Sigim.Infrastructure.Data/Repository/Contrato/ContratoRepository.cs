@@ -76,6 +76,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Contrato
             }
         }
 
+
         public void RemoverItemMedicao(ContratoRetificacaoItemMedicao item)
         {
             if (item != (ContratoRetificacaoItemMedicao)null)

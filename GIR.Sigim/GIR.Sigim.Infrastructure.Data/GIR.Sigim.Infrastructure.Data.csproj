@@ -83,6 +83,7 @@
     <Compile Include="Configuration\Orcamento\OrcamentoInsumoRequisitadoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialItemConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\EntradaMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\OrdemCompraItemConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\OrdemCompraConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\CotacaoConfiguration.cs" />
@@ -147,7 +148,6 @@
     <Compile Include="Repository\Admin\PerfilRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
-    <Compile Include="Repository\Contrato\ContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\TaxaAdministracaoRepository.cs" />
@@ -164,6 +164,7 @@
     <Compile Include="Repository\Orcamento\OrcamentoRepository.cs" />
     <Compile Include="Repository\Orcamento\ParametrosOrcamentoRepository.cs" />
     <Compile Include="Repository\Financeiro\CentroCustoRepository.cs" />
+    <Compile Include="Repository\OrdemCompra\EntradaMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\RequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\PreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\ParametrosOrdemCompraRepository.cs" />

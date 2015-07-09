@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.Orcamento;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.Enums;
 using GIR.Sigim.Application.Filtros.Sigim;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.Sigim;
@@ -54,28 +55,50 @@ namespace GIR.Sigim.Application.Service.Sigim
             specification &= MaterialSpecification.DescricaoContem(descricao);
             specification &= MaterialSpecification.EhAtivo();
 
-            var centroCusto = centroCustoRepository.ObterPeloCodigo(codigoCentroCusto);
-            if (centroCusto != null)
-            {
-                var tipoTabela = centroCusto.TipoTabela.HasValue ? (TipoTabela)centroCusto.TipoTabela.Value : TipoTabela.Propria;
-                int? anoMes = centroCusto.AnoMes;
-
-                if (tipoTabela != TipoTabela.Propria)
-                    specification &= (MaterialSpecification.EhTipoTabela(TipoTabela.Propria)
-                        || (MaterialSpecification.EhTipoTabela(tipoTabela)
-                            && MaterialSpecification.MatchingAnoMes(anoMes)));
-                else
-                    specification &= MaterialSpecification.EhTipoTabela(tipoTabela);
-            }
-            else
-                specification &= MaterialSpecification.EhTipoTabela(TipoTabela.Propria);
+            specification &= ObterTipoTabelaSpecification(specification, codigoCentroCusto);
 
             return materialRepository.ListarPeloFiltro(specification).To<List<MaterialDTO>>();
         }
 
-        public List<MaterialDTO> ListarAtivosPeloTipoTabelaPropria(string descricao)
+        public List<MaterialDTO> PesquisarAtivosPeloFiltro(MaterialPesquisaFiltro filtro)
         {
-            return materialRepository.ListarAtivosPeloTipoTabelaPropria(descricao, l => l.UnidadeMedida).To<List<MaterialDTO>>();
+            var specification = (Specification<Material>)new TrueSpecification<Material>();
+            specification &= MaterialSpecification.EhAtivo();
+            specification &= ObterTipoTabelaSpecification(specification, filtro.CodigoCentroCusto);
+
+            bool EhTipoSelecaoContem = filtro.TipoSelecao == TipoPesquisa.Contem;
+            switch (filtro.Campo)
+            {
+                case "unidadeMedida":
+                    specification &= EhTipoSelecaoContem ? MaterialSpecification.UnidadeMedidaContem(filtro.TextoInicio)
+                        : MaterialSpecification.UnidadeMedidaNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "codigo":
+                    int? inicio = !string.IsNullOrEmpty(filtro.TextoInicio) ? Convert.ToInt32(filtro.TextoInicio) : (int?)null;
+                    int? fim = !string.IsNullOrEmpty(filtro.TextoFim) ? Convert.ToInt32(filtro.TextoFim) : (int?)null;
+                    specification &= EhTipoSelecaoContem ? MaterialSpecification.MatchingId(inicio)
+                        : MaterialSpecification.IdNoIntervalo(inicio, fim);
+                    break;
+                case "classeInsumo":
+                    specification &= EhTipoSelecaoContem ? MaterialSpecification.ClasseInsumoContem(filtro.TextoInicio)
+                        : MaterialSpecification.ClasseInsumoNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "codigoExterno":
+                    specification &= EhTipoSelecaoContem ? MaterialSpecification.CodigoExternoContem(filtro.TextoInicio)
+                        : MaterialSpecification.CodigoExternoNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "descricao":
+                default:
+                    specification &= EhTipoSelecaoContem ? MaterialSpecification.DescricaoContem(filtro.TextoInicio)
+                        : MaterialSpecification.DescricaoNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+            }
+
+            var x = materialRepository.Pesquisar(
+                specification,
+                filtro.PaginationParameters.OrderBy,
+                filtro.PaginationParameters.Ascending);
+            return x.To<List<MaterialDTO>>();
         }
 
         public List<OrcamentoComposicaoItemDTO> ListarOrcamentoComposicaoItem(int? materialId, string codigoCentroCusto, string codigoClasse, out bool possuiInterfaceOrcamento)
@@ -123,6 +146,27 @@ namespace GIR.Sigim.Application.Service.Sigim
             return orcamento.Situacao == "E"
                 && orcamento.ListaOrcamentoComposicao.Any(l =>
                     l.ListaOrcamentoComposicaoItem.Any(o => o.MaterialId == materialId && o.EhControlado == true));
+        }
+
+        private Specification<Material> ObterTipoTabelaSpecification(Specification<Material> specification, string codigoCentroCusto)
+        {
+            var centroCusto = centroCustoRepository.ObterPeloCodigo(codigoCentroCusto);
+            if (centroCusto != null)
+            {
+                var tipoTabela = centroCusto.TipoTabela.HasValue ? (TipoTabela)centroCusto.TipoTabela.Value : TipoTabela.Propria;
+                int? anoMes = centroCusto.AnoMes;
+
+                if (tipoTabela != TipoTabela.Propria)
+                    specification &= (MaterialSpecification.EhTipoTabela(TipoTabela.Propria)
+                        || (MaterialSpecification.EhTipoTabela(tipoTabela)
+                            && MaterialSpecification.MatchingAnoMes(anoMes)));
+                else
+                    specification &= MaterialSpecification.EhTipoTabela(tipoTabela);
+            }
+            else
+                specification &= MaterialSpecification.EhTipoTabela(TipoTabela.Propria);
+
+            return specification;
         }
 
         #endregion

@@ -178,6 +178,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Não existem registros..
+        /// </summary>
+        public static string NaoExistemRegistros {
+            get {
+                return ResourceManager.GetString("NaoExistemRegistros", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nenhum registro encontrado..
         /// </summary>
         public static string NenhumRegistroEncontrado {

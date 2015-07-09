@@ -64,7 +64,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository
             var set = unitOfWork.CreateSet<TEntity>().AsQueryable<TEntity>();
 
             if (includes.Any())
-                set = includes.Aggregate(set, (current, expression) => current.Include(expression));
+                set = includes.Aggregate(set, (current, expression) => current.Include(expression).DefaultIfEmpty());
 
             return set;
         }

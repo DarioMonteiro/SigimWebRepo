@@ -142,6 +142,7 @@ namespace GIR.Sigim.Infrastructure.Data
             //OrdemCompra
             modelBuilder.Configurations.Add(new CotacaoConfiguration());
             modelBuilder.Configurations.Add(new CotacaoItemConfiguration());
+            modelBuilder.Configurations.Add(new EntradaMaterialConfiguration());
             modelBuilder.Configurations.Add(new OrdemCompraConfiguration());
             modelBuilder.Configurations.Add(new OrdemCompraItemConfiguration());
             modelBuilder.Configurations.Add(new ParametrosOrdemCompraConfiguration());

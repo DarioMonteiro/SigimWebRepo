@@ -89,6 +89,8 @@
     <Compile Include="Entity\Orcamento\ParametrosOrcamento.cs" />
     <Compile Include="Entity\OrdemCompra\AbstractRequisicaoMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\AbstractRequisicaoMaterialItem.cs" />
+    <Compile Include="Entity\OrdemCompra\SituacaoEntradaMaterial.cs" />
+    <Compile Include="Entity\OrdemCompra\EntradaMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\SituacaoOrdemCompra.cs" />
     <Compile Include="Entity\OrdemCompra\OrdemCompraItem.cs" />
     <Compile Include="Entity\OrdemCompra\OrdemCompra.cs" />
@@ -164,7 +166,6 @@
     <Compile Include="Repository\Admin\IPerfilRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
-    <Compile Include="Repository\Contrato\IContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\ITaxaAdministracaoRepository.cs" />
     <Compile Include="Repository\Financeiro\IRateioAutomaticoRepository.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Repository\Admin\IUsuarioRepository.cs" />
     <Compile Include="Repository\Orcamento\IOrcamentoRepository.cs" />
     <Compile Include="Repository\Orcamento\IParametrosOrcamentoRepository.cs" />
+    <Compile Include="Repository\OrdemCompra\IEntradaMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
@@ -242,6 +244,7 @@
     <Compile Include="Specification\AndSpecification.cs" />
     <Compile Include="Specification\BaseSpecification.cs" />
     <Compile Include="Specification\CompositeSpecification.cs" />
+    <Compile Include="Specification\Contrato\ContratoRetificacaoItemMedicaoSpecification.cs" />
     <Compile Include="Specification\Contrato\ContratoSpecification.cs" />
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />
@@ -249,6 +252,7 @@
     <Compile Include="Specification\ISpecification.cs" />
     <Compile Include="Specification\NotSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\AbstractRequisicaoMaterialSpecification.cs" />
+    <Compile Include="Specification\OrdemCompra\EntradaMaterialSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\RequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\PreRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrSpecification.cs" />

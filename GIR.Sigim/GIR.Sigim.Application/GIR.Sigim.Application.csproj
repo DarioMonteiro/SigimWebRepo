@@ -73,6 +73,7 @@
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
+    <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="DTO\Orcamento\ParametrosOrcamentoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\EntradaMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\OrdemCompraDTO.cs" />
     <Compile Include="DTO\OrdemCompra\OrdemCompraItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\CotacaoDTO.cs" />
@@ -149,19 +151,24 @@
     <Compile Include="DTO\Sigim\UnidadeMedidaDTO.cs" />
     <Compile Include="DTO\Sigim\MaterialDTO.cs" />
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
+    <Compile Include="Enums\TipoPesquisa.cs" />
     <Compile Include="Enums\TabelaBasicaFinanceiro.cs" />
     <Compile Include="Filtros\Admin\PerfilFiltro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
+    <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
+    <Compile Include="Filtros\OrdemCompras\EntradaMaterialFiltro.cs" />
+    <Compile Include="Filtros\OrdemCompras\RelOcItensOrdemCompraFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\RequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\PaginationParameters.cs" />
     <Compile Include="Filtros\Sigim\BancoFiltro.cs" />
     <Compile Include="Filtros\Sigim\AgenciaFiltro.cs" />
     <Compile Include="Filtros\Sigim\ContaCorrenteFiltro.cs" />
+    <Compile Include="Filtros\Sigim\MaterialPesquisaFiltro.cs" />
     <Compile Include="Filtros\Sigim\FormaRecebimentoFiltro.cs" />
     <Compile Include="Filtros\Sac\Setor.cs" />
     <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />
@@ -179,6 +186,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relMedicao.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Contrato\relNotaFiscalLiberada.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relNotaFiscalLiberada.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\OrdemCompra\relPreRequisicaoMaterial.cs">
@@ -271,6 +284,7 @@
     <Compile Include="Service\IBaseAppService.cs" />
     <Compile Include="Service\Orcamento\IOrcamentoAppService.cs" />
     <Compile Include="Service\Orcamento\IParametrosOrcamentoAppService.cs" />
+    <Compile Include="Service\OrdemCompra\IEntradaMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IPreRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosOrdemCompraAppService.cs" />
@@ -329,6 +343,10 @@
     <EmbeddedResource Include="Reports\Contrato\relMedicao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relMedicao.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Contrato\relNotaFiscalLiberada.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relNotaFiscalLiberada.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\OrdemCompra\relPreRequisicaoMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

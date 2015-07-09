@@ -62,8 +62,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 var result = requisicaoMaterialAppService.ListarPeloFiltro(model.Filtro, Usuario.Id, out totalRegistros);
                 if (result.Any())
                 {
-                    var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
-                    return PartialView("ListaPartial", listaViewModel);
+                    if (result.Count == 1)
+                    {
+                        Session["Filtro"] = null;
+                        return PartialView("Redirect", Url.Action("Cadastro", "RequisicaoMaterial", new { id = result[0].Id }));
+                    }
+                    else
+                    {
+                        var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
+                        return PartialView("ListaPartial", listaViewModel);
+                    }
                 }
                 return PartialView("_EmptyListPartial");
             }

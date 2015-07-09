@@ -28,4 +28,21 @@
             <li>@Html.ActionLink("Cadastro", "Index", "RequisicaoMaterial")</li>
         </ul>
     </li>
+    <li>
+        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Entrada de material</span></a>
+        <ul>
+            <li>@Html.ActionLink("Cadastro", "Index", "EntradaMaterial")</li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Relatórios</span></a>
+        <ul>            
+            <li>
+                <a href="#">Ordem compra</a>
+                <ul>
+                    <li>@Html.ActionLink("Itens de ordem de compra", "Index", "RelOCItensOrdemCompra")</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
 </ul>

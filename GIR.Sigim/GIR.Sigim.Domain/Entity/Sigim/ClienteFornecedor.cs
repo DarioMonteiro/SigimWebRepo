@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.OrdemCompra;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
@@ -42,6 +43,9 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<ImpostoFinanceiro> ListaImpostoFinanceiro { get; set; }
         public ICollection<ParametrosContrato> ListaParametrosContrato { get; set; }
         public ICollection<TaxaAdministracao> ListaTaxaAdministracao { get; set; }
+        public ICollection<EntradaMaterial> ListaEntradaMaterial { get; set; }
+        public ICollection<EntradaMaterial> ListaEntradaMaterialNota { get; set; }
+
 
         public ClienteFornecedor()
         {
@@ -56,7 +60,9 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
             this.ListaImpostoFinanceiro = new HashSet<ImpostoFinanceiro>();
             this.ListaParametrosContrato = new HashSet<ParametrosContrato>();
-            this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();  
+            this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();
+            this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();
+            this.ListaEntradaMaterialNota = new HashSet<EntradaMaterial>();
         }
     }
 }
