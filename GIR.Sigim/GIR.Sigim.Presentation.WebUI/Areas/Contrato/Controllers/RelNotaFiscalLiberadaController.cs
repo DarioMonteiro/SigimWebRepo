@@ -42,8 +42,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             model.PodeImprimir = true;
 
-            CarregarCombosFiltro(model);
-
             return View(model);
         }
 
@@ -60,7 +58,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     model.Filtro.PaginationParameters.OrderBy = "numeroDocumento";
 
                 var result = contratoRetificacaoItemMedicaoAppService.ListarPeloFiltroRelNotaFiscalLiberada(model.Filtro, Usuario.Id, out totalRegistros);
-
 
                 if (result.Any())
                 {
@@ -117,20 +114,5 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             });
 
         }
-
-
-        private void CarregarCombosFiltro(RelNotaFiscalLiberadaListaViewModel model)
-        {
-            int? fornecedorClienteId = null;
-
-            if (model.Filtro != null)
-            {
-                fornecedorClienteId = model.Filtro.FornecedorClienteId;
-            }
-
-            model.ListaFornecedorCliente = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", fornecedorClienteId);
-
-        }
-
     }
 }

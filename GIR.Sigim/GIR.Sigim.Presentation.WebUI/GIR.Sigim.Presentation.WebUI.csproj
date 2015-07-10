@@ -799,7 +799,6 @@
     <Content Include="Views\FormaRecebimento\ListaPartial.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\ListPageScriptExtra.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ClienteFornecedor.cshtml" />
   </ItemGroup>
   <ItemGroup>

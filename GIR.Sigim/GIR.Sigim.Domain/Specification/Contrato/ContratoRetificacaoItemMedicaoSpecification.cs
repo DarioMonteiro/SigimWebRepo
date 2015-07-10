@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -70,7 +71,7 @@ namespace GIR.Sigim.Domain.Specification.Contrato
 
             if (data.HasValue)
             {
-                var directSpecification = new DirectSpecification<ContratoRetificacaoItemMedicao>(l => l.DataLiberacao >= data);
+                var directSpecification = new DirectSpecification<ContratoRetificacaoItemMedicao>(l => l.DataLiberacao.Value >= data);
                 specification &= directSpecification;
             }
 
@@ -83,7 +84,9 @@ namespace GIR.Sigim.Domain.Specification.Contrato
 
             if (data.HasValue)
             {
-                var directSpecification = new DirectSpecification<ContratoRetificacaoItemMedicao>(l => l.DataLiberacao <= data);
+                DateTime dataUltimaHora = new DateTime(data.Value.Year, data.Value.Month, data.Value.Day, 23, 59, 59);
+
+                var directSpecification = new DirectSpecification<ContratoRetificacaoItemMedicao>(l => l.DataLiberacao.Value <= dataUltimaHora);
                 specification &= directSpecification;
             }
 

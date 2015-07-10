@@ -227,10 +227,10 @@ namespace GIR.Sigim.Application.Service.Contrato
                 relat.ContratoRetificacaoItemId = medicao.ContratoRetificacaoItem.Id.Value;
                 relat.DataEmissao = medicao.DataEmissao;
                 relat.DataVencimento = medicao.DataVencimento;
-                decimal valorImpostoRetidoMedicao = medicao.Contrato.ObterValorTotalImpostoIndiretoMedicao(medicao.SequencialItem,
-                                                                                                           medicao.SequencialCronograma,
-                                                                                                           medicao.ContratoRetificacaoItemId,
-                                                                                                           medicao.Id);
+                decimal valorImpostoRetidoMedicao = medicao.Contrato.ObterValorImpostoRetidoMedicao(medicao.SequencialItem,
+                                                                                                    medicao.SequencialCronograma,
+                                                                                                    medicao.ContratoRetificacaoItemId,
+                                                                                                    medicao.Id);
                 decimal valorRetido = 0;
                 decimal desconto = 0;
                 if (medicao.ValorRetido.HasValue)
@@ -281,7 +281,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMenorOuIgual(filtro.DataFinal);
                 specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
                 specification &= ContratoRetificacaoItemMedicaoSpecification.DocumentoPertenceAhMedicao(filtro.Documento);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.FornecedorClientePertenceAhMedicao(filtro.FornecedorClienteId);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.FornecedorClientePertenceAhMedicao(filtro.FornecedorCliente.Id);
             }
 
             specification &= ContratoRetificacaoItemMedicaoSpecification.SituacaoIgualLiberado();
