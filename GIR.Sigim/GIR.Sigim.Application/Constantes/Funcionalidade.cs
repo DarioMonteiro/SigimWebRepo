@@ -22,10 +22,42 @@ namespace GIR.Sigim.Application.Constantes
 
         #region Admin
 
+        public const string PerfilAcessar = "PERFIL_ACESSAR";
+        public const string PerfilAcessarDescricao = "Perfil - acessar";
+        public const string PerfilGravar = "PERFIL_GRAVAR";
+        public const string PerfilGravarDescricao = "Perfil - gravar";
+        public const string PerfilDeletar = "PERFIL_DELETAR";
+        public const string PerfilDeletarDescricao = "Perfil - deletar";
+        public const string PerfilImprimir = "PERFIL_IMPRIMIR";
+        public const string PerfilImprimirDescricao = "Perfil - imprimir";
+
+        public const string UsuarioFuncionalidadeAcessar = "USUARIOFUNCIONALIDADE_ACESSAR";
+        public const string UsuarioFuncionalidadeAcessarDescricao = "Usuário funcionalidades - acessar";
+        public const string UsuarioFuncionalidadeGravar = "USUARIOFUNCIONALIDADE_GRAVAR";
+        public const string UsuarioFuncionalidadeGravarDescricao = "Usuário funcionalidades - gravar";
+        public const string UsuarioFuncionalidadeDeletar = "USUARIOFUNCIONALIDADE_DELETAR";
+        public const string UsuarioFuncionalidadeDeletarDescricao = "Usuário funcionalidades - deletar";
+        public const string UsuarioFuncionalidadeImprimir = "USUARIOFUNCIONALIDADE_IMPRIMIR";
+        public const string UsuarioFuncionalidadeImprimirDescricao = "Usuário funcionalidades - imprimir";
+
         #endregion
 
         #region Contrato
 
+        public const string MedicaoAcessar = "MEDICAO_ACESSAR";
+        public const string MedicaoAcessarDescricao = "Medição - acessar";
+        public const string MedicaoGravar = "MEDICAO_GRAVAR";
+        public const string MedicaoGravarDescricao = "Medição - gravar";
+        public const string MedicaoDeletar = "MEDICAO_DELETAR";
+        public const string MedicaoDeletarDescricao = "Medição - deletar";
+        public const string MedicaoImprimir = "MEDICAO_IMPRIMIR";
+        public const string MedicaoImprimirDescricao = "Medição - imprimir";
+
+        public const string RelNotasFiscaisLiberadasAcessar = "REL_NF_LIBERADAS_ACESSAR";
+        public const string RelNotasFiscaisLiberadasAcessarDescricao = "Relatório de notas fiscais liberadas - acessar";
+        public const string RelNotasFiscaisLiberadasImprimir = "REL_NF_LIBERADAS_IMPRIMIR";
+        public const string RelNotasFiscaisLiberadasImprimirDescricao = "Relatório de notas fiscais liberadas - imprimir";
+        
         #endregion
 
         #region Financeiro
@@ -159,7 +191,7 @@ namespace GIR.Sigim.Application.Constantes
            
         #endregion
 
-        #region Sigim
+        #region Comuns
 
         public const string UnidadeMedidaAcessar = "UNIDADEMEDIDA_ACESSAR";
         public const string UnidadeMedidaAcessarDescricao = "Unidade de medida - acessar";
@@ -219,6 +251,24 @@ namespace GIR.Sigim.Application.Constantes
 
         #endregion
 
+        #region Sac
+
+        public const string ParametroSacAcessar = "PARAMETRO_SAC_ACESSAR";
+        public const string ParametroSacAcessarDescricao = "Parâmetros - acessar";
+        public const string ParametroSacGravar = "PARAMETRO_SAC_GRAVAR";
+        public const string ParametroSacGravarDescricao = "Parâmetros - gravar";
+
+        public const string SetorSacAcessar = "SETOR_SAC_ACESSAR";
+        public const string SetorSacAcessarDescricao = "Setor - acessar";
+        public const string SetorSacGravar = "SETOR_SAC_GRAVAR";
+        public const string SetorSacGravarDescricao = "Setor - gravar";
+        public const string SetorSacDeletar = "SETOR_SAC_DELETAR";
+        public const string SetorSacDeletarDescricao = "Setor - deletar";
+        public const string SetorSacImprimir = "SETOR_SAC_IMPRIMIR";
+        public const string SetorSacImprimirDescricao = "Setor - imprimir";
+
+        #endregion
+
         public Funcionalidade()
         {
             FuncionalidadeAdmin();
@@ -231,11 +281,31 @@ namespace GIR.Sigim.Application.Constantes
         private void FuncionalidadeAdmin()
         {
             MenuAdmin = new System.Collections.Hashtable();
+
+            MenuAdmin.Add(PerfilAcessar, PerfilAcessarDescricao);
+            MenuAdmin.Add(PerfilGravar, PerfilGravarDescricao);
+            MenuAdmin.Add(PerfilDeletar, PerfilDeletarDescricao);
+            MenuAdmin.Add(PerfilImprimir, PerfilImprimirDescricao);
+
+            MenuAdmin.Add(UsuarioFuncionalidadeAcessar, UsuarioFuncionalidadeAcessarDescricao);
+            MenuAdmin.Add(UsuarioFuncionalidadeGravar, UsuarioFuncionalidadeGravarDescricao);
+            MenuAdmin.Add(UsuarioFuncionalidadeDeletar, UsuarioFuncionalidadeDeletarDescricao);
+            MenuAdmin.Add(UsuarioFuncionalidadeImprimir, UsuarioFuncionalidadeImprimirDescricao);
+
         }
 
         private void FuncionalidadeContrato()
         {
             MenuContrato = new System.Collections.Hashtable();
+
+            MenuContrato.Add(MedicaoAcessar, MedicaoAcessarDescricao);
+            MenuContrato.Add(MedicaoGravar, MedicaoGravarDescricao);
+            MenuContrato.Add(MedicaoDeletar, MedicaoDeletarDescricao);
+            MenuContrato.Add(MedicaoImprimir, MedicaoImprimirDescricao);
+
+            MenuContrato.Add(RelNotasFiscaisLiberadasAcessar, RelNotasFiscaisLiberadasAcessarDescricao);
+            MenuContrato.Add(RelNotasFiscaisLiberadasImprimir, RelNotasFiscaisLiberadasImprimirDescricao);
+
         }
 
         private void FuncionalidadeFinanceiro()
@@ -352,6 +422,15 @@ namespace GIR.Sigim.Application.Constantes
         private void FuncionalidadeSac()
         {
             MenuSac = new System.Collections.Hashtable();
+
+            MenuSac.Add(ParametroSacAcessar, ParametroSacAcessarDescricao);
+            MenuSac.Add(ParametroSacGravar, ParametroSacGravarDescricao);
+
+            MenuSac.Add(SetorSacAcessar, SetorSacAcessarDescricao);
+            MenuSac.Add(SetorSacGravar, SetorSacGravarDescricao);
+            MenuSac.Add(SetorSacDeletar, SetorSacDeletarDescricao);
+            MenuSac.Add(SetorSacImprimir, SetorSacImprimirDescricao);
+            
         }
 
     }

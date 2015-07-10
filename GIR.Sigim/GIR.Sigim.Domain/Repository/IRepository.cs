@@ -18,6 +18,7 @@ namespace GIR.Sigim.Domain.Repository
         TEntity ObterPeloId(int? id, params Expression<Func<TEntity, object>>[] includes);
         TEntity ObterPeloId(int? id, ISpecification<TEntity> specification, params Expression<Func<TEntity, object>>[] includes);
         IEnumerable<TEntity> ListarTodos();
+        IEnumerable<TEntity> ListarTodos(params Expression<Func<TEntity, object>>[] includes);
         IEnumerable<TEntity> ListarPeloFiltro(Expression<Func<TEntity, bool>> filtro, params Expression<Func<TEntity, object>>[] includes);
         IEnumerable<TEntity> ListarPeloFiltro(ISpecification<TEntity> specification, params Expression<Func<TEntity, object>>[] includes);
         IEnumerable<TEntity> ListarPeloFiltroComPaginacao<KProperty>(

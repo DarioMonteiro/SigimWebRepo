@@ -26,15 +26,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
 
         public string JsonItens { get; set; }
 
-        public BaseFiltro Filtro { get; set; }
-        
         public int IndexSelecionado { get; set; }
         public SelectList ListaCliente { get; set; }
 
         public TaxaAdministracaoViewModel()
         {
             JsonItens = "[]";
-            Filtro = new BaseFiltro();
         }
 
     }
