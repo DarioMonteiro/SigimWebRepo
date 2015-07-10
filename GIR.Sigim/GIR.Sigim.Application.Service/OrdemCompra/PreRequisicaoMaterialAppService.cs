@@ -26,20 +26,20 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private IPreRequisicaoMaterialRepository preRequisicaoMaterialRepository;
         private IRequisicaoMaterialRepository requisicaoMaterialRepository;
         private IUsuarioAppService usuarioAppService;
-        private IParametrosOrdemCompraAppService parametrosOrdemCompraAppService;
+        private IParametrosOrdemCompraRepository parametrosOrdemCompraRepository;
 
         public PreRequisicaoMaterialAppService(
             IPreRequisicaoMaterialRepository preRequisicaoMaterialRepository,
             IRequisicaoMaterialRepository requisicaoMaterialRepository,
             IUsuarioAppService usuarioAppService,
-            IParametrosOrdemCompraAppService parametrosOrdemCompraAppService,
+            IParametrosOrdemCompraRepository parametrosOrdemCompraRepository,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.preRequisicaoMaterialRepository = preRequisicaoMaterialRepository;
             this.requisicaoMaterialRepository = requisicaoMaterialRepository;
             this.usuarioAppService = usuarioAppService;
-            this.parametrosOrdemCompraAppService = parametrosOrdemCompraAppService;
+            this.parametrosOrdemCompraRepository = parametrosOrdemCompraRepository;
         }
 
         #region IPreRequisicaoMaterialAppService Members
@@ -264,22 +264,21 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             relPreRequisicaoMaterial objRel = new relPreRequisicaoMaterial();
             objRel.Database.Tables["OrdemCompra_preRequisicaoMaterialRelatorio"].SetDataSource(PreRequisicaoToDataTable(preRequisicao));
             objRel.Database.Tables["OrdemCompra_preRequisicaoMaterialItemRelatorio"].SetDataSource(PreRequisicaoItemToDataTable(preRequisicao.ListaItens.ToList()));
-            var parametros = parametrosOrdemCompraAppService.Obter();
-            objRel.SetParameterValue("nomeEmpresa", parametros.Cliente.Nome);
 
-            var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
-            System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
-            imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
+            var parametros = parametrosOrdemCompraRepository.Obter();
 
+            var caminhoImagem = PrepararIconeRelatorio(null, parametros);
             objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+
+            var nomeEmpresa = ObterNomeEmpresa(null, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
 
             FileDownloadDTO arquivo = new FileDownloadDTO(
                 "PreRequisicaoMaterial_" + id.ToString(),
                 objRel.ExportToStream((ExportFormatType)formato),
                 formato);
 
-            if (System.IO.File.Exists(caminhoImagem))
-                System.IO.File.Delete(caminhoImagem);
+            RemoverIconeRelatorio(caminhoImagem);
 
             return arquivo;
         }

@@ -98,5 +98,12 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
             return listaViewModel;
         }
+
+        protected ListaViewModel CreateListaViewModel(object records)
+        {
+            var listaViewModel = new ListaViewModel();
+            listaViewModel.Records = records;
+            return listaViewModel;
+        }
     }
 }

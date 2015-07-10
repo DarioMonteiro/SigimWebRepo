@@ -12,7 +12,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public string CodigoCentroCusto { get; set; }
         public CentroCusto CentroCusto { get; set; }
         public int? ClienteId { get; set; }
-        public ClienteFornecedor Cliente { get; set; }
+        public virtual ClienteFornecedor Cliente { get; set; }
         public string EnderecoEntrega { get; set; }
         public string EnderecoCobranca { get; set; }
         public string ResponsavelObra { get; set; }

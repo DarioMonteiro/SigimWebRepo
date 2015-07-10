@@ -130,20 +130,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return bolOK;
         }
 
-        public List<TaxaAdministracaoDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros)
+        public List<TaxaAdministracaoDTO> ListarTodos()
         {
-            var specification = (Specification<TaxaAdministracao>)new TrueSpecification<TaxaAdministracao>();
-
-            //List<TaxaAdministracaoDTO> lista = new List<TaxaAdministracaoDTO>();
-
-            var lista = taxaAdministracaoRepository.ListarPeloFiltroComPaginacao(
-                                                                                specification,
-                                                                                filtro.PaginationParameters.PageIndex,
-                                                                                filtro.PaginationParameters.PageSize,
-                                                                                filtro.PaginationParameters.OrderBy,
-                                                                                filtro.PaginationParameters.Ascending,
-                                                                                out totalRegistros, 
-                                                                                l => l.CentroCusto, l => l.Cliente).To<List<TaxaAdministracaoDTO>>();
+            var lista = taxaAdministracaoRepository.ListarTodos(l => l.CentroCusto, l => l.Cliente).OrderBy(l => l.CentroCustoId).To<List<TaxaAdministracaoDTO>>();
 
             var vetTeste = new System.Collections.Hashtable();
             string texto;
@@ -161,8 +150,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     vetTeste.Add(texto, texto);
                 }
             }
-
-            totalRegistros = lista.Count;
 
             return lista;
 

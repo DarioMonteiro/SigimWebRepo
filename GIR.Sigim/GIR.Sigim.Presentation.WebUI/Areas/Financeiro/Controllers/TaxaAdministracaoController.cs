@@ -37,15 +37,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
       
         public ActionResult Index()
         {
-            var model = Session["TaxaAdministracao"] as TaxaAdministracaoViewModel;
-            if (model == null)
-            {
-                model = new TaxaAdministracaoViewModel();
-                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
-            }
-
-            CarregarCombos(model);
-
+            var model = new TaxaAdministracaoViewModel();
+            //CarregarCombos(model);
             return View(model);
         }
 
@@ -71,7 +64,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 
                 model.CentroCusto = centroCusto;
                 model.ClienteId = ClienteId.Value;
-                //model.JsonItens = JsonConvert.SerializeObject(lista);
             }
 
             CarregarCombos(model);
@@ -128,21 +120,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         {
             if (ModelState.IsValid)
             {
-                Session["Filtro"] = model;
-                int totalRegistros;
-                totalRegistros = 0;
-                if (string.IsNullOrEmpty(model.Filtro.PaginationParameters.OrderBy))
-                {
-                    model.Filtro.PaginationParameters.OrderBy = "centroCusto";
-                }
-
-                model.Filtro.PaginationParameters.PageSize = 200;
-                model.Filtro.PaginationParameters.PageIndex  = 0;
-
-                var result = taxaAdministracaoAppService.ListarPeloFiltro(model.Filtro, out totalRegistros); ;
+                var result = taxaAdministracaoAppService.ListarTodos();
                 if (result.Any())
                 {
-                    var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
+                    var listaViewModel = CreateListaViewModel(result);
                     return PartialView("ListaPartial", listaViewModel);
                 }
                 return PartialView("_EmptyListPartial");
@@ -152,7 +133,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
         private void CarregarCombos(TaxaAdministracaoViewModel model)
         {
-            model.ListaCliente = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.ClienteId );
+            model.ListaCliente = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.ClienteId);
         }
 
         private List<TaxaAdministracaoDTO> LimpaClasseListaFilhos(List<TaxaAdministracaoDTO> lista)

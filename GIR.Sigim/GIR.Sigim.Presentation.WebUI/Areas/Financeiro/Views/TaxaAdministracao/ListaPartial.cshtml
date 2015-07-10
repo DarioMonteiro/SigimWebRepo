@@ -8,7 +8,7 @@
 <div class="table-container">
     @if (Lista != null && Lista.Any())
     {
-        <div class="dt-toolbar table-header hidden-xs">
+        @*<div class="dt-toolbar table-header hidden-xs">
             <div class="col-sm-12 col-xs-12">
                 <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
                     <label>
@@ -24,7 +24,7 @@
                     </label>
                 </div>
             </div>
-        </div>
+        </div>*@
         <div class="table-responsive">
             <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
@@ -61,6 +61,6 @@
                 </tbody>
             </table>
         </div>
-        @Html.Partial("_PaginationPartial", Model.Pagination)
+        //@Html.Partial("_PaginationPartial", Model.Pagination)
     }
 </div>

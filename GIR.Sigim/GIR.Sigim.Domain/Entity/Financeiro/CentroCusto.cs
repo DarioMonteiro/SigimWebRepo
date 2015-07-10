@@ -25,7 +25,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             set { Situacao = value ? "A" : "I"; }
         }
         public string CodigoPai { get; set; }
-        public CentroCusto CentroCustoPai { get; set; }
+        public virtual CentroCusto CentroCustoPai { get; set; }
         public virtual ICollection<CentroCusto> ListaFilhos { get; set; }
         public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
         public ICollection<ParametrosUsuario> ListaParametrosUsuario { get; set; }
