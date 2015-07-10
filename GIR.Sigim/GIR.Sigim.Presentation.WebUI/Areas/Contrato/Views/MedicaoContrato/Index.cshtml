@@ -45,7 +45,7 @@
                                                 <section class="col col-2">
                                                     @Html.LabelFor(m => m.Filtro.Id, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10" })
+                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10", @class = "numeric" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.Id, "", new { @class = "note note-error" })
                                                 </section>
@@ -56,22 +56,10 @@
                                                 </section>
                                             </div>
                                             <div class="row">
-                                                <section class="col col-12">
-                                                    @Html.LabelFor(m => m.Filtro.ContratanteId, new { @class = "label" })
-                                                    <label class="select">
-                                                        @Html.DropDownListFor(m => m.Filtro.ContratanteId, Model.ListaContratante, string.Empty)
-                                                        <i></i>     
-                                                    </label>
-                                                </section>
+                                                @Html.EditorFor(m => m.Filtro.Contratante, "ClienteFornecedor", new { @sectionClass = "col col-12", @required = false, @label = "Contratante"})
                                             </div>
                                             <div class="row">
-                                                <section class="col col-12">
-                                                    @Html.LabelFor(m => m.Filtro.ContratadoId, new { @class = "label" })
-                                                    <label class="select">
-                                                        @Html.DropDownListFor(m => m.Filtro.ContratadoId, Model.ListaContratado, string.Empty)
-                                                        <i></i>   
-                                                    </label>
-                                                </section>
+                                                @Html.EditorFor(m => m.Filtro.Contratado, "ClienteFornecedor", new { @sectionClass = "col col-12", @required = false, @label = "Contratado"})
                                             </div>
                                         </fieldset> 
                                     </div>
@@ -85,29 +73,33 @@
         </div>
     </article>
 </div>
+
 @section scripts{
-    @{
-        bool condicao = ((Model.Filtro.CentroCusto !=null) && !string.IsNullOrEmpty(Model.Filtro.CentroCusto.Codigo));
-            condicao = condicao || (Model.Filtro.ContratadoId != null);
-            condicao = condicao || (Model.Filtro.ContratanteId != null);
-            condicao = condicao || (Model.Filtro.Id != null);
-    }
-    @if (!condicao)
-    {
-        @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScriptExtra")
-    }
-    else{
-        @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
-    }
+   @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScriptExtra")
 }
 
 <script type="text/javascript">
     $(document).ready(function () {
+        var codigoCentroCusto = null;
+        var contratadoId = null;
+        var contratanteId = null;
+
+        contratoId = $("#@Html.IdFor(m => m.Filtro.Id)").val();
+        codigoCentroCusto = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
+        contratadoId = $("#@Html.IdFor(m => m.Filtro.Contratado.Id)").val();
+        contratanteId = $("#@Html.IdFor(m => m.Filtro.Contratante.Id)").val();
+
+        var condicao = (codigoCentroCusto != "") || (contratadoId != "") || (contratanteId != "") || (contratoId != "");
+
+        if (condicao) {
+            doFilter();
+        }
+
         jQuery.validator.addMethod(
-            "centroCustoValido",
-            function (value, element) {
+            "ehCentroCustoValido",
+            function (value, element, params) {
                 var isValid = validaCentroCusto();
-                $.validator.messages.centroCustoValido = getErrorMessageContainer(element.name).html();
+                $.validator.messages.ehCentroCustoValido = $('#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)_ValidationMessage').html();
                 return isValid;
             }, ''
         );
@@ -115,7 +107,7 @@
         $('#formFilter').validate({
             rules: {
                 '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
-                    centroCustoValido: true
+                    ehCentroCustoValido: true
                 }
             },
             errorPlacement: function (error, element) {

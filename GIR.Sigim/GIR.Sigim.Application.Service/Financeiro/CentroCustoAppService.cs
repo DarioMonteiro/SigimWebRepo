@@ -93,7 +93,27 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return RemoverNosInativos(lista);
         }
 
+        public byte[] ObterIconeRelatorioPeloCentroCusto(string codigo)
+        {
+            var centroCusto = centroCustoRepository.ObterPeloCodigo(codigo, l => l.ListaCentroCustoEmpresa);
+            return ObterIconeRelatorio(centroCusto);
+        }
+
         #endregion
+
+        private byte[] ObterIconeRelatorio(CentroCusto centroCusto)
+        {
+            if (centroCusto == null)
+                return null;
+            else
+            {
+                var centroCustoEmpresa = centroCusto.ListaCentroCustoEmpresa.FirstOrDefault();
+                if ((centroCustoEmpresa != null) && (centroCustoEmpresa.IconeRelatorio != null))
+                    return centroCustoEmpresa.IconeRelatorio;
+                else
+                    return ObterIconeRelatorio(centroCusto.CentroCustoPai);
+            }
+        }
 
         private List<TreeNodeDTO> RemoverNosInativos(List<TreeNodeDTO> arvore)
         {

@@ -190,6 +190,7 @@
     <Compile Include="Areas\OrdemCompra\ViewModel\RelOcItensOrdemCompraListaViewModel.cs" />
     <Compile Include="Controllers\BancoController.cs" />
     <Compile Include="Controllers\AgenciaController.cs" />
+    <Compile Include="Controllers\ClienteFornecedorController.cs" />
     <Compile Include="Controllers\ContaCorrenteController.cs" />
     <Compile Include="Controllers\FormaRecebimentoController.cs" />
     <Compile Include="Controllers\UnidadeMedidaController.cs" />
@@ -799,7 +800,7 @@
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ListPageScriptExtra.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Contratado.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClienteFornecedor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

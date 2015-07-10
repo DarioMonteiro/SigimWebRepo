@@ -12,9 +12,11 @@ using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros.OrdemCompras;
 using GIR.Sigim.Application.Reports.OrdemCompra;
 using GIR.Sigim.Application.Service.Admin;
+using GIR.Sigim.Application.Service.Financeiro;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
 using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Specification;
@@ -27,21 +29,24 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
     {
         private IRequisicaoMaterialRepository requisicaoMaterialRepository;
         private IUsuarioAppService usuarioAppService;
-        private IParametrosOrdemCompraAppService parametrosOrdemCompraAppService;
+        private IParametrosOrdemCompraRepository parametrosOrdemCompraRepository;
         private ILogOperacaoAppService logOperacaoAppService;
+        private ICentroCustoRepository centroCustoRepository;
 
         public RequisicaoMaterialAppService(
             IRequisicaoMaterialRepository requisicaoMaterialRepository,
             IUsuarioAppService usuarioAppService,
-            IParametrosOrdemCompraAppService parametrosOrdemCompraAppService,
+            IParametrosOrdemCompraRepository parametrosOrdemCompraRepository,
             ILogOperacaoAppService logOperacaoAppService,
+            ICentroCustoRepository centroCustoRepository,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.requisicaoMaterialRepository = requisicaoMaterialRepository;
             this.usuarioAppService = usuarioAppService;
-            this.parametrosOrdemCompraAppService = parametrosOrdemCompraAppService;
+            this.parametrosOrdemCompraRepository = parametrosOrdemCompraRepository;
             this.logOperacaoAppService = logOperacaoAppService;
+            this.centroCustoRepository = centroCustoRepository;
         }
 
         #region IRequisicaoMaterialAppService Members
@@ -257,26 +262,26 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato)
         {
-            var preRequisicao = ObterPeloIdEUsuario(id, UsuarioLogado.Id, l => l.ListaItens.Select(o => o.Material.MaterialClasseInsumo));
+            var requisicao = ObterPeloIdEUsuario(id, UsuarioLogado.Id, l => l.ListaItens.Select(o => o.Material.MaterialClasseInsumo));
             relRequisicaoMaterial objRel = new relRequisicaoMaterial();
-            objRel.SetDataSource(RequisicaoToDataTable(preRequisicao));
-            objRel.Subreports["requisicaoMaterialItem"].SetDataSource(RequisicaoItemToDataTable(preRequisicao.ListaItens.ToList()));
-            var parametros = parametrosOrdemCompraAppService.Obter();
-            objRel.SetParameterValue("nomeEmpresa", parametros.Cliente.Nome);
+            objRel.SetDataSource(RequisicaoToDataTable(requisicao));
+            objRel.Subreports["requisicaoMaterialItem"].SetDataSource(RequisicaoItemToDataTable(requisicao.ListaItens.ToList()));
 
-            var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
-            System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
-            imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
+            var parametros = parametrosOrdemCompraRepository.Obter();
+            var centroCusto = centroCustoRepository.ObterPeloCodigo(requisicao.CodigoCentroCusto, l => l.ListaCentroCustoEmpresa);
 
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
             objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
 
             FileDownloadDTO arquivo = new FileDownloadDTO(
                 "RequisicaoMaterial_" + id.ToString(),
                 objRel.ExportToStream((ExportFormatType)formato),
                 formato);
 
-            if (System.IO.File.Exists(caminhoImagem))
-                System.IO.File.Delete(caminhoImagem);
+            RemoverIconeRelatorio(caminhoImagem);
 
             return arquivo;
         }

@@ -73,8 +73,8 @@ namespace GIR.Sigim.Application.Service.Contrato
             else
             {
                 specification &= ContratoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
-                specification &= ContratoSpecification.PertenceAoContratante(filtro.ContratanteId);
-                specification &= ContratoSpecification.PertenceAoContratado(filtro.ContratadoId);
+                specification &= ContratoSpecification.PertenceAoContratante(filtro.Contratante.Id);
+                specification &= ContratoSpecification.PertenceAoContratado(filtro.Contratado.Id);
             }
 
             return contratoRepository.ListarPeloFiltroComPaginacao(
@@ -169,11 +169,11 @@ namespace GIR.Sigim.Application.Service.Contrato
         {
             var contrato = contratoRepository.ObterPeloId(contratoId,
                                                           l => l.ListaContratoRetificacaoItemCronograma,
-                                                          l => l.ListaContratoRetificacaoItemMedicao);
+                                                          l => l.ListaContratoRetificacaoItemMedicao.Select(i => i.MultiFornecedor));
 
             var medicao =  contrato.ListaContratoRetificacaoItemMedicao
-                            .Where(l => l.Id.Value == contratoRetificacaoItemMedicaoId).SingleOrDefault()
-                            .To<ContratoRetificacaoItemMedicaoDTO>();
+                            .Where(l => l.Id.Value == contratoRetificacaoItemMedicaoId).SingleOrDefault().To<ContratoRetificacaoItemMedicaoDTO>();
+
             return medicao;
         }
 
@@ -617,7 +617,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             contratoRetificacaoItemMedicao.DataVencimento = dto.DataVencimento;
             contratoRetificacaoItemMedicao.Quantidade = dto.Quantidade;
             contratoRetificacaoItemMedicao.Valor = dto.Valor;
-            contratoRetificacaoItemMedicao.MultiFornecedorId = dto.MultiFornecedorId;
+            contratoRetificacaoItemMedicao.MultiFornecedorId = dto.MultiFornecedor.Id;
             contratoRetificacaoItemMedicao.Observacao = dto.Observacao;
             contratoRetificacaoItemMedicao.Desconto = dto.Desconto;
             contratoRetificacaoItemMedicao.MotivoDesconto = dto.MotivoDesconto;
@@ -739,40 +739,46 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             if (parametros.DadosSped.Value)
             {
+                bool estaCorreto = true;
                 if (string.IsNullOrEmpty(medicao.TipoCompraCodigo))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo compra"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((!medicao.CifFobId.HasValue) || (medicao.CifFobId.Value == 0))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "CIF/FOB"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((string.IsNullOrEmpty(medicao.NaturezaOperacaoCodigo)))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Natureza de operação"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((!medicao.SerieNFId.HasValue) || (medicao.SerieNFId.Value == 0))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Série"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((string.IsNullOrEmpty(medicao.CSTCodigo)))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "CST"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
                 }
 
                 if ((string.IsNullOrEmpty(medicao.CodigoContribuicaoCodigo)))
                 {
                     messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contribuição"), TypeMessage.Error);
-                    return false;
+                    estaCorreto = false;
+                }
+
+                if (!estaCorreto)
+                {
+                    return estaCorreto;
                 }
             }
 
@@ -1308,7 +1314,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 row[sequencialItem] = item.Imposto.ContratoRetificacaoItem.Sequencial;
                 row[descricaoItem] = item.Imposto.ContratoRetificacaoItem.Servico.Descricao;
                 //Esse campo está no rpt mais não vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
-                row[valorImposto] = item.ValorImposto;
+                row[valorImposto] = Math.Round(item.ValorImposto,2);
                 row[valorTotalMedidoIndireto] = item.Medicao.Contrato.ObterValorTotalMedidoIndireto(item.Medicao.ContratoId,
                                                                                                     item.Medicao.NumeroDocumento,
                                                                                                     item.Medicao.TipoDocumentoId,

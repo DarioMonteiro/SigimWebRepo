@@ -82,6 +82,7 @@
     <Compile Include="Entity\Financeiro\TipoTitulo.cs" />
     <Compile Include="Entity\Financeiro\TituloPagar.cs" />
     <Compile Include="Entity\Financeiro\TituloReceber.cs" />
+    <Compile Include="Entity\IParametros.cs" />
     <Compile Include="Entity\Orcamento\Orcamento.cs" />
     <Compile Include="Entity\Orcamento\Obra.cs" />
     <Compile Include="Entity\Orcamento\OrcamentoComposicao.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Entity\Sac\Setor.cs" />
     <Compile Include="Entity\Sac\ParametrosSac.cs" />
     <Compile Include="Entity\Sigim\AssuntoContato.cs" />
+    <Compile Include="Entity\Sigim\AvaliacaoFornecedor.cs" />
     <Compile Include="Entity\Sigim\Banco.cs" />
     <Compile Include="Entity\Sigim\BancoLayout.cs" />
     <Compile Include="Entity\Sigim\BloqueioContabil.cs" />
@@ -123,6 +125,8 @@
     <Compile Include="Entity\Sigim\Composicao.cs" />
     <Compile Include="Entity\Sigim\Agencia.cs" />
     <Compile Include="Entity\Sigim\ContaCorrente.cs" />
+    <Compile Include="Entity\Sigim\AvaliacaoModelo.cs" />
+    <Compile Include="Entity\Sigim\TipoValidade.cs" />
     <Compile Include="Entity\Sigim\LogAcesso.cs" />
     <Compile Include="Entity\Sigim\FormaRecebimento.cs" />
     <Compile Include="Entity\Sigim\TipoFormaRecebimento.cs" />
@@ -260,6 +264,7 @@
     <Compile Include="Specification\ParameterRebinder.cs" />
     <Compile Include="Specification\Sigim\AgendaSpecification.cs" />
     <Compile Include="Specification\Sigim\BancoSpecification.cs" />
+    <Compile Include="Specification\Sigim\ClienteFornecedorSpecification.cs" />
     <Compile Include="Specification\Sigim\ContaCorrenteSpecification.cs" />
     <Compile Include="Specification\Sigim\MaterialSpecification.cs" />
     <Compile Include="Specification\Specification.cs" />

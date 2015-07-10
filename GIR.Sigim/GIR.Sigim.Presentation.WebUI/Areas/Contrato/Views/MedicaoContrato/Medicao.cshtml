@@ -293,21 +293,7 @@
                                                 </script>
                                             </div>
                                             <div class="row">
-                                                <section class="col col-12">
-                                                    @Html.LabelFor(m => m.ListaMultiFornecedor, new { @class = "label" })
-                                                    <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId, Model.ListaMultiFornecedor, string.Empty)  
-                                                        <i></i>
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").on("change", function () {
-                                                                    validaNumeroDocumento();
-                                                                });
-                                                            });
-                                                        </script>
-
-                                                    </label>
-                                                </section>
+                                                @Html.EditorFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor, "ClienteFornecedor", new { @sectionClass = "col col-12", @required = false, @label = "Multifornecedor"})
                                             </div>
                                         </fieldset>
                                         <h5 style="padding-left :15px;">
@@ -364,7 +350,7 @@
                                                 <section class="col col-12">
                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, new { @maxlength = "50" })  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, new { @maxlength = "50"})
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, "", new { @class = "note note-error" })
                                                 </section>
@@ -620,7 +606,7 @@
             var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
             var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
             var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
-            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val();
             var retencaoContratual = $("#@Html.IdFor(m => m.RetencaoContratual)").val();
             var valorContratadoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)").val();
 
@@ -715,7 +701,7 @@
             var tipoDocumentoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val();
             var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
             var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
-            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val();
             var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
 
             if (contratoId == "") {
@@ -1113,10 +1099,35 @@
         $('#AbaMedicaoId').click();
     }
 
+    $(document).on("centroCustoValidado",
+        function (e) {
+            $("#orcamentoId").val(0);
+            if (e.codigo != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ObterUltimoOrcamentoPeloCentroCusto", "Orcamento", new { area = "Orcamento" })',
+                    cache: false,
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        codigoCentroCusto: e.codigo
+                    })
+                })
+                .success(function (result) {
+                    $("#orcamentoId").val(result);
+                });
+            }
+        });
+
+    $(document).on("multiFornecedorSelecionado",
+        function (e) {
+            validaNumeroDocumento();
+        });
+
     function validaNumeroDocumento() {
         var isValid = false;
         var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
-        var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+        var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val();
         var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
         var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
 
@@ -1143,15 +1154,13 @@
 
         if (existeNumeroDocumento) {
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val("");
-            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").focus();
             smartAlert("Atenção", "Documento existente no contrato.", "warning");
         }
 
         isValid = !existeNumeroDocumento;
 
         return isValid;
-
-    }
+    };
 
     function validaDataVencimento() {
         var dataVencimento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val();
@@ -1398,8 +1407,9 @@
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val(dataEmissao);
             var dataVencimento = new Date(parseInt(jsonMedicao.DataVencimento.substr(6))).toFormatDDMMYYYY();
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val(dataVencimento);
-            if (jsonMedicao.MultiFornecedorId != null) {
-                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val(jsonMedicao.MultiFornecedorId);
+            if ((jsonMedicao.MultiFornecedor !=null) && (jsonMedicao.MultiFornecedor.Id != null)) {
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val(jsonMedicao.MultiFornecedor.Id);
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Nome)").val(jsonMedicao.MultiFornecedor.Nome);
             }
             if (jsonMedicao.TipoCompraCodigo != null) {
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoCompraCodigo)").val(jsonMedicao.TipoCompraCodigo);

@@ -183,4 +183,7 @@
   <data name="ValorDeveSerNumerico" xml:space="preserve">
     <value>Preencha o campo {0} com um valor numérico.</value>
   </data>
+  <data name="ValorDeveSerNumericoEOuEspaco" xml:space="preserve">
+    <value>Preencha o campo {0} com um valor numérico e ou espaço.</value>
+  </data>
 </root>

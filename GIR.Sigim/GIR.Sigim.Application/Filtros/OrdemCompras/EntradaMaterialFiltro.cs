@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Financeiro;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Application.Filtros.OrdemCompras
 {
@@ -25,6 +26,11 @@ namespace GIR.Sigim.Application.Filtros.OrdemCompras
         public int? Id { get; set; }
 
         public CentroCustoDTO CentroCusto { get; set; }
+
+        [Display(Name = "Nota Fiscal")]
+        public string NumeroNotaFiscal { get; set; }
+
+        public ClienteFornecedorDTO ClienteFornecedor { get; set; }
 
         [Display(Name = "Pendente")]
         public bool EhPendente { get; set; }

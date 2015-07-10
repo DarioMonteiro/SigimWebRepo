@@ -86,7 +86,7 @@
                                                 <section class="col col-3">
                                                     @Html.LabelFor(m => m.Filtro.Id, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10" })
+                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10", @class = "numeric" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.Id, "", new { @class = "note note-error" })
                                                 </section>
@@ -97,7 +97,7 @@
                                                 </section>
                                             </div>
                                             <div class="row">
-                                                    @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo" })
+                                                @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo" })
                                                 <section class="col col-6">
                                                     <label class="label">Situação</label>
                                                     <div class="inline-group">
@@ -116,6 +116,15 @@
                                                     </div>
                                                 </section>
                                             </div>
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.Filtro.NumeroNotaFiscal, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Filtro.NumeroNotaFiscal)
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Filtro.NumeroNotaFiscal, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
                                         </fieldset>
                                     </div>
                                 </div>
@@ -131,3 +140,55 @@
 @section scripts{
     @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery.validator.addMethod(
+            "ehCentroCustoValido",
+            function (value, element, params) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.ehCentroCustoValido = $('#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
+
+        $('#formFilter').validate({
+            rules: {
+                '@Html.NameFor(m => m.Filtro.DataInicial)': {
+                    date: true
+                },
+                '@Html.NameFor(m => m.Filtro.DataFinal)': {
+                    date: true
+                },
+                '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
+                    ehCentroCustoValido: true
+                }
+            },
+            messages: {
+                '@Html.NameFor(m => m.Filtro.DataInicial)': {
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                },
+                '@Html.NameFor(m => m.Filtro.DataFinal)': {
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                },
+                '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo")'
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
+        });
+    });
+</script>

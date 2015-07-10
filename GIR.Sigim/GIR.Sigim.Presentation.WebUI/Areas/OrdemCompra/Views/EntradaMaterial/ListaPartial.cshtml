@@ -92,13 +92,13 @@
                         <th class="sorting @centroCustoSortingSuffix" data-order="centroCusto">Centro de Custo</th>
                         <th class="sorting @notaFiscalSortingSuffix" data-order="notaFiscal">Nota Fiscal</th>
                         <th class="sorting @observacaoSortingSuffix" data-order="observacao" style="min-width:85px;">Observação</th>
-                        <th data-order="fornecedor">Fornecedor</th>
+                        <th>Fornecedor</th>
                         <th class="sorting @motivoCancelamentoSortingSuffix text-center" data-order="motivoCancelamento" style="min-width:105px;">Motivo cancelamento</th>
                         <th class="sorting @responsavelCancelamentoSortingSuffix text-center" data-order="responsavelCancelamento" style="min-width:105px;">Responsável cancelamento</th>
                         <th class="sorting @responsavelLiberacaoSortingSuffix text-center" data-order="responsavelLiberacao" style="min-width:105px;">Responsável liberação</th>
                         <th class="sorting @responsavelConferenciaSortingSuffix text-center" data-order="responsavelConferencia" style="min-width:105px;">Responsável conferência</th>
                         <th class="sorting @dataConferenciaSortingSuffix text-center" data-order="dataConferencia" style="min-width:90px;">Data conferência</th>
-                        
+                        <th class="text-center">Avalicação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -122,6 +122,7 @@
                                     @item.DataConferencia.Value.ToString("dd/MM/yyyy");
                                 }
                             </td>
+                            <td class="text-center">@(item.PossuiAvaliacaoFornecedor ? "Sim" : "Não")</td>
                         </tr>
                     }
                 </tbody>

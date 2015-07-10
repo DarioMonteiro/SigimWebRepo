@@ -153,8 +153,10 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new RequisicaoMaterialItemConfiguration());
 
             //Sigim
-            modelBuilder.Configurations.Add(new AssuntoContatoConfiguration());
             modelBuilder.Configurations.Add(new AgenciaConfiguration());
+            modelBuilder.Configurations.Add(new AssuntoContatoConfiguration());
+            modelBuilder.Configurations.Add(new AvaliacaoFornecedorConfiguration());
+            modelBuilder.Configurations.Add(new AvaliacaoModeloConfiguration());
             modelBuilder.Configurations.Add(new BancoConfiguration());
             modelBuilder.Configurations.Add(new BancoLayoutConfiguration());
             modelBuilder.Configurations.Add(new ClienteFornecedorConfiguration());

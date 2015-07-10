@@ -8,7 +8,7 @@ using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Domain.Entity.OrdemCompra
 {
-    public class ParametrosOrdemCompra : BaseEntity
+    public class ParametrosOrdemCompra : BaseEntity, IParametros
     {
         public int? ClienteId { get; set; }
         public ClienteFornecedor Cliente { get; set; }
