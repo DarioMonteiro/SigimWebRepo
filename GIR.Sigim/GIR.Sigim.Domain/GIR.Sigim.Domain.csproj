@@ -81,6 +81,7 @@
     <Compile Include="Entity\Financeiro\TipoTitulo.cs" />
     <Compile Include="Entity\Financeiro\TituloPagar.cs" />
     <Compile Include="Entity\Financeiro\TituloReceber.cs" />
+    <Compile Include="Entity\IParametros.cs" />
     <Compile Include="Entity\Orcamento\Orcamento.cs" />
     <Compile Include="Entity\Orcamento\Obra.cs" />
     <Compile Include="Entity\Orcamento\OrcamentoComposicao.cs" />
