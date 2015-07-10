@@ -28,7 +28,7 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         private IContratoRepository  contratoRepository;
         private IUsuarioAppService usuarioAppService;
-        private IParametrosContratoAppService parametrosContratoAppService;
+        private IParametrosContratoRepository parametrosContratoRepository;
         private ILogOperacaoAppService logOperacaoAppService;
         private IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
         private ITituloPagarAppService tituloPagarAppService;
@@ -40,21 +40,21 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         public ContratoAppService(IContratoRepository contratoRepository, 
                                   IUsuarioAppService usuarioAppService, 
-                                  IParametrosContratoAppService parametrosContratoAppService,
                                   ILogOperacaoAppService logOperacaoAppService,
                                   IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
                                   ITituloPagarAppService tituloPagarAppService,
                                   IBloqueioContabilAppService bloqueioContabilAppService,
+                                  IParametrosContratoRepository parametrosContratoRepository,
                                   MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.contratoRepository = contratoRepository;
             this.usuarioAppService = usuarioAppService;
-            this.parametrosContratoAppService = parametrosContratoAppService;
             this.logOperacaoAppService = logOperacaoAppService;
             this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
             this.tituloPagarAppService = tituloPagarAppService;
             this.bloqueioContabilAppService = bloqueioContabilAppService;
+            this.parametrosContratoRepository = parametrosContratoRepository;
         }
 
         #endregion
@@ -343,7 +343,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                        numeroDocumento,
                                                                        dataEmissao,
                                                                        contratadoId,
-                                                                       l => l.CentroCusto,
+                                                                       l => l.CentroCusto.ListaCentroCustoEmpresa,
                                                                        l => l.ContratoDescricao,
                                                                        l => l.Contratado.PessoaFisica,
                                                                        l => l.Contratado.PessoaJuridica,
@@ -400,15 +400,18 @@ namespace GIR.Sigim.Application.Service.Contrato
             objRel.SetDataSource(MedicaoToDataTable(listaMedicao));
             objRel.Subreports["contratoImposto"].Database.Tables["Contrato_contratoImpostoMedidoRelatorio"].SetDataSource(dtaImpostoMedido);
 
-            var parametros = parametrosContratoAppService.Obter();
+            var parametros = parametrosContratoRepository.Obter();
+            var centroCusto = listaMedicao.ElementAt(0).Contrato.CentroCusto;
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
 
-            var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
-            System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
-            imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
+            //var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
+            //System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
+            //imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
 
-            objRel.SetParameterValue("nomeEmpresa", parametros.Cliente.Nome);
-            objRel.SetParameterValue("parCentroCusto", listaMedicao.ElementAt(0).Contrato.CentroCusto.Codigo);
-            objRel.SetParameterValue("parDescricaoCentroCusto", listaMedicao.ElementAt(0).Contrato.CentroCusto.Descricao);
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
+            objRel.SetParameterValue("parCentroCusto", centroCusto.Codigo);
+            objRel.SetParameterValue("parDescricaoCentroCusto", centroCusto.Descricao);
             string contratado = listaMedicao.ElementAt(0).Contrato.Contratado.Nome;
             if (listaMedicao.ElementAt(0).Contrato.Contratado.TipoPessoa == "F")
             {
@@ -668,7 +671,7 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         private bool EhValidoSalvarMedicao(ContratoRetificacaoItemMedicao medicao)
         {
-            ParametrosContrato parametros = parametrosContratoAppService.Obter().To<ParametrosContrato>();
+            ParametrosContrato parametros = parametrosContratoRepository.Obter();
 
             //int contratadoId = medicao.Contrato.ContratadoId;
             //if (medicao.MultiFornecedorId.HasValue)

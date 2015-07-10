@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Repository.Contrato;
+using GIR.Sigim.Domain.Repository.Financeiro;
 using System.Threading.Tasks;
 using CrystalDecisions.Shared;
 using GIR.Sigim.Application.Adapter;
@@ -25,22 +26,25 @@ namespace GIR.Sigim.Application.Service.Contrato
         #region Declaração
 
         private IUsuarioAppService usuarioAppService;
-        private IParametrosContratoAppService parametrosContratoAppService;
+        private IParametrosContratoRepository parametrosContratoRepository;
         private IContratoRetificacaoItemMedicaoRepository contratoRetificacaoItemMedicaoRepository;
+        private ICentroCustoRepository centroCustoRepository;
 
         #endregion
 
         #region Construtor
 
         public ContratoRetificacaoItemMedicaoAppService(IUsuarioAppService usuarioAppService,
-                                                        IParametrosContratoAppService parametrosContratoAppService,
+                                                        IParametrosContratoRepository parametrosContratoRepository,
                                                         IContratoRetificacaoItemMedicaoRepository contratoRetificacaoItemMedicaoRepository,
+                                                        ICentroCustoRepository centroCustoRepository,
                                                         MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.usuarioAppService = usuarioAppService;
-            this.parametrosContratoAppService = parametrosContratoAppService;
+            this.parametrosContratoRepository = parametrosContratoRepository;
             this.contratoRetificacaoItemMedicaoRepository = contratoRetificacaoItemMedicaoRepository;
+            this.centroCustoRepository = centroCustoRepository;
         }
 
         #endregion
@@ -321,14 +325,18 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             string periodo = filtro.DataInicial.Value.ToString("dd/MM/yyyy") + "  a  " + filtro.DataFinal.Value.ToString("dd/MM/yyyy");
 
-            var parametros = parametrosContratoAppService.Obter();
+            var parametros = parametrosContratoRepository.Obter();
+            var centroCusto = centroCustoRepository.ObterPeloCodigo(filtro.CentroCusto.Codigo, l => l.ListaCentroCustoEmpresa);
 
-            var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
-            System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
-            imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
 
-            objRel.SetParameterValue("nomeEmpresa", parametros.Cliente.Nome);
-            objRel.SetParameterValue("descricaoCentroCusto", listaMedicao.ElementAt(0).Contrato.CentroCusto.Descricao);
+            //var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
+            //System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
+            //imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
+
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
+            objRel.SetParameterValue("descricaoCentroCusto", centroCusto.Descricao);
             objRel.SetParameterValue("periodo", periodo);
             objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 
