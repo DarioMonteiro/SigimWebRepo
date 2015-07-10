@@ -404,10 +404,6 @@ namespace GIR.Sigim.Application.Service.Contrato
             var centroCusto = listaMedicao.ElementAt(0).Contrato.CentroCusto;
             var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
 
-            //var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
-            //System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
-            //imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
-
             var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
             objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
             objRel.SetParameterValue("parCentroCusto", centroCusto.Codigo);

@@ -319,8 +319,6 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             relNotaFiscalLiberada objRel = new relNotaFiscalLiberada();
 
-
-
             objRel.SetDataSource(RelNotaFiscalLiberadaToDataTable(listaMedicao));
 
             string periodo = filtro.DataInicial.Value.ToString("dd/MM/yyyy") + "  a  " + filtro.DataFinal.Value.ToString("dd/MM/yyyy");
@@ -329,10 +327,6 @@ namespace GIR.Sigim.Application.Service.Contrato
             var centroCusto = centroCustoRepository.ObterPeloCodigo(filtro.CentroCusto.Codigo, l => l.ListaCentroCustoEmpresa);
 
             var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
-
-            //var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
-            //System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
-            //imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
 
             var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
             objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
