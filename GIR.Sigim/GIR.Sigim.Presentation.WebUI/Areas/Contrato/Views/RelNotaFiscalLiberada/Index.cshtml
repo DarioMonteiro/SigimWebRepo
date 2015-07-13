@@ -103,7 +103,7 @@
                                                 <section class="col col-2">
                                                     @Html.LabelFor(m => m.Filtro.ContratoId, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.ContratoId, new { @maxlength = "10" })
+                                                        @Html.TextBoxFor(m => m.Filtro.ContratoId, new { @maxlength = "10",@class = "numeric" })
                                                         <script type="text/javascript">
                                                             $(document).ready(function () {
                                                                 $("#@Html.IdFor(m => m.Filtro.ContratoId)").on("change", function () {

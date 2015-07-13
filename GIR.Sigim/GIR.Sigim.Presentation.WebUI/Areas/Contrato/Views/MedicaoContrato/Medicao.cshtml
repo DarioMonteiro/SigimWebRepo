@@ -612,7 +612,6 @@
             if ((multiFornecedorId != "") && (multiFornecedorId > 0)) {
                 contratadoId = multiFornecedorId;
             }
-            var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
 
             if (contratoId == "") {
                 smartAlert("Atenção", "Informe o contrato", "warning");
@@ -643,7 +642,7 @@
                 e.event.preventDefault();
             }
 
-            parametrosUrlImpressao += '&contratadoId=' + contratadoId;
+            parametrosUrlImpressao = '&contratadoId=' + contratadoId;
             parametrosUrlImpressao += '&contratoId=' + contratoId;
             parametrosUrlImpressao += '&tipoDocumentoId=' + tipoDocumentoId;
             parametrosUrlImpressao += '&numeroDocumento=' + numeroDocumento;
@@ -651,7 +650,7 @@
             parametrosUrlImpressao += '&multiFornecedorId=' + multiFornecedorId;
             parametrosUrlImpressao += '&retencaoContratual=' + retencaoContratual;
             parametrosUrlImpressao += '&valorContratadoItem=' + valorContratadoItem;
-
+            alert(parametrosUrlImpressao);
         });
 
         $(document).on("show.bs.modal", "#PesquisarMedicao_ModalPanel", function (e) {

@@ -32,12 +32,10 @@ namespace GIR.Sigim.Application.Filtros.OrdemCompras
 
         [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Fornecedor")]
-        public int? ClienteFornecedorId { get; set; }
         public ClienteFornecedorDTO ClienteFornecedor { get; set; }
 
         [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Material")]
-        public int? MaterialId { get; set; }
         public MaterialDTO Material { get; set; }
 
         [Display(Name = "Liberadas")]

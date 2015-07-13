@@ -96,7 +96,7 @@
                                                 <section class="col col-2">
                                                     @Html.LabelFor(m => m.Filtro.OrdemCompraId, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.OrdemCompraId, new { @maxlength = "10" })
+                                                        @Html.TextBoxFor(m => m.Filtro.OrdemCompraId, new { @maxlength = "10",@class = "numeric" })
                                                         <script type="text/javascript">
                                                             $(document).ready(function () {
                                                                 $("#@Html.IdFor(m => m.Filtro.OrdemCompraId)").on("change", function () {
@@ -159,7 +159,10 @@
                                                 </script>
                                             </div>
                                             <div class="row">
+                                                @Html.EditorFor(m => m.Filtro.ClienteFornecedor, "ClienteFornecedor", new { @sectionClass = "col col-10", @required = false, @label = "Fornecedor"})
+@*
                                                 <section class="col col-10">
+
                                                     @Html.LabelFor(m => m.Filtro.ClienteFornecedorId, new { @class = "label" })
                                                     <label class="select">
                                                         @Html.DropDownListFor(m => m.Filtro.ClienteFornecedorId, Model.ListaFornecedorCliente, string.Empty)
@@ -172,7 +175,7 @@
                                                             });
                                                         </script>
                                                     </label>
-                                                </section>
+                                                </section>*@
                                             </div>
                                             <div class="row">
                                                 @Html.EditorFor(m => m.Filtro.Material, "Material", new { @sectionClass = "col col-10", @required = false, @centroCustoRequerido = false, @insumoControlado = false })
@@ -201,29 +204,40 @@
     </article>
 </div>
 @section scripts{
-    @{
-        bool condicao = ((Model.Filtro.CentroCusto !=null) && !string.IsNullOrEmpty(Model.Filtro.CentroCusto.Codigo));
-            condicao = condicao || ((Model.Filtro.Classe !=null) && !string.IsNullOrEmpty(Model.Filtro.Classe.Codigo));
-            condicao = condicao || (Model.Filtro.DataInicial != null);
-            condicao = condicao || (Model.Filtro.DataFinal != null);
-            condicao = condicao || (Model.Filtro.EhExibirSomentecomSaldo == true);
-            condicao = condicao || (Model.Filtro.EhFechada == true);
-            condicao = condicao || (Model.Filtro.EhLiberada == true);
-            condicao = condicao || (Model.Filtro.EhPendente == true);
-            condicao = condicao || (Model.Filtro.MaterialId != null);
-            condicao = condicao || (Model.Filtro.OrdemCompraId != null);
-    }
-    @if (!condicao)
-    {
-        @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScriptExtra")
-    }
-    else{
-        @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
-    }
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
 }
 
 <script type="text/javascript">
     $(document).ready(function () {
+        var codigoCentroCusto = null;
+        var ordemCompraId = null;
+        var codigoClasse = null;
+        var materialId = null;
+        var clienteFornecedorId = null;
+        var situacaoLiberadas = false;
+        var situacaoPendentes = false;
+        var situacaoFechadas = false;
+        var exibirSomenteComSaldo = false;
+        var condicao = false;
+
+        ordemCompraId = $("#@Html.IdFor(m => m.Filtro.OrdemCompraId)").val();
+        codigoCentroCusto = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
+        codigoClasse = $("#@Html.IdFor(m => m.Filtro.Classe.Codigo)").val();
+        clienteFornecedorId = $("#@Html.IdFor(m => m.Filtro.ClienteFornecedor.Id)").val();
+        materialId = $("#@Html.IdFor(m => m.Filtro.Material.Id)").val();
+        exibirSomenteComSaldo = $("#@Html.IdFor(m => m.Filtro.EhExibirSomentecomSaldo)").val();
+        situacaoLiberadas = $("#@Html.IdFor(m => m.Filtro.EhLiberada)").val();
+        situacaoPendentes = $("#@Html.IdFor(m => m.Filtro.EhPendente)").val();
+        situacaoFechadas = $("#@Html.IdFor(m => m.Filtro.EhFechada)").val();
+
+        condicao = situacaoLiberadas || situacaoPendentes || situacaoFechadas || exibirSomenteComSaldo;
+        condicao = condicao || (ordemCompraId !== "") || (codigoCentroCusto != "") || (codigoClasse != "")
+        condicao = condicao || (clienteFornecedorId != "") || (materialId != "");
+
+        if (condicao) {
+            doFilter();
+        }
+
 
         $(document).on("showFormatoImpressaoModalPanel", function (e) {
 
