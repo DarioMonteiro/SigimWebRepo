@@ -1,0 +1,243 @@
+﻿@model GIR.Sigim.Application.DTO.Sigim.MaterialDTO
+@{
+    string uniqueIdentifier = Html.IdFor(m => m.Id).ToHtmlString();
+}
+<section class="@ViewBag.sectionClass" style="margin: 0;">
+    <label class="label">@ViewBag.label</label>
+    <label class="input">
+        @{
+            string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+        }
+        @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do material", @class = cssClass })
+        @Html.HiddenFor(m => m.Id)
+    </label>
+    @if(ViewBag.exibirBotaoPesquisa){
+        <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+    }
+    @Html.ValidationMessageFor(m => m.Id, "", new { @id = uniqueIdentifier + "_ValidationMessage", @class = "note note-error" })
+</section>
+
+<div class="modal fade" id="@(uniqueIdentifier)_Pesquisa_ModalPanel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Material
+                </h4>
+            </div>
+            <div id="@(uniqueIdentifier)_Pesquisa_ModalBody" class="modal-body no-padding" style="min-height:290px;">
+                <div class="panel-group smart-accordion-default" id="@(uniqueIdentifier)_accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#@(uniqueIdentifier)_accordion" href="#@(uniqueIdentifier)_collapseFiltro" class="">
+                                    <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                    <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                    Filtro
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="@(uniqueIdentifier)_collapseFiltro" class="panel-collapse collapse in">
+                            <div class="panel-body no-padding">
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="label" for="@(uniqueIdentifier)_cboCampo">Campo</label>
+                                            <label class="select">
+                                                <select id="@(uniqueIdentifier)_cboCampo" name="@(uniqueIdentifier)_cboCampo">
+                                                    <option value="descricao">Descrição</option>
+                                                    <option value="unidadeMedida">Unidade medida</option>
+                                                    <option value="codigo">Código</option>
+                                                    <option value="classeInsumo">Classe insumo</option>
+                                                    <option value="codigoExterno">Código externo</option>
+                                                </select>
+                                                <i></i>
+                                            </label>
+                                        </section>
+                                        <section class="col col-8">
+											<label class="label">Seleção</label>
+											<div class="inline-group">
+												<label class="radio">
+													<input type="radio" id="@(uniqueIdentifier)_radTipoSelecaoContem" name="tipoSelecao" value="@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)">
+													<i></i>
+                                                    Contém
+												</label>
+												<label class="radio">
+													<input type="radio" id="@(uniqueIdentifier)_radTipoSelecaoIntervalo" name="tipoSelecao" value="@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Intervalo)">
+													<i></i>
+                                                    Intervalo
+												</label>
+											</div>
+										</section>
+                                    </div>
+                                    <div class="row">
+                                        <section id="@(uniqueIdentifier)_sectionDe" class="col col-3">
+                                            <label class="label" for="@(uniqueIdentifier)_txtDe">De</label>
+                                            <label class="input">
+                                                <input id="@(uniqueIdentifier)_txtDe" name="txtDe" type="text" value="">
+                                            </label>
+                                        </section>
+
+                                        <section id="@(uniqueIdentifier)_sectionAte" class="col col-3">
+                                            <label class="label" for="@(uniqueIdentifier)_txtAte">Até</label>
+                                            <label class="input">
+                                                <input id="@(uniqueIdentifier)_txtAte" name="txtAte" type="text" value="">
+                                            </label>
+                                        </section>
+
+                                        <section class="col col-3">
+                                            <a id="@(uniqueIdentifier)_btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar">
+                                                <i class="fa fa-search fa-lg"></i>
+                                            </a>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="@(uniqueIdentifier)_resultadoBusca"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var codigoCentroCusto_@(uniqueIdentifier);
+    var codigoClasse_@(uniqueIdentifier);
+
+    $(document).ready(function () {
+        $("#@Html.IdFor(m => m.Descricao)").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ListarAtivosPeloCentroCustoEDescricao", "Material", new { area = "" })',
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        codigoCentroCusto: codigoCentroCusto_@(uniqueIdentifier),
+                        descricao: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                id: item.Id,
+                                label: item.Descricao,
+                                value: item.Descricao
+                            }
+                        }));
+                    }
+                });
+            },
+            autoFocus: true,
+            autoSelect: true,
+            minLength: 2,
+            select: function (event, ui) {
+                TratarSelecaoMaterial(ui.item.id, ui.item.label);
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            return $("<li>")
+                .append("<a>" + highlight(item.label, this.term) + "</a>")
+                .appendTo(ul);
+        };
+
+        @{
+            bool? centroCustoRequerido = ViewBag.centroCustoRequerido as bool? ?? false;
+            string linkModal = "#" + uniqueIdentifier + "_Pesquisa_ModalPanel";
+            string linkNotificarObrigatoriedadeCentroCusto = "javascript:notificarObrigatoriedadeCentroCusto();";
+            string href = linkModal;
+            if (centroCustoRequerido.Value) {
+                href = linkNotificarObrigatoriedadeCentroCusto;
+            }
+        }
+
+        $(document).on("centroCustoValidado",            function (e) {
+                codigoCentroCusto_@(uniqueIdentifier) = e.codigo;
+
+                @if (centroCustoRequerido.Value) {
+                    @:if (e.isValid) {
+                    @:  if (e.codigo != '')
+                    @:      unblockMaterialForm_@(uniqueIdentifier)();
+                    @:  else {
+                    @:      blockMaterialForm_@(uniqueIdentifier)();
+                    @:      limpaMaterialForm_@(uniqueIdentifier)();
+                    @:  }
+                    @:}
+                    @:else {
+                    @:  blockMaterialForm_@(uniqueIdentifier)();
+                    @:  limpaMaterialForm_@(uniqueIdentifier)();
+                    @:}
+                }
+            }        );        $(document).on("classeValidada",            function (e) {
+                codigoClasse_@(uniqueIdentifier) = e.isValid ? e.codigo : '';
+            }        );        @if (centroCustoRequerido.Value) {            @:validaCentroCusto();        }
+
+        $('input[type=radio][name=tipoSelecao]').change(function () {
+            if ($(this).val() == '@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)') {
+                $('#@(uniqueIdentifier)_sectionDe label[for="@(uniqueIdentifier)_txtDe"]:first').text('Contém');
+                $('#@(uniqueIdentifier)_sectionAte').hide();
+            }
+            else {
+                $('#@(uniqueIdentifier)_sectionDe label[for="@(uniqueIdentifier)_txtDe"]:first').text('De');
+                $('#@(uniqueIdentifier)_sectionAte').show();
+            }
+        });
+
+        $(document).on("show.bs.modal", "#@(uniqueIdentifier)_Pesquisa_ModalPanel", function () {
+            $('#@(uniqueIdentifier)_txtDe').val('');
+            $('#@(uniqueIdentifier)_txtAte').val('');
+            $('#@(uniqueIdentifier)_cboCampo').val($('#@(uniqueIdentifier)_cboCampo option:first').val());
+            $('#@(uniqueIdentifier)_resultadoBusca').html('');
+
+            $('#@(uniqueIdentifier)_radTipoSelecaoContem')
+                .attr('checked', true)
+                .trigger('change')
+                .trigger('click');
+        });
+
+        $('#@(uniqueIdentifier)_btnSearch').on("click", function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PesquisarMaterial", "Material", new { area = "" })',
+                cache: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    Campo: $('#@(uniqueIdentifier)_cboCampo').val(),
+                    TipoSelecao: $('input[type=radio][name=tipoSelecao]:checked').val(),
+                    TextoInicio: $('#@(uniqueIdentifier)_txtDe').val(),
+                    TextoFim: $('#@(uniqueIdentifier)_txtAte').val(),
+                    CodigoCentroCusto: codigoCentroCusto_@(uniqueIdentifier)
+                })
+            })
+            .success(function (result) {
+                $('#@(uniqueIdentifier)_resultadoBusca').html(result);
+            });
+        });
+
+    });
+
+    function TratarSelecaoMaterial(id, descricao) {
+        $('#@(uniqueIdentifier)').val(id);
+        $('#@Html.IdFor(m => m.Descricao)').val(descricao);
+        $('#@(uniqueIdentifier)_Pesquisa_ModalPanel').modal('hide');
+    }
+
+    function limpaMaterialForm_@(uniqueIdentifier)() {
+        $("#@(Html.IdFor(m => m.Id))").val('');
+        $("#@Html.IdFor(m => m.Descricao)").val('');
+    }
+
+    function blockMaterialForm_@(uniqueIdentifier)() {
+        $("#@Html.IdFor(m => m.Descricao)").attr("readonly", true);
+        $("#@Html.IdFor(m => m.Descricao)").addClass("readonly");
+        $("#BtnShowModalPanel_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+    }
+
+    function unblockMaterialForm_@(uniqueIdentifier)() {
+        $("#@Html.IdFor(m => m.Descricao)").attr("readonly", false);
+        $("#@Html.IdFor(m => m.Descricao)").removeClass("readonly");
+        $("#BtnShowModalPanel_@(uniqueIdentifier)").attr('href', '@linkModal');
+    }
+
+</script>

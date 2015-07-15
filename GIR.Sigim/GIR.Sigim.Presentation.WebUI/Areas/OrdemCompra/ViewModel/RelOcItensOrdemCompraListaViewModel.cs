@@ -17,6 +17,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public RelOcItensOrdemCompraListaViewModel()
         {
             Filtro = new RelOcItensOrdemCompraFiltro();
+            Filtro.EhFechada = true;
+            Filtro.EhLiberada = true;
+            Filtro.EhPendente = true;
         }
 
     }

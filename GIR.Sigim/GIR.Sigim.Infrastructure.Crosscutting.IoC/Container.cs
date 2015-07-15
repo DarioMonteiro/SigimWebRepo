@@ -123,6 +123,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ILogAcessoRepository, LogAcessoRepository>();
             currentContainer.RegisterType<ILogOperacaoRepository, LogOperacaoRepository>();
             currentContainer.RegisterType<IMaterialRepository, MaterialRepository>();
+            currentContainer.RegisterType<IMaterialClasseInsumoRepository, MaterialClasseInsumoRepository>();
             currentContainer.RegisterType<ITipoCompraRepository, TipoCompraRepository>();
             currentContainer.RegisterType<ICifFobRepository, CifFobRepository>();
             currentContainer.RegisterType<INaturezaOperacaoRepository, NaturezaOperacaoRepository>();
@@ -217,6 +218,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IContaCorrenteAppService, ContaCorrenteAppService>();
             currentContainer.RegisterType<ILogOperacaoAppService, LogOperacaoAppService>();
             currentContainer.RegisterType<IMaterialAppService, MaterialAppService>();
+            currentContainer.RegisterType<IMaterialClasseInsumoAppService, MaterialClasseInsumoAppService>();
             currentContainer.RegisterType<ITipoCompraAppService, TipoCompraAppService>();
             currentContainer.RegisterType<ICifFobAppService, CifFobAppService>();
             currentContainer.RegisterType<INaturezaOperacaoAppService, NaturezaOperacaoAppService>();

@@ -120,7 +120,12 @@
                                                         @Html.TextBoxFor(m => m.Filtro.DescricaoContrato, new { @readonly = "", @class = "readonly" })
                                                     </label>
                                                 </section>
-                                                @Html.EditorFor(m => m.Filtro.FornecedorCliente, "ClienteFornecedor", new { @sectionClass = "col col-6", @required = false, @label = "Fornecedor/Cliente"})
+                                                @Html.EditorFor(m => m.Filtro.FornecedorCliente, "ClienteFornecedor", new { @sectionClass = "col col-6", 
+                                                                                                                            @required = false, 
+                                                                                                                            @label = "Fornecedor/Cliente",
+                                                                                                                            @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
+                                                                                                                            @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo)
+                                                                                                                            })
                                             </div>
                                             <div class="row">
                                                 <section class="col col-2">

@@ -55,6 +55,9 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.DescricaoTipoTabela, m => m.MapFrom(s => s.TipoTabela.ObterDescricao()));
             Mapper.CreateMap<MaterialDTO, Material>();
 
+            Mapper.CreateMap<MaterialClasseInsumo, MaterialClasseInsumoDTO>();
+            Mapper.CreateMap<MaterialClasseInsumoDTO, MaterialClasseInsumo>();
+
             Mapper.CreateMap<NaturezaOperacao, NaturezaOperacaoDTO>();
             Mapper.CreateMap<NaturezaOperacaoDTO, NaturezaOperacao>();
 
@@ -77,6 +80,10 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.ListaFilhos, m => m.MapFrom(s => s.ListaFilhos));
 
             Mapper.CreateMap<Classe, TreeNodeDTO>()
+                .ForMember(d => d.ListaFilhos, m => m.MapFrom(s => s.ListaFilhos))
+                .ForMember(d => d.Ativo, m => m.MapFrom(s => true));
+
+            Mapper.CreateMap<MaterialClasseInsumo, TreeNodeDTO>()
                 .ForMember(d => d.ListaFilhos, m => m.MapFrom(s => s.ListaFilhos))
                 .ForMember(d => d.Ativo, m => m.MapFrom(s => true));
 

@@ -10,6 +10,8 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
     {
         public DateTime Data { get; set; }
         public SituacaoOrdemCompra Situacao { get; set; }
+        public int? PrazoEntrega { get; set;}
+
         public virtual ICollection<OrdemCompraItem> ListaItens { get; set; }
 
         public OrdemCompra()

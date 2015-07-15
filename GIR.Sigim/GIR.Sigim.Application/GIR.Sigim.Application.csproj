@@ -104,6 +104,7 @@
     <Compile Include="DTO\OrdemCompra\CotacaoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\CotacaoItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\RelOCItensOrdemCompraDTO.cs" />
     <Compile Include="DTO\OrdemCompra\RequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\InterfaceCotacaoDTO.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="DTO\Sigim\AgenciaDTO.cs" />
     <Compile Include="DTO\Sigim\ContaCorrenteDTO.cs" />
     <Compile Include="DTO\Sigim\FormaRecebimentoDTO.cs" />
+    <Compile Include="DTO\Sigim\MaterialClasseInsumoDTO.cs" />
     <Compile Include="DTO\Sigim\TipoAreaDTO.cs" />
     <Compile Include="DTO\Sigim\TipoCaracteristicaDTO.cs" />
     <Compile Include="DTO\Sigim\TipoEspecificacaoDTO.cs" />
@@ -151,8 +153,13 @@
     <Compile Include="DTO\Sigim\UnidadeMedidaDTO.cs" />
     <Compile Include="DTO\Sigim\MaterialDTO.cs" />
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
+    <Compile Include="Enums\ClienteFornecedorModuloAutoComplete.cs" />
+    <Compile Include="Enums\SimNaoAmbos.cs" />
+    <Compile Include="Enums\SituacaoAutoComplete.cs" />
+    <Compile Include="Enums\TipoClienteAutoComplete.cs" />
     <Compile Include="Enums\TipoPesquisa.cs" />
     <Compile Include="Enums\TabelaBasicaFinanceiro.cs" />
+    <Compile Include="Enums\TipoPessoaAutoComplete.cs" />
     <Compile Include="Filtros\Admin\PerfilFiltro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
     <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
@@ -295,6 +302,7 @@
     <Compile Include="Service\Sigim\IAgenciaAppService.cs" />
     <Compile Include="Service\Sigim\IBancoAppService.cs" />
     <Compile Include="Service\Sigim\IFormaRecebimentoAppService.cs" />
+    <Compile Include="Service\Sigim\IMaterialClasseInsumoAppService.cs" />
     <Compile Include="Service\Sigim\ITratamentoAppService.cs" />
     <Compile Include="Service\Sigim\ITipoAreaAppService.cs" />
     <Compile Include="Service\Sigim\ITipoEspecificacaoAppService.cs" />

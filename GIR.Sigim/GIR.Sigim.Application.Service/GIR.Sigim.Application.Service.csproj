@@ -99,6 +99,7 @@
     <Compile Include="Sigim\AgenciaAppService.cs" />
     <Compile Include="Sigim\ContaCorrenteAppService.cs" />
     <Compile Include="Sigim\FormaRecebimentoAppService.cs" />
+    <Compile Include="Sigim\MaterialClasseInsumoAppService.cs" />
     <Compile Include="Sigim\TratamentoAppService.cs" />
     <Compile Include="Sigim\TipoAreaAppService.cs" />
     <Compile Include="Sigim\TipoCaracteristicaAppService.cs" />

@@ -30,6 +30,8 @@ namespace GIR.Sigim.Application.Filtros.OrdemCompras
 
         public ClasseDTO Classe { get; set; }
 
+        public MaterialClasseInsumoDTO ClasseInsumo { get; set; }
+
         [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Fornecedor")]
         public ClienteFornecedorDTO ClienteFornecedor { get; set; }

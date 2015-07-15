@@ -188,6 +188,7 @@
     <Compile Include="Repository\Sigim\ContaCorrenteRepository.cs" />
     <Compile Include="Repository\Sigim\LogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\FormaRecebimentoRepository.cs" />
+    <Compile Include="Repository\Sigim\MaterialClasseInsumoRepository.cs" />
     <Compile Include="Repository\Sigim\TratamentoRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCaracteristicaRepository.cs" />
     <Compile Include="Repository\Sigim\TipoEspecificacaoRepository.cs" />

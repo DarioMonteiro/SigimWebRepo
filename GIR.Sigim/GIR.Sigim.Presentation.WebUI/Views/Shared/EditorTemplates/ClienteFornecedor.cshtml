@@ -15,16 +15,30 @@
 </section>
 
 <script type="text/javascript">
+    var clienteFornecedorModulo_@(uniqueIdentifier);
+    var situacao_@(uniqueIdentifier);
+    var tipoPessoa_@(uniqueIdentifier);
+    var tipoCliente_@(uniqueIdentifier);
+
+    @if(ViewBag.clienteFornecedorModulo != null){
+        @:clienteFornecedorModulo_@(uniqueIdentifier) = "@ViewBag.clienteFornecedorModulo";
+    }
+    @if(ViewBag.situacao != null){
+        @:situacao_@(uniqueIdentifier) = "@ViewBag.situacao";
+    }
+   
     $(document).ready(function () {
-        $("#@Html.IdFor(m => m.Nome)").autocomplete({
+        $("#@Html.IdFor(m => m.Nome)").autocomplete({        
             source: function (request, response) {
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("ListarClienteContratoAtivosPorNome", "ClienteFornecedor", new { area = "" })',
+                    url: '@Url.Action("ListarClienteFornecedorPorNome", "ClienteFornecedor", new { area = "" })',
                     cache: false,
                     dataType: "json",
                     data: {
-                        nome: request.term
+                        nome: request.term,
+                        clienteFornecedorModulo: clienteFornecedorModulo_@(uniqueIdentifier),
+                        situacao: situacao_@(uniqueIdentifier)
                     },
                     success: function (data) {
                         response($.map(data, function (item) {

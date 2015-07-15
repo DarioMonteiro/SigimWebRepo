@@ -39,6 +39,29 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Lista(RelOcItensOrdemCompraListaViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Session["Filtro"] = model;
+                int totalRegistros;
+
+                //if (string.IsNullOrEmpty(model.Filtro.PaginationParameters.OrderBy))
+                //    model.Filtro.PaginationParameters.OrderBy = "numeroDocumento";
+
+                //var result = contratoRetificacaoItemMedicaoAppService.ListarPeloFiltroRelNotaFiscalLiberada(model.Filtro, Usuario.Id, out totalRegistros);
+
+                //if (result.Any())
+                //{
+                //    var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
+                //    return PartialView("ListaPartial", listaViewModel);
+                //}
+                return PartialView("_EmptyListPartial");
+            }
+            return PartialView("_NotificationMessagesPartial");
+        }
 
     }
 }
