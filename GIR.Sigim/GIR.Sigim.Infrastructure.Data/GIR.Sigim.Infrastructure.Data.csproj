@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Admin\UsuarioFuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Admin\PerfilFuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoConfiguration.cs" />

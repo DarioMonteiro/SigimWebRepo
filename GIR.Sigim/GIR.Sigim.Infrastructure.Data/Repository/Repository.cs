@@ -93,6 +93,12 @@ namespace GIR.Sigim.Infrastructure.Data.Repository
             return unitOfWork.CreateSet<TEntity>();
         }
 
+        public IEnumerable<TEntity> ListarTodos(params Expression<Func<TEntity, object>>[] includes)
+        {
+            var set = CreateSetAsQueryable(includes);
+            return set;
+        }
+
         public IEnumerable<TEntity> ListarPeloFiltro(Expression<Func<TEntity, bool>> filtro, params Expression<Func<TEntity, object>>[] includes)
         {
             var set = CreateSetAsQueryable(includes);

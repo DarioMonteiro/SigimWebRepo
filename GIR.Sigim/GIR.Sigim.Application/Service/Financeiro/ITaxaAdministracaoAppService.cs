@@ -12,7 +12,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
     public interface ITaxaAdministracaoAppService
     {
         List<TaxaAdministracaoDTO> ListarPeloCentroCustoCliente(string  CentroCustoId, int ClienteId);
-        List<TaxaAdministracaoDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros);
+        List<TaxaAdministracaoDTO> ListarTodos();
         bool Salvar(string CentroCustoId, int ClienteId, List<TaxaAdministracaoDTO> listaDto);
         bool Deletar(string CentroCustoId, int ClienteId);
     }
