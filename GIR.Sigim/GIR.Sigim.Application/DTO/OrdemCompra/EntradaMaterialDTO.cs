@@ -51,7 +51,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public decimal? PercentualISS { get; set; }
         public decimal? ISS { get; set; }
         public decimal? FreteIncluso { get; set; }
-        public DateTime DataCadastro { get; set; }
+        public Nullable<DateTime> DataCadastro { get; set; }
         public string LoginUsuarioCadastro { get; set; }
         public Nullable<DateTime> DataLiberacao { get; set; }
         public string LoginUsuarioLiberacao { get; set; }
@@ -77,5 +77,14 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public Nullable<DateTime> DataConferencia { get; set; }
         public string LoginUsuarioConferencia { get; set; }
         public bool PossuiAvaliacaoFornecedor { get; set; }
+
+        public EntradaMaterialDTO()
+        {
+            this.Situacao = SituacaoEntradaMaterial.Pendente;
+            this.Data = DateTime.Now;
+            this.CentroCusto = new CentroCustoDTO();
+            this.ClienteFornecedor = new ClienteFornecedorDTO();
+            this.FornecedorNota = new ClienteFornecedorDTO();
+        }
     }
 }

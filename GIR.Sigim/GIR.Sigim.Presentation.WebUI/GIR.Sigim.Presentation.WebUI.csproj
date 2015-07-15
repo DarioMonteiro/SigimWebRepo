@@ -185,6 +185,7 @@
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\EntradaMaterialController.cs" />
+    <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialListaViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RelOCItensOrdemCompraController.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\RelOcItensOrdemCompraListaViewModel.cs" />
@@ -352,6 +353,7 @@
     <Content Include="Areas\Admin\Views\Perfil\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Perfil\ListaPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Perfil\Cadastro.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\EntradaMaterial\Cadastro.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />

@@ -20,8 +20,15 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
             Property(l => l.Cnpj)
                 .HasColumnName("cnpj");
 
+            Property(l => l.NomeFantasia)
+                .HasMaxLength(50)
+                .HasColumnName("nomeFantasia");
+
+            Property(l => l.InscricaoEstadual)
+                .HasMaxLength(20)
+                .HasColumnName("inscricaoEstadual");
+
             HasRequired(l => l.Cliente).WithRequiredDependent(l => l.PessoaJuridica);
- 
         }
     }
 }
