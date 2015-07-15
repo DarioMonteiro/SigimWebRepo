@@ -206,8 +206,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
 
             requisicaoMaterial.Situacao = SituacaoRequisicaoMaterial.Requisitada;
-            requisicaoMaterial.DataAprovacao = null;
-            requisicaoMaterial.LoginUsuarioAprovacao = null;
 
             requisicaoMaterialRepository.Alterar(requisicaoMaterial);
             requisicaoMaterialRepository.UnitOfWork.Commit();
