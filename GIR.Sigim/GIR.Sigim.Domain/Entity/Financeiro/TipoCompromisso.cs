@@ -21,6 +21,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<TituloPagar> ListaTituloPagar { get; set; }
         public ICollection<TituloReceber> ListaTituloReceber { get; set; }
         public ICollection<ImpostoFinanceiro> ListaImpostoFinanceiro { get; set; }
+        public ICollection<OrdemCompraFormaPagamento> ListaOrdemCompraFormaPagamento { get; set; }
+        public ICollection<EntradaMaterialFormaPagamento> ListaEntradaMaterialFormaPagamento { get; set; }
         
         public TipoCompromisso()
         {
@@ -30,6 +32,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaTituloPagar = new HashSet<TituloPagar>();
             this.ListaTituloReceber = new HashSet<TituloReceber>();
             this.ListaImpostoFinanceiro = new HashSet<ImpostoFinanceiro>();
+            this.ListaOrdemCompraFormaPagamento = new HashSet<OrdemCompraFormaPagamento>();
+            this.ListaEntradaMaterialFormaPagamento = new HashSet<EntradaMaterialFormaPagamento>();
         }
     }
 }

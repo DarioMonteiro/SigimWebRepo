@@ -84,6 +84,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("clienteEmpreitada")
                 .HasColumnOrder(24);
 
+            Property(l => l.EnderecoComercialId)
+                .HasColumnName("enderecoComercial");
+
             Ignore(l => l.Ativo);
 
             HasMany<ParametrosOrdemCompra>(l => l.ListaParametrosOrdemCompra)

@@ -10,5 +10,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
     {
         public ClienteFornecedor Cliente { get; set; }
         public string Cnpj { get; set; }
+        public string NomeFantasia { get; set; }
+        public string InscricaoEstadual { get; set; }
     }
 }

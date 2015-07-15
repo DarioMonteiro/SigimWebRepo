@@ -91,6 +91,10 @@
     <Compile Include="Entity\Orcamento\ParametrosOrcamento.cs" />
     <Compile Include="Entity\OrdemCompra\AbstractRequisicaoMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\AbstractRequisicaoMaterialItem.cs" />
+    <Compile Include="Entity\OrdemCompra\EntradaMaterialFormaPagamento.cs" />
+    <Compile Include="Entity\OrdemCompra\EntradaMaterialImposto.cs" />
+    <Compile Include="Entity\OrdemCompra\EntradaMaterialItem.cs" />
+    <Compile Include="Entity\OrdemCompra\OrdemCompraFormaPagamento.cs" />
     <Compile Include="Entity\OrdemCompra\SituacaoEntradaMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\EntradaMaterial.cs" />
     <Compile Include="Entity\OrdemCompra\SituacaoOrdemCompra.cs" />
@@ -122,6 +126,7 @@
     <Compile Include="Entity\Sigim\CifFob.cs" />
     <Compile Include="Entity\Sigim\ClienteFornecedor.cs" />
     <Compile Include="Entity\Sigim\CodigoContribuicao.cs" />
+    <Compile Include="Entity\Sigim\ComplementoCST.cs" />
     <Compile Include="Entity\Sigim\Composicao.cs" />
     <Compile Include="Entity\Sigim\Agencia.cs" />
     <Compile Include="Entity\Sigim\ContaCorrente.cs" />

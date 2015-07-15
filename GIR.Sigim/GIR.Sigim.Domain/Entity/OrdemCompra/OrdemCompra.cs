@@ -13,10 +13,12 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public int? PrazoEntrega { get; set;}
 
         public virtual ICollection<OrdemCompraItem> ListaItens { get; set; }
+        public ICollection<OrdemCompraFormaPagamento> ListaOrdemCompraFormaPagamento { get; set; }
 
         public OrdemCompra()
         {
             this.ListaItens = new HashSet<OrdemCompraItem>();
+            this.ListaOrdemCompraFormaPagamento = new HashSet<OrdemCompraFormaPagamento>();
         }
     }
 }
