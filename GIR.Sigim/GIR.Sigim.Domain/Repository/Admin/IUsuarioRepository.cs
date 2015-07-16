@@ -10,5 +10,7 @@ namespace GIR.Sigim.Domain.Repository.Admin
     public interface IUsuarioRepository : IRepository<Usuario>
     {
         Usuario ObterPeloLogin(string login);
+        void RemoverFuncionalidade(UsuarioFuncionalidade item);
+        void RemoverPerfil(UsuarioPerfil item);
     }
 }

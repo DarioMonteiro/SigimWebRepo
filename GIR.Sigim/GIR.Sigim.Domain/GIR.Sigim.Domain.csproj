@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Admin\UsuarioPerfil.cs" />
     <Compile Include="Entity\Admin\UsuarioFuncionalidade.cs" />
     <Compile Include="Entity\Admin\PerfilFuncionalidade.cs" />
     <Compile Include="Entity\Admin\Modulo.cs" />
@@ -245,6 +246,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Specification\Admin\UsuarioFuncionalidadeSpecification.cs" />
     <Compile Include="Specification\Admin\PerfilSpecification.cs" />
     <Compile Include="Specification\AndSpecification.cs" />
     <Compile Include="Specification\BaseSpecification.cs" />
@@ -271,6 +273,7 @@
     <Compile Include="Specification\TrueSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resource\Admin\" />
     <Folder Include="Service\Sigim\" />
     <Folder Include="Specification\Financeiro\" />
   </ItemGroup>

@@ -56,6 +56,13 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
 
             HasRequired(l => l.ParametrosUsuarioFinanceiro).WithRequiredPrincipal(l => l.Usuario);
 
+            HasMany<UsuarioFuncionalidade>(l => l.ListaUsuarioFuncionalidade)
+               .WithRequired(c => c.Usuario)
+               .HasForeignKey(c => c.UsuarioId);
+
+            HasMany<UsuarioPerfil>(l => l.ListaUsuarioPerfil)
+               .WithRequired(c => c.Usuario)
+               .HasForeignKey(c => c.UsuarioId);
 
             //TODO: Implementar controle de acesso
             //Ignore(l => l.ListaFuncionalidade);

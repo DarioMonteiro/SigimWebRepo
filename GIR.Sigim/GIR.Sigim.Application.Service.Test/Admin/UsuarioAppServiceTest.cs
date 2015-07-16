@@ -25,6 +25,8 @@ namespace GIR.Sigim.Application.Service.Test.Admin
         private ILogAcessoRepository logAcessoRepository;
         private UnitOfWork unitOfWork;
         private IUsuarioAppService usuarioService;
+        private IModuloRepository moduloRepository;
+        private IPerfilRepository perfilRepository;
 
         [TestInitialize]
         public void Initialize()
@@ -40,8 +42,10 @@ namespace GIR.Sigim.Application.Service.Test.Admin
             unitOfWork = new UnitOfWork();
             usuarioRepository = new UsuarioRepository(unitOfWork);
             logAcessoRepository = new LogAcessoRepository(unitOfWork);
+            moduloRepository = new ModuloRepository(unitOfWork);
+            perfilRepository = new PerfilRepository(unitOfWork);
 
-            usuarioService = new UsuarioAppService(usuarioRepository, logAcessoRepository, messageQueue);
+            usuarioService = new UsuarioAppService(usuarioRepository, logAcessoRepository, perfilRepository, moduloRepository, messageQueue);
         }
 
         //[TestMethod]

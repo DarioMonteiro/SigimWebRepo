@@ -11,11 +11,11 @@ using GIR.Sigim.Domain.Specification;
 
 namespace GIR.Sigim.Infrastructure.Data.Repository.Admin
 {
-    public class PerfilFuncionalidadeRepository : Repository<PerfilFuncionalidade>, IPerfilFuncionalidadeRepository
+    public class UsuarioPerfilRepository : Repository<UsuarioPerfil>, IUsuarioPerfilRepository
     {
         #region Constructor
 
-        public PerfilFuncionalidadeRepository(UnitOfWork unitOfWork)
+        public UsuarioPerfilRepository(UnitOfWork unitOfWork)
             : base(unitOfWork)
         {
 
@@ -23,7 +23,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Admin
 
         #endregion
 
-        #region IPerfilFuncionalidadeRepository Members
+        #region IUsuarioPerfilRepository Members
 
         #endregion
     }

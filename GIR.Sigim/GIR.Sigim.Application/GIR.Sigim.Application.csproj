@@ -56,6 +56,8 @@
     <Compile Include="Constantes\Modulo.cs" />
     <Compile Include="Constantes\Funcionalidade.cs" />
     <Compile Include="CustomAttribute\RequiredIfNotEmptyAttribute.cs" />
+    <Compile Include="DTO\Admin\UsuarioPerfilDTO.cs" />
+    <Compile Include="DTO\Admin\UsuarioFuncionalidadeDTO.cs" />
     <Compile Include="DTO\Admin\FuncionalidadeDTO.cs" />
     <Compile Include="DTO\Admin\PerfilFuncionalidadeDTO.cs" />
     <Compile Include="DTO\Admin\ModuloDTO.cs" />
@@ -153,6 +155,7 @@
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
     <Compile Include="Enums\TipoPesquisa.cs" />
     <Compile Include="Enums\TabelaBasicaFinanceiro.cs" />
+    <Compile Include="Filtros\Admin\UsuarioFuncionalidadeFiltro.cs" />
     <Compile Include="Filtros\Admin\PerfilFiltro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
     <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />

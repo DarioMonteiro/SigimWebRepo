@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO;
 using GIR.Sigim.Application.DTO.Admin;
+using GIR.Sigim.Application.Filtros.Admin;
 
 namespace GIR.Sigim.Application.Service.Admin
 {
@@ -15,5 +16,10 @@ namespace GIR.Sigim.Application.Service.Admin
         bool ChangePassword(string currentPassword, string newPassword, string confirmPassword);
         bool UsuarioPossuiCentroCustoDefinidoNoModulo(int? idUsuario, string modulo);
         UsuarioDTO ObterUsuarioPorLogin(string login);
+        UsuarioDTO ObterUsuarioPorId(int id);
+        List<UsuarioDTO> ListarTodos();
+        List<UsuarioPerfilDTO> ListarPeloUsuarioModulo(UsuarioFuncionalidadeFiltro filtro, out int totalRegistros);
+        bool SalvarPermissoes(int UsuarioId, int ModuloId, int? PerfilId, List<UsuarioFuncionalidadeDTO> listaFuncionalidadeDTO);
+        bool DeletarPermissoes(int UsuarioId, int ModuloId);
     }
 }
