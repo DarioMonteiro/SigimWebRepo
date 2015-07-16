@@ -104,68 +104,46 @@
                             }
                         }
 
-                            string saldoSortingSuffix = "sorting";
-
-                        <th class="sorting @ordemCompraIdSortingSuffix text-center" data-order="ordemCompraId" style="min-width:80px;">Ordem compra</th>
-                        <th class="sorting @dataOrdemCompraSortingSuffix text-center" data-order="dataOrdemCompra" style="min-width:90px;">Data</th>
-                        <th class="sorting @descricaoSituacaoSortingSuffix text-left" data-order="descricaoSituacao" style="min-width:140px;">Situação</th>
-                        <th class="sorting @prazoEntregaSortingSuffix text-right" data-order="prazoEntrega" style="min-width:90px;">Prazo de entrega</th>
+                        <th class="sorting @ordemCompraIdSortingSuffix text-center" data-order="ordemCompraId" style="min-width:60px;">Ordem compra</th>
+                        <th class="sorting @dataOrdemCompraSortingSuffix text-center" data-order="dataOrdemCompra" style="min-width:70px;">Data</th>
+                        <th class="sorting @descricaoSituacaoSortingSuffix text-left" data-order="descricaoSituacao" style="min-width:80px;">Situação</th>
+                        <th class="sorting @prazoEntregaSortingSuffix text-left" data-order="prazoEntrega" style="min-width:70px;">Prazo de entrega</th>
                         <th class="sorting @nomeFornecedorSortingSuffix text-left" data-order="nomeFornecedor" style="min-width:90px;">Fornecedor</th>
-                        <th class="sorting @materialIdSortingSuffix text-right" data-order="materialId">Código</th>
-                        <th class="sorting @descricaoMaterialSortingSuffix text-left" data-order="descricaoMaterial">Ítem</th>
-                        <th class="sorting @complementoDescricaoSortingSuffix text-left" data-order="complementoDescricao">Complemento</th>
-                        <th class="sorting @unidadeMedidaSortingSuffix text-center" data-order="unidadeMedida">Unidade</th>
+                        <th class="sorting @materialIdSortingSuffix text-left" data-order="materialId" style="min-width:60px;">Código</th>
+                        <th class="sorting @descricaoMaterialSortingSuffix text-left" data-order="descricaoMaterial">Item</th>
+                        <th class="sorting @complementoDescricaoSortingSuffix text-left" data-order="complementoDescricao" style="min-width:100px;">Complemento</th>
+                        <th class="sorting @unidadeMedidaSortingSuffix text-center" data-order="unidadeMedida" style="min-width:70px;">Unidade</th>
                         <th class="sorting @codigoClasseSortingSuffix text-left" data-order="codigoClasse" style="min-width:70px;">Classe de despesa</th>
-                        <th class="sorting @quantidadeSortingSuffix text-right" data-order="quantidade">Quantidade</th>
-                        <th class="sorting @valorUnitarioSortingSuffix text-right" data-order="valorUnitario" style="min-width:80px;">Valor unitário</th>
-                        <th class="sorting @percentualIPISortingSuffix text-right" data-order="percentualIPI" style="min-width:60px;">Valor unitário IPI</th>
-                        <th class="sorting @valorTotalComImpostoSortingSuffix text-right" data-order="valorTotalComImposto">Valor total c/imposto</th>
-                        <th class="sorting @quantidadeEntregueSortingSuffix text-right" data-order="quantidadeEntregue">Qtd. entregue</th>
-                        <th class="sorting @saldoSortingSuffix text-right" data-order="saldo">Saldo</th>
+                        <th class="sorting @quantidadeSortingSuffix text-left" data-order="quantidade" style="min-width:80px;">Quantidade</th>
+                        <th class="sorting @valorUnitarioSortingSuffix text-left" data-order="valorUnitario" style="min-width:80px;">Valor unitário</th>
+                        <th class="sorting @percentualIPISortingSuffix text-left" data-order="percentualIPI" style="min-width:60px;">Valor unitário IPI</th>
+                        <th class="sorting @valorTotalComImpostoSortingSuffix text-left" data-order="valorTotalComImposto">Valor total c/imposto</th>
+                        <th class="sorting @quantidadeEntregueSortingSuffix text-left" data-order="quantidadeEntregue" style="min-width:70px;">Qtd. entregue</th>
+                        <th class="sorting @saldoSortingSuffix text-left" data-order="saldo">Saldo</th>
                     </tr>
                 </thead>
                 <tbody>
-@*                    @foreach (var item in Lista)
+                    @foreach (var item in Lista)
                     {
                         <tr>
-                            <td class="text-right text-nowrap">@item.NumeroDocumento</td>
-                            <td class="text-center text-nowrap">@item.DataEmissao.ToShortDateString()</td>
-                            <td class="text-left text-nowrap">@item.FornecedorCliente.Nome</td>
-                            @{
-                                if (item.FornecedorCliente.TipoPessoa == "J")
-                                {
-                                    if (item.FornecedorCliente.PessoaJuridica != null)
-                                    {
-                                        <td class="text-left text-nowrap">@item.FornecedorCliente.PessoaJuridica.Cnpj</td>
-                                    }
-                                    else{
-                                        <td class="text-left text-nowrap"></td>
-                                    }
-                                }
-                                if (item.FornecedorCliente.TipoPessoa == "F")
-                                {
-                                    if (item.FornecedorCliente.PessoaFisica != null)
-                                    {
-                                        <td class="text-left text-nowrap">@item.FornecedorCliente.PessoaFisica.Cpf</td>
-                                    }
-                                    else{
-                                        <td class="text-left text-nowrap"></td>
-                                    }
-                                }
-                            }
-
-                            <td class="text-center text-nowrap">@item.DataVencimento.ToShortDateString()</td>
-                            <td class="text-right text-nowrap">@item.Valor.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@item.ValorClasse.ToString("N2")</td>
-                            <td class="text-left text-nowrap">@item.ContratoRetificacaoItem.Servico.Descricao</td>
-                            <td class="text-left text-nowrap">@item.ContratoRetificacaoItem.Classe.ClasseDescricao</td>
-                            <td class="text-left text-nowrap">@item.ContratoId</td>
-                            <td class="text-left text-nowrap">@item.Contrato.ContratoDescricao.Descricao</td>
-                            <td class="text-left text-nowrap">@item.UsuarioLiberacao</td>
-                            <td class="text-left text-nowrap">@item.TituloId</td>
-                            <td class="text-left text-nowrap">@item.Contrato.CentroCusto.CentroCustoDescricao</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompra.Id</td>
+                            <td class="text-center text-nowrap">@item.OrdemCompra.Data.ToShortDateString()</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompra.SituacaoDescricao</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompra.PrazoEntrega</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompra.ClienteFornecedor.Nome</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.MaterialId</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompraItem.Material.Descricao</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompraItem.Complemento</td>
+                            <td class="text-center text-nowrap">@item.OrdemCompraItem.Material.SiglaUnidadeMedida</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompraItem.Classe.ClasseDescricao</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.Quantidade</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.ValorUnitario</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.PercentualIPI</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.ValorTotalComImposto</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.QuantidadeEntregue</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.Saldo</td>
                         </tr>
-                    }*@
+                    }
                 </tbody>
             </table>
         </div>

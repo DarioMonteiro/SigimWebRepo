@@ -806,6 +806,7 @@
     <Content Include="Views\Shared\EditorTemplates\ClasseInsumo.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TreeNode.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TreeView.cshtml" />
+    <Content Include="Views\Material\ListaPesquisaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

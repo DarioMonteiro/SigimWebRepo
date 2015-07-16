@@ -47,6 +47,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<EntradaMaterial> ListaEntradaMaterialNota { get; set; }
         public ICollection<EntradaMaterial> ListaEntradaMaterialTransportadora { get; set; }
         public ICollection<AvaliacaoFornecedor> ListaAvaliacaoFornecedor { get; set; }
+        public ICollection<Domain.Entity.OrdemCompra.OrdemCompra> ListaOrdemCompra { get; set; }
 
         public ClienteFornecedor()
         {
@@ -66,6 +67,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaEntradaMaterialNota = new HashSet<EntradaMaterial>();
             this.ListaEntradaMaterialTransportadora = new HashSet<EntradaMaterial>();
             this.ListaAvaliacaoFornecedor = new HashSet<AvaliacaoFornecedor>();
+            this.ListaOrdemCompra = new HashSet<Domain.Entity.OrdemCompra.OrdemCompra>();
         }
     }
 }

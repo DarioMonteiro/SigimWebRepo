@@ -167,7 +167,7 @@
                                                     });
                                                 </script>
                                             </div>
-                                            <div class="row">
+@*                                            <div class="row">
                                                 @Html.EditorFor(m => m.Filtro.ClienteFornecedor, "ClienteFornecedor", 
                                                             new { @sectionClass = "col col-10", 
                                                                   @required = false, 
@@ -175,9 +175,13 @@
                                                                   @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.OrdemCompra),
                                                                   @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo)
                                                             })
-                                            </div>
+                                            </div>*@
                                             <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.Material, "MaterialComPesquisaGenerica", new { @sectionClass = "col col-10", @required = false, @centroCustoRequerido = false, @label = "Material", @exibirBotaoPesquisa = false})
+@*                                                @Html.EditorFor(m => m.Filtro.Material, "MaterialComPesquisaGenerica", new { @sectionClass = "col col-10", 
+                                                                                                                             @required = false, 
+                                                                                                                             @centroCustoRequerido = false, 
+                                                                                                                             @label = "Material", 
+                                                                                                                             @exibirBotaoPesquisa = false})*@
                                                 <section class="col col-1">
                                                     <button id="btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar" onclick="javascript:tratarBotoes(true);goToPage(0);">
                                                         <i class="fa fa-search fa-lg"></i>

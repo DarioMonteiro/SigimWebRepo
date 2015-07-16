@@ -133,6 +133,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .WithOptional(c => c.Cliente)
                 .HasForeignKey(c => c.ClienteId);
 
+            HasMany<Domain.Entity.OrdemCompra.OrdemCompra>(l => l.ListaOrdemCompra)
+                .WithRequired(c => c.ClienteFornecedor)
+                .HasForeignKey(c => c.ClienteFornecedorId);
         }
     }
 }

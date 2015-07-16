@@ -152,7 +152,8 @@
             }
         }
 
-        $(document).on("centroCustoValidado",            function (e) {
+        $(document).on("centroCustoValidado",
+            function (e) {
                 codigoCentroCusto_@(uniqueIdentifier) = e.codigo;
 
                 @if (centroCustoRequerido.Value) {
@@ -169,9 +170,18 @@
                     @:  limpaMaterialForm_@(uniqueIdentifier)();
                     @:}
                 }
-            }        );        $(document).on("classeValidada",            function (e) {
+            }
+        );
+
+        $(document).on("classeValidada",
+            function (e) {
                 codigoClasse_@(uniqueIdentifier) = e.isValid ? e.codigo : '';
-            }        );        @if (centroCustoRequerido.Value) {            @:validaCentroCusto();        }
+            }
+        );
+
+        @if (centroCustoRequerido.Value) {
+            @:validaCentroCusto();
+        }
 
         $('input[type=radio][name=tipoSelecao]').change(function () {
             if ($(this).val() == '@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)') {

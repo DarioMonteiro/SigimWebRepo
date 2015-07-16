@@ -298,6 +298,7 @@
     <Compile Include="Service\Orcamento\IOrcamentoAppService.cs" />
     <Compile Include="Service\Orcamento\IParametrosOrcamentoAppService.cs" />
     <Compile Include="Service\OrdemCompra\IEntradaMaterialAppService.cs" />
+    <Compile Include="Service\OrdemCompra\IOrdemCompraItemAppService.cs" />
     <Compile Include="Service\OrdemCompra\IRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IPreRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosOrdemCompraAppService.cs" />
