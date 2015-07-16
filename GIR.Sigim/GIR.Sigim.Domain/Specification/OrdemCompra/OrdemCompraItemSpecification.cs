@@ -146,17 +146,18 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
             return new DirectSpecification<OrdemCompraItem>(l => l.OrdemCompra.Situacao == SituacaoOrdemCompra.Fechada);
         }
 
-        //public static Specification<OrdemCompraItem> EhExibirSomenteComSaldo(bool? exibirSomenteComSaldo)
-        //{
-        //    Specification<OrdemCompraItem> specification = new TrueSpecification<OrdemCompraItem>();
+        public static Specification<OrdemCompraItem> EhExibirSomenteComSaldo(bool? exibirSomenteComSaldo)
+        {
+            Specification<OrdemCompraItem> specification = new TrueSpecification<OrdemCompraItem>();
 
-        //    if (exibirSomenteComSaldo.HasValue && exibirSomenteComSaldo.Value)
-        //    {
-        //        var directSpecification = new DirectSpecification<OrdemCompraItem>(l => (l.Quantidade - l.QuantidadeEntregue) > 0);
-        //    }
+            if (exibirSomenteComSaldo.HasValue && exibirSomenteComSaldo.Value)
+            {
+                var directSpecification = new DirectSpecification<OrdemCompraItem>(l => l.Quantidade != l.QuantidadeEntregue);
+                specification &= directSpecification;
+            }
 
-        //    return specification;
-        //}
+            return specification;
+        }
 
 
     }

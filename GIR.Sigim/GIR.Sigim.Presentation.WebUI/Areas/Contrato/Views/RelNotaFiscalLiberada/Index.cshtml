@@ -78,6 +78,12 @@
                                                             changeMonth: true,
                                                             changeYear: true,
                                                             onClose: function (selectedDate) {
+                                                                if (selectedDate == '') {
+                                                                    $(this).datepicker('disable');
+                                                                    $(this).datepicker('setDate', new Date());
+                                                                    $(this).datepicker('enable');
+                                                                    selectedDate = new Date();
+                                                                }
                                                                 $('#@Html.IdFor(m => m.Filtro.DataFinal)').datepicker('option', 'minDate', selectedDate);
                                                             }
                                                         });
@@ -88,6 +94,12 @@
                                                             changeMonth: true,
                                                             changeYear: true,
                                                             onClose: function (selectedDate) {
+                                                                if (selectedDate == '') {
+                                                                    $(this).datepicker('disable');
+                                                                    $(this).datepicker('setDate', new Date());
+                                                                    $(this).datepicker('enable');
+                                                                    selectedDate = new Date();
+                                                                }
                                                                 $('#@Html.IdFor(m => m.Filtro.DataInicial)').datepicker('option', 'maxDate', selectedDate);
                                                             }
                                                         });
@@ -182,7 +194,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var codigoCentroCusto = null;
+@*        var codigoCentroCusto = null;
         var contratoId = null;
         var fornecedorClienteId = null;
         var documento = null;
@@ -196,7 +208,7 @@
 
         if (condicao) {
             doFilter();
-        }
+        }*@
 
         jQuery.validator.addMethod(
             "ehCentroCustoValido",
@@ -221,15 +233,15 @@
             },
             messages: {
                 '@Html.NameFor(m => m.Filtro.DataInicial)': {
-                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                        date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                    },
+                    '@Html.NameFor(m => m.Filtro.DataFinal)': {
+                        date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                    },
+                    '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
+                        required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo")'
+                    }
                 },
-                '@Html.NameFor(m => m.Filtro.DataFinal)': {
-                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
-                },
-                '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
-                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo")'
-                }
-            },
             errorPlacement: function (error, element) {
                 var span = getErrorMessageContainer(element.attr("name"));
                 span.html(error.append());

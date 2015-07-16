@@ -136,6 +136,11 @@
             minLength: 2,
             select: function (event, ui) {
                 TratarSelecaoMaterial(ui.item.id, ui.item.label);
+            },
+            change: function (event, ui) {
+                if (ui.item == null) {
+                    limpaMaterialForm_@(uniqueIdentifier)();
+                }
             }
         }).data("ui-autocomplete")._renderItem = function (ul, item) {
             return $("<li>")

@@ -78,6 +78,12 @@
                                                             changeMonth: true,
                                                             changeYear: true,
                                                             onClose: function (selectedDate) {
+                                                                if (selectedDate == '') {
+                                                                    $(this).datepicker('disable');
+                                                                    $(this).datepicker('setDate', new Date());
+                                                                    $(this).datepicker('enable');
+                                                                    selectedDate = new Date();
+                                                                }
                                                                 $('#@Html.IdFor(m => m.Filtro.DataFinal)').datepicker('option', 'minDate', selectedDate);
                                                             }
                                                         });
@@ -88,6 +94,12 @@
                                                             changeMonth: true,
                                                             changeYear: true,
                                                             onClose: function (selectedDate) {
+                                                                if (selectedDate == '') {
+                                                                    $(this).datepicker('disable');
+                                                                    $(this).datepicker('setDate', new Date());
+                                                                    $(this).datepicker('enable');
+                                                                    selectedDate = new Date();
+                                                                }
                                                                 $('#@Html.IdFor(m => m.Filtro.DataInicial)').datepicker('option', 'maxDate', selectedDate);
                                                             }
                                                         });
@@ -209,7 +221,7 @@
                         </div>
                         <footer>
                             @{
-                            var url = Url.Action("Imprimir", "RelNotaFiscalLiberada");
+                            var url = Url.Action("Imprimir", "RelOCItensOrdemCompra");
                             }
                             @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })                           
                         </footer>
@@ -226,8 +238,87 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $(document).on("showFormatoImpressaoModalPanel", function (e) {
 
+        jQuery.validator.addMethod(
+            "ehCentroCustoValido",
+            function (value, element, params) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.ehCentroCustoValido = $('#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
+            "ehClasseValida",
+            function (value, element, params) {
+                var isValid = validaClasse();
+                $.validator.messages.ehClasseValida = $('#@Html.IdFor(m => m.Filtro.Classe.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
+            "ehClasseInsumoValida",
+            function (value, element, params) {
+                var isValid = validaClasseInsumo();
+                $.validator.messages.ehClasseInsumoValida = $('#@Html.IdFor(m => m.Filtro.ClasseInsumo.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
+
+
+        $('#formFilter').validate({
+            rules: {
+                '@Html.NameFor(m => m.Filtro.DataInicial)': {
+                    date: true
+                },
+                '@Html.NameFor(m => m.Filtro.DataFinal)': {
+                    date: true
+                },
+                '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
+                    ehCentroCustoValido: true
+                },
+                '@Html.NameFor(m => m.Filtro.Classe.Codigo)': {
+                    ehClasseValida: true
+                },
+                '@Html.NameFor(m => m.Filtro.ClasseInsumo.Codigo)': {
+                    ehClasseInsumoValida: true
+                }
+            },
+            messages: {
+                '@Html.NameFor(m => m.Filtro.DataInicial)': {
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                },
+                '@Html.NameFor(m => m.Filtro.DataFinal)': {
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                },
+                '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo")'
+                },
+                '@Html.NameFor(m => m.Filtro.Classe.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Classe")'
+                },
+                '@Html.NameFor(m => m.Filtro.ClasseInsumo.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Classe Insumo")'
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
             var dataInicial          = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
             var dataFinal            = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
 
@@ -243,7 +334,6 @@
                 }
             }
         })
-
     });
 
     function refresh(result) {
