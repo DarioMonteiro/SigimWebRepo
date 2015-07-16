@@ -116,6 +116,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
             Property(l => l.TransportadoraId)
                 .HasColumnName("transportadora");
 
+            HasRequired(l => l.Transportadora)
+                .WithMany(l => l.ListaEntradaMaterialTransportadora)
+                .HasForeignKey(l => l.TransportadoraId);
+
             Property(l => l.DataFrete)
                 .HasColumnName("dataFrete");
 
@@ -137,8 +141,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
             Property(l => l.OrdemCompraFrete)
                 .HasColumnName("ordemCompraFrete");
 
-            Property(l => l.TituloFrete)
+            Property(l => l.TituloFreteId)
                 .HasColumnName("tituloFrete");
+
+            HasRequired(l => l.TituloFrete)
+                .WithMany(l => l.ListaEntradaMaterial)
+                .HasForeignKey(l => l.TituloFreteId);
 
             Property(l => l.CodigoTipoCompra)
                 .HasMaxLength(10)

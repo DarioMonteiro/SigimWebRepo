@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Repository.Contrato;
+using GIR.Sigim.Domain.Repository.Financeiro;
 using System.Threading.Tasks;
 using CrystalDecisions.Shared;
 using GIR.Sigim.Application.Adapter;
@@ -25,22 +26,25 @@ namespace GIR.Sigim.Application.Service.Contrato
         #region Declaração
 
         private IUsuarioAppService usuarioAppService;
-        private IParametrosContratoAppService parametrosContratoAppService;
+        private IParametrosContratoRepository parametrosContratoRepository;
         private IContratoRetificacaoItemMedicaoRepository contratoRetificacaoItemMedicaoRepository;
+        private ICentroCustoRepository centroCustoRepository;
 
         #endregion
 
         #region Construtor
 
         public ContratoRetificacaoItemMedicaoAppService(IUsuarioAppService usuarioAppService,
-                                                        IParametrosContratoAppService parametrosContratoAppService,
+                                                        IParametrosContratoRepository parametrosContratoRepository,
                                                         IContratoRetificacaoItemMedicaoRepository contratoRetificacaoItemMedicaoRepository,
+                                                        ICentroCustoRepository centroCustoRepository,
                                                         MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.usuarioAppService = usuarioAppService;
-            this.parametrosContratoAppService = parametrosContratoAppService;
+            this.parametrosContratoRepository = parametrosContratoRepository;
             this.contratoRetificacaoItemMedicaoRepository = contratoRetificacaoItemMedicaoRepository;
+            this.centroCustoRepository = centroCustoRepository;
         }
 
         #endregion
@@ -227,10 +231,10 @@ namespace GIR.Sigim.Application.Service.Contrato
                 relat.ContratoRetificacaoItemId = medicao.ContratoRetificacaoItem.Id.Value;
                 relat.DataEmissao = medicao.DataEmissao;
                 relat.DataVencimento = medicao.DataVencimento;
-                decimal valorImpostoRetidoMedicao = medicao.Contrato.ObterValorTotalImpostoIndiretoMedicao(medicao.SequencialItem,
-                                                                                                           medicao.SequencialCronograma,
-                                                                                                           medicao.ContratoRetificacaoItemId,
-                                                                                                           medicao.Id);
+                decimal valorImpostoRetidoMedicao = medicao.Contrato.ObterValorImpostoRetidoMedicao(medicao.SequencialItem,
+                                                                                                    medicao.SequencialCronograma,
+                                                                                                    medicao.ContratoRetificacaoItemId,
+                                                                                                    medicao.Id);
                 decimal valorRetido = 0;
                 decimal desconto = 0;
                 if (medicao.ValorRetido.HasValue)
@@ -281,7 +285,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMenorOuIgual(filtro.DataFinal);
                 specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
                 specification &= ContratoRetificacaoItemMedicaoSpecification.DocumentoPertenceAhMedicao(filtro.Documento);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.FornecedorClientePertenceAhMedicao(filtro.FornecedorClienteId);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.FornecedorClientePertenceAhMedicao(filtro.FornecedorCliente.Id);
             }
 
             specification &= ContratoRetificacaoItemMedicaoSpecification.SituacaoIgualLiberado();
@@ -315,20 +319,18 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             relNotaFiscalLiberada objRel = new relNotaFiscalLiberada();
 
-
-
             objRel.SetDataSource(RelNotaFiscalLiberadaToDataTable(listaMedicao));
 
             string periodo = filtro.DataInicial.Value.ToString("dd/MM/yyyy") + "  a  " + filtro.DataFinal.Value.ToString("dd/MM/yyyy");
 
-            var parametros = parametrosContratoAppService.Obter();
+            var parametros = parametrosContratoRepository.Obter();
+            var centroCusto = centroCustoRepository.ObterPeloCodigo(filtro.CentroCusto.Codigo, l => l.ListaCentroCustoEmpresa);
 
-            var caminhoImagem = DiretorioImagemRelatorio + Guid.NewGuid().ToString() + ".bmp";
-            System.Drawing.Image imagem = parametros.IconeRelatorio.ToImage();
-            imagem.Save(caminhoImagem, System.Drawing.Imaging.ImageFormat.Bmp);
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
 
-            objRel.SetParameterValue("nomeEmpresa", parametros.Cliente.Nome);
-            objRel.SetParameterValue("descricaoCentroCusto", listaMedicao.ElementAt(0).Contrato.CentroCusto.Descricao);
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
+            objRel.SetParameterValue("descricaoCentroCusto", centroCusto.Descricao);
             objRel.SetParameterValue("periodo", periodo);
             objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 

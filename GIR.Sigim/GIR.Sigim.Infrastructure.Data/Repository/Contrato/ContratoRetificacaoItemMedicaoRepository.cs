@@ -40,12 +40,6 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Contrato
 
             switch (orderBy)
             {
-                //<th class="sorting @fornecedorClienteSortingSuffix text-left" data-order="fornecedorCliente" style="min-width:140px;">Fornecedor / Cliente</th>
-                //<th class="sorting @CPFCNPJFornecedorClienteSortingSuffix text-left" data-order="CPFCNPJFornecedorCliente" style="min-width:90px;">CPF / CNPJ</th>
-
-                //<th class="sorting @valorClasseSortingSuffix text-left" data-order="valorClasse">Valor classe</th>
-                //<th class="sorting @tituloSortingSuffix text-left" data-order="titulo" style="min-width:60px;">Título</th>
-
                 case "fornecedorCliente":
                     set = ascending ? set.OrderBy(l => l.Contrato.Contratado.Nome).ThenBy(l => l.MultiFornecedor.Nome).ThenBy(l => l.Contrato.Contratante.Nome) :
                                       set.OrderByDescending(l => l.Contrato.Contratado.Nome).ThenByDescending(l => l.MultiFornecedor.Nome).ThenByDescending(l => l.Contrato.Contratante.Nome);

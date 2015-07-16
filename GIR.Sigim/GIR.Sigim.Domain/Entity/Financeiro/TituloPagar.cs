@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
@@ -14,12 +15,17 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public TipoCompromisso TipoCompromisso { get; set; }
         public TipoDocumento TipoDocumento { get; set; }
         public ContratoRetificacaoProvisao ContratoRetificacaoProvisao { get; set; }
-
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
+        public ICollection<OrdemCompraFormaPagamento> ListaOrdemCompraFormaPagamento { get; set; }
+        public ICollection<EntradaMaterial> ListaEntradaMaterial { get; set; }
+        public ICollection<EntradaMaterialFormaPagamento> ListaEntradaMaterialFormaPagamento { get; set; }
 
         public TituloPagar()
         {
             this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
+            this.ListaOrdemCompraFormaPagamento = new HashSet<OrdemCompraFormaPagamento>();
+            this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();
+            this.ListaEntradaMaterialFormaPagamento = new HashSet<EntradaMaterialFormaPagamento>();
         }
     }
 }

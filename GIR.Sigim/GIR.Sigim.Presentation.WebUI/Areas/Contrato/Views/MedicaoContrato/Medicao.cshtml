@@ -600,7 +600,6 @@
         tratarBotoes(false, false, false);
 
         $(document).on("showFormatoImpressaoModalPanel", function (e) {
-
             var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
             var tipoDocumentoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val();
             var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
@@ -613,7 +612,6 @@
             if ((multiFornecedorId != "") && (multiFornecedorId > 0)) {
                 contratadoId = multiFornecedorId;
             }
-            var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
 
             if (contratoId == "") {
                 smartAlert("Atenção", "Informe o contrato", "warning");
@@ -644,7 +642,7 @@
                 e.event.preventDefault();
             }
 
-            parametrosUrlImpressao += '&contratadoId=' + contratadoId;
+            parametrosUrlImpressao = '&contratadoId=' + contratadoId;
             parametrosUrlImpressao += '&contratoId=' + contratoId;
             parametrosUrlImpressao += '&tipoDocumentoId=' + tipoDocumentoId;
             parametrosUrlImpressao += '&numeroDocumento=' + numeroDocumento;
@@ -652,7 +650,6 @@
             parametrosUrlImpressao += '&multiFornecedorId=' + multiFornecedorId;
             parametrosUrlImpressao += '&retencaoContratual=' + retencaoContratual;
             parametrosUrlImpressao += '&valorContratadoItem=' + valorContratadoItem;
-
         });
 
         $(document).on("show.bs.modal", "#PesquisarMedicao_ModalPanel", function (e) {

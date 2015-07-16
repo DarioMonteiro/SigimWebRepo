@@ -27,9 +27,6 @@ namespace GIR.Sigim.Application.Filtros.Contrato
 
         public string DescricaoContrato { get; set; }
 
-        [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
-        [Display(Name = "Fornecedor/Cliente")]
-        public int? FornecedorClienteId { get; set; }
         public ClienteFornecedorDTO FornecedorCliente { get; set; }
 
         [Display(Name = "Documento")]

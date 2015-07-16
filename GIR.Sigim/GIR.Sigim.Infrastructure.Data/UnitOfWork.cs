@@ -145,7 +145,11 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new CotacaoConfiguration());
             modelBuilder.Configurations.Add(new CotacaoItemConfiguration());
             modelBuilder.Configurations.Add(new EntradaMaterialConfiguration());
+            modelBuilder.Configurations.Add(new EntradaMaterialFormaPagamentoConfiguration());
+            modelBuilder.Configurations.Add(new EntradaMaterialImpostoConfiguration());
+            modelBuilder.Configurations.Add(new EntradaMaterialItemConfiguration());
             modelBuilder.Configurations.Add(new OrdemCompraConfiguration());
+            modelBuilder.Configurations.Add(new OrdemCompraFormaPagamentoConfiguration());
             modelBuilder.Configurations.Add(new OrdemCompraItemConfiguration());
             modelBuilder.Configurations.Add(new ParametrosOrdemCompraConfiguration());
             modelBuilder.Configurations.Add(new ParametrosUsuarioConfiguration());

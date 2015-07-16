@@ -206,8 +206,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
 
             requisicaoMaterial.Situacao = SituacaoRequisicaoMaterial.Requisitada;
-            requisicaoMaterial.DataAprovacao = null;
-            requisicaoMaterial.LoginUsuarioAprovacao = null;
 
             requisicaoMaterialRepository.Alterar(requisicaoMaterial);
             requisicaoMaterialRepository.UnitOfWork.Commit();
@@ -318,7 +316,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoAdicionarItem(RequisicaoMaterialDTO dto)
         {
-            return EhPermitidoSalvar(dto);
+            if (!EhPermitidoSalvar(dto))
+                return false;
+
+            if (!PodeAdicionarItemNaSituacaoAtual(dto.Situacao))
+                return false;
+
+            return true;
         }
 
         public bool EhPermitidoCancelarItem(RequisicaoMaterialDTO dto)
@@ -385,6 +389,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         {
             return situacao == SituacaoRequisicaoMaterial.Requisitada
                 || situacao == SituacaoRequisicaoMaterial.Aprovada;
+        }
+
+        private bool PodeAdicionarItemNaSituacaoAtual(SituacaoRequisicaoMaterial situacao)
+        {
+            return situacao == SituacaoRequisicaoMaterial.Requisitada;
         }
 
         private bool PodeAprovarNaSituacaoAtual(SituacaoRequisicaoMaterial situacao)

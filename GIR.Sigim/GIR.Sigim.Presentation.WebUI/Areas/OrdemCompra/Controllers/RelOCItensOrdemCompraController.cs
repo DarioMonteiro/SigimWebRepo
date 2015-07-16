@@ -36,25 +36,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 
             model.PodeImprimir = true;
 
-            CarregarCombosFiltro(model);
-
             return View(model);
         }
 
-
-
-        private void CarregarCombosFiltro(RelOcItensOrdemCompraListaViewModel model)
-        {
-            int? fornecedorClienteId = null;
-
-            if (model.Filtro != null)
-            {
-                fornecedorClienteId = model.Filtro.ClienteFornecedorId;
-            }
-
-            model.ListaFornecedorCliente = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", fornecedorClienteId);
-
-        }
 
     }
 }
