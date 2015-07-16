@@ -126,6 +126,13 @@
                                                                                                                             @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
                                                                                                                             @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo)
                                                                                                                             })
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.FornecedorCliente.Id)").on("change", function () {
+                                                            limpaLista();
+                                                        });
+                                                    });
+                                                </script>
                                             </div>
                                             <div class="row">
                                                 <section class="col col-2">

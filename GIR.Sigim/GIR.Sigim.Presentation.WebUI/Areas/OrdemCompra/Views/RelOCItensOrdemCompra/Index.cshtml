@@ -167,7 +167,7 @@
                                                     });
                                                 </script>
                                             </div>
-@*                                            <div class="row">
+                                            <div class="row">
                                                 @Html.EditorFor(m => m.Filtro.ClienteFornecedor, "ClienteFornecedor", 
                                                             new { @sectionClass = "col col-10", 
                                                                   @required = false, 
@@ -175,13 +175,27 @@
                                                                   @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.OrdemCompra),
                                                                   @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo)
                                                             })
-                                            </div>*@
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.ClienteFornecedor.Id)").on("change", function () {
+                                                            limpaLista();
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
                                             <div class="row">
-@*                                                @Html.EditorFor(m => m.Filtro.Material, "MaterialComPesquisaGenerica", new { @sectionClass = "col col-10", 
+                                                @Html.EditorFor(m => m.Filtro.Material, "MaterialComPesquisaGenerica", new { @sectionClass = "col col-10", 
                                                                                                                              @required = false, 
                                                                                                                              @centroCustoRequerido = false, 
                                                                                                                              @label = "Material", 
-                                                                                                                             @exibirBotaoPesquisa = false})*@
+                                                                                                                             @exibirBotaoPesquisa = false})
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.Material.Id)").on("change", function () {
+                                                            limpaLista();
+                                                        });
+                                                    });
+                                                </script>
                                                 <section class="col col-1">
                                                     <button id="btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar" onclick="javascript:tratarBotoes(true);goToPage(0);">
                                                         <i class="fa fa-search fa-lg"></i>
@@ -230,37 +244,7 @@
             }
         })
 
-        ListaFiltro();
     });
-
-    function ListaFiltro() {
-        var situacaoLiberadas;
-        var condicao;
-        situacaoLiberadas = $("#@Html.IdFor(m => m.Filtro.EhLiberada)").val();
-        condicao = situacaoLiberadas;
-        if (condicao) {
-            doFilter();
-        }
-@*        var codigoCentroCusto = null;
-        var ordemCompraId = null;
-        var codigoClasse = null;
-        var materialId = null;
-        var clienteFornecedorId = null;
-        var situacaoPendentes = false;
-        var situacaoFechadas = false;
-        var exibirSomenteComSaldo = false;
-        ordemCompraId = $("#@Html.IdFor(m => m.Filtro.OrdemCompraId)").val();
-        codigoCentroCusto = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
-        codigoClasse = $("#@Html.IdFor(m => m.Filtro.Classe.Codigo)").val();
-        clienteFornecedorId = $("#@Html.IdFor(m => m.Filtro.ClienteFornecedor.Id)").val();
-        materialId = $("#@Html.IdFor(m => m.Filtro.Material.Id)").val();
-        exibirSomenteComSaldo = $("#@Html.IdFor(m => m.Filtro.EhExibirSomentecomSaldo)").val();
-        situacaoPendentes = $("#@Html.IdFor(m => m.Filtro.EhPendente)").val();
-        situacaoFechadas = $("#@Html.IdFor(m => m.Filtro.EhFechada)").val();
-        condicao = situacaoLiberadas || situacaoPendentes || situacaoFechadas || exibirSomenteComSaldo;
-        condicao = condicao || (ordemCompraId !== "") || (codigoCentroCusto !== "") || (codigoClasse !== "")
-        condicao = condicao || (clienteFornecedorId !== "") || (materialId !== "");*@
-    }
 
     function refresh(result) {
         onSuccess();

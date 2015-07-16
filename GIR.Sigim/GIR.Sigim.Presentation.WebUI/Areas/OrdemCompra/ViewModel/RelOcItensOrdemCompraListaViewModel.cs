@@ -10,7 +10,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
     public class RelOcItensOrdemCompraListaViewModel
     {
         public RelOcItensOrdemCompraFiltro Filtro { get; set; }
-        public SelectList ListaFornecedorCliente { get; set; }
 
         public bool PodeImprimir { get; set; }
 

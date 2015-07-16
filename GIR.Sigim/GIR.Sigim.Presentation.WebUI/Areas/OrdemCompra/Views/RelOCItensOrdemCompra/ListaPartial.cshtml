@@ -46,11 +46,10 @@
                             string percentualIPISortingSuffix = "sorting";
                             string valorTotalComImpostoSortingSuffix = "sorting";
                             string quantidadeEntregueSortingSuffix = "sorting";
-                            string saldoSortingSuffix = "sorting";
+                            //string saldoSortingSuffix = "sorting";
                             
                             switch (Model.OrderBy)
                             {
-                                    
                                 case "ordemCompraId":
                                     ordemCompraIdSortingSuffix += sortingSuffix;
                                     break;
@@ -96,9 +95,9 @@
                                 case "quantidadeEntregue":
                                     quantidadeEntregueSortingSuffix += sortingSuffix;
                                     break;
-                                case "saldo":
-                                    saldoSortingSuffix += sortingSuffix;
-                                    break;                                   
+                                //case "saldo":
+                                //    saldoSortingSuffix += sortingSuffix;
+                                //    break;                                   
                                 default:
                                     break;
                             }
@@ -119,15 +118,49 @@
                         <th class="sorting @percentualIPISortingSuffix text-left" data-order="percentualIPI" style="min-width:60px;">Valor unitário IPI</th>
                         <th class="sorting @valorTotalComImpostoSortingSuffix text-left" data-order="valorTotalComImposto">Valor total c/imposto</th>
                         <th class="sorting @quantidadeEntregueSortingSuffix text-left" data-order="quantidadeEntregue" style="min-width:70px;">Qtd. entregue</th>
-                        <th class="sorting @saldoSortingSuffix text-left" data-order="saldo">Saldo</th>
+                        <th class="text-left" style="min-width:80px;">Saldo</th>
+                        @*<th class="sorting @saldoSortingSuffix text-left" data-order="saldo">Saldo</th>*@
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Lista)
                     {
+                        decimal quantidade = 0;
+                        decimal valorUnitario = 0;
+                        decimal percentualIPI = 0;
+                        decimal valorTotalComImposto = 0;
+                        decimal quantidadeEntregue = 0;
+                        string dataOrdemCompra = item.OrdemCompra.Data.ToString().Remove((item.OrdemCompra.Data.ToString().Length - 3),3);
+                        if (item.OrdemCompra.Data.ToString().Contains("00:00:00"))
+                        {
+                            dataOrdemCompra = item.OrdemCompra.Data.ToShortDateString();
+                        }
+                        
+                        if (item.OrdemCompraItem.Quantidade.HasValue)
+                        {
+                            quantidade = item.OrdemCompraItem.Quantidade.Value;
+                        }
+                        if (item.OrdemCompraItem.ValorUnitario.HasValue)
+                        {
+                            valorUnitario = item.OrdemCompraItem.ValorUnitario.Value;
+                        }
+                        if (item.OrdemCompraItem.PercentualIPI.HasValue)
+                        {
+                            percentualIPI = item.OrdemCompraItem.PercentualIPI.Value;
+                        }
+                        if (item.OrdemCompraItem.ValorTotalComImposto.HasValue)
+                        {
+                            valorTotalComImposto = item.OrdemCompraItem.ValorTotalComImposto.Value;
+                        }
+                        if (item.OrdemCompraItem.QuantidadeEntregue.HasValue)
+                        {
+                            quantidadeEntregue = item.OrdemCompraItem.QuantidadeEntregue.Value;
+                        }
+                                
+                        
                         <tr>
                             <td class="text-right text-nowrap">@item.OrdemCompra.Id</td>
-                            <td class="text-center text-nowrap">@item.OrdemCompra.Data.ToShortDateString()</td>
+                            <td class="text-center text-nowrap">@dataOrdemCompra</td>
                             <td class="text-left text-nowrap">@item.OrdemCompra.SituacaoDescricao</td>
                             <td class="text-left text-nowrap">@item.OrdemCompra.PrazoEntrega</td>
                             <td class="text-left text-nowrap">@item.OrdemCompra.ClienteFornecedor.Nome</td>
@@ -136,12 +169,12 @@
                             <td class="text-left text-nowrap">@item.OrdemCompraItem.Complemento</td>
                             <td class="text-center text-nowrap">@item.OrdemCompraItem.Material.SiglaUnidadeMedida</td>
                             <td class="text-left text-nowrap">@item.OrdemCompraItem.Classe.ClasseDescricao</td>
-                            <td class="text-right text-nowrap">@item.OrdemCompraItem.Quantidade</td>
-                            <td class="text-right text-nowrap">@item.OrdemCompraItem.ValorUnitario</td>
-                            <td class="text-right text-nowrap">@item.OrdemCompraItem.PercentualIPI</td>
-                            <td class="text-right text-nowrap">@item.OrdemCompraItem.ValorTotalComImposto</td>
-                            <td class="text-right text-nowrap">@item.OrdemCompraItem.QuantidadeEntregue</td>
-                            <td class="text-right text-nowrap">@item.OrdemCompraItem.Saldo</td>
+                            <td class="text-right text-nowrap">@quantidade.ToString("N2")</td>                           
+                            <td class="text-right text-nowrap">@valorUnitario.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@percentualIPI.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@valorTotalComImposto.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@quantidadeEntregue.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.Saldo.ToString("N2")</td>
                         </tr>
                     }
                 </tbody>

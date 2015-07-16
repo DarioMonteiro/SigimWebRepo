@@ -37,5 +37,6 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
                 return quantidade - quantidadeEntregue;
             }
         }
+
     }
 }

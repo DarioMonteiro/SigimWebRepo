@@ -86,9 +86,9 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra
                 case "quantidadeEntregue":
                     set = ascending ? set.OrderBy(l => l.QuantidadeEntregue) : set.OrderByDescending(l => l.QuantidadeEntregue);
                     break;
-                case "saldo":
-                    set = ascending ? set.OrderBy(l => (l.Quantidade - l.QuantidadeEntregue)) : set.OrderByDescending(l => (l.Quantidade - l.QuantidadeEntregue));
-                    break;
+                //case "saldo":
+                //    set = ascending ? set.OrderBy(l => l.Saldo) : set.OrderByDescending(l => l.Saldo);
+                //    break;
                 default:
                     set = ascending ? set.OrderBy(l => l.OrdemCompraId) : set.OrderByDescending(l => l.OrdemCompraId);
                     break;

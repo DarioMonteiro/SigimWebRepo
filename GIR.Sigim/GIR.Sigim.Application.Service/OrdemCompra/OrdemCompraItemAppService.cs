@@ -84,9 +84,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 specification &= OrdemCompraItemSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
                 specification &= OrdemCompraItemSpecification.PertenceAhClasseIniciadaPor(filtro.Classe.Codigo);
                 specification &= OrdemCompraItemSpecification.PertenceAhClasseInsumoIniciadaPor(filtro.ClasseInsumo.Codigo);
-                //specification &= OrdemCompraItemSpecification.ClienteFornecedorPertenceAhItemOC(filtro.ClienteFornecedor.Id);
-                //specification &= OrdemCompraItemSpecification.PertenceMaterialId(filtro.Material.Id);
-                specification &= OrdemCompraItemSpecification.EhExibirSomenteComSaldo(filtro.EhExibirSomentecomSaldo);
+                specification &= OrdemCompraItemSpecification.ClienteFornecedorPertenceAhItemOC(filtro.ClienteFornecedor.Id);
+                specification &= OrdemCompraItemSpecification.PertenceMaterialId(filtro.Material.Id);
+                //specification &= OrdemCompraItemSpecification.EhExibirSomenteComSaldo(filtro.EhExibirSomentecomSaldo);
 
                 if (filtro.EhFechada || filtro.EhLiberada || filtro.EhPendente)
                 {

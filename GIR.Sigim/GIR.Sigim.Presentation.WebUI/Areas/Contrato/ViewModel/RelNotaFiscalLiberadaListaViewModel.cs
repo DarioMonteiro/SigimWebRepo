@@ -10,7 +10,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
     public class RelNotaFiscalLiberadaListaViewModel
     {
         public RelNotaFiscalLiberadaFiltro Filtro { get; set; }
-        //public SelectList ListaFornecedorCliente { get; set; }
 
         public bool PodeImprimir { get; set; }
 
