@@ -8,11 +8,11 @@ using GIR.Sigim.Domain.Entity.Admin;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
 {
-    public class UsuarioFuncionalidadeConfiguration : EntityTypeConfiguration<UsuarioFuncionalidade>
+    public class UsuarioPerfilConfiguration : EntityTypeConfiguration<UsuarioPerfil>
     {
-        public UsuarioFuncionalidadeConfiguration()
+        public UsuarioPerfilConfiguration()
         {
-            ToTable("usuarioFuncionalidade", "Sigim");
+            ToTable("usuarioPerfil", "Sigim");
 
             Property(l => l.Id)
                .HasColumnName("codigo")
@@ -23,18 +23,15 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
                .HasColumnOrder(2);
 
             HasRequired(l => l.Usuario)
-               .WithMany(l => l.ListaUsuarioFuncionalidade)
-               .HasForeignKey(l => l.UsuarioId);
+               .WithMany(l => l.ListaUsuarioPerfil);
 
             Property(l => l.ModuloId)
                .HasColumnName("sistema")
                .HasColumnOrder(3);
 
-            Property(l => l.Funcionalidade)
-                .IsRequired()
-                .HasColumnName("funcionalidade")
-                .HasMaxLength(200)
-                .HasColumnOrder(4);
+            Property(l => l.PerfilId)
+               .HasColumnName("perfil")
+               .HasColumnOrder(4);
 
         }
     }

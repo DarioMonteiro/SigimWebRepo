@@ -81,7 +81,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             else
             {
                 taxaAdministracaoRepository.UnitOfWork.RollbackChanges();
-                messageQueue.Add("Erro na exclusão !", TypeMessage.Error);
+                messageQueue.Add(Resource.Sigim.ErrorMessages.GravacaoErro, TypeMessage.Error);
             }
 
             return bolOK;
@@ -124,7 +124,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             else
             {
                 taxaAdministracaoRepository.UnitOfWork.RollbackChanges();
-                messageQueue.Add("Erro na exclusão !", TypeMessage.Error);
+                messageQueue.Add(Resource.Sigim.ErrorMessages.ExclusaoErro, TypeMessage.Error);
             }
 
             return bolOK;

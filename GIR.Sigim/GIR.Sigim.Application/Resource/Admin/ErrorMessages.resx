@@ -123,11 +123,17 @@
   <data name="FuncionalidadesNaoMarcadas" xml:space="preserve">
     <value>Selecione as funcionalidades.</value>
   </data>
+  <data name="ModuloInexistente" xml:space="preserve">
+    <value>Módulo inexistente.</value>
+  </data>
   <data name="NovaSenhaIgualAtual" xml:space="preserve">
     <value>A nova senha deve ser diferante da atual.</value>
   </data>
   <data name="NovaSenhaIgualLogin" xml:space="preserve">
     <value>A nova senha não pode ser igual ao login.</value>
+  </data>
+  <data name="PerfilNaoPertenceAoSistemaSelecionado" xml:space="preserve">
+    <value>O perfil informado não pertence ao sistema selecionado.</value>
   </data>
   <data name="SenhaAtualIncorreta" xml:space="preserve">
     <value>A senha atual está incorreta ou a nova senha é inválida.</value>
@@ -149,6 +155,9 @@
   </data>
   <data name="SenhaSemNumero" xml:space="preserve">
     <value>A senha digitada deve possuir no mínimo um caracter númerico.</value>
+  </data>
+  <data name="UsuarioInexistente" xml:space="preserve">
+    <value>Usuário inexistente.</value>
   </data>
   <data name="UsuarioOuSenhaIncorretos" xml:space="preserve">
     <value>Usuário e/ou senha inseridos estão incorretos.</value>

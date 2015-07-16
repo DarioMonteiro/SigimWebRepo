@@ -146,8 +146,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsuarioFuncionalidadeController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\PerfilController.cs" />
+    <Compile Include="Areas\Admin\ViewModel\UsuarioFuncionalidadeViewModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\PerfilViewModel.cs" />
     <Compile Include="Areas\Contrato\ContratoAreaRegistration.cs" />
     <Compile Include="Areas\Contrato\Controllers\HomeController.cs" />
@@ -354,6 +356,9 @@
     <Content Include="Areas\Admin\Views\Perfil\ListaPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Perfil\Cadastro.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\EntradaMaterial\Cadastro.cshtml" />
+    <Content Include="Areas\Admin\Views\UsuarioFuncionalidade\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\UsuarioFuncionalidade\ListaPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\UsuarioFuncionalidade\Cadastro.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\RelOCItensOrdemCompra\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />

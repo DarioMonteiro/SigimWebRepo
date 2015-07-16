@@ -71,10 +71,12 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType(typeof(UnitOfWork), new PerResolveLifetimeManager());
 
             #region Admin
+
             currentContainer.RegisterType<IUsuarioRepository, UsuarioRepository>();
             currentContainer.RegisterType<IPerfilRepository, PerfilRepository>();
             currentContainer.RegisterType<IPerfilFuncionalidadeRepository, PerfilFuncionalidadeRepository>();
             currentContainer.RegisterType<IModuloRepository, ModuloRepository>();
+
             #endregion
 
             #region Contrato
@@ -164,11 +166,14 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             #endregion
 
             #region Application services
+
             #region Admin
+
+            currentContainer.RegisterType<IUsuarioAppService, UsuarioAppService>();
             currentContainer.RegisterType<IFuncionalidadeAppService, FuncionalidadeAppService>();
             currentContainer.RegisterType<IModuloAppService, ModuloAppService>();
-            currentContainer.RegisterType<IUsuarioAppService, UsuarioAppService>();
             currentContainer.RegisterType<IPerfilAppService, PerfilAppService>();
+
             #endregion
 
             #region Contrato
