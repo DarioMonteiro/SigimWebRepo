@@ -159,7 +159,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 if (formaPagamento.TituloPagar != null)
                 {
-                    if (formaPagamento.TituloPagar.TipoTitulo == TipoTitulo.NaoVinculado)
+                    if (formaPagamento.TituloPagar.TipoTitulo == TipoTitulo.Pai)
                     {
 
                     }
