@@ -812,6 +812,11 @@
     <Content Include="Views\Shared\EditorTemplates\TreeNode.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TreeView.cshtml" />
     <Content Include="Views\Material\ListaPesquisaPartial.cshtml" />
+    <Content Include="Views\Agencia\Cadastro.cshtml" />
+    <Content Include="Views\Agencia\Index.cshtml" />
+    <Content Include="Views\Agencia\ListaPartial.cshtml" />
+    <Content Include="Views\ContaCorrente\Index.cshtml" />
+    <Content Include="Views\ContaCorrente\ListaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
