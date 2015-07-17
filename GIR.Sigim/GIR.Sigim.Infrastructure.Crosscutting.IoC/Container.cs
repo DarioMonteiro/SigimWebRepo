@@ -111,6 +111,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IParametrosOrdemCompraRepository, ParametrosOrdemCompraRepository>();
             currentContainer.RegisterType<IParametrosUsuarioRepository, ParametrosUsuarioRepository>();
             currentContainer.RegisterType<IPreRequisicaoMaterialRepository, PreRequisicaoMaterialRepository>();
+            currentContainer.RegisterType<IOrdemCompraItemRepository, OrdemCompraItemRepository>();
             currentContainer.RegisterType<IRequisicaoMaterialRepository, RequisicaoMaterialRepository>();
             #endregion
 
@@ -125,6 +126,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ILogAcessoRepository, LogAcessoRepository>();
             currentContainer.RegisterType<ILogOperacaoRepository, LogOperacaoRepository>();
             currentContainer.RegisterType<IMaterialRepository, MaterialRepository>();
+            currentContainer.RegisterType<IMaterialClasseInsumoRepository, MaterialClasseInsumoRepository>();
             currentContainer.RegisterType<ITipoCompraRepository, TipoCompraRepository>();
             currentContainer.RegisterType<ICifFobRepository, CifFobRepository>();
             currentContainer.RegisterType<INaturezaOperacaoRepository, NaturezaOperacaoRepository>();
@@ -209,6 +211,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IParametrosOrdemCompraAppService, ParametrosOrdemCompraAppService>();
             currentContainer.RegisterType<IParametrosUsuarioAppService, ParametrosUsuarioAppService>();
             currentContainer.RegisterType<IPreRequisicaoMaterialAppService, PreRequisicaoMaterialAppService>();
+            currentContainer.RegisterType<IOrdemCompraItemAppService, OrdemCompraItemAppService>();
             currentContainer.RegisterType<IRequisicaoMaterialAppService, RequisicaoMaterialAppService>();
             #endregion
 
@@ -222,6 +225,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IContaCorrenteAppService, ContaCorrenteAppService>();
             currentContainer.RegisterType<ILogOperacaoAppService, LogOperacaoAppService>();
             currentContainer.RegisterType<IMaterialAppService, MaterialAppService>();
+            currentContainer.RegisterType<IMaterialClasseInsumoAppService, MaterialClasseInsumoAppService>();
             currentContainer.RegisterType<ITipoCompraAppService, TipoCompraAppService>();
             currentContainer.RegisterType<ICifFobAppService, CifFobAppService>();
             currentContainer.RegisterType<INaturezaOperacaoAppService, NaturezaOperacaoAppService>();

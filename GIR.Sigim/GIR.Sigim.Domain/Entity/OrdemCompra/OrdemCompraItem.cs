@@ -29,6 +29,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public decimal? PercentualDesconto { get; set; }
         public decimal? ValorTotalComImposto { get; set; }
         public decimal? ValorTotalItem { get; set; }
+
         public ICollection<EntradaMaterialItem> ListaEntradaMaterialItem { get; set; }
 
         public OrdemCompraItem()

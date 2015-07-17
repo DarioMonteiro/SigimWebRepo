@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Application.Enums;
 
 namespace GIR.Sigim.Presentation.WebUI.Controllers
 {
@@ -20,11 +21,26 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult ListarClienteContratoAtivosPorNome(string nome)
+        public ActionResult ListarClienteFornecedorPorNome(string nome,
+                                                           ClienteFornecedorModuloAutoComplete clienteFornecedorModulo,
+                                                           SituacaoAutoComplete situacao)
         {
-            var model = clienteFornecedorAppService.ListarClienteContratoAtivosPorNome(nome);
-            return Json(model);
-        }
+            if (clienteFornecedorModulo == ClienteFornecedorModuloAutoComplete.Contrato){
+                if (situacao == SituacaoAutoComplete.Ativo)
+                {
+                    var model = clienteFornecedorAppService.ListarClienteContratoAtivosPorNome(nome);
+                    return Json(model);
+                }
+            }
+            if (clienteFornecedorModulo == ClienteFornecedorModuloAutoComplete.OrdemCompra){
+                if (situacao == SituacaoAutoComplete.Ativo)
+                {
+                    var model = clienteFornecedorAppService.ListarClienteOrdemCompraAtivosPorNome(nome);
+                    return Json(model);
+                }
+            }
 
+            return Json(null);
+        }
     }
 }

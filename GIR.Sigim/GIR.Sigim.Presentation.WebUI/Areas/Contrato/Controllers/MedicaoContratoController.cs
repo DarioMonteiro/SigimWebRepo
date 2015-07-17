@@ -171,13 +171,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (!contratoRetificacaoAppService.EhRetificacaoAprovada(contratoRetificacao))
             {
-                //return View(model);
             }
-
-            //if (!contratoAppService.EhContratoAssinado(contrato))
-            //{
-            //    //return View(model);
-            //}
 
             model.RetencaoContratual = 0;
             if (contratoRetificacao.RetencaoContratual.HasValue)

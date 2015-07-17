@@ -107,6 +107,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
             .WithRequired(c => c.CentroCusto)
             .HasForeignKey(c => c.CodigoCentroCusto);
 
+        HasMany<Domain.Entity.OrdemCompra.OrdemCompra>(l => l.ListaOrdemCompra)
+            .WithRequired(c => c.CentroCusto)
+            .HasForeignKey(c => c.CodigoCentroCusto);
+
         }
     }
 }

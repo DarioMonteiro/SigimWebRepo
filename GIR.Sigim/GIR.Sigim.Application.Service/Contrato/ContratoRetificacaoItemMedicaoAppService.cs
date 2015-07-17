@@ -330,7 +330,7 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
             objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
-            objRel.SetParameterValue("descricaoCentroCusto", centroCusto.Descricao);
+            objRel.SetParameterValue("descricaoCentroCusto", centroCusto != null ?  centroCusto.Descricao : "");
             objRel.SetParameterValue("periodo", periodo);
             objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 

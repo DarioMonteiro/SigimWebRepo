@@ -78,6 +78,12 @@
                                                             changeMonth: true,
                                                             changeYear: true,
                                                             onClose: function (selectedDate) {
+                                                                if (selectedDate == '') {
+                                                                    $(this).datepicker('disable');
+                                                                    $(this).datepicker('setDate', new Date());
+                                                                    $(this).datepicker('enable');
+                                                                    selectedDate = new Date();
+                                                                }
                                                                 $('#@Html.IdFor(m => m.Filtro.DataFinal)').datepicker('option', 'minDate', selectedDate);
                                                             }
                                                         });
@@ -88,6 +94,12 @@
                                                             changeMonth: true,
                                                             changeYear: true,
                                                             onClose: function (selectedDate) {
+                                                                if (selectedDate == '') {
+                                                                    $(this).datepicker('disable');
+                                                                    $(this).datepicker('setDate', new Date());
+                                                                    $(this).datepicker('enable');
+                                                                    selectedDate = new Date();
+                                                                }
                                                                 $('#@Html.IdFor(m => m.Filtro.DataInicial)').datepicker('option', 'maxDate', selectedDate);
                                                             }
                                                         });
@@ -108,7 +120,6 @@
                                                     @Html.ValidationMessageFor(m => m.Filtro.OrdemCompraId, "", new { @class = "note note-error" })
                                                 </section>
                                                 <section class="col col-4">
-                                                    @*<label class="label"> </label>*@
                                                     <div class="inline-group" style="padding-top:28px;">
                                                         <label class="checkbox">
                                                             @Html.CheckBoxFor(m => m.Filtro.EhExibirSomentecomSaldo)
@@ -159,26 +170,44 @@
                                                 </script>
                                             </div>
                                             <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.ClienteFornecedor, "ClienteFornecedor", new { @sectionClass = "col col-10", @required = false, @label = "Fornecedor"})
-@*
-                                                <section class="col col-10">
-
-                                                    @Html.LabelFor(m => m.Filtro.ClienteFornecedorId, new { @class = "label" })
-                                                    <label class="select">
-                                                        @Html.DropDownListFor(m => m.Filtro.ClienteFornecedorId, Model.ListaFornecedorCliente, string.Empty)
-                                                        <i></i>
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                $("#@Html.IdFor(m => m.Filtro.ClienteFornecedorId)").on("change", function () {
-                                                                    limpaLista();
-                                                                });
-                                                            });
-                                                        </script>
-                                                    </label>
-                                                </section>*@
+                                                @Html.EditorFor(m => m.Filtro.ClasseInsumo, "ClasseInsumo", new { @sectionClass = "col col-6", @labelText = "Classe insumo" })
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.ClasseInsumo.Codigo)").on("change", function () {
+                                                            limpaLista();
+                                                        });
+                                                    });
+                                                </script>
                                             </div>
                                             <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.Material, "Material", new { @sectionClass = "col col-10", @required = false, @centroCustoRequerido = false, @insumoControlado = false })
+                                                @Html.EditorFor(m => m.Filtro.ClienteFornecedor, "ClienteFornecedor", 
+                                                            new { @sectionClass = "col col-10", 
+                                                                  @required = false, 
+                                                                  @label = "Fornecedor", 
+                                                                  @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.OrdemCompra),
+                                                                  @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo)
+                                                            })
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.ClienteFornecedor.Id)").on("change", function () {
+                                                            limpaLista();
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                            <div class="row">
+                                                @Html.EditorFor(m => m.Filtro.Material, "MaterialComPesquisaGenerica", new { @sectionClass = "col col-10", 
+                                                                                                                             @required = false, 
+                                                                                                                             @centroCustoRequerido = false, 
+                                                                                                                             @label = "Material", 
+                                                                                                                             @exibirBotaoPesquisa = false})
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.Material.Id)").on("change", function () {
+                                                            limpaLista();
+                                                        });
+                                                    });
+                                                </script>
                                                 <section class="col col-1">
                                                     <button id="btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar" onclick="javascript:tratarBotoes(true);goToPage(0);">
                                                         <i class="fa fa-search fa-lg"></i>
@@ -192,7 +221,7 @@
                         </div>
                         <footer>
                             @{
-                            var url = Url.Action("Imprimir", "RelNotaFiscalLiberada");
+                            var url = Url.Action("Imprimir", "RelOCItensOrdemCompra");
                             }
                             @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })                           
                         </footer>
@@ -209,38 +238,87 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var codigoCentroCusto = null;
-        var ordemCompraId = null;
-        var codigoClasse = null;
-        var materialId = null;
-        var clienteFornecedorId = null;
-        var situacaoLiberadas = false;
-        var situacaoPendentes = false;
-        var situacaoFechadas = false;
-        var exibirSomenteComSaldo = false;
-        var condicao = false;
 
-        ordemCompraId = $("#@Html.IdFor(m => m.Filtro.OrdemCompraId)").val();
-        codigoCentroCusto = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
-        codigoClasse = $("#@Html.IdFor(m => m.Filtro.Classe.Codigo)").val();
-        clienteFornecedorId = $("#@Html.IdFor(m => m.Filtro.ClienteFornecedor.Id)").val();
-        materialId = $("#@Html.IdFor(m => m.Filtro.Material.Id)").val();
-        exibirSomenteComSaldo = $("#@Html.IdFor(m => m.Filtro.EhExibirSomentecomSaldo)").val();
-        situacaoLiberadas = $("#@Html.IdFor(m => m.Filtro.EhLiberada)").val();
-        situacaoPendentes = $("#@Html.IdFor(m => m.Filtro.EhPendente)").val();
-        situacaoFechadas = $("#@Html.IdFor(m => m.Filtro.EhFechada)").val();
+        jQuery.validator.addMethod(
+            "ehCentroCustoValido",
+            function (value, element, params) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.ehCentroCustoValido = $('#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
 
-        condicao = situacaoLiberadas || situacaoPendentes || situacaoFechadas || exibirSomenteComSaldo;
-        condicao = condicao || (ordemCompraId !== "") || (codigoCentroCusto != "") || (codigoClasse != "")
-        condicao = condicao || (clienteFornecedorId != "") || (materialId != "");
+        jQuery.validator.addMethod(
+            "ehClasseValida",
+            function (value, element, params) {
+                var isValid = validaClasse();
+                $.validator.messages.ehClasseValida = $('#@Html.IdFor(m => m.Filtro.Classe.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
 
-        if (condicao) {
-            doFilter();
-        }
+        jQuery.validator.addMethod(
+            "ehClasseInsumoValida",
+            function (value, element, params) {
+                var isValid = validaClasseInsumo();
+                $.validator.messages.ehClasseInsumoValida = $('#@Html.IdFor(m => m.Filtro.ClasseInsumo.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
 
+
+        $('#formFilter').validate({
+            rules: {
+                '@Html.NameFor(m => m.Filtro.DataInicial)': {
+                    date: true
+                },
+                '@Html.NameFor(m => m.Filtro.DataFinal)': {
+                    date: true
+                },
+                '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
+                    ehCentroCustoValido: true
+                },
+                '@Html.NameFor(m => m.Filtro.Classe.Codigo)': {
+                    ehClasseValida: true
+                },
+                '@Html.NameFor(m => m.Filtro.ClasseInsumo.Codigo)': {
+                    ehClasseInsumoValida: true
+                }
+            },
+            messages: {
+                '@Html.NameFor(m => m.Filtro.DataInicial)': {
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                },
+                '@Html.NameFor(m => m.Filtro.DataFinal)': {
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                },
+                '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo")'
+                },
+                '@Html.NameFor(m => m.Filtro.Classe.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Classe")'
+                },
+                '@Html.NameFor(m => m.Filtro.ClasseInsumo.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Classe Insumo")'
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
+        });
 
         $(document).on("showFormatoImpressaoModalPanel", function (e) {
-
             var dataInicial          = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
             var dataFinal            = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
 
