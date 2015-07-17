@@ -408,10 +408,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private bool PodeCancelarNaSituacaoAtual(SituacaoRequisicaoMaterial situacao)
         {
-            if (situacao != SituacaoRequisicaoMaterial.Requisitada)
-                return false;
-
-            return true;
+            return situacao == SituacaoRequisicaoMaterial.Requisitada;
         }
 
         private bool PodeCancelarComItensAtuais(List<RequisicaoMaterialItemDTO> listaItens)

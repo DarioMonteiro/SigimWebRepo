@@ -98,8 +98,12 @@
     <Compile Include="DTO\Orcamento\ParametrosOrcamentoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\EntradaMaterialFormaPagamentoDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\EntradaMaterialImpostoDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\EntradaMaterialItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\EntradaMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\OrdemCompraDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\OrdemCompraFormaPagamentoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\OrdemCompraItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\CotacaoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\CotacaoItemDTO.cs" />

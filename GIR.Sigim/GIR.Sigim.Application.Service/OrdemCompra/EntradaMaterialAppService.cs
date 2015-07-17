@@ -13,6 +13,7 @@ using GIR.Sigim.Application.Filtros.OrdemCompras;
 using GIR.Sigim.Application.Reports.OrdemCompra;
 using GIR.Sigim.Application.Service.Admin;
 using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Repository.Financeiro;
@@ -138,6 +139,40 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return PodeSerSalvaNaSituacaoAtual(dto.Situacao);
         }
 
+        public bool EhPermitidoCancelar(EntradaMaterialDTO dto)
+        {
+            if (!dto.Id.HasValue)
+                return false;
+
+            if (!PodeCancelarNaSituacaoAtual(dto.Situacao))
+                return false;
+
+            if (JaHouvePagamentoEfetuado(dto))
+                return false;
+
+            return true;
+        }
+
+        private bool JaHouvePagamentoEfetuado(EntradaMaterialDTO dto)
+        {
+            foreach (var formaPagamento in dto.ListaFormaPagamento)
+            {
+                if (formaPagamento.TituloPagar != null)
+                {
+                    if (formaPagamento.TituloPagar.TipoTitulo == TipoTitulo.NaoVinculado)
+                    {
+
+                    }
+                    if ((formaPagamento.TituloPagar.Situacao == SituacaoTituloPagar.Emitido)
+                        || (formaPagamento.TituloPagar.Situacao == SituacaoTituloPagar.Pago)
+                        || (formaPagamento.TituloPagar.Situacao == SituacaoTituloPagar.Baixado))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
         public bool EhPermitidoImprimir(EntradaMaterialDTO dto)
         {
             if (!dto.Id.HasValue)
@@ -163,6 +198,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private bool PodeSerSalvaNaSituacaoAtual(SituacaoEntradaMaterial situacao)
         {
             return situacao == SituacaoEntradaMaterial.Pendente;
+        }
+
+        private bool PodeCancelarNaSituacaoAtual(SituacaoEntradaMaterial situacao)
+        {
+            return situacao != SituacaoEntradaMaterial.Cancelada;
         }
 
         private DataTable EntradaMaterialToDataTable(EntradaMaterial entradaMaterial)

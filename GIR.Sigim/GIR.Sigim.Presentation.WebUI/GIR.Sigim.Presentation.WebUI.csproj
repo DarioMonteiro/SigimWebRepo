@@ -802,6 +802,12 @@
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ClienteFornecedor.cshtml" />
+    <Content Include="Views\Agencia\Cadastro.cshtml" />
+    <Content Include="Views\Agencia\Index.cshtml" />
+    <Content Include="Views\Agencia\ListaPartial.cshtml" />
+    <Content Include="Views\ContaCorrente\Index.cshtml" />
+    <Content Include="Views\ContaCorrente\ListaPartial.cshtml" />
+    <Content Include="Views\Material\ListaPesquisaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

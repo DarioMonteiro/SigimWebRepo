@@ -77,6 +77,9 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public Nullable<DateTime> DataConferencia { get; set; }
         public string LoginUsuarioConferencia { get; set; }
         public bool PossuiAvaliacaoFornecedor { get; set; }
+        public ICollection<EntradaMaterialItemDTO> ListaItens { get; set; }
+        public ICollection<EntradaMaterialFormaPagamentoDTO> ListaFormaPagamento { get; set; }
+        public ICollection<EntradaMaterialImpostoDTO> ListaImposto { get; set; }
 
         public EntradaMaterialDTO()
         {
@@ -85,6 +88,9 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
             this.CentroCusto = new CentroCustoDTO();
             this.ClienteFornecedor = new ClienteFornecedorDTO();
             this.FornecedorNota = new ClienteFornecedorDTO();
+            this.ListaItens = new HashSet<EntradaMaterialItemDTO>();
+            this.ListaFormaPagamento = new HashSet<EntradaMaterialFormaPagamentoDTO>();
+            this.ListaImposto = new HashSet<EntradaMaterialImpostoDTO>();
         }
     }
 }
