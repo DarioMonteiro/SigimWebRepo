@@ -146,8 +146,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsuarioFuncionalidadeController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\PerfilController.cs" />
+    <Compile Include="Areas\Admin\ViewModel\UsuarioFuncionalidadeViewModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\PerfilViewModel.cs" />
     <Compile Include="Areas\Contrato\ContratoAreaRegistration.cs" />
     <Compile Include="Areas\Contrato\Controllers\HomeController.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="Controllers\ClienteFornecedorController.cs" />
     <Compile Include="Controllers\ContaCorrenteController.cs" />
     <Compile Include="Controllers\FormaRecebimentoController.cs" />
+    <Compile Include="Controllers\MaterialClasseInsumoController.cs" />
     <Compile Include="Controllers\UnidadeMedidaController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\HomeController.cs" />
@@ -294,7 +297,6 @@
     <Content Include="Scripts\plugin\form-to-json\jquery.toObject.js" />
     <Content Include="Scripts\sigim_scripts.js" />
     <Content Include="Views\Shared\EditorTemplates\CentroCusto.cshtml" />
-    <Content Include="Areas\Financeiro\Views\Shared\TreeNode.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\Parametros\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\ListaPartial.cshtml" />
@@ -354,6 +356,10 @@
     <Content Include="Areas\Admin\Views\Perfil\ListaPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Perfil\Cadastro.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\EntradaMaterial\Cadastro.cshtml" />
+    <Content Include="Areas\Admin\Views\UsuarioFuncionalidade\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\UsuarioFuncionalidade\ListaPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\UsuarioFuncionalidade\Cadastro.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\RelOCItensOrdemCompra\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
@@ -790,7 +796,6 @@
     <Content Include="Views\Shared\_PaginationPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ListPageScript.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Classe.cshtml" />
-    <Content Include="Areas\Financeiro\Views\Shared\TreeView.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Material.cshtml" />
     <Content Include="Views\Shared\Redirect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Imprimir.cshtml" />
@@ -807,6 +812,11 @@
     <Content Include="Views\Agencia\ListaPartial.cshtml" />
     <Content Include="Views\ContaCorrente\Index.cshtml" />
     <Content Include="Views\ContaCorrente\ListaPartial.cshtml" />
+    <Content Include="Views\Material\ListaPesquisaPartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MaterialComPesquisaGenerica.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClasseInsumo.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TreeNode.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TreeView.cshtml" />
     <Content Include="Views\Material\ListaPesquisaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -293,7 +293,12 @@
                                                 </script>
                                             </div>
                                             <div class="row">
-                                                @Html.EditorFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor, "ClienteFornecedor", new { @sectionClass = "col col-12", @required = false, @label = "Multifornecedor"})
+                                                @Html.EditorFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor, "ClienteFornecedor", new { @sectionClass = "col col-12", 
+                                                                                                                                                  @required = false, 
+                                                                                                                                                  @label = "Multifornecedor",
+                                                                                                                                                  @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
+                                                                                                                                                  @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo)
+                                                                                                                                                 })
                                             </div>
                                         </fieldset>
                                         <h5 style="padding-left :15px;">

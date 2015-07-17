@@ -6,20 +6,25 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.Financeiro;
+using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 
 namespace GIR.Sigim.Application.DTO.OrdemCompra
 {
     public class OrdemCompraDTO : BaseDTO
     {
+        public string CodigoCentroCusto { get; set; }
+        public CentroCustoDTO CentroCusto { get; set; }
+        public int ClienteFornecedorId { get; set; }
+        public ClienteFornecedorDTO ClienteFornecedor { get; set; }
         public DateTime Data { get; set; }
         public SituacaoOrdemCompra Situacao { get; set; }
-
         [Display(Name = "Situação")]
         public string SituacaoDescricao
         {
             get { return this.Situacao.ObterDescricao(); }
         }
+        public int? PrazoEntrega { get; set; }
 
         public List<OrdemCompraItemDTO> ListaItens { get; set; }
 

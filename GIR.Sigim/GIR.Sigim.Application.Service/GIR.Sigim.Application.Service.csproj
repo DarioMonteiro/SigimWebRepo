@@ -82,6 +82,7 @@
     <Compile Include="Orcamento\OrcamentoAppService.cs" />
     <Compile Include="Orcamento\ParametrosOrcamentoAppService.cs" />
     <Compile Include="OrdemCompra\EntradaMaterialAppService.cs" />
+    <Compile Include="OrdemCompra\OrdemCompraItemAppService.cs" />
     <Compile Include="OrdemCompra\RequisicaoMaterialAppService.cs" />
     <Compile Include="OrdemCompra\ParametrosOrdemCompraAppService.cs" />
     <Compile Include="OrdemCompra\ParametrosUsuarioAppService.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Sigim\AgenciaAppService.cs" />
     <Compile Include="Sigim\ContaCorrenteAppService.cs" />
     <Compile Include="Sigim\FormaRecebimentoAppService.cs" />
+    <Compile Include="Sigim\MaterialClasseInsumoAppService.cs" />
     <Compile Include="Sigim\TratamentoAppService.cs" />
     <Compile Include="Sigim\TipoAreaAppService.cs" />
     <Compile Include="Sigim\TipoCaracteristicaAppService.cs" />

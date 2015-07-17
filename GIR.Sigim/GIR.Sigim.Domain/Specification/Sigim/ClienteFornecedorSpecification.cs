@@ -32,5 +32,10 @@ namespace GIR.Sigim.Domain.Specification.Sigim
             return new DirectSpecification<ClienteFornecedor>(l => l.ClienteContrato == "S");
         }
 
+        public static Specification<ClienteFornecedor> EhClienteOrdemCompra()
+        {
+            return new DirectSpecification<ClienteFornecedor>(l => l.ClienteOrdemCompra == "S");
+        }
+
     }
 }

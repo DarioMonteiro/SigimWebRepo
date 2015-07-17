@@ -14,17 +14,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
     public class RelNotaFiscalLiberadaController : BaseController
     {
-        private IClienteFornecedorAppService clienteFornecedorAppService;
         private IContratoAppService contratoAppService;
         private IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
 
-        public RelNotaFiscalLiberadaController( IClienteFornecedorAppService clienteFornecedorAppService,
-                                                IContratoAppService contratoAppService,
+        public RelNotaFiscalLiberadaController( IContratoAppService contratoAppService,
                                                 IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
                                                 MessageQueue messageQueue)
             : base(messageQueue)
         {
-            this.clienteFornecedorAppService = clienteFornecedorAppService;
             this.contratoAppService = contratoAppService;
             this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
         }

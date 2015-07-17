@@ -23,7 +23,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Admin
 
         #endregion
 
-        #region IPerfilRepository Members
+        #region IPerfilFuncionalidadeRepository Members
 
         #endregion
     }

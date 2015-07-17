@@ -42,7 +42,16 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("naoGeraSPED")
                 .HasColumnOrder(5);
 
-            HasMany(l => l.ListaMaterial)
+            Property(l => l.CodigoPai)
+                .HasMaxLength(18)
+                .HasColumnName("pai")
+                .HasColumnOrder(6);
+
+            HasOptional<MaterialClasseInsumo>(l => l.ClassePai)
+                .WithMany(c => c.ListaFilhos)
+                .HasForeignKey(c => c.CodigoPai);
+
+            HasMany<Material>(l => l.ListaMaterial)
                 .WithOptional(l => l.MaterialClasseInsumo);
         }
     }

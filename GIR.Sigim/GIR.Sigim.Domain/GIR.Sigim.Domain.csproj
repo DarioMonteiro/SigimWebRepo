@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Admin\UsuarioPerfil.cs" />
     <Compile Include="Entity\Admin\UsuarioFuncionalidade.cs" />
     <Compile Include="Entity\Admin\PerfilFuncionalidade.cs" />
     <Compile Include="Entity\Admin\Modulo.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Repository\Orcamento\IOrcamentoRepository.cs" />
     <Compile Include="Repository\Orcamento\IParametrosOrcamentoRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IEntradaMaterialRepository.cs" />
+    <Compile Include="Repository\OrdemCompra\IOrdemCompraItemRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Repository\Sac\IParametrosEmailSacRepository.cs" />
     <Compile Include="Repository\Sac\ISetorRepository.cs" />
     <Compile Include="Repository\Sigim\ILogOperacaoRepository.cs" />
+    <Compile Include="Repository\Sigim\IMaterialClasseInsumoRepository.cs" />
     <Compile Include="Repository\Sigim\IUnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sac\IParametrosSacRepository.cs" />
     <Compile Include="Repository\Sigim\ITipoCaracteristicaRepository.cs" />
@@ -250,6 +253,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Specification\Admin\UsuarioFuncionalidadeSpecification.cs" />
     <Compile Include="Specification\Admin\PerfilSpecification.cs" />
     <Compile Include="Specification\AndSpecification.cs" />
     <Compile Include="Specification\BaseSpecification.cs" />
@@ -263,6 +267,7 @@
     <Compile Include="Specification\NotSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\AbstractRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\EntradaMaterialSpecification.cs" />
+    <Compile Include="Specification\OrdemCompra\OrdemCompraItemSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\RequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\PreRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrSpecification.cs" />
@@ -276,6 +281,7 @@
     <Compile Include="Specification\TrueSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resource\Admin\" />
     <Folder Include="Service\Sigim\" />
     <Folder Include="Specification\Financeiro\" />
   </ItemGroup>

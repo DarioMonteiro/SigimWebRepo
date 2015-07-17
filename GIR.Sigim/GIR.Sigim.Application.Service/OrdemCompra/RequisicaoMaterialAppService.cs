@@ -562,7 +562,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             row[dataAprovado] = requisicaoMaterial.DataAprovacao.HasValue ? requisicaoMaterial.DataAprovacao.Value.ToString("dd/MM/yyyy") : string.Empty;
             row[usuarioAprovado] = requisicaoMaterial.LoginUsuarioAprovacao;
             row[centroCusto] = requisicaoMaterial.CodigoCentroCusto;
-            row[descricaoCentroCusto] = requisicaoMaterial.CentroCusto.Descricao;
+            row[descricaoCentroCusto] = requisicaoMaterial.CodigoCentroCusto + " - " + requisicaoMaterial.CentroCusto.Descricao;
             row[codigoDescricaoCentroCusto] = requisicaoMaterial.CodigoCentroCusto + " - " + requisicaoMaterial.CentroCusto.Descricao;
             row[situacaoCentroCusto] = requisicaoMaterial.CentroCusto.Situacao;
             row[situacao] = requisicaoMaterial.Situacao;

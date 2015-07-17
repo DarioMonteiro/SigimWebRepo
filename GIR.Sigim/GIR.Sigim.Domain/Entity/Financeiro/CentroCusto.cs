@@ -8,6 +8,7 @@ using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Entity.Contrato;
 
+
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
     public class CentroCusto : BaseEntity
@@ -42,6 +43,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<RateioAutomatico> ListaRateioAutomatico { get; set; }
         public ICollection<TaxaAdministracao> ListaTaxaAdministracao { get; set; }
         public ICollection<EntradaMaterial> ListaEntradaMaterial { get; set; }
+        public ICollection<Domain.Entity.OrdemCompra.OrdemCompra> ListaOrdemCompra { get; set; }
 
         public CentroCusto()
         {
@@ -61,6 +63,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaRateioAutomatico = new HashSet<RateioAutomatico>();
             this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();
             this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();
+            this.ListaOrdemCompra = new HashSet<Domain.Entity.OrdemCompra.OrdemCompra>();
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)

@@ -13,10 +13,15 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public bool? EhMovimentoTemporario { get; set; }
         public int? Sequencial { get; set; }
         public bool? NaoGeraSPED { get; set; }
+        public string CodigoPai { get; set; }
+        public MaterialClasseInsumo ClassePai { get; set; }
+        public virtual ICollection<MaterialClasseInsumo> ListaFilhos { get; set; }
+
         public ICollection<Material> ListaMaterial { get; set; }
 
         public MaterialClasseInsumo()
         {
+            this.ListaFilhos = new HashSet<MaterialClasseInsumo>();
             this.ListaMaterial = new HashSet<Material>();
         }
     }
