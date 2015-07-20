@@ -817,6 +817,7 @@
     <Content Include="Views\Agencia\ListaPartial.cshtml" />
     <Content Include="Views\ContaCorrente\Index.cshtml" />
     <Content Include="Views\ContaCorrente\ListaPartial.cshtml" />
+    <None Include="Properties\PublishProfiles\SigimWeb.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
