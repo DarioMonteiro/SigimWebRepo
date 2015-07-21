@@ -108,6 +108,74 @@
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                             @{
+                                string disableBtnCancelar = string.Empty;
+                                if (!Model.PodeCancelarEntrada)
+                                {
+                                    disableBtnCancelar = "disabled";
+                                }
+                            }
+                            <a data-toggle="modal" href="#MotivoCancelamento_ModalPanel" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
+                            @if (Model.PodeCancelarEntrada) {
+                                <div class="modal fade" id="MotivoCancelamento_ModalPanel" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title">
+                                                    Motivo do Cancelamento
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                @if (!Model.ExisteMovimentoNoEstoque) {
+                                                    <article class="col-sm-12">
+                                                        <div class="alert alert-info alert-block fade in">
+                                                            <h4 class="alert-heading">Informação</h4>
+                                                            O cancelamento não irá abater a quantidade do insumo no estoque.
+                                                            Porque, quando da entrada desse insumo, o sistema não o incluiu no estoque.<br />
+                                                            Em caso de dúvida, favor anotar o número da Entrada de Material e reportar a GIR.
+                                                        </div>
+                                                    </article>
+                                                }
+                                                <label class="textarea">
+                                                    @Html.TextAreaFor(m => m.EntradaMaterial.MotivoCancelamento, new { @rows = "3" })
+                                                </label>
+                                            </div>
+                                            <div class="modal-footer">
+								                <button type="button" id="btnCancelarEntrada" class="btn btn-primary">
+									                Ok
+								                </button>
+							                </div>
+                                        </div>
+                                    </div>
+                                    <script type="text/javascript">
+                                        $("#btnCancelarEntrada").on("click", function () {
+                                            var motivo = $("#@Html.IdFor(m => m.EntradaMaterial.MotivoCancelamento)").val();
+                                            if (motivo.length != 0) {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("Cancelar", "EntradaMaterial")',
+                                                    cache: false,
+                                                    async: false,
+                                                    contentType: 'application/json; charset=utf-8',
+                                                    data: JSON.stringify({
+                                                        id: '@Html.DisplayFor(m => m.EntradaMaterial.Id)',
+                                                        motivo: motivo
+                                                    })
+                                                })
+                                                .success(function (result) {
+                                                    $('#notificationMessages').html(result);
+                                                });
+                                            }
+                                            else
+                                                smartAlert("Erro", "@GIR.Sigim.Application.Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoEntradaMaterial", "error");
+                                        });
+                                    </script>
+                                </div>
+                            }
+
+                            @{
                                 var url = Url.Action("Imprimir", "EntradaMaterial") + "/" + @Html.DisplayFor(m => m.EntradaMaterial.Id);
                             }
                             @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url } )

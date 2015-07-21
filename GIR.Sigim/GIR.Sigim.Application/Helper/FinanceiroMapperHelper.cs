@@ -15,17 +15,35 @@ namespace GIR.Sigim.Application.Helper
     {
         public static void Initialise()
         {
+            Mapper.CreateMap<Caixa, CaixaDTO>();
+            Mapper.CreateMap<CaixaDTO, Caixa>();
+
             Mapper.CreateMap<CentroCusto, CentroCustoDTO>();
             Mapper.CreateMap<CentroCustoDTO, CentroCusto>();
 
             Mapper.CreateMap<Classe, ClasseDTO>();
             Mapper.CreateMap<ClasseDTO, Classe>();
 
-            Mapper.CreateMap<Caixa, CaixaDTO>();
-            Mapper.CreateMap<CaixaDTO, Caixa>();
+            Mapper.CreateMap<ImpostoFinanceiro, ImpostoFinanceiroDTO>();
+            Mapper.CreateMap<ImpostoFinanceiroDTO, ImpostoFinanceiro>();
+
+            Mapper.CreateMap<ImpostoPagar, ImpostoPagarDTO>();
+            Mapper.CreateMap<ImpostoPagarDTO, ImpostoPagar>();
+
+            Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
+            Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
+
+            Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
+            Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>();
 
             Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
             Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
+
+            Mapper.CreateMap<RateioAutomatico, RateioAutomaticoDTO>();
+            Mapper.CreateMap<RateioAutomaticoDTO, RateioAutomatico>();
+
+            Mapper.CreateMap<TaxaAdministracao, TaxaAdministracaoDTO>();
+            Mapper.CreateMap<TaxaAdministracaoDTO, TaxaAdministracao>();
 
             Mapper.CreateMap<TipoCompromisso, TipoCompromissoDTO>();
             Mapper.CreateMap<TipoCompromissoDTO, TipoCompromisso>();
@@ -41,24 +59,6 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<TituloReceber, TituloReceberDTO>();
             Mapper.CreateMap<TituloReceberDTO, TituloReceber>();
-
-            Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
-            Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
-
-            Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
-            Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
-
-            Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
-            Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>();
-
-            Mapper.CreateMap<ImpostoFinanceiro, ImpostoFinanceiroDTO>();
-            Mapper.CreateMap<ImpostoFinanceiroDTO, ImpostoFinanceiro>();
-
-            Mapper.CreateMap<RateioAutomatico, RateioAutomaticoDTO>();
-            Mapper.CreateMap<RateioAutomaticoDTO, RateioAutomatico>();
-
-            Mapper.CreateMap<TaxaAdministracao, TaxaAdministracaoDTO>();
-            Mapper.CreateMap<TaxaAdministracaoDTO, TaxaAdministracao>();
 
             Mapper.CreateMap<AssuntoContatoDTO, TabelaBasicaDTO>()
                 .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.AssuntoContato));

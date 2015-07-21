@@ -138,8 +138,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasMaxLength(50)
                 .HasColumnName("numeroNotaFrete");
 
-            Property(l => l.OrdemCompraFrete)
+            Property(l => l.OrdemCompraFreteId)
                 .HasColumnName("ordemCompraFrete");
+
+            //HasOptional(l => l.OrdemCompraFrete)
+            //    .WithMany(l => l.ListaEntradaMaterial)
+            //    .HasForeignKey(l => l.OrdemCompraFreteId);
 
             Property(l => l.TituloFreteId)
                 .HasColumnName("tituloFrete");

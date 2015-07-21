@@ -217,7 +217,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         {
             if (string.IsNullOrEmpty(motivo.Trim()))
             {
-                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoPreRequisicao, TypeMessage.Error);
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoRequisicao, TypeMessage.Error);
                 return false;
             }
 

@@ -88,7 +88,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             //}
 
             model.PodeSalvar = entradaMaterialAppService.EhPermitidoSalvar(entradaMaterial);
-            //model.PodeCancelarRequisicao = requisicaoMaterialAppService.EhPermitidoCancelar(entradaMaterial);
+            model.PodeCancelarEntrada = entradaMaterialAppService.EhPermitidoCancelar(entradaMaterial);
+            model.ExisteMovimentoNoEstoque = entradaMaterialAppService.ExisteMovimentoNoEstoque(entradaMaterial);
             model.PodeImprimir = entradaMaterialAppService.EhPermitidoImprimir(entradaMaterial);
             //model.PodeAdicionarItem = requisicaoMaterialAppService.EhPermitidoAdicionarItem(entradaMaterial);
             //model.PodeCancelarItem = requisicaoMaterialAppService.EhPermitidoCancelarItem(entradaMaterial);
@@ -98,6 +99,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             //model.PodeEditarCentroCusto = requisicaoMaterialAppService.EhPermitidoEditarCentroCusto(entradaMaterial);
 
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Cancelar(int? id, string motivo)
+        {
+            if (entradaMaterialAppService.CancelarEntrada(id, motivo))
+                return PartialView("Redirect", Url.Action("Cadastro", "EntradaMaterial", new { id = id }));
+
+            return PartialView("_NotificationMessagesPartial");
         }
 
         public ActionResult Imprimir(int? id, FormatoExportacaoArquivo formato)

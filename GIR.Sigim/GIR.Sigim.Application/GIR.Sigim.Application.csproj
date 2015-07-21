@@ -76,10 +76,12 @@
     <Compile Include="DTO\Contrato\LicitacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
     <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
+    <Compile Include="DTO\Estoque\MovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
+    <Compile Include="DTO\Financeiro\ImpostoPagarDTO.cs" />
     <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />
     <Compile Include="DTO\Financeiro\RateioAutomaticoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoFinanceiroDTO.cs" />
@@ -189,6 +191,7 @@
     <Compile Include="Filtros\Sigim\UnidadeMedidaFiltro.cs" />
     <Compile Include="Helper\AdminMapperHelper.cs" />
     <Compile Include="Helper\ContratoMapperHelper.cs" />
+    <Compile Include="Helper\EstoqueMapperHelper.cs" />
     <Compile Include="Helper\SacMapperHelper.cs" />
     <Compile Include="Helper\SigimMapperHelper.cs" />
     <Compile Include="Helper\OrdemCompraMapperHelper.cs" />

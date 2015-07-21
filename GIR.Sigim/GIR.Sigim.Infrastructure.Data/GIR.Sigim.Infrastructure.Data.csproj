@@ -62,10 +62,12 @@
     <Compile Include="Configuration\Contrato\LicitacaoDescricaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\LicitacaoCronogramaConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ParametrosContratoConfiguration.cs" />
+    <Compile Include="Configuration\Estoque\MovimentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\AbstractTituloConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ClasseConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CaixaConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\ImpostoPagarConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TaxaAdministracaoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\RateioAutomaticoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ImpostoFinanceiroConfiguration.cs" />

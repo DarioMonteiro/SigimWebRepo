@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CrystalDecisions.Shared;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros.OrdemCompras;
@@ -90,8 +91,68 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return ObterPeloIdEUsuario(id,
                 UsuarioLogado.Id,
                 l => l.ListaItens,
-                l => l.ListaFormaPagamento,
-                l => l.ListaImposto).To<EntradaMaterialDTO>();
+                l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
+                l => l.ListaImposto,
+                l => l.ListaMovimentoEstoque).To<EntradaMaterialDTO>();
+        }
+
+        public bool CancelarEntrada(int? id, string motivo)
+        {
+            if (string.IsNullOrEmpty(motivo.Trim()))
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoEntradaMaterial, TypeMessage.Error);
+                return false;
+            }
+
+            var entradaMaterial = ObterPeloIdEUsuario(id, UsuarioLogado.Id,
+                l => l.ListaItens,
+                l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
+                l => l.ListaImposto,
+                l => l.ListaMovimentoEstoque);
+
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
+                return false;
+            }
+
+            if (!PodeCancelarNaSituacaoAtual(entradaMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            foreach (var formaPagamento in entradaMaterial.ListaFormaPagamento.To<List<EntradaMaterialFormaPagamentoDTO>>())
+            {
+                int? tituloPagarId;
+
+                if (PossuiTituloPago(formaPagamento.TituloPagar, out tituloPagarId))
+                {
+                    var msg = string.Format(Resource.OrdemCompra.ErrorMessages.TituloEstaPago, tituloPagarId.ToString());
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return false;
+                }
+
+                if (PossuiTituloImpostoPago(formaPagamento.TituloPagar, out tituloPagarId))
+                {
+                    var msg = string.Format(Resource.OrdemCompra.ErrorMessages.TituloImpostoEstaPago, tituloPagarId.ToString());
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return false;
+                }
+            }
+
+            entradaMaterial.MotivoCancelamento = motivo;
+            entradaMaterial.Situacao = SituacaoEntradaMaterial.Cancelada;
+            entradaMaterial.DataCancelamento = DateTime.Now;
+            entradaMaterial.LoginUsuarioCancelamento = UsuarioLogado.Login;
+
+            //TODO: Efetuar todos os passos da PROCEDURE [OrdemCompra].[entradaMaterial_Cancela]
+
+            entradaMaterialRepository.Alterar(entradaMaterial);
+            entradaMaterialRepository.UnitOfWork.Commit();
+            messageQueue.Add(Resource.OrdemCompra.SuccessMessages.CancelamentoComSucesso, TypeMessage.Success);
+            return true;
         }
 
         public FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato)
@@ -153,32 +214,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return true;
         }
 
-        private bool JaHouvePagamentoEfetuado(EntradaMaterialDTO dto)
-        {
-            foreach (var formaPagamento in dto.ListaFormaPagamento)
-            {
-                if (formaPagamento.TituloPagar != null)
-                {
-                    if (formaPagamento.TituloPagar.TipoTitulo == TipoTitulo.Pai)
-                    {
-
-                    }
-                    if ((formaPagamento.TituloPagar.Situacao == SituacaoTituloPagar.Emitido)
-                        || (formaPagamento.TituloPagar.Situacao == SituacaoTituloPagar.Pago)
-                        || (formaPagamento.TituloPagar.Situacao == SituacaoTituloPagar.Baixado))
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
         public bool EhPermitidoImprimir(EntradaMaterialDTO dto)
         {
             if (!dto.Id.HasValue)
                 return false;
 
             return true;
+        }
+
+        public bool ExisteMovimentoNoEstoque(EntradaMaterialDTO dto)
+        {
+            return dto.ListaMovimentoEstoque.Any();
         }
 
         #endregion
@@ -203,6 +249,90 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private bool PodeCancelarNaSituacaoAtual(SituacaoEntradaMaterial situacao)
         {
             return situacao != SituacaoEntradaMaterial.Cancelada;
+        }
+
+        private bool JaHouvePagamentoEfetuado(EntradaMaterialDTO dto)
+        {
+            foreach (var formaPagamento in dto.ListaFormaPagamento)
+            {
+                int? tituloPagarId;
+
+                if (PossuiTituloPago(formaPagamento.TituloPagar, out tituloPagarId))
+                    return true;
+
+                if (PossuiTituloImpostoPago(formaPagamento.TituloPagar, out tituloPagarId))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool PossuiTituloImpostoPago(TituloPagarDTO tituloPagar, out int? tituloPagarId)
+        {
+            tituloPagarId = null;
+            if (tituloPagar != null)
+            {
+                foreach (var item in tituloPagar.ListaImpostoPagar)
+                {
+                    if (item.TituloPagar.TipoTitulo == TipoTitulo.Pai)
+                    {
+                        if (PossuiTituloDesdobradoPago(item.TituloPagar.ListaFilhos, out tituloPagarId))
+                            return true;
+                    }
+                    else if (EhTituloPago(item.TituloPagar, out tituloPagarId))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool PossuiTituloPago(TituloPagarDTO tituloPagar, out int? tituloPagarId)
+        {
+            tituloPagarId = null;
+            if (tituloPagar != null)
+            {
+                if (tituloPagar.TipoTitulo == TipoTitulo.Pai)
+                {
+                    if (PossuiTituloDesdobradoPago(tituloPagar.ListaFilhos, out tituloPagarId))
+                        return true;
+                }
+                else if (EhTituloPago(tituloPagar, out tituloPagarId))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool PossuiTituloDesdobradoPago(List<TituloPagarDTO> listaFilhos, out int? tituloPagarId)
+        {
+            tituloPagarId = null;
+            foreach (var titulo in listaFilhos)
+            {
+                if (titulo.TipoTitulo == TipoTitulo.Pai)
+                {
+                    if (PossuiTituloDesdobradoPago(titulo.ListaFilhos, out tituloPagarId))
+                        return true;
+                }
+                else if (EhTituloPago(titulo, out tituloPagarId))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool EhTituloPago(TituloPagarDTO titulo, out int? tituloPagarId)
+        {
+            tituloPagarId = null;
+            if ((titulo.Situacao == SituacaoTituloPagar.Emitido)
+                || (titulo.Situacao == SituacaoTituloPagar.Pago)
+                || (titulo.Situacao == SituacaoTituloPagar.Baixado))
+            {
+                tituloPagarId = titulo.Id;
+                return true;
+            }
+
+            return false;
         }
 
         private DataTable EntradaMaterialToDataTable(EntradaMaterial entradaMaterial)

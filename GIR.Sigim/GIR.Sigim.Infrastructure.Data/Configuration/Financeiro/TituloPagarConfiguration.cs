@@ -30,6 +30,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .WithOptional(c => c.TituloPagar)
                 .HasForeignKey(c => c.TituloPagarId);
 
+            Property(l => l.TituloPaiId)
+                .HasColumnName("tituloPai");
+
+            HasOptional(l => l.TituloPai)
+                .WithMany(l => l.ListaFilhos)
+                .HasForeignKey(l => l.TituloPaiId);
         }
     }
 }

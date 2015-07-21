@@ -13,9 +13,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
     {
         List<EntradaMaterialDTO> ListarPeloFiltro(EntradaMaterialFiltro filtro, out int totalRegistros);
         EntradaMaterialDTO ObterPeloId(int? id);
+        bool CancelarEntrada(int? id, string motivo);
+        FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato);
         bool EhPermitidoSalvar(EntradaMaterialDTO dto);
         bool EhPermitidoCancelar(EntradaMaterialDTO dto);
         bool EhPermitidoImprimir(EntradaMaterialDTO dto);
-        FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato);
+        bool ExisteMovimentoNoEstoque(EntradaMaterialDTO dto);
     }
 }

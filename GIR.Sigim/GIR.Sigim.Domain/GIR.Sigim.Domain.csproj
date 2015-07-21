@@ -62,11 +62,13 @@
     <Compile Include="Entity\Contrato\SituacaoContrato.cs" />
     <Compile Include="Entity\Contrato\SituacaoLicitacao.cs" />
     <Compile Include="Entity\Contrato\SituacaoMedicao.cs" />
+    <Compile Include="Entity\Estoque\Movimento.cs" />
     <Compile Include="Entity\Financeiro\AbstractTitulo.cs" />
     <Compile Include="Entity\Financeiro\CentroCusto.cs" />
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
     <Compile Include="Entity\Financeiro\Caixa.cs" />
+    <Compile Include="Entity\Financeiro\ImpostoPagar.cs" />
     <Compile Include="Entity\Financeiro\TaxaAdministracao.cs" />
     <Compile Include="Entity\Financeiro\RateioAutomatico.cs" />
     <Compile Include="Entity\Financeiro\FatoGeradorImpostoFinanceiro.cs" />

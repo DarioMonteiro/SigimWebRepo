@@ -18,8 +18,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
     public class EntradaMaterialCadastroViewModel
     {
         public EntradaMaterialDTO EntradaMaterial { get; set; }
-
+        public bool ExisteMovimentoNoEstoque { get; set; }
         public bool PodeSalvar { get; set; }
+        public bool PodeCancelarEntrada { get; set; }
         public bool PodeImprimir { get; set; }
     }
 }
