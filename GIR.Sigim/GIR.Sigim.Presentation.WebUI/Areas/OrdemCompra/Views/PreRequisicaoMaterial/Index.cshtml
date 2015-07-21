@@ -98,24 +98,26 @@
                                             </div>
                                             <div class="row">
                                                 <section class="col col-12">
-                                                    <label class="label">Situação</label>
-                                                    <div class="inline-group">
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhRequisitada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhRequisitada)
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhFechada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhParcialmenteAprovada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhParcialmenteAprovada)
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhCancelada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhCancelada)
-                                                        </label>
+                                                    <div style="border:1px solid lightgray; width:550px;">
+                                                        <label class="label">Situação</label>
+                                                        <div class="inline-group" style="padding-left:15px;">
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhRequisitada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhRequisitada)
+                                                            </label>
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhFechada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
+                                                            </label>
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhParcialmenteAprovada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhParcialmenteAprovada)
+                                                            </label>
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhCancelada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhCancelada)
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </section>
                                             </div>

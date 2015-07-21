@@ -71,3 +71,9 @@
 @section scripts{
     @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        doFilter();
+    });
+</script>

@@ -237,10 +237,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
         {
             model.ListaUsuario = new SelectList(usuarioAppService.ListarTodos(), "Id", "Login", model.UsuarioId);
             model.ListaModulo = new SelectList(moduloAppService.ListarTodos(), "Id", "NomeCompleto", model.ModuloId);
-            if (model.ModuloId != 0)
-            {
-                model.ListaPerfil = new SelectList(perfilAppService.ListarPeloModulo(model.ModuloId), "Id", "Descricao", model.PerfilId);
-            }
+            model.ListaPerfil = new SelectList(perfilAppService.ListarPeloModulo(model.ModuloId), "Id", "Descricao", model.PerfilId);
         }
 
         private List<UsuarioFuncionalidadeDTO> LimpaFuncionalidadeUsuario(List<UsuarioFuncionalidadeDTO> lista)
