@@ -81,13 +81,13 @@
 
                 $('#@Html.IdFor(m => m.Codigo)_tree.tree').find('li').not(':has(ul)').find(' > span').css({ cursor: 'pointer' }).on('click', function (e) {
                     $('#@Html.IdFor(m => m.Codigo)').val($(this).data("codigo-centro-custo")).change();
-                    $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('toggle');
+                    $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('hide');
                 });
 
                 @if (!somenteNivelFolha.Value) {
                     @:$('#@Html.IdFor(m => m.Codigo)_tree.tree').find('li:has(ul)').find(' > span').css({ cursor: 'pointer' }).on('dblclick', function (e) {
                     @:  $('#@Html.IdFor(m => m.Codigo)').val($(this).data("codigo-centro-custo")).change();
-                    @:  $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('toggle');
+                    @:  $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('hide');
                     @:});
                 }
             });
