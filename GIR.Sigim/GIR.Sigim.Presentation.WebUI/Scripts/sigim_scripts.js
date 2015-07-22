@@ -13,7 +13,7 @@ $(function () {
 
     $(document).ajaxStart(function () {
         showLoading();
-});
+    });
 
     $(document).ajaxStop(function () {
         hideLoading();
@@ -198,7 +198,7 @@ function smartAlert(title, message, type) {
 
     $.smallBox({
         title: title,
-        content: message,
+        content: message.replace("\n", "<br />"),
         color: color,
         timeout: 4000,
         icon: icon

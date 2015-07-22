@@ -187,6 +187,7 @@
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\EntradaMaterialController.cs" />
+    <Compile Include="Areas\OrdemCompra\ViewModel\PossibilidadeCancelamentoEntradaMaterialViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialListaViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RelOCItensOrdemCompraController.cs" />

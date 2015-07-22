@@ -11,5 +11,12 @@ namespace GIR.Sigim.Domain.Entity.Estoque
     {
         public int? EntradaMaterialId { get; set; }
         public EntradaMaterial EntradaMaterial { get; set; }
+
+        public ICollection<MovimentoItem> ListaMovimentoItem { get; set; }
+
+        public Movimento()
+        {
+            this.ListaMovimentoItem = new HashSet<MovimentoItem>();
+        }
     }
 }

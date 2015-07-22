@@ -17,6 +17,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Repository.Estoque;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
 using GIR.Sigim.Domain.Repository.Sigim;
@@ -32,12 +33,14 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private IUsuarioAppService usuarioAppService;
         private IParametrosOrdemCompraRepository parametrosOrdemCompraRepository;
         private ICentroCustoRepository centroCustoRepository;
+        private IEstoqueRepository estoqueRepository;
 
         public EntradaMaterialAppService(
             IEntradaMaterialRepository entradaMaterialRepository,
             IUsuarioAppService usuarioAppService,
             IParametrosOrdemCompraRepository parametrosOrdemCompraRepository,
             ICentroCustoRepository centroCustoRepository,
+            IEstoqueRepository estoqueRepository,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -45,6 +48,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             this.usuarioAppService = usuarioAppService;
             this.parametrosOrdemCompraRepository = parametrosOrdemCompraRepository;
             this.centroCustoRepository = centroCustoRepository;
+            this.estoqueRepository = estoqueRepository;
         }
 
         #region IEntradaMaterialAppService Members
@@ -98,48 +102,19 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool CancelarEntrada(int? id, string motivo)
         {
-            if (string.IsNullOrEmpty(motivo.Trim()))
-            {
-                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoEntradaMaterial, TypeMessage.Error);
-                return false;
-            }
-
             var entradaMaterial = ObterPeloIdEUsuario(id, UsuarioLogado.Id,
-                l => l.ListaItens,
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
                 l => l.ListaImposto,
                 l => l.ListaMovimentoEstoque);
 
-            if (entradaMaterial == null)
-            {
-                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
+            if (!EhCancelamentoPossivel(entradaMaterial))
                 return false;
-            }
 
-            if (!PodeCancelarNaSituacaoAtual(entradaMaterial.Situacao))
+            if (string.IsNullOrEmpty(motivo.Trim()))
             {
-                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
-                messageQueue.Add(msg, TypeMessage.Error);
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoEntradaMaterial, TypeMessage.Error);
                 return false;
-            }
-
-            foreach (var formaPagamento in entradaMaterial.ListaFormaPagamento.To<List<EntradaMaterialFormaPagamentoDTO>>())
-            {
-                int? tituloPagarId;
-
-                if (PossuiTituloPago(formaPagamento.TituloPagar, out tituloPagarId))
-                {
-                    var msg = string.Format(Resource.OrdemCompra.ErrorMessages.TituloEstaPago, tituloPagarId.ToString());
-                    messageQueue.Add(msg, TypeMessage.Error);
-                    return false;
-                }
-
-                if (PossuiTituloImpostoPago(formaPagamento.TituloPagar, out tituloPagarId))
-                {
-                    var msg = string.Format(Resource.OrdemCompra.ErrorMessages.TituloImpostoEstaPago, tituloPagarId.ToString());
-                    messageQueue.Add(msg, TypeMessage.Error);
-                    return false;
-                }
             }
 
             entradaMaterial.MotivoCancelamento = motivo;
@@ -208,9 +183,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             if (!PodeCancelarNaSituacaoAtual(dto.Situacao))
                 return false;
 
-            if (JaHouvePagamentoEfetuado(dto))
-                return false;
-
             return true;
         }
 
@@ -227,9 +199,71 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return dto.ListaMovimentoEstoque.Any();
         }
 
+        public bool HaPossibilidadeCancelamentoEntradaMaterial(int? entradaMaterialId)
+        {
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId, UsuarioLogado.Id,
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
+                l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
+                l => l.ListaImposto,
+                l => l.ListaMovimentoEstoque);
+
+            return EhCancelamentoPossivel(entradaMaterial);
+        }
+
         #endregion
 
         #region Métodos Privados
+
+        private bool EhCancelamentoPossivel(EntradaMaterial entradaMaterial)
+        {
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
+                return false;
+            }
+
+            if (!PodeCancelarNaSituacaoAtual(entradaMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            if (JaHouvePagamentoEfetuado(entradaMaterial))
+                return false;
+
+            if (!EhEstoqueValido(entradaMaterial))
+                return false;
+
+            return true;
+        }
+
+        private bool EhEstoqueValido(EntradaMaterial entradaMaterial)
+        {
+            foreach (var item in entradaMaterial.ListaItens)
+            {
+                if (item.OrdemCompraItem.Material.EhControladoPorEstoque.Value)
+                {
+                    var estoqueMaterial = estoqueRepository.ObterEstoqueMaterialAtivoPeloCentroCustoEMaterial(entradaMaterial.CodigoCentroCusto, item.OrdemCompraItem.MaterialId, l => l.Estoque);
+                    if (estoqueMaterial != null)
+                    {
+                        if (item.Quantidade > estoqueMaterial.Quantidade)
+                        {
+                            if (estoqueMaterial.Material.EhControladoPorEstoque.Value)
+                            {
+                                var msg = "Quantidade do estoque: " + estoqueMaterial.Quantidade.ToString() + "\n";
+                                msg += "Quantidade da entrada de material: " + item.Quantidade.ToString() + "\n";
+                                msg += "A quantidade do material: '" + item.OrdemCompraItem.Material.Descricao + "' que será retirado do estoque '" + estoqueMaterial.Estoque.Descricao + "' está maior que o saldo existente.";
+                                messageQueue.Add(msg, TypeMessage.Error);
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
 
         private EntradaMaterial ObterPeloIdEUsuario(int? id, int? idUsuario, params Expression<Func<EntradaMaterial, object>>[] includes)
         {
@@ -251,23 +285,31 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return situacao != SituacaoEntradaMaterial.Cancelada;
         }
 
-        private bool JaHouvePagamentoEfetuado(EntradaMaterialDTO dto)
+        private bool JaHouvePagamentoEfetuado(EntradaMaterial entradaMaterial)
         {
-            foreach (var formaPagamento in dto.ListaFormaPagamento)
+            foreach (var formaPagamento in entradaMaterial.ListaFormaPagamento)
             {
                 int? tituloPagarId;
 
                 if (PossuiTituloPago(formaPagamento.TituloPagar, out tituloPagarId))
+                {
+                    var msg = string.Format(Resource.OrdemCompra.ErrorMessages.TituloEstaPago, tituloPagarId.ToString());
+                    messageQueue.Add(msg, TypeMessage.Error);
                     return true;
+                }
 
                 if (PossuiTituloImpostoPago(formaPagamento.TituloPagar, out tituloPagarId))
+                {
+                    var msg = string.Format(Resource.OrdemCompra.ErrorMessages.TituloImpostoEstaPago, tituloPagarId.ToString());
+                    messageQueue.Add(msg, TypeMessage.Error);
                     return true;
+                }
             }
 
             return false;
         }
 
-        private bool PossuiTituloImpostoPago(TituloPagarDTO tituloPagar, out int? tituloPagarId)
+        private bool PossuiTituloImpostoPago(TituloPagar tituloPagar, out int? tituloPagarId)
         {
             tituloPagarId = null;
             if (tituloPagar != null)
@@ -287,7 +329,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return false;
         }
 
-        private bool PossuiTituloPago(TituloPagarDTO tituloPagar, out int? tituloPagarId)
+        private bool PossuiTituloPago(TituloPagar tituloPagar, out int? tituloPagarId)
         {
             tituloPagarId = null;
             if (tituloPagar != null)
@@ -304,7 +346,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return false;
         }
 
-        private bool PossuiTituloDesdobradoPago(List<TituloPagarDTO> listaFilhos, out int? tituloPagarId)
+        private bool PossuiTituloDesdobradoPago(ICollection<TituloPagar> listaFilhos, out int? tituloPagarId)
         {
             tituloPagarId = null;
             foreach (var titulo in listaFilhos)
@@ -321,7 +363,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return false;
         }
 
-        private static bool EhTituloPago(TituloPagarDTO titulo, out int? tituloPagarId)
+        private static bool EhTituloPago(TituloPagar titulo, out int? tituloPagarId)
         {
             tituloPagarId = null;
             if ((titulo.Situacao == SituacaoTituloPagar.Emitido)

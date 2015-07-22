@@ -102,6 +102,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         }
 
         [HttpPost]
+        public ActionResult HaPossibilidadeCancelamentoEntradaMaterial(int? entradaMaterialId)
+        {
+            PossibilidadeCancelamentoEntradaMaterialViewModel model = new PossibilidadeCancelamentoEntradaMaterialViewModel();
+            model.HaPossibilidadeCancelamentoEntradaMaterial = entradaMaterialAppService.HaPossibilidadeCancelamentoEntradaMaterial(entradaMaterialId);
+            model.ErrorMessages = messageQueue.GetAll().Where(l => l.Type == TypeMessage.Error).ToList();
+            messageQueue.Clear();
+            return Json(model);
+        }
+
+        [HttpPost]
         public ActionResult Cancelar(int? id, string motivo)
         {
             if (entradaMaterialAppService.CancelarEntrada(id, motivo))

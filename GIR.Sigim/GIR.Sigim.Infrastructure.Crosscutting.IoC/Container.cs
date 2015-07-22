@@ -31,6 +31,8 @@ using GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra;
 using GIR.Sigim.Infrastructure.Data.Repository.Sigim;
 using GIR.Sigim.Infrastructure.Data.Repository.Sac;
 using Microsoft.Practices.Unity;
+using GIR.Sigim.Domain.Repository.Estoque;
+using GIR.Sigim.Infrastructure.Data.Repository.Estoque;
 
 namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
 {
@@ -83,6 +85,12 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<IContratoRepository, ContratoRepository>();
             currentContainer.RegisterType<IParametrosContratoRepository, ParametrosContratoRepository>();
             currentContainer.RegisterType<IContratoRetificacaoItemMedicaoRepository, ContratoRetificacaoItemMedicaoRepository>();
+            #endregion
+
+            #region Estoque
+
+            currentContainer.RegisterType<IEstoqueRepository, EstoqueRepository>();
+
             #endregion
 
             #region Financeiro

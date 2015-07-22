@@ -114,7 +114,7 @@
                                     disableBtnCancelar = "disabled";
                                 }
                             }
-                            <a data-toggle="modal" href="#MotivoCancelamento_ModalPanel" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
+                            <a id="btnCancelarEntrada" href="#MotivoCancelamento_ModalPanel" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
                             @if (Model.PodeCancelarEntrada) {
                                 <div class="modal fade" id="MotivoCancelamento_ModalPanel" tabindex="-1" role="dialog">
                                     <div class="modal-dialog">
@@ -143,7 +143,7 @@
                                                 </label>
                                             </div>
                                             <div class="modal-footer">
-								                <button type="button" id="btnCancelarEntrada" class="btn btn-primary">
+								                <button type="button" id="btnConfirmaCancelamentoEntrada" class="btn btn-primary">
 									                Ok
 								                </button>
 							                </div>
@@ -151,6 +151,30 @@
                                     </div>
                                     <script type="text/javascript">
                                         $("#btnCancelarEntrada").on("click", function () {
+                                            $.ajax({
+                                                type: 'POST',
+                                                url: '@Url.Action("HaPossibilidadeCancelamentoEntradaMaterial", "EntradaMaterial")',
+                                                cache: false,
+                                                async: false,
+                                                contentType: 'application/json; charset=utf-8',
+                                                data: JSON.stringify({
+                                                    entradaMaterialId: '@Html.DisplayFor(m => m.EntradaMaterial.Id)'
+                                                })
+                                            })
+                                            .success(function (result) {
+                                                if (result.HaPossibilidadeCancelamentoEntradaMaterial)
+                                                    $('#MotivoCancelamento_ModalPanel').modal('show');
+                                                else {
+                                                    var errorMessages = result.ErrorMessages;
+                                                    if (errorMessages.length !== 0) {
+                                                        for (var i = 0; i < errorMessages.length; i++)
+                                                            smartAlert("Erro", errorMessages[i].Text, "error");
+                                                    }
+                                                }
+                                            });
+                                        });
+
+                                        $("#btnConfirmaCancelamentoEntrada").on("click", function () {
                                             var motivo = $("#@Html.IdFor(m => m.EntradaMaterial.MotivoCancelamento)").val();
                                             if (motivo.length != 0) {
                                                 $.ajax({

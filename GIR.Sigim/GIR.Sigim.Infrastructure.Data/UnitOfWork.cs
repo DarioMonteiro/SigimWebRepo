@@ -124,7 +124,10 @@ namespace GIR.Sigim.Infrastructure.Data
 
             #region Estoque
 
+            modelBuilder.Configurations.Add(new EstoqueConfiguration());
+            modelBuilder.Configurations.Add(new EstoqueMaterialConfiguration());
             modelBuilder.Configurations.Add(new MovimentoConfiguration());
+            modelBuilder.Configurations.Add(new MovimentoItemConfiguration());
 
             #endregion
 

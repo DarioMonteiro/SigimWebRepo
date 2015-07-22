@@ -19,5 +19,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         bool EhPermitidoCancelar(EntradaMaterialDTO dto);
         bool EhPermitidoImprimir(EntradaMaterialDTO dto);
         bool ExisteMovimentoNoEstoque(EntradaMaterialDTO dto);
+        bool HaPossibilidadeCancelamentoEntradaMaterial(int? entradaMaterialId);
     }
 }
