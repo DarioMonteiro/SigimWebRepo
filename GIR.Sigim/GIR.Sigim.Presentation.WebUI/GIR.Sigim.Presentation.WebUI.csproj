@@ -836,6 +836,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GIR.Sigim.Application.Service\GIR.Sigim.Application.Service.csproj">
+      <Project>{5cb76b8f-44f7-42eb-bc19-4d2e53790ec9}</Project>
+      <Name>GIR.Sigim.Application.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GIR.Sigim.Application\GIR.Sigim.Application.csproj">
       <Project>{5ca0a583-33a5-43ab-99c6-2d5d19508ca0}</Project>
       <Name>GIR.Sigim.Application</Name>
@@ -848,6 +852,9 @@
       <Project>{c6691185-a423-4909-9157-1cb230a48980}</Project>
       <Name>GIR.Sigim.Infrastructure.Crosscutting</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

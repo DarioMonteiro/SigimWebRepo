@@ -38,6 +38,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -149,6 +158,15 @@
     <Compile Include="Configuration\Sigim\MaterialClasseInsumoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\MaterialConfiguration.cs" />
     <Compile Include="Configuration\Sigim\UsuarioCentroCustoConfiguration.cs" />
+    <Compile Include="IoC\AdminBootstraper.cs" />
+    <Compile Include="IoC\Bootstrapper.cs" />
+    <Compile Include="IoC\ContratoBootstraper.cs" />
+    <Compile Include="IoC\SigimBootstraper.cs" />
+    <Compile Include="IoC\SacBootstraper.cs" />
+    <Compile Include="IoC\OrdemCompraBootstraper.cs" />
+    <Compile Include="IoC\OrcamentoBootstraper.cs" />
+    <Compile Include="IoC\FinanceiroBootstraper.cs" />
+    <Compile Include="IoC\EstoqueBootstraper.cs" />
     <Compile Include="IQueryableUnitOfWork.cs" />
     <Compile Include="Configuration\Admin\UsuarioConfiguration.cs" />
     <Compile Include="Configuration\Admin\PerfilConfiguration.cs" />
@@ -229,6 +247,10 @@
     <ProjectReference Include="..\GIR.Sigim.Domain\GIR.Sigim.Domain.csproj">
       <Project>{1235e084-57fe-4dc3-9858-63c7063003b2}</Project>
       <Name>GIR.Sigim.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting.IoC\GIR.Sigim.Infrastructure.Crosscutting.IoC.csproj">
+      <Project>{b581e80a-8ed7-4b76-b24a-b3332020cf56}</Project>
+      <Name>GIR.Sigim.Infrastructure.Crosscutting.IoC</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

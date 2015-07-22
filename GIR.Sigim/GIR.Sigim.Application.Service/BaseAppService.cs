@@ -12,6 +12,8 @@ using GIR.Sigim.Infrastructure.Crosscutting.Validator;
 using System.Globalization;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Application.DTO;
+using GIR.Sigim.Infrastructure.Crosscutting.IoC;
+using Microsoft.Practices.Unity;
 
 namespace GIR.Sigim.Application.Service
 {
