@@ -10,7 +10,6 @@ namespace GIR.Sigim.Application.Service.IoC
     {
         public static void Initialise()
         {
-            //Trul.Data.EntityFramework.Bootstrapper.Initialise();
             GIR.Sigim.Infrastructure.Data.IoC.Bootstrapper.Initialise();
             AdminBootstraper.Initialise();
             ContratoBootstraper.Initialise();

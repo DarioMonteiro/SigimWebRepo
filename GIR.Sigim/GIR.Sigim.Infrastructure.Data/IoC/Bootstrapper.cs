@@ -12,7 +12,6 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
     {
         public static void Initialise()
         {
-            //Trul.Data.EntityFramework.Bootstrapper.Initialise();
             Container.Current.RegisterType(typeof(UnitOfWork), new PerResolveLifetimeManager());
 
             AdminBootstraper.Initialise();
