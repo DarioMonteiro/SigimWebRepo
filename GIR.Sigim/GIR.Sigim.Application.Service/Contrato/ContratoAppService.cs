@@ -525,27 +525,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                       l => l.ListaContratoRetificacaoItemMedicao, 
                                                                                       l => l.CentroCusto);
 
-            ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == dto.Id).SingleOrDefault();
-
-            if (contratoRetificacaoItemMedicao == null)
-            {
-                novoRegistro = true;
-                contratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicao();
-                contratoRetificacaoItemMedicao.DataCadastro = DateTime.Now;
-                contratoRetificacaoItemMedicao.UsuarioMedicao = UsuarioLogado.Login;
-                contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoAprovacao;
-
-                contratoRetificacaoItemMedicao.Contrato = contrato;
-                contratoRetificacaoItemMedicao.ContratoRetificacao = contrato.ListaContratoRetificacao.Where(l => l.Id == dto.ContratoRetificacaoId).SingleOrDefault();
-                contratoRetificacaoItemMedicao.ContratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == dto.ContratoRetificacaoItemId).SingleOrDefault();
-
-            }
-            else
-            {
-                contrato.ListaContratoRetificacaoItemMedicao.Remove(contratoRetificacaoItemMedicao);
-            }
-
-            PopularEntityMedicao(dto, contratoRetificacaoItemMedicao);
+            ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = InseriuMedicao(contrato, dto);
+            novoRegistro = contratoRetificacaoItemMedicao.Id == null ? true : false;
 
             try
             {
@@ -554,25 +535,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                     return false;
                 }
 
-                contrato.ListaContratoRetificacaoItemMedicao.Add(contratoRetificacaoItemMedicao);
-
-
                 if (Validator.IsValid(contratoRetificacaoItemMedicao, out validationErrors))
                 {
-
-                    if (novoRegistro)
-                    {
-                        contratoRetificacaoItemMedicao.Contrato = null;
-                        contratoRetificacaoItemMedicao.ContratoRetificacao = null;
-                        contratoRetificacaoItemMedicao.ContratoRetificacaoItem = null;
-
-                        contratoRepository.AdicionarItemMedicao(contratoRetificacaoItemMedicao);
-                    }
-                    else
-                    {
-                        contratoRepository.AlterarItemMedicao(contratoRetificacaoItemMedicao);
-                    }
-
                     contratoRepository.Alterar(contrato);
                     contratoRepository.UnitOfWork.Commit();
                     GravarLogOperacao(contratoRetificacaoItemMedicao, novoRegistro ? "INSERT" : "UPDATE");
@@ -599,12 +563,19 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         #region Métodos Privados
 
-        private void PopularEntityMedicao(ContratoRetificacaoItemMedicaoDTO dto, ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao)
+        private ContratoRetificacaoItemMedicao InseriuMedicao(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoItemMedicaoDTO dto)
         {
-            contratoRetificacaoItemMedicao.Id = dto.Id;
+            ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicao();
+            int index = contrato.ListaContratoRetificacaoItemMedicao.ToList<ContratoRetificacaoItemMedicao>().FindIndex(l => l.Id == dto.Id);
+
+            ContratoRetificacao contratoRetificacao = contrato.ListaContratoRetificacao.Where(l => l.Id == dto.ContratoRetificacaoId).FirstOrDefault();
+            ContratoRetificacaoItem contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == dto.ContratoRetificacaoItemId).FirstOrDefault();
+
             contratoRetificacaoItemMedicao.ContratoId = dto.ContratoId;
+            contratoRetificacaoItemMedicao.Contrato = contrato;
             contratoRetificacaoItemMedicao.ContratoRetificacaoId = dto.ContratoRetificacaoId;
             contratoRetificacaoItemMedicao.ContratoRetificacaoItemId = dto.ContratoRetificacaoItemId;
+            contratoRetificacaoItemMedicao.ContratoRetificacaoItem = contratoRetificacaoItem;
             contratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId = dto.ContratoRetificacaoItemCronogramaId;
             contratoRetificacaoItemMedicao.SequencialItem = dto.SequencialItem;
             contratoRetificacaoItemMedicao.SequencialCronograma = dto.SequencialCronograma;
@@ -621,13 +592,6 @@ namespace GIR.Sigim.Application.Service.Contrato
             contratoRetificacaoItemMedicao.Desconto = dto.Desconto;
             contratoRetificacaoItemMedicao.MotivoDesconto = dto.MotivoDesconto;
 
-            decimal valorRetido = CalculaValorRetido(contratoRetificacaoItemMedicao);
-
-            if (valorRetido > 0)
-            {
-                contratoRetificacaoItemMedicao.ValorRetido = valorRetido;
-            }
-
             contratoRetificacaoItemMedicao.TipoCompraCodigo = dto.TipoCompraCodigo;
             contratoRetificacaoItemMedicao.CifFobId = dto.CifFobId;
             contratoRetificacaoItemMedicao.NaturezaOperacaoCodigo = dto.NaturezaOperacaoCodigo;
@@ -635,153 +599,151 @@ namespace GIR.Sigim.Application.Service.Contrato
             contratoRetificacaoItemMedicao.CSTCodigo = dto.CSTCodigo;
             contratoRetificacaoItemMedicao.CodigoContribuicaoCodigo = dto.CodigoContribuicaoCodigo;
             contratoRetificacaoItemMedicao.CodigoBarras = dto.CodigoBarras;
-        }
 
-        private decimal CalculaValorRetido(ContratoRetificacaoItemMedicao medicao)
-        {
             decimal valorRetido = 0.0m;
             decimal percentualRetencao = 0.0m;
             decimal percentualBaseCalculo = 0.0m;
 
-            if (medicao.ContratoRetificacao.RetencaoContratual.HasValue)
+            if (contratoRetificacao.RetencaoContratual.HasValue)
             {
-                percentualRetencao = medicao.ContratoRetificacao.RetencaoContratual.Value;
+                percentualRetencao = contratoRetificacao.RetencaoContratual.Value;
                 percentualBaseCalculo = 100.0m;
             }
 
-            if (medicao.ContratoRetificacaoItem.RetencaoItem.HasValue)
+            if (contratoRetificacaoItem.RetencaoItem.HasValue)
             {
-                percentualRetencao = medicao.ContratoRetificacaoItem.RetencaoItem.Value;
+                percentualRetencao = contratoRetificacaoItem.RetencaoItem.Value;
                 percentualBaseCalculo = 0;
-                if (medicao.ContratoRetificacaoItem.BaseRetencaoItem.HasValue) percentualBaseCalculo = medicao.ContratoRetificacaoItem.BaseRetencaoItem.Value;
+                if (contratoRetificacaoItem.BaseRetencaoItem.HasValue) percentualBaseCalculo = contratoRetificacaoItem.BaseRetencaoItem.Value;
             }
 
             if (percentualRetencao > 0.0m)
             {
-                decimal valorBaseCalculo = ((medicao.Valor * percentualBaseCalculo) / 100);
+                decimal valorBaseCalculo = ((dto.Valor * percentualBaseCalculo) / 100);
                 valorRetido = decimal.Round(((valorBaseCalculo * percentualRetencao) / 100), 2);
             }
 
-            return valorRetido;
+            if (valorRetido > 0)
+            {
+                dto.ValorRetido = valorRetido;
+                contratoRetificacaoItemMedicao.ValorRetido = valorRetido;
+            }
+
+            if (index < 0)
+            {
+                //contratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicao();
+                contratoRetificacaoItemMedicao.DataCadastro = DateTime.Now;
+                contratoRetificacaoItemMedicao.UsuarioMedicao = UsuarioLogado.Login;
+                contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoAprovacao;
+
+                contrato.ListaContratoRetificacaoItemMedicao.Add(contratoRetificacaoItemMedicao);
+            }
+            else
+            {
+                contratoRetificacaoItemMedicao.Id = dto.Id;
+                contrato.ListaContratoRetificacaoItemMedicao.ToList<ContratoRetificacaoItemMedicao>()[index] = contratoRetificacaoItemMedicao; 
+            }
+
+            return contratoRetificacaoItemMedicao;
         }
 
         private bool EhValidoSalvarMedicao(ContratoRetificacaoItemMedicao medicao)
         {
             ParametrosContrato parametros = parametrosContratoRepository.Obter();
 
-            //int contratadoId = medicao.Contrato.ContratadoId;
-            //if (medicao.MultiFornecedorId.HasValue)
-            //{
-            //    contratadoId = medicao.MultiFornecedorId.Value;
-            //}
-
-            //bool condicao = !medicao.Id.HasValue ? true : (medicao.Id.Value == 0 ? true : false);
-
-            //if (condicao)
-            //{
-            //    if (ExisteNumeroDocumento(medicao.DataEmissao, medicao.NumeroDocumento, contratadoId))
-            //    {
-            //        messageQueue.Add(Resource.Contrato.ErrorMessages.DocumentoExistente, TypeMessage.Error);
-            //        return false;
-            //    }
-            //    else
-            //    {
-            //        if (tituloPagarAppService.ExisteNumeroDocumento(medicao.DataEmissao,medicao.DataVencimento,medicao.NumeroDocumento,contratadoId))
-            //        {
-            //            messageQueue.Add(Resource.Contrato.ErrorMessages.DocumentoExistente, TypeMessage.Error);
-            //            return false;
-            //        }
-            //    }
-            //}
-
-            DateTime DataLimiteMedicao = DateTime.Now;
-
-            if (parametros != null && (medicao.DataVencimento != null) && (medicao.DataMedicao != null))
+            if (medicao != null)
             {
-                if (parametros.DiasPagamento.HasValue)
+                DateTime DataLimiteMedicao = DateTime.Now;
+
+                if (parametros != null && (medicao.DataVencimento != null) && (medicao.DataMedicao != null))
                 {
-
-                    DataLimiteMedicao = DateTime.Now.AddDays((parametros.DiasPagamento.Value * -1));
-
-                    if (parametros.DiasPagamento.Value > 0)
+                    if (parametros.DiasPagamento.HasValue)
                     {
-                        int numeroDias = (int)medicao.DataVencimento.Subtract(medicao.DataMedicao).TotalDays;
-                        if (numeroDias < parametros.DiasPagamento.Value)
+
+                        DataLimiteMedicao = DateTime.Now.AddDays((parametros.DiasPagamento.Value * -1));
+
+                        if (parametros.DiasPagamento.Value > 0)
                         {
-                            messageQueue.Add(Application.Resource.Contrato.ErrorMessages.DataVencimentoForaDoLimite, TypeMessage.Error);
-                            return false;
+                            int numeroDias = (int)medicao.DataVencimento.Subtract(medicao.DataMedicao).TotalDays;
+                            if (numeroDias < parametros.DiasPagamento.Value)
+                            {
+                                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.DataVencimentoForaDoLimite, TypeMessage.Error);
+                                return false;
+                            }
                         }
                     }
                 }
+
+                if (ComparaDatas(medicao.DataMedicao.ToShortDateString(), DataLimiteMedicao.ToShortDateString()) < 0)
+                {
+                    messageQueue.Add(Application.Resource.Contrato.ErrorMessages.DataMedicaoMenorQueDataLimite, TypeMessage.Error);
+                    return false;
+                }
+
+                Nullable<DateTime> dataBloqueio;
+
+                if (bloqueioContabilAppService.OcorreuBloqueioContabil(medicao.Contrato.CentroCusto.Codigo,
+                                                                        medicao.DataEmissao,
+                                                                        out dataBloqueio))
+                {
+                    string msg = string.Format(Resource.Sigim.ErrorMessages.BloqueioContabilEncontrado, dataBloqueio.Value.ToShortDateString(), medicao.Contrato.CentroCusto.Codigo);
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return false;
+                }
+
+                if (parametros == null) return true;
+
+                if (!parametros.DadosSped.HasValue) return true;
+
+                if (parametros.DadosSped.Value)
+                {
+                    bool ok = true;
+
+                    if (string.IsNullOrEmpty(medicao.TipoCompraCodigo))
+                    {
+                        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo compra"), TypeMessage.Error);
+                        ok = false;
+                    }
+
+                    if ((!medicao.CifFobId.HasValue) || (medicao.CifFobId.Value == 0))
+                    {
+                        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "CIF/FOB"), TypeMessage.Error);
+                        ok = false;
+                    }
+
+                    if ((string.IsNullOrEmpty(medicao.NaturezaOperacaoCodigo)))
+                    {
+                        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Natureza de operação"), TypeMessage.Error);
+                        ok = false;
+                    }
+
+                    if ((!medicao.SerieNFId.HasValue) || (medicao.SerieNFId.Value == 0))
+                    {
+                        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Série"), TypeMessage.Error);
+                        ok = false;
+                    }
+
+                    if ((string.IsNullOrEmpty(medicao.CSTCodigo)))
+                    {
+                        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "CST"), TypeMessage.Error);
+                        ok = false;
+                    }
+
+                    if ((string.IsNullOrEmpty(medicao.CodigoContribuicaoCodigo)))
+                    {
+                        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contribuição"), TypeMessage.Error);
+                        ok = false;
+                    }
+
+                    if (!ok){
+                        return false;
+                    }
+                }
+
+                return true;
             }
 
-            if (ComparaDatas(medicao.DataMedicao.ToShortDateString(), DataLimiteMedicao.ToShortDateString()) < 0)
-            {
-                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.DataMedicaoMenorQueDataLimite, TypeMessage.Error);
-                return false;
-            }
-
-            Nullable<DateTime> dataBloqueio;
-
-            if (bloqueioContabilAppService.OcorreuBloqueioContabil(medicao.Contrato.CentroCusto.Codigo,
-                                                                    medicao.DataEmissao,
-                                                                    out dataBloqueio))
-            {
-                string msg = string.Format(Resource.Sigim.ErrorMessages.BloqueioContabilEncontrado, dataBloqueio.Value.ToShortDateString(), medicao.Contrato.CentroCusto.Codigo);
-                messageQueue.Add(msg, TypeMessage.Error);
-                return false;
-            }
-
-            if (parametros == null) return true;
-
-            if (!parametros.DadosSped.HasValue) return true;
-
-            if (parametros.DadosSped.Value)
-            {
-                bool estaCorreto = true;
-                if (string.IsNullOrEmpty(medicao.TipoCompraCodigo))
-                {
-                    messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo compra"), TypeMessage.Error);
-                    estaCorreto = false;
-                }
-
-                if ((!medicao.CifFobId.HasValue) || (medicao.CifFobId.Value == 0))
-                {
-                    messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "CIF/FOB"), TypeMessage.Error);
-                    estaCorreto = false;
-                }
-
-                if ((string.IsNullOrEmpty(medicao.NaturezaOperacaoCodigo)))
-                {
-                    messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Natureza de operação"), TypeMessage.Error);
-                    estaCorreto = false;
-                }
-
-                if ((!medicao.SerieNFId.HasValue) || (medicao.SerieNFId.Value == 0))
-                {
-                    messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Série"), TypeMessage.Error);
-                    estaCorreto = false;
-                }
-
-                if ((string.IsNullOrEmpty(medicao.CSTCodigo)))
-                {
-                    messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "CST"), TypeMessage.Error);
-                    estaCorreto = false;
-                }
-
-                if ((string.IsNullOrEmpty(medicao.CodigoContribuicaoCodigo)))
-                {
-                    messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contribuição"), TypeMessage.Error);
-                    estaCorreto = false;
-                }
-
-                if (!estaCorreto)
-                {
-                    return estaCorreto;
-                }
-            }
-
-            return true;
+            return false;
         }
 
         private void GravarLogOperacao(ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao, string operacao)
@@ -805,18 +767,15 @@ namespace GIR.Sigim.Application.Service.Contrato
                 "Contrato.contratoRetificacaoItemMedicao",
                 operacao,
                 contratoRetificacaoItemMedicaoAppService.MedicaoToXML(contratoRetificacaoItemMedicao));
-
         }
 
         private bool EhValidoExcluirMedicao(Domain.Entity.Contrato.Contrato contrato,int? contratoRetificacaoItemMedicaoId)
         {
-
             if (!contratoRetificacaoItemMedicaoId.HasValue)
             {
                 messageQueue.Add(Application.Resource.Contrato.ErrorMessages.SelecioneUmaMedicao, TypeMessage.Error);
                 return false;
             }
-
 
             if (contratoRetificacaoItemMedicaoId.Value == 0)
             {
