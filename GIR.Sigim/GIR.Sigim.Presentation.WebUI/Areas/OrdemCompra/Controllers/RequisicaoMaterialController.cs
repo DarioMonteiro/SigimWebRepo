@@ -92,7 +92,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             if ((requisicaoMaterial.CentroCusto == null) || (string.IsNullOrEmpty(requisicaoMaterial.CentroCusto.Codigo)))
             {
                 var parametrosUsuario = parametrosUsuarioAppService.ObterPeloIdUsuario(Usuario.Id);
-                model.RequisicaoMaterial.CentroCusto = parametrosUsuario.CentroCusto;
+                model.RequisicaoMaterial.CentroCusto = parametrosUsuario != null ? parametrosUsuario.CentroCusto : null;
             }
 
             var parametros = parametrosOrdemCompraAppService.Obter();

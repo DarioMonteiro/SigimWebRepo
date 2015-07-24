@@ -168,6 +168,9 @@
   <data name="NenhumRegistroEncontrado" xml:space="preserve">
     <value>Nenhum registro encontrado.</value>
   </data>
+  <data name="PrivilegiosInsuficientes" xml:space="preserve">
+    <value>Privilégios insuficientes para executar esta operação.</value>
+  </data>
   <data name="RegistroEmUso" xml:space="preserve">
     <value>O registro [{0}] está sendo usado.</value>
   </data>

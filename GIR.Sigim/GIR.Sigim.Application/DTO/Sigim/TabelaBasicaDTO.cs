@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.Enums;
 
-namespace GIR.Sigim.Application.DTO.Financeiro
+namespace GIR.Sigim.Application.DTO.Sigim
 {
     public class TabelaBasicaDTO : BaseDTO
     {
