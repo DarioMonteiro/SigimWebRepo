@@ -214,6 +214,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Privilégios insuficientes para executar esta operação..
+        /// </summary>
+        public static string PrivilegiosInsuficientes {
+            get {
+                return ResourceManager.GetString("PrivilegiosInsuficientes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O registro [{0}] está sendo usado..
         /// </summary>
         public static string RegistroEmUso {
