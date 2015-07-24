@@ -9,6 +9,7 @@ using GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.Service.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 {
@@ -23,6 +24,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.ordemCompraItemAppService = ordemCompraItemAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.RelatorioItensOrdemCompraAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as RelOcItensOrdemCompraListaViewModel;

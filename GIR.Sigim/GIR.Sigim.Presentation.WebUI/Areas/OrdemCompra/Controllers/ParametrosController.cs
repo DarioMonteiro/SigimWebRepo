@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
@@ -40,10 +41,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.bancoLayoutAppService = bancoLayoutAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.ParametroOrdemCompraAcessar)]
         public ActionResult Index()
         {
             ParametrosViewModel model = new ParametrosViewModel();
             model.Parametros = parametrosAppService.Obter() ?? new ParametrosOrdemCompraDTO();
+            model.PodeSalvar = parametrosAppService.EhPermitidoSalvar();
             CarregarCombos(model);
             return View(model);
         }

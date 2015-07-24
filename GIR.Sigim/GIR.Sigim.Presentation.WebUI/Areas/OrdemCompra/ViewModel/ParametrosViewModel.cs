@@ -19,5 +19,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public SelectList ListaLayoutSPED { get; set; }
         public SelectList ListaModeloInterface { get; set; }
         public HttpPostedFileBase IconeRelatorio { get; set; }
+        public bool PodeSalvar { get; set; }
     }
 }

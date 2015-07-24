@@ -11,5 +11,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
     {
         ParametrosOrdemCompraDTO Obter();
         void Salvar(ParametrosOrdemCompraDTO dto);
+        bool EhPermitidoSalvar();
     }
 }

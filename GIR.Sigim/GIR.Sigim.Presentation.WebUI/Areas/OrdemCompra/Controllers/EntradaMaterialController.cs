@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros;
@@ -28,6 +29,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.entradaMaterialAppService = entradaMaterialAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as EntradaMaterialListaViewModel;
@@ -62,6 +64,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
+        [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
         public ActionResult Cadastro(int? id)
         {
             EntradaMaterialCadastroViewModel model = new EntradaMaterialCadastroViewModel();

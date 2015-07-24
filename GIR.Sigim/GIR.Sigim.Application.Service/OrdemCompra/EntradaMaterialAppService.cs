@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CrystalDecisions.Shared;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
@@ -102,6 +103,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool CancelarEntrada(int? id, string motivo)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialCancelar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             var entradaMaterial = ObterPeloIdEUsuario(id, UsuarioLogado.Id,
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
@@ -132,6 +139,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialImprimir))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
             var entradaMaterial = ObterPeloIdEUsuario(id,
                 UsuarioLogado.Id,
                 l => l.CentroCusto,
@@ -172,11 +185,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoSalvar(EntradaMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
+                return false;
+
             return PodeSerSalvaNaSituacaoAtual(dto.Situacao);
         }
 
         public bool EhPermitidoCancelar(EntradaMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialCancelar))
+                return false;
+
             if (!dto.Id.HasValue)
                 return false;
 
@@ -188,6 +207,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoImprimir(EntradaMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialImprimir))
+                return false;
+
             if (!dto.Id.HasValue)
                 return false;
 

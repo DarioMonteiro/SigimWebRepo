@@ -17,6 +17,7 @@ namespace GIR.Sigim.Application.Service.Admin
         bool UsuarioPossuiCentroCustoDefinidoNoModulo(int? idUsuario, string modulo);
         UsuarioDTO ObterUsuarioPorLogin(string login);
         UsuarioDTO ObterUsuarioPorId(int id);
+        string[] ObterPermissoesUsuario(int? usuarioId);
         List<UsuarioDTO> ListarTodos();
         List<UsuarioPerfilDTO> ListarPeloUsuarioModulo(UsuarioFuncionalidadeFiltro filtro, out int totalRegistros);
         bool SalvarPermissoes(int UsuarioId, int ModuloId, int? PerfilId, List<UsuarioFuncionalidadeDTO> listaFuncionalidadeDTO);

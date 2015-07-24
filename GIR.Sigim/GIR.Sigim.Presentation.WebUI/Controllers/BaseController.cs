@@ -4,9 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GIR.Sigim.Application.Filtros;
+using GIR.Sigim.Application.Service.Admin;
+using GIR.Sigim.Infrastructure.Crosscutting.IoC;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
+using Microsoft.Practices.Unity;
 
 namespace GIR.Sigim.Presentation.WebUI.Controllers
 {
@@ -15,11 +18,31 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
     {
         public MessageQueue messageQueue;
 
+        private CustomPrincipal usuario;
+        public CustomPrincipal Usuario
+        {
+            get
+            {
+                if (usuario == null)
+                    usuario = AuthenticationServiceFactory.Create().GetUser();
+
+                return usuario;
+            }
+        }
+
         public BaseController(MessageQueue messageQueue)
         {
             MergeMessages(messageQueue);
             System.Web.HttpContext.Current.Session["MessageQueue"] = messageQueue;
             this.messageQueue = messageQueue;
+            ObterPermissoesUsuario();
+        }
+
+        private void ObterPermissoesUsuario()
+        {
+            var usuarioAppService = Container.Current.Resolve<IUsuarioAppService>();
+            if (Usuario != null)
+                Usuario.Roles = usuarioAppService.ObterPermissoesUsuario(Usuario.Id);
         }
 
         private static void MergeMessages(MessageQueue messageQueue)
@@ -33,11 +56,6 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                     messageQueue.Add(message.Text, message.Type);
                 }
             }
-        }
-
-        public CustomPrincipal Usuario
-        {
-            get { return AuthenticationServiceFactory.Create().GetUser(); }
         }
 
         protected void AdicionarMensagemNotificacao(string mensagem, TypeMessage tipo)

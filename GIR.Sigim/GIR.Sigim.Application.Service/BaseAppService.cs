@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.DTO;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Domain.Entity;
+using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Repository.Admin;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using GIR.Sigim.Infrastructure.Crosscutting.Validator;
-using System.Globalization;
-using GIR.Sigim.Domain.Entity.Financeiro;
-using GIR.Sigim.Application.DTO;
-using GIR.Sigim.Infrastructure.Crosscutting.IoC;
-using Microsoft.Practices.Unity;
-using GIR.Sigim.Domain.Repository.Admin;
 
 namespace GIR.Sigim.Application.Service
 {
@@ -30,11 +28,7 @@ namespace GIR.Sigim.Application.Service
             get
             {
                 if (usuarioLogado == null)
-                {
                     usuarioLogado = AuthenticationServiceFactory.Create().GetUser();
-                    if (usuarioLogado.Roles == null)
-                        usuarioLogado.Roles = ObterPermissoesUsuario(usuarioLogado.Id);
-                }
 
                 return usuarioLogado;
             }
@@ -174,20 +168,6 @@ namespace GIR.Sigim.Application.Service
                 else
                     return ObterIconeRelatorio(centroCusto.CentroCustoPai);
             }
-        }
-
-        private string[] ObterPermissoesUsuario(int? usuarioId)
-        {
-            var usuarioRepository = Container.Current.Resolve<IUsuarioRepository>();
-            var usuario = usuarioRepository.ObterPeloId(usuarioId,
-                l => l.ListaUsuarioFuncionalidade,
-                l => l.ListaUsuarioPerfil.Select(o => o.Perfil.ListaFuncionalidade));
-
-            List<string> roles = new List<string>();
-            roles.AddRange(usuario.ListaUsuarioFuncionalidade.To<List<string>>());
-            roles.AddRange(usuario.ListaUsuarioPerfil.SelectMany(l => l.Perfil.ListaFuncionalidade).To<List<string>>());
-
-            return roles.ToArray<string>();
         }
     }
 }

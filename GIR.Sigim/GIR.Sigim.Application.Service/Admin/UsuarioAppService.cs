@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO;
+using GIR.Sigim.Application.DTO.Admin;
 using GIR.Sigim.Application.Filtros;
 using GIR.Sigim.Application.Filtros.Admin;
+using GIR.Sigim.Domain.Entity.Admin;
+using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Repository.Admin;
+using GIR.Sigim.Domain.Repository.Sigim;
+using GIR.Sigim.Infrastructure.Crosscutting.IoC;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
-using GIR.Sigim.Application.DTO.Admin;
-using GIR.Sigim.Domain.Entity.Sigim;
-using GIR.Sigim.Domain.Entity.Admin;
-using GIR.Sigim.Domain.Repository.Sigim;
+using Microsoft.Practices.Unity;
 
 namespace GIR.Sigim.Application.Service.Admin
 {
@@ -152,6 +154,20 @@ namespace GIR.Sigim.Application.Service.Admin
         public UsuarioDTO ObterUsuarioPorId(int id)
         {
             return usuarioRepository.ObterPeloId(id, l => l.ListaUsuarioFuncionalidade, l => l.ListaUsuarioPerfil).To<UsuarioDTO>();
+        }
+
+        public string[] ObterPermissoesUsuario(int? usuarioId)
+        {
+            var usuarioRepository = Container.Current.Resolve<IUsuarioRepository>();
+            var usuario = usuarioRepository.ObterPeloId(usuarioId,
+                l => l.ListaUsuarioFuncionalidade,
+                l => l.ListaUsuarioPerfil.Select(o => o.Perfil.ListaFuncionalidade));
+
+            List<string> roles = new List<string>();
+            roles.AddRange(usuario.ListaUsuarioFuncionalidade.To<List<string>>());
+            roles.AddRange(usuario.ListaUsuarioPerfil.SelectMany(l => l.Perfil.ListaFuncionalidade).To<List<string>>());
+
+            return roles.ToArray<string>();
         }
 
         #endregion
