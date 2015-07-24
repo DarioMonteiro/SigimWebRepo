@@ -291,7 +291,7 @@ function diasDecorridos(dt1, dt2){
     return Math.ceil(dif / dia);
 }
 
-$('.numeric').on('input', function (event) {
+$(document).on('input', '.numeric', function (event) {
     this.value = this.value.replace(/[^0-9]/g, '');
 });
 

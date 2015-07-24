@@ -284,11 +284,31 @@
             $('#@(uniqueIdentifier)_txtAte').val('');
             $('#@(uniqueIdentifier)_cboCampo').val($('#@(uniqueIdentifier)_cboCampo option:first').val());
             $('#@(uniqueIdentifier)_resultadoBusca').html('');
+            SetTipoSelecao('Contem');
+        });
 
-            $('#@(uniqueIdentifier)_radTipoSelecaoContem')
+        function SetTipoSelecao(tipo) {
+            var radioId = '#@(uniqueIdentifier)_radTipoSelecao' + tipo;
+            $(radioId)
                 .attr('checked', true)
                 .trigger('change')
                 .trigger('click');
+        }
+
+        $(document).on("change", "#@(uniqueIdentifier)_cboCampo", function () {
+            $('#@(uniqueIdentifier)_txtDe').val('');
+            $('#@(uniqueIdentifier)_txtAte').val('');
+            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'codigo') {
+                $('#@(uniqueIdentifier)_txtDe').addClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').addClass('text-right numeric');
+                SetTipoSelecao('Intervalo');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', true);
+            }
+            else {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+            }
         });
 
         $('#@(uniqueIdentifier)_btnSearch').on("click", function () {
