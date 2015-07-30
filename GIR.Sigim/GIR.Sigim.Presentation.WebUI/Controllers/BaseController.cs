@@ -107,6 +107,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             listaViewModel.PageSize = paginationParameters.PageSize;
             listaViewModel.Ascending = paginationParameters.Ascending;
             listaViewModel.OrderBy = paginationParameters.OrderBy;
+            listaViewModel.UniqueIdentifier = paginationParameters.UniqueIdentifier;
             listaViewModel.PageSizeList = new SelectList(this.PageSizeList, paginationParameters.PageSize);
             listaViewModel.Pagination = new Pagination(
                 listaViewModel.PageIndex,
@@ -122,6 +123,11 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             var listaViewModel = new ListaViewModel();
             listaViewModel.Records = records;
             return listaViewModel;
+        }
+
+        protected string GenerateUniqueIdentifier()
+        {
+            return "_" + Guid.NewGuid().ToString().Replace("-", string.Empty);
         }
     }
 }

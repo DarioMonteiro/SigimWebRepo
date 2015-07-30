@@ -12,6 +12,7 @@ namespace GIR.Sigim.Application.Filtros
         public int PageSize { get; set; }
         public string OrderBy { get; set; }
         public bool Ascending { get; set; }
+        public string UniqueIdentifier { get; set; }
 
         public PaginationParameters()
         {
