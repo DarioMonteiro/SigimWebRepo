@@ -22,13 +22,14 @@
                         "RequisicaoMaterial",
                         null,
                         new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
-                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                        new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -91,7 +92,7 @@
                                                     @Html.ValidationMessageFor(m => m.Filtro.Id, "", new { @class = "note note-error" })
                                                 </section>
                                                 <section class="col col-3">
-                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar" onclick="javascript:goToPage(0);">
+                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
                                                         <i class="fa fa-search fa-lg"></i>
                                                     </button>
                                                 </section>
