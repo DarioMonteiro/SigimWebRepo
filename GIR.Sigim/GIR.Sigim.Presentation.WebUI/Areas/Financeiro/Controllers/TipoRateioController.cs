@@ -8,7 +8,7 @@ using GIR.Sigim.Application.Service.Financeiro;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
-
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -25,7 +25,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.tipoRateioAppService = tipoRateioAppService;
         }
 
-
+        [Authorize(Roles = Funcionalidade.TipoRateioAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as TipoRateioViewModel;
