@@ -7,8 +7,12 @@
 
     <mvcSiteMapNode title="Admin" controller="Home" action="Index" area="Admin">
       <mvcSiteMapNode title="Acessos" url="#" clickable="false" roles="PERFIL_ACESSAR,USUARIOFUNCIONALIDADE_ACESSAR">
-        <mvcSiteMapNode title="Perfil" controller="Perfil" action="Index"/>
-        <mvcSiteMapNode title="Usuário funcionalidades" controller="UsuarioFuncionalidade" action="Index"/>
+        <mvcSiteMapNode title="Perfil" controller="Perfil" action="Index">
+          <mvcSiteMapNode title="Cadastro" controller="Perfil" action="Cadastro" visibility="SiteMapPathHelper,!*"/>
+        </mvcSiteMapNode>
+        <mvcSiteMapNode title="Usuário funcionalidades" controller="UsuarioFuncionalidade" action="Index">
+          <mvcSiteMapNode title="Cadastro" controller="UsuarioFuncionalidade" action="Cadastro" visibility="SiteMapPathHelper,!*"/>
+        </mvcSiteMapNode>
       </mvcSiteMapNode>
     </mvcSiteMapNode>
 
