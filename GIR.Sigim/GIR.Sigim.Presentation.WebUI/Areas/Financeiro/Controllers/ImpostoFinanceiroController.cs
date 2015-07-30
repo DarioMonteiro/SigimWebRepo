@@ -11,6 +11,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -32,7 +33,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.tipoCompromissoAppService = tipoCompromissoAppService;
         }
 
-      
+        [Authorize(Roles = Funcionalidade.ImpostoFinanceiroAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as ImpostoFinanceiroViewModel;

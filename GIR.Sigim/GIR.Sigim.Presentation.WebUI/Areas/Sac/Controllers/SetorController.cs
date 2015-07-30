@@ -8,6 +8,7 @@ using GIR.Sigim.Application.Service.Sac;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Sac.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
 {
@@ -22,7 +23,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
         {
             this.SetorAppService = SetorAppService;
         }
-       
+
+        [Authorize(Roles = Funcionalidade.SetorSacAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as SetorViewModel;
