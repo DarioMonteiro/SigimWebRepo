@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="Painel" controller="Painel" action="Index">
+    
+    <mvcSiteMapNode title="Ordem de Compra" controller="Home" action="Index" area="OrdemCompra">
+      <mvcSiteMapNode title="Sistema" url="#" clickable="false">
+        <mvcSiteMapNode title="Parâmetros" controller="Parametros" action="Index"/>
+        <mvcSiteMapNode title="Parâmetros - usuário" controller="ParametrosUsuario" action="Index"/>
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Cadastros" url="#" clickable="false"
+                      roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR,
+                             ORDEMCOMPRA_MATERIAL_ACESSAR">
+        <mvcSiteMapNode title="Unidade de medida" controller="UnidadeMedida" action="Index" roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR"/>
+        <mvcSiteMapNode title="Material" controller="Material" action="Index" roles="ORDEMCOMPRA_MATERIAL_ACESSAR"/>
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Requisição de Material" controller="RequisicaoMaterial" action="Index">
+        <mvcSiteMapNode title="Pré-requisição de Material" controller="PreRequisicaoMaterial" action="Index">
+          <mvcSiteMapNode title="Cadastro" controller="PreRequisicaoMaterial" action="Index" visibility="MenuHelper,!*"/>
+          <mvcSiteMapNode title="Cadastro" controller="PreRequisicaoMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+        </mvcSiteMapNode>
+        <mvcSiteMapNode title="Cadastro" controller="RequisicaoMaterial" action="Index" visibility="MenuHelper,!*"/>
+        <mvcSiteMapNode title="Cadastro" controller="RequisicaoMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Entrada de Material" controller="EntradaMaterial" action="Index">
+        <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Index" visibility="MenuHelper,!*"/>
+        <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="RELATORIOITENSORDEMCOMPRA_ACESSAR">
+        <mvcSiteMapNode title="Ordem de Compra" url="#" clickable="false" roles="RELATORIOITENSORDEMCOMPRA_ACESSAR">
+          <mvcSiteMapNode title="Itens de ordem de compra" controller="RelOCItensOrdemCompra" action="Index"/>
+        </mvcSiteMapNode>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+  </mvcSiteMapNode>
+
+</mvcSiteMap>

@@ -1,0 +1,12 @@
+﻿@model MvcSiteMapProvider.Web.Html.Models.SiteMapNodeModel
+@using System.Web.Mvc.Html
+@using MvcSiteMapProvider.Web.Html.Models
+
+@if (!Model.IsCurrentNode && Model.IsClickable)
+{
+    <a href="@Model.Url" title="@Model.Description">@Model.Title</a>
+}
+else
+{ 
+    <text>@Model.Title</text>
+}

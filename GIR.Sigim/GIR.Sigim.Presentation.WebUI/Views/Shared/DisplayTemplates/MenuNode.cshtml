@@ -1,0 +1,18 @@
+﻿@model MvcSiteMapProvider.Web.Html.Models.SiteMapNodeModel
+@using System.Web.Mvc.Html
+@using MvcSiteMapProvider.Web.Html.Models
+
+@{
+    var url = "#";
+    var iconeClass = string.Empty;
+    
+    if (Model.IsClickable && !Model.Children.Any()) {
+        url = Model.Url;
+    }
+
+    if (Model.Children.Any() && (Model.Ancestors.Count == 2)) {
+        iconeClass = "fa fa-lg fa-fw fa-cog";
+    }
+
+    <a href="@url"><i class="@iconeClass"></i>@Model.Title</a>
+}
