@@ -11,5 +11,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
     {
         ParametrosUsuarioDTO ObterPeloIdUsuario(int? idUsuario);
         void Salvar(ParametrosUsuarioDTO dto);
+        bool EhPermitidoSalvar();
     }
 }

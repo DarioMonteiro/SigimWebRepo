@@ -49,7 +49,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
                     foreach (var item in listaTituloPagar)
                     {
-                        if ((item.Situacao != SituacaoTituloPagar.Cancelado) && (item.TipoTitulo != TipoTitulo.NaoVinculado))
+                        if ((item.Situacao != SituacaoTituloPagar.Cancelado) && (item.TipoTitulo != TipoTitulo.Pai))
                         {
                             var quantidadeDeZerosIniciais = item.Documento.Length - numeroNotaFiscal.Length;
                             numeroDeZerosIniciais = item.Documento.Substring(0, quantidadeDeZerosIniciais);

@@ -29,6 +29,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public string ClienteEmpreitada { get; set; }
         public PessoaJuridica PessoaJuridica { get; set; }
         public PessoaFisica PessoaFisica { get; set; }
+        public int? EnderecoComercialId { get; set; }
 
         public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
         public ICollection<OrdemCompra.ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
@@ -44,7 +45,9 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<TaxaAdministracao> ListaTaxaAdministracao { get; set; }
         public ICollection<EntradaMaterial> ListaEntradaMaterial { get; set; }
         public ICollection<EntradaMaterial> ListaEntradaMaterialNota { get; set; }
+        public ICollection<EntradaMaterial> ListaEntradaMaterialTransportadora { get; set; }
         public ICollection<AvaliacaoFornecedor> ListaAvaliacaoFornecedor { get; set; }
+        public ICollection<Domain.Entity.OrdemCompra.OrdemCompra> ListaOrdemCompra { get; set; }
 
         public ClienteFornecedor()
         {
@@ -62,7 +65,9 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();
             this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();
             this.ListaEntradaMaterialNota = new HashSet<EntradaMaterial>();
+            this.ListaEntradaMaterialTransportadora = new HashSet<EntradaMaterial>();
             this.ListaAvaliacaoFornecedor = new HashSet<AvaliacaoFornecedor>();
+            this.ListaOrdemCompra = new HashSet<Domain.Entity.OrdemCompra.OrdemCompra>();
         }
     }
 }

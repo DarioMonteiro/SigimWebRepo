@@ -9,6 +9,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Controllers
 {
@@ -24,6 +25,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             this.formaRecebimentoAppService = formaRecebimentoAppService;            
         }
 
+        [Authorize(Roles = Funcionalidade.FormaRecebimentoAcessar)]
         public ActionResult Index(int? id)
         {
            

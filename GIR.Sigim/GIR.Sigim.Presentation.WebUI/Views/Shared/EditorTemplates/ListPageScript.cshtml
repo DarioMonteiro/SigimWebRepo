@@ -2,25 +2,25 @@
 
 <script type="text/javascript">
     function doFilter() {
-        $('#formFilter').submit();
-    }
-        
-    function changePageSize() {
-        $('#@Html.IdFor(m => m.PageSize)').val($('#pageSizeSelector').val());
-        goToPage(0);
+        $('#formFilter@(Model.UniqueIdentifier)').submit();
     }
 
-    function goToPage(index) {
+    function changePageSize() {
+        $('#@Html.IdFor(m => m.PageSize)').val($('#pageSizeSelector').val());
+        goToPage@(Model.UniqueIdentifier)(0);
+    }
+
+    function goToPage@(Model.UniqueIdentifier)(index) {
         $('#@Html.IdFor(m => m.PageIndex)').val(index);
         doFilter();
     }
 
     $(document).ready(function () {
-        $("#btnSearch").click(function (e) {
+        $(".btnSearchWithPagination").click(function (e) {
             e.preventDefault();
         });
 
-        $(document).on("click", "#tableSearchResult th.sorting", function () {
+        $(document).on("click", "#tableSearchResult@(Model.UniqueIdentifier) th.sorting", function () {
             var currentOrder = $('#@Html.IdFor(m => m.OrderBy)').val();
             var currentAscending = $('#@Html.IdFor(m => m.Ascending)').val();
             var ascending = true;
@@ -31,9 +31,7 @@
                 $('#@Html.IdFor(m => m.OrderBy)').val($(this).data("order"));
 
             $('#@Html.IdFor(m => m.Ascending)').val(ascending);
-            goToPage(0);
+            goToPage@(Model.UniqueIdentifier)(0);
         });
-
-        //doFilter();
     });
 </script>

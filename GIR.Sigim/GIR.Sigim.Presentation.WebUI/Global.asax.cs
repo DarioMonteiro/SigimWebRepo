@@ -8,6 +8,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using GIR.Sigim.Application.Helper;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using GIR.Sigim.Presentation.WebUI.IoC;
 
@@ -27,6 +28,7 @@ namespace GIR.Sigim.Presentation.WebUI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Bootstrapper.Initialise();
+            MapperHelper.Initialise();
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("pt-BR");
         }

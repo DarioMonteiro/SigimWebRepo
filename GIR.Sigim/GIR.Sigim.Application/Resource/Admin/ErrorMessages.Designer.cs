@@ -79,6 +79,15 @@ namespace GIR.Sigim.Application.Resource.Admin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Módulo inexistente..
+        /// </summary>
+        public static string ModuloInexistente {
+            get {
+                return ResourceManager.GetString("ModuloInexistente", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A nova senha deve ser diferante da atual..
         /// </summary>
         public static string NovaSenhaIgualAtual {
@@ -93,6 +102,15 @@ namespace GIR.Sigim.Application.Resource.Admin {
         public static string NovaSenhaIgualLogin {
             get {
                 return ResourceManager.GetString("NovaSenhaIgualLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O perfil informado não pertence ao sistema selecionado..
+        /// </summary>
+        public static string PerfilNaoPertenceAoSistemaSelecionado {
+            get {
+                return ResourceManager.GetString("PerfilNaoPertenceAoSistemaSelecionado", resourceCulture);
             }
         }
         
@@ -156,6 +174,15 @@ namespace GIR.Sigim.Application.Resource.Admin {
         public static string SenhaSemNumero {
             get {
                 return ResourceManager.GetString("SenhaSemNumero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuário inexistente..
+        /// </summary>
+        public static string UsuarioInexistente {
+            get {
+                return ResourceManager.GetString("UsuarioInexistente", resourceCulture);
             }
         }
         

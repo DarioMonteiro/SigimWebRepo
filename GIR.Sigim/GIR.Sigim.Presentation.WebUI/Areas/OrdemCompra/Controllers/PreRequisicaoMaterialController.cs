@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Service.OrdemCompra;
@@ -33,6 +34,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.parametrosOrdemCompraAppService = parametrosOrdemCompraAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.PreRequisicaoMaterialAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as PreRequisicaoMaterialListaViewModel;
@@ -40,6 +42,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             {
                 model = new PreRequisicaoMaterialListaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             return View(model);
         }
@@ -75,6 +78,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
+        [Authorize(Roles = Funcionalidade.PreRequisicaoMaterialAcessar)]
         public ActionResult Cadastro(int? id)
         {
             PreRequisicaoMaterialCadastroViewModel model = new PreRequisicaoMaterialCadastroViewModel();

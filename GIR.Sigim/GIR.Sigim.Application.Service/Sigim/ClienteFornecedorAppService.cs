@@ -54,5 +54,16 @@ namespace GIR.Sigim.Application.Service.Sigim
             return clienteFornecedorRepository.ListarPeloFiltro(specification).To<List<ClienteFornecedorDTO>>();
         }
 
+        public List<ClienteFornecedorDTO> ListarClienteOrdemCompraAtivosPorNome(string nome)
+        {
+            var specification = (Specification<ClienteFornecedor>)new TrueSpecification<ClienteFornecedor>();
+            specification &= ClienteFornecedorSpecification.NomeContem(nome);
+            specification &= ClienteFornecedorSpecification.EhAtivo();
+            specification &= ClienteFornecedorSpecification.EhClienteOrdemCompra();
+
+            return clienteFornecedorRepository.ListarPeloFiltro(specification).To<List<ClienteFornecedorDTO>>();
+        }
+
+
     }
 }

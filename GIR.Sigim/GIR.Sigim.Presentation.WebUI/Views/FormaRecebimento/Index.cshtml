@@ -80,6 +80,10 @@
 }
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        doFilter();
+    });
+
     $("#btnDeletar").on("click", function () {
         $.ajax({
             type: 'POST',

@@ -1,16 +1,16 @@
-﻿@model GIR.Sigim.Presentation.WebUI.ViewModel.Pagination
+﻿@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
 
 <div class="dt-toolbar-footer table-footer">
     <div class="col-sm-6 col-xs-12 hidden-xs">
         <div class="dataTables_info" id="dt_basic_info" role="status" aria-live="polite">
-            Exibindo <span class="txt-color-darken">@Model.FirstRecord</span> a <span class="txt-color-darken">@Model.LastRecord</span>
-            de <span class="text-primary">@Model.TotalRecords</span> registros
+            Exibindo <span class="txt-color-darken">@Model.Pagination.FirstRecord</span> a <span class="txt-color-darken">@Model.Pagination.LastRecord</span>
+            de <span class="text-primary">@Model.Pagination.TotalRecords</span> registros
         </div>
     </div>
     <div class="col-xs-12 col-sm-6">
-        <div class="dataTables_paginate paging_simple_numbers" id="dt_basic_paginate">
+        <div class="dataTables_paginate paging_simple_numbers">
             <ul class="pagination">
-                @foreach (var item in Model.PageList)
+                @foreach (var item in Model.Pagination.PageList)
                 {
                     string classActive = string.Empty;
                     if (item.Active)
@@ -19,7 +19,7 @@
                     }
 
                     <li @classActive>
-                        <a href="javascript:goToPage(@item.Index);">
+                        <a href="javascript:goToPage@(Model.UniqueIdentifier)(@item.Index);">
                             @switch (item.Decription)
                             {
                                 case "<<":

@@ -24,6 +24,15 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.PossuiAvaliacaoFornecedor, m => m.MapFrom(s => s.ListaAvaliacaoFornecedor.Any()));
             Mapper.CreateMap<EntradaMaterialDTO, EntradaMaterial>();
 
+            Mapper.CreateMap<EntradaMaterialFormaPagamento, EntradaMaterialFormaPagamentoDTO>();
+            Mapper.CreateMap<EntradaMaterialFormaPagamentoDTO, EntradaMaterialFormaPagamento>();
+
+            Mapper.CreateMap<EntradaMaterialImposto, EntradaMaterialImpostoDTO>();
+            Mapper.CreateMap<EntradaMaterialImpostoDTO, EntradaMaterialImposto>();
+
+            Mapper.CreateMap<EntradaMaterialItem, EntradaMaterialItemDTO>();
+            Mapper.CreateMap<EntradaMaterialItemDTO, EntradaMaterialItem>();
+
             Mapper.CreateMap<InterfaceCotacao, InterfaceCotacaoDTO>();
             Mapper.CreateMap<InterfaceCotacaoDTO, InterfaceCotacao>();
 

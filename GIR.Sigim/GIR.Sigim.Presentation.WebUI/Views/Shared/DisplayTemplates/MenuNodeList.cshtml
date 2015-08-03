@@ -1,0 +1,16 @@
+﻿@model MvcSiteMapProvider.Web.Html.Models.SiteMapNodeModelList
+@using System.Web.Mvc.Html
+@using MvcSiteMapProvider.Web.Html.Models
+
+<ul>
+    @foreach (var node in Model) {
+        if (!node.Description.Contains("hideForMenu"))
+        {
+            <li>@Html.DisplayFor(m => node, "MenuNode")
+                @if (node.Children.Any()) {
+                    @Html.DisplayFor(m => node.Children, "MenuNodeList")
+                }
+            </li>
+        }
+    }
+</ul>

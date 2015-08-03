@@ -34,10 +34,8 @@
                             string numeroDocumentoSortingSuffix = "sorting";
                             string dataEmissaoSortingSuffix = "sorting";
                             string fornecedorClienteSortingSuffix = "sorting";
-                            //string CPFCNPJFornecedorClienteSortingSuffix = "sorting";
                             string dataVencimentoSortingSuffix = "sorting";
                             string valorSortingSuffix = "sorting";
-                            //string valorClasseSortingSuffix = "sorting";
                             string descricaoItemSortingSuffix = "sorting";
                             string codigoDescricaoClasseSortingSuffix = "sorting";
                             string contratoSortingSuffix = "sorting";
@@ -57,18 +55,12 @@
                                 case "fornecedorCliente":
                                     fornecedorClienteSortingSuffix += sortingSuffix;
                                     break;
-                                //case "CPFCNPJFornecedorCliente":
-                                //    CPFCNPJFornecedorClienteSortingSuffix += sortingSuffix;
-                                //    break;
                                 case "dataVencimento":
                                     dataVencimentoSortingSuffix += sortingSuffix;
                                     break;
                                 case "valor":
                                     valorSortingSuffix += sortingSuffix;
                                     break;
-                                //case "valorClasse":
-                                //    valorClasseSortingSuffix += sortingSuffix;
-                                //    break;
                                 case "descricaoItem":
                                     descricaoItemSortingSuffix += sortingSuffix;
                                     break;
@@ -99,7 +91,7 @@
                         <th class="sorting @fornecedorClienteSortingSuffix text-left" data-order="fornecedorCliente" style="min-width:140px;">Fornecedor / Cliente</th>
                         <th class="text-left" data-order="CPFCNPJFornecedorCliente" style="min-width:90px;">CPF / CNPJ</th>
                         <th class="sorting @dataVencimentoSortingSuffix text-left" data-order="dataVencimento" style="min-width:90px;">Data vencimento</th>
-                        <th class="sorting @valorSortingSuffix text-left" data-order="valor">Valor NF</th>
+                        <th class="sorting @valorSortingSuffix text-left" data-order="valor" style="min-width:80px;">Valor NF</th>
                         <th class="text-left">Valor classe</th>
                         <th class="sorting @descricaoItemSortingSuffix text-left" data-order="descricaoItem">Serviço</th>
                         <th class="sorting @codigoDescricaoClasseSortingSuffix text-left" data-order="codigoDescricaoClasse">Classe de despesa</th>
@@ -155,6 +147,6 @@
                 </tbody>
             </table>
         </div>
-        @Html.Partial("_PaginationPartial", Model.Pagination)
+        @Html.Partial("_PaginationPartial", Model)
     }
 </div>

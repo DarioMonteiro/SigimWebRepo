@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.DTO.Estoque;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
@@ -51,7 +52,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public decimal? PercentualISS { get; set; }
         public decimal? ISS { get; set; }
         public decimal? FreteIncluso { get; set; }
-        public DateTime DataCadastro { get; set; }
+        public Nullable<DateTime> DataCadastro { get; set; }
         public string LoginUsuarioCadastro { get; set; }
         public Nullable<DateTime> DataLiberacao { get; set; }
         public string LoginUsuarioLiberacao { get; set; }
@@ -77,5 +78,22 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public Nullable<DateTime> DataConferencia { get; set; }
         public string LoginUsuarioConferencia { get; set; }
         public bool PossuiAvaliacaoFornecedor { get; set; }
+        public List<EntradaMaterialItemDTO> ListaItens { get; set; }
+        public List<EntradaMaterialFormaPagamentoDTO> ListaFormaPagamento { get; set; }
+        public List<EntradaMaterialImpostoDTO> ListaImposto { get; set; }
+        public List<MovimentoDTO> ListaMovimentoEstoque { get; set; }
+
+        public EntradaMaterialDTO()
+        {
+            this.Situacao = SituacaoEntradaMaterial.Pendente;
+            this.Data = DateTime.Now;
+            this.CentroCusto = new CentroCustoDTO();
+            this.ClienteFornecedor = new ClienteFornecedorDTO();
+            this.FornecedorNota = new ClienteFornecedorDTO();
+            this.ListaItens = new List<EntradaMaterialItemDTO>();
+            this.ListaFormaPagamento = new List<EntradaMaterialFormaPagamentoDTO>();
+            this.ListaImposto = new List<EntradaMaterialImpostoDTO>();
+            this.ListaMovimentoEstoque = new List<MovimentoDTO>();
+        }
     }
 }

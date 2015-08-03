@@ -97,6 +97,24 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Classe insumo não cadastrada..
+        /// </summary>
+        public static string ClasseInsumoNaoCadastrada {
+            get {
+                return ResourceManager.GetString("ClasseInsumoNaoCadastrada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selecione uma classe insumo do último nível..
+        /// </summary>
+        public static string ClasseUltimoNivel {
+            get {
+                return ResourceManager.GetString("ClasseUltimoNivel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A data máxima não pode ser menor que a data mínima..
         /// </summary>
         public static string DataMaximaMenorQueMinima {
@@ -192,6 +210,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         public static string NenhumRegistroEncontrado {
             get {
                 return ResourceManager.GetString("NenhumRegistroEncontrado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Privilégios insuficientes para executar esta operação..
+        /// </summary>
+        public static string PrivilegiosInsuficientes {
+            get {
+                return ResourceManager.GetString("PrivilegiosInsuficientes", resourceCulture);
             }
         }
         

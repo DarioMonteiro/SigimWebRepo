@@ -9,14 +9,14 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
 {
     public enum TipoTitulo : short
     {
-        [Description("Vinculado")]
-        Vinculado = 0,
+        [Description("Normal")]
+        Normal = 0,
 
-        [Description("Não Vinculado")]
-        NaoVinculado = 1,
+        [Description("Pai")]
+        Pai = 1,
 
-        [Description("Todos")]
-        Todos = 2
+        [Description("Parcela")]
+        Parcela = 2
 
     }
 }

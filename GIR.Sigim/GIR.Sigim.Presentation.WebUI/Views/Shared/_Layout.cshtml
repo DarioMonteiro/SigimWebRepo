@@ -42,14 +42,7 @@
     </aside>
     <div id="main" role="main">
         <div id="ribbon">
-            <ol class="breadcrumb">
-                <li>
-                    @Html.ActionLink("Painel", "Index", "Painel", new { area = "" }, null)
-                </li>
-                <li>UI Elements</li>
-                <li>Icons</li>
-                <li>Font Awesome</li>
-            </ol>
+            @Html.MvcSiteMap().SiteMapPath()
         </div>
         <div id="content">
             <section id="widget-grid" class="">

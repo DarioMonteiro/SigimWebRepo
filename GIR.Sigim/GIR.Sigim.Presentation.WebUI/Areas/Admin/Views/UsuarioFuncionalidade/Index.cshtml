@@ -1,0 +1,85 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Admin.ViewModel.UsuarioFuncionalidadeViewModel
+
+@{
+    ViewBag.Title = "Usuário funcionalidades";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+        @Html.ActionLink("Novo", "Cadastro", null, new { @class = "btn btn-primary", @style = "float:right;" })
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Lista",
+                        "UsuarioFuncionalidade",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Filtro
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFiltro" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-9">
+                                                @Html.LabelFor(m => m.Filtro.UsuarioId, new { @class = "label" })
+                                                <label class="select">
+                                                    @Html.DropDownListFor(m => m.Filtro.UsuarioId, Model.ListaUsuario, string.Empty)<i></i>
+                                                </label>
+                                                </section>
+                                                <section class="col col-9">
+                                                @Html.LabelFor(m => m.Filtro.ModuloId, new { @class = "label" })
+                                                <label class="select">
+                                                    @Html.DropDownListFor(m => m.Filtro.ModuloId, Model.ListaModulo, string.Empty)<i></i>
+                                                </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar" onclick="javascript:goToPage(0);">
+                                                        <i class="fa fa-search fa-lg"></i>
+                                                    </button>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        doFilter();
+    });
+</script>

@@ -42,6 +42,15 @@
       <Private>True</Private>
       <HintPath>..\packages\CrystalDecisions.Shared.1.0.0\lib\CrystalDecisions.Shared.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -60,6 +69,8 @@
     <Compile Include="Admin\PerfilAppService.cs" />
     <Compile Include="Admin\UsuarioAppService.cs" />
     <Compile Include="BaseAppService.cs" />
+    <Compile Include="IoC\AdminBootstraper.cs" />
+    <Compile Include="IoC\Bootstrapper.cs" />
     <Compile Include="Contrato\ContratoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoAppService.cs" />
     <Compile Include="Contrato\ContratoRetificacaoItemAppService.cs" />
@@ -81,9 +92,16 @@
     <Compile Include="Financeiro\TipoDocumentoAppService.cs" />
     <Compile Include="Financeiro\TipoRateioAppService.cs" />
     <Compile Include="Financeiro\TituloPagarAppService.cs" />
+    <Compile Include="IoC\ContratoBootstraper.cs" />
+    <Compile Include="IoC\SigimBootstraper.cs" />
+    <Compile Include="IoC\SacBootstraper.cs" />
+    <Compile Include="IoC\OrdemCompraBootstraper.cs" />
+    <Compile Include="IoC\OrcamentoBootstraper.cs" />
+    <Compile Include="IoC\FinanceiroBootstraper.cs" />
     <Compile Include="Orcamento\OrcamentoAppService.cs" />
     <Compile Include="Orcamento\ParametrosOrcamentoAppService.cs" />
     <Compile Include="OrdemCompra\EntradaMaterialAppService.cs" />
+    <Compile Include="OrdemCompra\OrdemCompraItemAppService.cs" />
     <Compile Include="OrdemCompra\RequisicaoMaterialAppService.cs" />
     <Compile Include="OrdemCompra\ParametrosOrdemCompraAppService.cs" />
     <Compile Include="OrdemCompra\ParametrosUsuarioAppService.cs" />
@@ -101,6 +119,7 @@
     <Compile Include="Sigim\AgenciaAppService.cs" />
     <Compile Include="Sigim\ContaCorrenteAppService.cs" />
     <Compile Include="Sigim\FormaRecebimentoAppService.cs" />
+    <Compile Include="Sigim\MaterialClasseInsumoAppService.cs" />
     <Compile Include="Sigim\TratamentoAppService.cs" />
     <Compile Include="Sigim\TipoAreaAppService.cs" />
     <Compile Include="Sigim\TipoCaracteristicaAppService.cs" />
@@ -132,9 +151,17 @@
       <Project>{1235e084-57fe-4dc3-9858-63c7063003b2}</Project>
       <Name>GIR.Sigim.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting.IoC\GIR.Sigim.Infrastructure.Crosscutting.IoC.csproj">
+      <Project>{b581e80a-8ed7-4b76-b24a-b3332020cf56}</Project>
+      <Name>GIR.Sigim.Infrastructure.Crosscutting.IoC</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting\GIR.Sigim.Infrastructure.Crosscutting.csproj">
       <Project>{c6691185-a423-4909-9157-1cb230a48980}</Project>
       <Name>GIR.Sigim.Infrastructure.Crosscutting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Data\GIR.Sigim.Infrastructure.Data.csproj">
+      <Project>{b6a84fc7-9009-4d4e-82e8-0d1e4ceab6a0}</Project>
+      <Name>GIR.Sigim.Infrastructure.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

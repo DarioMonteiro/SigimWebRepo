@@ -45,7 +45,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         {
             var model = centroCustoAppService.ListarRaizesAtivas();
             ViewBag.FirstNode = "Centro de Custo";
-            return View(model);
+            return View("~/Views/Shared/EditorTemplates/TreeView.cshtml",model);
         }
     }
 }

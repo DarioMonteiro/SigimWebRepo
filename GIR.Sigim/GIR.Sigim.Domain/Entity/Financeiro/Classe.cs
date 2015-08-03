@@ -7,6 +7,7 @@ using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.Estoque;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -26,6 +27,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
         public ICollection<RateioAutomatico> ListaRateioAutomatico { get; set; }
         public ICollection<TaxaAdministracao> ListaTaxaAdministracao { get; set; }
+        public ICollection<EntradaMaterialItem> ListaEntradaMaterialItem { get; set; }
+        public ICollection<MovimentoItem> ListaMovimentoItem { get; set; }
 
         public Classe()
         {
@@ -37,7 +40,9 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
             this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>();
             this.ListaRateioAutomatico = new HashSet<RateioAutomatico>();
-            this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();  
+            this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();
+            this.ListaEntradaMaterialItem = new HashSet<EntradaMaterialItem>();
+            this.ListaMovimentoItem = new HashSet<MovimentoItem>();
         }
     }
 }

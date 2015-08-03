@@ -13,6 +13,7 @@ using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Filtros;
 using Newtonsoft.Json;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -34,7 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.centroCustoAppService = centroCustoAppService;
         }
 
-      
+        [Authorize(Roles = Funcionalidade.TaxaAdministracaoAcessar)]
         public ActionResult Index()
         {
             var model = new TaxaAdministracaoViewModel();

@@ -32,6 +32,8 @@ namespace GIR.Sigim.Application.Service.Test.OrdemCompra
         private ILogAcessoRepository logAcessoRepository;
         private IUsuarioAppService usuarioAppService;
         private ICentroCustoAppService centroCustoService;
+        private IModuloRepository moduloRepository;
+        private IPerfilRepository perfilRepository;
         private MessageQueue messageQueue;
 
         [TestInitialize]
@@ -48,8 +50,10 @@ namespace GIR.Sigim.Application.Service.Test.OrdemCompra
             usuarioRepository = new UsuarioRepository(unitOfWork);
             logAcessoRepository = new LogAcessoRepository(unitOfWork);
             centroCustoRepository = new CentroCustoRepository(unitOfWork);
+            moduloRepository = new ModuloRepository(unitOfWork);
+            perfilRepository = new PerfilRepository(unitOfWork);
             messageQueue = new MessageQueue();
-            usuarioAppService = new UsuarioAppService(usuarioRepository, logAcessoRepository, messageQueue);
+            usuarioAppService = new UsuarioAppService(usuarioRepository, logAcessoRepository, perfilRepository, moduloRepository, messageQueue);
             centroCustoService = new CentroCustoAppService(centroCustoRepository, usuarioAppService, messageQueue);
         }
 

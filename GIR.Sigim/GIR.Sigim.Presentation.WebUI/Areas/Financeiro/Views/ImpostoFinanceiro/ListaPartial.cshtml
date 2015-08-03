@@ -39,7 +39,12 @@
                             string retidoDescricaoSortingSuffix = "sorting";
                             string indiretoDescricaoSortingSuffix = "sorting";
                             string pagamentoEletronicoDescricaoSortingSuffix = "sorting";
-
+                            string periodicidadeDescricaoSortingSuffix = "sorting";
+                            string fimDeSemanaDescricaoSortingSuffix = "sorting";
+                            string fatoGeradorDescricaoSortingSuffix = "sorting";
+                            string contaContabilSortingSuffix = "sorting";
+                            string diaVencimentoSortingSuffix = "sorting";
+                            
                             switch (Model.OrderBy)
                             {
                                 case "id":
@@ -69,6 +74,22 @@
                                 case "pagamentoEletronicoDescricao":
                                     pagamentoEletronicoDescricaoSortingSuffix += sortingSuffix;
                                     break;
+                                case "periodicidadeDescricao":
+                                    periodicidadeDescricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "fimDeSemanaDescricao":
+                                    fimDeSemanaDescricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "fatoGeradorDescricao":
+                                    fatoGeradorDescricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "contaContabilDescricao":
+                                    contaContabilSortingSuffix += sortingSuffix;
+                                    break;
+                                case "diaVencimentoDescricao":
+                                    diaVencimentoSortingSuffix += sortingSuffix;
+                                    break;
+                                                                        
                                 default:
                                     break;
                             }
@@ -82,6 +103,11 @@
                         <th class="sorting @retidoDescricaoSortingSuffix text-center" data-order="retidoDescricao" style="min-width:50px;">Retido</th>
                         <th class="sorting @indiretoDescricaoSortingSuffix text-center" data-order="indiretoDescricao" style="min-width:50px;">Indireto</th>
                         <th class="sorting @pagamentoEletronicoDescricaoSortingSuffix text-center" data-order="pagamentoEletronicoDescricao" style="min-width:50px;">Pagto elet.</th>
+                        <th class="sorting @periodicidadeDescricaoSortingSuffix text-center" data-order="periodicidadeDescricao" style="min-width:50px;">Periodicidade</th>
+                        <th class="sorting @diaVencimentoSortingSuffix text-center" data-order="diaVencimento" style="min-width:50px;">Dia Vencto</th>
+                        <th class="sorting @fimDeSemanaDescricaoSortingSuffix text-center" data-order="fimDeSemanaDescricao" style="min-width:50px;">Fim de semana</th>
+                        <th class="sorting @fatoGeradorDescricaoSortingSuffix text-center" data-order="fatoGeradorDescricao" style="min-width:50px;">Fato gerador</th>
+                        <th class="sorting @contaContabilSortingSuffix text-center" data-order="contaContabil" style="min-width:50px;">Conta contábil</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,6 +131,11 @@
                             <td class="text-center">@item.RetidoDescricao</td>
                             <td class="text-center">@item.IndiretoDescricao</td>
                             <td class="text-center">@item.PagamentoEletronicoDescricao</td>
+                            <td class="text-center">@item.PeriodicidadeDescricao</td>
+                            <td class="text-center">@item.DiaVencimento</td>
+                            <td class="text-center">@item.FimDeSemanaDescricao</td>
+                            <td class="text-center">@item.FatoGeradorDescricao</td>
+                            <td class="text-center">@item.ContaContabil</td>
                         </tr>
                     }
                 </tbody>

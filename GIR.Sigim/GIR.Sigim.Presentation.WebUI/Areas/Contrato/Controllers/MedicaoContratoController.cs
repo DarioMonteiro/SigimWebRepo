@@ -14,7 +14,7 @@ using GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.Adapter;
-
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -79,6 +79,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
         #region Methods
 
+        [Authorize(Roles = Funcionalidade.MedicaoAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as MedicaoContratoListaViewModel;
@@ -123,6 +124,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
+        [Authorize(Roles = Funcionalidade.MedicaoAcessar)]
         public ActionResult Medicao(int? id)
         {
             MedicaoContratoMedicaoViewModel model = new MedicaoContratoMedicaoViewModel();
@@ -171,13 +173,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (!contratoRetificacaoAppService.EhRetificacaoAprovada(contratoRetificacao))
             {
-                //return View(model);
             }
-
-            //if (!contratoAppService.EhContratoAssinado(contrato))
-            //{
-            //    //return View(model);
-            //}
 
             model.RetencaoContratual = 0;
             if (contratoRetificacao.RetencaoContratual.HasValue)

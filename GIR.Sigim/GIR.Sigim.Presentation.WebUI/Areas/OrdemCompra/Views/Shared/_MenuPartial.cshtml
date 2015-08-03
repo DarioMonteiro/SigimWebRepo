@@ -1,48 +1,7 @@
 ﻿<ul style="">
     <li>
-        <a href="@Url.Content("~/OrdemCompra/Home")" title="Painel"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Home</span></a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Sistema</span></a>
-        <ul>
-            <li>@Html.ActionLink("Parâmetros", "Index", "Parametros")</li>
-            <li>@Html.ActionLink("Parâmetros - usuário", "Index", "ParametrosUsuario")</li>
-        </ul>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Cadastros</span></a>
-        <ul>            
-             <li>@Html.ActionLink("Unidade de medida", "", "UnidadeMedida" )</li>
-             <li>@Html.ActionLink("Material", "Index", "Material")</li>                        
-        </ul>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Requisição de material</span></a>
-        <ul>
-            <li>
-                <a href="#">Pré-requisição de material</a>
-                <ul>
-                    <li>@Html.ActionLink("Cadastro", "Index", "PreRequisicaoMaterial")</li>
-                </ul>
-            </li>
-            <li>@Html.ActionLink("Cadastro", "Index", "RequisicaoMaterial")</li>
-        </ul>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Entrada de material</span></a>
-        <ul>
-            <li>@Html.ActionLink("Cadastro", "Index", "EntradaMaterial")</li>
-        </ul>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Relatórios</span></a>
-        <ul>            
-            <li>
-                <a href="#">Ordem compra</a>
-                <ul>
-                    <li>@Html.ActionLink("Itens de ordem de compra", "Index", "RelOCItensOrdemCompra")</li>
-                </ul>
-            </li>
-        </ul>
+        <a href="@Url.Content("~/OrdemCompra")" title="Painel"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Home</span></a>
     </li>
 </ul>
+
+@Html.MvcSiteMap().Menu(Html.MvcSiteMap().SiteMap.FindSiteMapNode(Url.Action("Index", "Home", new { area = "OrdemCompra" })), true, false)

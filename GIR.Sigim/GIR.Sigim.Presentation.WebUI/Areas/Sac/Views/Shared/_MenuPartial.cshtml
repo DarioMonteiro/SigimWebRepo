@@ -2,20 +2,5 @@
     <li>
         <a href="@Url.Content("~/Sac/Home")" title="Painel"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Home</span></a>
     </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Sistema</span></a>
-        <ul>
-            <li>
-                @Html.ActionLink("Parâmetros", "Index", "Parametros")
-            </li>
-        </ul>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Cadastro</span></a>
-        <ul>
-            <li>
-                @Html.ActionLink("Cadastro", "Index", "Setor")
-            </li>
-        </ul>
-    </li>       
 </ul>
+@Html.MvcSiteMap().Menu(Html.MvcSiteMap().SiteMap.FindSiteMapNode(Url.Action("Index", "Home", new { area = "Sac" })), true, false)

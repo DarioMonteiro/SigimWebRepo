@@ -9,26 +9,25 @@ using GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.Service.Contrato;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
     public class RelNotaFiscalLiberadaController : BaseController
     {
-        private IClienteFornecedorAppService clienteFornecedorAppService;
         private IContratoAppService contratoAppService;
         private IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
 
-        public RelNotaFiscalLiberadaController( IClienteFornecedorAppService clienteFornecedorAppService,
-                                                IContratoAppService contratoAppService,
+        public RelNotaFiscalLiberadaController( IContratoAppService contratoAppService,
                                                 IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
                                                 MessageQueue messageQueue)
             : base(messageQueue)
         {
-            this.clienteFornecedorAppService = clienteFornecedorAppService;
             this.contratoAppService = contratoAppService;
             this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.RelNotasFiscaisLiberadasAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as RelNotaFiscalLiberadaListaViewModel;

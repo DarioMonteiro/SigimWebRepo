@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros.OrdemCompras;
@@ -86,6 +87,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool Salvar(PreRequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PreRequisicaoMaterialGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (dto == null)
                 throw new ArgumentNullException("dto");
 
@@ -141,6 +148,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool Aprovar(int? id, int[] itens)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PreRequisicaoMaterialAprovar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (!itens.Any())
             {
                 messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmItemParaAprocacao, TypeMessage.Error);
@@ -220,6 +233,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool Cancelar(int? id, string motivo)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PreRequisicaoMaterialCancelar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (string.IsNullOrEmpty(motivo.Trim()))
             {
                 messageQueue.Add(Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoPreRequisicao, TypeMessage.Error);
@@ -260,6 +279,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PreRequisicaoMaterialImprimir))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
             var preRequisicao = ObterPeloIdEUsuario(id, UsuarioLogado.Id);
             relPreRequisicaoMaterial objRel = new relPreRequisicaoMaterial();
             objRel.Database.Tables["OrdemCompra_preRequisicaoMaterialRelatorio"].SetDataSource(PreRequisicaoToDataTable(preRequisicao));
@@ -285,11 +310,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoSalvar(PreRequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PreRequisicaoMaterialGravar))
+                return false;
+
             return PodeSerSalvaNaSituacaoAtual(dto.Situacao);
         }
 
         public bool EhPermitidoCancelar(PreRequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PreRequisicaoMaterialCancelar))
+                return false;
+
             if (!dto.Id.HasValue)
                 return false;
 
@@ -304,6 +335,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoImprimir(PreRequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PreRequisicaoMaterialImprimir))
+                return false;
+
             if (!dto.Id.HasValue)
                 return false;
 
@@ -330,6 +364,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoAprovarItem(PreRequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PreRequisicaoMaterialAprovar))
+                return false;
+
             if ((dto.Situacao != SituacaoPreRequisicaoMaterial.Requisitada) && (dto.Situacao != SituacaoPreRequisicaoMaterial.ParcialmenteAprovada))
                 return false;
 

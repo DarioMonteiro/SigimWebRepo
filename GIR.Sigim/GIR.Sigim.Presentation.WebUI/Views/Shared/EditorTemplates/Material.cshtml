@@ -237,7 +237,8 @@
             }
         }
 
-        $(document).on("centroCustoValidado",            function (e) {
+        $(document).on("centroCustoValidado",
+            function (e) {
                 codigoCentroCusto_@(uniqueIdentifier) = e.codigo;
 
                 @if (centroCustoRequerido.Value) {
@@ -254,9 +255,18 @@
                     @:  limpaMaterialForm_@(uniqueIdentifier)();
                     @:}
                 }
-            }        );        $(document).on("classeValidada",            function (e) {
+            }
+        );
+
+        $(document).on("classeValidada",
+            function (e) {
                 codigoClasse_@(uniqueIdentifier) = e.isValid ? e.codigo : '';
-            }        );        @if (centroCustoRequerido.Value) {            @:validaCentroCusto();        }
+            }
+        );
+
+        @if (centroCustoRequerido.Value) {
+            @:validaCentroCusto();
+        }
 
         $('input[type=radio][name=tipoSelecao]').change(function () {
             if ($(this).val() == '@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)') {
@@ -274,11 +284,31 @@
             $('#@(uniqueIdentifier)_txtAte').val('');
             $('#@(uniqueIdentifier)_cboCampo').val($('#@(uniqueIdentifier)_cboCampo option:first').val());
             $('#@(uniqueIdentifier)_resultadoBusca').html('');
+            SetTipoSelecao('Contem');
+        });
 
-            $('#@(uniqueIdentifier)_radTipoSelecaoContem')
+        function SetTipoSelecao(tipo) {
+            var radioId = '#@(uniqueIdentifier)_radTipoSelecao' + tipo;
+            $(radioId)
                 .attr('checked', true)
                 .trigger('change')
                 .trigger('click');
+        }
+
+        $(document).on("change", "#@(uniqueIdentifier)_cboCampo", function () {
+            $('#@(uniqueIdentifier)_txtDe').val('');
+            $('#@(uniqueIdentifier)_txtAte').val('');
+            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'codigo') {
+                $('#@(uniqueIdentifier)_txtDe').addClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').addClass('text-right numeric');
+                SetTipoSelecao('Intervalo');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', true);
+            }
+            else {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+            }
         });
 
         $('#@(uniqueIdentifier)_btnSearch').on("click", function () {

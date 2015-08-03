@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CrystalDecisions.Shared;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros.OrdemCompras;
@@ -98,6 +99,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool Salvar(RequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (dto == null)
                 throw new ArgumentNullException("dto");
 
@@ -156,6 +163,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool Aprovar(int? id)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialAprovar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             var requisicaoMaterial = ObterPeloIdEUsuario(id, UsuarioLogado.Id);
 
             if (requisicaoMaterial == null)
@@ -184,6 +197,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool CancelarAprovacao(int? id)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialCancelarAprovacao))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             var requisicaoMaterial = ObterPeloIdEUsuario(id, UsuarioLogado.Id);
 
             if (requisicaoMaterial == null)
@@ -206,8 +225,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
 
             requisicaoMaterial.Situacao = SituacaoRequisicaoMaterial.Requisitada;
-            requisicaoMaterial.DataAprovacao = null;
-            requisicaoMaterial.LoginUsuarioAprovacao = null;
 
             requisicaoMaterialRepository.Alterar(requisicaoMaterial);
             requisicaoMaterialRepository.UnitOfWork.Commit();
@@ -217,9 +234,15 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool CancelarRequisicao(int? id, string motivo)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialCancelar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (string.IsNullOrEmpty(motivo.Trim()))
             {
-                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoPreRequisicao, TypeMessage.Error);
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoRequisicao, TypeMessage.Error);
                 return false;
             }
 
@@ -262,6 +285,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialImprimir))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
             var requisicao = ObterPeloIdEUsuario(id, UsuarioLogado.Id, l => l.ListaItens.Select(o => o.Material.MaterialClasseInsumo));
             relRequisicaoMaterial objRel = new relRequisicaoMaterial();
             objRel.SetDataSource(RequisicaoToDataTable(requisicao));
@@ -288,11 +317,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoSalvar(RequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialGravar))
+                return false;
+
             return PodeSerSalvaNaSituacaoAtual(dto.Situacao);
         }
 
         public bool EhPermitidoCancelar(RequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialCancelar))
+                return false;
+
             if (!dto.Id.HasValue)
                 return false;
 
@@ -307,6 +342,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoImprimir(RequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialImprimir))
+                return false;
+
             if (!dto.Id.HasValue)
                 return false;
 
@@ -318,7 +356,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoAdicionarItem(RequisicaoMaterialDTO dto)
         {
-            return EhPermitidoSalvar(dto);
+            if (!EhPermitidoSalvar(dto))
+                return false;
+
+            if (!PodeAdicionarItemNaSituacaoAtual(dto.Situacao))
+                return false;
+
+            return true;
         }
 
         public bool EhPermitidoCancelarItem(RequisicaoMaterialDTO dto)
@@ -333,6 +377,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoAprovarRequisicao(RequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialAprovar))
+                return false;
+
             if (!dto.Id.HasValue)
                 return false;
 
@@ -347,6 +394,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoCancelarAprovacao(RequisicaoMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RequisicaoMaterialCancelarAprovacao))
+                return false;
+
             if (!dto.Id.HasValue)
                 return false;
 
@@ -387,6 +437,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 || situacao == SituacaoRequisicaoMaterial.Aprovada;
         }
 
+        private bool PodeAdicionarItemNaSituacaoAtual(SituacaoRequisicaoMaterial situacao)
+        {
+            return situacao == SituacaoRequisicaoMaterial.Requisitada;
+        }
+
         private bool PodeAprovarNaSituacaoAtual(SituacaoRequisicaoMaterial situacao)
         {
             return situacao == SituacaoRequisicaoMaterial.Requisitada;
@@ -399,10 +454,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private bool PodeCancelarNaSituacaoAtual(SituacaoRequisicaoMaterial situacao)
         {
-            if (situacao != SituacaoRequisicaoMaterial.Requisitada)
-                return false;
-
-            return true;
+            return situacao == SituacaoRequisicaoMaterial.Requisitada;
         }
 
         private bool PodeCancelarComItensAtuais(List<RequisicaoMaterialItemDTO> listaItens)
@@ -556,7 +608,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             row[dataAprovado] = requisicaoMaterial.DataAprovacao.HasValue ? requisicaoMaterial.DataAprovacao.Value.ToString("dd/MM/yyyy") : string.Empty;
             row[usuarioAprovado] = requisicaoMaterial.LoginUsuarioAprovacao;
             row[centroCusto] = requisicaoMaterial.CodigoCentroCusto;
-            row[descricaoCentroCusto] = requisicaoMaterial.CentroCusto.Descricao;
+            row[descricaoCentroCusto] = requisicaoMaterial.CodigoCentroCusto + " - " + requisicaoMaterial.CentroCusto.Descricao;
             row[codigoDescricaoCentroCusto] = requisicaoMaterial.CodigoCentroCusto + " - " + requisicaoMaterial.CentroCusto.Descricao;
             row[situacaoCentroCusto] = requisicaoMaterial.CentroCusto.Situacao;
             row[situacao] = requisicaoMaterial.Situacao;

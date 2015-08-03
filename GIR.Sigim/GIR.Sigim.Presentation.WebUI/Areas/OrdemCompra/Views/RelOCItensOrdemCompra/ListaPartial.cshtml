@@ -1,0 +1,185 @@
+﻿@using GIR.Sigim.Application.DTO.OrdemCompra
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<RelOCItensOrdemCompraDTO> Lista = Model.Records as IEnumerable<RelOCItensOrdemCompraDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new {
+                                @id = "pageSizeSelector",
+                                @aria_controls="dt_basic",
+                                @class="form-control",
+                                onchange="changePageSize();"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string ordemCompraIdSortingSuffix = "sorting";
+                            string dataOrdemCompraSortingSuffix = "sorting";
+                            string descricaoSituacaoSortingSuffix = "sorting";
+                            string prazoEntregaSortingSuffix = "sorting";
+                            string nomeFornecedorSortingSuffix = "sorting";
+                            string materialIdSortingSuffix = "sorting";
+                            string descricaoMaterialSortingSuffix = "sorting";
+                            string complementoDescricaoSortingSuffix = "sorting";
+                            string unidadeMedidaSortingSuffix = "sorting";
+                            string codigoClasseSortingSuffix = "sorting";
+                            string quantidadeSortingSuffix = "sorting";
+                            string valorUnitarioSortingSuffix = "sorting";
+                            string percentualIPISortingSuffix = "sorting";
+                            string valorTotalComImpostoSortingSuffix = "sorting";
+                            string quantidadeEntregueSortingSuffix = "sorting";
+                            //string saldoSortingSuffix = "sorting";
+                            
+                            switch (Model.OrderBy)
+                            {
+                                case "ordemCompraId":
+                                    ordemCompraIdSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataOrdemCompra":
+                                    dataOrdemCompraSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoSituacao":
+                                    descricaoSituacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "prazoEntrega":
+                                    prazoEntregaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "nomeFornecedor":
+                                    nomeFornecedorSortingSuffix += sortingSuffix;
+                                    break;
+                                case "materialId":
+                                    materialIdSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoMaterial":
+                                    descricaoMaterialSortingSuffix += sortingSuffix;
+                                    break;
+                                case "complementoDescricao":
+                                    complementoDescricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "unidadeMedida":
+                                    unidadeMedidaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "codigoClasse":
+                                    codigoClasseSortingSuffix += sortingSuffix;
+                                    break;
+                                case "quantidade":
+                                    quantidadeSortingSuffix += sortingSuffix;
+                                    break;
+                                case "valorUnitario":
+                                    valorUnitarioSortingSuffix += sortingSuffix;
+                                    break;
+                                case "percentualIPI":
+                                    percentualIPISortingSuffix += sortingSuffix;
+                                    break;
+                                case "valorTotalComImposto":
+                                    valorTotalComImpostoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "quantidadeEntregue":
+                                    quantidadeEntregueSortingSuffix += sortingSuffix;
+                                    break;
+                                //case "saldo":
+                                //    saldoSortingSuffix += sortingSuffix;
+                                //    break;                                   
+                                default:
+                                    break;
+                            }
+                        }
+
+                        <th class="sorting @ordemCompraIdSortingSuffix text-center" data-order="ordemCompraId" style="min-width:60px;">Ordem compra</th>
+                        <th class="sorting @dataOrdemCompraSortingSuffix text-center" data-order="dataOrdemCompra" style="min-width:70px;">Data</th>
+                        <th class="sorting @descricaoSituacaoSortingSuffix text-left" data-order="descricaoSituacao" style="min-width:80px;">Situação</th>
+                        <th class="sorting @prazoEntregaSortingSuffix text-left" data-order="prazoEntrega" style="min-width:70px;">Prazo de entrega</th>
+                        <th class="sorting @nomeFornecedorSortingSuffix text-left" data-order="nomeFornecedor" style="min-width:90px;">Fornecedor</th>
+                        <th class="sorting @materialIdSortingSuffix text-left" data-order="materialId" style="min-width:60px;">Código</th>
+                        <th class="sorting @descricaoMaterialSortingSuffix text-left" data-order="descricaoMaterial">Item</th>
+                        <th class="sorting @complementoDescricaoSortingSuffix text-left" data-order="complementoDescricao" style="min-width:100px;">Complemento</th>
+                        <th class="sorting @unidadeMedidaSortingSuffix text-center" data-order="unidadeMedida" style="min-width:70px;">Unidade</th>
+                        <th class="sorting @codigoClasseSortingSuffix text-left" data-order="codigoClasse" style="min-width:70px;">Classe de despesa</th>
+                        <th class="sorting @quantidadeSortingSuffix text-left" data-order="quantidade" style="min-width:80px;">Quantidade</th>
+                        <th class="sorting @valorUnitarioSortingSuffix text-left" data-order="valorUnitario" style="min-width:80px;">Valor unitário</th>
+                        <th class="sorting @percentualIPISortingSuffix text-left" data-order="percentualIPI" style="min-width:60px;">Valor unitário IPI</th>
+                        <th class="sorting @valorTotalComImpostoSortingSuffix text-left" data-order="valorTotalComImposto">Valor total c/imposto</th>
+                        <th class="sorting @quantidadeEntregueSortingSuffix text-left" data-order="quantidadeEntregue" style="min-width:70px;">Qtd. entregue</th>
+                        <th class="text-left" style="min-width:80px;">Saldo</th>
+                        @*<th class="sorting @saldoSortingSuffix text-left" data-order="saldo">Saldo</th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        decimal quantidade = 0;
+                        decimal valorUnitario = 0;
+                        decimal percentualIPI = 0;
+                        decimal valorTotalComImposto = 0;
+                        decimal quantidadeEntregue = 0;
+                        string dataOrdemCompra = item.OrdemCompra.Data.ToString().Remove((item.OrdemCompra.Data.ToString().Length - 3),3);
+                        if (item.OrdemCompra.Data.ToString().Contains("00:00:00"))
+                        {
+                            dataOrdemCompra = item.OrdemCompra.Data.ToShortDateString();
+                        }
+                        
+                        if (item.OrdemCompraItem.Quantidade.HasValue)
+                        {
+                            quantidade = item.OrdemCompraItem.Quantidade.Value;
+                        }
+                        if (item.OrdemCompraItem.ValorUnitario.HasValue)
+                        {
+                            valorUnitario = item.OrdemCompraItem.ValorUnitario.Value;
+                        }
+                        if (item.OrdemCompraItem.PercentualIPI.HasValue)
+                        {
+                            percentualIPI = item.OrdemCompraItem.PercentualIPI.Value;
+                        }
+                        if (item.OrdemCompraItem.ValorTotalComImposto.HasValue)
+                        {
+                            valorTotalComImposto = item.OrdemCompraItem.ValorTotalComImposto.Value;
+                        }
+                        if (item.OrdemCompraItem.QuantidadeEntregue.HasValue)
+                        {
+                            quantidadeEntregue = item.OrdemCompraItem.QuantidadeEntregue.Value;
+                        }
+                                
+                        
+                        <tr>
+                            <td class="text-right text-nowrap">@item.OrdemCompra.Id</td>
+                            <td class="text-center text-nowrap">@dataOrdemCompra</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompra.SituacaoDescricao</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompra.PrazoEntrega</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompra.ClienteFornecedor.Nome</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.MaterialId</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompraItem.Material.Descricao</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompraItem.Complemento</td>
+                            <td class="text-center text-nowrap">@item.OrdemCompraItem.Material.SiglaUnidadeMedida</td>
+                            <td class="text-left text-nowrap">@item.OrdemCompraItem.Classe.ClasseDescricao</td>
+                            <td class="text-right text-nowrap">@quantidade.ToString("N2")</td>                           
+                            <td class="text-right text-nowrap">@valorUnitario.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@percentualIPI.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@valorTotalComImposto.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@quantidadeEntregue.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.OrdemCompraItem.Saldo.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>
