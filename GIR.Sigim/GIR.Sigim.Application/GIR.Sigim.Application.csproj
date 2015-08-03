@@ -78,6 +78,8 @@
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
+    <Compile Include="DTO\Financeiro\HistoricoContabilDTO.cs" />
+    <Compile Include="DTO\Financeiro\TipoMovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />
     <Compile Include="DTO\Financeiro\RateioAutomaticoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoFinanceiroDTO.cs" />
@@ -157,6 +159,8 @@
     <Compile Include="Filtros\BaseFiltro.cs" />
     <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
+    <Compile Include="Filtros\Financeiro\HistoricoContabilFiltro.cs" />
+    <Compile Include="Filtros\Financeiro\TipoMovimentoFiltro.cs" />
     <Compile Include="Filtros\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
@@ -267,6 +271,8 @@
     <Compile Include="Service\Contrato\IContratoRetificacaoItemImpostoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoItemMedicaoAppService.cs" />
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
+    <Compile Include="Service\Financeiro\IHistoricoContabilAppService.cs" />
+    <Compile Include="Service\Financeiro\ITipoMovimentoAppService.cs" />
     <Compile Include="Service\Financeiro\ITaxaAdministracaoAppService.cs" />
     <Compile Include="Service\Financeiro\IRateioAutomaticoAppService.cs" />
     <Compile Include="Service\Financeiro\IImpostoFinanceiroAppService.cs" />

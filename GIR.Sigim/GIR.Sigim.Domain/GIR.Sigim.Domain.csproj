@@ -66,6 +66,7 @@
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
     <Compile Include="Entity\Financeiro\Caixa.cs" />
+    <Compile Include="Entity\Financeiro\HistoricoContabil.cs" />
     <Compile Include="Entity\Financeiro\TaxaAdministracao.cs" />
     <Compile Include="Entity\Financeiro\RateioAutomatico.cs" />
     <Compile Include="Entity\Financeiro\FatoGeradorImpostoFinanceiro.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Entity\Financeiro\SituacaoTituloPagar.cs" />
     <Compile Include="Entity\Financeiro\TipoCompromisso.cs" />
     <Compile Include="Entity\Financeiro\TipoDocumento.cs" />
+    <Compile Include="Entity\Financeiro\TipoMovimento.cs" />
     <Compile Include="Entity\Financeiro\TipoRateio.cs" />
     <Compile Include="Entity\Financeiro\TipoTitulo.cs" />
     <Compile Include="Entity\Financeiro\TituloPagar.cs" />
@@ -172,6 +174,8 @@
     <Compile Include="Repository\Contrato\IContratoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
+    <Compile Include="Repository\Financeiro\ITipoMovimentoRepository.cs" />
+    <Compile Include="Repository\Financeiro\IHistoricoContabilRepository.cs" />
     <Compile Include="Repository\Financeiro\ITaxaAdministracaoRepository.cs" />
     <Compile Include="Repository\Financeiro\IRateioAutomaticoRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoFinanceiroRepository.cs" />

@@ -119,11 +119,13 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new CentroCustoEmpresaConfiguration());
             modelBuilder.Configurations.Add(new ClasseConfiguration());
             modelBuilder.Configurations.Add(new CaixaConfiguration());
+            modelBuilder.Configurations.Add(new HistoricoContabilConfiguration());
             modelBuilder.Configurations.Add(new TipoCompromissoConfiguration());
             modelBuilder.Configurations.Add(new MotivoCancelamentoConfiguration());
             modelBuilder.Configurations.Add(new ParametrosUsuarioFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new ParametrosFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new TipoDocumentoConfiguration());
+            modelBuilder.Configurations.Add(new TipoMovimentoConfiguration());
             modelBuilder.Configurations.Add(new TipoRateioConfiguration());
             modelBuilder.Configurations.Add(new TituloPagarConfiguration());
             modelBuilder.Configurations.Add(new TituloReceberConfiguration());

@@ -1,0 +1,146 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.TipoMovimentoViewModel
+
+@{
+    ViewBag.Title = "Tipo de movimento";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Salvar",
+                            "TipoMovimento",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            <div class="row">
+                            <section class="col col-4">
+                                @Html.HiddenFor(m => m.TipoMovimento.Id)
+                                @Html.LabelFor(m => m.TipoMovimento.Historico, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.TipoMovimento.Historico, new { @maxlength = "5",  @class = "required" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.TipoMovimento.Historico, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
+                            <div class="row">
+                            <section class="col col-12">
+                                @Html.LabelFor(m => m.TipoMovimento.Descricao, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.TipoMovimento.Descricao, new { @maxlength = "50",  @class = "required" })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.TipoMovimento.Descricao, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <footer>
+                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                            Deletar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Salvar
+                        </button>
+                    </footer>
+                    }
+
+                    @using (Ajax.BeginForm(
+                            "Lista",
+                            "TipoMovimento",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+    $("#btnDeletar").on("click", function() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletar", "TipoMovimento")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: $('#@Html.IdFor(m => m.TipoMovimento.Id)').val()
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
+            limpaPaginacao();
+            clearForm();
+            doFilter();
+        });
+    });
+
+    function clearForm() {
+        $('#@Html.IdFor(m => m.TipoMovimento.Id)').val('');
+        $('#@Html.IdFor(m => m.TipoMovimento.Historico)').val('');
+        $('#@Html.IdFor(m => m.TipoMovimento.Descricao)').val('');
+    }
+
+    function novo() {
+        clearForm();
+        $('#notificationMessages').html('');
+        $('#TipoMovimento_Descricao-error').remove();
+    }
+
+    function refresh() {
+        onSuccess();
+        clearForm();
+        doFilter();
+    }
+
+    function loadItem(id) {
+        novo();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CarregarItem", "TipoMovimento")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: id
+            })
+        })
+        .success(function (result) {
+            $('#@Html.IdFor(m => m.TipoMovimento.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.TipoMovimento.Descricao)').val(result.Descricao);
+            $('#@Html.IdFor(m => m.TipoMovimento.Descricao)').val(result.Descricao);
+            goToTop();
+        });
+    }
+
+    function limpaPaginacao() {
+        $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
+    };
+
+</script>

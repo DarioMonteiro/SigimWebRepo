@@ -159,6 +159,7 @@
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CaixaController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\TipoMovimentoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\TaxaAdministracaoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\RateioAutomaticoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ImpostoFinanceiroController.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Areas\Financeiro\Controllers\TipoRateioController.cs" />
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\CaixaViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\TipoMovimentoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TaxaAdministracaoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\RateioAutomaticoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ImpostoFinanceiroViewModel.cs" />
@@ -352,6 +354,8 @@
     <Content Include="Areas\Admin\Views\Perfil\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Perfil\ListaPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Perfil\Cadastro.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoMovimento\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoMovimento\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />

@@ -181,10 +181,12 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.IoC
             currentContainer.RegisterType<ICentroCustoAppService, CentroCustoAppService>();
             currentContainer.RegisterType<IClasseAppService, ClasseAppService>();
             currentContainer.RegisterType<ICaixaAppService, CaixaAppService>();
+            currentContainer.RegisterType<IHistoricoContabilAppService, HistoricoContabilAppService>();
             currentContainer.RegisterType<ITipoCompromissoAppService, TipoCompromissoAppService>();
             currentContainer.RegisterType<IMotivoCancelamentoAppService, MotivoCancelamentoAppService>();
             currentContainer.RegisterType<IParametrosUsuarioFinanceiroAppService, ParametrosUsuarioFinanceiroAppService>();
             currentContainer.RegisterType<ITipoDocumentoAppService, TipoDocumentoAppService>();
+            currentContainer.RegisterType<ITipoMovimentoAppService, TipoMovimentoAppService>();
             currentContainer.RegisterType<ITipoRateioAppService, TipoRateioAppService>();
             currentContainer.RegisterType<ITituloPagarAppService, TituloPagarAppService>();
             currentContainer.RegisterType<IParametrosFinanceiroAppService, ParametrosFinanceiroAppService>();
