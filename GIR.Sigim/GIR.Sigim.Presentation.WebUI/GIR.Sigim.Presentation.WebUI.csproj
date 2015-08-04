@@ -306,6 +306,9 @@
     <Content Include="Scripts\plugin\form-to-json\form2js.js" />
     <Content Include="Scripts\plugin\form-to-json\jquery.toObject.js" />
     <Content Include="Scripts\sigim_scripts.js" />
+    <Content Include="Views\Agencia\Index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Views\Shared\EditorTemplates\CentroCusto.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\Parametros\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\Index.cshtml" />
@@ -824,20 +827,13 @@
     <Content Include="Views\Banco\ListaPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ClienteFornecedor.cshtml" />
     <Content Include="Views\Agencia\Cadastro.cshtml" />
-    <Content Include="Views\Agencia\Index.cshtml" />
-    <Content Include="Views\Agencia\ListaPartial.cshtml" />
     <Content Include="Views\ContaCorrente\Index.cshtml" />
-    <Content Include="Views\ContaCorrente\ListaPartial.cshtml" />
-    <Content Include="Views\Material\ListaPesquisaPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MaterialComPesquisaGenerica.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ClasseInsumo.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TreeNode.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TreeView.cshtml" />
     <Content Include="Views\Material\ListaPesquisaPartial.cshtml" />
-    <Content Include="Views\Agencia\Cadastro.cshtml" />
-    <Content Include="Views\Agencia\Index.cshtml" />
     <Content Include="Views\Agencia\ListaPartial.cshtml" />
-    <Content Include="Views\ContaCorrente\Index.cshtml" />
     <Content Include="Views\ContaCorrente\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\SigimWeb.pubxml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapTitleHelperModel.cshtml" />
