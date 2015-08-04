@@ -79,6 +79,8 @@
     <Compile Include="Financeiro\CentroCustoAppService.cs" />
     <Compile Include="Financeiro\ClasseAppService.cs" />
     <Compile Include="Financeiro\CaixaAppService.cs" />
+    <Compile Include="Financeiro\HistoricoContabilAppService.cs" />
+    <Compile Include="Financeiro\TipoMovimentoAppService.cs" />
     <Compile Include="Financeiro\TaxaAdministracaoAppService.cs" />
     <Compile Include="Financeiro\RateioAutomaticoAppService.cs" />
     <Compile Include="Financeiro\ImpostoFinanceiroAppService.cs" />

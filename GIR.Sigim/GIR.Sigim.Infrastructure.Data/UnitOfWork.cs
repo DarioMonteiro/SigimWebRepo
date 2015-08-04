@@ -137,6 +137,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());
             modelBuilder.Configurations.Add(new CentroCustoEmpresaConfiguration());
             modelBuilder.Configurations.Add(new ClasseConfiguration());
+            modelBuilder.Configurations.Add(new HistoricoContabilConfiguration());
             modelBuilder.Configurations.Add(new ImpostoFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new ImpostoPagarConfiguration());
             modelBuilder.Configurations.Add(new MotivoCancelamentoConfiguration());
@@ -146,6 +147,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new TaxaAdministracaoConfiguration());
             modelBuilder.Configurations.Add(new TipoCompromissoConfiguration());
             modelBuilder.Configurations.Add(new TipoDocumentoConfiguration());
+            modelBuilder.Configurations.Add(new TipoMovimentoConfiguration());
             modelBuilder.Configurations.Add(new TipoRateioConfiguration());
             modelBuilder.Configurations.Add(new TituloPagarConfiguration());
             modelBuilder.Configurations.Add(new TituloReceberConfiguration());
@@ -235,7 +237,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
             modelBuilder.Configurations.Add(new SetorConfiguration());
             modelBuilder.Configurations.Add(new ParametrosEmailSacConfiguration());
-
+            
             #endregion
         }
 
