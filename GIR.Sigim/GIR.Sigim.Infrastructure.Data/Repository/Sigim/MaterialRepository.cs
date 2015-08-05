@@ -64,15 +64,20 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
 
         public IEnumerable<Material> Pesquisar(
             ISpecification<Material> specification,
+            int pageIndex,
+            int pageCount,
             string orderBy,
             bool ascending,
+            out int totalRecords,
             params Expression<Func<Material, object>>[] includes)
         {
             var set = CreateSetAsQueryable(includes);
             set = set.Where(specification.SatisfiedBy());
+            totalRecords = set.Count();
             set = ConfigurarOrdenacao(set, orderBy, ascending);
 
-            return set.ToList();
+            //return set.ToList();
+            return set.Skip(pageCount * pageIndex).Take(pageCount);
         }
 
         #endregion
@@ -88,7 +93,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
                     set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
                     break;
                 case "classeInsumo":
-                    set = ascending ? set.OrderBy(l => l.CodigoMaterialClasseInsumo) : set.OrderByDescending(l => l.MaterialClasseInsumo);
+                    set = ascending ? set.OrderBy(l => l.CodigoMaterialClasseInsumo) : set.OrderByDescending(l => l.CodigoMaterialClasseInsumo);
                     break;
                 case "precoUnitario":
                     set = ascending ? set.OrderBy(l => l.PrecoUnitario) : set.OrderByDescending(l => l.PrecoUnitario);

@@ -137,3 +137,13 @@
 @section scripts{
     @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+            }
+        );
+    });
+</script>

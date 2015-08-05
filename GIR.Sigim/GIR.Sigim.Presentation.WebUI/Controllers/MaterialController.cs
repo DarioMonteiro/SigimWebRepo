@@ -55,10 +55,11 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         public ActionResult PesquisarMaterial(MaterialPesquisaFiltro filtro)
         {
             //var model = materialAppService.PesquisarMaterial(filtro);
-            var result = materialAppService.PesquisarAtivosPeloFiltro(filtro);
+            int totalRegistros;
+            var result = materialAppService.PesquisarAtivosPeloFiltro(filtro, out totalRegistros);
             if (result.Any())
             {
-                var listaViewModel = CreateListaViewModel(filtro.PaginationParameters, 0, result);
+                var listaViewModel = CreateListaViewModel(filtro, totalRegistros, result);
                 return PartialView("ListaPesquisaPartial", listaViewModel);
             }
             return PartialView("_EmptyListPartial");

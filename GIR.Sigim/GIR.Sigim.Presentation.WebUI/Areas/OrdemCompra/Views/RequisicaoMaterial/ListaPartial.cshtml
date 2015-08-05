@@ -16,10 +16,9 @@
                             m => m.PageSize,
                             Model.PageSizeList,
                             new {
-                                @id = "pageSizeSelector",
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
                                 @aria_controls="dt_basic",
-                                @class="form-control",
-                                onchange="changePageSize();"
+                                @class="form-control"
                             })
                     </label>
                 </div>

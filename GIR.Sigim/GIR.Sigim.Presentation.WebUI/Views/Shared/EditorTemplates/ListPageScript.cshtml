@@ -2,12 +2,9 @@
 
 <script type="text/javascript">
     function doFilter() {
-        $('#formFilter@(Model.UniqueIdentifier)').submit();
-    }
-
-    function changePageSize() {
-        $('#@Html.IdFor(m => m.PageSize)').val($('#pageSizeSelector').val());
-        goToPage@(Model.UniqueIdentifier)(0);
+        $.event.trigger({
+            type: "doFilter@(Model.UniqueIdentifier)"
+        });
     }
 
     function goToPage@(Model.UniqueIdentifier)(index) {
@@ -18,6 +15,11 @@
     $(document).ready(function () {
         $(".btnSearchWithPagination").click(function (e) {
             e.preventDefault();
+        });
+
+        $(document).on("change", "#pageSizeSelector@(Model.UniqueIdentifier)", function (e) {
+            $('#@Html.IdFor(m => m.PageSize)').val($(this).val());
+            goToPage@(Model.UniqueIdentifier)(0);
         });
 
         $(document).on("click", "#tableSearchResult@(Model.UniqueIdentifier) th.sorting", function () {

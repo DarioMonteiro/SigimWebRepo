@@ -8,7 +8,7 @@ using GIR.Sigim.Application.Enums;
 
 namespace GIR.Sigim.Application.Filtros.Sigim
 {
-    public class MaterialPesquisaFiltro : BaseFiltro
+    public class MaterialPesquisaFiltro : PaginationParameters
     {
         public string Campo { get; set; }
         public TipoPesquisa TipoSelecao { get; set; }
@@ -18,8 +18,8 @@ namespace GIR.Sigim.Application.Filtros.Sigim
 
         public MaterialPesquisaFiltro()
         {
-            PaginationParameters.Ascending = true;
-            PaginationParameters.OrderBy = "descricao";
+            Ascending = true;
+            OrderBy = "descricao";
         }
     }
 }

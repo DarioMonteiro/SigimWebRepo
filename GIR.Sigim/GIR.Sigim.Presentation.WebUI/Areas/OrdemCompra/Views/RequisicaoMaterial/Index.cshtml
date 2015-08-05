@@ -150,7 +150,7 @@
             }, ''
         );
 
-        $('#formFilter').validate({
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').validate({
             rules: {
                 '@Html.NameFor(m => m.Filtro.DataInicial)': {
                     date: true
@@ -188,5 +188,11 @@
                 span.addClass("field-validation-valid");
             }
         });
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+            }
+        );
     });
 </script>

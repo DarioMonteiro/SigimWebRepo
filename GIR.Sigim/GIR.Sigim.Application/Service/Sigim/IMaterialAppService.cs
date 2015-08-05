@@ -14,7 +14,7 @@ namespace GIR.Sigim.Application.Service.Sigim
         List<MaterialDTO> ListarPeloFiltro(MaterialFiltro filtro, out int totalRegistros);
         List<MaterialDTO> ListarAtivosPeloCentroCustoEDescricao(string codigoCentroCusto, string descricao);
         //List<MaterialDTO> ListarAtivosPeloTipoTabelaPropria(string descricao);
-        List<MaterialDTO> PesquisarAtivosPeloFiltro(MaterialPesquisaFiltro filtro);
+        List<MaterialDTO> PesquisarAtivosPeloFiltro(MaterialPesquisaFiltro filtro, out int totalRegistros);
         List<OrcamentoComposicaoItemDTO> ListarOrcamentoComposicaoItem(int? materialId, string codigoCentroCusto, string codigoClasse, out bool possuiInterfaceOrcamento);
     }
 }

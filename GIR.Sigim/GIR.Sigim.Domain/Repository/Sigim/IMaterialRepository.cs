@@ -14,8 +14,11 @@ namespace GIR.Sigim.Domain.Repository.Sigim
     {
         IEnumerable<Material> Pesquisar(
             ISpecification<Material> specification,
+            int pageIndex,
+            int pageCount,
             string orderBy,
             bool ascending,
+            out int totalRecords,
             params Expression<Func<Material, object>>[] includes);
     }
 }

@@ -1,6 +1,7 @@
 ﻿@model GIR.Sigim.Application.DTO.Sigim.MaterialDTO
 @{
     string uniqueIdentifier = Html.IdFor(m => m.Id).ToHtmlString();
+    Model.PaginationParameters.UniqueIdentifier = uniqueIdentifier;
 }
 <section class="@ViewBag.sectionClass" style="margin: 0;">
     <section class="col col-10" style="padding-left: 0;">
@@ -48,6 +49,11 @@
                             </h4>
                         </div>
                         <div id="@(uniqueIdentifier)_collapseFiltro" class="panel-collapse collapse in">
+                            @Html.HiddenFor(m => m.PaginationParameters.PageIndex)
+                            @Html.HiddenFor(m => m.PaginationParameters.PageSize)
+                            @Html.HiddenFor(m => m.PaginationParameters.OrderBy)
+                            @Html.HiddenFor(m => m.PaginationParameters.Ascending)
+                            @Html.HiddenFor(m => m.PaginationParameters.UniqueIdentifier)
                             <div class="panel-body no-padding">
                                 <fieldset>
                                     <div class="row">
@@ -57,7 +63,7 @@
                                                 <select id="@(uniqueIdentifier)_cboCampo" name="@(uniqueIdentifier)_cboCampo">
                                                     <option value="descricao">Descrição</option>
                                                     <option value="unidadeMedida">Unidade medida</option>
-                                                    <option value="codigo">Código</option>
+                                                    <option value="id">Código</option>
                                                     <option value="classeInsumo">Classe insumo</option>
                                                     <option value="codigoExterno">Código externo</option>
                                                 </select>
@@ -96,7 +102,7 @@
                                         </section>
 
                                         <section class="col col-3">
-                                            <a id="@(uniqueIdentifier)_btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar">
+                                            <a id="@(uniqueIdentifier)_btnSearch" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar">
                                                 <i class="fa fa-search fa-lg"></i>
                                             </a>
                                         </section>
@@ -111,6 +117,8 @@
         </div>
     </div>
 </div>
+
+@Html.EditorFor(m => m.PaginationParameters, "ListPageScript")
 
 <div class="modal fade" id="@(uniqueIdentifier)_ModalPanel" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -298,7 +306,9 @@
         $(document).on("change", "#@(uniqueIdentifier)_cboCampo", function () {
             $('#@(uniqueIdentifier)_txtDe').val('');
             $('#@(uniqueIdentifier)_txtAte').val('');
-            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'codigo') {
+            $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val($(this).val());
+            $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(true);
+            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'id') {
                 $('#@(uniqueIdentifier)_txtDe').addClass('text-right numeric');
                 $('#@(uniqueIdentifier)_txtAte').addClass('text-right numeric');
                 SetTipoSelecao('Intervalo');
@@ -312,25 +322,40 @@
         });
 
         $('#@(uniqueIdentifier)_btnSearch').on("click", function () {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("PesquisarMaterial", "Material", new { area = "" })',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({
-                    Campo: $('#@(uniqueIdentifier)_cboCampo').val(),
-                    TipoSelecao: $('input[type=radio][name=tipoSelecao]:checked').val(),
-                    TextoInicio: $('#@(uniqueIdentifier)_txtDe').val(),
-                    TextoFim: $('#@(uniqueIdentifier)_txtAte').val(),
-                    CodigoCentroCusto: codigoCentroCusto_@(uniqueIdentifier)
-                })
-            })
-            .success(function (result) {
-                $('#@(uniqueIdentifier)_resultadoBusca').html(result);
-            });
+            goToPage@(Model.PaginationParameters.UniqueIdentifier)(0);
         });
 
+        $(document).on("doFilter@(uniqueIdentifier)",
+            function (e) {
+                Pesquisar@(uniqueIdentifier)();
+            }
+        );
+
     });
+
+    function Pesquisar@(uniqueIdentifier)() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("PesquisarMaterial", "Material", new { area = "" })',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                Campo: $('#@(uniqueIdentifier)_cboCampo').val(),
+                TipoSelecao: $('input[type=radio][name=tipoSelecao]:checked').val(),
+                TextoInicio: $('#@(uniqueIdentifier)_txtDe').val(),
+                TextoFim: $('#@(uniqueIdentifier)_txtAte').val(),
+                CodigoCentroCusto: codigoCentroCusto_@(uniqueIdentifier),
+                PageIndex: $('#@Html.IdFor(m => m.PaginationParameters.PageIndex)').val(),
+                PageSize: $('#@Html.IdFor(m => m.PaginationParameters.PageSize)').val(),
+                OrderBy: $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val(),
+                Ascending: $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(),
+                UniqueIdentifier: $('#@Html.IdFor(m => m.PaginationParameters.UniqueIdentifier)').val()
+            })
+        })
+        .success(function (result) {
+            $('#@(uniqueIdentifier)_resultadoBusca').html(result);
+        });
+    }
 
     function TratarSelecaoMaterial(id, descricao, unidadeMedida) {
         $('#@(uniqueIdentifier)').val(id);

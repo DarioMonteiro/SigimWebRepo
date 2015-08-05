@@ -60,7 +60,7 @@ namespace GIR.Sigim.Application.Service.Sigim
             return materialRepository.ListarPeloFiltro(specification).To<List<MaterialDTO>>();
         }
 
-        public List<MaterialDTO> PesquisarAtivosPeloFiltro(MaterialPesquisaFiltro filtro)
+        public List<MaterialDTO> PesquisarAtivosPeloFiltro(MaterialPesquisaFiltro filtro, out int totalRegistros)
         {
             var specification = (Specification<Material>)new TrueSpecification<Material>();
             specification &= MaterialSpecification.EhAtivo();
@@ -73,7 +73,7 @@ namespace GIR.Sigim.Application.Service.Sigim
                     specification &= EhTipoSelecaoContem ? MaterialSpecification.UnidadeMedidaContem(filtro.TextoInicio)
                         : MaterialSpecification.UnidadeMedidaNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
                     break;
-                case "codigo":
+                case "id":
                     int? inicio = !string.IsNullOrEmpty(filtro.TextoInicio) ? Convert.ToInt32(filtro.TextoInicio) : (int?)null;
                     int? fim = !string.IsNullOrEmpty(filtro.TextoFim) ? Convert.ToInt32(filtro.TextoFim) : (int?)null;
                     specification &= EhTipoSelecaoContem ? MaterialSpecification.MatchingId(inicio)
@@ -94,11 +94,13 @@ namespace GIR.Sigim.Application.Service.Sigim
                     break;
             }
 
-            var x = materialRepository.Pesquisar(
+            return materialRepository.Pesquisar(
                 specification,
-                filtro.PaginationParameters.OrderBy,
-                filtro.PaginationParameters.Ascending);
-            return x.To<List<MaterialDTO>>();
+                filtro.PageIndex,
+                filtro.PageSize,
+                filtro.OrderBy,
+                filtro.Ascending,
+                out totalRegistros).To<List<MaterialDTO>>();
         }
 
         public List<OrcamentoComposicaoItemDTO> ListarOrcamentoComposicaoItem(int? materialId, string codigoCentroCusto, string codigoClasse, out bool possuiInterfaceOrcamento)

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Application.Filtros;
 
 namespace GIR.Sigim.Application.DTO.Sigim
 {
@@ -25,5 +26,12 @@ namespace GIR.Sigim.Application.DTO.Sigim
         public string CodigoSituacaoMercadoria { get; set; }
         public string CodigoNCM { get; set; }
         public string TipoMaterial { get; set; }
+        public PaginationParameters PaginationParameters { get; set; }
+
+        public MaterialDTO()
+        {
+            PaginationParameters = new PaginationParameters();
+            PaginationParameters.UniqueIdentifier = "_" + Guid.NewGuid().ToString().Replace("-", string.Empty);
+        }
     }
 }
