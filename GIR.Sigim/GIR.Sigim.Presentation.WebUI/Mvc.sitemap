@@ -7,14 +7,18 @@
 
     <mvcSiteMapNode title="Admin" controller="Home" action="Index" area="Admin">
       <mvcSiteMapNode title="Acessos" url="#" clickable="false" roles="PERFIL_ACESSAR,USUARIOFUNCIONALIDADE_ACESSAR">
-        <mvcSiteMapNode title="Perfil" controller="Perfil" action="Index"/>
-        <mvcSiteMapNode title="Usuário funcionalidades" controller="UsuarioFuncionalidade" action="Index"/>
+        <mvcSiteMapNode title="Perfil" controller="Perfil" action="Index">
+          <mvcSiteMapNode title="Cadastro" controller="Perfil" action="Cadastro" visibility="SiteMapPathHelper,!*"/>
+        </mvcSiteMapNode>
+        <mvcSiteMapNode title="Usuário funcionalidades" controller="UsuarioFuncionalidade" action="Index">
+          <mvcSiteMapNode title="Cadastro" controller="UsuarioFuncionalidade" action="Cadastro" visibility="SiteMapPathHelper,!*"/>
+        </mvcSiteMapNode>
       </mvcSiteMapNode>
     </mvcSiteMapNode>
 
     <mvcSiteMapNode title="Contrato" controller="Home" action="Index" area="Contrato">
-      <mvcSiteMapNode title="Medição e Liberação" controller="MedicaoContrato" action="Index">
-        <mvcSiteMapNode title="Medição" controller="MedicaoContrato" action="Index" visibility="MenuHelper,!*"/>
+      <mvcSiteMapNode title="Medição e Liberação" url="#" clickable="false">
+        <mvcSiteMapNode title="Medição" controller="MedicaoContrato" action="Index"/>
         <mvcSiteMapNode title="Medição" controller="MedicaoContrato" action="Medicao" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
       </mvcSiteMapNode>
       <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_NF_LIBERADAS_ACESSAR">
@@ -57,7 +61,7 @@
                       roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR,
                              ORDEMCOMPRA_MATERIAL_ACESSAR">
         <mvcSiteMapNode title="Unidade de medida" controller="UnidadeMedida" action="Index" roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR"/>
-        <mvcSiteMapNode title="Material" controller="Material" action="Index" roles="ORDEMCOMPRA_MATERIAL_ACESSAR"/>
+        <!--<mvcSiteMapNode title="Material" controller="Material" action="Index" roles="ORDEMCOMPRA_MATERIAL_ACESSAR"/>-->
       </mvcSiteMapNode>
       <mvcSiteMapNode title="Requisição de Material" controller="RequisicaoMaterial" action="Index">
         <mvcSiteMapNode title="Pré-requisição de Material" controller="PreRequisicaoMaterial" action="Index">

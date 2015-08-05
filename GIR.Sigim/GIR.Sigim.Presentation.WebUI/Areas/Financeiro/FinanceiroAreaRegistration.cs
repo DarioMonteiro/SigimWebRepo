@@ -19,7 +19,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro
              "Financeiro/ContaCorrente/{action}/{id}",
              new
              {
-                 area = "",
+                 area = "Financeiro",
                  controller = "ContaCorrente",
                  action = "Index",
                  id = UrlParameter.Optional
@@ -32,7 +32,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro
              "Financeiro/Agencia/{action}/{id}",
              new
              {
-                 area = "",
+                 area = "Financeiro",
                  controller = "Agencia",
                  action = "Index",
                  id = UrlParameter.Optional
@@ -45,7 +45,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro
               "Financeiro/Banco/{action}/{id}",
               new
               {
-                  area = "",
+                  area = "Financeiro",
                   controller = "Banco",
                   action = "Index",
                   id = UrlParameter.Optional
@@ -58,7 +58,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro
                "Financeiro/FormaRecebimento/{action}/{id}",
                new
                {
-                   area = "",
+                   area = "Financeiro",
                    controller = "FormaRecebimento",
                    action = "Index",
                    id = UrlParameter.Optional
