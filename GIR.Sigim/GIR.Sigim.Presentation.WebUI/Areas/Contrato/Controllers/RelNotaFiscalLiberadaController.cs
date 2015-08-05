@@ -35,6 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             {
                 model = new RelNotaFiscalLiberadaListaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
                 model.Filtro.DataInicial = DateTime.Now;
                 model.Filtro.DataFinal = DateTime.Now;
             }
