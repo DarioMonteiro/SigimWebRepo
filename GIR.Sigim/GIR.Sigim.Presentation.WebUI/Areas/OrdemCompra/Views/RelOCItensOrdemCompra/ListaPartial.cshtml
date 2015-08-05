@@ -16,17 +16,16 @@
                             m => m.PageSize,
                             Model.PageSizeList,
                             new {
-                                @id = "pageSizeSelector",
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
                                 @aria_controls="dt_basic",
-                                @class="form-control",
-                                onchange="changePageSize();"
+                                @class="form-control"
                             })
                     </label>
                 </div>
             </div>
         </div>
         <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
                     <tr role="row">
                         @{
@@ -46,7 +45,6 @@
                             string percentualIPISortingSuffix = "sorting";
                             string valorTotalComImpostoSortingSuffix = "sorting";
                             string quantidadeEntregueSortingSuffix = "sorting";
-                            //string saldoSortingSuffix = "sorting";
                             
                             switch (Model.OrderBy)
                             {
@@ -95,9 +93,6 @@
                                 case "quantidadeEntregue":
                                     quantidadeEntregueSortingSuffix += sortingSuffix;
                                     break;
-                                //case "saldo":
-                                //    saldoSortingSuffix += sortingSuffix;
-                                //    break;                                   
                                 default:
                                     break;
                             }
@@ -119,7 +114,6 @@
                         <th class="sorting @valorTotalComImpostoSortingSuffix text-left" data-order="valorTotalComImposto">Valor total c/imposto</th>
                         <th class="sorting @quantidadeEntregueSortingSuffix text-left" data-order="quantidadeEntregue" style="min-width:70px;">Qtd. entregue</th>
                         <th class="text-left" style="min-width:80px;">Saldo</th>
-                        @*<th class="sorting @saldoSortingSuffix text-left" data-order="saldo">Saldo</th>*@
                     </tr>
                 </thead>
                 <tbody>
@@ -156,8 +150,7 @@
                         {
                             quantidadeEntregue = item.OrdemCompraItem.QuantidadeEntregue.Value;
                         }
-                                
-                        
+                                                       
                         <tr>
                             <td class="text-right text-nowrap">@item.OrdemCompra.Id</td>
                             <td class="text-center text-nowrap">@dataOrdemCompra</td>

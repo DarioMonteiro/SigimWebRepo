@@ -31,6 +31,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             {
                 model = new UnidadeMedidaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             
             var unidadeMedida = unidadeMedidaAppService.ObterPeloCodigo(sigla);
