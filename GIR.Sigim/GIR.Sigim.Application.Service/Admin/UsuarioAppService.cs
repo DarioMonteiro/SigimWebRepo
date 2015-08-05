@@ -272,15 +272,21 @@ namespace GIR.Sigim.Application.Service.Admin
                     listaPerfilAux = usuario.ListaUsuarioPerfil.ToList<UsuarioPerfil>();
                 }
 
-                listaFuncionalidade.AddRange(listaFuncionalidadeAux);
-                listaPerfil.AddRange(listaPerfilAux);
 
                 if (filtro.UsuarioId != null)
                 {
                     if (filtro.UsuarioId == usuario.Id)
                     {
+                        listaFuncionalidade.AddRange(listaFuncionalidadeAux);
+                        listaPerfil.AddRange(listaPerfilAux);
+
                         break;
                     }
+                }
+                else
+                {
+                    listaFuncionalidade.AddRange(listaFuncionalidadeAux);
+                    listaPerfil.AddRange(listaPerfilAux);
                 }
 
             }
