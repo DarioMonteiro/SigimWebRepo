@@ -47,6 +47,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
             {
                 model = new UsuarioFuncionalidadeViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
             CarregarCombos(model);
