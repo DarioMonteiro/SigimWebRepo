@@ -140,10 +140,35 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        var preRequisicaoIdFiltro = null;
+        var dataInicialFiltro = null;
+        var dataFinalFiltro = null;
+        var situacaoFiltro = false;
+        var condicao = false;
+
+        preRequisicaoIdFiltro = $("#@Html.IdFor(m => m.Filtro.Id)").val();
+        dataInicialFiltro = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
+        dataFinalFiltro = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
+        situacaoFiltro = $("#@Html.IdFor(m => m.Filtro.EhParcialmenteAprovada)")[0].checked;
+        situacaoFiltro = situacaoFiltro || $("#@Html.IdFor(m => m.Filtro.EhCancelada)")[0].checked;
+        situacaoFiltro = situacaoFiltro || $("#@Html.IdFor(m => m.Filtro.EhFechada)")[0].checked;
+        situacaoFiltro = situacaoFiltro || $("#@Html.IdFor(m => m.Filtro.EhRequisitada)")[0].checked;
+
+        condicao = (preRequisicaoIdFiltro != "") || (dataInicialFiltro != "") || (dataFinalFiltro != "") || (situacaoFiltro == true);
+
+        if (condicao) {
+            listarFiltro();
+        }
+
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
-                $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+                listarFiltro();
             }
         );
     });
+
+    function listarFiltro() {
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
+
 </script>
