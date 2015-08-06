@@ -17,7 +17,7 @@
                             Model.PageSizeList,
                             new
                             {
-                                @id = "pageSizeSelector",
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
                                 @aria_controls = "dt_basic",
                                 @class = "form-control",
                                 onchange = "changePageSize();"
@@ -27,33 +27,33 @@
             </div>
         </div>
         <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
                     <tr role="row">
                         @{
-        string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
-        string idSortingSuffix = "sorting";
-        string descricaoSortingSuffix = "sorting";
-        string tipoRecebimentoSortingSuffix = "sorting";
-        string numeroDiasSortingSuffix = "sorting";  
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string idSortingSuffix = "sorting";
+                            string descricaoSortingSuffix = "sorting";
+                            string tipoRecebimentoSortingSuffix = "sorting";
+                            string numeroDiasSortingSuffix = "sorting";  
 
-        switch (Model.OrderBy)
-        {            
-            case "id":
-                idSortingSuffix += sortingSuffix;
-                break;                
-            case "descricao":                
-                descricaoSortingSuffix += sortingSuffix;
-                break;
-            case "tipoRecebimento":
-                tipoRecebimentoSortingSuffix += sortingSuffix;
-                break;
-            case "numeroDias":
-                numeroDiasSortingSuffix += sortingSuffix;
-                break;       
-            default:                
-                break;
-        }
+                            switch (Model.OrderBy)
+                            {            
+                                case "id":
+                                    idSortingSuffix += sortingSuffix;
+                                    break;                
+                                case "descricao":                
+                                    descricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "tipoRecebimento":
+                                    tipoRecebimentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "numeroDias":
+                                    numeroDiasSortingSuffix += sortingSuffix;
+                                    break;       
+                                default:                
+                                    break;
+                            }
                         }
                         <th class="sorting @idSortingSuffix text-right" data-order="id" style="width:60px;">Código</th>
                         <th class="sorting @descricaoSortingSuffix text-left" data-order="descricao" style="min-width:100px;">Descrição</th>   

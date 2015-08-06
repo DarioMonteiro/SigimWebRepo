@@ -43,6 +43,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 tipoTabela = 0;
                 model = new TabelaBasicaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
             if (model.TipoTabelaId != null) { tipoTabela = (int)model.TipoTabelaId; }
