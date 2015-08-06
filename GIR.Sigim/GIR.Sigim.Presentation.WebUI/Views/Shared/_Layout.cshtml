@@ -27,9 +27,10 @@
     <aside id="left-panel">
         <div class="login-info">
             <span>
-                <a href="@Url.Action("ChangePassword", "Account", new { area = "" })" title="@User.Identity.Name">
-                    <img src="~/Content/img/avatars/male.png" alt="@User.Identity.Name" class="online">
-                    <span>@User.Identity.Name</span>
+                @*<a href="@Url.Action("ChangePassword", "Account", new { area = "" })" title="@User.Identity.Name">*@
+                <a href="#" title="@User.Identity.Name">
+                    @*<img src="~/Content/img/avatars/male.png" alt="@User.Identity.Name" class="online">*@
+                    <span style="font-size:small">@User.Identity.Name</span>
                 </a>
             </span>
         </div>
