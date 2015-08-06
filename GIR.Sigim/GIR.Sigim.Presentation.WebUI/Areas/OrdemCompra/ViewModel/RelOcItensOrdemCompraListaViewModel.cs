@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GIR.Sigim.Application.Filtros.OrdemCompras;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
 {
@@ -19,6 +20,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
             Filtro.EhFechada = true;
             Filtro.EhLiberada = true;
             Filtro.EhPendente = true;
+            Filtro.Material = new MaterialDTO();
         }
 
     }

@@ -1,19 +1,22 @@
 ﻿@model GIR.Sigim.Application.DTO.Sigim.MaterialDTO
 @{
     string uniqueIdentifier = Html.IdFor(m => m.Id).ToHtmlString();
+    Model.PaginationParameters.UniqueIdentifier = uniqueIdentifier;
 }
 <section class="@ViewBag.sectionClass" style="margin: 0;">
     <label class="label">@ViewBag.label</label>
-    <label class="input">
-        @{
-            string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+    <div class="input-group">
+        <label class="input">
+            @{
+                string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+            }
+            @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+            @Html.HiddenFor(m => m.Id)
+        </label>
+        @if(ViewBag.exibirBotaoPesquisa){
+            <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
         }
-        @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
-        @Html.HiddenFor(m => m.Id)
-    </label>
-    @if(ViewBag.exibirBotaoPesquisa){
-        <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
-    }
+    </div>
     @Html.ValidationMessageFor(m => m.Id, "", new { @id = uniqueIdentifier + "_ValidationMessage", @class = "note note-error" })
 </section>
 
@@ -40,6 +43,11 @@
                             </h4>
                         </div>
                         <div id="@(uniqueIdentifier)_collapseFiltro" class="panel-collapse collapse in">
+                            @Html.HiddenFor(m => m.PaginationParameters.PageIndex)
+                            @Html.HiddenFor(m => m.PaginationParameters.PageSize)
+                            @Html.HiddenFor(m => m.PaginationParameters.OrderBy)
+                            @Html.HiddenFor(m => m.PaginationParameters.Ascending)
+                            @Html.HiddenFor(m => m.PaginationParameters.UniqueIdentifier)
                             <div class="panel-body no-padding">
                                 <fieldset>
                                     <div class="row">
@@ -49,7 +57,7 @@
                                                 <select id="@(uniqueIdentifier)_cboCampo" name="@(uniqueIdentifier)_cboCampo">
                                                     <option value="descricao">Descrição</option>
                                                     <option value="unidadeMedida">Unidade medida</option>
-                                                    <option value="codigo">Código</option>
+                                                    <option value="id">Código</option>
                                                     <option value="classeInsumo">Classe insumo</option>
                                                     <option value="codigoExterno">Código externo</option>
                                                 </select>
@@ -60,14 +68,14 @@
 											<label class="label">Seleção</label>
 											<div class="inline-group">
 												<label class="radio">
-													<input type="radio" id="@(uniqueIdentifier)_radTipoSelecaoContem" name="tipoSelecao" value="@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)">
-													<i></i>
-                                                    Contém
-												</label>
-												<label class="radio">
 													<input type="radio" id="@(uniqueIdentifier)_radTipoSelecaoIntervalo" name="tipoSelecao" value="@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Intervalo)">
 													<i></i>
                                                     Intervalo
+												</label>
+												<label class="radio">
+													<input type="radio" id="@(uniqueIdentifier)_radTipoSelecaoContem" name="tipoSelecao" value="@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)">
+													<i></i>
+                                                    Contém
 												</label>
 											</div>
 										</section>
@@ -88,7 +96,7 @@
                                         </section>
 
                                         <section class="col col-3">
-                                            <a id="@(uniqueIdentifier)_btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar">
+                                            <a id="@(uniqueIdentifier)_btnSearch" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar">
                                                 <i class="fa fa-search fa-lg"></i>
                                             </a>
                                         </section>
@@ -103,6 +111,9 @@
         </div>
     </div>
 </div>
+
+@Html.EditorFor(m => m.PaginationParameters, "ListPageScript")
+
 <script type="text/javascript">
     var codigoCentroCusto_@(uniqueIdentifier);
     var codigoClasse_@(uniqueIdentifier);
@@ -205,33 +216,70 @@
             $('#@(uniqueIdentifier)_txtAte').val('');
             $('#@(uniqueIdentifier)_cboCampo').val($('#@(uniqueIdentifier)_cboCampo option:first').val());
             $('#@(uniqueIdentifier)_resultadoBusca').html('');
+            SetTipoSelecao('Contem');
+        });
 
-            $('#@(uniqueIdentifier)_radTipoSelecaoContem')
+        function SetTipoSelecao(tipo) {
+            var radioId = '#@(uniqueIdentifier)_radTipoSelecao' + tipo;
+            $(radioId)
                 .attr('checked', true)
                 .trigger('change')
                 .trigger('click');
+        }
+
+        $(document).on("change", "#@(uniqueIdentifier)_cboCampo", function () {
+            $('#@(uniqueIdentifier)_txtDe').val('');
+            $('#@(uniqueIdentifier)_txtAte').val('');
+            $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val($(this).val());
+            $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(true);
+            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'id') {
+                $('#@(uniqueIdentifier)_txtDe').addClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').addClass('text-right numeric');
+                SetTipoSelecao('Intervalo');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', true);
+            }
+            else {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+            }
         });
 
         $('#@(uniqueIdentifier)_btnSearch').on("click", function () {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("PesquisarMaterial", "Material", new { area = "" })',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({
-                    Campo: $('#@(uniqueIdentifier)_cboCampo').val(),
-                    TipoSelecao: $('input[type=radio][name=tipoSelecao]:checked').val(),
-                    TextoInicio: $('#@(uniqueIdentifier)_txtDe').val(),
-                    TextoFim: $('#@(uniqueIdentifier)_txtAte').val(),
-                    CodigoCentroCusto: codigoCentroCusto_@(uniqueIdentifier)
-                })
-            })
-            .success(function (result) {
-                $('#@(uniqueIdentifier)_resultadoBusca').html(result);
-            });
+            goToPage@(Model.PaginationParameters.UniqueIdentifier)(0);
         });
 
+        $(document).on("doFilter@(uniqueIdentifier)",
+            function (e) {
+                Pesquisar@(uniqueIdentifier)();               
+            }
+        );
     });
+
+    function Pesquisar@(uniqueIdentifier)() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("PesquisarMaterial", "Material", new { area = "" })',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                Campo: $('#@(uniqueIdentifier)_cboCampo').val(),
+                TipoSelecao: $('input[type=radio][name=tipoSelecao]:checked').val(),
+                TextoInicio: $('#@(uniqueIdentifier)_txtDe').val(),
+                TextoFim: $('#@(uniqueIdentifier)_txtAte').val(),
+                CodigoCentroCusto: codigoCentroCusto_@(uniqueIdentifier),
+                PageIndex: $('#@Html.IdFor(m => m.PaginationParameters.PageIndex)').val(),
+                PageSize: $('#@Html.IdFor(m => m.PaginationParameters.PageSize)').val(),
+                OrderBy: $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val(),
+                Ascending: $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(),
+                UniqueIdentifier: $('#@Html.IdFor(m => m.PaginationParameters.UniqueIdentifier)').val()
+            })
+        })
+        .success(function (result) {
+            $('#@(uniqueIdentifier)_resultadoBusca').html(result);
+        });
+    }
+
 
     function TratarSelecaoMaterial(id, descricao) {
         $('#@(uniqueIdentifier)').val(id);
