@@ -1,7 +1,7 @@
 ﻿@model GIR.Sigim.Application.Filtros.PaginationParameters
 
 <script type="text/javascript">
-    function doFilter() {
+    function doFilter@(Model.UniqueIdentifier)() {
         $.event.trigger({
             type: "doFilter@(Model.UniqueIdentifier)"
         });
@@ -9,7 +9,7 @@
 
     function goToPage@(Model.UniqueIdentifier)(index) {
         $('#@Html.IdFor(m => m.PageIndex)').val(index);
-        doFilter();
+        doFilter@(Model.UniqueIdentifier)();
     }
 
     $(document).ready(function () {
