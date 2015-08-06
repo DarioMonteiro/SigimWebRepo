@@ -5,18 +5,27 @@
 }
 <section class="@ViewBag.sectionClass" style="margin: 0;">
     <label class="label">@ViewBag.label</label>
-    <div class="input-group">
-        <label class="input">
-            @{
-                string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
-            }
-            @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
-            @Html.HiddenFor(m => m.Id)
-        </label>
-        @if(ViewBag.exibirBotaoPesquisa){
-            <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+    @{
+        string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+        
+        if (ViewBag.exibirBotaoPesquisa)
+        {
+            <div class="input-group">
+                <label class="input">
+                    @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                    @Html.HiddenFor(m => m.Id)
+                </label>
+                <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+            </div>
         }
-    </div>
+        else
+        {
+            <label class="input">
+                @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                @Html.HiddenFor(m => m.Id)
+            </label>
+        }
+    }
     @Html.ValidationMessageFor(m => m.Id, "", new { @id = uniqueIdentifier + "_ValidationMessage", @class = "note note-error" })
 </section>
 
@@ -164,7 +173,8 @@
             string linkModal = "#" + uniqueIdentifier + "_Pesquisa_ModalPanel";
             string linkNotificarObrigatoriedadeCentroCusto = "javascript:notificarObrigatoriedadeCentroCusto();";
             string href = linkModal;
-            if (centroCustoRequerido.Value) {
+            if (centroCustoRequerido.Value)
+            {
                 href = linkNotificarObrigatoriedadeCentroCusto;
             }
         }
@@ -173,7 +183,8 @@
             function (e) {
                 codigoCentroCusto_@(uniqueIdentifier) = e.codigo;
 
-                @if (centroCustoRequerido.Value) {
+                @if (centroCustoRequerido.Value)
+                {
                     @:if (e.isValid) {
                     @:  if (e.codigo != '')
                     @:      unblockMaterialForm_@(uniqueIdentifier)();
@@ -196,7 +207,8 @@
             }
         );
 
-        @if (centroCustoRequerido.Value) {
+        @if (centroCustoRequerido.Value)
+        {
             @:validaCentroCusto();
         }
 
