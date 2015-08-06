@@ -857,6 +857,7 @@
     <Folder Include="Areas\Financeiro\Views\CentroCusto\" />
     <Folder Include="Areas\Orcamento\ViewModel\" />
     <Folder Include="Areas\Orcamento\Views\Shared\" />
+    <Folder Include="ImagemRelatorio\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
