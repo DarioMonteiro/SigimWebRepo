@@ -8,7 +8,7 @@
     <mvcSiteMapNode title="Admin" controller="Home" action="Index" area="Admin">
       <mvcSiteMapNode title="Acessos" url="#" clickable="false" roles="PERFIL_ACESSAR,USUARIOFUNCIONALIDADE_ACESSAR">
         <mvcSiteMapNode title="Perfil" controller="Perfil" action="Index">
-          <mvcSiteMapNode title="Cadastro" controller="Perfil" action="Cadastro" visibility="SiteMapPathHelper,!*"/>
+          <mvcSiteMapNode title="Cadastro" controller="Perfil" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
         </mvcSiteMapNode>
         <mvcSiteMapNode title="Usuário funcionalidades" controller="UsuarioFuncionalidade" action="Index">
           <mvcSiteMapNode title="Cadastro" controller="UsuarioFuncionalidade" action="Cadastro" visibility="SiteMapPathHelper,!*"/>
@@ -46,8 +46,10 @@
         <mvcSiteMapNode title="Tipo rateio" controller="TipoRateio" action="Index"/>
         <mvcSiteMapNode title="Bancário" url="#" clickable="false" roles="BANCO_ACESSAR,AGENCIA_ACESSAR,CONTACORRENTE_ACESSAR">
           <mvcSiteMapNode title="Banco" controller="Banco" action="Index"/>
-          <mvcSiteMapNode title="Agência" controller="Agencia" action="Index"/>
-          <mvcSiteMapNode title="Conta corrente" controller="ContaCorrente" action="Index"/>
+          <mvcSiteMapNode title="Agência" controller="Agencia" action="Index">
+            <mvcSiteMapNode title="Cadastro" controller="Agencia" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+          </mvcSiteMapNode>
+          <!--<mvcSiteMapNode title="Conta corrente" controller="ContaCorrente" action="Index"/>-->
         </mvcSiteMapNode>
       </mvcSiteMapNode>
     </mvcSiteMapNode>
@@ -87,10 +89,9 @@
     <mvcSiteMapNode title="Sac" controller="Home" action="Index" area="Sac">
       <mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_SAC_ACESSAR,SETOR_SAC_ACESSAR">
         <mvcSiteMapNode title="Parâmetros" controller="Parametros" action="Index"/>
-        <mvcSiteMapNode title="Setor" controller="Setor" action="Index"/>
+        <mvcSiteMapNode title="Setor" controller="Setor" action="Index" preservedRouteParameters="id"/>
       </mvcSiteMapNode>
     </mvcSiteMapNode>
-
 
   </mvcSiteMapNode>
 </mvcSiteMap>
