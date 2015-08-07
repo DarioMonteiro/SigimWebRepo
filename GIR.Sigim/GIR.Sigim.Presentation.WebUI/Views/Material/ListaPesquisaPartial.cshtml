@@ -83,7 +83,7 @@
                     @foreach (var item in Lista)
                     {
                         <tr>
-                            <td><a href="javascript:TratarSelecaoMaterial(@item.Id, '@item.Descricao.Replace("'", "\\\'").Replace("\"", "\\\"")', '@item.SiglaUnidadeMedida');">@item.Descricao</a></td>
+                            <td><a href="javascript:TratarSelecaoMaterial@(Model.UniqueIdentifier)(@item.Id, '@item.Descricao.Replace("'", "\\\'").Replace("\"", "\\\"")', '@item.SiglaUnidadeMedida');">@item.Descricao</a></td>
                             <td class="text-center">@item.SiglaUnidadeMedida</td>
                             <td class="text-right">@item.Id</td>
                             <td>@item.CodigoMaterialClasseInsumo</td>
