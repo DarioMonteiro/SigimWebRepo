@@ -1094,6 +1094,23 @@
         tratarBotoes(false, false, false);
     }
 
+    function LimpaDadosDaNota() {
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val(null);
+        var dataAtual = new Date().toFormatDDMMYYYY();
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val(dataAtual);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val(dataAtual);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Nome)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoCompraCodigo)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CifFobId)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NaturezaOperacaoCodigo)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SerieNFId)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CSTCodigo)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras)").val(null);
+    }
+
     function setarAbaProvisionamento() {
         $('#AbaProvisionamentoId').click();
     }
@@ -1382,6 +1399,7 @@
     function carregaAbaDadosMedicaoPesquisa() {
         var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
 
+        LimpaDadosDaNota();
         limpaAbaDadosMedicao();
 
         if (jsonMedicao != null) {
@@ -1439,12 +1457,10 @@
 
             var valor = roundDecimal(floatToString(jsonMedicao.Valor), 2);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(valor);
-            @*$("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.ValorPendente)").val(valor);*@
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)").val(valor);
 
             var quantidade = roundDecimal(floatToString(jsonMedicao.Quantidade), 7);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(quantidade);
-            @*$("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)").val(quantidade);*@
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.QuantidadePendente)").val(quantidade);
 
             if (jsonMedicao.Desconto != null) {
