@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GIR.Sigim.Domain.Entity.Sigim;    
+using GIR.Sigim.Application.Filtros;
 
 namespace GIR.Sigim.Application.DTO.Sigim
 {
@@ -21,5 +22,12 @@ namespace GIR.Sigim.Application.DTO.Sigim
         public string ClienteEmpreitada { get; set; }
         public PessoaFisicaDTO PessoaFisica { get; set; }
         public PessoaJuridicaDTO PessoaJuridica { get; set; }
+        public PaginationParameters PaginationParameters { get; set; }
+
+        public ClienteFornecedorDTO()
+        {
+            PaginationParameters = new PaginationParameters();
+            PaginationParameters.UniqueIdentifier = "_" + Guid.NewGuid().ToString().Replace("-", string.Empty);
+        }
     }
 }

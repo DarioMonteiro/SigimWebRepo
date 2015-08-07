@@ -12,5 +12,7 @@ namespace GIR.Sigim.Application.DTO.Sigim
         public ClienteFornecedorDTO ClienteFornecedor { get; set; }
         [Display(Name = "C.P.F")]
         public string Cpf { get; set; }
+        [Display(Name = "RG")]
+        public string Rg { get; set; }
     }
 }

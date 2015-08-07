@@ -20,6 +20,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
             Property(l => l.Cpf)
                 .HasColumnName("cpf");
 
+            Property(l => l.Rg)
+                .HasColumnName("rg");
+
             HasRequired(l => l.Cliente).WithRequiredDependent(l => l.PessoaFisica);
  
         }

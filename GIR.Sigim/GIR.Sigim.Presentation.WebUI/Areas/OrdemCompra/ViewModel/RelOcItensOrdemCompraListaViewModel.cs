@@ -21,6 +21,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
             Filtro.EhLiberada = true;
             Filtro.EhPendente = true;
             Filtro.Material = new MaterialDTO();
+            Filtro.ClienteFornecedor = new ClienteFornecedorDTO();
         }
 
     }

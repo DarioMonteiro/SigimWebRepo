@@ -1,18 +1,127 @@
 ﻿@model GIR.Sigim.Application.DTO.Sigim.ClienteFornecedorDTO
 @{
     string uniqueIdentifier = Html.IdFor(m => m.Id).ToHtmlString();
+    Model.PaginationParameters.UniqueIdentifier = uniqueIdentifier;
 }
 <section class="@ViewBag.sectionClass" style="margin: 0;">
     <label class="label">@ViewBag.label</label>
-    <label class="input">
-        @{
-            string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
-        }
-        @Html.TextBoxFor(m => m.Nome, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+    @{
+        string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
         @Html.HiddenFor(m => m.Id)
-    </label>
+        
+        if (ViewBag.exibirBotaoPesquisa)
+        {
+            <div class="input-group">
+                <label class="input">
+                    @Html.TextBoxFor(m => m.Nome, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                </label>
+                <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+            </div>
+        }
+        else
+        {
+            <label class="input">
+                @Html.TextBoxFor(m => m.Nome, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+            </label>
+        }
+    }
     @Html.ValidationMessageFor(m => m.Id, "", new { @id = Html.IdFor(m => m.Id) + "_ValidationMessage", @class = "note note-error" })
 </section>
+
+<div class="modal fade" id="@(uniqueIdentifier)_Pesquisa_ModalPanel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Cliente/Fornecedor
+                </h4>
+            </div>
+            <div id="@(uniqueIdentifier)_Pesquisa_ModalBody" class="modal-body no-padding" style="min-height:290px;">
+                <div class="panel-group smart-accordion-default" id="@(uniqueIdentifier)_accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#@(uniqueIdentifier)_accordion" href="#@(uniqueIdentifier)_collapseFiltro" class="">
+                                    <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                    <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                    Filtro
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="@(uniqueIdentifier)_collapseFiltro" class="panel-collapse collapse in">
+                            @Html.HiddenFor(m => m.PaginationParameters.PageIndex)
+                            @Html.HiddenFor(m => m.PaginationParameters.PageSize)
+                            @Html.HiddenFor(m => m.PaginationParameters.OrderBy)
+                            @Html.HiddenFor(m => m.PaginationParameters.Ascending)
+                            @Html.HiddenFor(m => m.PaginationParameters.UniqueIdentifier)
+                            <div class="panel-body no-padding">
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="label" for="@(uniqueIdentifier)_cboCampo">Campo</label>
+                                            <label class="select">
+                                                <select id="@(uniqueIdentifier)_cboCampo" name="@(uniqueIdentifier)_cboCampo">
+                                                    <option value="nomeFantasia">Nome Fantasia</option>
+                                                    <option value="razaoSocial">Razão Social</option>
+                                                    <option value="rg">RG</option>
+                                                    <option value="cpf">CPF</option>
+                                                    <option value="cnpj">CNPJ</option>
+                                                </select>
+                                                <i></i>
+                                            </label>
+                                        </section>
+                                        <section class="col col-8">
+											<label class="label">Seleção</label>
+											<div class="inline-group">
+												<label class="radio">
+													<input type="radio" id="@(uniqueIdentifier)_radTipoSelecaoIntervalo" name="tipoSelecao" value="@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Intervalo)">
+													<i></i>
+                                                    Intervalo
+												</label>
+												<label class="radio">
+													<input type="radio" id="@(uniqueIdentifier)_radTipoSelecaoContem" name="tipoSelecao" value="@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)">
+													<i></i>
+                                                    Contém
+												</label>
+											</div>
+										</section>
+                                    </div>
+                                    <div class="row">
+                                        <section id="@(uniqueIdentifier)_sectionDe" class="col col-3">
+                                            <label class="label" for="@(uniqueIdentifier)_txtDe">De</label>
+                                            <label class="input">
+                                                <input id="@(uniqueIdentifier)_txtDe" name="txtDe" type="text" value="">
+                                            </label>
+                                        </section>
+
+                                        <section id="@(uniqueIdentifier)_sectionAte" class="col col-3">
+                                            <label class="label" for="@(uniqueIdentifier)_txtAte">Até</label>
+                                            <label class="input">
+                                                <input id="@(uniqueIdentifier)_txtAte" name="txtAte" type="text" value="">
+                                            </label>
+                                        </section>
+
+                                        <section class="col col-3">
+                                            <a id="@(uniqueIdentifier)_btnSearch" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar">
+                                                <i class="fa fa-search fa-lg"></i>
+                                            </a>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="@(uniqueIdentifier)_resultadoBusca"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.EditorFor(m => m.PaginationParameters, "ListPageScript")
+
 
 <script type="text/javascript">
     var clienteFornecedorModulo_@(uniqueIdentifier);
@@ -72,16 +181,100 @@
                 .appendTo(ul);
         };
 
+
+
+        $('input[type=radio][name=tipoSelecao]').change(function () {
+            if ($(this).val() == '@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)') {
+                $('#@(uniqueIdentifier)_sectionDe label[for="@(uniqueIdentifier)_txtDe"]:first').text('Contém');
+                $('#@(uniqueIdentifier)_sectionAte').hide();
+            }
+            else {
+                $('#@(uniqueIdentifier)_sectionDe label[for="@(uniqueIdentifier)_txtDe"]:first').text('De');
+                $('#@(uniqueIdentifier)_sectionAte').show();
+            }
+        });
+
+        $(document).on("show.bs.modal", "#@(uniqueIdentifier)_Pesquisa_ModalPanel", function () {
+            $('#@(uniqueIdentifier)_txtDe').val('');
+            $('#@(uniqueIdentifier)_txtAte').val('');
+            $('#@(uniqueIdentifier)_cboCampo').val($('#@(uniqueIdentifier)_cboCampo option:first').val());
+            $('#@(uniqueIdentifier)_resultadoBusca').html('');
+            SetTipoSelecao('Contem');
+        });
+
+        function SetTipoSelecao(tipo) {
+            var radioId = '#@(uniqueIdentifier)_radTipoSelecao' + tipo;
+            $(radioId)
+                .attr('checked', true)
+                .trigger('change')
+                .trigger('click');
+        }
+
+        $(document).on("change", "#@(uniqueIdentifier)_cboCampo", function () {
+            $('#@(uniqueIdentifier)_txtDe').val('');
+            $('#@(uniqueIdentifier)_txtAte').val('');
+            $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val($(this).val());
+            $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(true);
+            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'id') {
+                $('#@(uniqueIdentifier)_txtDe').addClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').addClass('text-right numeric');
+                SetTipoSelecao('Intervalo');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', true);
+            }
+            else {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+            }
+        });
+
+        $('#@(uniqueIdentifier)_btnSearch').on("click", function () {
+            goToPage@(Model.PaginationParameters.UniqueIdentifier)(0);
+        });
+
+        $(document).on("doFilter@(uniqueIdentifier)",
+            function (e) {
+                Pesquisar@(uniqueIdentifier)();
+            }
+        );
+
     });
+
+    function Pesquisar@(uniqueIdentifier)() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("PesquisarClienteFornecedor", "ClienteFornecedor", new { area = "" })',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                Campo: $('#@(uniqueIdentifier)_cboCampo').val(),
+                TipoSelecao: $('input[type=radio][name=tipoSelecao]:checked').val(),
+                TextoInicio: $('#@(uniqueIdentifier)_txtDe').val(),
+                TextoFim: $('#@(uniqueIdentifier)_txtAte').val(),
+                PageIndex: $('#@Html.IdFor(m => m.PaginationParameters.PageIndex)').val(),
+                PageSize: $('#@Html.IdFor(m => m.PaginationParameters.PageSize)').val(),
+                OrderBy: $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val(),
+                Ascending: $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(),
+                UniqueIdentifier: $('#@Html.IdFor(m => m.PaginationParameters.UniqueIdentifier)').val(),
+                clienteFornecedorModulo: clienteFornecedorModulo_@(uniqueIdentifier),
+                situacao: situacao_@(uniqueIdentifier)
+            })
+        })
+        .success(function (result) {
+            $('#@(uniqueIdentifier)_resultadoBusca').html(result);
+        });
+    }
 
     function TratarSelecaoClienteFornecedor@(uniqueIdentifier)(id, nome) {
         $('#@(uniqueIdentifier)').val(id);
         $('#@Html.IdFor(m => m.Nome)').val(nome);
+        $('#@(uniqueIdentifier)_Pesquisa_ModalPanel').modal('hide');
     }
 
     function LimpaSelecaoClienteFornecedor@(uniqueIdentifier)() {
         $('#@(uniqueIdentifier)').val(null);
         $('#@Html.IdFor(m => m.Nome)').val("");
     }
+
 
 </script>

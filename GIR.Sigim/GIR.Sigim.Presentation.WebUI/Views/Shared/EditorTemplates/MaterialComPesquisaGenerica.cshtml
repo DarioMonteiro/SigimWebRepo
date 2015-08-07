@@ -7,13 +7,13 @@
     <label class="label">@ViewBag.label</label>
     @{
         string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+        @Html.HiddenFor(m => m.Id)
         
         if (ViewBag.exibirBotaoPesquisa)
         {
             <div class="input-group">
                 <label class="input">
                     @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
-                    @Html.HiddenFor(m => m.Id)
                 </label>
                 <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
             </div>
@@ -22,7 +22,6 @@
         {
             <label class="input">
                 @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
-                @Html.HiddenFor(m => m.Id)
             </label>
         }
     }

@@ -851,6 +851,7 @@
     <Content Include="Views\Shared\DisplayTemplates\PathNode.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuNode.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuNodeList.cshtml" />
+    <Content Include="Views\ClienteFornecedor\ListaPesquisaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

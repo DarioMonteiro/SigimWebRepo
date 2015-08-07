@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GIR.Sigim.Application.Filtros.Contrato;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
 {
@@ -16,6 +17,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public RelNotaFiscalLiberadaListaViewModel()
         {
             Filtro = new RelNotaFiscalLiberadaFiltro();
+            Filtro.FornecedorCliente = new ClienteFornecedorDTO();
         }
     }
 }

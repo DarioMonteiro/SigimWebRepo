@@ -187,6 +187,7 @@
     <Compile Include="Filtros\PaginationParameters.cs" />
     <Compile Include="Filtros\Sigim\BancoFiltro.cs" />
     <Compile Include="Filtros\Sigim\AgenciaFiltro.cs" />
+    <Compile Include="Filtros\Sigim\ClienteFornecedorPesquisaFiltro.cs" />
     <Compile Include="Filtros\Sigim\ContaCorrenteFiltro.cs" />
     <Compile Include="Filtros\Sigim\MaterialPesquisaFiltro.cs" />
     <Compile Include="Filtros\Sigim\FormaRecebimentoFiltro.cs" />
