@@ -37,15 +37,13 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 throw new ArgumentNullException("dto");
 
             var parametros = dto.To<ParametrosFinanceiro>();
+            var entidade = Obter();
 
-            if (dto.IconeRelatorio == null)
+            if (entidade != null)
             {
-                if (!dto.RemoverImagem)
-                {
-                    var entidade = Obter();
-                    if (entidade != null)
-                        parametros.IconeRelatorio = entidade.IconeRelatorio;
-                }
+                parametros.Id = entidade.Id;
+                if ((dto.IconeRelatorio == null) && (!dto.RemoverImagem) && (entidade.IconeRelatorio.Length > 0))
+                    parametros.IconeRelatorio = entidade.IconeRelatorio;
             }
 
             if (EhValido(parametros))

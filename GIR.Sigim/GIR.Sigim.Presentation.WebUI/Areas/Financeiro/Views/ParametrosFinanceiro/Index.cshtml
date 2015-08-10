@@ -96,7 +96,8 @@
                                                 </div>
                                                 <div class="row">
                                                     <section class="col col-8">
-                                                        <input type="file" name="@Html.IdFor(m => m.IconeRelatorio)"  id="IconeRelatorio"/>
+                                                        @*<input type="file" name="@Html.IdFor(m => m.IconeRelatorio)"  id="IconeRelatorio"/>*@
+                                                        @Html.TextBoxFor(m => m.IconeRelatorio, new { type = "file" })
                                                     </section>
                                                     <section class="col col-4">
                                                         @Html.HiddenFor(m => m.Parametros.RemoverImagem)
@@ -104,7 +105,7 @@
                                                             @{
                                                                 string imgPadrao = Url.Content("~/Content/img/48x48.png");
                                                                 string imageSrc = imgPadrao;
-                                                                if (Model.Parametros.IconeRelatorio != null && Model.Parametros.IconeRelatorio.Length > 0)
+                                                                if (Model.Parametros.IconeRelatorio != null && Model.Parametros.IconeRelatorio != null && Model.Parametros.IconeRelatorio.Length > 0)
                                                                 {
                                                                     string imageBase64 = Convert.ToBase64String(Model.Parametros.IconeRelatorio);
                                                                     imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
