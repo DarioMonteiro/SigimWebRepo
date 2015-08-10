@@ -67,6 +67,7 @@
     <Compile Include="Entity\Estoque\EstoqueMaterial.cs" />
     <Compile Include="Entity\Estoque\Movimento.cs" />
     <Compile Include="Entity\Financeiro\AbstractTitulo.cs" />
+    <Compile Include="Entity\Financeiro\BloqueioSituacaoLiberado.cs" />
     <Compile Include="Entity\Financeiro\CentroCusto.cs" />
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />

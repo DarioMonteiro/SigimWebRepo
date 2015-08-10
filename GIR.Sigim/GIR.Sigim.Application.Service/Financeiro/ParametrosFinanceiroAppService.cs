@@ -16,6 +16,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
 {
     public class ParametrosFinanceiroAppService : BaseAppService, IParametrosFinanceiroAppService
     {
+        public const string delimitadorBloqueioSituacaoLiberado = "¨¨";
+
         private IParametrosFinanceiroRepository parametrosRepository;
 
         public ParametrosFinanceiroAppService(
@@ -28,7 +30,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public ParametrosFinanceiroDTO Obter()
         {
-            return parametrosRepository.ListarTodos().FirstOrDefault().To<ParametrosFinanceiroDTO>();
+            ParametrosFinanceiroDTO parametros = parametrosRepository.ListarTodos().FirstOrDefault().To<ParametrosFinanceiroDTO>();
+
+            PreencherCheckBoxBloqueioSituacaoLiberado(parametros);
+
+            return parametros;
+
         }
 
         public void Salvar(ParametrosFinanceiroDTO dto)
@@ -46,6 +53,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     parametros.IconeRelatorio = entidade.IconeRelatorio;
             }
 
+            parametros.BloqueioSituacaoLiberado = PreencherStringBloqueioSituacaoLiberado(dto);         
+
             if (EhValido(parametros))
             {
                 if (parametros.Id.HasValue)
@@ -58,6 +67,116 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
             }
         }
+
+        private void PreencherCheckBoxBloqueioSituacaoLiberado(ParametrosFinanceiroDTO parametros)
+        {
+            string[] delimitador = new string[] { delimitadorBloqueioSituacaoLiberado };
+            string[] bloqueioSituacaoLiberado = parametros.BloqueioSituacaoLiberado.Split(delimitador, StringSplitOptions.None);
+
+            parametros.BloqueioCorrentista = false;
+            parametros.BloqueioIdentificacao = false;
+            parametros.BloqueioValorTitulo = false;
+            parametros.BloqueioDataEmissao = false;
+            parametros.BloqueioDataVencimento = false;
+            parametros.BloqueioImpostos = false;
+            parametros.BloqueioApropriacao = false;
+
+            foreach (string bloqueio in bloqueioSituacaoLiberado)
+            {
+                if (bloqueio.ToUpper() == BloqueioSituacaoLiberado.Correntista.ObterDescricao().ToUpper())
+                {
+                    parametros.BloqueioCorrentista = true;
+                    continue;
+                }
+
+                if (bloqueio.ToUpper() == BloqueioSituacaoLiberado.Identificacao.ObterDescricao().ToUpper())
+                {
+                    parametros.BloqueioIdentificacao = true;
+                    continue;
+                }
+
+                if (bloqueio.ToUpper() == BloqueioSituacaoLiberado.ValorTitulo.ObterDescricao().ToUpper())
+                {
+                    parametros.BloqueioValorTitulo = true;
+                    continue;
+                }
+
+                if (bloqueio.ToUpper() == BloqueioSituacaoLiberado.DataEmissao.ObterDescricao().ToUpper())
+                {
+                    parametros.BloqueioDataEmissao = true;
+                    continue;
+                }
+
+                if (bloqueio.ToUpper() == BloqueioSituacaoLiberado.DataVencimento.ObterDescricao().ToUpper())
+                {
+                    parametros.BloqueioDataVencimento = true;
+                    continue;
+                }
+
+                if (bloqueio.ToUpper() == BloqueioSituacaoLiberado.Apropriacao.ObterDescricao().ToUpper())
+                {
+                    parametros.BloqueioApropriacao = true;
+                    continue;
+                }
+
+                if (bloqueio.ToUpper() == BloqueioSituacaoLiberado.Imposto.ObterDescricao().ToUpper())
+                {
+                    parametros.BloqueioImpostos = true;
+                    continue;
+                }
+
+            }
+
+        }
+
+        private string PreencherStringBloqueioSituacaoLiberado(ParametrosFinanceiroDTO parametros)
+        {
+            string bloqueioSituacaoLiberado = "";
+
+            if (parametros.BloqueioCorrentista)
+            {
+                bloqueioSituacaoLiberado = bloqueioSituacaoLiberado + BloqueioSituacaoLiberado.Correntista.ObterDescricao() + delimitadorBloqueioSituacaoLiberado;
+            }
+
+            if (parametros.BloqueioIdentificacao)
+            {
+                bloqueioSituacaoLiberado = bloqueioSituacaoLiberado + BloqueioSituacaoLiberado.Identificacao.ObterDescricao() + delimitadorBloqueioSituacaoLiberado;
+            }
+
+            if (parametros.BloqueioDataEmissao)
+            {
+                bloqueioSituacaoLiberado = bloqueioSituacaoLiberado + BloqueioSituacaoLiberado.DataEmissao.ObterDescricao() + delimitadorBloqueioSituacaoLiberado;
+            }
+
+            if (parametros.BloqueioDataVencimento)
+            {
+                bloqueioSituacaoLiberado = bloqueioSituacaoLiberado + BloqueioSituacaoLiberado.DataVencimento.ObterDescricao() + delimitadorBloqueioSituacaoLiberado;
+            }
+
+            if (parametros.BloqueioApropriacao)
+            {
+                bloqueioSituacaoLiberado = bloqueioSituacaoLiberado + BloqueioSituacaoLiberado.Apropriacao.ObterDescricao() + delimitadorBloqueioSituacaoLiberado;
+            }
+
+            if (parametros.BloqueioImpostos)
+            {
+                bloqueioSituacaoLiberado = bloqueioSituacaoLiberado + BloqueioSituacaoLiberado.Imposto.ObterDescricao() + delimitadorBloqueioSituacaoLiberado;
+            }
+
+            if (parametros.BloqueioValorTitulo)
+            {
+                bloqueioSituacaoLiberado = bloqueioSituacaoLiberado + BloqueioSituacaoLiberado.ValorTitulo.ObterDescricao() + delimitadorBloqueioSituacaoLiberado;
+            }
+
+            if (bloqueioSituacaoLiberado.Length > 0)
+            {
+                bloqueioSituacaoLiberado = bloqueioSituacaoLiberado.Substring(0, (bloqueioSituacaoLiberado.Length - 2));
+            }
+
+            return bloqueioSituacaoLiberado;
+
+        }
+
 
         private bool EhValido(ParametrosFinanceiro parametros)
         {
