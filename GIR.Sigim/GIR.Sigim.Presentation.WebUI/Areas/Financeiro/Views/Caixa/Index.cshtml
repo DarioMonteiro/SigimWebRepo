@@ -38,7 +38,7 @@
                                 </section>
                                 <section class="col col-2" style="padding-top:30px">                                  
                                     <label class="checkbox">
-                                        @Html.CheckBoxFor(m => m.Caixa.Inativo)<i></i>@Html.DisplayNameFor(m => m.Caixa.Inativo)
+                                        @Html.CheckBoxFor(m => m.Caixa.Ativa)<i></i>@Html.DisplayNameFor(m => m.Caixa.Ativa)
                                     </label>                                                 
                                 </section>
                                 <section class="col col-4">
@@ -121,7 +121,7 @@
     function clearForm() {
         $('#@Html.IdFor(m => m.Caixa.Id)').val('');
         $('#@Html.IdFor(m => m.Caixa.Descricao)').val('');
-        $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', false);
+        $('#@Html.IdFor(m => m.Caixa.Ativa)').prop('checked', false);
         $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val('');
         $('#@Html.IdFor(m => m.Caixa.CentroCusto.Codigo)').val('');
         $('#@Html.IdFor(m => m.Caixa.CentroCusto.Descricao)').val('');        
@@ -154,7 +154,7 @@
         .success(function (result) {
             $('#@Html.IdFor(m => m.Caixa.Id)').val(result.Id);
             $('#@Html.IdFor(m => m.Caixa.Descricao)').val(result.Descricao);
-            $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', result.Inativo);
+            $('#@Html.IdFor(m => m.Caixa.Ativa)').prop('checked', result.Ativa);
             $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val(result.CentroContabil);                  
             $('#@Html.IdFor(m => m.Caixa.CentroCusto.Codigo)').val(result.CentroCusto.Codigo);
             $('#@Html.IdFor(m => m.Caixa.CentroCusto.Descricao)').val(result.CentroCusto.Descricao);
