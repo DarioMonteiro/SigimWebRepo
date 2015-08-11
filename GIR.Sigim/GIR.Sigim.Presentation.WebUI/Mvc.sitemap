@@ -43,7 +43,7 @@
         </mvcSiteMapNode>  
         <mvcSiteMapNode title="Tipo de compromisso" controller="TipoCompromisso" action="Index"/>
         <mvcSiteMapNode title="Tipo de documento" controller="TipoDocumento" action="Index"/>
-        <mvcSiteMapNode title="Tipo rateio" controller="TipoRateio" action="Index"/>
+        <mvcSiteMapNode title="Tipo de rateio" controller="TipoRateio" action="Index"/>
         <mvcSiteMapNode title="Bancário" url="#" clickable="false" roles="BANCO_ACESSAR,AGENCIA_ACESSAR,CONTACORRENTE_ACESSAR">
           <mvcSiteMapNode title="Banco" controller="Banco" action="Index"/>
           <mvcSiteMapNode title="Agência" controller="Agencia" action="Index">
