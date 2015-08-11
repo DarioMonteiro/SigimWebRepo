@@ -107,7 +107,7 @@
                                                     });
                                                 </script>
                                                 <section class="col col-3">
-                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:tratarBotoes(true);goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
+                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
                                                         <i class="fa fa-search fa-lg"></i>
                                                     </button>
                                                 </section>
@@ -196,21 +196,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-@*        var codigoCentroCusto = null;
-        var contratoId = null;
-        var fornecedorClienteId = null;
-        var documento = null;
 
-        contratoId = $("#@Html.IdFor(m => m.Filtro.ContratoId)").val();
-        codigoCentroCusto = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
-        documento = $("#@Html.IdFor(m => m.Filtro.Documento)").val();
-        fornecedorClienteId = $("#@Html.IdFor(m => m.Filtro.FornecedorCliente.Id)").val();
-
-        var condicao = (codigoCentroCusto != "") || (contratoId != "") || (documento != "") || (fornecedorClienteId != "");
-
-        if (condicao) {
-            doFilter();
-        }*@
+        tratarBotoes(false);
 
         jQuery.validator.addMethod(
             "ehCentroCustoValido",
@@ -281,7 +268,7 @@
 
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
-                $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+                listarFiltro();
             }
         );
 
@@ -330,5 +317,11 @@
             document.getElementById('btnImprimir').className = "btn btn-primary disabled";
         }
     }
+
+    function listarFiltro() {
+        tratarBotoes(true);
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
+
 
 </script>
