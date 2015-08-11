@@ -390,7 +390,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private bool PodeSerSalvaNaSituacaoAtual(SituacaoPreRequisicaoMaterial situacao)
         {
-            if (situacao != SituacaoPreRequisicaoMaterial.Requisitada)
+            if ((short)situacao > (short)SituacaoPreRequisicaoMaterial.ParcialmenteAprovada)
                 return false;
 
             return true;
