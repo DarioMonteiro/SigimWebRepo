@@ -29,21 +29,40 @@
                     <div class="panel-body no-padding">
                         <fieldset>
                             <div class="row">
-                            <section class="col col-12">
-                                @Html.HiddenFor(m => m.FormaRecebimento.Id)
-                                @Html.LabelFor(m => m.FormaRecebimento.Descricao, new { @class = "label" })
-                                <label class="input">
-                                    @Html.TextBoxFor(m => m.FormaRecebimento.Descricao, new { @maxlength = "50",  @class = "required" })
-                                </label>
-                                @Html.ValidationMessageFor(m => m.FormaRecebimento.Descricao, "", new { @class = "note note-error" })
-                            </section>
-                            <section class="col col-6">
-                                @Html.LabelFor(m => m.FormaRecebimento.TipoRecebimento, new { @class = "label" })                                
-                                <label class="select">
-                                    @Html.DropDownListFor(m => m.FormaRecebimento.TipoRecebimento, Model.ListaTipoRecebimento, string.Empty, new { @class="required" })<i></i>
-                                </label>
-                                @Html.ValidationMessageFor(m => m.FormaRecebimento.TipoRecebimento, "", new { @class = "note note-error" })
-                            </section>
+                                <section class="col col-12">
+                                    @Html.HiddenFor(m => m.FormaRecebimento.Id)
+                                    @Html.LabelFor(m => m.FormaRecebimento.Descricao, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.FormaRecebimento.Descricao, new { @maxlength = "50",  @class = "required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.FormaRecebimento.Descricao, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-6">
+                                    @Html.LabelFor(m => m.FormaRecebimento.TipoRecebimento, new { @class = "label" })                                
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.FormaRecebimento.TipoRecebimento, Model.ListaTipoRecebimento, string.Empty, new { @class="required" })<i></i>
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.FormaRecebimento.TipoRecebimento, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.FormaRecebimento.NumeroDias, new { @class = "label" })                                
+                                    @{
+                                        if (!Model.PodeHabilitarNumeroDias)
+                                        {
+                                            <label class="input">
+                                                @Html.TextBoxFor(m => m.FormaRecebimento.NumeroDias, new { @maxlength = "10" , @class = "numeric text-right readonly" , @readonly="readonly" })
+                                            </label>
+                                        }
+                                        else{
+                                            <label class="input">
+                                                @Html.TextBoxFor(m => m.FormaRecebimento.NumeroDias, new { @maxlength = "10" , @class = "numeric text-right"})
+                                            </label>
+                                        }
+                                    }
+                                    @Html.ValidationMessageFor(m => m.FormaRecebimento.NumeroDias, "", new { @class = "note note-error" })
+                                </section>
                             </div>                           
                         </fieldset>
                     </div>
@@ -90,6 +109,11 @@
             }
         );
 
+        $(document).on("change", "#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)", function () {
+            habilitaDesabilitaNumeroDeDias();           
+        });
+
+
     });
 
     $("#btnDeletar").on("click", function () {
@@ -115,6 +139,7 @@
         $('#@Html.IdFor(m => m.FormaRecebimento.Id)').val('');
         $('#@Html.IdFor(m => m.FormaRecebimento.Descricao)').val('');
         $('#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)').val('');
+        $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val();
     }
 
     function novo() {
@@ -150,6 +175,7 @@
             $('#@Html.IdFor(m => m.FormaRecebimento.Automatico)').val(result.Automatico);
             $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').val(result.NumeroDias);
             tratarBotoes(!result.Automatico, !result.Automatico);
+            habilitaDesabilitaNumeroDeDias();
             goToTop();
 
         });
@@ -160,7 +186,7 @@
     }
 
     function tratarBotoes(condicaoSalvar, condicaoDeletar) {
-        $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
+         $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
          $("#@Html.IdFor(m => m.PodeDeletar)").val(condicaoDeletar);
          if (condicaoSalvar) {
              document.getElementById('btnSalvar').className = "btn btn-primary right";
@@ -180,5 +206,19 @@
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
     }
 
+    function habilitaDesabilitaNumeroDeDias() {
+        var tipoRecementoId = $("#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)").val();       
+        if (tipoRecementoId == "1") {
+            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', false);
+            document.getElementById('@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').className = "numeric text-right";
+            $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val(0);
+        }
+        else {
+            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', true);
+            document.getElementById('@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').className = "numeric text-right readonly";
+            $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val("");
+        }
+        
+    }
 </script>
 

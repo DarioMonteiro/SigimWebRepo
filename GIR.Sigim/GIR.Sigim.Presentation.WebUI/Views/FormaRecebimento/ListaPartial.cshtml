@@ -32,16 +32,16 @@
                     <tr role="row">
                         @{
                             string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
-                            string idSortingSuffix = "sorting";
+                            //string idSortingSuffix = "sorting";
                             string descricaoSortingSuffix = "sorting";
                             string tipoRecebimentoSortingSuffix = "sorting";
                             string numeroDiasSortingSuffix = "sorting";  
 
                             switch (Model.OrderBy)
                             {            
-                                case "id":
-                                    idSortingSuffix += sortingSuffix;
-                                    break;                
+                                //case "id":
+                                //    idSortingSuffix += sortingSuffix;
+                                //    break;                
                                 case "descricao":                
                                     descricaoSortingSuffix += sortingSuffix;
                                     break;
@@ -55,18 +55,18 @@
                                     break;
                             }
                         }
-                        <th class="sorting @idSortingSuffix text-right" data-order="id" style="width:60px;">Código</th>
+                        @*<th class="sorting @idSortingSuffix text-right" data-order="id" style="width:60px;">Código</th>*@
                         <th class="sorting @descricaoSortingSuffix text-left" data-order="descricao" style="min-width:100px;">Descrição</th>   
-                        <th class="sorting @tipoRecebimentoSortingSuffix text-left" data-order="tipoRecebimento" style="min-width:100px;">Tipo de recebimento</th>  
-                        <th class="sorting @numeroDiasSortingSuffix text-right" data-order="numeroDias" style="min-width:100px;">Nº de dias</th>           
+                        <th class="sorting @tipoRecebimentoSortingSuffix text-left" data-order="tipoRecebimento" style="min-width:100px;">Tipo</th>  
+                        <th class="sorting @numeroDiasSortingSuffix text-left" data-order="numeroDias" style="min-width:100px;">Nº de dias</th>           
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Lista)
                     {
                         <tr>                                      
-                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id</a></td>                                               
-                            <td class="text-left">@item.Descricao</td>                            
+                            @*<td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id</a></td>*@
+                            <td class="text-left"><a href="javascript:loadItem(@item.Id.ToString());">@item.Descricao</a></td>                            
                             <td class="text-left">@item.TipoRecebimentoDescricao</td>                            
                             <td class="text-right">@item.NumeroDias</td>                            
                         </tr>

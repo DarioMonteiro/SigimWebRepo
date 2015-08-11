@@ -15,13 +15,16 @@ namespace GIR.Sigim.Application.DTO.Sigim
         public string Descricao { get; set; }
 
         public bool Automatico { get; set; }
-        
+
+        [Display(Name = "Tipo")]
         public string TipoRecebimento { get; set; }
         public string TipoRecebimentoDescricao
         {
-          get { return TipoRecebimento == "0" ? "Compensação imediata" : TipoRecebimento == "1" ? "Compensação posterior" : "Sem compensação"; }
+          get { return TipoRecebimento == "0" ? "Compensação Imediata" : TipoRecebimento == "1" ? "Compensação Posterior" : "Sem Compensação"; }
         }
 
+        [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "No dias")]
         public int? NumeroDias { get; set; }
 
     }

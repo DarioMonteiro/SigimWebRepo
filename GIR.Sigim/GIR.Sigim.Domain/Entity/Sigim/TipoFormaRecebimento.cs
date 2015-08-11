@@ -10,13 +10,13 @@ namespace GIR.Sigim.Domain.Entity.Sigim
     public enum TipoFormaRecebimento
    
     {
-        [Description("Compensação imediata")]
+        [Description("Compensação Imediata")]
         CompensacaoImediata = 0,
 
-        [Description("Compensação posterior")]
+        [Description("Compensação Posterior")]
         CompensacaoPosterior = 1,
 
-        [Description("Sem compensação")]
+        [Description("Sem Compensação")]
         SemCompensacao = 2
 
     }
