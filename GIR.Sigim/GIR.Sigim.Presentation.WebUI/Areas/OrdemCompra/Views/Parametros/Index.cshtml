@@ -454,6 +454,25 @@
                     $('#notificationMessages').html(xhr.responseText);
                 }
             });
+
+            $("#@Html.IdFor(m => m.Parametros.EhPreRequisicaoMaterial)").on("change", function () {
+                desabilitaGeraRequisicaoMaterialRequisitada();
+            });
+
         });
+
+        function desabilitaGeraRequisicaoMaterialRequisitada() {
+            if ($("#@Html.IdFor(m => m.Parametros.EhPreRequisicaoMaterial)").is(':checked')) {
+                $('#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)').prop('disabled', false);
+            }
+            else {
+                $('#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)').prop('disabled', true);
+            }
+
+            $("#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)").val(false);
+            $("#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)").prop('checked', false);
+
+        }
+
     </script>
 }
