@@ -163,6 +163,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
             Property(l => l.EhObrigatorioDadosSPED)
                 .HasColumnName("dadosSPED")
                 .HasColumnOrder(33);
+
+            Property(l => l.EhGeraRequisicaoMaterialRequisitada)
+                .HasColumnName("geraRequisicaoMaterialRequisitada")
+                .HasColumnType("bit")
+                .HasColumnOrder(34);
+
         }
     }
 }
