@@ -13,6 +13,7 @@ using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros;
+using GIR.Sigim.Domain.Specification.Financeiro;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -33,10 +34,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return tipoMovimentoRepository.ListarTodos().OrderBy(l => l.Id).To<List<TipoMovimentoDTO>>(); 
         }
 
-        public List<TipoMovimentoDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros)
+        public List<TipoMovimentoDTO> ListarNaoAutomatico(BaseFiltro filtro, out int totalRegistros)
         {
             var specification = (Specification<TipoMovimento>)new TrueSpecification<TipoMovimento>();
 
+            specification &= TipoMovimentoSpecification.EhNaoAutomatico();
 
             return tipoMovimentoRepository.ListarPeloFiltroComPaginacao(
                 specification,
@@ -44,8 +46,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 filtro.PaginationParameters.PageSize,
                 filtro.PaginationParameters.OrderBy,
                 filtro.PaginationParameters.Ascending,
-                out totalRegistros).To<List<TipoMovimentoDTO>>();
+                out totalRegistros,
+                l => l.HistoricoContabil).To<List<TipoMovimentoDTO>>();
         }
+
 
         public TipoMovimentoDTO ObterPeloId(int? id)
         {
@@ -67,24 +71,34 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
 
             tipoMovimento.Descricao = dto.Descricao;
-            tipoMovimento.HistoricoContabilId = dto.Historico;
+            tipoMovimento.HistoricoContabilId = dto.HistoricoContabilId;
             tipoMovimento.Tipo = dto.Tipo;
             tipoMovimento.Operacao = dto.Operacao;
-        
-            if (Validator.IsValid(tipoMovimento, out validationErrors))
+
+            try
             {
-                if (novoItem)
-                    tipoMovimentoRepository.Inserir(tipoMovimento);
+                if (!EhValidoSalvarTipoMovimento(tipoMovimento)){
+                    return false;
+                }
+
+                if (Validator.IsValid(tipoMovimento, out validationErrors))
+                {
+                    if (novoItem)
+                        tipoMovimentoRepository.Inserir(tipoMovimento);
+                    else
+                        tipoMovimentoRepository.Alterar(tipoMovimento);
+
+                    tipoMovimentoRepository.UnitOfWork.Commit();
+                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                    return true;
+                }
                 else
-                    tipoMovimentoRepository.Alterar(tipoMovimento);
-
-                tipoMovimentoRepository.UnitOfWork.Commit();
-                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
-                return true;
+                    messageQueue.AddRange(validationErrors, TypeMessage.Error);
             }
-            else
-                messageQueue.AddRange(validationErrors, TypeMessage.Error);
-
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
             return false;
         }
 
@@ -112,6 +126,38 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
         }
 
+        #endregion
+
+        #region métodos privados de ITipoMovimentoAppService
+
+        private bool EhValidoSalvarTipoMovimento(TipoMovimento tipoMovimento)
+        {
+            if (!EhNaoAutomatico(tipoMovimento.Id)){
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.RegistroProtegido, TypeMessage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool EhNaoAutomatico(int? tipoMovimentoId)
+        {
+            if (tipoMovimentoId.HasValue)
+            {
+                TipoMovimentoDTO tipoMovimento = new TipoMovimentoDTO();
+
+                tipoMovimento = ObterPeloId(tipoMovimentoId);
+                if (tipoMovimento.Automatico.HasValue)
+                {
+                    if (tipoMovimento.Automatico.Value)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
         #endregion
     }
 }

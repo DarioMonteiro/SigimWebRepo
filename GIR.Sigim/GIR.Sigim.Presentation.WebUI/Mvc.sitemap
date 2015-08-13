@@ -38,6 +38,7 @@
                                                                          RATEIOAUTOMATICO_ACESSAR,
                                                                          TABELABASICA_FINANCEIRO_ACESSAR,
                                                                          TAXAADMINISTRACAO_ACESSAR,
+                                                                         TIPOMOVIMENTO_ACESSAR
                                                                          TIPOCOMPROMISSO_ACESSAR,
                                                                          TIPODOCUMENTO_ACESSAR,
                                                                          TIPORATEIO_ACESSAR,
@@ -51,7 +52,8 @@
           <mvcSiteMapNode title="Tabelas básicas" controller="TabelaBasica" action="Index"/>
           <mvcSiteMapNode title="Taxa de administração" controller="TaxaAdministracao" action="Index">
             <mvcSiteMapNode title="Cadastro" controller="TaxaAdministracao" action="Cadastro" visibility="SiteMapPathHelper,!*"/>
-          </mvcSiteMapNode>  
+          </mvcSiteMapNode>
+          <mvcSiteMapNode title="Tipo de movimento" controller="TipoMovimento" action="Index"/>
           <mvcSiteMapNode title="Tipo de compromisso" controller="TipoCompromisso" action="Index"/>
           <mvcSiteMapNode title="Tipo de documento" controller="TipoDocumento" action="Index"/>
           <mvcSiteMapNode title="Tipo de rateio" controller="TipoRateio" action="Index"/>

@@ -12,6 +12,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
     public interface IHistoricoContabilAppService
     {
         List<HistoricoContabilDTO> ListarTodos();
+        List<HistoricoContabilDTO> ListarPorTipo(int tipo);
         List<HistoricoContabilDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros);
         HistoricoContabilDTO ObterPeloId(int? id);
         bool Salvar(HistoricoContabilDTO dto);

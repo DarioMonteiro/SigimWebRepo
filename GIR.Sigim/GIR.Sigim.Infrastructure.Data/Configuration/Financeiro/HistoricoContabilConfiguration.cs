@@ -32,6 +32,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                .IsRequired()
                .HasColumnOrder(3);
 
+            HasMany<TipoMovimento>(l => l.ListaTipoMovimento)
+                .WithOptional(c => c.HistoricoContabil)
+                .HasForeignKey(c => c.HistoricoContabilId);
         }
     }
 }

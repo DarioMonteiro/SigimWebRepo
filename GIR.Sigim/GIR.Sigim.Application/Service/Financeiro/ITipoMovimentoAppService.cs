@@ -12,7 +12,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
     public interface ITipoMovimentoAppService
     {
         List<TipoMovimentoDTO> ListarTodos();
-        List<TipoMovimentoDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros);
+        List<TipoMovimentoDTO> ListarNaoAutomatico(BaseFiltro filtro, out int totalRegistros);
         TipoMovimentoDTO ObterPeloId(int? id);
         bool Salvar(TipoMovimentoDTO dto);
         bool Deletar(int? id);

@@ -27,26 +27,37 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasMaxLength(50) 
                 .HasColumnOrder(2);
 
-            Property(l => l.HistoricoContabilId )
-                .HasColumnName("historicoContabil")
+            Property(l => l.Operacao)
+                .HasColumnName("operacao")
+                .IsRequired()
+                .HasColumnType("char")
+                .HasMaxLength(1)
                 .HasColumnOrder(3);
 
-            HasRequired(l => l.HistoricoContabil)
+            Property(l => l.Automatico)
+                .HasColumnName("automatico")
+                .HasColumnType("bit")
+                .HasColumnOrder(4);
+
+            Property(l => l.HistoricoContabilId )
+                .HasColumnName("historicoContabil")
+                .HasColumnOrder(5);
+
+            HasOptional<HistoricoContabil>(l => l.HistoricoContabil)
                 .WithMany(l => l.ListaTipoMovimento)
                 .HasForeignKey(l => l.HistoricoContabilId);
 
             Property(l => l.Tipo)
                 .HasColumnName("tipo")
+                .HasColumnType("char")
+                .HasMaxLength(1)
                 .IsRequired()
-                .HasColumnOrder(4);
+                .HasColumnOrder(6);
 
-            Property(l => l.Operacao )
-                .HasColumnName("operacao")
-                .IsRequired()
-                .HasColumnOrder(5);
-
-
-
+            Property(l => l.FormaPagamento)
+                .HasColumnName("formaPagamento")
+                .HasColumnType("tinyint")
+                .HasColumnOrder(7);
         }
     }
 }

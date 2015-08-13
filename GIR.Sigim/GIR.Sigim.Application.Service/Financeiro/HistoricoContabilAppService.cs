@@ -18,19 +18,24 @@ namespace GIR.Sigim.Application.Service.Financeiro
 {
     public class HistoricoContabilAppService : BaseAppService, IHistoricoContabilAppService
     {
-        private IHistoricoContabilRepository HistoricoContabilRepository;
+        private IHistoricoContabilRepository historicoContabilRepository;
 
-        public HistoricoContabilAppService(IHistoricoContabilRepository HistoricoContabilRepository, MessageQueue messageQueue) 
+        public HistoricoContabilAppService(IHistoricoContabilRepository historicoContabilRepository, MessageQueue messageQueue) 
             : base (messageQueue)
         {
-            this.HistoricoContabilRepository = HistoricoContabilRepository;
+            this.historicoContabilRepository = historicoContabilRepository;
         }
 
         #region métodos de ITipoMovimentoAppService
 
         public List<HistoricoContabilDTO> ListarTodos()
         {
-            return HistoricoContabilRepository.ListarTodos().OrderBy(l => l.Descricao).To<List<HistoricoContabilDTO>>(); 
+            return historicoContabilRepository.ListarTodos().OrderBy(l => l.Descricao).To<List<HistoricoContabilDTO>>(); 
+        }
+
+        public List<HistoricoContabilDTO> ListarPorTipo(int tipo)
+        {
+            return historicoContabilRepository.ListarPeloFiltro(l => l.Tipo == tipo).To<List<HistoricoContabilDTO>>();
         }
 
         public List<HistoricoContabilDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros)
@@ -38,7 +43,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             var specification = (Specification<HistoricoContabil>)new TrueSpecification<HistoricoContabil>();
 
 
-            return HistoricoContabilRepository.ListarPeloFiltroComPaginacao(
+            return historicoContabilRepository.ListarPeloFiltroComPaginacao(
                 specification,
                 filtro.PaginationParameters.PageIndex,
                 filtro.PaginationParameters.PageSize,
@@ -49,7 +54,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public HistoricoContabilDTO ObterPeloId(int? id)
         {
-            return HistoricoContabilRepository.ObterPeloId(id).To<HistoricoContabilDTO>();
+            return historicoContabilRepository.ObterPeloId(id).To<HistoricoContabilDTO>();
         }
 
         public bool Salvar(HistoricoContabilDTO dto)
@@ -59,7 +64,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             bool novoItem = false;
 
-            var historicoContabil = HistoricoContabilRepository.ObterPeloId(dto.Id);
+            var historicoContabil = historicoContabilRepository.ObterPeloId(dto.Id);
             if (historicoContabil == null)
             {
                 historicoContabil = new HistoricoContabil();
@@ -73,11 +78,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
             if (Validator.IsValid(historicoContabil, out validationErrors))
             {
                 if (novoItem)
-                    HistoricoContabilRepository.Inserir(historicoContabil);
+                    historicoContabilRepository.Inserir(historicoContabil);
                 else
-                    HistoricoContabilRepository.Alterar(historicoContabil);
+                    historicoContabilRepository.Alterar(historicoContabil);
 
-                HistoricoContabilRepository.UnitOfWork.Commit();
+                historicoContabilRepository.UnitOfWork.Commit();
                 messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
                 return true;
             }
@@ -89,7 +94,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Deletar(int? id)
         {
-            var historicoContabil = HistoricoContabilRepository.ObterPeloId(id);
+            var historicoContabil = historicoContabilRepository.ObterPeloId(id);
 
             if (historicoContabil == null)
             {
@@ -99,8 +104,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             try
             {
-                HistoricoContabilRepository.Remover(historicoContabil);
-                HistoricoContabilRepository.UnitOfWork.Commit();
+                historicoContabilRepository.Remover(historicoContabil);
+                historicoContabilRepository.UnitOfWork.Commit();
                 messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
                 return true;
             }

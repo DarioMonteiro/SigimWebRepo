@@ -24,6 +24,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<Classe, ClasseDTO>();
             Mapper.CreateMap<ClasseDTO, Classe>();
 
+            Mapper.CreateMap<HistoricoContabil, HistoricoContabilDTO>();
+            Mapper.CreateMap<HistoricoContabilDTO, HistoricoContabil>();
+
             Mapper.CreateMap<ImpostoFinanceiro, ImpostoFinanceiroDTO>();
             Mapper.CreateMap<ImpostoFinanceiroDTO, ImpostoFinanceiro>();
 
@@ -51,6 +54,9 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<TipoDocumento, TipoDocumentoDTO>();
             Mapper.CreateMap<TipoDocumentoDTO, TipoDocumento>();
+
+            Mapper.CreateMap<TipoMovimento, TipoMovimentoDTO>();
+            Mapper.CreateMap<TipoMovimentoDTO, TipoMovimento>();
 
             Mapper.CreateMap<TipoRateio, TipoRateioDTO>();
             Mapper.CreateMap<TipoRateioDTO, TipoRateio>();

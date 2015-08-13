@@ -274,6 +274,7 @@
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />
     <Compile Include="Specification\ExpressionBuilder.cs" />
+    <Compile Include="Specification\Financeiro\TipoMovimentoSpecification.cs" />
     <Compile Include="Specification\ISpecification.cs" />
     <Compile Include="Specification\NotSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\AbstractRequisicaoMaterialSpecification.cs" />
@@ -294,7 +295,6 @@
   <ItemGroup>
     <Folder Include="Resource\Admin\" />
     <Folder Include="Service\Sigim\" />
-    <Folder Include="Specification\Financeiro\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\Contrato\ErrorMessages.resx">

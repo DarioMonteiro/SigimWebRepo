@@ -53,6 +53,7 @@
     <Compile Include="Adapter\Adapter.cs" />
     <Compile Include="Adapter\ImageAdapter.cs" />
     <Compile Include="Adapter\EnumAdapter.cs" />
+    <Compile Include="Constantes\HistoricoContabil.cs" />
     <Compile Include="Constantes\Modulo.cs" />
     <Compile Include="Constantes\Funcionalidade.cs" />
     <Compile Include="CustomAttribute\RequiredIfNotEmptyAttribute.cs" />
