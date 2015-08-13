@@ -40,7 +40,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 model.Filtro.DataFinal = DateTime.Now;
             }
 
-            model.PodeImprimir = true;
+            model.PodeImprimir = contratoRetificacaoItemMedicaoAppService.EhPermitidoImprimir();
 
             return View(model);
         }
