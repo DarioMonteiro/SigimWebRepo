@@ -37,7 +37,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 model.Filtro.DataFinal = DateTime.Now;
             }
 
-            model.PodeImprimir = true;
+            model.PodeImprimir = ordemCompraItemAppService.EhPermitidoImprimir();
 
             return View(model);
         }

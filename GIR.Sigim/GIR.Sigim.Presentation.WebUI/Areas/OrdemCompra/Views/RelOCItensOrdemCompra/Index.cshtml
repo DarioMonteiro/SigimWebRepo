@@ -389,8 +389,6 @@
     }
 
     function tratarBotoes(condicaoImprimir) {
-        $("#@Html.IdFor(m => m.PodeImprimir)").val(condicaoImprimir);
-
         if (condicaoImprimir) {
             document.getElementById('btnImprimir').className = "btn btn-primary";
         }
@@ -412,7 +410,12 @@
             return;
         }
 
-        tratarBotoes(true);
+        @{
+            bool? condicaoImprimir = Model.PodeImprimir as bool? ?? false;
+        }
+
+        tratarBotoes(@condicaoImprimir.ToString().ToLower());
+
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
     }
 

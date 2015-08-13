@@ -13,5 +13,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
     {
         List<RelOCItensOrdemCompraDTO> ListarPeloFiltroRelOCItensOrdemCompra(RelOcItensOrdemCompraFiltro filtro, int? idUsuario, out int totalRegistros);
         FileDownloadDTO ExportarRelOCItensOrdemCompra(RelOcItensOrdemCompraFiltro filtro, int? usuarioId, FormatoExportacaoArquivo formato);
+        bool EhPermitidoImprimir();
     }
 }
