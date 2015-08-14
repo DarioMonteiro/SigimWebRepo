@@ -307,6 +307,14 @@
     }
 
     function tratarBotoes(condicaoImprimir) {
+        @{
+            bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
+        }
+
+        @if(podeImprimir.ToString().ToLower() == "false"){
+            @:condicaoImprimir = false;
+        }
+
         if (condicaoImprimir) {
             document.getElementById('btnImprimir').className = "btn btn-primary";
 
@@ -317,12 +325,7 @@
     }
 
     function listarFiltro() {
-
-        @{
-            bool? condicaoImprimir = Model.PodeImprimir as bool? ?? false;
-        }
-
-        tratarBotoes(@condicaoImprimir.ToString().ToLower());
+        tratarBotoes(true);
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
     }
 

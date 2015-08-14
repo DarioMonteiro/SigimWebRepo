@@ -276,6 +276,12 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                              FormatoExportacaoArquivo formato)
         {
 
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RelNotasFiscaisLiberadasImprimir))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
             var specification = MontarSpecificationRelNotaFiscalLiberada(filtro, usuarioId);
 
             var listaMedicao =
