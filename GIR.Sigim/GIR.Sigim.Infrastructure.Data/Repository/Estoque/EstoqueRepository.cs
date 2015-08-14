@@ -24,7 +24,21 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Estoque
 
         #region IEstoqueRepository Members
 
-        public Domain.Entity.Estoque.EstoqueMaterial ObterEstoqueMaterialAtivoPeloCentroCustoEMaterial(string codigoCentroCusto,
+        public Domain.Entity.Estoque.Estoque ObterEstoqueAtivoPeloCentroCusto(string codigoCentroCusto,
+            params System.Linq.Expressions.Expression<Func<Domain.Entity.Estoque.Estoque, object>>[] includes)
+        {
+            var set = QueryableUnitOfWork.CreateSet<Domain.Entity.Estoque.Estoque>().AsQueryable<Domain.Entity.Estoque.Estoque>();
+
+            if (includes.Any())
+                set = includes.Aggregate(set, (current, expression) => current.Include(expression).DefaultIfEmpty());
+
+            set = set.Where(l => l.CodigoCentroCusto == codigoCentroCusto
+                && l.Situacao == "A");
+
+            return set.SingleOrDefault();
+        }
+
+        public EstoqueMaterial ObterEstoqueMaterialAtivoPeloCentroCustoEMaterial(string codigoCentroCusto,
             int? materialId,
             params System.Linq.Expressions.Expression<Func<EstoqueMaterial, object>>[] includes)
         {

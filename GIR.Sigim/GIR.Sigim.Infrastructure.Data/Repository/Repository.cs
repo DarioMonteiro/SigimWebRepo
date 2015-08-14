@@ -54,7 +54,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository
             }
         }
 
-        public void Alterar(TEntity item)
+        public virtual void Alterar(TEntity item)
         {
             unitOfWork.SetModified<TEntity>(item);
         }

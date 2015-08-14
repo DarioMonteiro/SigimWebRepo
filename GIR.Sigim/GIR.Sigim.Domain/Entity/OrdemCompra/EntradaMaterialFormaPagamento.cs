@@ -19,5 +19,11 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public TipoCompromisso TipoCompromisso { get; set; }
         public int? TituloPagarId { get; set; }
         public TituloPagar TituloPagar { get; set; }
+        public ICollection<TituloPagarAdiantamento> ListaTituloPagarAdiantamento { get; set; }
+
+        public EntradaMaterialFormaPagamento()
+        {
+            this.ListaTituloPagarAdiantamento = new HashSet<TituloPagarAdiantamento>();
+        }
     }
 }

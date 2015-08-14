@@ -69,6 +69,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public ICollection<EntradaMaterialImposto> ListaImposto { get; set; }
         public ICollection<AvaliacaoFornecedor> ListaAvaliacaoFornecedor { get; set; }
         public ICollection<Movimento> ListaMovimentoEstoque { get; set; }
+        public ICollection<OrdemCompra> ListaOrdemCompraFrete { get; set; }
        
         public EntradaMaterial()
         {
@@ -77,6 +78,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
             this.ListaImposto = new HashSet<EntradaMaterialImposto>();
             this.ListaAvaliacaoFornecedor = new HashSet<AvaliacaoFornecedor>();
             this.ListaMovimentoEstoque = new HashSet<Movimento>();
+            this.ListaOrdemCompraFrete = new HashSet<OrdemCompra>();
         }
     }
 }

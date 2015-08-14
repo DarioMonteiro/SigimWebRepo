@@ -7,9 +7,7 @@ using GIR.Sigim.Domain.Entity.Financeiro;
 
 namespace GIR.Sigim.Domain.Repository.Financeiro
 {
-    public interface ITituloPagarRepository : IRepository<TituloPagar>
+    public interface IApropriacaoRepository : IRepository<Apropriacao>
     {
-        void RemoverTituloPagarAdiantamento(TituloPagarAdiantamento titulo);
-        void RemoverImpostoPagar(ImpostoPagar impostoPagar);
     }
 }

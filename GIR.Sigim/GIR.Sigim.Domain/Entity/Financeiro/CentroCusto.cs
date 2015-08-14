@@ -45,6 +45,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<EntradaMaterial> ListaEntradaMaterial { get; set; }
         public ICollection<OrdemCompra.OrdemCompra> ListaOrdemCompra { get; set; }
         public ICollection<Estoque.Estoque> ListaEstoque { get; set; }
+        public ICollection<Apropriacao> ListaApropriacao { get; set; }
         
         public CentroCusto()
         {
@@ -66,6 +67,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();
             this.ListaOrdemCompra = new HashSet<Domain.Entity.OrdemCompra.OrdemCompra>();
             this.ListaEstoque = new HashSet<Estoque.Estoque>();
+            this.ListaApropriacao = new HashSet<Apropriacao>();
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)

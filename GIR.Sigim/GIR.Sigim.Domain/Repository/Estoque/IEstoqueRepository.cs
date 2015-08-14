@@ -10,6 +10,7 @@ namespace GIR.Sigim.Domain.Repository.Estoque
 {
     public interface IEstoqueRepository : IRepository<Domain.Entity.Estoque.Estoque>
     {
+        Domain.Entity.Estoque.Estoque ObterEstoqueAtivoPeloCentroCusto(string codigoCentroCusto, params Expression<Func<Domain.Entity.Estoque.Estoque, object>>[] includes);
         EstoqueMaterial ObterEstoqueMaterialAtivoPeloCentroCustoEMaterial(string codigoCentroCusto, int? materialId, params Expression<Func<EstoqueMaterial, object>>[] includes);
     }
 }

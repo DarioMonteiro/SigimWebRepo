@@ -23,7 +23,15 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public int Sequencial { get; set; }
         public string Complemento { get; set; }
         public decimal? Quantidade { get; set; }
-        public decimal? QuantidadeEntregue { get; set; }
+
+        //TODO: Tornar campo obrigatório no banco com valor default 0
+        private decimal? quantidadeEntregue;
+        public decimal? QuantidadeEntregue
+        {
+            get { return quantidadeEntregue.HasValue ? quantidadeEntregue : 0; }
+            set { quantidadeEntregue = value; }
+        }
+        
         public decimal? ValorUnitario { get; set; }
         public decimal? PercentualIPI { get; set; }
         public decimal? PercentualDesconto { get; set; }

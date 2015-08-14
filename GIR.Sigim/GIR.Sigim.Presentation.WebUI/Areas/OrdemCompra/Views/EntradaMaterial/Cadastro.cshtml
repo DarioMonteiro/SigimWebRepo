@@ -114,7 +114,7 @@
                                     disableBtnCancelar = "disabled";
                                 }
                             }
-                            <a id="btnCancelarEntrada" href="#MotivoCancelamento_ModalPanel" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
+                            <a id="btnCancelarEntrada" href="#" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
                             @if (Model.PodeCancelarEntrada) {
                                 <div class="modal fade" id="MotivoCancelamento_ModalPanel" tabindex="-1" role="dialog">
                                     <div class="modal-dialog">
@@ -128,7 +128,7 @@
                                                 </h4>
                                             </div>
                                             <div class="modal-body">
-                                                @if (!Model.ExisteMovimentoNoEstoque) {
+                                                @if (Model.ExisteEstoqueParaCentroCusto && !Model.ExisteMovimentoNoEstoque) {
                                                     <article class="col-sm-12">
                                                         <div class="alert alert-info alert-block fade in">
                                                             <h4 class="alert-heading">Informação</h4>

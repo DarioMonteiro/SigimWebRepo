@@ -25,6 +25,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
             HasRequired(l => l.TituloPagar)
                 .WithMany(l => l.ListaImpostoPagar)
                 .HasForeignKey(l => l.TituloPagarId);
+
+            Property(l => l.TituloPagarImpostoId)
+                .HasColumnName("tituloPagarImposto");
         }
     }
 }

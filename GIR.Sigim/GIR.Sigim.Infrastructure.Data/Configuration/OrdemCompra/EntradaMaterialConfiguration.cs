@@ -141,9 +141,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
             Property(l => l.OrdemCompraFreteId)
                 .HasColumnName("ordemCompraFrete");
 
-            //HasOptional(l => l.OrdemCompraFrete)
-            //    .WithMany(l => l.ListaEntradaMaterial)
-            //    .HasForeignKey(l => l.OrdemCompraFreteId);
+            HasOptional(l => l.OrdemCompraFrete)
+                .WithMany(l => l.ListaEntradaMaterialFrete)
+                .HasForeignKey(l => l.OrdemCompraFreteId);
 
             Property(l => l.TituloFreteId)
                 .HasColumnName("tituloFrete");

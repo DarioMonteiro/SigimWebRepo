@@ -29,6 +29,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<TaxaAdministracao> ListaTaxaAdministracao { get; set; }
         public ICollection<EntradaMaterialItem> ListaEntradaMaterialItem { get; set; }
         public ICollection<MovimentoItem> ListaMovimentoItem { get; set; }
+        public ICollection<Apropriacao> ListaApropriacao { get; set; }
 
         public Classe()
         {
@@ -43,6 +44,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();
             this.ListaEntradaMaterialItem = new HashSet<EntradaMaterialItem>();
             this.ListaMovimentoItem = new HashSet<MovimentoItem>();
+            this.ListaApropriacao = new HashSet<Apropriacao>();
         }
     }
 }

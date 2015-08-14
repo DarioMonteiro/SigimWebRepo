@@ -53,6 +53,13 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasColumnName("prazoEntrega")
                 .HasColumnOrder(13);
 
+            Property(l => l.EntradaMaterialFreteId)
+                .HasColumnName("entradaMaterialFrete");
+
+            HasOptional(l => l.EntradaMaterialFrete)
+                .WithMany(c => c.ListaOrdemCompraFrete)
+                .HasForeignKey(l => l.EntradaMaterialFreteId);
+
             HasMany(l => l.ListaItens)
                 .WithRequired(l => l.OrdemCompra);
         }

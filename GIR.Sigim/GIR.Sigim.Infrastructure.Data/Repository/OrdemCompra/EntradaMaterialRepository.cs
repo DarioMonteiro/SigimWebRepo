@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
 using GIR.Sigim.Domain.Specification;
@@ -79,6 +80,26 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra
             }
 
             return set.Skip(pageCount * pageIndex).Take(pageCount);
+        }
+
+        public void RemoverImpostoPagar(ImpostoPagar impostoPagar)
+        {
+            QueryableUnitOfWork.CreateSet<ImpostoPagar>().Remove(impostoPagar);
+        }
+
+        public void RemoverEntradaMaterialItem(EntradaMaterialItem entradaMaterialItem)
+        {
+            QueryableUnitOfWork.CreateSet<EntradaMaterialItem>().Remove(entradaMaterialItem);
+        }
+
+        public void RemoverEntradaMaterialImposto(EntradaMaterialImposto EntradaMaterialImposto)
+        {
+            QueryableUnitOfWork.CreateSet<EntradaMaterialImposto>().Remove(EntradaMaterialImposto);
+        }
+
+        public void RemoverEntradaMaterialFormaPagamento(EntradaMaterialFormaPagamento entradaMaterialFormaPagamento)
+        {
+            QueryableUnitOfWork.CreateSet<EntradaMaterialFormaPagamento>().Remove(entradaMaterialFormaPagamento);
         }
     }
 }
