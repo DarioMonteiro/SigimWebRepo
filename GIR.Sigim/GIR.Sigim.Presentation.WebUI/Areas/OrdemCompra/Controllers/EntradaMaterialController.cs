@@ -95,6 +95,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.ExisteEstoqueParaCentroCusto = entradaMaterialAppService.ExisteEstoqueParaCentroCusto(entradaMaterial.CentroCusto.Codigo);
             model.ExisteMovimentoNoEstoque = entradaMaterialAppService.ExisteMovimentoNoEstoque(entradaMaterial);
             model.PodeImprimir = entradaMaterialAppService.EhPermitidoImprimir(entradaMaterial);
+            model.PodeLiberarTitulos = entradaMaterialAppService.EhPermitidoLiberarTitulos(entradaMaterial);
             //model.PodeAdicionarItem = requisicaoMaterialAppService.EhPermitidoAdicionarItem(entradaMaterial);
             //model.PodeCancelarItem = requisicaoMaterialAppService.EhPermitidoCancelarItem(entradaMaterial);
             //model.PodeEditarItem = requisicaoMaterialAppService.EhPermitidoEditarItem(entradaMaterial);

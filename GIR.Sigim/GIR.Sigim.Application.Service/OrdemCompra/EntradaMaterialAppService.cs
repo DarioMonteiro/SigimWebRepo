@@ -258,6 +258,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return true;
         }
 
+        public bool EhPermitidoLiberarTitulos(EntradaMaterialDTO dto)
+        {
+            return true;
+        }
+
         public bool ExisteEstoqueParaCentroCusto(string codigoCentroCusto)
         {
             return estoqueRepository.ObterEstoqueAtivoPeloCentroCusto(codigoCentroCusto) != null;

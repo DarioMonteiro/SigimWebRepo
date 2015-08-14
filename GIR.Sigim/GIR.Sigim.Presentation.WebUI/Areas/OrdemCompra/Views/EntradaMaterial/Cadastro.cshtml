@@ -6,6 +6,16 @@
 
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
+    @{
+        string disablebtnLiberarTitulos = string.Empty;
+        if (!Model.PodeLiberarTitulos)
+        {
+            disablebtnLiberarTitulos = "disabled";
+        }
+    }
+    <button id="btnLiberarTitulos" type="button" class="btn btn-primary @disablebtnLiberarTitulos" title="Liberar títulos para o Financeiro">
+        Liberar Títulos
+    </button>
     @Html.ActionLink("Novo", "Cadastro", new { @id = "" }, new { @class = "btn btn-primary", @style = "float:right;" })
 </div>
 <div class="row">
@@ -221,3 +231,31 @@
         </div>
     </article>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnLiberarTitulos').on("click", function () {
+            $.SmartMessageBox({
+                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a liberação dos títulos para o Financeiro?",
+                content: "Esta ação não poderá ser revertida.",
+                buttons: '[Não][Sim]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Sim") {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("LiberarTitulos", "EntradaMaterial")',
+                        cache: false,
+                        async: false,
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({
+                            id: '@Model.EntradaMaterial.Id'
+                        })
+                    })
+                    .success(function (result) {
+                        $('#notificationMessages').html(result);
+                    })
+                }
+            });
+        });
+
+    });
+</script>
