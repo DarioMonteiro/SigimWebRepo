@@ -49,10 +49,24 @@
                         </fieldset>
                     </div>
                     <footer>                       
-                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                        @{
+                        string disableBtnDeletar = string.Empty;
+                            if (!Model.PodeDeletar)
+                            {
+                                disableBtnDeletar = "disabled";
+                            }
+                        }
+                        <button type="button" id="btnDeletar" class="btn btn-primary @disableBtnDeletar">
                             Deletar
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        @{
+                            string disableBtnSalvar = string.Empty;
+                            if (!Model.PodeSalvar)
+                            {
+                                disableBtnSalvar = "disabled";
+                            }
+                        }
+                        <button type="submit" class="btn btn-primary @disableBtnSalvar">
                             Salvar
                         </button>
                     </footer>

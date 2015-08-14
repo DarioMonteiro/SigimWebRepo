@@ -15,5 +15,8 @@ namespace GIR.Sigim.Application.Service.Sigim
         UnidadeMedidaDTO ObterPeloCodigo(string sigla);
         bool Salvar(UnidadeMedidaDTO dto);
         bool Deletar(string sigla);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
     }
 }
