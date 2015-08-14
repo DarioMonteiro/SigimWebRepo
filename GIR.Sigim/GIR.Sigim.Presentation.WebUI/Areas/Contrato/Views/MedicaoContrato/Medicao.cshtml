@@ -1050,25 +1050,43 @@
     }
 
     function tratarBotoes(condicaoSalvar, condicaoCancelar, condicaoImprimir) {
-        $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
-        $("#@Html.IdFor(m => m.PodeCancelar)").val(condicaoCancelar);
-        $("#@Html.IdFor(m => m.PodeImprimir)").val(condicaoImprimir);
+        @{
+            bool? podeSalvar = Model.PodeSalvar as bool? ?? false;
+            bool? podeCancelar = Model.PodeCancelar as bool? ?? false;
+            bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
+        }
+        
+        @if(podeSalvar.ToString().ToLower() == "false"){
+            @:condicaoSalvar = false;
+        }
+        
+        @if (podeCancelar.ToString().ToLower() == "false")
+        {
+            @:condicaoCancelar = false;
+        }
 
+        @if (podeImprimir.ToString().ToLower() == "false")
+        {
+            @:condicaoImprimir = false;
+        }
+
+        
         if (condicaoSalvar) {
             document.getElementById('btnSalvar').className = "btn btn-primary right";
         }
         else {
             document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
         }
+
         if (condicaoCancelar) {
             document.getElementById('btnCancelar').className = "btn btn-danger";
         }
         else {
             document.getElementById('btnCancelar').className = "btn btn-danger disabled";
         }
+
         if (condicaoImprimir) {
             document.getElementById('btnImprimir').className = "btn btn-primary";
-
         }
         else {
             document.getElementById('btnImprimir').className = "btn btn-primary disabled";

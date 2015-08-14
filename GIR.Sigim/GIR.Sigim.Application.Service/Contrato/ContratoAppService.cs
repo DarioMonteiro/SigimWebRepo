@@ -19,6 +19,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.Service.Financeiro;
 using CrystalDecisions.Shared;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -338,6 +339,13 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                string valorContratadoItem,
                                                FormatoExportacaoArquivo formato)
         {
+
+            if (!UsuarioLogado.IsInRole(Funcionalidade.MedicaoImprimir))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
             var listaMedicao = RecuperaMedicaoPorContratoEhDadosDaNota(contratoId,
                                                                        tipoDocumentoId,
                                                                        numeroDocumento,
@@ -483,6 +491,12 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         public bool ExcluirMedicao(int? contratoId,int? contratoRetificacaoItemMedicaoId)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.MedicaoDeletar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             var contrato = contratoRepository.ObterPeloId(contratoId,l => l.ListaContratoRetificacaoItemMedicao);
             if (!EhValidoExcluirMedicao(contrato,contratoRetificacaoItemMedicaoId))
             {
@@ -512,10 +526,13 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         public bool SalvarMedicao(ContratoRetificacaoItemMedicaoDTO dto)
         {
-            if ((dto == null))
+            if (!UsuarioLogado.IsInRole(Funcionalidade.MedicaoGravar))
             {
-                throw new ArgumentNullException("dto");
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
             }
+
+            if ((dto == null)) throw new ArgumentNullException("dto");
 
             bool novoRegistro = false;
 
@@ -558,6 +575,29 @@ namespace GIR.Sigim.Application.Service.Contrato
             return false;
         }
 
+        public bool EhPermitidoSalvarMedicao()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.MedicaoGravar))
+                return false;
+
+            return true;
+        }
+
+        public bool EhPermitidoCancelarMedicao()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.MedicaoDeletar))
+                return false;
+
+            return true;
+        }
+
+        public bool EhPermitidoImprimirMedicao()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.MedicaoImprimir))
+                return false;
+
+            return true;
+        }
 
         #endregion
 

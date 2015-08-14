@@ -138,10 +138,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             model.Contrato = contrato;
 
             CarregarCombosMedicao(model);
- 
-            model.PodeSalvar = false;
-            model.PodeCancelar = false;
-            model.PodeImprimir = true;
+
+            model.PodeSalvar = contratoAppService.EhPermitidoSalvarMedicao();
+            model.PodeCancelar = contratoAppService.EhPermitidoCancelarMedicao();
+            model.PodeImprimir = contratoAppService.EhPermitidoImprimirMedicao();
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
             if (parametros != null)
@@ -198,7 +198,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             if (ModelState.IsValid)
             {
                 contratoAppService.SalvarMedicao(model.ContratoRetificacaoItemMedicao);
-                //contratoRetificacaoItemMedicaoAppService.Salvar(model.ContratoRetificacaoItemMedicao);
             }
             return PartialView("_NotificationMessagesPartial");
         }
