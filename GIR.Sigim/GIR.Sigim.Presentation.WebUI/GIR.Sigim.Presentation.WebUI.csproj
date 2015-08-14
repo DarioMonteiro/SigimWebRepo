@@ -851,12 +851,14 @@
     <Content Include="Views\Shared\DisplayTemplates\PathNode.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuNode.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuNodeList.cshtml" />
+    <Content Include="Views\ClienteFornecedor\ListaPesquisaPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Financeiro\Views\CentroCusto\" />
     <Folder Include="Areas\Orcamento\ViewModel\" />
     <Folder Include="Areas\Orcamento\Views\Shared\" />
+    <Folder Include="ImagemRelatorio\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

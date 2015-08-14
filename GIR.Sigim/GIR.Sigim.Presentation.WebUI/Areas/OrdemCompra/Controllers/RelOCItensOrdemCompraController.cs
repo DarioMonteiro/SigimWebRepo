@@ -32,11 +32,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             {
                 model = new RelOcItensOrdemCompraListaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
                 model.Filtro.DataInicial = DateTime.Now;
                 model.Filtro.DataFinal = DateTime.Now;
             }
 
-            model.PodeImprimir = true;
+            model.PodeImprimir = ordemCompraItemAppService.EhPermitidoImprimir();
 
             return View(model);
         }

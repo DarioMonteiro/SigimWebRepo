@@ -18,13 +18,14 @@
                         "RelOCItensOrdemCompra",
                         null,
                         new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "resultadoBusca" },
-                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                        new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -124,6 +125,13 @@
                                                         <label class="checkbox">
                                                             @Html.CheckBoxFor(m => m.Filtro.EhExibirSomentecomSaldo)
                                                             <i></i>@Html.DisplayNameFor(m => m.Filtro.EhExibirSomentecomSaldo)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.EhExibirSomentecomSaldo)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
                                                         </label>
                                                     </div>
                                                 </section>
@@ -136,14 +144,35 @@
                                                             <label class="checkbox">
                                                                 @Html.CheckBoxFor(m => m.Filtro.EhLiberada)
                                                                 <i></i>@Html.DisplayNameFor(m => m.Filtro.EhLiberada)
+                                                                <script type="text/javascript">
+                                                                    $(document).ready(function () {
+                                                                        $("#@Html.IdFor(m => m.Filtro.EhLiberada)").on("change", function () {
+                                                                            limpaLista();
+                                                                        });
+                                                                    });
+                                                                </script>
                                                             </label>
                                                             <label class="checkbox">
                                                                 @Html.CheckBoxFor(m => m.Filtro.EhPendente)
                                                                 <i></i>@Html.DisplayNameFor(m => m.Filtro.EhPendente)
+                                                                <script type="text/javascript">
+                                                                    $(document).ready(function () {
+                                                                        $("#@Html.IdFor(m => m.Filtro.EhPendente)").on("change", function () {
+                                                                            limpaLista();
+                                                                        });
+                                                                    });
+                                                                </script>
                                                             </label>
                                                             <label class="checkbox">
                                                                 @Html.CheckBoxFor(m => m.Filtro.EhFechada)
                                                                 <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
+                                                                <script type="text/javascript">
+                                                                    $(document).ready(function () {
+                                                                        $("#@Html.IdFor(m => m.Filtro.EhFechada)").on("change", function () {
+                                                                            limpaLista();
+                                                                        });
+                                                                    });
+                                                                </script>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -185,7 +214,8 @@
                                                                   @required = false, 
                                                                   @label = "Fornecedor", 
                                                                   @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.OrdemCompra),
-                                                                  @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo)
+                                                                  @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                  @exibirBotaoPesquisa = false
                                                             })
                                                 <script type="text/javascript">
                                                     $(document).ready(function () {
@@ -209,7 +239,7 @@
                                                     });
                                                 </script>
                                                 <section class="col col-1">
-                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:tratarBotoes(true);goToPage(0);">
+                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
                                                         <i class="fa fa-search fa-lg"></i>
                                                     </button>
                                                 </section>
@@ -239,6 +269,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        tratarBotoes(false);
+
         jQuery.validator.addMethod(
             "ehCentroCustoValido",
             function (value, element, params) {
@@ -267,7 +299,7 @@
         );
 
 
-        $('#formFilter').validate({
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').validate({
             rules: {
                 '@Html.NameFor(m => m.Filtro.DataInicial)': {
                     date: true
@@ -334,6 +366,13 @@
                 }
             }
         })
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                listarFiltro();
+            }
+        );
+
     });
 
     function refresh(result) {
@@ -350,14 +389,34 @@
     }
 
     function tratarBotoes(condicaoImprimir) {
-        $("#@Html.IdFor(m => m.PodeImprimir)").val(condicaoImprimir);
-
         if (condicaoImprimir) {
             document.getElementById('btnImprimir').className = "btn btn-primary";
         }
         else {
             document.getElementById('btnImprimir').className = "btn btn-primary disabled";
         }
+    }
+
+    function listarFiltro() {
+        var situacaoFiltroMarcado = false;
+
+        situacaoFiltroMarcado = $("#@Html.IdFor(m => m.Filtro.EhLiberada)")[0].checked;
+        situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.EhPendente)")[0].checked;
+        situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.EhFechada)")[0].checked;
+
+        if (!situacaoFiltroMarcado) {
+            smartAlert("Erro", "Situação da ordem de compra não selecionada.", "error");
+            tratarBotoes(false);
+            return;
+        }
+
+        @{
+            bool? condicaoImprimir = Model.PodeImprimir as bool? ?? false;
+        }
+
+        tratarBotoes(@condicaoImprimir.ToString().ToLower());
+
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
     }
 
 </script>

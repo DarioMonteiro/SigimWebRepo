@@ -16,19 +16,40 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public string Descricao { get; set; }
 
         [Required]
-        [StringLength(2, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
-        [Display(Name = "Histórico")]
-        public int? Historico { get; set; }
+        [StringLength(1, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        [Display(Name = "Operação")]
+        public string Operacao { get; set; }
+        public string OperacaoDescricao
+        {
+            get { return Operacao == "D" ? "Débito" : Operacao == "C" ? "Crédito" : ""; }
+        }
+
+
+        [Display(Name = "Automático")]
+        public bool? Automatico { get; set; }
+
+        [Display(Name = "Histórico Contábil")]
+        public int? HistoricoContabilId { get; set; }
+        public HistoricoContabilDTO HistoricoContabil { get; set; }
+
+        public string HistoricoContabilDescricao
+        {
+            get { return HistoricoContabil != null ? HistoricoContabil.Descricao : ""; }
+        }
+
         
         [Required]
         [StringLength(1, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Tipo")]
         public string Tipo { get; set; }
 
-        [Required]
-        [StringLength(1, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
-        [Display(Name = "Operação")]
-        public string Operacao { get; set; }
+        public string TipoDescricao
+        {
+            get { return Tipo == "B" ? "Bancário" : Tipo == "C" ? "Caixa" : ""; }
+        }
+
+
+        public Byte? FormaPagamento { get; set; }
     }
 
 }

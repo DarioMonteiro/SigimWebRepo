@@ -43,6 +43,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
             {
                 model = new PerfilViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
             CarregarCombos(model);

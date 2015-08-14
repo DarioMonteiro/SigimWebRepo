@@ -99,6 +99,11 @@ namespace GIR.Sigim.Application.Constantes
         public const string TipoDocumentoDeletar = "TIPODOCUMENTO_DELETAR";
         public const string TipoDocumentoImprimir = "TIPODOCUMENTO_IMPRIMIR";
 
+        public const string TipoMovimentoAcessar = "TIPOMOVIMENTO_ACESSAR";
+        public const string TipoMovimentoGravar = "TIPOMOVIMENTO_GRAVAR";
+        public const string TipoMovimentoDeletar = "TIPOMOVIMENTO_DELETAR";
+        public const string TipoMovimentoImprimir = "TIPOMOVIMENTO_IMPRIMIR";
+
         public const string TipoRateioAcessar = "TIPORATEIO_ACESSAR";
         public const string TipoRateioGravar = "TIPORATEIO_GRAVAR";
         public const string TipoRateioDeletar = "TIPORATEIO_DELETAR";
@@ -265,6 +270,11 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(TipoDocumentoGravar, "Tipo de documento - gravar");
             MenuFinanceiro.Add(TipoDocumentoDeletar, "Tipo de documento - deletar");
             MenuFinanceiro.Add(TipoDocumentoImprimir, "Tipo de documento - Imprimir");
+
+            MenuFinanceiro.Add(TipoMovimentoAcessar, "Tipo movimento - acessar");
+            MenuFinanceiro.Add(TipoMovimentoGravar, "Tipo movimento - gravar");
+            MenuFinanceiro.Add(TipoMovimentoDeletar, "Tipo movimento - deletar");
+            MenuFinanceiro.Add(TipoMovimentoImprimir, "Tipo movimento - Imprimir");
 
             MenuFinanceiro.Add(TipoRateioAcessar, "Tipo rateio - acessar");
             MenuFinanceiro.Add(TipoRateioGravar, "Tipo rateio - gravar");

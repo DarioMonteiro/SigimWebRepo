@@ -17,6 +17,7 @@ using GIR.Sigim.Domain.Specification.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Reports.OrdemCompra;
 using GIR.Sigim.Domain.Repository.Financeiro;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.OrdemCompra
 {
@@ -166,6 +167,14 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             if (System.IO.File.Exists(caminhoImagem))
                 System.IO.File.Delete(caminhoImagem);
             return arquivo;
+        }
+
+        public bool EhPermitidoImprimir()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RelatorioItensOrdemCompraImprimir))
+                return false;
+
+            return true;
         }
 
 

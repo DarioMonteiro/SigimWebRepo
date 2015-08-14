@@ -565,8 +565,8 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         private ContratoRetificacaoItemMedicao InseriuMedicao(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoItemMedicaoDTO dto)
         {
-            ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicao();
-            int index = contrato.ListaContratoRetificacaoItemMedicao.ToList<ContratoRetificacaoItemMedicao>().FindIndex(l => l.Id == dto.Id);
+            ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao;
+            contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == dto.Id).FirstOrDefault() ?? new ContratoRetificacaoItemMedicao();
 
             ContratoRetificacao contratoRetificacao = contrato.ListaContratoRetificacao.Where(l => l.Id == dto.ContratoRetificacaoId).FirstOrDefault();
             ContratoRetificacaoItem contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == dto.ContratoRetificacaoItemId).FirstOrDefault();
@@ -629,19 +629,13 @@ namespace GIR.Sigim.Application.Service.Contrato
                 contratoRetificacaoItemMedicao.ValorRetido = valorRetido;
             }
 
-            if (index < 0)
+            if (!contratoRetificacaoItemMedicao.Id.HasValue)
             {
-                //contratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicao();
                 contratoRetificacaoItemMedicao.DataCadastro = DateTime.Now;
                 contratoRetificacaoItemMedicao.UsuarioMedicao = UsuarioLogado.Login;
                 contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoAprovacao;
 
-                contrato.ListaContratoRetificacaoItemMedicao.Add(contratoRetificacaoItemMedicao);
-            }
-            else
-            {
-                contratoRetificacaoItemMedicao.Id = dto.Id;
-                contrato.ListaContratoRetificacaoItemMedicao.ToList<ContratoRetificacaoItemMedicao>()[index] = contratoRetificacaoItemMedicao; 
+                contrato.ListaContratoRetificacaoItemMedicao.Add(contratoRetificacaoItemMedicao);    
             }
 
             return contratoRetificacaoItemMedicao;

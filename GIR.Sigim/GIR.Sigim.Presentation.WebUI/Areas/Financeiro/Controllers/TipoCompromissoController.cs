@@ -27,12 +27,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.tipoCompromissoAppService = tipoCompromissoAppService;
         }
 
-        /*public ActionResult Index()
-        {
-            TipoCompromissoViewModel model = new TipoCompromissoViewModel();
-            return View(model);
-        }*/
-
         [Authorize(Roles = Funcionalidade.TipoCompromissoAcessar)]
         public ActionResult Index(int? id)
         {
@@ -41,6 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 model = new TipoCompromissoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             var tipoCompromisso = tipoCompromissoAppService.ObterPeloId(id) ?? new TipoCompromissoDTO();
 

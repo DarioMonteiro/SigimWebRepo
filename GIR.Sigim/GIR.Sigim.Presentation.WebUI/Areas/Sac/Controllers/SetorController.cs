@@ -32,6 +32,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
             {
                 model = new SetorViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             var Setor = SetorAppService.ObterPeloId(id) ?? new SetorDTO();
 

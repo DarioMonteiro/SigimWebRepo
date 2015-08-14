@@ -96,7 +96,8 @@
                                                 </div>
                                                 <div class="row">
                                                     <section class="col col-8">
-                                                        <input type="file" name="@Html.IdFor(m => m.IconeRelatorio)"  id="IconeRelatorio"/>
+                                                        @*<input type="file" name="@Html.IdFor(m => m.IconeRelatorio)"  id="IconeRelatorio"/>*@
+                                                        @Html.TextBoxFor(m => m.IconeRelatorio, new { type = "file" })
                                                     </section>
                                                     <section class="col col-4">
                                                         @Html.HiddenFor(m => m.Parametros.RemoverImagem)
@@ -104,7 +105,7 @@
                                                             @{
                                                                 string imgPadrao = Url.Content("~/Content/img/48x48.png");
                                                                 string imageSrc = imgPadrao;
-                                                                if (Model.Parametros.IconeRelatorio != null && Model.Parametros.IconeRelatorio.Length > 0)
+                                                                if (Model.Parametros.IconeRelatorio != null && Model.Parametros.IconeRelatorio != null && Model.Parametros.IconeRelatorio.Length > 0)
                                                                 {
                                                                     string imageBase64 = Convert.ToBase64String(Model.Parametros.IconeRelatorio);
                                                                     imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
@@ -223,6 +224,56 @@
 									                </div>
 								                </section>
                                             </div>
+                                        </fieldset>
+                                    </div>
+
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <label class="label">Bloqueio de títulos com situação "liberado"</label>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.BloqueioCorrentista)<i></i>@Html.DisplayNameFor(m => m.Parametros.BloqueioCorrentista)
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.BloqueioDataVencimento)<i></i>@Html.DisplayNameFor(m => m.Parametros.BloqueioDataVencimento)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.BloqueioIdentificacao)<i></i>@Html.DisplayNameFor(m => m.Parametros.BloqueioIdentificacao)
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.BloqueioImpostos)<i></i>@Html.DisplayNameFor(m => m.Parametros.BloqueioImpostos)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.BloqueioValorTitulo)<i></i>@Html.DisplayNameFor(m => m.Parametros.BloqueioValorTitulo)
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.BloqueioApropriacao)<i></i>@Html.DisplayNameFor(m => m.Parametros.BloqueioApropriacao)
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.BloqueioDataEmissao)<i></i>@Html.DisplayNameFor(m => m.Parametros.BloqueioDataEmissao)
+                                                    </label>
+                                                </section>
+                                            </div>
+
                                         </fieldset>
                                     </div>
                                 </div>

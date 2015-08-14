@@ -11,22 +11,26 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
     public class TipoMovimentoController : BaseController
     {
         private ITipoMovimentoAppService tipoMovimentoAppService;
+        private IHistoricoContabilAppService historicoContabilAppService;
 
-        public TipoMovimentoController(
-            ITipoMovimentoAppService tipoMovimentoAppService,
-            MessageQueue messageQueue)
+        public TipoMovimentoController(ITipoMovimentoAppService tipoMovimentoAppService,
+                                       IHistoricoContabilAppService historicoContabilAppService, 
+                                       MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.tipoMovimentoAppService = tipoMovimentoAppService;
+            this.historicoContabilAppService = historicoContabilAppService;
         }
 
 
+        [Authorize(Roles = Funcionalidade.TipoMovimentoAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as TipoMovimentoViewModel;
@@ -34,6 +38,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 model = new TipoMovimentoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             var tipoMovimento = tipoMovimentoAppService.ObterPeloId(id) ?? new TipoMovimentoDTO();
 
@@ -41,6 +46,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
 
             model.TipoMovimento = tipoMovimento;
+
+            model.TipoMovimento.Tipo = "B";
+            model.TipoMovimento.Operacao = "C";
+
+            CarregarCombos(model);
 
             return View(model);
         }
@@ -66,7 +76,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 Session["Filtro"] = model;
                 int totalRegistros;
-                var result = tipoMovimentoAppService.ListarPeloFiltro(model.Filtro, out totalRegistros);
+                var result = tipoMovimentoAppService.ListarNaoAutomatico(model.Filtro, out totalRegistros);
                 if (result.Any())
                 {
                     var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
@@ -82,6 +92,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         {
             tipoMovimentoAppService.Deletar(id);
             return PartialView("_NotificationMessagesPartial");
+        }
+
+        private void CarregarCombos(TipoMovimentoViewModel model)
+        {
+            model.ListaHistoricoContabil = new SelectList(historicoContabilAppService.ListarPorTipo(HistoricoContabil.TipoMovimento), "Id", "Descricao", model.TipoMovimento.HistoricoContabilId);
         }
 
     }

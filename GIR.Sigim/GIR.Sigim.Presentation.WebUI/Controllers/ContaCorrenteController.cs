@@ -49,6 +49,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             {
                 model = new ContaCorrenteListaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             
             if (id.HasValue)

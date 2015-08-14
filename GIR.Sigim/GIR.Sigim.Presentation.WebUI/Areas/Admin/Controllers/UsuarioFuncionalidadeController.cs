@@ -47,6 +47,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
             {
                 model = new UsuarioFuncionalidadeViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
             CarregarCombos(model);
@@ -237,7 +238,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
 
         private void CarregarCombos(UsuarioFuncionalidadeViewModel model)
         {
-            model.ListaUsuario = new SelectList(usuarioAppService.ListarTodos(), "Id", "Login", model.UsuarioId);
+            model.ListaUsuario = new SelectList(usuarioAppService.ListarTodos().OrderBy(l => l.Login), "Id", "Login", model.UsuarioId);
             model.ListaModulo = new SelectList(moduloAppService.ListarTodos(), "Id", "NomeCompleto", model.ModuloId);
             model.ListaPerfil = new SelectList(perfilAppService.ListarPeloModulo(model.ModuloId), "Id", "Descricao", model.PerfilId);
         }

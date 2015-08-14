@@ -69,6 +69,7 @@
     <Compile Include="Entity\Estoque\TipoMovimentoEstoque.cs" />
     <Compile Include="Entity\Financeiro\AbstractTitulo.cs" />
     <Compile Include="Entity\Financeiro\Apropriacao.cs" />
+    <Compile Include="Entity\Financeiro\BloqueioSituacaoLiberado.cs" />
     <Compile Include="Entity\Financeiro\CentroCusto.cs" />
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
     <Compile Include="Entity\Financeiro\Classe.cs" />
@@ -277,6 +278,7 @@
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />
     <Compile Include="Specification\ExpressionBuilder.cs" />
+    <Compile Include="Specification\Financeiro\TipoMovimentoSpecification.cs" />
     <Compile Include="Specification\ISpecification.cs" />
     <Compile Include="Specification\NotSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\AbstractRequisicaoMaterialSpecification.cs" />
@@ -297,7 +299,6 @@
   <ItemGroup>
     <Folder Include="Resource\Admin\" />
     <Folder Include="Service\Sigim\" />
-    <Folder Include="Specification\Financeiro\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\Contrato\ErrorMessages.resx">

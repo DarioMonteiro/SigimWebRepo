@@ -33,6 +33,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 model = new TipoRateioViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             var tipoRateio = tipoRateioAppService.ObterPeloId(id) ?? new TipoRateioDTO();
 

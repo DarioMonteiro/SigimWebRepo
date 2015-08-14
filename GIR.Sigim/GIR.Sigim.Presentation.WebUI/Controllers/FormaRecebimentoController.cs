@@ -34,8 +34,11 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             {
                 model = new FormaRecebimentoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
-           
+
+            model.PodeHabilitarNumeroDias = false;
+
             var formaRecebimento = formaRecebimentoAppService.ObterPeloId(id) ?? new FormaRecebimentoDTO();
             
             if (id.HasValue && !formaRecebimento.Id.HasValue)

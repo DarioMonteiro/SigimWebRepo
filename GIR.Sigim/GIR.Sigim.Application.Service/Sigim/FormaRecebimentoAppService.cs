@@ -68,6 +68,7 @@ namespace GIR.Sigim.Application.Service.Sigim
             formaRecebimento.Automatico = dto.Automatico;
             formaRecebimento.TipoRecebimento = dto.TipoRecebimento;
             formaRecebimento.NumeroDias = dto.NumeroDias;
+            if (!dto.NumeroDias.HasValue) formaRecebimento.NumeroDias = 0;
 
             if (Validator.IsValid(formaRecebimento, out validationErrors))
             {
@@ -81,8 +82,10 @@ namespace GIR.Sigim.Application.Service.Sigim
                 return true;
             }
             else
+            {
                 messageQueue.AddRange(validationErrors, TypeMessage.Error);
-                return false;       
+                return false;
+            }
         }
 
         public bool Deletar(int? id)

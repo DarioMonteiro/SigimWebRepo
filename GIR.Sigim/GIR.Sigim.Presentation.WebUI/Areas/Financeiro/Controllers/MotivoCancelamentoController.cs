@@ -32,6 +32,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 model = new MotivoCancelamentoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             var motivoCancelamento = motivoCancelamentoAppService.ObterPeloId(id) ?? new MotivoCancelamentoDTO();
 

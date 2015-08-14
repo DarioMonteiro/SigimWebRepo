@@ -18,6 +18,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<ICaixaRepository, CaixaRepository>();
             Container.Current.RegisterType<ICentroCustoRepository, CentroCustoRepository>();
             Container.Current.RegisterType<IClasseRepository, ClasseRepository>();
+            Container.Current.RegisterType<IHistoricoContabilRepository, HistoricoContabilRepository>();
             Container.Current.RegisterType<IImpostoFinanceiroRepository, ImpostoFinanceiroRepository>();
             Container.Current.RegisterType<IMotivoCancelamentoRepository, MotivoCancelamentoRepository>();
             Container.Current.RegisterType<IParametrosFinanceiroRepository, ParametrosFinanceiroRepository>();
@@ -26,6 +27,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<ITaxaAdministracaoRepository, TaxaAdministracaoRepository>();
             Container.Current.RegisterType<ITipoCompromissoRepository, TipoCompromissoRepository>();
             Container.Current.RegisterType<ITipoDocumentoRepository, TipoDocumentoRepository>();
+            Container.Current.RegisterType<ITipoMovimentoRepository, TipoMovimentoRepository>();
             Container.Current.RegisterType<ITipoRateioRepository, TipoRateioRepository>();
             Container.Current.RegisterType<ITituloPagarRepository, TituloPagarRepository>();
         }

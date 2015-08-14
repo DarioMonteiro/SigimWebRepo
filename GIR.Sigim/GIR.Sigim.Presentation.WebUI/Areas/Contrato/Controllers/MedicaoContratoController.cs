@@ -86,7 +86,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             if (model == null)
             {
                 model = new MedicaoContratoListaViewModel();
-                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;  
+                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
             return View(model);
@@ -107,7 +108,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 var result = contratoAppService.ListarPeloFiltro(model.Filtro,Usuario.Id,out totalRegistros);
                 if (result.Any())
                 {
-                    if (result.Count == 1)
+                    if (model.Filtro.PaginationParameters.PageIndex == 0 && result.Count == 1)
                     {
                         Session["Filtro"] = null;
 

@@ -39,6 +39,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public BancoLayout LayoutSPED { get; set; }
         public int? DiasPagamento { get; set; }
         public bool? EhObrigatorioDadosSPED { get; set; }
+        public bool? EhGeraRequisicaoMaterialRequisitada { get; set; }
 
         public ParametrosOrdemCompra()
         {

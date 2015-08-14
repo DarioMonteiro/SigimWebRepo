@@ -13,8 +13,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
     public class TipoMovimentoViewModel
     {
         public TipoMovimentoDTO TipoMovimento { get; set; }
+        public SelectList ListaHistoricoContabil { get; set; }
 
         public BaseFiltro Filtro { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
 
         public TipoMovimentoViewModel()
         {

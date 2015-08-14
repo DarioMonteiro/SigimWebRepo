@@ -53,6 +53,7 @@
     <Compile Include="Adapter\Adapter.cs" />
     <Compile Include="Adapter\ImageAdapter.cs" />
     <Compile Include="Adapter\EnumAdapter.cs" />
+    <Compile Include="Constantes\HistoricoContabil.cs" />
     <Compile Include="Constantes\Modulo.cs" />
     <Compile Include="Constantes\Funcionalidade.cs" />
     <Compile Include="CustomAttribute\RequiredIfNotEmptyAttribute.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="Filtros\PaginationParameters.cs" />
     <Compile Include="Filtros\Sigim\BancoFiltro.cs" />
     <Compile Include="Filtros\Sigim\AgenciaFiltro.cs" />
+    <Compile Include="Filtros\Sigim\ClienteFornecedorPesquisaFiltro.cs" />
     <Compile Include="Filtros\Sigim\ContaCorrenteFiltro.cs" />
     <Compile Include="Filtros\Sigim\MaterialPesquisaFiltro.cs" />
     <Compile Include="Filtros\Sigim\FormaRecebimentoFiltro.cs" />

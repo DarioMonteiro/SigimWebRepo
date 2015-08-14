@@ -43,6 +43,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             {
                 model = new BancoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
             var banco = bancoAppService.ObterPeloId(id) ?? new BancoDTO(); ;

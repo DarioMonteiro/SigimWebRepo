@@ -25,9 +25,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         [Display(Name="Tipo")]
         public SelectList ListaTipoDocumento { get; set; }
 
-        [Display(Name = "Multifornecedor")]
-        public SelectList ListaMultiFornecedor { get; set; }
-
         [Display(Name = "Tipo compra")]
         public SelectList ListaTipoCompra { get; set; }
 
@@ -65,6 +62,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public MedicaoContratoMedicaoViewModel()
         {
             this.ContratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicaoDTO();
+            this.ContratoRetificacaoItemMedicao.MultiFornecedor = new ClienteFornecedorDTO();
 
             EhSituacaoAguardandoAprovacao = true;
             EhSituacaoAguardandoLiberacao = false;

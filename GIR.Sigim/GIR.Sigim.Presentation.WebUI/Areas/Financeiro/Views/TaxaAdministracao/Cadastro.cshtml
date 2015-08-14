@@ -377,12 +377,12 @@
             smartAlert("Erro", "Informe o campo classe.", "error");
             return false;
         }
-        if ((parseFloat($('#@Html.IdFor(m => m.Percentual)').val()) <= 0))
+@*        if ((parseFloat($('#@Html.IdFor(m => m.Percentual)').val()) <= 0))
         {
             result = false;
             smartAlert("Erro", "Informe um percentual maior que zero.", "error");
             return false;
-        }
+        }*@
 
         var percentualTotal = parseFloat(0);
         $.each(jsonItemArray, function (index, obj) {

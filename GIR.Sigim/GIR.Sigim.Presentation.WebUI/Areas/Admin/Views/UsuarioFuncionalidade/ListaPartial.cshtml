@@ -16,17 +16,16 @@
                             m => m.PageSize,
                             Model.PageSizeList,
                             new {
-                                @id = "pageSizeSelector",
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
                                 @aria_controls="dt_basic",
-                                @class="form-control",
-                                onchange="changePageSize();"
+                                @class="form-control"
                             })
                     </label>
                 </div>
             </div>
         </div>
         <div class="table-responsive">
-            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
                     <tr role="row">
                         @{

@@ -18,6 +18,7 @@ using GIR.Sigim.Domain.Specification.Contrato;
 using GIR.Sigim.Application.Service.Admin;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Reports.Contrato;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -270,28 +271,6 @@ namespace GIR.Sigim.Application.Service.Contrato
             return listaRelNotaFiscalLiberadaDTO;
         }
 
-        private Specification<ContratoRetificacaoItemMedicao> MontarSpecificationRelNotaFiscalLiberada(RelNotaFiscalLiberadaFiltro filtro, int? idUsuario)
-        {
-            var specification = (Specification<ContratoRetificacaoItemMedicao>)new TrueSpecification<ContratoRetificacaoItemMedicao>();
-
-            if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
-                specification &= ContratoRetificacaoItemMedicaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
-
-            if (filtro.ContratoId.HasValue)
-                specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoContratoComSituacaoLiberado(filtro.ContratoId);
-            else
-            {
-                specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMaiorOuIgual(filtro.DataInicial);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMenorOuIgual(filtro.DataFinal);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.DocumentoPertenceAhMedicao(filtro.Documento);
-                specification &= ContratoRetificacaoItemMedicaoSpecification.FornecedorClientePertenceAhMedicao(filtro.FornecedorCliente.Id);
-            }
-
-            specification &= ContratoRetificacaoItemMedicaoSpecification.SituacaoIgualLiberado();
-            return specification;
-        }
-
         public FileDownloadDTO ExportarRelNotaFiscalLiberada(RelNotaFiscalLiberadaFiltro filtro,
                                                              int? usuarioId,
                                                              FormatoExportacaoArquivo formato)
@@ -342,6 +321,14 @@ namespace GIR.Sigim.Application.Service.Contrato
             if (System.IO.File.Exists(caminhoImagem))
                 System.IO.File.Delete(caminhoImagem);
             return arquivo;
+        }
+
+        public bool EhPermitidoImprimir()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RelNotasFiscaisLiberadasImprimir))
+                return false;
+
+            return true;
         }
 
         #endregion
@@ -654,6 +641,27 @@ namespace GIR.Sigim.Application.Service.Contrato
             return dta;
         }
 
+        private Specification<ContratoRetificacaoItemMedicao> MontarSpecificationRelNotaFiscalLiberada(RelNotaFiscalLiberadaFiltro filtro, int? idUsuario)
+        {
+            var specification = (Specification<ContratoRetificacaoItemMedicao>)new TrueSpecification<ContratoRetificacaoItemMedicao>();
+
+            if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
+                specification &= ContratoRetificacaoItemMedicaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+
+            if (filtro.ContratoId.HasValue)
+                specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoContratoComSituacaoLiberado(filtro.ContratoId);
+            else
+            {
+                specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMaiorOuIgual(filtro.DataInicial);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.DataLiberacaoMenorOuIgual(filtro.DataFinal);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.DocumentoPertenceAhMedicao(filtro.Documento);
+                specification &= ContratoRetificacaoItemMedicaoSpecification.FornecedorClientePertenceAhMedicao(filtro.FornecedorCliente.Id);
+            }
+
+            specification &= ContratoRetificacaoItemMedicaoSpecification.SituacaoIgualLiberado();
+            return specification;
+        }
         
         #endregion
     }

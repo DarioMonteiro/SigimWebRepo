@@ -148,6 +148,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool Aprovar(int? id, int[] itens)
         {
+            ParametrosOrdemCompra parametros = parametrosOrdemCompraRepository.Obter() ?? new ParametrosOrdemCompra();
+
             if (!UsuarioLogado.IsInRole(Funcionalidade.PreRequisicaoMaterialAprovar))
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
@@ -186,7 +188,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 int sequencial = 1;
 
                 requisicaoMaterial = new RequisicaoMaterial();
-                requisicaoMaterial.Situacao = SituacaoRequisicaoMaterial.Aprovada;
+
+                SituacaoRequisicaoMaterial situacao = SituacaoRequisicaoMaterial.Aprovada;
+                if (parametros != null)
+                {
+                    if (parametros.EhGeraRequisicaoMaterialRequisitada.HasValue)
+                    {
+                        if (parametros.EhGeraRequisicaoMaterialRequisitada.Value) situacao = SituacaoRequisicaoMaterial.Requisitada;
+                    }
+                }
+
+                requisicaoMaterial.Situacao = situacao;
                 requisicaoMaterial.DataAprovacao = DateTime.Now;
                 requisicaoMaterial.LoginUsuarioAprovacao = UsuarioLogado.Login;
 
@@ -390,7 +402,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private bool PodeSerSalvaNaSituacaoAtual(SituacaoPreRequisicaoMaterial situacao)
         {
-            if (situacao != SituacaoPreRequisicaoMaterial.Requisitada)
+            if ((short)situacao > (short)SituacaoPreRequisicaoMaterial.ParcialmenteAprovada)
                 return false;
 
             return true;

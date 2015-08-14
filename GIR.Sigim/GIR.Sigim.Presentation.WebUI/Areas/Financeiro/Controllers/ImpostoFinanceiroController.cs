@@ -41,6 +41,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 model = new ImpostoFinanceiroViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             var impostoFinanceiro = impostoFinanceiroAppService.ObterPeloId(id) ?? new ImpostoFinanceiroDTO();
 
