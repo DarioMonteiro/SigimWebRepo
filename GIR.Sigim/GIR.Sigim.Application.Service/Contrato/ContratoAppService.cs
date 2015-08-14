@@ -619,7 +619,10 @@ namespace GIR.Sigim.Application.Service.Contrato
             contratoRetificacaoItemMedicao.ContratoRetificacaoItemCronogramaId = dto.ContratoRetificacaoItemCronogramaId;
             contratoRetificacaoItemMedicao.SequencialItem = dto.SequencialItem;
             contratoRetificacaoItemMedicao.SequencialCronograma = dto.SequencialCronograma;
-            contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoAprovacao;
+            if (contratoRetificacaoItemMedicao.Id.HasValue && contratoRetificacaoItemMedicao.Situacao < SituacaoMedicao.Liberado)
+            {
+                contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoAprovacao;
+            }
             contratoRetificacaoItemMedicao.TipoDocumentoId = dto.TipoDocumentoId;
             contratoRetificacaoItemMedicao.NumeroDocumento = dto.NumeroDocumento;
             contratoRetificacaoItemMedicao.DataMedicao = dto.DataMedicao;

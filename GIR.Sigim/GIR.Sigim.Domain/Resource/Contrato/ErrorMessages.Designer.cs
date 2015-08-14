@@ -59,5 +59,14 @@ namespace GIR.Sigim.Domain.Resource.Contrato {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A situação da medição não permite a gravação..
+        /// </summary>
+        internal static string SituacaoNaoPermitida {
+            get {
+                return ResourceManager.GetString("SituacaoNaoPermitida", resourceCulture);
+            }
+        }
     }
 }
