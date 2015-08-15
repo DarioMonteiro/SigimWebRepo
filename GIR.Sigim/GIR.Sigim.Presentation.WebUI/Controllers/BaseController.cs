@@ -44,7 +44,6 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         {
             base.Initialize(requestContext);
             ObterPermissoesUsuario();
-            RemoverPermissoesUsuarioConformeParametros();
         }
 
         private void ObterPermissoesUsuario()
@@ -52,23 +51,6 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             var usuarioAppService = Container.Current.Resolve<IUsuarioAppService>();
             if (Usuario != null)
                 Usuario.Roles = usuarioAppService.ObterPermissoesUsuario(Usuario.Id);
-        }
-
-        private void RemoverPermissoesUsuarioConformeParametros()
-        {
-            if (!this.HttpContext.Request.IsAjaxRequest())
-            {
-                string area = this.ControllerContext.RouteData.DataTokens["area"] as string;
-                switch (area)
-                {
-                    case "OrdemCompra":
-                        var parametrosOrdemCompraAppService = Container.Current.Resolve<IParametrosOrdemCompraAppService>();
-                        var parametrosOrdemCompra = parametrosOrdemCompraAppService.Obter();
-                        if (!parametrosOrdemCompra.EhPreRequisicaoMaterial)
-                            Usuario.Roles = Usuario.Roles.Where(l => l != Funcionalidade.PreRequisicaoMaterialAcessar).ToArray();
-                        break;
-                }
-            }
         }
 
         private static void MergeMessages(MessageQueue messageQueue)
