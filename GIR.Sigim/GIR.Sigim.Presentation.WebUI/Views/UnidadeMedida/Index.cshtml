@@ -97,7 +97,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        //doFilter();
         listarFiltro();
 
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
@@ -123,7 +122,6 @@
             $('#notificationMessages').html(result);
             limpaPaginacao();
             clearForm();
-            //doFilter();
             listarFiltro();
         });
     });
@@ -142,7 +140,6 @@
     function refresh() {
         onSuccess();
         clearForm();
-        //doFilter();
         listarFiltro();
     }
 

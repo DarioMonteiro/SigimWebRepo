@@ -116,6 +116,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                                                              int? usuarioId,
                                                              FormatoExportacaoArquivo formato)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.RelatorioItensOrdemCompraImprimir))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
             var specification = MontarSpecificationRelOCItensOrdemCompra(filtro, usuarioId);
 
             var listaOrdemCompraItem =
