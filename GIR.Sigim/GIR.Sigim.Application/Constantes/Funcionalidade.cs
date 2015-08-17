@@ -51,8 +51,8 @@ namespace GIR.Sigim.Application.Constantes
         public const string ParametroFinanceiroAcessar = "PARAMETRO_FINANCEIRO_ACESSAR";
         public const string ParametroFinanceiroGravar = "PARAMETRO_FINANCEIRO_GRAVAR";
 
-        public const string ParametroUsuarioFinanceiroAcessar = "PARAMETROUSUARIO_FINANCEIRO_ACESSAR";
-        public const string ParametroUsuarioFinanceiroGravar = "PARAMETROUSUARIO_FINANCEIRO_GRAVAR";
+        public const string ParametroUsuarioFinanceiroAcessar = "PARAMETRO_USUARIO_FINANCEIRO_ACESSAR";
+        public const string ParametroUsuarioFinanceiroGravar = "PARAMETRO_USUARIO_FINANCEIRO_GRAVAR";
 
         public const string CaixaAcessar = "CAIXA_ACESSAR";
         public const string CaixaGravar = "CAIXA_GRAVAR";
