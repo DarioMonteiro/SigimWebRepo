@@ -19,6 +19,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
         public SelectList ListaOpcoesPeriodicidade { get; set; }
         public SelectList ListarOpcoesFimDeSemana { get; set; }
         public SelectList ListarOpcoesFatoGerador { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
+        public bool PodeImprimir { get; set; }
 
         public ImpostoFinanceiroViewModel()
         {

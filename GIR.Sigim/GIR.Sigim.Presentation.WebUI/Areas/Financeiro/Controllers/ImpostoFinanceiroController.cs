@@ -43,6 +43,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
+
+            model.PodeSalvar = impostoFinanceiroAppService.EhPermitidoSalvar();
+            model.PodeDeletar = impostoFinanceiroAppService.EhPermitidoDeletar();
+            model.PodeImprimir = impostoFinanceiroAppService.EhPermitidoImprimir();
+
             var impostoFinanceiro = impostoFinanceiroAppService.ObterPeloId(id) ?? new ImpostoFinanceiroDTO();
 
             if (id.HasValue && !impostoFinanceiro.Id.HasValue)
