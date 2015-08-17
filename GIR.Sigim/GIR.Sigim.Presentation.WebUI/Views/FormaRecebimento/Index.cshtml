@@ -67,10 +67,24 @@
                         </fieldset>
                     </div>
                     <footer>                       
-                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                        @{
+                        string disableBtnDeletar = string.Empty;
+                            if (!Model.PodeDeletar)
+                            {
+                                disableBtnDeletar = "disabled";
+                            }
+                        }
+                        <button type="button" id="btnDeletar" class="btn btn-primary @disableBtnDeletar">
                             Deletar
                         </button>
-                        <button type="submit" id="btnSalvar" class="btn btn-primary">
+                        @{
+                            string disableBtnSalvar = string.Empty;
+                            if (!Model.PodeSalvar)
+                            {
+                                disableBtnSalvar = "disabled";
+                            }
+                        }
+                        <button type="submit" id="btnSalvar" class="btn btn-primary @disableBtnSalvar">
                             Salvar
                         </button>
                     </footer>
@@ -186,20 +200,51 @@
     }
 
     function tratarBotoes(condicaoSalvar, condicaoDeletar) {
-         $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
-         $("#@Html.IdFor(m => m.PodeDeletar)").val(condicaoDeletar);
-         if (condicaoSalvar) {
-             document.getElementById('btnSalvar').className = "btn btn-primary right";
-         }
-         else {
-             document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
-         }
-         if (condicaoDeletar) {
-             document.getElementById('btnDeletar').className = "btn btn-primary";
-         }
-         else {
-             document.getElementById('btnDeletar').className = "btn btn-primary disabled";
-         }
+        @{
+            bool? podeSalvar = Model.PodeSalvar as bool? ?? false;
+        }
+
+        @{
+            bool? podeDeletar = Model.PodeDeletar as bool? ?? false;
+        }
+
+@*        @{
+            bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
+        }*@
+
+        @if(podeSalvar.ToString().ToLower() == "false"){
+            @:condicaoSalvar = false;
+        }
+
+        @if(podeDeletar.ToString().ToLower() == "false"){
+            @:condicaoDeletar = false;
+        }
+
+@*        @if(podeImprimir.ToString().ToLower() == "false"){
+            @:condicaoImprimir = false;
+        }*@
+
+
+        if (condicaoSalvar) {
+            document.getElementById('btnSalvar').className = "btn btn-primary right";
+        }
+        else {
+            document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
+        }
+        if (condicaoDeletar) {
+            document.getElementById('btnDeletar').className = "btn btn-primary";
+        }
+        else {
+            document.getElementById('btnDeletar').className = "btn btn-primary disabled";
+        }
+
+        //if (condicaoImprimir) {
+        //    document.getElementById('btnImprimir').className = "btn btn-primary";
+        //}
+        //else {
+        //    document.getElementById('btnImprimir').className = "btn btn-primary disabled";
+        //}
+
     }
 
     function listarFiltro() {
