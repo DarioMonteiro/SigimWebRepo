@@ -192,6 +192,7 @@
         })
         .success(function (result) {
             $('#notificationMessages').html(result);
+            limpaPaginacao();
             clearForm();
             listarFiltro();
         });
@@ -278,6 +279,10 @@
             goToTop();
         });
     }
+
+    function limpaPaginacao() {
+        $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
+    };
 
     function listarFiltro() {
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
