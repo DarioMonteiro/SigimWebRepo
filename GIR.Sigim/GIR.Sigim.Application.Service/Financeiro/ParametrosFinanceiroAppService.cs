@@ -11,6 +11,7 @@ using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -40,6 +41,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public void Salvar(ParametrosFinanceiroDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.ParametroFinanceiroGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return;
+            }
+
             if (dto == null)
                 throw new ArgumentNullException("dto");
 
@@ -67,6 +74,15 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
             }
         }
+
+        public bool EhPermitidoSalvar()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.ParametroFinanceiroGravar))
+                return false;
+
+            return true;
+        }
+
 
         private void PreencherCheckBoxBloqueioSituacaoLiberado(ParametrosFinanceiroDTO parametros)
         {
