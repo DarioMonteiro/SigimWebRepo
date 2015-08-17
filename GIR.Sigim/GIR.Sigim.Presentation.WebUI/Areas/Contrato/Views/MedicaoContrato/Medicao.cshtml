@@ -569,13 +569,13 @@
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                             @{
-                                string disableBtnCancelar = string.Empty;
-                                if (!Model.PodeCancelar)
+                                string disableBtnDeletar = string.Empty;
+                                if (!Model.PodeDeletar)
                                 {
-                                    disableBtnCancelar = "disabled";
+                                    disableBtnDeletar = "disabled";
                                 }
                             }
-                            <a data-toggle="modal" id="btnCancelar" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
+                            <a data-toggle="modal" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">Deletar</a>
 
                             @{
                                 var url = Url.Action("Imprimir","MedicaoContrato");
@@ -778,14 +778,14 @@
         });
 
 
-        $("#btnCancelar").on("click", function () {
+        $("#btnDeletar").on("click", function () {
             var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
             var id = $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)').val();
             var isCancelou = false;
 
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("Cancelar", "MedicaoContrato")',
+                url: '@Url.Action("Deletar", "MedicaoContrato")',
                 cache: false,
                 async: false,
                 contentType: 'application/json; charset=utf-8',
@@ -805,6 +805,9 @@
                 else {
                     smartAlert("Ocorreu erro na exclusão", result.message, "error");
                 }
+            })
+            .error(function (result) {
+                smartAlert("Erro", "Ocorreu erro na exclusão da medição !", "error");
             });
         });
     });
@@ -1051,10 +1054,10 @@
         }
     }
 
-    function tratarBotoes(condicaoSalvar, condicaoCancelar, condicaoImprimir) {
+    function tratarBotoes(condicaoSalvar, condicaoDeletar, condicaoImprimir) {
         @{
             bool? podeSalvar = Model.PodeSalvar as bool? ?? false;
-            bool? podeCancelar = Model.PodeCancelar as bool? ?? false;
+            bool? podeDeletar = Model.PodeDeletar as bool? ?? false;
             bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
         }
         
@@ -1062,9 +1065,9 @@
             @:condicaoSalvar = false;
         }
         
-        @if (podeCancelar.ToString().ToLower() == "false")
+        @if (podeDeletar.ToString().ToLower() == "false")
         {
-            @:condicaoCancelar = false;
+            @:condicaoDeletar = false;
         }
 
         @if (podeImprimir.ToString().ToLower() == "false")
@@ -1080,11 +1083,11 @@
             document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
         }
 
-        if (condicaoCancelar) {
-            document.getElementById('btnCancelar').className = "btn btn-danger";
+        if (condicaoDeletar) {
+            document.getElementById('btnDeletar').className = "btn btn-danger";
         }
         else {
-            document.getElementById('btnCancelar').className = "btn btn-danger disabled";
+            document.getElementById('btnDeletar').className = "btn btn-danger disabled";
         }
 
         if (condicaoImprimir) {
