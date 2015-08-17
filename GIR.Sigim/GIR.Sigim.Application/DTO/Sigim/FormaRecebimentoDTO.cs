@@ -16,6 +16,7 @@ namespace GIR.Sigim.Application.DTO.Sigim
 
         public bool Automatico { get; set; }
 
+        [Required]
         [Display(Name = "Tipo")]
         public string TipoRecebimento { get; set; }
         public string TipoRecebimentoDescricao
