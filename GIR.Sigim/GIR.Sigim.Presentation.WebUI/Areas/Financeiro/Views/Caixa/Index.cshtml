@@ -106,6 +106,37 @@
     $(document).ready(function () {
         listarFiltro();
 
+        jQuery.validator.addMethod(
+            "centroCustoValido",
+            function (value, element) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.centroCustoValido = getErrorMessageContainer(element.name).html();
+                return isValid;
+            }, ''
+        );
+
+        $('#formCadastro').validate({
+            rules: {
+                '@Html.NameFor(m => m.Caixa.CentroCusto.Codigo)': {
+                    centroCustoValido: true
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
+        });
+
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
                 listarFiltro();
