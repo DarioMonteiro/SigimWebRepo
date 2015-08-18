@@ -21,7 +21,7 @@
                         "ParametrosUsuarioFinanceiro",
                         null,
                         new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
-                        new { @class = "smart-form client-form", @novalidate = "novalidate" }))
+                        new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
                         <fieldset>
@@ -50,7 +50,14 @@
                             </div>
                         </fieldset>
                         <footer>
-                            <button type="submit" class="btn btn-primary">
+                            @{
+                                string disableBtnSalvar = string.Empty;
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
+                            }
+                            <button type="submit" class="btn btn-primary @disableBtnSalvar">
                                 Salvar
                             </button>
                         </footer>

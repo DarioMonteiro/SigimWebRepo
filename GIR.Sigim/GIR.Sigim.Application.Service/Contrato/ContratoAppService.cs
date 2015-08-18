@@ -583,7 +583,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             return true;
         }
 
-        public bool EhPermitidoCancelarMedicao()
+        public bool EhPermitidoDeletarMedicao()
         {
             if (!UsuarioLogado.IsInRole(Funcionalidade.MedicaoDeletar))
                 return false;

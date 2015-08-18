@@ -140,7 +140,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             CarregarCombosMedicao(model);
 
             model.PodeSalvar = contratoAppService.EhPermitidoSalvarMedicao();
-            model.PodeCancelar = contratoAppService.EhPermitidoCancelarMedicao();
+            model.PodeDeletar = contratoAppService.EhPermitidoDeletarMedicao();
             model.PodeImprimir = contratoAppService.EhPermitidoImprimirMedicao();
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
@@ -341,7 +341,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         }
 
         [HttpPost]
-        public ActionResult Cancelar(int? id,int? contratoId)
+        public ActionResult Deletar(int? id,int? contratoId)
         {
             bool cancelou = false;
 

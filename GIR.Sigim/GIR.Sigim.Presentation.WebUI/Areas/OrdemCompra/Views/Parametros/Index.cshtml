@@ -467,11 +467,8 @@
             }
             else {
                 $('#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)').prop('disabled', true);
+                $("#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)").prop('checked', false);
             }
-
-            $("#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)").val(false);
-            $("#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)").prop('checked', false);
-
         }
 
     </script>

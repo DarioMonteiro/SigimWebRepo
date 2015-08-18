@@ -18,5 +18,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
         List<ItemListaDTO> ListarOpcoesPeriodicidade();
         List<ItemListaDTO> ListarOpcoesFimDeSemana();
         List<ItemListaDTO> ListarOpcoesFatoGerador();
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
     }
 }

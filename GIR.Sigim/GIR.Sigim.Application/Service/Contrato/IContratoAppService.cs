@@ -28,7 +28,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool ExcluirMedicao(int? contratoId, int? contratoRetificacaoItemMedicaoId);
         bool SalvarMedicao(ContratoRetificacaoItemMedicaoDTO dto);
         bool EhPermitidoSalvarMedicao();
-        bool EhPermitidoCancelarMedicao();
+        bool EhPermitidoDeletarMedicao();
         bool EhPermitidoImprimirMedicao();
     }
 }

@@ -37,6 +37,10 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
+            model.PodeSalvar = formaRecebimentoAppService.EhPermitidoSalvar();
+            model.PodeDeletar = formaRecebimentoAppService.EhPermitidoDeletar();
+            model.PodeImprimir = formaRecebimentoAppService.EhPermitidoImprimir();
+
             model.PodeHabilitarNumeroDias = false;
 
             var formaRecebimento = formaRecebimentoAppService.ObterPeloId(id) ?? new FormaRecebimentoDTO();

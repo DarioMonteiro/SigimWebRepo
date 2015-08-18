@@ -53,7 +53,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public bool EhSituacaoLiberado { get; set; }
 
         public bool PodeSalvar { get; set; }
-        public bool PodeCancelar { get; set; }
+        public bool PodeDeletar { get; set; }
         public bool PodeImprimir { get; set; }
 
         [Display(Name = "Preço unitário")]

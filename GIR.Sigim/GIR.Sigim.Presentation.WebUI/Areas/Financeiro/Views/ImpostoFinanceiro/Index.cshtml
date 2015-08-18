@@ -121,10 +121,24 @@
                         </fieldset>
                     </div>
                     <footer>
-                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                        @{
+                        string disableBtnDeletar = string.Empty;
+                            if (!Model.PodeDeletar)
+                            {
+                                disableBtnDeletar = "disabled";
+                            }
+                        }
+                        <button type="button" id="btnDeletar" class="btn btn-primary @disableBtnDeletar">
                             Deletar
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        @{
+                            string disableBtnSalvar = string.Empty;
+                            if (!Model.PodeSalvar)
+                            {
+                                disableBtnSalvar = "disabled";
+                            }
+                        }
+                        <button type="submit" class="btn btn-primary @disableBtnSalvar">
                             Salvar
                         </button>
                     </footer>
@@ -178,6 +192,7 @@
         })
         .success(function (result) {
             $('#notificationMessages').html(result);
+            limpaPaginacao();
             clearForm();
             listarFiltro();
         });
@@ -264,6 +279,10 @@
             goToTop();
         });
     }
+
+    function limpaPaginacao() {
+        $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
+    };
 
     function listarFiltro() {
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
