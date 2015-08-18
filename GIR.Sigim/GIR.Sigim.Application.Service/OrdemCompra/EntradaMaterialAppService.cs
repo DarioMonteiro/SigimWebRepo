@@ -301,9 +301,10 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         {
             var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId, UsuarioLogado.Id,
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
-                l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
+                l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar.Select(s => s.TituloPagarImposto)),
                 l => l.ListaImposto,
-                l => l.ListaMovimentoEstoque);
+                l => l.ListaMovimentoEstoque,
+                l => l.TituloFrete);
 
             return EhCancelamentoPossivel(entradaMaterial);
         }
@@ -765,10 +766,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private bool JaHouvePagamentoEfetuado(EntradaMaterial entradaMaterial)
         {
+            int? tituloPagarId;
             foreach (var formaPagamento in entradaMaterial.ListaFormaPagamento)
             {
-                int? tituloPagarId;
-
                 if (PossuiTituloPago(formaPagamento.TituloPagar, out tituloPagarId))
                 {
                     var msg = string.Format(Resource.OrdemCompra.ErrorMessages.TituloEstaPago, tituloPagarId.ToString());
@@ -784,6 +784,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 }
             }
 
+            if (PossuiTituloPago(entradaMaterial.TituloFrete, out tituloPagarId))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.TituloFreteEstaPago, tituloPagarId.ToString());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return true;
+            }
+
             return false;
         }
 
@@ -794,12 +801,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 foreach (var item in tituloPagar.ListaImpostoPagar)
                 {
-                    if (item.TituloPagar.TipoTitulo == TipoTitulo.Pai)
+                    if (item.TituloPagarImposto.TipoTitulo == TipoTitulo.Pai)
                     {
-                        if (PossuiTituloDesdobradoPago(item.TituloPagar.ListaFilhos, out tituloPagarId))
+                        if (PossuiTituloDesdobradoPago(item.TituloPagarImposto.ListaFilhos, out tituloPagarId))
                             return true;
                     }
-                    else if (EhTituloPago(item.TituloPagar, out tituloPagarId))
+                    else if (EhTituloPago(item.TituloPagarImposto, out tituloPagarId))
                         return true;
                 }
             }

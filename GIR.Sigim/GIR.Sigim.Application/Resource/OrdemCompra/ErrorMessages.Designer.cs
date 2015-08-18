@@ -160,6 +160,15 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O título de frete {0}, já está pago..
+        /// </summary>
+        public static string TituloFreteEstaPago {
+            get {
+                return ResourceManager.GetString("TituloFreteEstaPago", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O título de imposto {0}, já está pago..
         /// </summary>
         public static string TituloImpostoEstaPago {

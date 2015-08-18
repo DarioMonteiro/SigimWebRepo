@@ -150,6 +150,9 @@
   <data name="TituloEstaPago" xml:space="preserve">
     <value>O título {0}, já está pago.</value>
   </data>
+  <data name="TituloFreteEstaPago" xml:space="preserve">
+    <value>O título de frete {0}, já está pago.</value>
+  </data>
   <data name="TituloImpostoEstaPago" xml:space="preserve">
     <value>O título de imposto {0}, já está pago.</value>
   </data>
