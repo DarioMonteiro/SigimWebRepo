@@ -7,6 +7,7 @@ using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros;
+using GIR.Sigim.Application.Service.Financeiro;
 using GIR.Sigim.Application.Service.OrdemCompra;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
@@ -20,13 +21,34 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
     public class EntradaMaterialController : BaseController
     {
         private IEntradaMaterialAppService entradaMaterialAppService;
+        private ITipoDocumentoAppService tipoDocumentoAppService;
+        private ITipoCompraAppService tipoCompraAppService;
+        private ICifFobAppService cifFobAppService;
+        private INaturezaOperacaoAppService naturezaOperacaoAppService;
+        private ISerieNFAppService serieNFAppService;
+        private ICSTAppService CSTAppService;
+        private ICodigoContribuicaoAppService codigoContribuicaoAppService;
 
         public EntradaMaterialController(
             IEntradaMaterialAppService entradaMaterialAppService,
+            ITipoDocumentoAppService tipoDocumentoAppService,
+            ITipoCompraAppService tipoCompraAppService,
+            ICifFobAppService cifFobAppService,
+            INaturezaOperacaoAppService naturezaOperacaoAppService,
+            ISerieNFAppService serieNFAppService,
+            ICSTAppService CSTAppService,
+            ICodigoContribuicaoAppService codigoContribuicaoAppService,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.entradaMaterialAppService = entradaMaterialAppService;
+            this.tipoDocumentoAppService = tipoDocumentoAppService;
+            this.tipoCompraAppService = tipoCompraAppService;
+            this.cifFobAppService = cifFobAppService;
+            this.naturezaOperacaoAppService = naturezaOperacaoAppService;
+            this.serieNFAppService = serieNFAppService;
+            this.CSTAppService = CSTAppService;
+            this.codigoContribuicaoAppService = codigoContribuicaoAppService;
         }
 
         [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
@@ -101,9 +123,41 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             //model.PodeEditarItem = requisicaoMaterialAppService.EhPermitidoEditarItem(entradaMaterial);
             //model.PodeAprovarRequisicao = requisicaoMaterialAppService.EhPermitidoAprovarRequisicao(entradaMaterial);
             //model.PodeCancelarAprovacao = requisicaoMaterialAppService.EhPermitidoCancelarAprovacao(entradaMaterial);
-            //model.PodeEditarCentroCusto = requisicaoMaterialAppService.EhPermitidoEditarCentroCusto(entradaMaterial);
+            model.PodeEditarCentroCusto = entradaMaterialAppService.EhPermitidoEditarCentroCusto(entradaMaterial);
+            model.PodeEditarFornecedor = entradaMaterialAppService.EhPermitidoEditarFornecedor(entradaMaterial);
+            CarregarCombos(model);
 
             return View(model);
+        }
+
+        private void CarregarCombos(EntradaMaterialCadastroViewModel model)
+        {
+            int? tipoNotaFiscalId = null;
+            string CodigoTipoCompra = null;
+            int? CifFobId = null;
+            string CodigoNaturezaOperacao = null;
+            int? SerieNFId = null;
+            string CodigoCST = null;
+            string CodigoContribuicaoId = null;
+
+            if (model.EntradaMaterial != null)
+            {
+                tipoNotaFiscalId = model.EntradaMaterial.TipoNotaFiscalId;
+                CodigoTipoCompra = model.EntradaMaterial.CodigoTipoCompra;
+                CifFobId = model.EntradaMaterial.CifFobId;
+                CodigoNaturezaOperacao = model.EntradaMaterial.CodigoNaturezaOperacao;
+                SerieNFId = model.EntradaMaterial.SerieNFId;
+                CodigoCST = model.EntradaMaterial.CodigoCST;
+                CodigoContribuicaoId = model.EntradaMaterial.CodigoContribuicaoId;
+            }
+
+            model.ListaTipoNotaFiscal = new SelectList(tipoDocumentoAppService.ListarTodos(), "Id", "Sigla", tipoNotaFiscalId);
+            model.ListaTipoCompra = new SelectList(tipoCompraAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
+            model.ListaCifFob = new SelectList(cifFobAppService.ListarTodos(), "Id", "Descricao", tipoNotaFiscalId);
+            model.ListaNaturezaOperacao = new SelectList(naturezaOperacaoAppService.ListarTodos(), "Codigo", "CodigoComDescricao", tipoNotaFiscalId);
+            model.ListaSerieNF = new SelectList(serieNFAppService.ListarTodos(), "Id", "Descricao", tipoNotaFiscalId);
+            model.ListaCST = new SelectList(CSTAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
+            model.ListaCodigoContribuicao = new SelectList(codigoContribuicaoAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
         }
 
         [HttpPost]

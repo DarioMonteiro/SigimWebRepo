@@ -70,7 +70,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                         model.Parametros.IconeRelatorio = memoryStream.ToArray();
                     }
                 }
-                parametrosAppService.Salvar(model.Parametros);
+                if (parametrosAppService.Salvar(model.Parametros))
+                    return PartialView("Redirect", Url.Action("Index", "Parametros", new { area = "OrdemCompra" }));
             }
 
             return PartialView("_NotificationMessagesPartial");

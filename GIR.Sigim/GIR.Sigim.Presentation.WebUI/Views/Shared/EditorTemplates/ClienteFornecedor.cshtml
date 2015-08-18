@@ -124,6 +124,10 @@
 
 
 <script type="text/javascript">
+    @{
+        bool? podeEdidar = ViewBag.podeEdidar as bool? ?? true;
+    }
+
     var clienteFornecedorModulo_@(uniqueIdentifier);
     var situacao_@(uniqueIdentifier);
     var tipoPessoa_@(uniqueIdentifier);
@@ -137,6 +141,14 @@
     }
    
     $(document).ready(function () {
+        @if (!podeEdidar.Value)
+        {
+            @:$("#@Html.IdFor(m => m.Nome)").attr("readonly", true);
+            @:$("#@Html.IdFor(m => m.Nome)").addClass("readonly");
+            @:$("#BtnShowModalPanel_@(uniqueIdentifier)").attr('href', 'javascript:void(0);');
+            @:$("#BtnShowModalPanel_@(uniqueIdentifier)").removeAttr('data-toggle');
+        }
+
         $("#@Html.IdFor(m => m.Nome)").autocomplete({        
             source: function (request, response) {
                 $.ajax({
