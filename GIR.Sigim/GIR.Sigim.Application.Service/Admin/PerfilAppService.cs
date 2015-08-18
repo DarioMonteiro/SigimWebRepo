@@ -16,6 +16,7 @@ using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Domain.Specification.Admin;
 using GIR.Sigim.Application.Filtros.Admin;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Admin
 {
@@ -61,6 +62,12 @@ namespace GIR.Sigim.Application.Service.Admin
 
         public bool Salvar(PerfilDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PerfilGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (dto == null)
                 throw new ArgumentNullException("dto");
 
@@ -110,6 +117,12 @@ namespace GIR.Sigim.Application.Service.Admin
 
         public bool Deletar(int? id)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PerfilDeletar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (id == null)
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
@@ -135,6 +148,22 @@ namespace GIR.Sigim.Application.Service.Admin
                 messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.RegistroEmUso, perfil.Descricao), TypeMessage.Error);
                 return false;
             }
+        }
+
+        public bool EhPermitidoSalvar()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PerfilGravar))
+                return false;
+
+            return true;
+        }
+
+        public bool EhPermitidoDeletar()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.PerfilDeletar))
+                return false;
+
+            return true;
         }
 
         #endregion

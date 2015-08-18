@@ -15,7 +15,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.ViewModel
     public class PerfilViewModel
     {
         public PerfilFiltro Filtro { get; set; }
-
         public PerfilDTO Perfil { get; set; }
 
         //[Display(Name = "Módulo")]
@@ -24,8 +23,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.ViewModel
         public string JsonFuncionalidadesModulo { get; set; }
         public string JsonFuncionalidadesPerfil { get; set; }
         public string[] FuncionalidadeMarcada { get; set; }
-
         public SelectList ListaModulo { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
 
         public PerfilViewModel()
         {

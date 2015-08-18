@@ -72,10 +72,24 @@
                     </div>
                     <footer>
                         @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
-                        <button type="button" id="btnDeletar" class="btn btn-danger">
+                        @{
+                            string disableBtnDeletar = string.Empty;
+                            if (!Model.PodeDeletar)
+                            {
+                                disableBtnDeletar = "disabled";
+                            }
+                        }
+                        <button type="button" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">
                             Deletar
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        @{
+                            string disableBtnSalvar = string.Empty;
+                            if (!Model.PodeSalvar)
+                            {
+                                disableBtnSalvar = "disabled";
+                            }
+                        }
+                        <button type="submit" class="btn btn-primary @disableBtnSalvar">
                             Salvar
                         </button>
                     </footer>
