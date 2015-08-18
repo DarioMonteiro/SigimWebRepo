@@ -190,7 +190,6 @@ namespace GIR.Sigim.Infrastructure.Data.Test
         {
             var unitOfWork = new UnitOfWork();
             IRepository<Usuario> usuarioRepository = new Repository<Usuario>(unitOfWork);
-            IRepository<Funcionalidade> funcionalidadeRepository = new Repository<Funcionalidade>(unitOfWork);
 
             var usuario = new Usuario()
             {
@@ -319,7 +318,6 @@ namespace GIR.Sigim.Infrastructure.Data.Test
             //var usuario = usuarioRepository.ObterPeloId(1, l => l.ListaFuncionalidade.Select(f => f.Modulo), l => l.ListaPerfil.Select(f => f.ListaFuncionalidade));
             var usuario = usuarioRepository.ObterPeloId(1);
             ITypeAdapter adapter = TypeAdapterFactory.Create();
-            Mapper.CreateMap<Funcionalidade, FuncionalidadeDTO>();
             Mapper.CreateMap<Modulo, ModuloDTO>();
             Mapper.CreateMap<Perfil, PerfilDTO>();
             Mapper.CreateMap<Usuario, UsuarioDTO>();

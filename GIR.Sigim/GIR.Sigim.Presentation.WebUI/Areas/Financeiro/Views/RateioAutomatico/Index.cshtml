@@ -78,7 +78,7 @@
                         </fieldset>
                     </div>
                     <footer>
-                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                        <button type="button" id="btnDeletar" class="btn btn-danger">
                             Deletar
                         </button>
                         <button type="submit" class="btn btn-primary">
@@ -215,6 +215,7 @@
 
     function fillTable()
     {
+        var totalPercentual = 0;
         $("#tableItens tbody").empty();
         for (var intIndex = 0; intIndex < jsonItemArray.length; intIndex++) {
             var row = $('<tr />')
@@ -223,10 +224,19 @@
             var chkDisabled = '';
             var labelClass = 'checkbox';
             row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + intIndex + '" ' + chkDisabled + '><i></i>' + '' + '</label></td>'));
-            row.append($('<td class="text-left">' + jsonItemArray[intIndex].Classe.Codigo + ' - ' + jsonItemArray[intIndex].Classe.Descricao + '</td>'));
+            row.append($('<td class="text-left" onclick="loadItem(' + intIndex + ');">' + jsonItemArray[intIndex].Classe.Codigo + ' - ' + jsonItemArray[intIndex].Classe.Descricao + '</td>'));
             row.append($('<td class="text-left">' + jsonItemArray[intIndex].CentroCusto.Codigo + ' - ' + jsonItemArray[intIndex].CentroCusto.Descricao + '</td>'));
-            row.append($('<td class="text-right" onclick="loadItem(' + intIndex + ');">' + roundDecimal(floatToString(jsonItemArray[intIndex].Percentual), 5) + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItemArray[intIndex].Percentual), 5) + '</td>'));
+            totalPercentual = totalPercentual + jsonItemArray[intIndex].Percentual;
         }
+        var row = $('<tr />');
+        $("#tableItens tbody").append(row);
+        row.append($('<td style="font-size:12px; line-height: 1.42857143;">Total</td>'));
+        row.append($('<td></td>'));
+        row.append($('<td></td>'));
+        row.append($('<td class="text-right">' + roundDecimal(floatToString(totalPercentual), 5) + '</td>'));
+        var row = $('<tr />')
+        $("#tableItens tbody").append(row);
     }
 
     function addItem()

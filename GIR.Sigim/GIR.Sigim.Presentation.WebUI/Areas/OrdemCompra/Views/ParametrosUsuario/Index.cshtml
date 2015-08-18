@@ -46,7 +46,14 @@
                             </div>
                         </fieldset>
                         <footer>
-                            <button type="submit" class="btn btn-primary">
+                            @{
+                                string disableBtnSalvar = string.Empty;
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
+                            }
+                            <button type="submit" class="btn btn-primary @disableBtnSalvar">
                                 Salvar
                             </button>
                         </footer>

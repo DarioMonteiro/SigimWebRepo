@@ -38,6 +38,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -48,6 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Admin\UsuarioPerfilConfiguration.cs" />
+    <Compile Include="Configuration\Admin\UsuarioFuncionalidadeConfiguration.cs" />
+    <Compile Include="Configuration\Admin\PerfilFuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemConfiguration.cs" />
@@ -59,10 +71,19 @@
     <Compile Include="Configuration\Contrato\LicitacaoDescricaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\LicitacaoCronogramaConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ParametrosContratoConfiguration.cs" />
+    <Compile Include="Configuration\Estoque\MovimentoItemConfiguration.cs" />
+    <Compile Include="Configuration\Estoque\EstoqueConfiguration.cs" />
+    <Compile Include="Configuration\Estoque\EstoqueMaterialConfiguration.cs" />
+    <Compile Include="Configuration\Estoque\MovimentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\AbstractTituloConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ClasseConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CaixaConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\ApropriacaoConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\HistoricoContabilConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\TipoMovimentoConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\ImpostoPagarConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\TaxaAdministracaoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\RateioAutomaticoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ImpostoFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\MotivoCancelamentoConfiguration.cs" />
@@ -71,6 +92,7 @@
     <Compile Include="Configuration\Financeiro\TipoCompromissoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoDocumentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoRateioConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\TituloPagarAdiantamentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloPagarConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloReceberConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoComposicaoItemConfiguration.cs" />
@@ -81,6 +103,11 @@
     <Compile Include="Configuration\Orcamento\OrcamentoInsumoRequisitadoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialItemConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\OrdemCompraFormaPagamentoConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\EntradaMaterialImpostoConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\EntradaMaterialFormaPagamentoConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\EntradaMaterialItemConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\EntradaMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\OrdemCompraItemConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\OrdemCompraConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\CotacaoConfiguration.cs" />
@@ -101,6 +128,8 @@
     <Compile Include="Configuration\Sigim\ClienteFornecedorConfiguration.cs" />
     <Compile Include="Configuration\Sigim\CodigoContribuicaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ComposicaoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\AvaliacaoModeloConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\AvaliacaoFornecedorConfiguration.cs" />
     <Compile Include="Configuration\Sigim\LogAcessoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AgenciaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ContaCorrenteConfiguration.cs" />
@@ -133,19 +162,34 @@
     <Compile Include="Configuration\Sigim\MaterialClasseInsumoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\MaterialConfiguration.cs" />
     <Compile Include="Configuration\Sigim\UsuarioCentroCustoConfiguration.cs" />
+    <Compile Include="IoC\AdminBootstraper.cs" />
+    <Compile Include="IoC\Bootstrapper.cs" />
+    <Compile Include="IoC\ContratoBootstraper.cs" />
+    <Compile Include="IoC\SigimBootstraper.cs" />
+    <Compile Include="IoC\SacBootstraper.cs" />
+    <Compile Include="IoC\OrdemCompraBootstraper.cs" />
+    <Compile Include="IoC\OrcamentoBootstraper.cs" />
+    <Compile Include="IoC\FinanceiroBootstraper.cs" />
+    <Compile Include="IoC\EstoqueBootstraper.cs" />
     <Compile Include="IQueryableUnitOfWork.cs" />
     <Compile Include="Configuration\Admin\UsuarioConfiguration.cs" />
     <Compile Include="Configuration\Admin\PerfilConfiguration.cs" />
     <Compile Include="Configuration\Admin\ModuloConfiguration.cs" />
-    <Compile Include="Configuration\Admin\FuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CentroCustoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\ParametrosUsuarioConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\Admin\PerfilFuncionalidadeRepository.cs" />
+    <Compile Include="Repository\Admin\ModuloRepository.cs" />
+    <Compile Include="Repository\Admin\PerfilRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
-    <Compile Include="Repository\Contrato\ContratoRetificacaoItemRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
+    <Compile Include="Repository\Estoque\EstoqueRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
+    <Compile Include="Repository\Financeiro\ApropriacaoRepository.cs" />
+    <Compile Include="Repository\Financeiro\TipoMovimentoRepository.cs" />
+    <Compile Include="Repository\Financeiro\HistoricoContabilRepository.cs" />
+    <Compile Include="Repository\Financeiro\TaxaAdministracaoRepository.cs" />
     <Compile Include="Repository\Financeiro\RateioAutomaticoRepository.cs" />
     <Compile Include="Repository\Financeiro\ImpostoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoRateioRepository.cs" />
@@ -159,6 +203,8 @@
     <Compile Include="Repository\Orcamento\OrcamentoRepository.cs" />
     <Compile Include="Repository\Orcamento\ParametrosOrcamentoRepository.cs" />
     <Compile Include="Repository\Financeiro\CentroCustoRepository.cs" />
+    <Compile Include="Repository\OrdemCompra\EntradaMaterialRepository.cs" />
+    <Compile Include="Repository\OrdemCompra\OrdemCompraItemRepository.cs" />
     <Compile Include="Repository\OrdemCompra\RequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\PreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\ParametrosOrdemCompraRepository.cs" />
@@ -179,6 +225,7 @@
     <Compile Include="Repository\Sigim\ContaCorrenteRepository.cs" />
     <Compile Include="Repository\Sigim\LogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\FormaRecebimentoRepository.cs" />
+    <Compile Include="Repository\Sigim\MaterialClasseInsumoRepository.cs" />
     <Compile Include="Repository\Sigim\TratamentoRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCaracteristicaRepository.cs" />
     <Compile Include="Repository\Sigim\TipoEspecificacaoRepository.cs" />
@@ -207,6 +254,10 @@
     <ProjectReference Include="..\GIR.Sigim.Domain\GIR.Sigim.Domain.csproj">
       <Project>{1235e084-57fe-4dc3-9858-63c7063003b2}</Project>
       <Name>GIR.Sigim.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting.IoC\GIR.Sigim.Infrastructure.Crosscutting.IoC.csproj">
+      <Project>{b581e80a-8ed7-4b76-b24a-b3332020cf56}</Project>
+      <Name>GIR.Sigim.Infrastructure.Crosscutting.IoC</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

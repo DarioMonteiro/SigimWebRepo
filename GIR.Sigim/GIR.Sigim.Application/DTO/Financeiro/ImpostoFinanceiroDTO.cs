@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Application.Adapter;
 
 namespace GIR.Sigim.Application.DTO.Financeiro
 {
@@ -58,15 +60,38 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         [Display(Name = "Periodicidade")]
         public int? Periodicidade { get; set; }
 
+        public string PeriodicidadeDescricao
+        { get {return RecuperaDescricao(typeof(PeriodicidadeImpostoFinanceiro).ToItemListaDTO(), Periodicidade);}}
+
         [Display(Name = "Fim de semana")]
         public int? FimDeSemana { get; set; }
+
+        public string FimDeSemanaDescricao
+        {get {return RecuperaDescricao(typeof(FimDeSemanaImpostoFinanceiro).ToItemListaDTO(), FimDeSemana);}}
 
         [Display(Name = "Fato gerador")]
         public int? FatoGerador { get; set; }
 
+        public string FatoGeradorDescricao
+        {get {return RecuperaDescricao(typeof(FatoGeradorImpostoFinanceiro).ToItemListaDTO(), FatoGerador);}}
+
         [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Dia do vencimento")]
         public Int16? DiaVencimento { get; set; }
+
+        public string RecuperaDescricao(List<ItemListaDTO> lista, int? Id)
+        {
+            ItemListaDTO retorno;
+            if (Id.HasValue)
+            {
+                retorno = lista.Where(l => l.Id == Id).ToList()[0];
+                return retorno != null ? retorno.Descricao : "";
+            }
+            else 
+            {
+                return "";
+            }
+        }
 
     }
 }

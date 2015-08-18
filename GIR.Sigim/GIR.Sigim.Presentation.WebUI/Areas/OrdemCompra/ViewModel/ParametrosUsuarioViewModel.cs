@@ -11,5 +11,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
     public class ParametrosUsuarioViewModel
     {
         public ParametrosUsuarioDTO ParametrosUsuario { get; set; }
+        public bool PodeSalvar { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -32,7 +33,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.tipoCompromissoAppService = tipoCompromissoAppService;
         }
 
-      
+        [Authorize(Roles = Funcionalidade.ImpostoFinanceiroAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as ImpostoFinanceiroViewModel;
@@ -40,7 +41,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 model = new ImpostoFinanceiroViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
+
+            model.PodeSalvar = impostoFinanceiroAppService.EhPermitidoSalvar();
+            model.PodeDeletar = impostoFinanceiroAppService.EhPermitidoDeletar();
+            model.PodeImprimir = impostoFinanceiroAppService.EhPermitidoImprimir();
+
             var impostoFinanceiro = impostoFinanceiroAppService.ObterPeloId(id) ?? new ImpostoFinanceiroDTO();
 
             if (id.HasValue && !impostoFinanceiro.Id.HasValue)

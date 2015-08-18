@@ -1,26 +1,28 @@
 ﻿@model GIR.Sigim.Application.Filtros.PaginationParameters
 
 <script type="text/javascript">
-    function doFilter() {
-        $('#formFilter').submit();
-    }
-        
-    function changePageSize() {
-        $('#@Html.IdFor(m => m.PageSize)').val($('#pageSizeSelector').val());
-        goToPage(0);
+    function doFilter@(Model.UniqueIdentifier)() {
+        $.event.trigger({
+            type: "doFilter@(Model.UniqueIdentifier)"
+        });
     }
 
-    function goToPage(index) {
+    function goToPage@(Model.UniqueIdentifier)(index) {
         $('#@Html.IdFor(m => m.PageIndex)').val(index);
-        doFilter();
+        doFilter@(Model.UniqueIdentifier)();
     }
 
     $(document).ready(function () {
-        $("#btnSearch").click(function (e) {
+        $(".btnSearchWithPagination").click(function (e) {
             e.preventDefault();
         });
 
-        $(document).on("click", "#tableSearchResult th.sorting", function () {
+        $(document).on("change", "#pageSizeSelector@(Model.UniqueIdentifier)", function (e) {
+            $('#@Html.IdFor(m => m.PageSize)').val($(this).val());
+            goToPage@(Model.UniqueIdentifier)(0);
+        });
+
+        $(document).on("click", "#tableSearchResult@(Model.UniqueIdentifier) th.sorting", function () {
             var currentOrder = $('#@Html.IdFor(m => m.OrderBy)').val();
             var currentAscending = $('#@Html.IdFor(m => m.Ascending)').val();
             var ascending = true;
@@ -31,9 +33,7 @@
                 $('#@Html.IdFor(m => m.OrderBy)').val($(this).data("order"));
 
             $('#@Html.IdFor(m => m.Ascending)').val(ascending);
-            goToPage(0);
+            goToPage@(Model.UniqueIdentifier)(0);
         });
-
-        doFilter();
     });
 </script>

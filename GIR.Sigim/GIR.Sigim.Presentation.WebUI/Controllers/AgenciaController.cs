@@ -9,6 +9,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Controllers
 {
@@ -37,6 +38,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
         #region Methods
 
+        [Authorize(Roles = Funcionalidade.AgenciaAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as AgenciaListaViewModel;
@@ -44,6 +46,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             {
                 model = new AgenciaListaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             
             if (id.HasValue)

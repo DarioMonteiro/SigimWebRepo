@@ -7,6 +7,7 @@ using GIR.Sigim.Application.Service.Financeiro;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -28,10 +29,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
         #region Methods
 
+            [Authorize(Roles = Funcionalidade.ParametroUsuarioFinanceiroAcessar)]
             public ActionResult Index()
             {
                 ParametrosUsuarioFinanceiroViewModel model = new ParametrosUsuarioFinanceiroViewModel();
                 model.ParametrosUsuarioFinanceiro = parametrosUsuarioFinanceiroAppService.ObterPeloIdUsuario(Usuario.Id);
+                model.PodeSalvar = parametrosUsuarioFinanceiroAppService.EhPermitidoSalvar();
                 return View(model);               
             }
 

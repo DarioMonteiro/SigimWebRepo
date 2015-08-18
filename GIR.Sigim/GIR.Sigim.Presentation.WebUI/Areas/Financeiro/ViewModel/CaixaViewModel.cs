@@ -13,8 +13,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
     public class CaixaViewModel
     {
         public CaixaDTO Caixa { get; set; }
-
         public CaixaFiltro Filtro { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
+        public bool PodeImprimir { get; set; }
 
         public CaixaViewModel()
         {

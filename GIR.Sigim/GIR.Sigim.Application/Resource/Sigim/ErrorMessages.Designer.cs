@@ -97,6 +97,24 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Classe insumo não cadastrada..
+        /// </summary>
+        public static string ClasseInsumoNaoCadastrada {
+            get {
+                return ResourceManager.GetString("ClasseInsumoNaoCadastrada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selecione uma classe insumo do último nível..
+        /// </summary>
+        public static string ClasseUltimoNivel {
+            get {
+                return ResourceManager.GetString("ClasseUltimoNivel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A data máxima não pode ser menor que a data mínima..
         /// </summary>
         public static string DataMaximaMenorQueMinima {
@@ -178,6 +196,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Não existem registros..
+        /// </summary>
+        public static string NaoExistemRegistros {
+            get {
+                return ResourceManager.GetString("NaoExistemRegistros", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nenhum registro encontrado..
         /// </summary>
         public static string NenhumRegistroEncontrado {
@@ -187,11 +214,29 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Privilégios insuficientes para executar esta operação..
+        /// </summary>
+        public static string PrivilegiosInsuficientes {
+            get {
+                return ResourceManager.GetString("PrivilegiosInsuficientes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O registro [{0}] está sendo usado..
         /// </summary>
         public static string RegistroEmUso {
             get {
                 return ResourceManager.GetString("RegistroEmUso", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selecione o registro..
+        /// </summary>
+        public static string RegistroNaoRecuperado {
+            get {
+                return ResourceManager.GetString("RegistroNaoRecuperado", resourceCulture);
             }
         }
         
@@ -237,6 +282,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         public static string ValorDeveSerNumerico {
             get {
                 return ResourceManager.GetString("ValorDeveSerNumerico", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preencha o campo {0} com um valor numérico e ou espaço..
+        /// </summary>
+        public static string ValorDeveSerNumericoEOuEspaco {
+            get {
+                return ResourceManager.GetString("ValorDeveSerNumericoEOuEspaco", resourceCulture);
             }
         }
     }

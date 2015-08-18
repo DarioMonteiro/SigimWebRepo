@@ -9,6 +9,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Controllers
 {
@@ -24,6 +25,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             this.unidadeMedidaAppService = unidadeMedidaAppService;            
         }
 
+        [Authorize(Roles = Funcionalidade.OrdemCompraUnidadeMedidaAcessar)]
         public ActionResult Index(string sigla)
         {
             var model = Session["Filtro"] as UnidadeMedidaViewModel;
@@ -31,8 +33,13 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             {
                 model = new UnidadeMedidaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
-            
+
+            model.PodeSalvar = unidadeMedidaAppService.EhPermitidoSalvar();
+            model.PodeDeletar = unidadeMedidaAppService.EhPermitidoDeletar();
+            model.PodeImprimir = unidadeMedidaAppService.EhPermitidoImprimir();
+
             var unidadeMedida = unidadeMedidaAppService.ObterPeloCodigo(sigla);
 
             if (!string.IsNullOrEmpty(sigla))

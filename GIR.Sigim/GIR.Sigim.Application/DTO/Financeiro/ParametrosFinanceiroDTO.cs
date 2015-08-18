@@ -88,6 +88,29 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         [Display(Name = "Não pagar títulos em conta corrente não associada ao c. custo")]
         public bool ContaCorrenteCentroCusto { get; set; }
 
+        public string BloqueioSituacaoLiberado { get; set; }
+
+        [Display(Name = "Correntista")]
+        public bool BloqueioCorrentista { get; set; }
+
+        [Display(Name = "Identificação")]
+        public bool BloqueioIdentificacao { get; set; }
+
+        [Display(Name = "Valor do título")]
+        public bool BloqueioValorTitulo { get; set; }
+
+        [Display(Name = "Data de emissão")]
+        public bool BloqueioDataEmissao { get; set; }
+
+        [Display(Name = "Data de vencimento")]
+        public bool BloqueioDataVencimento { get; set; }
+
+        [Display(Name = "Impostos")]
+        public bool BloqueioImpostos { get; set; }
+
+        [Display(Name = "Apropriação")]
+        public bool BloqueioApropriacao { get; set; }
+        
         public short Interface { get; set; }
       
     }

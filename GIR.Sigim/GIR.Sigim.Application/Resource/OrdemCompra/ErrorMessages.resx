@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EntradaMaterialSituacaoInvalida" xml:space="preserve">
+    <value>Entrada de Material \"{0}\".</value>
+  </data>
+  <data name="InformeMotivoCancelamentoEntradaMaterial" xml:space="preserve">
+    <value>Informe o motivo do cancelamento da Entrada de Material.</value>
+  </data>
   <data name="InformeMotivoCancelamentoPreRequisicao" xml:space="preserve">
     <value>Informe o motivo do cancelamento da Pré-requisicao.</value>
   </data>
@@ -140,5 +146,11 @@
   </data>
   <data name="SelecioneUmItemParaAprocacao" xml:space="preserve">
     <value>Selecione pelo menos 1 item para aprovação.</value>
+  </data>
+  <data name="TituloEstaPago" xml:space="preserve">
+    <value>O título {0}, já está pago.</value>
+  </data>
+  <data name="TituloImpostoEstaPago" xml:space="preserve">
+    <value>O título de imposto {0}, já está pago.</value>
   </data>
 </root>

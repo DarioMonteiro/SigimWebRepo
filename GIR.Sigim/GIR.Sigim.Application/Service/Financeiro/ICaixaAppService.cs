@@ -14,5 +14,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
         CaixaDTO ObterPeloId(int? id);
         bool Salvar(CaixaDTO dto);
         bool Deletar(int? id);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
     }
 }

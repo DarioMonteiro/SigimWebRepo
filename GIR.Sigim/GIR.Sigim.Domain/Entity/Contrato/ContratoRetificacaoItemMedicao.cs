@@ -105,6 +105,11 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         {
             bool condicao = false;
 
+            if (Situacao > SituacaoMedicao.AguardandoLiberacao)
+            {
+                yield return new ValidationResult(string.Format(Resource.Contrato.ErrorMessages.SituacaoNaoPermitida, "Situação da medição"));
+            }
+
             condicao = ((DataMedicao == null) || (DataMedicao == DateTime.MinValue));
             if (condicao)
             {

@@ -114,6 +114,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnName("contaCorrenteCentroCusto")
                 .HasColumnOrder(23);
 
+            Property(l => l.BloqueioSituacaoLiberado)
+                 .HasMaxLength(255)
+                 .HasColumnName("bloqueioSituacaoLiberado")
+                 .HasColumnOrder(24);
+
             Ignore(l => l.Interface);
 
         }

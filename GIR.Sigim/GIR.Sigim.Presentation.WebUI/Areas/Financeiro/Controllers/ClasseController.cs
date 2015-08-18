@@ -43,7 +43,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         {
             var model = classeAppService.ListarPeloOrcamento(orcamentoId);
             ViewBag.FirstNode = "Classe";
-            return View(model);
+            return View("~/Views/Shared/EditorTemplates/TreeView.cshtml",model);
         }
     }
 }

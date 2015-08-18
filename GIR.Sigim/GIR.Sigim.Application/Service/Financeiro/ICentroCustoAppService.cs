@@ -15,5 +15,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
         bool EhCentroCustoUltimoNivelValido(CentroCustoDTO centroCusto);
         bool UsuarioPossuiAcessoCentroCusto(CentroCustoDTO centroCusto, int? idUsuario, string modulo);
         List<TreeNodeDTO> ListarRaizesAtivas();
+        byte[] ObterIconeRelatorioPeloCentroCusto(string codigo);
     }
 }

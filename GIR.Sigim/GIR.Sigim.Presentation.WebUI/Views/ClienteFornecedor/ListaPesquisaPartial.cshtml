@@ -1,0 +1,102 @@
+﻿@using GIR.Sigim.Application.DTO.Sigim
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<ClienteFornecedorDTO> Lista = Model.Records as IEnumerable<ClienteFornecedorDTO>;
+}
+
+<div class="table-container" style="padding:0;">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs" style="padding: 6px 7px 1px; box-sizing: border-box;">
+            <div class="col-sm-12 col-xs-12" style="height: 37px;">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls="dt_basic",
+                                @class="form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="tableSearchResult@(Model.UniqueIdentifier)" class="table-responsive" style="max-height: 315px; border: 1px solid #ddd; overflow-x: auto;">
+            <table class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string nomeFantasiaSortingSuffix = "sorting";
+                            string razaoSocialSortingSuffix = "sorting";
+                            string rgSortingSuffix = "sorting";
+                            string cpfSortingSuffix = "sorting";
+                            string cnpjSortingSuffix = "sorting";
+                        
+                            switch (Model.OrderBy)
+                            {
+                                case "razaoSocial":
+                                    razaoSocialSortingSuffix += sortingSuffix;
+                                    break;
+                                case "rg":
+                                    rgSortingSuffix += sortingSuffix;
+                                    break;
+                                case "cpf":
+                                    cpfSortingSuffix += sortingSuffix;
+                                    break;
+                                case "cnpj":
+                                    cnpjSortingSuffix += sortingSuffix;
+                                    break;
+                                case "nomeFantasia":
+                                default:
+                                    nomeFantasiaSortingSuffix += sortingSuffix;
+                                    break;
+                            }
+                        }
+
+                        <th class="sorting @nomeFantasiaSortingSuffix" data-order="nomeFantasia">Nome Fantasia</th>
+                        <th class="sorting @razaoSocialSortingSuffix" data-order="razaoSocial" style="min-width:65px;">Razão Social</th>
+                        <th class="sorting @rgSortingSuffix" data-order="rg" style="min-width:65px;">RG</th>
+                        <th class="sorting @cpfSortingSuffix" data-order="cpf" style="min-width:55px;">CPF</th>
+                        <th class="sorting @cnpjSortingSuffix" data-order="cnpj" style="min-width:85px;">CNPJ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td><a href="javascript:TratarSelecaoClienteFornecedor@(Model.UniqueIdentifier)(@item.Id, '@item.Nome.Replace("'", "\\\'").Replace("\"", "\\\"")');">@item.Nome</a></td>                          
+                            @{
+                                if (@item.PessoaJuridica == null){
+                                    <td></td>
+                                }
+                                else{
+                                    <td>@item.PessoaJuridica.NomeFantasia</td>
+                                }                                
+                                
+                                if (@item.PessoaFisica == null){
+                                    <td></td>
+                                    <td></td>
+                                }
+                                else{
+                                    <td>@item.PessoaFisica.Rg</td>
+                                    <td>@item.PessoaFisica.Cpf</td>
+                                }
+                                if (@item.PessoaJuridica == null){
+                                    <td></td>
+                                }
+                                else{
+                                    <td>@item.PessoaJuridica.Cnpj</td>
+                                }                                
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>

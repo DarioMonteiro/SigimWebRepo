@@ -24,7 +24,7 @@
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
                             new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
-                        @Html.AntiForgeryToken()
+                    @Html.AntiForgeryToken()
                     <div class="panel-body no-padding">
                         <fieldset>                                           
                             <div class="row">
@@ -38,7 +38,7 @@
                                 </section>
                                 <section class="col col-2" style="padding-top:30px">                                  
                                     <label class="checkbox">
-                                        @Html.CheckBoxFor(m => m.Caixa.Inativo)<i></i>@Html.DisplayNameFor(m => m.Caixa.Inativo)
+                                        @Html.CheckBoxFor(m => m.Caixa.Ativa)<i></i>@Html.DisplayNameFor(m => m.Caixa.Ativa)
                                     </label>                                                 
                                 </section>
                                 <section class="col col-4">
@@ -55,10 +55,24 @@
                         </fieldset>
                     </div>
                     <footer>
-                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                        @{
+                        string disableBtnDeletar = string.Empty;
+                            if (!Model.PodeDeletar)
+                            {
+                                disableBtnDeletar = "disabled";
+                            }
+                        }
+                        <button type="button" id="btnDeletar" class="btn btn-primary @disableBtnDeletar">
                             Deletar
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        @{
+                            string disableBtnSalvar = string.Empty;
+                            if (!Model.PodeSalvar)
+                            {
+                                disableBtnSalvar = "disabled";
+                            }
+                        }
+                        <button type="submit" class="btn btn-primary @disableBtnSalvar">
                             Salvar
                         </button>
                     </footer>
@@ -69,13 +83,14 @@
                             "Caixa",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
-                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                            new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
                     }
                     <div id="resultadoBusca"></div>
                 </div>
@@ -88,6 +103,47 @@
 }
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        listarFiltro();
+
+        jQuery.validator.addMethod(
+            "centroCustoValido",
+            function (value, element) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.centroCustoValido = getErrorMessageContainer(element.name).html();
+                return isValid;
+            }, ''
+        );
+
+        $('#formCadastro').validate({
+            rules: {
+                '@Html.NameFor(m => m.Caixa.CentroCusto.Codigo)': {
+                    centroCustoValido: true
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
+        });
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                listarFiltro();
+            }
+        );
+    });
+
     $("#btnDeletar").on("click", function() {
         $.ajax({
             type: 'POST',
@@ -103,14 +159,14 @@
             $('#notificationMessages').html(result);
             limpaPaginacao();
             clearForm();
-            doFilter();
+            listarFiltro();
         });
     });
 
     function clearForm() {
         $('#@Html.IdFor(m => m.Caixa.Id)').val('');
         $('#@Html.IdFor(m => m.Caixa.Descricao)').val('');
-        $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', false);
+        $('#@Html.IdFor(m => m.Caixa.Ativa)').prop('checked', false);
         $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val('');
         $('#@Html.IdFor(m => m.Caixa.CentroCusto.Codigo)').val('');
         $('#@Html.IdFor(m => m.Caixa.CentroCusto.Descricao)').val('');        
@@ -125,7 +181,7 @@
     function refresh() {
         onSuccess();
         clearForm();
-        doFilter();
+        listarFiltro();
     }
 
     function loadItem(id) {
@@ -143,7 +199,7 @@
         .success(function (result) {
             $('#@Html.IdFor(m => m.Caixa.Id)').val(result.Id);
             $('#@Html.IdFor(m => m.Caixa.Descricao)').val(result.Descricao);
-            $('#@Html.IdFor(m => m.Caixa.Inativo)').prop('checked', result.Inativo);
+            $('#@Html.IdFor(m => m.Caixa.Ativa)').prop('checked', result.Ativa);
             $('#@Html.IdFor(m => m.Caixa.CentroContabil)').val(result.CentroContabil);                  
             $('#@Html.IdFor(m => m.Caixa.CentroCusto.Codigo)').val(result.CentroCusto.Codigo);
             $('#@Html.IdFor(m => m.Caixa.CentroCusto.Descricao)').val(result.CentroCusto.Descricao);
@@ -155,5 +211,9 @@
     function limpaPaginacao() {
         $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
     };
+
+    function listarFiltro() {
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
 
 </script>

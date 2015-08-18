@@ -1,0 +1,399 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Admin.ViewModel.UsuarioFuncionalidadeViewModel
+
+@{
+    ViewBag.Title = "Usuário funcionalidades";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Cadastro",
+                            "UsuarioFuncionalidade",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            @Html.HiddenFor(m => m.NovoItem)
+                            <div class="row">
+                                @Html.HiddenFor(m => m.Usuario.Id)
+                                <section class="col col-6">
+                                    @Html.LabelFor(m => m.UsuarioId, new { @class = "label" })
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.UsuarioId, Model.ListaUsuario, string.Empty)<i></i>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-6">
+                                    @Html.HiddenFor(m => m.Modulo.Id)
+                                    @Html.LabelFor(m => m.ModuloId, new { @class = "label" })
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.ModuloId, Model.ListaModulo, string.Empty)<i></i>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-6">
+                                @*@Html.HiddenFor(m => m.PerfilId)*@
+                                    @Html.LabelFor(m => m.PerfilId, new { @class = "label" })
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.PerfilId, Model.ListaPerfil, string.Empty)<i></i>
+                                    </label>
+                                </section>
+                            </div>
+                        </fieldset>
+                        <fieldset id="formItem">
+                            @Html.HiddenFor(m => m.JsonFuncionalidadesModulo)
+                            @Html.HiddenFor(m => m.JsonFuncionalidadesPerfil)
+                            @Html.HiddenFor(m => m.JsonFuncionalidadesAvulsas)
+                            <div class="row">
+                                <section class="col col-5">
+                                    <label class="checkbox">
+								    <input type="checkbox" name="checkbox" checked="checked" id="chkMarcaTodos">
+								    <i></i>Marca todos</label>
+                                </section>
+                            </div>
+
+                            <div class="table-responsive" style="min-height: 115px; height:450px;  border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto; overflow-y: auto;">
+                                <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="text-center" style="width: 30px;">...</th>
+                                            <th class="text-left">Funcionalidade</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                    <footer>
+                        @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
+                        <button type="button" id="btnDeletar" class="btn btn-danger">
+                            Deletar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Salvar
+                        </button>
+                    </footer>
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+
+<script type="text/javascript">
+    jsonFuncionalidadesModuloArray = JSON.parse($("#@Html.IdFor(m => m.JsonFuncionalidadesModulo)").val());
+    jsonFuncionalidadesPerfilArray = JSON.parse($("#@Html.IdFor(m => m.JsonFuncionalidadesPerfil)").val());
+    jsonFuncionalidadesAvulsasArray = JSON.parse($("#@Html.IdFor(m => m.JsonFuncionalidadesAvulsas)").val());
+
+    $(document).ready(function () {
+
+        var UsuarioId = $('#@Html.IdFor(m => m.UsuarioId)').val();
+        var ModuloId = $('#@Html.IdFor(m => m.ModuloId)').val();
+        var PerfilId = $('#@Html.IdFor(m => m.PerfilId)').val();
+
+        $('#@Html.IdFor(m => m.Usuario.Id)').val(UsuarioId)
+        $('#@Html.IdFor(m => m.Modulo.Id)').val(ModuloId);
+        @*$('#@Html.IdFor(m => m.Perfil.Id)').val(PerfilId);*@
+        $("#@Html.IdFor(m => m.ModuloId)").prop('disabled', false);
+        $("#@Html.IdFor(m => m.UsuarioId)").prop('disabled', false);
+        carregaFuncionalidades(true);
+        $('#chkMarcaTodos').prop('checked', false);
+
+        $("#@Html.IdFor(m => m.UsuarioId)").on("change", function () {
+            var UsuarioId = $('#@Html.IdFor(m => m.UsuarioId)').val();
+            $('#@Html.IdFor(m => m.Usuario.Id)').val(UsuarioId);
+            carregaRegistro(true);
+        });
+
+        $("#@Html.IdFor(m => m.ModuloId)").on("change", function () {
+            var ModuloId = $('#@Html.IdFor(m => m.ModuloId)').val();
+            $('#@Html.IdFor(m => m.Modulo.Id)').val(ModuloId);
+            jsonFuncionalidadesPerfilArray = [];
+            jsonFuncionalidadesAvulsasArray = [];
+            jsonFuncionalidadesModuloArray = [];
+            carregaComboPerfil();
+            carregaRegistro(true);
+            carregaFuncionalidades(true);
+        });
+
+        $("#@Html.IdFor(m => m.PerfilId)").on("change", function () {
+            var PerfilId = $('#@Html.IdFor(m => m.PerfilId)').val();
+            @*$('#@Html.IdFor(m => m.Perfil.Id)').val(PerfilId);*@
+            carregaPerfil(true);
+        });
+
+        $("#chkMarcaTodos").on("change", function () {
+            marcaDesmarcaCheckBox($(this).is(':checked'));
+        });
+
+        $("#btnDeletar").on("click", function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Deletar", "UsuarioFuncionalidade")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    UsuarioId: $('#@Html.IdFor(m => m.Usuario.Id)').val(),
+                    ModuloId: $('#@Html.IdFor(m => m.Modulo.Id)').val()
+                })
+            })
+            .success(function (result) {
+                $('#notificationMessages').html(result);
+                clearForm();
+            });
+        });
+
+    });
+
+    function clearForm() {
+        $('#@Html.IdFor(m => m.NovoItem)').val(true);
+        habilitaCampos();
+        $('#@Html.IdFor(m => m.UsuarioId)').val(0);
+        $('#@Html.IdFor(m => m.Usuario.Id)').val(0);
+        $('#@Html.IdFor(m => m.ModuloId)').val(0);
+        $('#@Html.IdFor(m => m.Modulo.Id)').val(0);
+        $('#@Html.IdFor(m => m.PerfilId)').val(0);
+        @*$('#@Html.IdFor(m => m.Perfil.Id)').val(0);*@
+        limpaComboPerfil();
+        jsonFuncionalidadesModuloArray = [];
+        jsonFuncionalidadesPerfilArray = [];
+        jsonFuncionalidadesAvulsasArray = [];
+        $('#chkMarcaTodos').prop('checked', false);
+        $("#tableItens tbody").empty();
+    }
+
+    function novo() {
+        clearForm();
+        limpaMsg();
+    }
+
+    function limpaMsg() {
+        $('#notificationMessages').html('');
+        $('#Perfil_Descricao-error').remove();
+        $('#CentroCusto_Codigo-error').remove();
+    }
+
+    function refresh() {
+        onSuccess();
+        $('#@Html.IdFor(m => m.NovoItem)').val(false);
+        habilitaCampos();
+    }
+
+    function carregaFuncionalidades(bolLimpaMsg)
+    {
+        $("#tableItens tbody").empty();
+        var ModuloId = $('#@Html.IdFor(m => m.Modulo.Id)').val();
+        if ((ModuloId != null) && (ModuloId != '')) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CarregarFuncionalidades", "UsuarioFuncionalidade")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    ModuloId: ModuloId
+                })
+            })
+            .success(function (result) {
+                if (bolLimpaMsg == true) { limpaMsg(); }
+                jsonFuncionalidadesModuloArray = result;
+                $("#@Html.IdFor(m => m.JsonFuncionalidadesModulo)").val(JSON.stringify(result));
+                $('#chkMarcaTodos').prop('checked', false);
+                fillTable();
+                goToTop();
+            });
+        }
+    };
+
+    function carregaPerfil(bolLimpaMsg) {
+        //$("#tableItens tbody").empty();
+        jsonFuncionalidadesPerfilArray = [];
+        @*var PerfilId = $('#@Html.IdFor(m => m.Perfil.Id)').val();*@
+        var PerfilId = $('#@Html.IdFor(m => m.PerfilId)').val();
+        if (PerfilId != '') {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CarregarPerfil", "UsuarioFuncionalidade")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    PerfilId: PerfilId
+                })
+            })
+            .success(function (result)
+            {
+                if (bolLimpaMsg == true) { limpaMsg(); }
+                jsonFuncionalidadesPerfilArray = result;
+                @*$("#@Html.IdFor(m => m.JsonFuncionalidadesPerfil)").val(JSON.stringify(result));*@
+                $('#chkMarcaTodos').prop('checked', false);
+                //fillTable();
+                goToTop();
+            }
+            );
+        }
+        fillTable();
+    };
+
+    function carregaRegistro(bolLimpaMsg) {
+        $("#tableItens tbody").empty();
+        var UsuarioId = $('#@Html.IdFor(m => m.Usuario.Id)').val();
+        var ModuloId = $('#@Html.IdFor(m => m.Modulo.Id)').val();
+        if ((UsuarioId == null) || (UsuarioId == '')) { UsuarioId = 0; }
+        if ((ModuloId == null) || (ModuloId == '')) { ModuloId = 0; }
+        if ((ModuloId != 0) && (UsuarioId != 0))
+        {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("RecuperaRegistro", "UsuarioFuncionalidade")',
+                @*url: '@Url.Action("Cadastro", new { UsuarioId = UsuarioId, ModuloId = .ModuloId})',*@
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    UsuarioId: UsuarioId,
+                    ModuloId: ModuloId
+                })
+            })
+            .success(function (result) {
+                if (bolLimpaMsg == true) { limpaMsg(); }
+                
+                $("#@Html.IdFor(m => m.ModuloId)").prop('disabled', false);
+                $("#@Html.IdFor(m => m.UsuarioId)").prop('disabled', false);
+
+                $('#@Html.IdFor(m => m.NovoItem)').val(result.NovoItem);
+                jsonFuncionalidadesPerfilArray = result.listaUsuarioPerfil;
+                jsonFuncionalidadesAvulsasArray = result.listaFuncionalidadesAvulsas;
+
+                var PerfilId;
+                PerfilId = result.PerfilId;
+                if (PerfilId != 0)
+                {
+                    carregaComboPerfil();
+                    $('#@Html.IdFor(m => m.PerfilId)').val(PerfilId);
+                    @*$('#@Html.IdFor(m => m.Perfil.Id)').val(PerfilId);*@
+                    carregaPerfil(true);
+                }
+
+                $('#chkMarcaTodos').prop('checked', false);
+                fillTable();
+                goToTop();
+            });
+        }
+    };
+
+    function fillTable() {
+        $("#tableItens tbody").empty();
+        $("#tableItens tbody").click
+        $.each(jsonFuncionalidadesModuloArray, function (index, objModulo) {
+            var row = $('<tr />')
+            $("#tableItens tbody").append(row);
+            var chkDisabled = '';
+            var labelClass = 'checkbox';
+            var chkChecked = '';
+
+            $.each(jsonFuncionalidadesAvulsasArray, function (index, objAvulsas) {
+                if (objModulo.Codigo == objAvulsas.Funcionalidade) {
+                    chkChecked = 'checked';
+                }
+            })
+
+            $.each(jsonFuncionalidadesPerfilArray, function (index, objPerfil) {
+                if (objModulo.Codigo == objPerfil.Funcionalidade) {
+                    chkChecked = 'checked';
+                    chkDisabled = 'disabled';
+                }
+            })
+
+            row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="FuncionalidadeMarcada" ' + chkChecked + ' value="' + objModulo.Codigo + '" ' + chkDisabled + '><i></i>' + '' + '</label></td>'));
+            row.append($('<td class="text-left">' + objModulo.Descricao + '</td>'));
+        })
+
+        var NovoItem = $('#@Html.IdFor(m => m.NovoItem)').val();
+        if (NovoItem.toUpperCase() == 'FALSE')
+        {
+            $("#@Html.IdFor(m => m.ModuloId)").prop('disabled', true);
+            $("#@Html.IdFor(m => m.UsuarioId)").prop('disabled', true);
+        }
+
+    }
+
+    function marcaDesmarcaCheckBox(condicao) {
+        var arrSequencial = [];
+        var index;
+        $($('#tableItens input[type=checkbox]').get().reverse()).each(function () {
+            if (!$(this).is(":disabled")) {
+                $(this).prop("checked", condicao);
+            }
+        });
+    }
+
+    function carregaComboPerfil() {
+        var ModuloId = $('#@Html.IdFor(m => m.Modulo.Id)').val();
+        if ((ModuloId == null) || (ModuloId == '')) { ModuloId = 0; }
+        limpaComboPerfil();
+        if (ModuloId != 0)
+        {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CarregaPerfilPorModulo", "UsuarioFuncionalidade")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    ModuloId: ModuloId
+                })
+            })
+                .success(function (result) {
+                    $.each(result, function (index, item) {
+                        $('#@Html.IdFor(m => m.PerfilId)').append($('<option>').text(item.Descricao).attr('value', item.Id));
+                    });
+                });
+        }
+    }
+
+    function limpaComboPerfil()
+    {
+        //$('#@Html.IdFor(m => m.PerfilId)').empty();
+        $('#@Html.IdFor(m => m.PerfilId)').html('');
+        $('#@Html.IdFor(m => m.PerfilId)').append($('<option>').text('').attr('value', ''));
+        $('#@Html.IdFor(m => m.PerfilId)').val(0);
+        @*$('#@Html.IdFor(m => m.Perfil.Id)').val(0);*@
+    }
+
+    function habilitaCampos()
+    {
+        var NovoItem = $('#@Html.IdFor(m => m.NovoItem)').val();
+        if (NovoItem.toUpperCase() == 'FALSE')
+        {
+            $("#@Html.IdFor(m => m.ModuloId)").prop('disabled', true);
+            $("#@Html.IdFor(m => m.UsuarioId)").prop('disabled', true);
+        }
+        else
+        {
+            $("#@Html.IdFor(m => m.ModuloId)").prop('disabled', false);
+            $("#@Html.IdFor(m => m.UsuarioId)").prop('disabled', false);
+        }
+    }
+
+</script>

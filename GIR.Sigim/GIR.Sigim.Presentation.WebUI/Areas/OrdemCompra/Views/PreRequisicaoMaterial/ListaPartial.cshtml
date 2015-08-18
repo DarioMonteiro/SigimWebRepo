@@ -17,51 +17,50 @@
                             Model.PageSizeList,
                             new
                             {
-                                @id = "pageSizeSelector",
-                                @aria_controls = "dt_basic",
-                                @class = "form-control",
-                                onchange = "changePageSize();"
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls="dt_basic",
+                                @class="form-control"
                             })
                     </label>
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
                     <tr role="row">
                         @{
-        string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
-        string idSortingSuffix = "sorting";
-        string situacaoSortingSuffix = "sorting";
-        string dataSortingSuffix = "sorting";
-        string observacaoSortingSuffix = "sorting";
-        //string rmgeradasSortingSuffix = "sorting";
-        string responsavelSortingSuffix = "sorting";
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string idSortingSuffix = "sorting";
+                            string situacaoSortingSuffix = "sorting";
+                            string dataSortingSuffix = "sorting";
+                            string observacaoSortingSuffix = "sorting";
+                            //string rmgeradasSortingSuffix = "sorting";
+                            string responsavelSortingSuffix = "sorting";
 
-        switch (Model.OrderBy)
-        {
-            case "id":
-                idSortingSuffix += sortingSuffix;
-                break;
-            case "situacao":
-                situacaoSortingSuffix += sortingSuffix;
-                break;
-            case "data":
-                dataSortingSuffix += sortingSuffix;
-                break;
-            case "observacao":
-                observacaoSortingSuffix += sortingSuffix;
-                break;
-            //case "rmgeradas":
-            //    rmgeradasSortingSuffix += sortingSuffix;
-            //    break;
-            case "responsavel":
-                responsavelSortingSuffix += sortingSuffix;
-                break;
-            default:
-                break;
-        }
+                            switch (Model.OrderBy)
+                            {
+                                case "id":
+                                    idSortingSuffix += sortingSuffix;
+                                    break;
+                                case "situacao":
+                                    situacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "data":
+                                    dataSortingSuffix += sortingSuffix;
+                                    break;
+                                case "observacao":
+                                    observacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                //case "rmgeradas":
+                                //    rmgeradasSortingSuffix += sortingSuffix;
+                                //    break;
+                                case "responsavel":
+                                    responsavelSortingSuffix += sortingSuffix;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                         
                         <th class="sorting @idSortingSuffix text-center" data-order="id" style="min-width:65px;">Código</th>
@@ -87,6 +86,6 @@
                 </tbody>
             </table>
         </div>
-        @Html.Partial("_PaginationPartial", Model.Pagination)
+        @Html.Partial("_PaginationPartial", Model)
     }
 </div>

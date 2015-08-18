@@ -11,7 +11,7 @@ namespace GIR.Sigim.Presentation.WebUI.IoC
         public static void Initialise()
         {
             ControllerBuilder.Current.SetControllerFactory(new ControllerFactory());
-            GIR.Sigim.Application.Helper.MapperHelper.Initialise();
+            GIR.Sigim.Application.Service.IoC.Bootstrapper.Initialise();
         }
     }
 }

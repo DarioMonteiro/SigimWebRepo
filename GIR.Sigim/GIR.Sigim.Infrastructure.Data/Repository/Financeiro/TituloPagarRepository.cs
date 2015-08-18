@@ -8,7 +8,7 @@ using GIR.Sigim.Domain.Repository.Financeiro;
 
 namespace GIR.Sigim.Infrastructure.Data.Repository.Financeiro
 {
-    public class TituloPagarRepository : Repository<TituloPagar>,ITituloPagarRepository
+    public class TituloPagarRepository : Repository<TituloPagar>, ITituloPagarRepository
     {
 
         #region Construtor
@@ -18,6 +18,28 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Financeiro
         {
 
         }
+        #endregion
+
+        #region ITituloPagarRepository Members
+
+        public void RemoverTituloPagarAdiantamento(TituloPagarAdiantamento titulo)
+        {
+            if (titulo != (TituloPagarAdiantamento)null)
+            {
+                QueryableUnitOfWork.Attach(titulo);
+                QueryableUnitOfWork.CreateSet<TituloPagarAdiantamento>().Remove(titulo);
+            }
+        }
+
+        public void RemoverImpostoPagar(ImpostoPagar impostoPagar)
+        {
+            if (impostoPagar != (ImpostoPagar)null)
+            {
+                QueryableUnitOfWork.Attach(impostoPagar);
+                QueryableUnitOfWork.CreateSet<ImpostoPagar>().Remove(impostoPagar);
+            }
+        }
+
         #endregion
     }
 }

@@ -11,5 +11,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
     {
         ParametrosFinanceiroDTO Obter();
         void Salvar(ParametrosFinanceiroDTO dto);
+        bool EhPermitidoSalvar();
     }
 }

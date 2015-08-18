@@ -14,7 +14,7 @@ using GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.Adapter;
-
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -79,20 +79,19 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
         #region Methods
 
+        [Authorize(Roles = Funcionalidade.MedicaoAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as MedicaoContratoListaViewModel;
             if (model == null)
             {
                 model = new MedicaoContratoListaViewModel();
-                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;  
+                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
-
-            CarregarCombosFiltro(model);
 
             return View(model);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,14 +108,24 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 var result = contratoAppService.ListarPeloFiltro(model.Filtro,Usuario.Id,out totalRegistros);
                 if (result.Any())
                 {
-                    var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
-                    return PartialView("ListaPartial", listaViewModel);
+                    if (model.Filtro.PaginationParameters.PageIndex == 0 && result.Count == 1)
+                    {
+                        Session["Filtro"] = null;
+
+                        return PartialView("Redirect", Url.Action("Medicao", "MedicaoContrato", new { id = result[0].Id }));
+                    }
+                    else
+                    {
+                        var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
+                        return PartialView("ListaPartial", listaViewModel);
+                    }
                 }
                 return PartialView("_EmptyListPartial");
             }
             return PartialView("_NotificationMessagesPartial");
         }
 
+        [Authorize(Roles = Funcionalidade.MedicaoAcessar)]
         public ActionResult Medicao(int? id)
         {
             MedicaoContratoMedicaoViewModel model = new MedicaoContratoMedicaoViewModel();
@@ -129,10 +138,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             model.Contrato = contrato;
 
             CarregarCombosMedicao(model);
- 
-            model.PodeSalvar = false;
-            model.PodeCancelar = false;
-            model.PodeImprimir = true;
+
+            model.PodeSalvar = contratoAppService.EhPermitidoSalvarMedicao();
+            model.PodeDeletar = contratoAppService.EhPermitidoDeletarMedicao();
+            model.PodeImprimir = contratoAppService.EhPermitidoImprimirMedicao();
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
             if (parametros != null)
@@ -165,12 +174,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (!contratoRetificacaoAppService.EhRetificacaoAprovada(contratoRetificacao))
             {
-                return View(model);
-            }
-
-            if (!contratoAppService.EhContratoAssinado(contrato))
-            {
-                return View(model);
             }
 
             model.RetencaoContratual = 0;
@@ -195,7 +198,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             if (ModelState.IsValid)
             {
                 contratoAppService.SalvarMedicao(model.ContratoRetificacaoItemMedicao);
-                //contratoRetificacaoItemMedicaoAppService.Salvar(model.ContratoRetificacaoItemMedicao);
             }
             return PartialView("_NotificationMessagesPartial");
         }
@@ -204,28 +206,53 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         public ActionResult RecuperaContratoRetificacaoItem(int? contratoId,int? contratoRetificacaoItemId)
         {
             List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisao = null;
-            ContratoRetificacaoItemDTO contratoRetificacaoItem = null;
+            ContratoRetificacaoItemDTO contratoRetificacaoItem = new ContratoRetificacaoItemDTO();
 
             if (contratoId.HasValue && contratoRetificacaoItemId.HasValue)
             {
                 listaContratoRetificacaoProvisao = contratoAppService.ObterListaCronograma(contratoId.Value, contratoRetificacaoItemId.Value);
 
+                ContratoDTO contrato = contratoAppService.ObterPeloId(contratoId.Value, Usuario.Id);
+                contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemId).SingleOrDefault();
+
+                bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
+                bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
+
+                if (!contratoAppService.EhContratoAssinado(contrato))
+                {
+                    var msg = messageQueue.GetAll()[0].Text;
+                    messageQueue.Clear();
+                    return Json(new
+                    {
+                        ehRecuperou = false,
+                        errorMessage = msg,
+                        ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
+                        ehNaturezaItemPorPrecoUnitario = EhNaturezaItemPorPrecoUnitario,
+                        contratoRetificacaoItem = contratoRetificacaoItem,
+                    });
+                }
+
+
                 if (!contratoAppService.ExisteContratoRetificacaoProvisao(listaContratoRetificacaoProvisao))
                 {
+
                     var msg = messageQueue.GetAll()[0].Text;
                     messageQueue.Clear();
                     return Json(new
                                 {
                                     ehRecuperou = false,
-                                    errorMessage = msg
+                                    errorMessage = msg,
+                                    ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
+                                    ehNaturezaItemPorPrecoUnitario = EhNaturezaItemPorPrecoUnitario,
+                                    contratoRetificacaoItem = contratoRetificacaoItem,
                                 });
                 }
                 else
                 {
                     contratoRetificacaoItem = listaContratoRetificacaoProvisao.ElementAt(0).ContratoRetificacaoItem;
 
-                    bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
-                    bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
+                    EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
+                    EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
 
                     return Json(new
                     {
@@ -240,8 +267,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             }
             return Json(new 
             {
-                ehRecuperou = false, 
-                errorMessage = string.Empty, 
+                ehRecuperou = false,
+                errorMessage = string.Empty,
+                ehNaturezaItemPorPrecoGlobal = true,
+                ehNaturezaItemPorPrecoUnitario = false,
+                contratoRetificacaoItem = contratoRetificacaoItem,
             });
         }
 
@@ -311,7 +341,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         }
 
         [HttpPost]
-        public ActionResult Cancelar(int? id,int? contratoId)
+        public ActionResult Deletar(int? id,int? contratoId)
         {
             bool cancelou = false;
 
@@ -427,28 +457,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        private void CarregarCombosFiltro(MedicaoContratoListaViewModel model) 
-        {
-            int? contratanteId = null;
-            int? contratadoId = null;
-
-            if (model.Filtro != null) 
-            {
-                contratanteId = model.Filtro.ContratanteId;
-                contratadoId = model.Filtro.ContratadoId;
-            }
-
-            model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratanteId);
-            model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratadoId);
-
-            //model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3,0,2), "Id", "Nome", contratanteId);
-            //model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3, 0, 2), "Id", "Nome", contratadoId); 
-        }
-
         private void CarregarCombosMedicao(MedicaoContratoMedicaoViewModel model)
         {
             int? tipoDocumentoId = null;
-            int? multifornecedorId = null;
             string tipoCompraCodigo = null;
             int? cifFobId = null;
             string naturezaOperacaoCodigo = null;
@@ -457,11 +468,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             string codigoContribuicaoCodigo = null;
 
             tipoDocumentoId = model.ContratoRetificacaoItemMedicao.TipoDocumentoId;
-
-            if (model.ContratoRetificacaoItemMedicao.MultiFornecedorId.HasValue)
-            {
-                multifornecedorId = model.ContratoRetificacaoItemMedicao.MultiFornecedorId.Value;
-            }
 
             tipoCompraCodigo = model.ContratoRetificacaoItemMedicao.TipoCompraCodigo;
 
@@ -480,7 +486,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             codigoContribuicaoCodigo = model.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo;
 
             model.ListaTipoDocumento = new SelectList(tipoDocumentoAppService.ListarTodos(), "Id", "Sigla", tipoDocumentoId);
-            model.ListaMultiFornecedor = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", multifornecedorId);
             model.ListaTipoCompra = new SelectList(tipoCompraAppService.ListarTodos(), "Codigo", "Descricao", tipoCompraCodigo);
             model.ListaCifFob = new SelectList(cifFobAppService.ListarTodos(), "Id", "Descricao", cifFobId);
             model.ListaNaturezaOperacao = new SelectList(naturezaOperacaoAppService.ListarTodos(), "Codigo", "Descricao", naturezaOperacaoCodigo);

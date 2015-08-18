@@ -14,5 +14,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
         public ParametrosFinanceiroDTO Parametros { get; set; }
         public SelectList ListaEmpresa { get; set; }
         public HttpPostedFileBase IconeRelatorio { get; set; }
+        public bool PodeSalvar { get; set; }
     }
 }

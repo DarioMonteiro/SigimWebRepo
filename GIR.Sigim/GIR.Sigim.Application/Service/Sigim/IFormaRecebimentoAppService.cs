@@ -16,5 +16,8 @@ namespace GIR.Sigim.Application.Service.Sigim
         List<ItemListaDTO> ListarTipoRecebimento();
         bool Salvar(FormaRecebimentoDTO dto);
         bool Deletar(int? id);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
     }
 }

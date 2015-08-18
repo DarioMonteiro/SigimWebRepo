@@ -43,24 +43,24 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
 
             switch (orderBy)
             {
-                case "id":
-                    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
-                    break;
+                //case "id":
+                //    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
+                //    break;
                 case "descricao":
                     set = ascending ? set.OrderBy(l => l.Descricao) : set.OrderByDescending(l => l.Descricao);
                     break;
                 case "tipoRecebimento":
                     set = ascending ? set.OrderBy(l => l.TipoRecebimento) : set.OrderByDescending(l => l.TipoRecebimento);
                     break;
-                case "automatico":
-                    set = ascending ? set.OrderBy(l => l.Automatico) : set.OrderByDescending(l => l.Automatico);
-                    break;
+                //case "automatico":
+                //    set = ascending ? set.OrderBy(l => l.Automatico) : set.OrderByDescending(l => l.Automatico);
+                //    break;
                 case "numeroDias":
                     set = ascending ? set.OrderBy(l => l.NumeroDias) : set.OrderByDescending(l => l.NumeroDias);
-                    break;                   
-                case "codigo":
+                    break;
+                //case "codigo":
                 default:
-                    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
+                    set = ascending ? set.OrderBy(l => l.Descricao) : set.OrderByDescending(l => l.Descricao);
                     break;
             }
 

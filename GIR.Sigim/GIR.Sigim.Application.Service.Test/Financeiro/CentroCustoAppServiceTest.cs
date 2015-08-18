@@ -25,6 +25,8 @@ namespace GIR.Sigim.Application.Service.Test.Financeiro
         private ILogAcessoRepository logAcessoRepository;
         private IUsuarioAppService usuarioAppService;
         private ICentroCustoAppService centroCustoService;
+        private IModuloRepository moduloRepository;
+        private IPerfilRepository perfilRepository;
         private MessageQueue messageQueue;
 
         [TestInitialize]
@@ -38,8 +40,10 @@ namespace GIR.Sigim.Application.Service.Test.Financeiro
             centroCustoRepository = new CentroCustoRepository(unitOfWork);
             usuarioRepository = new UsuarioRepository(unitOfWork);
             logAcessoRepository = new LogAcessoRepository(unitOfWork);
+            moduloRepository = new ModuloRepository(unitOfWork);
+            perfilRepository = new PerfilRepository(unitOfWork);
             messageQueue = new MessageQueue();
-            usuarioAppService = new UsuarioAppService(usuarioRepository, logAcessoRepository, messageQueue);
+            usuarioAppService = new UsuarioAppService(usuarioRepository, logAcessoRepository, perfilRepository, moduloRepository, messageQueue);
             centroCustoService = new CentroCustoAppService(centroCustoRepository, usuarioAppService, messageQueue);
         }
 

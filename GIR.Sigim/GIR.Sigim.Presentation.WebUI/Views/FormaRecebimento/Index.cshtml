@@ -29,29 +29,62 @@
                     <div class="panel-body no-padding">
                         <fieldset>
                             <div class="row">
-                            <section class="col col-12">
-                                @Html.HiddenFor(m => m.FormaRecebimento.Id)
-                                @Html.LabelFor(m => m.FormaRecebimento.Descricao, new { @class = "label" })
-                                <label class="input">
-                                    @Html.TextBoxFor(m => m.FormaRecebimento.Descricao, new { @maxlength = "50",  @class = "required" })
-                                </label>
-                                @Html.ValidationMessageFor(m => m.FormaRecebimento.Descricao, "", new { @class = "note note-error" })
-                            </section>
-                            <section class="col col-6">
-                                @Html.LabelFor(m => m.FormaRecebimento.TipoRecebimento, new { @class = "label" })                                
-                                <label class="select">
-                                    @Html.DropDownListFor(m => m.FormaRecebimento.TipoRecebimento, Model.ListaTipoRecebimento, string.Empty, new { @class="required" })<i></i>
-                                </label>
-                                @Html.ValidationMessageFor(m => m.FormaRecebimento.TipoRecebimento, "", new { @class = "note note-error" })
-                            </section>
+                                <section class="col col-12">
+                                    @Html.HiddenFor(m => m.FormaRecebimento.Id)
+                                    @Html.LabelFor(m => m.FormaRecebimento.Descricao, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.FormaRecebimento.Descricao, new { @maxlength = "50",  @class = "required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.FormaRecebimento.Descricao, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-6">
+                                    @Html.LabelFor(m => m.FormaRecebimento.TipoRecebimento, new { @class = "label" })                                
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.FormaRecebimento.TipoRecebimento, Model.ListaTipoRecebimento, string.Empty, new { @class="required" })<i></i>
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.FormaRecebimento.TipoRecebimento, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.FormaRecebimento.NumeroDias, new { @class = "label" })                                
+                                    @{
+                                        if (!Model.PodeHabilitarNumeroDias)
+                                        {
+                                            <label class="input">
+                                                @Html.TextBoxFor(m => m.FormaRecebimento.NumeroDias, new { @maxlength = "10" , @class = "numeric text-right readonly" , @readonly="readonly" })
+                                            </label>
+                                        }
+                                        else{
+                                            <label class="input">
+                                                @Html.TextBoxFor(m => m.FormaRecebimento.NumeroDias, new { @maxlength = "10" , @class = "numeric text-right"})
+                                            </label>
+                                        }
+                                    }
+                                    @Html.ValidationMessageFor(m => m.FormaRecebimento.NumeroDias, "", new { @class = "note note-error" })
+                                </section>
                             </div>                           
                         </fieldset>
                     </div>
                     <footer>                       
-                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                        @{
+                        string disableBtnDeletar = string.Empty;
+                            if (!Model.PodeDeletar)
+                            {
+                                disableBtnDeletar = "disabled";
+                            }
+                        }
+                        <button type="button" id="btnDeletar" class="btn btn-primary @disableBtnDeletar">
                             Deletar
                         </button>
-                        <button type="submit" id="btnSalvar" class="btn btn-primary">
+                        @{
+                            string disableBtnSalvar = string.Empty;
+                            if (!Model.PodeSalvar)
+                            {
+                                disableBtnSalvar = "disabled";
+                            }
+                        }
+                        <button type="submit" id="btnSalvar" class="btn btn-primary @disableBtnSalvar">
                             Salvar
                         </button>
                     </footer>
@@ -61,13 +94,14 @@
                             "FormaRecebimento",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
-                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                            new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
                     }
                     <div id="resultadoBusca"></div>
                 </div>
@@ -80,6 +114,22 @@
 }
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        listarFiltro();
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                listarFiltro();
+            }
+        );
+
+        $(document).on("change", "#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)", function () {
+            habilitaDesabilitaNumeroDeDias();           
+        });
+
+
+    });
+
     $("#btnDeletar").on("click", function () {
         $.ajax({
             type: 'POST',
@@ -95,7 +145,7 @@
             $('#notificationMessages').html(result);
             limpaPaginacao();
             clearForm();
-            doFilter();
+            listarFiltro();
         });
     });
 
@@ -103,6 +153,7 @@
         $('#@Html.IdFor(m => m.FormaRecebimento.Id)').val('');
         $('#@Html.IdFor(m => m.FormaRecebimento.Descricao)').val('');
         $('#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)').val('');
+        $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val();
     }
 
     function novo() {
@@ -116,7 +167,7 @@
     function refresh() {
         onSuccess();
         clearForm();
-        doFilter();
+        listarFiltro();
     }
 
     function loadItem(id) {
@@ -138,6 +189,7 @@
             $('#@Html.IdFor(m => m.FormaRecebimento.Automatico)').val(result.Automatico);
             $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').val(result.NumeroDias);
             tratarBotoes(!result.Automatico, !result.Automatico);
+            habilitaDesabilitaNumeroDeDias();
             goToTop();
 
         });
@@ -148,21 +200,70 @@
     }
 
     function tratarBotoes(condicaoSalvar, condicaoDeletar) {
-        $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
-         $("#@Html.IdFor(m => m.PodeDeletar)").val(condicaoDeletar);
-         if (condicaoSalvar) {
-             document.getElementById('btnSalvar').className = "btn btn-primary right";
-         }
-         else {
-             document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
-         }
-         if (condicaoDeletar) {
-             document.getElementById('btnDeletar').className = "btn btn-primary";
-         }
-         else {
-             document.getElementById('btnDeletar').className = "btn btn-primary disabled";
-         }
+        @{
+            bool? podeSalvar = Model.PodeSalvar as bool? ?? false;
+        }
+
+        @{
+            bool? podeDeletar = Model.PodeDeletar as bool? ?? false;
+        }
+
+@*        @{
+            bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
+        }*@
+
+        @if(podeSalvar.ToString().ToLower() == "false"){
+            @:condicaoSalvar = false;
+        }
+
+        @if(podeDeletar.ToString().ToLower() == "false"){
+            @:condicaoDeletar = false;
+        }
+
+@*        @if(podeImprimir.ToString().ToLower() == "false"){
+            @:condicaoImprimir = false;
+        }*@
+
+
+        if (condicaoSalvar) {
+            document.getElementById('btnSalvar').className = "btn btn-primary right";
+        }
+        else {
+            document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
+        }
+        if (condicaoDeletar) {
+            document.getElementById('btnDeletar').className = "btn btn-primary";
+        }
+        else {
+            document.getElementById('btnDeletar').className = "btn btn-primary disabled";
+        }
+
+        //if (condicaoImprimir) {
+        //    document.getElementById('btnImprimir').className = "btn btn-primary";
+        //}
+        //else {
+        //    document.getElementById('btnImprimir').className = "btn btn-primary disabled";
+        //}
+
     }
-    
+
+    function listarFiltro() {
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
+
+    function habilitaDesabilitaNumeroDeDias() {
+        var tipoRecementoId = $("#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)").val();       
+        if (tipoRecementoId == "1") {
+            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', false);
+            document.getElementById('@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').className = "numeric text-right";
+            $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val(0);
+        }
+        else {
+            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', true);
+            document.getElementById('@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').className = "numeric text-right readonly";
+            $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val("");
+        }
+        
+    }
 </script>
 

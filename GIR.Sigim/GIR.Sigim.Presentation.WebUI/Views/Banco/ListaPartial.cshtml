@@ -17,47 +17,46 @@
                             Model.PageSizeList,
                             new
                             {
-                                @id = "pageSizeSelector",
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
                                 @aria_controls = "dt_basic",
-                                @class = "form-control",
-                                onchange = "changePageSize();"
+                                @class = "form-control"
                             })
                     </label>
                 </div>
             </div>
         </div>
         <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
                     <tr role="row">
                         @{
-        string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
-        string idSortingSuffix = "sorting";
-        string nomeSortingSuffix = "sorting";
-        string interfaceEletronicaSortingSuffix = "sorting";
-        string numeroRemessaSortingSuffix = "sorting";
-        string numeroRemessaPagamentoSortingSuffix = "sorting";
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string idSortingSuffix = "sorting";
+                            string nomeSortingSuffix = "sorting";
+                            string interfaceEletronicaSortingSuffix = "sorting";
+                            string numeroRemessaSortingSuffix = "sorting";
+                            string numeroRemessaPagamentoSortingSuffix = "sorting";
 
-        switch (Model.OrderBy)
-        {
-            case "id":
-                idSortingSuffix += sortingSuffix;
-                break;
-            case "nome":
-                nomeSortingSuffix += sortingSuffix;
-                break;
-            case "interfaceEletronica":
-                interfaceEletronicaSortingSuffix += sortingSuffix;
-                break;
-            case "numeroRemessa":
-                numeroRemessaSortingSuffix += sortingSuffix;
-                break;
-            case "numeroRemessaPagamento":
-                numeroRemessaPagamentoSortingSuffix += sortingSuffix;
-                break;
-            default:
-                break;
-        }
+                            switch (Model.OrderBy)
+                            {
+                                case "id":
+                                    idSortingSuffix += sortingSuffix;
+                                    break;
+                                case "nome":
+                                    nomeSortingSuffix += sortingSuffix;
+                                    break;
+                                case "interfaceEletronica":
+                                    interfaceEletronicaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "numeroRemessa":
+                                    numeroRemessaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "numeroRemessaPagamento":
+                                    numeroRemessaPagamentoSortingSuffix += sortingSuffix;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                         <th class="sorting @idSortingSuffix text-center" data-order="id" style="width:60px; ">Código</th>
                         <th class="sorting @nomeSortingSuffix text-center" data-order="nome" style="min-width:65px;">Nome</th>
@@ -80,6 +79,6 @@
                 </tbody>
             </table>
         </div>
-        @Html.Partial("_PaginationPartial", Model.Pagination)
+        @Html.Partial("_PaginationPartial", Model)
     }
 </div>

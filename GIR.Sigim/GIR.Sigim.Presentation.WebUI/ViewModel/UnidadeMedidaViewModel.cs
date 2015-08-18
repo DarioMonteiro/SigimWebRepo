@@ -13,8 +13,10 @@ namespace GIR.Sigim.Presentation.WebUI.ViewModel
     public class UnidadeMedidaViewModel
     {
         public UnidadeMedidaDTO UnidadeMedida { get; set; }
-
         public UnidadeMedidaFiltro Filtro { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
+        public bool PodeImprimir { get; set; }
 
         public UnidadeMedidaViewModel()
         {

@@ -293,21 +293,13 @@
                                                 </script>
                                             </div>
                                             <div class="row">
-                                                <section class="col col-12">
-                                                    @Html.LabelFor(m => m.ListaMultiFornecedor, new { @class = "label" })
-                                                    <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId, Model.ListaMultiFornecedor, string.Empty)  
-                                                        <i></i>
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").on("change", function () {
-                                                                    validaNumeroDocumento();
-                                                                });
-                                                            });
-                                                        </script>
-
-                                                    </label>
-                                                </section>
+                                                @Html.EditorFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor, "ClienteFornecedor", new { @sectionClass = "col col-12", 
+                                                                                                                                                  @required = false, 
+                                                                                                                                                  @label = "Multifornecedor",
+                                                                                                                                                  @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
+                                                                                                                                                  @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                                                                                                  @exibirBotaoPesquisa = true
+                                                                                                                                                 })
                                             </div>
                                         </fieldset>
                                         <h5 style="padding-left :15px;">
@@ -364,7 +356,7 @@
                                                 <section class="col col-12">
                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, new { @maxlength = "50" })  
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, new { @maxlength = "50"})
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras, "", new { @class = "note note-error" })
                                                 </section>
@@ -577,13 +569,13 @@
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                             @{
-                                string disableBtnCancelar = string.Empty;
-                                if (!Model.PodeCancelar)
+                                string disableBtnDeletar = string.Empty;
+                                if (!Model.PodeDeletar)
                                 {
-                                    disableBtnCancelar = "disabled";
+                                    disableBtnDeletar = "disabled";
                                 }
                             }
-                            <a data-toggle="modal" id="btnCancelar" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
+                            <a data-toggle="modal" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">Deletar</a>
 
                             @{
                                 var url = Url.Action("Imprimir","MedicaoContrato");
@@ -614,20 +606,18 @@
         tratarBotoes(false, false, false);
 
         $(document).on("showFormatoImpressaoModalPanel", function (e) {
-
             var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
             var tipoDocumentoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val();
             var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
             var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
             var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
-            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val();
             var retencaoContratual = $("#@Html.IdFor(m => m.RetencaoContratual)").val();
             var valorContratadoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)").val();
 
             if ((multiFornecedorId != "") && (multiFornecedorId > 0)) {
                 contratadoId = multiFornecedorId;
             }
-            var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
 
             if (contratoId == "") {
                 smartAlert("Atenção", "Informe o contrato", "warning");
@@ -658,7 +648,7 @@
                 e.event.preventDefault();
             }
 
-            parametrosUrlImpressao += '&contratadoId=' + contratadoId;
+            parametrosUrlImpressao = '&contratadoId=' + contratadoId;
             parametrosUrlImpressao += '&contratoId=' + contratoId;
             parametrosUrlImpressao += '&tipoDocumentoId=' + tipoDocumentoId;
             parametrosUrlImpressao += '&numeroDocumento=' + numeroDocumento;
@@ -666,7 +656,6 @@
             parametrosUrlImpressao += '&multiFornecedorId=' + multiFornecedorId;
             parametrosUrlImpressao += '&retencaoContratual=' + retencaoContratual;
             parametrosUrlImpressao += '&valorContratadoItem=' + valorContratadoItem;
-
         });
 
         $(document).on("show.bs.modal", "#PesquisarMedicao_ModalPanel", function (e) {
@@ -715,7 +704,7 @@
             var tipoDocumentoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val();
             var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
             var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
-            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+            var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val();
             var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
 
             if (contratoId == "") {
@@ -789,14 +778,14 @@
         });
 
 
-        $("#btnCancelar").on("click", function () {
+        $("#btnDeletar").on("click", function () {
             var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
             var id = $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)').val();
             var isCancelou = false;
 
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("Cancelar", "MedicaoContrato")',
+                url: '@Url.Action("Deletar", "MedicaoContrato")',
                 cache: false,
                 async: false,
                 contentType: 'application/json; charset=utf-8',
@@ -806,7 +795,7 @@
                 })
             })
             .success(function (result) {
-                $('#notificationMessages').html(result.message);
+                //$('#notificationMessages').html(result.message);
                 
                 isCancelou = result.ehCancelou;
                 if (isCancelou) {
@@ -816,6 +805,9 @@
                 else {
                     smartAlert("Ocorreu erro na exclusão", result.message, "error");
                 }
+            })
+            .error(function (result) {
+                smartAlert("Erro", "Ocorreu erro na exclusão da medição !", "error");
             });
         });
     });
@@ -844,47 +836,39 @@
             }),
             success: function (result) {
                 showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
-                if (result.ehRecuperou) {
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val(result.contratoRetificacaoItem.ComplementoDescricao);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.contratoRetificacaoItem.DescricaoNaturezaItem);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val(result.contratoRetificacaoItem.Servico.SiglaUnidadeMedida);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
-                    if (result.contratoRetificacaoItem.ValorItem != null) {
-                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.ValorItem), 2));
+
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val(result.contratoRetificacaoItem.ComplementoDescricao);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val(result.contratoRetificacaoItem.DescricaoNaturezaItem);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val(result.contratoRetificacaoItem.Servico.SiglaUnidadeMedida);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
+                if (result.contratoRetificacaoItem.ValorItem != null) {
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.ValorItem), 2));
                     }
-                    $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
-                    if (result.contratoRetificacaoItem.RetencaoItem != null) {
-                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));
+                @*$('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));*@
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
+                if (result.contratoRetificacaoItem.RetencaoItem != null) {
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));
                         $('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));
                     }
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
-                    if (result.contratoRetificacaoItem.BaseRetencaoItem != null) {
-                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.BaseRetencaoItem), 5));
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
+                if (result.contratoRetificacaoItem.BaseRetencaoItem != null) {
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.BaseRetencaoItem), 5));
                     }
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(result.contratoRetificacaoItem.PrecoUnitario), 5));
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(roundDecimal(floatToString(result.contratoRetificacaoItem.PrecoUnitario), 5));
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(result.ehNaturezaItemPorPrecoGlobal);
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(result.ehNaturezaItemPorPrecoUnitario);
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.contratoRetificacaoItem.Sequencial);
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
+
+                if (result.ehRecuperou) {
                     $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(JSON.stringify(result.listaContratoRetificacaoProvisao));
                     jsonRetificaoProvisaoArray = result.listaContratoRetificacaoProvisao;
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(result.ehNaturezaItemPorPrecoGlobal);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(result.ehNaturezaItemPorPrecoUnitario);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(result.contratoRetificacaoItem.Sequencial);
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
+
                 }
                 else
                 {
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ComplementoDescricao)').val("");
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.DescricaoNaturezaItem)').val("");
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.Servico.SiglaUnidadeMedida)').val("");
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val("");
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(0);
-                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val("");
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
-                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
-                    jsonRetificaoProvisaoArray = "[]";
-                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
+                    $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(null);
+                    jsonRetificaoProvisaoArray = null;
                 }
                 isRecuperou = result.ehRecuperou;
             },
@@ -897,11 +881,11 @@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.BaseRetencaoItem)').val("");
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val(0);
-                $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val("");
+                $('#@Html.IdFor(m => m.JsonListaRetificacaoProvisao)').val(null);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)').val(false);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoUnitario)').val(false);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialItem)').val(0);
-                jsonRetificaoProvisaoArray = "[]";
+                jsonRetificaoProvisaoArray = null;
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Id)").val(null);
             }
         });
@@ -1026,11 +1010,13 @@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SequencialCronograma)').val(item.ContratoRetificacaoItemCronograma.Sequencial);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)').val(roundDecimal(floatToString(item.ValorPendente), 2));
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.QuantidadePendente)").val(roundDecimal(floatToString(item.QuantidadePendente), 7));
+                var dataAtual = new Date().toFormatDDMMYYYY();
                 var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
-                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataEmissao);
+
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataAtual);
 
                 if (!validaDataVencimento()) {
-                    return;
+                    $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataMedicao)").val(dataAtual);
                 }
                 $("#@Html.IdFor(m => m.PrecoUnitario)").val(roundDecimal(floatToString(precoUnitario), 5));
                 if (ehNaturezaItemPorPrecoGlobal) {
@@ -1068,26 +1054,44 @@
         }
     }
 
-    function tratarBotoes(condicaoSalvar, condicaoCancelar, condicaoImprimir) {
-        $("#@Html.IdFor(m => m.PodeSalvar)").val(condicaoSalvar);
-        $("#@Html.IdFor(m => m.PodeCancelar)").val(condicaoCancelar);
-        $("#@Html.IdFor(m => m.PodeImprimir)").val(condicaoImprimir);
+    function tratarBotoes(condicaoSalvar, condicaoDeletar, condicaoImprimir) {
+        @{
+            bool? podeSalvar = Model.PodeSalvar as bool? ?? false;
+            bool? podeDeletar = Model.PodeDeletar as bool? ?? false;
+            bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
+        }
+        
+        @if(podeSalvar.ToString().ToLower() == "false"){
+            @:condicaoSalvar = false;
+        }
+        
+        @if (podeDeletar.ToString().ToLower() == "false")
+        {
+            @:condicaoDeletar = false;
+        }
 
+        @if (podeImprimir.ToString().ToLower() == "false")
+        {
+            @:condicaoImprimir = false;
+        }
+
+        
         if (condicaoSalvar) {
             document.getElementById('btnSalvar').className = "btn btn-primary right";
         }
         else {
             document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
         }
-        if (condicaoCancelar) {
-            document.getElementById('btnCancelar').className = "btn btn-danger";
+
+        if (condicaoDeletar) {
+            document.getElementById('btnDeletar').className = "btn btn-danger";
         }
         else {
-            document.getElementById('btnCancelar').className = "btn btn-danger disabled";
+            document.getElementById('btnDeletar').className = "btn btn-danger disabled";
         }
+
         if (condicaoImprimir) {
             document.getElementById('btnImprimir').className = "btn btn-primary";
-
         }
         else {
             document.getElementById('btnImprimir').className = "btn btn-primary disabled";
@@ -1113,6 +1117,23 @@
         tratarBotoes(false, false, false);
     }
 
+    function LimpaDadosDaNota() {
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoDocumentoId)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val(null);
+        var dataAtual = new Date().toFormatDDMMYYYY();
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val(dataAtual);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val(dataAtual);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Nome)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoCompraCodigo)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CifFobId)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NaturezaOperacaoCodigo)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.SerieNFId)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CSTCodigo)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo)").val(null);
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.CodigoBarras)").val(null);
+    }
+
     function setarAbaProvisionamento() {
         $('#AbaProvisionamentoId').click();
     }
@@ -1121,10 +1142,35 @@
         $('#AbaMedicaoId').click();
     }
 
+    $(document).on("centroCustoValidado",
+        function (e) {
+            $("#orcamentoId").val(0);
+            if (e.codigo != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ObterUltimoOrcamentoPeloCentroCusto", "Orcamento", new { area = "Orcamento" })',
+                    cache: false,
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        codigoCentroCusto: e.codigo
+                    })
+                })
+                .success(function (result) {
+                    $("#orcamentoId").val(result);
+                });
+            }
+        });
+
+    $(document).on("multiFornecedorSelecionado",
+        function (e) {
+            validaNumeroDocumento();
+        });
+
     function validaNumeroDocumento() {
         var isValid = false;
         var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
-        var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val();
+        var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val();
         var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
         var numeroDocumento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val();
 
@@ -1151,15 +1197,13 @@
 
         if (existeNumeroDocumento) {
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").val("");
-            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.NumeroDocumento)").focus();
             smartAlert("Atenção", "Documento existente no contrato.", "warning");
         }
 
         isValid = !existeNumeroDocumento;
 
         return isValid;
-
-    }
+    };
 
     function validaDataVencimento() {
         var dataVencimento = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val();
@@ -1378,6 +1422,7 @@
     function carregaAbaDadosMedicaoPesquisa() {
         var ehNaturezaItemPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
 
+        LimpaDadosDaNota();
         limpaAbaDadosMedicao();
 
         if (jsonMedicao != null) {
@@ -1406,8 +1451,9 @@
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val(dataEmissao);
             var dataVencimento = new Date(parseInt(jsonMedicao.DataVencimento.substr(6))).toFormatDDMMYYYY();
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataVencimento)").val(dataVencimento);
-            if (jsonMedicao.MultiFornecedorId != null) {
-                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedorId)").val(jsonMedicao.MultiFornecedorId);
+            if ((jsonMedicao.MultiFornecedor !=null) && (jsonMedicao.MultiFornecedor.Id != null)) {
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val(jsonMedicao.MultiFornecedor.Id);
+                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Nome)").val(jsonMedicao.MultiFornecedor.Nome);
             }
             if (jsonMedicao.TipoCompraCodigo != null) {
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.TipoCompraCodigo)").val(jsonMedicao.TipoCompraCodigo);
@@ -1434,12 +1480,10 @@
 
             var valor = roundDecimal(floatToString(jsonMedicao.Valor), 2);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(valor);
-            @*$("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.ValorPendente)").val(valor);*@
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)").val(valor);
 
             var quantidade = roundDecimal(floatToString(jsonMedicao.Quantidade), 7);
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(quantidade);
-            @*$("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Totalizadores.QuantidadePendente)").val(quantidade);*@
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.QuantidadePendente)").val(quantidade);
 
             if (jsonMedicao.Desconto != null) {
@@ -1547,19 +1591,21 @@
 
                 if (valorImpostoRetido > 0 || valorImpostoIndireto > 0) {
                     valorImposto = valorImpostoIndireto + valorImpostoRetido;
+                    valorImposto = parseFloat(valorImposto.toFixed(2));
                     totalValorImposto = totalValorImposto + valorImposto;
                     valorLiquido = valorLiberado - valorImposto;
                 }
                 else {
                     valorLiquido = valorLiberado;
                 }
-                totalValorLiquido = totalValorLiquido + valorLiquido;
 
                 var valorDesconto = jsonContratoRetificaoItemMedicaoArray[i].Desconto;
                 if (isNaN(valorDesconto) || valorDesconto == null) {
                     valorDesconto = 0;
                 }
                 valorLiquido = valorLiberado - valorDesconto;
+
+                totalValorLiquido = totalValorLiquido + valorLiquido;
 
                 var titulo = "";
                 var tituloPagar = "";

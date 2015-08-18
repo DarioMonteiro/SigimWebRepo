@@ -53,13 +53,14 @@
                             "Setor",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
-                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                            new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
                     }
                     <div id="resultadoBusca"></div>
                 </div>
@@ -72,6 +73,17 @@
 }
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        listarFiltro();
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                listarFiltro();
+            }
+        );
+
+    });
+
     $("#btnDeletar").on("click", function () {
         $.ajax({
             type: 'POST',
@@ -86,7 +98,7 @@
         .success(function (result) {
             $('#notificationMessages').html(result);
             clearForm();
-            doFilter();
+            listarFiltro();
         });
     });
 
@@ -104,7 +116,7 @@
     function refresh() {
         onSuccess();
         clearForm();
-        doFilter();
+        listarFiltro();
     }
 
     function loadItem(id) {
@@ -124,6 +136,11 @@
             goToTop();
         });
     }
+
+    function listarFiltro() {
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
+
 </script>
 
 

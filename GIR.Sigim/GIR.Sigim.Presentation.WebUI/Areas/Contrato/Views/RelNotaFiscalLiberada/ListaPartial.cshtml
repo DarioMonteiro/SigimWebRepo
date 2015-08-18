@@ -1,0 +1,151 @@
+﻿@using GIR.Sigim.Application.DTO.Contrato
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<RelNotaFiscalLiberadaDTO> Lista = Model.Records as IEnumerable<RelNotaFiscalLiberadaDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls="dt_basic",
+                                @class="form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string numeroDocumentoSortingSuffix = "sorting";
+                            string dataEmissaoSortingSuffix = "sorting";
+                            string fornecedorClienteSortingSuffix = "sorting";
+                            string dataVencimentoSortingSuffix = "sorting";
+                            string valorSortingSuffix = "sorting";
+                            string descricaoItemSortingSuffix = "sorting";
+                            string codigoDescricaoClasseSortingSuffix = "sorting";
+                            string contratoSortingSuffix = "sorting";
+                            string descricaoContratoSortingSuffix = "sorting";
+                            string usuarioLiberacaoSortingSuffix = "sorting";
+                            string tituloSortingSuffix = "sorting";
+                            string codigoDescricaoCentroCustoSortingSuffix = "sorting";
+                            
+                            switch (Model.OrderBy)
+                            {
+                                case "numeroDocumento":
+                                    numeroDocumentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataEmissao":
+                                    dataEmissaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "fornecedorCliente":
+                                    fornecedorClienteSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataVencimento":
+                                    dataVencimentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "valor":
+                                    valorSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoItem":
+                                    descricaoItemSortingSuffix += sortingSuffix;
+                                    break;
+                                case "codigoDescricaoClasse":
+                                    codigoDescricaoClasseSortingSuffix += sortingSuffix;
+                                    break;
+                                case "contrato":
+                                    contratoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoContrato":
+                                    descricaoContratoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "usuarioLiberacao":
+                                    usuarioLiberacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "titulo":
+                                    tituloSortingSuffix += sortingSuffix;
+                                    break;
+                                case "codigoDescricaoCentroCusto":
+                                    codigoDescricaoCentroCustoSortingSuffix += sortingSuffix;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        <th class="sorting @numeroDocumentoSortingSuffix text-left" data-order="numeroDocumento" style="min-width:80px;">Nota fiscal</th>
+                        <th class="sorting @dataEmissaoSortingSuffix text-left" data-order="dataEmissao" style="min-width:90px;">Data emissão</th>
+                        <th class="sorting @fornecedorClienteSortingSuffix text-left" data-order="fornecedorCliente" style="min-width:140px;">Fornecedor / Cliente</th>
+                        <th class="text-left" data-order="CPFCNPJFornecedorCliente" style="min-width:90px;">CPF / CNPJ</th>
+                        <th class="sorting @dataVencimentoSortingSuffix text-left" data-order="dataVencimento" style="min-width:90px;">Data vencimento</th>
+                        <th class="sorting @valorSortingSuffix text-left" data-order="valor" style="min-width:80px;">Valor NF</th>
+                        <th class="text-left">Valor classe</th>
+                        <th class="sorting @descricaoItemSortingSuffix text-left" data-order="descricaoItem">Serviço</th>
+                        <th class="sorting @codigoDescricaoClasseSortingSuffix text-left" data-order="codigoDescricaoClasse">Classe de despesa</th>
+                        <th class="sorting @contratoSortingSuffix text-left" data-order="contrato" style="min-width:70px;">Contrato</th>
+                        <th class="sorting @descricaoContratoSortingSuffix text-left" data-order="descricaoContrato">Descrição contrato</th>
+                        <th class="sorting @usuarioLiberacaoSortingSuffix text-left" data-order="usuarioLiberacao" style="min-width:80px;">Resp. Liberação</th>
+                        <th class="sorting @tituloSortingSuffix text-left" data-order="titulo" style="min-width:60px;">Título</th>
+                        <th class="sorting @codigoDescricaoCentroCustoSortingSuffix text-left" data-order="codigoDescricaoCentroCusto">Centro de custo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td class="text-right text-nowrap">@item.NumeroDocumento</td>
+                            <td class="text-center text-nowrap">@item.DataEmissao.ToShortDateString()</td>
+                            <td class="text-left text-nowrap">@item.FornecedorCliente.Nome</td>
+                            @{
+                                if (item.FornecedorCliente.TipoPessoa == "J")
+                                {
+                                    if (item.FornecedorCliente.PessoaJuridica != null)
+                                    {
+                                        <td class="text-left text-nowrap">@item.FornecedorCliente.PessoaJuridica.Cnpj</td>
+                                    }
+                                    else{
+                                        <td class="text-left text-nowrap"></td>
+                                    }
+                                }
+                                if (item.FornecedorCliente.TipoPessoa == "F")
+                                {
+                                    if (item.FornecedorCliente.PessoaFisica != null)
+                                    {
+                                        <td class="text-left text-nowrap">@item.FornecedorCliente.PessoaFisica.Cpf</td>
+                                    }
+                                    else{
+                                        <td class="text-left text-nowrap"></td>
+                                    }
+                                }
+                            }
+
+                            <td class="text-center text-nowrap">@item.DataVencimento.ToShortDateString()</td>
+                            <td class="text-right text-nowrap">@item.Valor.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.ValorClasse.ToString("N2")</td>
+                            <td class="text-left text-nowrap">@item.ContratoRetificacaoItem.Servico.Descricao</td>
+                            <td class="text-left text-nowrap">@item.ContratoRetificacaoItem.Classe.ClasseDescricao</td>
+                            <td class="text-left text-nowrap">@item.ContratoId</td>
+                            <td class="text-left text-nowrap">@item.Contrato.ContratoDescricao.Descricao</td>
+                            <td class="text-left text-nowrap">@item.UsuarioLiberacao</td>
+                            <td class="text-left text-nowrap">@item.TituloId</td>
+                            <td class="text-left text-nowrap">@item.Contrato.CentroCusto.CentroCustoDescricao</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>

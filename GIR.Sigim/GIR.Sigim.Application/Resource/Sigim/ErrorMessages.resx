@@ -129,6 +129,12 @@
   <data name="CampoObrigatorio" xml:space="preserve">
     <value>O campo {0} é obrigatório.</value>
   </data>
+  <data name="ClasseInsumoNaoCadastrada" xml:space="preserve">
+    <value>Classe insumo não cadastrada.</value>
+  </data>
+  <data name="ClasseUltimoNivel" xml:space="preserve">
+    <value>Selecione uma classe insumo do último nível.</value>
+  </data>
   <data name="DataMaximaMenorQueMinima" xml:space="preserve">
     <value>A data máxima não pode ser menor que a data mínima.</value>
   </data>
@@ -156,11 +162,20 @@
   <data name="LimiteMinimoCaracteresNaoAtingido" xml:space="preserve">
     <value>Preencha o campo com no mínimo {1} caracteres.</value>
   </data>
+  <data name="NaoExistemRegistros" xml:space="preserve">
+    <value>Não existem registros.</value>
+  </data>
   <data name="NenhumRegistroEncontrado" xml:space="preserve">
     <value>Nenhum registro encontrado.</value>
   </data>
+  <data name="PrivilegiosInsuficientes" xml:space="preserve">
+    <value>Privilégios insuficientes para executar esta operação.</value>
+  </data>
   <data name="RegistroEmUso" xml:space="preserve">
     <value>O registro [{0}] está sendo usado.</value>
+  </data>
+  <data name="RegistroNaoRecuperado" xml:space="preserve">
+    <value>Selecione o registro.</value>
   </data>
   <data name="RegistroProtegido" xml:space="preserve">
     <value>O registro [{0}] está protegido.</value>
@@ -176,5 +191,8 @@
   </data>
   <data name="ValorDeveSerNumerico" xml:space="preserve">
     <value>Preencha o campo {0} com um valor numérico.</value>
+  </data>
+  <data name="ValorDeveSerNumericoEOuEspaco" xml:space="preserve">
+    <value>Preencha o campo {0} com um valor numérico e ou espaço.</value>
   </data>
 </root>

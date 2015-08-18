@@ -10,6 +10,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Sac.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
 {
@@ -27,6 +28,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
             this.clienteFornecedorAppService = clienteFornecedorAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.ParametroSacAcessar)]
         public ActionResult Index()
         {
             ParametrosViewModel model = new ParametrosViewModel();

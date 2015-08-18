@@ -97,6 +97,9 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         [Display(Name = "Dados SPED obrigatórios")]
         public bool EhObrigatorioDadosSPED { get; set; }
 
+        [Display(Name = "Gera RM pendente (Pré RM)")]
+        public bool EhGeraRequisicaoMaterialRequisitada { get; set; }
+
         public ParametrosOrdemCompraDTO()
         {
             this.InterfaceCotacao = new InterfaceCotacaoDTO();

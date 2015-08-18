@@ -14,6 +14,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Filtros;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -29,6 +30,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.tabelaBasicaAppService = tabelaBasicaAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.TabelaBasicaFinanceiroAcessar)]
         public ActionResult Index(int? id)
         {
             TabelaBasicaDTO tabelaBasica = new TabelaBasicaDTO();
@@ -41,6 +43,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 tipoTabela = 0;
                 model = new TabelaBasicaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
             if (model.TipoTabelaId != null) { tipoTabela = (int)model.TipoTabelaId; }

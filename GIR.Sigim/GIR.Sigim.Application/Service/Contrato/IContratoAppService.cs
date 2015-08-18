@@ -27,5 +27,8 @@ namespace GIR.Sigim.Application.Service.Contrato
         FileDownloadDTO ExportarMedicao(int contratoId,int? contratadoId,int tipoDocumentoId,string numeroDocumento,DateTime dataEmissao,string retencaoContratual,string valorContratadoItem,FormatoExportacaoArquivo formato);
         bool ExcluirMedicao(int? contratoId, int? contratoRetificacaoItemMedicaoId);
         bool SalvarMedicao(ContratoRetificacaoItemMedicaoDTO dto);
+        bool EhPermitidoSalvarMedicao();
+        bool EhPermitidoDeletarMedicao();
+        bool EhPermitidoImprimirMedicao();
     }
 }

@@ -16,17 +16,16 @@
                             m => m.PageSize,
                             Model.PageSizeList,
                             new {
-                                @id = "pageSizeSelector",
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
                                 @aria_controls="dt_basic",
-                                @class="form-control",
-                                onchange="changePageSize();"
+                                @class="form-control"
                             })
                     </label>
                 </div>
             </div>
         </div>
         <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
                     <tr role="row">
                         @{
@@ -88,7 +87,7 @@
                             <td class="text-center text-nowrap">
                                 @if (item.DataAssinatura.HasValue)
                                 {
-                                    @item.DataAssinatura.Value.ToString("dd/MM/yyyy HH:mm");
+                                    @item.DataAssinatura.Value.ToString("dd/MM/yyyy");
                                 }
                                 &nbsp;
                             </td>
@@ -98,6 +97,6 @@
                 </tbody>
             </table>
         </div>
-        @Html.Partial("_PaginationPartial", Model.Pagination)
+        @Html.Partial("_PaginationPartial", Model)
     }
 </div>

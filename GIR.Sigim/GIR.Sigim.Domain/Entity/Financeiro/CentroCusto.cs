@@ -25,7 +25,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             set { Situacao = value ? "A" : "I"; }
         }
         public string CodigoPai { get; set; }
-        public CentroCusto CentroCustoPai { get; set; }
+        public virtual CentroCusto CentroCustoPai { get; set; }
         public virtual ICollection<CentroCusto> ListaFilhos { get; set; }
         public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
         public ICollection<ParametrosUsuario> ListaParametrosUsuario { get; set; }
@@ -40,6 +40,11 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<Caixa> ListaCaixa { get; set; }
         public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
         public ICollection<RateioAutomatico> ListaRateioAutomatico { get; set; }
+        public ICollection<TaxaAdministracao> ListaTaxaAdministracao { get; set; }
+        public ICollection<EntradaMaterial> ListaEntradaMaterial { get; set; }
+        public ICollection<OrdemCompra.OrdemCompra> ListaOrdemCompra { get; set; }
+        public ICollection<Estoque.Estoque> ListaEstoque { get; set; }
+        public ICollection<Apropriacao> ListaApropriacao { get; set; }
         public ICollection<ContaCorrente> ListaContaCorrente { get; set; }
 
         public CentroCusto()
@@ -57,7 +62,12 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaBloqueioContabil = new HashSet<BloqueioContabil>();
             this.ListaCaixa = new HashSet<Caixa>();
             this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
-            this.ListaRateioAutomatico = new HashSet<RateioAutomatico>();
+            this.ListaRateioAutomatico = new HashSet<RateioAutomatico>();  
+            this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();
+            this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();
+            this.ListaOrdemCompra = new HashSet<Domain.Entity.OrdemCompra.OrdemCompra>();
+            this.ListaEstoque = new HashSet<Estoque.Estoque>();
+            this.ListaApropriacao = new HashSet<Apropriacao>();
             this.ListaContaCorrente = new HashSet<ContaCorrente>();  
         }
 

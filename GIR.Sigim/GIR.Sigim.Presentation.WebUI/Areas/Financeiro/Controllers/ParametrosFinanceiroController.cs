@@ -11,6 +11,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -29,10 +30,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.clienteFornecedorAppService = clienteFornecedorAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.ParametroFinanceiroAcessar)]
         public ActionResult Index()
         {
             ParametrosFinanceiroViewModel model = new ParametrosFinanceiroViewModel();
             model.Parametros = parametrosAppService.Obter();
+            model.PodeSalvar = parametrosAppService.EhPermitidoSalvar();
             CarregarCombos(model);
             return View(model);
         }

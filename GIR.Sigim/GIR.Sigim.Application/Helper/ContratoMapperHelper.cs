@@ -45,7 +45,9 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.ValorTotalMedidoIndireto, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedidoIndireto(s.ContratoId, s.NumeroDocumento, s.TipoDocumentoId, s.DataVencimento)))
                 .ForMember(d => d.ValorTotalMedidoNota, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedidoNota(s.ContratoId, s.NumeroDocumento, s.TipoDocumentoId, s.DataVencimento)))
                 .ForMember(d => d.ValorTotalMedidoLiberadoContrato, m => m.MapFrom(s => s.Contrato.ObterValorTotalMedidoLiberadoContrato(s.ContratoId)));
-            Mapper.CreateMap<ContratoRetificacaoItemMedicaoDTO, ContratoRetificacaoItemMedicao>();
+            Mapper.CreateMap<ContratoRetificacaoItemMedicaoDTO, ContratoRetificacaoItemMedicao>()
+                .ForMember(d => d.MultiFornecedor, m => m.UseValue(null))
+                .ForMember(d => d.MultiFornecedorId, m => m.MapFrom(s => s.MultiFornecedor.Id));
 
             Mapper.CreateMap<ContratoRetificacaoProvisao, ContratoRetificacaoProvisaoDTO>()
                 .ForMember(d => d.QuantidadeTotalMedida, m => m.MapFrom(s => s.Contrato.ObterQuantidadeTotalMedida(s.SequencialItem, s.SequencialCronograma)))

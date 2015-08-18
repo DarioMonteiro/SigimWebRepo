@@ -65,6 +65,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
+    <Reference Include="MvcSiteMapProvider">
+      <HintPath>..\packages\MvcSiteMapProvider.MVC4.Core.4.6.18\lib\net45\MvcSiteMapProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcSiteMapProvider.WebActivator">
+      <HintPath>..\packages\MvcSiteMapProvider.MVC4.4.6.18\lib\net45\MvcSiteMapProvider.WebActivator.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -135,6 +141,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0.1\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -145,14 +154,24 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsuarioFuncionalidadeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PerfilController.cs" />
+    <Compile Include="Areas\Admin\ViewModel\UsuarioFuncionalidadeViewModel.cs" />
+    <Compile Include="Areas\Admin\ViewModel\PerfilViewModel.cs" />
     <Compile Include="Areas\Contrato\ContratoAreaRegistration.cs" />
     <Compile Include="Areas\Contrato\Controllers\HomeController.cs" />
     <Compile Include="Areas\Contrato\Controllers\MedicaoContratoController.cs" />
+    <Compile Include="Areas\Contrato\Controllers\RelNotaFiscalLiberadaController.cs" />
     <Compile Include="Areas\Contrato\ViewModel\MedicaoContratoListaViewModel.cs" />
     <Compile Include="Areas\Contrato\ViewModel\MedicaoContratoMedicaoViewModel.cs" />
+    <Compile Include="Areas\Contrato\ViewModel\RelNotaFiscalLiberadaListaViewModel.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CaixaController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\TipoMovimentoController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\TaxaAdministracaoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\RateioAutomaticoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ImpostoFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\TabelaBasicaController.cs" />
@@ -165,6 +184,8 @@
     <Compile Include="Areas\Financeiro\Controllers\TipoRateioController.cs" />
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\CaixaViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\TipoMovimentoViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\TaxaAdministracaoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\RateioAutomaticoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ImpostoFinanceiroViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TabelaBasicaViewModel.cs" />
@@ -176,10 +197,18 @@
     <Compile Include="Areas\Financeiro\ViewModel\TipoRateioViewModel.cs" />
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
+    <Compile Include="Areas\OrdemCompra\Controllers\EntradaMaterialController.cs" />
+    <Compile Include="Areas\OrdemCompra\ViewModel\PossibilidadeCancelamentoEntradaMaterialViewModel.cs" />
+    <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialCadastroViewModel.cs" />
+    <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialListaViewModel.cs" />
+    <Compile Include="Areas\OrdemCompra\Controllers\RelOCItensOrdemCompraController.cs" />
+    <Compile Include="Areas\OrdemCompra\ViewModel\RelOcItensOrdemCompraListaViewModel.cs" />
     <Compile Include="Controllers\BancoController.cs" />
     <Compile Include="Controllers\AgenciaController.cs" />
+    <Compile Include="Controllers\ClienteFornecedorController.cs" />
     <Compile Include="Controllers\ContaCorrenteController.cs" />
     <Compile Include="Controllers\FormaRecebimentoController.cs" />
+    <Compile Include="Controllers\MaterialClasseInsumoController.cs" />
     <Compile Include="Controllers\UnidadeMedidaController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RequisicaoMaterialController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\HomeController.cs" />
@@ -197,6 +226,7 @@
     <Compile Include="Areas\Sac\SacAreaRegistration.cs" />
     <Compile Include="Areas\Sac\ViewModel\SetorViewModel.cs" />
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
+    <Compile Include="CustomAttributes\PreRequisicaoMaterialAuthorizeAttribute.cs" />
     <Compile Include="ViewModel\BancoViewModel.cs" />
     <Compile Include="ViewModel\ContaCorrenteListaViewModel.cs" />
     <Compile Include="ViewModel\ContaCorrenteCadastroViewModel.cs" />
@@ -276,30 +306,20 @@
     <Content Include="Areas\OrdemCompra\Views\Home\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\Web.config" />
     <Content Include="Areas\Financeiro\Views\_ViewStart.cshtml" />
-    <Content Include="ImagemRelatorio\0446ee22-6fef-41da-8567-0b24a44901c3.bmp" />
-    <Content Include="ImagemRelatorio\13bc62f1-5a09-444b-9cab-56b8560663b2.bmp" />
-    <Content Include="ImagemRelatorio\257b9d2b-4b4f-4327-ba9c-402d6525d0a9.bmp" />
-    <Content Include="ImagemRelatorio\5913a6f7-da5e-4777-a306-345d1b0ba955.bmp" />
-    <Content Include="ImagemRelatorio\69cdfcef-13fd-467f-95d6-433ed2150637.bmp" />
-    <Content Include="ImagemRelatorio\7e5ac06d-1c86-4e91-8cbe-18e880403053.bmp" />
-    <Content Include="ImagemRelatorio\915b820b-243e-496a-afb7-276e5505b83a.bmp" />
-    <Content Include="ImagemRelatorio\99a04b31-d778-4204-9c66-8693d87e4a6c.bmp" />
-    <Content Include="ImagemRelatorio\9f20a014-8ad4-4b46-81ee-12454c248a68.bmp" />
-    <Content Include="ImagemRelatorio\d24fe3a9-acb2-4417-94f0-164b2240703c.bmp" />
-    <Content Include="ImagemRelatorio\f65b74b2-7d71-469f-b689-185e2653a169.bmp" />
-    <Content Include="ImagemRelatorio\fdb71d6e-b92a-4235-a0cc-2bae133e8a5c.bmp" />
     <Content Include="Scripts\libs\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\plugin\form-to-json\form2js.js" />
     <Content Include="Scripts\plugin\form-to-json\jquery.toObject.js" />
     <Content Include="Scripts\sigim_scripts.js" />
+    <Content Include="Views\Agencia\Index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Views\Shared\EditorTemplates\CentroCusto.cshtml" />
-    <Content Include="Areas\Financeiro\Views\Shared\TreeNode.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\Parametros\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\Index.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\ListaPartial.cshtml" />
     <Content Include="Areas\OrdemCompra\Views\PreRequisicaoMaterial\Cadastro.cshtml" />
-    <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Index.cshtml" />
-    <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\ListaPartial.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\EntradaMaterial\Index.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\EntradaMaterial\ListaPartial.cshtml" />
     <Content Include="Areas\Orcamento\Views\Web.config" />
     <Content Include="Areas\Financeiro\Views\ParametrosUsuarioFinanceiro\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\Shared\_MenuPartial.cshtml" />
@@ -337,6 +357,34 @@
     <Content Include="Areas\Financeiro\Views\RateioAutomatico\Index.cshtml" />
     <Content Include="Areas\Sac\Views\Setor\Index.cshtml" />
     <Content Include="Areas\Sac\Views\Setor\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TaxaAdministracao\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TaxaAdministracao\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TaxaAdministracao\Cadastro.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\Index.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\RequisicaoMaterial\ListaPartial.cshtml" />
+    <Content Include="Areas\Contrato\Views\RelNotaFiscalLiberada\Index.cshtml" />
+    <Content Include="Areas\Contrato\Views\RelNotaFiscalLiberada\ListaPartial.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\RelOCItensOrdemCompra\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_MenuPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Web.config" />
+    <Content Include="Areas\Admin\Views\Perfil\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Perfil\ListaPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\Perfil\Cadastro.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\EntradaMaterial\Cadastro.cshtml" />
+    <Content Include="Areas\Admin\Views\UsuarioFuncionalidade\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\UsuarioFuncionalidade\ListaPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\UsuarioFuncionalidade\Cadastro.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\RelOCItensOrdemCompra\ListaPartial.cshtml" />
+    <Content Include="Mvc.sitemap">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="MvcSiteMapSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Areas\Financeiro\Views\TipoMovimento\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\TipoMovimento\ListaPartial.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
@@ -773,7 +821,6 @@
     <Content Include="Views\Shared\_PaginationPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ListPageScript.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Classe.cshtml" />
-    <Content Include="Areas\Financeiro\Views\Shared\TreeView.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Material.cshtml" />
     <Content Include="Views\Shared\Redirect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Imprimir.cshtml" />
@@ -784,11 +831,29 @@
     <Content Include="Views\FormaRecebimento\ListaPartial.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
-    <Content Include="Views\Agencia\Index.cshtml" />
-    <Content Include="Views\Agencia\ListaPartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClienteFornecedor.cshtml" />
     <Content Include="Views\Agencia\Cadastro.cshtml" />
     <Content Include="Views\ContaCorrente\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MaterialComPesquisaGenerica.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClasseInsumo.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TreeNode.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TreeView.cshtml" />
+    <Content Include="Views\Material\ListaPesquisaPartial.cshtml" />
+    <Content Include="Views\Agencia\ListaPartial.cshtml" />
     <Content Include="Views\ContaCorrente\ListaPartial.cshtml" />
+    <None Include="Properties\PublishProfiles\SigimWeb.pubxml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapTitleHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapNodeModelList.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapNodeModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MenuHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\CanonicalHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\PathNode.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MenuNode.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MenuNodeList.cshtml" />
+    <Content Include="Views\ClienteFornecedor\ListaPesquisaPartial.cshtml" />
     <Content Include="Views\ContaCorrente\Cadastro.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -796,11 +861,16 @@
     <Folder Include="Areas\Financeiro\Views\CentroCusto\" />
     <Folder Include="Areas\Orcamento\ViewModel\" />
     <Folder Include="Areas\Orcamento\Views\Shared\" />
+    <Folder Include="ImagemRelatorio\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GIR.Sigim.Application.Service\GIR.Sigim.Application.Service.csproj">
+      <Project>{5cb76b8f-44f7-42eb-bc19-4d2e53790ec9}</Project>
+      <Name>GIR.Sigim.Application.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GIR.Sigim.Application\GIR.Sigim.Application.csproj">
       <Project>{5ca0a583-33a5-43ab-99c6-2d5d19508ca0}</Project>
       <Name>GIR.Sigim.Application</Name>
@@ -813,6 +883,9 @@
       <Project>{c6691185-a423-4909-9157-1cb230a48980}</Project>
       <Name>GIR.Sigim.Infrastructure.Crosscutting</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

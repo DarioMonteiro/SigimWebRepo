@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.Service.Contrato;
 using GIR.Sigim.Application.Service.Orcamento;
@@ -41,6 +42,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public void Salvar(ParametrosOrdemCompraDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.ParametroOrdemCompraGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return;
+            }
+
             if (dto == null)
                 throw new ArgumentNullException("dto");
 
@@ -69,6 +76,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
                 messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
             }
+        }
+
+        public bool EhPermitidoSalvar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.ParametroOrdemCompraGravar);
         }
 
         private bool EhValido(ParametrosOrdemCompra parametros)

@@ -14,19 +14,36 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
         {
             ToTable("Perfil", "Sigim");
 
+            Property(l => l.Id)
+               .HasColumnName("codigo")
+               .HasColumnOrder(1);
+
             Property(l => l.Descricao)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasColumnName("descricao")
+                .HasMaxLength(100)
+                .HasColumnOrder(2);
 
-            HasRequired(l => l.Modulo).WithMany(l => l.ListaPerfil);
+            Property(l => l.ModuloId)
+                .HasColumnName("sistema")
+                .HasColumnOrder(3);
 
-            HasMany(l => l.ListaFuncionalidade).WithMany(l => l.ListaPerfil)
-                .Map(m =>
-                {
-                    m.ToTable("PerfilFuncionalidade", "Sigim");
-                    m.MapLeftKey("PerfilId");
-                    m.MapRightKey("FuncionalidadeId");
-                });
+            HasMany(l => l.ListaFuncionalidade)
+                .WithRequired(l => l.Perfil);
+
+            //HasOptional<Modulo>(l => l.Modulo)
+            //    .WithMany(l => l.ListaPerfil)
+            //    .HasForeignKey(l => l.ModuloId);
+
+            //HasRequired(l => l.Modulo).WithMany(l => l.ListaPerfil);
+
+            //HasMany(l => l.ListaFuncionalidade).WithMany(l => l.ListaPerfil)
+            //    .Map(m =>
+            //    {
+            //        m.ToTable("PerfilFuncionalidade", "Sigim");
+            //        m.MapLeftKey("PerfilId");
+            //        m.MapRightKey("FuncionalidadeId");
+            //    });
         }
     }
 }

@@ -15,11 +15,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra
         public override void RegisterArea(AreaRegistrationContext context)
         {
             context.MapRoute(
-                "UnidadeMedida",
+                "OrdemCompra_unidadeMedida",
                 "OrdemCompra/UnidadeMedida/{action}/{id}",
                 new
                 {
-                    area = "",
+                    area = "OrdemCompra",
                     controller = "UnidadeMedida",
                     action = "Index",
                     id = UrlParameter.Optional
@@ -28,16 +28,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra
             );
 
             context.MapRoute(
-                "Material",
+                "OrdemCompra_material",
                 "OrdemCompra/Material/{action}/{id}",
                 new
                 {
-                    area = "",
+                    area = "OrdemCompra",
                     controller = "Material",
                     action = "Index",
                     id = UrlParameter.Optional
                 },
-                new [] { "GIR.Sigim.Presentation.WebUI.Controllers" }
+                new string[] { "GIR.Sigim.Presentation.WebUI.Controllers" }
             );
 
             context.MapRoute(

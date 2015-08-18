@@ -65,18 +65,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GIR.Sigim.Application.Service\GIR.Sigim.Application.Service.csproj">
-      <Project>{5cb76b8f-44f7-42eb-bc19-4d2e53790ec9}</Project>
-      <Name>GIR.Sigim.Application.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GIR.Sigim.Application\GIR.Sigim.Application.csproj">
-      <Project>{5ca0a583-33a5-43ab-99c6-2d5d19508ca0}</Project>
-      <Name>GIR.Sigim.Application</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GIR.Sigim.Domain\GIR.Sigim.Domain.csproj">
-      <Project>{1235e084-57fe-4dc3-9858-63c7063003b2}</Project>
-      <Name>GIR.Sigim.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting.Adapter\GIR.Sigim.Infrastructure.Crosscutting.Adapter.csproj">
       <Project>{3c2f3688-ae7c-45a1-b6c8-0efca43a1019}</Project>
       <Name>GIR.Sigim.Infrastructure.Crosscutting.Adapter</Name>
@@ -92,10 +80,6 @@
     <ProjectReference Include="..\GIR.Sigim.Infrastructure.Crosscutting\GIR.Sigim.Infrastructure.Crosscutting.csproj">
       <Project>{c6691185-a423-4909-9157-1cb230a48980}</Project>
       <Name>GIR.Sigim.Infrastructure.Crosscutting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GIR.Sigim.Infrastructure.Data\GIR.Sigim.Infrastructure.Data.csproj">
-      <Project>{b6a84fc7-9009-4d4e-82e8-0d1e4ceab6a0}</Project>
-      <Name>GIR.Sigim.Infrastructure.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
