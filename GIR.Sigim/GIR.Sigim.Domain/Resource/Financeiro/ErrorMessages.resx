@@ -117,43 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EntradaMaterialSituacaoInvalida" xml:space="preserve">
-    <value>Entrada de Material \"{0}\".</value>
-  </data>
-  <data name="InformeMotivoCancelamentoEntradaMaterial" xml:space="preserve">
-    <value>Informe o motivo do cancelamento da Entrada de Material.</value>
-  </data>
-  <data name="InformeMotivoCancelamentoPreRequisicao" xml:space="preserve">
-    <value>Informe o motivo do cancelamento da Pré-requisicao.</value>
-  </data>
-  <data name="InformeMotivoCancelamentoRequisicao" xml:space="preserve">
-    <value>Informe o motivo do cancelamento da Requisição.</value>
-  </data>
-  <data name="ItemJaAprovado" xml:space="preserve">
-    <value>O item {0} já foi aprovado.</value>
-  </data>
-  <data name="PreRequisicaoComItens" xml:space="preserve">
-    <value>A Pré-requisição possui itens e não pode ser cancelada.</value>
-  </data>
-  <data name="PreRequisicaoSituacaoInvalida" xml:space="preserve">
-    <value>Pré requisição \"{0}\".</value>
-  </data>
-  <data name="RequisicaoComItensNaoRequisitados" xml:space="preserve">
-    <value>Requisição com itens não requisitados.</value>
-  </data>
-  <data name="RequisicaoSituacaoInvalida" xml:space="preserve">
-    <value>Requisição \"{0}\".</value>
-  </data>
-  <data name="SelecioneUmItemParaAprocacao" xml:space="preserve">
-    <value>Selecione pelo menos 1 item para aprovação.</value>
-  </data>
-  <data name="TituloEstaPago" xml:space="preserve">
-    <value>O título {0}, já está pago.</value>
-  </data>
-  <data name="TituloFreteEstaPago" xml:space="preserve">
-    <value>O título de frete {0}, já está pago.</value>
-  </data>
-  <data name="TituloImpostoEstaPago" xml:space="preserve">
-    <value>O título de imposto {0}, já está pago.</value>
+  <data name="BancoCarteira" xml:space="preserve">
+    <value>Banco usado para carteira !</value>
   </data>
 </root>

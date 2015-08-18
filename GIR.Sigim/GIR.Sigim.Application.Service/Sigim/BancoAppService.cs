@@ -63,8 +63,6 @@ namespace GIR.Sigim.Application.Service.Sigim
 
             bool novoItem = false;
 
-            dto.Id = Int32.Parse(dto.BancoCodigo);
-           
             var banco = bancoRepository.ObterPeloId(dto.Id);
             if (banco == null)
             {
@@ -74,7 +72,6 @@ namespace GIR.Sigim.Application.Service.Sigim
             banco.Id = dto.Id;
             banco.Nome = dto.Nome;
             banco.Ativo = true;
-            banco.Situacao = "A";
             banco.NumeroRemessa = dto.NumeroRemessa;
             banco.NumeroRemessaPagamento = dto.NumeroRemessaPagamento;
             banco.InterfaceEletronica = dto.InterfaceEletronica;
@@ -113,9 +110,10 @@ namespace GIR.Sigim.Application.Service.Sigim
                 messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.RegistroEmUso, banco.Nome), TypeMessage.Error);
+                QueueExeptionMessages(e);
                 return false;
             }
         }

@@ -72,9 +72,9 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
                 case "complemento":
                     set = ascending ? set.OrderBy(l => l.Complemento) : set.OrderByDescending(l => l.Complemento);
                     break;
-                //case "tipo":
-                //    set = ascending ? set.OrderBy(l => l.Tipo) : set.OrderByDescending(l => l.Tipo);
-                //    break;
+                case "tipo":
+                    set = ascending ? set.OrderBy(l => l.Tipo) : set.OrderByDescending(l => l.Tipo);
+                    break;
                 case "situacao":
                     set = ascending ? set.OrderBy(l => l.Situacao) : set.OrderByDescending(l => l.Situacao);
                     break;

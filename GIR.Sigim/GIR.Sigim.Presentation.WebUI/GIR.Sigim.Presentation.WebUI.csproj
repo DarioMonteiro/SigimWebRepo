@@ -229,6 +229,7 @@
     <Compile Include="CustomAttributes\PreRequisicaoMaterialAuthorizeAttribute.cs" />
     <Compile Include="ViewModel\BancoViewModel.cs" />
     <Compile Include="ViewModel\ContaCorrenteListaViewModel.cs" />
+    <Compile Include="ViewModel\ContaCorrenteCadastroViewModel.cs" />
     <Compile Include="ViewModel\FormaRecebimentoViewModel.cs" />
     <Compile Include="ViewModel\AgenciaListaViewModel.cs" />
     <Compile Include="ViewModel\AgenciaCadastroViewModel.cs" />
@@ -853,6 +854,7 @@
     <Content Include="Views\Shared\DisplayTemplates\MenuNode.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuNodeList.cshtml" />
     <Content Include="Views\ClienteFornecedor\ListaPesquisaPartial.cshtml" />
+    <Content Include="Views\ContaCorrente\Cadastro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

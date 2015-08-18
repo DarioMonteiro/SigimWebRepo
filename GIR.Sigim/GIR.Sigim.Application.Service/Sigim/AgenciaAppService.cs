@@ -60,6 +60,10 @@ namespace GIR.Sigim.Application.Service.Sigim
             return agenciaRepository.ObterPeloId(id).To<AgenciaDTO>();
         }
 
+        public List<AgenciaDTO> ListarPeloBanco(int? bancoId)
+        {
+            return agenciaRepository.ListarTodos().Where(l => l.BancoId == bancoId).To<List<AgenciaDTO>>();
+        }
 
         public bool Salvar(AgenciaDTO dto)
         {

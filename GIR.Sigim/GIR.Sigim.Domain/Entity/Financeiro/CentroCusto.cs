@@ -8,7 +8,6 @@ using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Entity.Contrato;
 
-
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
     public class CentroCusto : BaseEntity
@@ -46,7 +45,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<OrdemCompra.OrdemCompra> ListaOrdemCompra { get; set; }
         public ICollection<Estoque.Estoque> ListaEstoque { get; set; }
         public ICollection<Apropriacao> ListaApropriacao { get; set; }
-        
+        public ICollection<ContaCorrente> ListaContaCorrente { get; set; }
+
         public CentroCusto()
         {
             this.ListaFilhos = new HashSet<CentroCusto>();
@@ -62,12 +62,13 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaBloqueioContabil = new HashSet<BloqueioContabil>();
             this.ListaCaixa = new HashSet<Caixa>();
             this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
-            this.ListaRateioAutomatico = new HashSet<RateioAutomatico>();
+            this.ListaRateioAutomatico = new HashSet<RateioAutomatico>();  
             this.ListaTaxaAdministracao = new HashSet<TaxaAdministracao>();
             this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();
             this.ListaOrdemCompra = new HashSet<Domain.Entity.OrdemCompra.OrdemCompra>();
             this.ListaEstoque = new HashSet<Estoque.Estoque>();
             this.ListaApropriacao = new HashSet<Apropriacao>();
+            this.ListaContaCorrente = new HashSet<ContaCorrente>();  
         }
 
         public bool UsuarioPossuiAcesso(int? idUsuario, string modulo)

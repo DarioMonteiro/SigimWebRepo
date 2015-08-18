@@ -40,12 +40,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return parametrosRepository.Obter().To<ParametrosOrdemCompraDTO>();
         }
 
-        public void Salvar(ParametrosOrdemCompraDTO dto)
+        public bool Salvar(ParametrosOrdemCompraDTO dto)
         {
             if (!UsuarioLogado.IsInRole(Funcionalidade.ParametroOrdemCompraGravar))
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
-                return;
+                return false;
             }
 
             if (dto == null)
@@ -75,7 +75,10 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 parametrosRepository.UnitOfWork.Commit();
 
                 messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
             }
+            else
+                return false;
         }
 
         public bool EhPermitidoSalvar()
