@@ -33,13 +33,5 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public int? ContaCorrentePenhor { get; set; }
         public string ContaContabilCredCob { get; set; }
         public string EnderecoCedente { get; set; }
-
-        public ICollection<CentroCusto> ListaContaCorrente { get; set; }
-
-        public ContaCorrente()
-        {            
-            this.ListaContaCorrente = new HashSet<CentroCusto>();
-        }
-
     }
 }
