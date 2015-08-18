@@ -141,7 +141,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
                 model.JsonFuncionalidadesPerfil = JsonConvert.SerializeObject(perfil.ListaFuncionalidade);
                 model.JsonFuncionalidadesAvulsas = JsonConvert.SerializeObject(listaFuncionalidadesAvulsas);
             }
-            
+
+            model.PodeSalvar = usuarioAppService.EhPermitidoSalvar();
+            model.PodeDeletar = usuarioAppService.EhPermitidoDeletar();
+
             CarregarCombos(model);
 
             return View(model);
@@ -180,7 +183,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
             }
             return PartialView("_NotificationMessagesPartial");
         }
-
 
         public ActionResult CarregarFuncionalidades(int ModuloId)
         {

@@ -18,6 +18,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.IoC;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using Microsoft.Practices.Unity;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Admin
 {
@@ -168,6 +169,22 @@ namespace GIR.Sigim.Application.Service.Admin
             roles.AddRange(usuario.ListaUsuarioPerfil.SelectMany(l => l.Perfil.ListaFuncionalidade).To<List<string>>());
 
             return roles.ToArray<string>();
+        }
+
+        public bool EhPermitidoSalvar()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.UsuarioFuncionalidadeGravar))
+                return false;
+
+            return true;
+        }
+
+        public bool EhPermitidoDeletar()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.UsuarioFuncionalidadeDeletar))
+                return false;
+
+            return true;
         }
 
         #endregion
@@ -363,6 +380,12 @@ namespace GIR.Sigim.Application.Service.Admin
 
         public bool SalvarPermissoes(int UsuarioId, int ModuloId, int? PerfilId, List<UsuarioFuncionalidadeDTO> listaFuncionalidadeDTO)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.UsuarioFuncionalidadeGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (!ValidaSalvar(UsuarioId, ModuloId, PerfilId, listaFuncionalidadeDTO)) { return false; }
 
             var objUsuario = usuarioRepository.ObterPeloId(UsuarioId,
@@ -398,6 +421,12 @@ namespace GIR.Sigim.Application.Service.Admin
 
         public bool DeletarPermissoes(int UsuarioId, int ModuloId)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.UsuarioFuncionalidadeDeletar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (!ValidaDeletar(UsuarioId, ModuloId)) { return false; }
 
             var objUsuario = usuarioRepository.ObterPeloId(UsuarioId, l => l.ListaUsuarioFuncionalidade, l => l.ListaUsuarioPerfil);
