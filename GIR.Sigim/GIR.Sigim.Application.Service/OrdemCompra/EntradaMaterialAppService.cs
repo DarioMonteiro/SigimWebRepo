@@ -125,13 +125,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var entradaMaterial = ObterPeloIdEUsuario(id, UsuarioLogado.Id,
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.ListaOrdemCompraFormaPagamento.Select(s => s.TituloPagar.ListaApropriacao)),
-                l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
-                l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar),
+                l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar.Select(s => s.TituloPagarImposto)),
                 l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento),
                 l => l.ListaFormaPagamento.Select(o => o.ListaTituloPagarAdiantamento),
                 l => l.ListaImposto,
                 l => l.ListaMovimentoEstoque,
-                l => l.OrdemCompraFrete);
+                l => l.OrdemCompraFrete,
+                l => l.TituloFrete);
 
             if (!EhCancelamentoPossivel(entradaMaterial))
                 return false;
