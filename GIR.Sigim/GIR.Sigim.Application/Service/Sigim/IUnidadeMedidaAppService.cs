@@ -17,6 +17,6 @@ namespace GIR.Sigim.Application.Service.Sigim
         bool Deletar(string sigla);
         bool EhPermitidoSalvar();
         bool EhPermitidoDeletar();
-        bool EhPermitidoImprimir();
+        //bool EhPermitidoImprimir();
     }
 }

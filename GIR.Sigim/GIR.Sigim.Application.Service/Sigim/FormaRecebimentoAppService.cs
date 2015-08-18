@@ -143,10 +143,10 @@ namespace GIR.Sigim.Application.Service.Sigim
             return UsuarioLogado.IsInRole(Funcionalidade.FormaRecebimentoDeletar);
         }
 
-        public bool EhPermitidoImprimir()
-        {
-            return UsuarioLogado.IsInRole(Funcionalidade.FormaRecebimentoImprimir);
-        }
+        //public bool EhPermitidoImprimir()
+        //{
+        //    return UsuarioLogado.IsInRole(Funcionalidade.FormaRecebimentoImprimir);
+        //}
 
 
     }

@@ -39,7 +39,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
             model.PodeSalvar = formaRecebimentoAppService.EhPermitidoSalvar();
             model.PodeDeletar = formaRecebimentoAppService.EhPermitidoDeletar();
-            model.PodeImprimir = formaRecebimentoAppService.EhPermitidoImprimir();
+            //model.PodeImprimir = formaRecebimentoAppService.EhPermitidoImprimir();
 
             model.PodeHabilitarNumeroDias = false;
 

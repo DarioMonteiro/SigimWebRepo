@@ -40,7 +40,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             model.PodeSalvar = caixaAppService.EhPermitidoSalvar();
             model.PodeDeletar = caixaAppService.EhPermitidoDeletar();
-            model.PodeImprimir = caixaAppService.EhPermitidoImprimir();
+            //model.PodeImprimir = caixaAppService.EhPermitidoImprimir();
 
             var caixa = caixaAppService.ObterPeloId(id) ?? new CaixaDTO();
 

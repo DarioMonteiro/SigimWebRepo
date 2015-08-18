@@ -38,7 +38,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
             model.PodeSalvar = unidadeMedidaAppService.EhPermitidoSalvar();
             model.PodeDeletar = unidadeMedidaAppService.EhPermitidoDeletar();
-            model.PodeImprimir = unidadeMedidaAppService.EhPermitidoImprimir();
+            //model.PodeImprimir = unidadeMedidaAppService.EhPermitidoImprimir();
 
             var unidadeMedida = unidadeMedidaAppService.ObterPeloCodigo(sigla);
 
