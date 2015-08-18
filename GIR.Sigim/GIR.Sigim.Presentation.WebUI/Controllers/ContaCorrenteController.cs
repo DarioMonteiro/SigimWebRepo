@@ -95,52 +95,63 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         }
 
 
-        //public ActionResult Cadastro(int? id)
-        //{
-        //    AgenciaCadastroViewModel model = new AgenciaCadastroViewModel();
-        //    var agencia = agenciaAppService.ObterPeloId(id) ?? new AgenciaDTO();
+        public ActionResult Cadastro(int? id)
+        {
+            ContaCorrenteCadastroViewModel model = new ContaCorrenteCadastroViewModel();
+            var contaCorrente = contaCorrenteAppService.ObterPeloId(id) ?? new ContaCorrenteDTO();
 
-        //    if (id.HasValue && !agencia.Id.HasValue)
-        //        messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
+            if (id.HasValue && !contaCorrente.Id.HasValue)
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
 
-        //    model.Agencia = agencia;
+            model.ContaCorrente = contaCorrente;
 
-        //    CarregarComboBanco(model);
+            CarregarCombos(model);
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
-        //private void CarregarComboBanco(AgenciaCadastroViewModel model)
-        //{
-        //    int? bancoId = null;
+        private void CarregarCombos(ContaCorrenteCadastroViewModel model)
+        {
+            int? bancoId = null;
+            int? agenciaId = null;
 
-        //    if (model.Agencia != null)
-        //    {
-        //        bancoId = model.Agencia.BancoId;
-        //    }
+            if (model.ContaCorrente != null)
+            {
+                bancoId = model.ContaCorrente.BancoId;
+                agenciaId = model.ContaCorrente.AgenciaId;
+            }
 
-        //    model.ListaBanco = new SelectList(bancoAppService.ListarTodos(), "Id", "Nome", bancoId);
-        //}
+            model.ListaBanco = new SelectList(bancoAppService.ListarTodos(), "Id", "Nome", bancoId);
+            model.ListaAgencia = new SelectList(agenciaAppService.ListarPeloBanco(bancoId), "Id", "AgenciaCodigo", agenciaId);
+            model.ListaTipo = new SelectList(contaCorrenteAppService.ListarTipo(), "Id", "Descricao", model.ContaCorrente.Tipo);
+        }
 
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Cadastro(AgenciaCadastroViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {                
-        //        agenciaAppService.Salvar(model.Agencia);
-        //    }
-        //    return PartialView("_NotificationMessagesPartial");            
-            
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Cadastro(ContaCorrenteCadastroViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                contaCorrenteAppService.Salvar(model.ContaCorrente);
+            }
+            return PartialView("_NotificationMessagesPartial");
 
-        //[HttpPost]
-        //public ActionResult Deletar(int? id)
-        //{
-        //    agenciaAppService.Deletar(id);
-        //    return PartialView("_NotificationMessagesPartial");
-        //}
+        }
+
+        [HttpPost]
+        public ActionResult Deletar(int? id)
+        {
+            contaCorrenteAppService.Deletar(id);
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+
+        [HttpPost]
+        public ActionResult CarregaAgencia(int? id)
+        {
+            return Json(agenciaAppService.ListarPeloBanco(id));
+        }
 
         #endregion
     }

@@ -58,85 +58,88 @@ namespace GIR.Sigim.Application.Service.Sigim
         public ContaCorrenteDTO ObterPeloId(int? id)
         {
             
-            return contaCorrenteRepository.ObterPeloId(id).To<ContaCorrenteDTO>();
+            return contaCorrenteRepository.ObterPeloId(id, l =>l.Banco.ListaAgencia).To<ContaCorrenteDTO>();
         }
 
+        public List<ItemListaDTO> ListarTipo()
+        { return typeof(TipoContaCorrente).ToItemListaDTO(); }
 
-        //public bool Salvar(AgenciaDTO dto)
-        //{
-        //    if (dto == null)
-        //        throw new ArgumentNullException("dto");
 
-        //    bool novoItem = false;
+        public bool Salvar(ContaCorrenteDTO dto)
+        {
+            if (dto == null)
+                throw new ArgumentNullException("dto");
 
-        //    var agencia = agenciaRepository.ObterPeloId(dto.Id, l => l.Banco);
-        //    if (agencia == null)
-        //    {
-        //        agencia = new Agencia();                
-        //        novoItem = true;
-        //    }
-            
-        //    agencia.BancoId = dto.BancoId;
-        //    agencia.AgenciaCodigo = dto.AgenciaCodigo;
-        //    agencia.DVAgencia = dto.DVAgencia;
-        //    agencia.Nome = dto.Nome;
-        //    agencia.NomeContato = dto.NomeContato;
-        //    agencia.TelefoneContato = dto.TelefoneContato;
-        //    agencia.TipoLogradouro = dto.TipoLogradouro;
-        //    agencia.Logradouro = dto.Logradouro;
-        //    agencia.Complemento = dto.Complemento;
-        //    agencia.Numero = dto.Numero;
-        //    agencia.Cidade = dto.Cidade;  
-            
-        //    if (Validator.IsValid(agencia, out validationErrors))
-        //    {
-        //        try
-        //        {
-        //            if (novoItem)
-        //                agenciaRepository.Inserir(agencia);
-        //            else
-        //                agenciaRepository.Alterar(agencia);
+            bool novoItem = false;
 
-        //            agenciaRepository.UnitOfWork.Commit();
-                   
-        //            dto.Id = agencia.Id;
-        //            messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
-        //            return true;
-        //        }
-        //        catch (Exception exception)
-        //        {
-        //            QueueExeptionMessages(exception);
-        //        }
-        //    }
-        //    else
-        //        messageQueue.AddRange(validationErrors, TypeMessage.Error);
+            var contaCorrente = contaCorrenteRepository.ObterPeloId(dto.Id);
+            if (contaCorrente == null)
+            {
+                contaCorrente = new ContaCorrente();
+                novoItem = true;
+            }
 
-        //    return false;
-        //}
+            contaCorrente.BancoId = dto.BancoId;
+            contaCorrente.AgenciaId = dto.AgenciaId;
+            contaCorrente.ContaCodigo = dto.ContaCodigo;
+            contaCorrente.DVConta = dto.DVConta;
+            contaCorrente.Descricao = dto.Descricao;
+            contaCorrente.CodigoEmpresa = dto.CodigoEmpresa;
+            contaCorrente.NomeCedente = dto.NomeCedente;
+            contaCorrente.CNPJCedente = dto.CNPJCedente;            
+            contaCorrente.Complemento = dto.Complemento;
+            contaCorrente.Tipo = dto.Tipo;
+            contaCorrente.Situacao = dto.Situacao;
 
-        //public bool Deletar(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
-        //        return false;
-        //    }
+            if (Validator.IsValid(contaCorrente, out validationErrors))
+            {
+                try
+                {
+                    if (novoItem)
+                        contaCorrenteRepository.Inserir(contaCorrente);
+                    else
+                        contaCorrenteRepository.Alterar(contaCorrente);
 
-        //    var agencia = agenciaRepository.ObterPeloId(id);
+                    contaCorrenteRepository.UnitOfWork.Commit();
 
-        //    try
-        //    {
-        //        agenciaRepository.Remover(agencia);
-        //        agenciaRepository.UnitOfWork.Commit();
-        //        messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
-        //        return true;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.RegistroEmUso, agencia.Nome), TypeMessage.Error);
-        //        return false;
-        //    }
-        //}
+                    dto.Id = contaCorrente.Id;
+                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    QueueExeptionMessages(exception);
+                }
+            }
+            else
+                messageQueue.AddRange(validationErrors, TypeMessage.Error);
+
+            return false;
+        }
+
+        public bool Deletar(int? id)
+        {
+            if (id == null)
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
+                return false;
+            }
+
+            var contaCorrente = contaCorrenteRepository.ObterPeloId(id, l => l.Banco.ListaAgencia);
+
+            try
+            {
+                contaCorrenteRepository.Remover(contaCorrente);
+                contaCorrenteRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.ExcluidoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception)
+            {
+                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.RegistroEmUso, contaCorrente.ContaCodigo), TypeMessage.Error);
+                return false;
+            }
+        }
 
        #endregion
     }

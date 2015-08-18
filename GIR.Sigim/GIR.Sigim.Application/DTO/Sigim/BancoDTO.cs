@@ -9,11 +9,6 @@ namespace GIR.Sigim.Application.DTO.Sigim
 {
     public class BancoDTO : BaseDTO
     {
-        [StringLength(3, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
-        [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
-        [Display(Name = "Código do banco")]
-        public string BancoCodigo { get; set; }
-
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Nome")]
         public string Nome { get; set; }

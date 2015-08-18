@@ -31,12 +31,11 @@
                         <fieldset>
                             <div class="row">
                             <section class="col col-3">  
-                                @Html.HiddenFor(m => m.Banco.Id)                                                        
-                                @Html.LabelFor(m => m.Banco.BancoCodigo, new { @class = "label" })
+                                @Html.LabelFor(m => m.Banco.Id, "Código do banco", new { @class = "label" })
                                 <label class="input">
-                                    @Html.TextBoxFor(m => m.Banco.BancoCodigo, new { @maxlength = "3",  @class = "required" })
+                                    @Html.TextBoxFor(m => m.Banco.Id, new { @maxlength = "3",  @class = "numeric required" })
                                 </label>
-                                @Html.ValidationMessageFor(m => m.Banco.BancoCodigo, "", new { @class = "note note-error" })
+                                @Html.ValidationMessageFor(m => m.Banco.Id, "", new { @class = "note note-error" })
                             </section>
                             <section class="col col-12">
                                 @Html.LabelFor(m => m.Banco.Nome, new { @class = "label" })
@@ -108,7 +107,7 @@
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                id: $('#@Html.IdFor(m => m.Banco.BancoCodigo)').val()
+                id: $('#@Html.IdFor(m => m.Banco.Id)').val()
             })
         })
         .success(function (result) {
@@ -121,7 +120,6 @@
 
     function clearForm() {
         $('#@Html.IdFor(m => m.Banco.Id)').val('');
-        $('#@Html.IdFor(m => m.Banco.BancoCodigo)').val('');
         $('#@Html.IdFor(m => m.Banco.Nome)').val('');
         $('#@Html.IdFor(m => m.Banco.InterfaceEletronica)').prop('checked', false);
         $('#@Html.IdFor(m => m.Banco.NumeroRemessa)').val('');
@@ -155,8 +153,7 @@
             })
         })
         .success(function (result) {
-            $('#@Html.IdFor(m => m.Banco.Id)').val(result.Id);
-            $('#@Html.IdFor(m => m.Banco.BancoCodigo)').val(result.Id);
+            $('#@Html.IdFor(m => m.Banco.Id)').val(result.Id.toString().padLeft(3, '0'));
             $('#@Html.IdFor(m => m.Banco.Nome)').val(result.Nome);
             $('#@Html.IdFor(m => m.Banco.InterfaceEletronica)').prop('checked', result.InterfaceEletronica);
             $('#@Html.IdFor(m => m.Banco.NumeroRemessa)').val(result.NumeroRemessa);

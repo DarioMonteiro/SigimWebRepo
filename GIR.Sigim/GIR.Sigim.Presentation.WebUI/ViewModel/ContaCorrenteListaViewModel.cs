@@ -13,6 +13,7 @@ namespace GIR.Sigim.Presentation.WebUI.ViewModel
 {
     public class ContaCorrenteListaViewModel
     {
+        public ContaCorrenteDTO ContaCorrente { get; set; }
         public ContaCorrenteFiltro Filtro { get; set; }
         public SelectList ListaBanco { get; set; }
 

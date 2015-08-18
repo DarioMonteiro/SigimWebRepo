@@ -81,19 +81,15 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         public ActionResult Salvar(BancoViewModel model)
         {
             if (ModelState.IsValid)
-            {
-                if (model.Banco.BancoCodigo == "999")               
-                    messageQueue.Add(Application.Resource.Sigim.ErrorMessages.BancoCarteira, TypeMessage.Info);
-                else
-                    bancoAppService.Salvar(model.Banco);                              
-            }
+                bancoAppService.Salvar(model.Banco);
+
             return PartialView("_NotificationMessagesPartial");
         }
 
         [HttpPost]
-        public ActionResult Deletar(string id)
+        public ActionResult Deletar(int? id)
         {          
-            bancoAppService.Deletar(Int32.Parse(id));
+            bancoAppService.Deletar(id);
             return PartialView("_NotificationMessagesPartial");
         }
 

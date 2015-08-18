@@ -13,6 +13,7 @@ namespace GIR.Sigim.Presentation.WebUI.ViewModel
 {
     public class AgenciaListaViewModel
     {
+        public AgenciaDTO Agencia { get; set; }        
         public AgenciaFiltro Filtro { get; set; }
         public SelectList ListaBanco { get; set; }
 

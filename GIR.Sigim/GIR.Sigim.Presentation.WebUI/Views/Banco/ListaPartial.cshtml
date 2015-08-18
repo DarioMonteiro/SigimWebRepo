@@ -70,7 +70,7 @@
                     @foreach (var item in Lista)
                     {
                         <tr>
-                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString()</a></td>
+                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString().PadLeft(3, '0')</a></td>
                             <td class="text-left">@item.Nome</td>
                             <td class="text-center">@item.InterfaceEletronicaDescricao</td>
                             <td class="text-right">@item.NumeroRemessa</td>

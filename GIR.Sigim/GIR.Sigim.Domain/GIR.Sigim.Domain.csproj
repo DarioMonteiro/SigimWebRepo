@@ -119,6 +119,7 @@
     <Compile Include="Entity\Sigim\Composicao.cs" />
     <Compile Include="Entity\Sigim\Agencia.cs" />
     <Compile Include="Entity\Sigim\ContaCorrente.cs" />
+    <Compile Include="Entity\Sigim\TipoContaCorrente.cs" />
     <Compile Include="Entity\Sigim\LogAcesso.cs" />
     <Compile Include="Entity\Sigim\FormaRecebimento.cs" />
     <Compile Include="Entity\Sigim\TipoFormaRecebimento.cs" />
@@ -223,6 +224,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resource\Financeiro\ErrorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resource\OrdemCompra\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -260,6 +266,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\Contrato\ErrorMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Financeiro\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>

@@ -199,6 +199,7 @@
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
     <Compile Include="ViewModel\BancoViewModel.cs" />
     <Compile Include="ViewModel\ContaCorrenteListaViewModel.cs" />
+    <Compile Include="ViewModel\ContaCorrenteCadastroViewModel.cs" />
     <Compile Include="ViewModel\FormaRecebimentoViewModel.cs" />
     <Compile Include="ViewModel\AgenciaListaViewModel.cs" />
     <Compile Include="ViewModel\AgenciaCadastroViewModel.cs" />
@@ -788,6 +789,7 @@
     <Content Include="Views\Agencia\Cadastro.cshtml" />
     <Content Include="Views\ContaCorrente\Index.cshtml" />
     <Content Include="Views\ContaCorrente\ListaPartial.cshtml" />
+    <Content Include="Views\ContaCorrente\Cadastro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

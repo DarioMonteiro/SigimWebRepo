@@ -313,6 +313,17 @@ function isValidDate(format, value)
 
     return isValid;
 }
+
 function goToTop() {
     $('html, body').animate({ scrollTop: 0 }, 'slow');
+}
+
+// Pad Right
+String.prototype.padRight = function (l, c) {
+    return this + Array(l - this.length + 1).join(c || " ");
+}
+
+// Pad Left
+String.prototype.padLeft = function (l, c) {
+    return Array(l - this.length + 1).join(c || " ") + this;
 }
