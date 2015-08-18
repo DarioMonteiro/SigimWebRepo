@@ -12,17 +12,16 @@ using GIR.Sigim.Presentation.WebUI.ViewModel;
 
 namespace GIR.Sigim.Presentation.WebUI.ViewModel
 {
-    public class AgenciaCadastroViewModel
+    public class ContaCorrenteCadastroViewModel
     {
-        public AgenciaDTO Agencia { get; set; }
-        
+        public ContaCorrenteDTO ContaCorrente { get; set; }
         public SelectList ListaBanco { get; set; }
+        public SelectList ListaAgencia { get; set; }
+        public SelectList ListaTipo { get; set; }
 
-        public AgenciaCadastroViewModel()
+        public ContaCorrenteCadastroViewModel()
         {
-               
+                    
         }
-        
-        
     }
 }

@@ -36,9 +36,11 @@
                             string contaCodigoSortingSuffix = "sorting";
                             string DVContaSortingSuffix = "sorting";
                             string nomeAgenciaSortingSuffix = "sorting";
+                            string agenciaCodigoSortingSuffix = "sorting";
                             string DVAgenciaSortingSuffix = "sorting";
                             string descricaoSortingSuffix = "sorting";
                             string situacaoSortingSuffix = "sorting";
+                            string tipoSortingSuffix = "sorting";
 
                             switch (Model.OrderBy)
                             {
@@ -60,6 +62,9 @@
                                 case "nomeAgencia":
                                     nomeAgenciaSortingSuffix += sortingSuffix;
                                     break;
+                                case "agenciaCodigo":
+                                    agenciaCodigoSortingSuffix += sortingSuffix;
+                                    break;                                    
                                 case "DVAgencia":
                                     DVAgenciaSortingSuffix += sortingSuffix;
                                     break;
@@ -68,7 +73,10 @@
                                     break;
                                 case "situacao":
                                     situacaoSortingSuffix += sortingSuffix;
-                                    break;                                                                                             
+                                    break;
+                                case "tipo":
+                                    tipoSortingSuffix += sortingSuffix;
+                                    break;                                                                                            
                                 default:
                                     break;
                             }
@@ -79,22 +87,27 @@
                         <th class="sorting @contaCodigoSortingSuffix text-center" data-order="contaCodigo" style="min-width:65px;">Conta</th>
                         <th class="sorting @DVContaSortingSuffix text-center" data-order="DVConta" style="min-width:75px;">DV conta</th>
                         <th class="sorting @nomeAgenciaSortingSuffix text-left" data-order="nomeAgencia" style="min-width:75px;">Nome agência</th>
+                        <th class="sorting @agenciaCodigoSortingSuffix text-left" data-order="agenciaCodigo" style="min-width:75px;">Agência</th>
                         <th class="sorting @DVAgenciaSortingSuffix text-left" data-order="DVAgencia" style="min-width:75px;">DV agência</th>
                         <th class="sorting @descricaoSortingSuffix text-left" data-order="descricao" style="min-width:75px;">Descrição</th>
                         <th class="sorting @situacaoSortingSuffix text-left" data-order="situacao" style="min-width:75px;">Situação</th>
+                        <th class="sorting @tipoSortingSuffix text-left" data-order="tipo" style="min-width:100px;">Tipo</th>  
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Lista)
                     {
                         <tr>                       
-                            <td class="text-center">@item.BancoId</td>
+                            <td class="text-center">@item.BancoId.ToString().PadLeft(3,'0')</td>
                             <td class="text-left">@item.Banco.Nome</td>
                             <td class="text-center">@Html.ActionLink(item.ContaCodigo.ToString(), "Cadastro", new { id = item.Id })</td>                                                       
                             <td class="text-center">@item.DVConta</td>
                             <td class="text-left">@item.Agencia.Nome</td>
+                            <td class="text-left">@item.Agencia.AgenciaCodigo</td>
                             <td class="text-left">@item.Agencia.DVAgencia</td>
                             <td class="text-left">@item.Descricao</td>
+                            <td class="text-center">@item.Situacao</td>
+                            <td class="text-left">@item.TipoContaCorrenteDescricao</td>   
                         </tr>
                     }
                 </tbody>

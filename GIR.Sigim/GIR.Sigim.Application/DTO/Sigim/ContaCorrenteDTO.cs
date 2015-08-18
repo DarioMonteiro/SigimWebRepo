@@ -44,16 +44,20 @@ namespace GIR.Sigim.Application.DTO.Sigim
         [Display(Name = "Complemento")]
         public string Complemento { get; set; }
 
-        //public byte? Tipo { get; set; }
+        public byte? Tipo { get; set; }
+        public string TipoContaCorrenteDescricao
+        {
+            get { return Tipo == 1 ? "Simples" : "Registrada"; }
+        }
 
         [StringLength(1, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Situação")]
-        public string Situacao { get; set; }       
-        //public bool Inativo
-        //{
-        //    get { return Situacao == "I"; }
-        //    set { Situacao = value ? "I" : "A"; }
-        //}
+        public string Situacao { get; set; }
+        public bool Inativo
+        {
+            get { return Situacao == "I"; }
+            set { Situacao = value ? "I" : "A"; }
+        }
         
     }
 }

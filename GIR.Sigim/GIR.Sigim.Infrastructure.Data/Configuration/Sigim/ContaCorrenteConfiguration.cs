@@ -66,16 +66,66 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("complemento")
                 .HasColumnOrder(10);
 
-            //Property(l => l.Tipo)                    
-            //    .HasColumnName("tipo")
-            //    .HasColumnType("tinyint")
-            //    .HasColumnOrder(11);
+            Property(l => l.Tipo)
+                .HasColumnName("tipo")
+                .HasColumnType("tinyint")
+                .HasColumnOrder(11);
 
             Property(l => l.Situacao)
                 .HasColumnName("situacao")
                 .HasColumnType("char")
                 .HasMaxLength(1)
                 .HasColumnOrder(12);
+
+
+            
+            Property(l => l.BancoLayoutCobranca)
+                .HasColumnName("bancoLayoutCobranca")
+                .HasColumnOrder(13);
+           
+            Property(l => l.BancoLayoutPagamento)
+                .HasColumnName("BancoLayoutPagamento")
+                .HasColumnOrder(14);     
+
+            Property(l => l.CodigoCentroCusto)
+               .HasMaxLength(18)
+               .HasColumnName("centroCusto")
+               .HasColumnOrder(15);
+
+            HasOptional(l => l.CentroCusto)
+                .WithMany(l => l.ListaContaCorrente)
+                .HasForeignKey(l => l.CodigoCentroCusto);
+
+            Property(l => l.ContaContabil)
+                .HasMaxLength(18)
+                .HasColumnName("contaContabil")
+                .HasColumnOrder(16);
+
+            Property(l => l.Carteira)
+                .HasMaxLength(18)
+                .HasColumnName("carteira")
+                .HasColumnOrder(17);
+
+             Property(l => l.ImprimeBoleto)               
+                .HasColumnName("imprimeBoleto")
+                .HasColumnOrder(18);
+
+             Property(l => l.ContaCorrentePenhor)
+                 .HasColumnName("contaCorrentePenhor")
+                 .HasColumnOrder(19);
+
+            Property(l => l.ContaContabilCredCob)
+                .HasMaxLength(18)
+                .HasColumnName("contaContabilCredCob")
+                .HasColumnOrder(30);                       
+
+            Property(l => l.EnderecoCedente)
+                .HasMaxLength(18)
+                .HasColumnName("enderecoCedente")
+                .HasColumnOrder(31);
+
+        
+        
 
         }
     }
