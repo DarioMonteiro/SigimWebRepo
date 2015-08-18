@@ -19,8 +19,21 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         {
             get { return this.CentroCusto.Codigo + " - " + this.CentroCusto.Descricao; }
         }
-        public ClienteFornecedorDTO ClienteFornecedor { get; set; }
-        public ClienteFornecedorDTO FornecedorNota { get; set; }
+
+        private ClienteFornecedorDTO clienteFornecedor;
+        public ClienteFornecedorDTO ClienteFornecedor
+        {
+            get { return clienteFornecedor ?? new ClienteFornecedorDTO(); }
+            set { clienteFornecedor = value; }
+        }
+
+        private ClienteFornecedorDTO fornecedorNota;
+        public ClienteFornecedorDTO FornecedorNota
+        {
+            get { return fornecedorNota ?? new ClienteFornecedorDTO(); }
+            set { fornecedorNota = value; }
+        }
+
         public string FornecedorNome
         {
             get
@@ -42,9 +55,17 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
             get { return this.Situacao.ObterDescricao(); }
         }
 
-        //TipoNotaFiscal
+        [Display(Name = "Tipo")]
+        public int? TipoNotaFiscalId { get; set; }
+        public TipoDocumentoDTO TipoNotaFiscal { get; set; }
+
+        [Display(Name = "Número")]
         public string NumeroNotaFiscal { get; set; }
+
+        [Display(Name = "Data da emissão")]
         public Nullable<DateTime> DataEmissaoNota { get; set; }
+
+        [Display(Name = "Data da entrega")]
         public Nullable<DateTime> DataEntregaNota { get; set; }
         public string Observacao { get; set; }
         public decimal? PercentualDesconto { get; set; }
@@ -52,10 +73,19 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public decimal? PercentualISS { get; set; }
         public decimal? ISS { get; set; }
         public decimal? FreteIncluso { get; set; }
+
+        [Display(Name = "Data cadastro")]
         public Nullable<DateTime> DataCadastro { get; set; }
+
+        [Display(Name = "Cadastrado por")]
         public string LoginUsuarioCadastro { get; set; }
+
+        [Display(Name = "Data liberação")]
         public Nullable<DateTime> DataLiberacao { get; set; }
+
+        [Display(Name = "Liberado por")]
         public string LoginUsuarioLiberacao { get; set; }
+
         public Nullable<DateTime> DataCancelamento { get; set; }
         public string LoginUsuarioCancelamento { get; set; }
         public string MotivoCancelamento { get; set; }
@@ -67,12 +97,32 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public string NumeroNotaFrete { get; set; }
         public int? OrdemCompraFrete { get; set; }
         public int? TituloFrete { get; set; }
-        //TipoCompra
-        //CIFFOB
-        //NaturezaOperacao
-        //SerieNF
-        //CST
-        //CodigoContribuicao
+
+        [Display(Name = "Tipo de compra")]
+        public string CodigoTipoCompra { get; set; }
+        public TipoCompraDTO TipoCompra { get; set; }
+
+        [Display(Name = "CIF/FOB")]
+        public int? CifFobId { get; set; }
+        public CifFobDTO CifFob { get; set; }
+
+        [Display(Name = "Natureza da operação")]
+        public string CodigoNaturezaOperacao { get; set; }
+        public NaturezaOperacaoDTO NaturezaOperacao { get; set; }
+
+        [Display(Name = "Série")]
+        public int? SerieNFId { get; set; }
+        public SerieNFDTO SerieNF { get; set; }
+
+        [Display(Name = "CST")]
+        public string CodigoCST { get; set; }
+        public CSTDTO CST { get; set; }
+
+        [Display(Name = "Contribuição")]
+        public string CodigoContribuicaoId { get; set; }
+        public CodigoContribuicaoDTO CodigoContribuicao { get; set; }
+
+        [Display(Name = "Código de barras")]
         public string CodigoBarras { get; set; }
         public bool? EhConferido { get; set; }
         public Nullable<DateTime> DataConferencia { get; set; }

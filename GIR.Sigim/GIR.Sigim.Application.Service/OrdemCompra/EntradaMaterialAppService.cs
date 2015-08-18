@@ -106,6 +106,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return ObterPeloIdEUsuario(id,
                 UsuarioLogado.Id,
                 l => l.CentroCusto,
+                l => l.ClienteFornecedor,
+                l => l.FornecedorNota,
                 l => l.ListaItens,
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
                 l => l.ListaImposto,
@@ -260,6 +262,28 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoLiberarTitulos(EntradaMaterialDTO dto)
         {
+            return true;
+        }
+
+        public bool EhPermitidoEditarCentroCusto(EntradaMaterialDTO dto)
+        {
+            if (!EhPermitidoSalvar(dto))
+                return false;
+
+            if (dto.ListaItens.Count > 0)
+                return false;
+
+            return true;
+        }
+
+        public bool EhPermitidoEditarFornecedor(EntradaMaterialDTO dto)
+        {
+            if (!EhPermitidoSalvar(dto))
+                return false;
+
+            if (dto.ListaItens.Count > 0)
+                return false;
+
             return true;
         }
 

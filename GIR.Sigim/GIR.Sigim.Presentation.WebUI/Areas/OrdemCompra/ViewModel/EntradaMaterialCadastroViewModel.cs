@@ -18,11 +18,22 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
     public class EntradaMaterialCadastroViewModel
     {
         public EntradaMaterialDTO EntradaMaterial { get; set; }
+        public SelectList ListaTipoNotaFiscal { get; set; }
+        public SelectList ListaTipoCompra { get; set; }
+        public SelectList ListaCifFob { get; set; }
+        public SelectList ListaNaturezaOperacao { get; set; }
+        public SelectList ListaSerieNF { get; set; }
+        public SelectList ListaCST { get; set; }
+        public SelectList ListaCodigoContribuicao { get; set; }
+
         public bool ExisteEstoqueParaCentroCusto { get; set; }
         public bool ExisteMovimentoNoEstoque { get; set; }
         public bool PodeSalvar { get; set; }
         public bool PodeCancelarEntrada { get; set; }
         public bool PodeImprimir { get; set; }
         public bool PodeLiberarTitulos { get; set; }
+
+        public bool PodeEditarCentroCusto { get; set; }
+        public bool PodeEditarFornecedor { get; set; }
     }
 }
