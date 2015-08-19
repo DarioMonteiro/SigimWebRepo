@@ -55,7 +55,13 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             Property(l => l.Observacao)
                 .HasMaxLength(2000)
-                .HasColumnName("observacao");
+                .HasColumnName("obs");
+
+            Property(l => l.MovimentoDevolucaoId)
+                .HasColumnName("movimentoDevolucao");
+
+            Property(l => l.MovimentoItemDevolucaoId)
+                .HasColumnName("movimentoItemDevolucao");
         }
     }
 }
