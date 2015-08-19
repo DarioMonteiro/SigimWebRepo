@@ -105,6 +105,11 @@ namespace GIR.Sigim.Application.Service.Sac
             }
         }
 
+        public List<SetorDTO> ListarTodos()
+        {
+            return SetorRepository.ListarTodos().OrderBy(l => l.Descricao).To<List<SetorDTO>>(); 
+        }
+
 
         #endregion
       

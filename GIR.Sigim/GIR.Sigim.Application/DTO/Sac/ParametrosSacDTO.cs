@@ -37,6 +37,8 @@ namespace GIR.Sigim.Application.DTO.Sac
         public string EmailEnvio { get; set; }
 
         [Required]
+        [StringLength(20, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        [DataType(DataType.Password)]
         [Display(Name = "Senha")]
         public string senhaEnvio { get; set; }
 

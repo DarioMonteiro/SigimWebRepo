@@ -17,7 +17,7 @@
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
                             "Index",
-                            "Parametros",
+                            "ParametrosSac",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
                             new { @id = "formParametros", @class = "smart-form client-form", @novalidate = "novalidate", @enctype = "multipart/form-data" }))
@@ -28,16 +28,16 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseGeral" class="">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseGeral" class="collapsed">
                                             <i class="fa fa-lg fa-angle-down pull-right"></i>
                                             <i class="fa fa-lg fa-angle-up pull-right"></i>
                                             Geral
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseGeral" class="panel-collapse collapse in">
+                                <div id="collapseGeral" class="panel-collapse collapse" style="height: 0px;">
                                     <div class="panel-body no-padding">
-                                        <fieldset>
+                                        <fieldset><legend></legend>
                                             <div class="row">
                                                 <section class="col col-12">
                                                     @Html.LabelFor(m => m.ParametrosSac.ClienteId, new { @class = "label" })
@@ -74,6 +74,7 @@
                                                 <section class="col col-6">
                                                     @Html.LabelFor(m => m.ParametrosSac.EmailEnvio, new { @class = "label" })
                                                     <label class="input">
+                                                        <i class="icon-append fa fa-envelope-o"></i>
                                                         @Html.TextBoxFor(m => m.ParametrosSac.EmailEnvio, new { @class = "required" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.ParametrosSac.EmailEnvio, "", new { @class = "note note-error" })
@@ -81,7 +82,8 @@
                                                 <section class="col col-6">
                                                     @Html.LabelFor(m => m.ParametrosSac.senhaEnvio, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.ParametrosSac.senhaEnvio, new { @class = "required" })
+                                                        <i class="icon-append fa fa-lock"></i>
+                                                        @Html.PasswordFor(m => m.ParametrosSac.senhaEnvio, new { @class = "lastField" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.ParametrosSac.senhaEnvio, "", new { @class = "note note-error" })
                                                 </section>
@@ -121,45 +123,71 @@
                                     </div>
                                 </div>
                             </div>
-                        <fieldset id="formItem">
-                           @* @Html.HiddenFor(m => m.ParametrosEmailSac.Id )
+                      <div class="panel panel-default">
+                           <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseListaEmail" class="collapsed">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Emails
+                                        </a>
+                                    </h4>
+                                </div>
+                        <div id="collapseListaEmail" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body no-padding">
+                        <fieldset id="formItem"><legend></legend>
+                             @Html.HiddenFor(m => m.IndexSelecionado)
                             <div class="row">
                                <section class="col col-12">
-                                    @Html.LabelFor(m => m.ParametrosEmailSac.Email, new { @class = "label" })
+                                    @Html.LabelFor(m => m.Email, new { @class = "label" })
                                     <label class="input">
-                                        @Html.TextBoxFor(m =>m.ParametrosEmailSac.Email)
+                                        @Html.TextBoxFor(m =>m.Email, new { @class = "required" })
                                     </label>
-                                    @Html.ValidationMessageFor(m => m.ParametrosEmailSac, "", new { @class = "note note-error" })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "note note-error" })
                                 </section>
                             </div>
                             <div class="row">
                                 <section class="col col-4">
-                                    @Html.LabelFor(m => m.ParametrosEmailSac.SetorId, new { @class = "label" })
+                                    <label class="label">Setor</label>
                                     <label class="select">
-                                        @Html.DropDownListFor(m => m.ParametrosEmailSac.SetorId, Model.ListaEmpresa, string.Empty)
+                                        @Html.DropDownListFor(m => m.SetorId, Model.ListaSetor, string.Empty, new { @class = "required" })
+                                        @*@Html.HiddenFor(m => m.Setor.Descricao)*@
                                         <i></i>
                                     </label>
+                                        @Html.ValidationMessageFor(m => m.SetorId, "", new { @class = "note note-error" })
                                 </section>
                                 <section class="col col-4">
-                                    @Html.LabelFor(m => m.ParametrosSac.ServidorEnvio, new { @class = "label" })
-                                    <label class="input">
-                                        @Html.TextBoxFor(m => m.ParametrosSac.ServidorEnvio, new { @class = "required" })
+                                        @Html.LabelFor(m => m.Tipo, new { @class = "label" })                                
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.Tipo, Model.ListaSituacaoSolicitacaoSac, string.Empty, new { @class = "required" })
+                                        <i></i>
                                     </label>
-                                    @Html.ValidationMessageFor(m => m.ParametrosSac.ServidorEnvio, "", new { @class = "note note-error" })
+                                        @Html.ValidationMessageFor(m => m.Tipo, "", new { @class = "note note-error" })
                                 </section>
                                 <section class="col col-4" style="padding-top: 30px;">
                                     <label class="checkbox">
-                                        @Html.CheckBoxFor(m => m.ParametrosSac.HabilitaSSL)<i></i>@Html.DisplayNameFor(m => m.ParametrosSac.HabilitaSSL)
+                                        @Html.CheckBoxFor(m => m.Anexo)<i></i>@Html.DisplayNameFor(m => m.Anexo)
                                     </label>
                                 </section>
-                            </div>*@
+                            </div>
+                            <div class="row">
+                                <section class="col col-6">
+                                    <button id="btnAddItem" type="button" class="btn btn-primary enable">
+                                        Adicionar
+                                    </button>
+                                    <button id="btnRemoverItem" type="button" class="btn btn-danger enable">
+                                        Remover
+                                    </button>
+                                </section>
+                            </div>
                             <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
                                 <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                     <thead>
                                         <tr role="row">
+                                            <th class="text-center" style="width: 5px;"> </th>
                                             <th>Email</th>
-                                            <th>Tipo</th>
                                             <th>Setor</th>
+                                            <th>Tipo</th>
                                             <th>Anexo</th>
                                         </tr>
                                     </thead>
@@ -168,6 +196,9 @@
                                 </table>
                             </div>
                         </fieldset>
+                    </div>
+                    </div>          
+                    </div> 
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
@@ -180,7 +211,7 @@
                                 </div>
                                 <div id="collapseIconeRelatorio" class="panel-collapse collapse" style="height: 0px;">
                                     <div class="panel-body no-padding">
-                                        <fieldset>
+                                        <fieldset><legend></legend>
                                             <div class="row">
                                                 <section class="col col-12">
                                                     <div class="alert alert-warning fade in">
@@ -250,6 +281,7 @@
                     }
                 </div>
             </div>
+        </div> 
     </article>
 </div>
 
@@ -265,60 +297,125 @@
                 }
             });
         });
-             
+                     
         jsonListaEmailArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaEmail)").val());
         $(document).ready(function () {
             fillTable();
-              
+            LimpaItem();
+
+            jQuery.validator.setDefaults({
+                ignore: '#formItem *'
+
+            });
         });
 
-        function fillTable() {
-            $("#tableItens tbody").empty();
-            for (var i = 0; i < jsonListaEmailArray.length; i++) {
-                var row = $('<tr />')
-                $("#tableItens tbody").append(row);
-
-                var chkDisabled = '';
-                var labelClass = 'checkbox';
-                if (jsonListaEmailArray[i].situacao != 0) { //Sem anexo
-                    chkDisabled = 'disabled';
-                    labelClass += ' state-disabled';
-                }
-                //row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + jsonListaEmailArray[i].Sequencial + '" ' + chkDisabled + '><i></i>' + jsonListaEmailArray[i].Sequencial + '</label></td>'));
-
-                //row.append($('<td class="text-right">' + jsonListaEmailArray[i].Email + '</td>'));
-                @* @if (Model.PodeEditarItem)
-	        {
-                @:if (jsonListaEmailArray[i].situacao == 0) //Com anexo
-                		        @:row.append($('<td class="text-nowrap" onclick="loadItem(' + jsonListaEmailArray[i].Sequencial + ');">' + jsonListaEmailArray[i].Material.Descricao + '</td>'));
-                                                @:else
-                @:row.append($('<td class="text-nowrap">' + jsonListaEmailArray[i].Material.Descricao + '</td>'));
-	        }
-            else
+            function LimpaItem()
             {
-                @:row.append($('<td class="text-nowrap">' + jsonListaEmailArray[i].Material.Descricao + '</td>'));
-            }*@
-                row.append($('<td>' + jsonListaEmailArray[i].Email + '</td>'));
-                row.append($('<td>' + jsonListaEmailArray[i].Tipo + '</td>'));
-                row.append($('<td>' + jsonListaEmailArray[i].Setor.Descricao + '</td>'));
-                row.append($('<td>' + jsonListaEmailArray[i].Anexo + '</td>'));
+                $("#@Html.IdFor(m => m.Email)").val('');
+                $("#@Html.IdFor(m => m.SetorId)").val('');
+                $("#@Html.IdFor(m => m.Tipo)").val('');
+                $("#@Html.IdFor(m => m.Anexo)").prop('checked', false);
+                $("#@Html.IdFor(m => m.IndexSelecionado)").val(-1);
+            }
 
-            //    if (jsonListaEmailArray[i].DataMinima != null)
-            //    row.append($('<td>' + new Date(jsonListaEmailArray[i].DataMinima).toFormatDDMMYYYY() + '</td>'));
-            //else
-            //    row.append($('<td>&nbsp;</td>'));
+            function loadItem(index) {
+                $('#@Html.IdFor(m => m.Email)').val(jsonListaEmailArray[index].Email);
+                $('#@Html.IdFor(m => m.SetorId)').val(jsonListaEmailArray[index].SetorId);
+                $('#@Html.IdFor(m => m.Tipo)').val(jsonListaEmailArray[index].Tipo);
+                $('#@Html.IdFor(m => m.Anexo)').prop('checked', (jsonListaEmailArray[index].Anexo));
+                $('#@Html.IdFor(m => m.IndexSelecionado)').val(index);
+                goToTop();
+            }
 
-            //    if (jsonListaEmailArray[i].DataMaxima != null)
-            //        row.append($('<td>' + new Date(jsonListaEmailArray[i].DataMaxima).toFormatDDMMYYYY() + '</td>'));
-            //else
-            //    row.append($('<td>&nbsp;</td>'));
+            function fillTable() {
+                $("#tableItens tbody").empty();
+                for (var i = 0; i < jsonListaEmailArray.length; i++) {
+                    var row = $('<tr />')
+                    $("#tableItens tbody").append(row);
 
-            //    row.append($('<td>' + jsonListaEmailArray[i].SituacaoDescricao + '</td>'));
-            //var rmGerada = "&nbsp;";
-            //if (jsonListaEmailArray[i].ListaRequisicaoMaterialItem.length > 0)
-            //    rmGerada = jsonListaEmailArray[i].ListaRequisicaoMaterialItem[0].RequisicaoMaterialId;
-            //row.append($('<td class="text-center">' + rmGerada + '</td>'));
-        }
-    }
+                    var chkDisabled = '';
+                    var labelClass = 'checkbox';
+                    row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + '' + '</label></td>'));
+                    row.append($('<td class="text-left" onclick = "loadItem(' + i + ');">' + jsonListaEmailArray[i].Email + '</td>'));
+                    row.append($('<td>' + jsonListaEmailArray[i].Setor.Descricao + '</td>'));
+                    row.append($('<td>' + jsonListaEmailArray[i].DescricaoTipo + '</td>'));
+                    row.append($('<td>' + jsonListaEmailArray[i].DescricaoAnexo + '</td>'));
+                }
+            }
+
+            $('#btnAddItem').on("click", function () {
+                if ($('#formItem input').valid()) {
+                    {
+                        addItem();
+                    }
+                }
+            });
+
+            function addItem() {
+                var item = $("#formItem").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
+
+                item["DescricaoTipo"] = $("#@Html.IdFor(m => m.Tipo) option:selected").text();
+                item["DescricaoAnexo"] = $('#@Html.IdFor(m => m.Anexo)').prop('checked') ? 'Sim' : 'Não';
+
+                var index = -1;
+                $.each(jsonListaEmailArray, function (i, obj) {
+                    if ($('#@Html.IdFor(m => m.IndexSelecionado)').val() == i) {
+                        index = i;
+                        return false;
+                    }
+                });
+
+                if (index >= 0) jsonListaEmailArray.splice(index, 1, item);
+                else {
+                    JSON.parse($("#@Html.IdFor(m => m.JsonListaEmail)").val());
+                    jsonListaEmailArray.push(item);
+                }
+
+                $("#@Html.IdFor(m => m.JsonListaEmail)").val(JSON.stringify(jsonListaEmailArray));
+                LimpaItem();
+                fillTable();
+            }
+
+            $('#btnRemoverItem').on("click", function ()
+            {
+                removerItem();
+            });
+
+            function removerItem()
+            {
+                var arrSequencial = [];
+                var index;
+                $($('#tableItens input[type=checkbox]:checked').get().reverse()).each(function ()
+                {
+                    index = parseInt($(this).val());
+                    arrSequencial.push(index);
+                    jsonListaEmailArray.splice(index, 1);
+                })
+
+                if (arrSequencial.length > 0)
+                {
+                    $("#@Html.IdFor(m => m.JsonListaEmail)").val(JSON.stringify(jsonListaEmailArray));
+                    fillTable();
+                }
+                else smartAlert("Erro", "Selecione pelo menos 1 item para remover.", "error");
+                
+            }
+
+            function processData(node) {
+                var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+                var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+                if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.SetorId)")) {
+                    return {
+                        name: "Setor",
+                        value: {
+                            Descricao: $("#@Html.IdFor(m => m.SetorId) option:selected").text(),
+                            Id: $("#@Html.IdFor(m => m.SetorId)").val()
+                        }
+                    }
+                }
+                return false;
+            }
+        
     </script>
 }

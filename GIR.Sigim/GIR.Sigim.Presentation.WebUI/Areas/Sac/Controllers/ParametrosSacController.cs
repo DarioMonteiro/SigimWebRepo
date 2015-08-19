@@ -13,24 +13,27 @@ using GIR.Sigim.Presentation.WebUI.Controllers;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
 {
-    public class ParametrosController : BaseController
+    public class ParametrosSacController : BaseController
     {
-        private IParametrosSacAppService parametrosAppService;
+        private IParametrosSacAppService parametrosSacAppService;
         private IClienteFornecedorAppService clienteFornecedorAppService;
+        private ISetorAppService setorAppService;
 
-        public ParametrosController(IParametrosSacAppService parametrosAppService,
-                                    IClienteFornecedorAppService clienteFornecedorAppService,
-                                    MessageQueue messageQueue)
-                                    : base(messageQueue)
+        public ParametrosSacController(IParametrosSacAppService parametrosAppService,
+                                       IClienteFornecedorAppService clienteFornecedorAppService,
+                                       ISetorAppService setorAppService,
+                                       MessageQueue messageQueue)
+                                       : base(messageQueue)
         {
-            this.parametrosAppService = parametrosAppService;
+            this.parametrosSacAppService = parametrosAppService;
             this.clienteFornecedorAppService = clienteFornecedorAppService;
+            this.setorAppService = setorAppService;
         }
 
         public ActionResult Index()
         {
             ParametrosViewModel model = new ParametrosViewModel();
-            var parametrosSac = parametrosAppService.Obter() ?? new ParametrosSacDTO();
+            var parametrosSac = parametrosSacAppService.Obter() ?? new ParametrosSacDTO();
             foreach (var parametrosEmail in parametrosSac.ListaParametrosEmailSac)
             {
                 parametrosEmail.ParametrosSac = new ParametrosSacDTO();
@@ -48,6 +51,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                model.ParametrosSac.ListaParametrosEmailSac = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ParametrosEmailSacDTO>>(model.JsonListaEmail);
+               
                 if (model.IconeRelatorio != null)
                 {
                     using (Stream inputStream = model.IconeRelatorio.InputStream)
@@ -61,9 +67,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
                         model.ParametrosSac.IconeRelatorio = memoryStream.ToArray();
                     }
                 }
-                parametrosAppService.Salvar(model.ParametrosSac);
-            }
 
+                parametrosSacAppService.Salvar(model.ParametrosSac);
+            }
+            
             return PartialView("_NotificationMessagesPartial");
         }
         private void CarregarCombos(ParametrosViewModel model)
@@ -75,6 +82,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
                 clienteId = model.ParametrosSac.ClienteId;
             }
             model.ListaEmpresa = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.ParametrosSac.ClienteId);
+            model.ListaSituacaoSolicitacaoSac = new SelectList(parametrosSacAppService.ListaSituacaoSolicitacaoSac(), "Id", "Descricao", null);
+            model.ListaSetor = new SelectList(setorAppService.ListarTodos(), "Id", "Descricao", model.SetorId);
         }
+      
     }   
 }

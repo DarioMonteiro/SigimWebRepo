@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Domain.Entity.Sac;
+using GIR.Sigim.Application.Adapter;
 
 namespace GIR.Sigim.Application.DTO.Sac
 {
@@ -12,7 +14,12 @@ namespace GIR.Sigim.Application.DTO.Sac
     {
         [Required]
         [Display(Name = "Tipo")]
-        public int? Tipo { get; set; }
+        public SituacaoSolicitacaoSac? Tipo { get; set; }
+
+        public string DescricaoTipo
+        {
+            get { return this.Tipo.ObterDescricao(); }
+        }
 
         [Required]
         [Display(Name = "Email")]
@@ -25,6 +32,11 @@ namespace GIR.Sigim.Application.DTO.Sac
 
         [Display(Name = "Anexo")]
         public bool Anexo { get; set; }
+
+        public string DescricaoAnexo
+        {
+            get { return Anexo == true ? "Sim" : "Não"; }
+        }
 
         [Display(Name = "Parametros")]
         public int? ParametrosId { get; set; }
