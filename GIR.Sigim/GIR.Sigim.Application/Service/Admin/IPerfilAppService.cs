@@ -17,5 +17,7 @@ namespace GIR.Sigim.Application.Service.Admin
         PerfilDTO ObterPeloId(int? id);
         bool Salvar(PerfilDTO dto);
         bool Deletar(int? id);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
     }
 }

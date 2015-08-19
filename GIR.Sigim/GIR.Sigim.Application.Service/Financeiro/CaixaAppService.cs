@@ -131,10 +131,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return UsuarioLogado.IsInRole(Funcionalidade.CaixaDeletar);
         }
 
-        public bool EhPermitidoImprimir()
-        {
-            return UsuarioLogado.IsInRole(Funcionalidade.CaixaImprimir);
-        }
+        //public bool EhPermitidoImprimir()
+        //{
+        //    return UsuarioLogado.IsInRole(Funcionalidade.CaixaImprimir);
+        //}
 
         #endregion
     }

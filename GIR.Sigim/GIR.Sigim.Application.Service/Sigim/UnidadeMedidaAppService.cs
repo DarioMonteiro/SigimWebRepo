@@ -134,10 +134,10 @@ namespace GIR.Sigim.Application.Service.Sigim
             return UsuarioLogado.IsInRole(Funcionalidade.OrdemCompraUnidadeMedidaDeletar);
         }
 
-        public bool EhPermitidoImprimir()
-        {
-            return UsuarioLogado.IsInRole(Funcionalidade.OrdemCompraUnidadeMedidaImprimir);
-        }
+        //public bool EhPermitidoImprimir()
+        //{
+        //    return UsuarioLogado.IsInRole(Funcionalidade.OrdemCompraUnidadeMedidaImprimir);
+        //}
         #endregion
     }
 }

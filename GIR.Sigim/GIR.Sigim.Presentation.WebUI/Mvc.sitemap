@@ -78,7 +78,7 @@
         <mvcSiteMapNode title="Unidade de medida" controller="UnidadeMedida" action="Index" roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR"/>
         <!--<mvcSiteMapNode title="Material" controller="Material" action="Index" roles="ORDEMCOMPRA_MATERIAL_ACESSAR"/>-->
       </mvcSiteMapNode>
-      <mvcSiteMapNode title="Requisição de Material" controller="RequisicaoMaterial" action="Index">
+      <mvcSiteMapNode title="Requisição de Material" url="#" clickable="false" roles="PREREQUISICAOMATERIAL_ACESSAR,REQUISICAOMATERIAL_ACESSAR">
         <mvcSiteMapNode title="Pré-requisição de Material" controller="PreRequisicaoMaterial" action="Index">
           <mvcSiteMapNode title="Cadastro" controller="PreRequisicaoMaterial" action="Index" visibility="MenuHelper,!*"/>
           <mvcSiteMapNode title="Cadastro" controller="PreRequisicaoMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>

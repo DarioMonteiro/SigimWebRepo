@@ -39,6 +39,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.ViewModel
         public SelectList ListaModulo { get; set; }
         public SelectList ListaUsuario { get; set; }
         public SelectList ListaPerfil { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
 
         public UsuarioFuncionalidadeViewModel()
         {

@@ -67,6 +67,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
                 model.JsonFuncionalidadesModulo = JsonConvert.SerializeObject(listaFuncionalidadesModulo);
                 model.JsonFuncionalidadesPerfil = JsonConvert.SerializeObject(perfil.ListaFuncionalidade);
             }
+
+            model.PodeSalvar = perfilAppService.EhPermitidoSalvar();
+            model.PodeDeletar = perfilAppService.EhPermitidoDeletar();
             
             CarregarCombos(model);
 

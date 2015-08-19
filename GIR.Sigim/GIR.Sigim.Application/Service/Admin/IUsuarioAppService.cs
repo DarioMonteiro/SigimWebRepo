@@ -22,5 +22,7 @@ namespace GIR.Sigim.Application.Service.Admin
         List<UsuarioPerfilDTO> ListarPeloUsuarioModulo(UsuarioFuncionalidadeFiltro filtro, out int totalRegistros);
         bool SalvarPermissoes(int UsuarioId, int ModuloId, int? PerfilId, List<UsuarioFuncionalidadeDTO> listaFuncionalidadeDTO);
         bool DeletarPermissoes(int UsuarioId, int ModuloId);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
     }
 }

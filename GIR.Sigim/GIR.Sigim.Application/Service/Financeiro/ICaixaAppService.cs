@@ -16,6 +16,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
         bool Deletar(int? id);
         bool EhPermitidoSalvar();
         bool EhPermitidoDeletar();
-        bool EhPermitidoImprimir();
+        //bool EhPermitidoImprimir();
     }
 }
