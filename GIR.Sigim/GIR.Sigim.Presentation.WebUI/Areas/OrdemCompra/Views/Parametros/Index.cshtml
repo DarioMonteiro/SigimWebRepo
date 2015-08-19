@@ -111,18 +111,25 @@
                                     <div class="panel-body no-padding">
                                         <fieldset>
                                             <div class="row">
-                                                <section class="col col-6">
+                                                <section class="col col-4">
                                                     <label class="checkbox">
                                                         @Html.CheckBoxFor(m => m.Parametros.EhPreRequisicaoMaterial)
                                                         <i></i>@Html.DisplayNameFor(m => m.Parametros.EhPreRequisicaoMaterial)
                                                     </label>
                                                 </section>
-                                                <section class="col col-6">
+                                                <section class="col col-4">
                                                     <label class="checkbox">
                                                         @Html.CheckBoxFor(m => m.Parametros.EhRequisicaoObrigatoria)
                                                         <i></i>@Html.DisplayNameFor(m => m.Parametros.EhRequisicaoObrigatoria)
                                                     </label>
                                                 </section>
+                                                <section class="col col-4">
+                                                    <label class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)
+                                                        <i></i>@Html.DisplayNameFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)
+                                                    </label>
+                                                </section>
+
                                             </div>
                                             <div class="row">
                                                 <section class="col col-6">
@@ -418,7 +425,14 @@
                             </div>
                         </div>
                         <footer>
-                            <button type="submit" class="btn btn-primary">
+                            @{
+                                string disableBtnSalvar = string.Empty;
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
+                            }
+                            <button type="submit" class="btn btn-primary @disableBtnSalvar">
                                 Salvar
                             </button>
                         </footer>
@@ -440,6 +454,22 @@
                     $('#notificationMessages').html(xhr.responseText);
                 }
             });
+
+            $("#@Html.IdFor(m => m.Parametros.EhPreRequisicaoMaterial)").on("change", function () {
+                desabilitaGeraRequisicaoMaterialRequisitada();
+            });
+
         });
+
+        function desabilitaGeraRequisicaoMaterialRequisitada() {
+            if ($("#@Html.IdFor(m => m.Parametros.EhPreRequisicaoMaterial)").is(':checked')) {
+                $('#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)').prop('disabled', false);
+            }
+            else {
+                $('#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)').prop('disabled', true);
+                $("#@Html.IdFor(m => m.Parametros.EhGeraRequisicaoMaterialRequisitada)").prop('checked', false);
+            }
+        }
+
     </script>
 }

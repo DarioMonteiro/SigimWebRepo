@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Admin;
+using GIR.Sigim.Domain.Entity.Estoque;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 
@@ -47,6 +48,8 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<OrdemCompraItem> ListaOrdemCompraItem { get; set; }
         public ICollection<OrcamentoInsumoRequisitado> ListaOrcamentoInsumoRequisitado { get; set; }
         public ICollection<OrcamentoComposicaoItem> ListaOrcamentoComposicaoItem { get; set; }
+        public ICollection<EstoqueMaterial> ListaEstoqueMaterial { get; set; }
+        public ICollection<MovimentoItem> ListaMovimentoItem { get; set; }
 
         public Material()
         {
@@ -55,6 +58,8 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaOrdemCompraItem = new HashSet<OrdemCompraItem>();
             this.ListaOrcamentoInsumoRequisitado = new HashSet<OrcamentoInsumoRequisitado>();
             this.ListaOrcamentoComposicaoItem = new HashSet<OrcamentoComposicaoItem>();
+            this.ListaEstoqueMaterial = new HashSet<EstoqueMaterial>();
+            this.ListaMovimentoItem = new HashSet<MovimentoItem>();
         }
     }
 }

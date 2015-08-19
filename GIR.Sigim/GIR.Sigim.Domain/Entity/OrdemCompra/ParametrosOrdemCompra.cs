@@ -8,7 +8,7 @@ using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Domain.Entity.OrdemCompra
 {
-    public class ParametrosOrdemCompra : BaseEntity
+    public class ParametrosOrdemCompra : BaseEntity, IParametros
     {
         public int? ClienteId { get; set; }
         public ClienteFornecedor Cliente { get; set; }
@@ -39,6 +39,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public BancoLayout LayoutSPED { get; set; }
         public int? DiasPagamento { get; set; }
         public bool? EhObrigatorioDadosSPED { get; set; }
+        public bool? EhGeraRequisicaoMaterialRequisitada { get; set; }
 
         public ParametrosOrdemCompra()
         {

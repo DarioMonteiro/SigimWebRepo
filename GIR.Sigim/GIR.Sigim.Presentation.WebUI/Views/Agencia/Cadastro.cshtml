@@ -1,0 +1,208 @@
+﻿@model GIR.Sigim.Presentation.WebUI.ViewModel.AgenciaCadastroViewModel
+
+@{
+    ViewBag.Title = "Agência";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    @Html.ActionLink("Novo", "Cadastro", new { @id = "" }, new { @class = "btn btn-primary", @style = "float:right;" })
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Cadastro",
+                        "Agencia",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
+                        new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <fieldset>
+                            <div class="row">
+                                <section class="col col-4">
+                                    @Html.HiddenFor(m => m.Agencia.Id)
+                                    @Html.LabelFor(m => m.Agencia.Banco.Nome, new { @class = "label" })                                
+                                    <label class="select">                                                      
+                                        @Html.DropDownListFor(m => m.Agencia.BancoId, Model.ListaBanco, string.Empty, new {@class = "required" })
+                                        <i></i> 
+                                    </label>  
+                                    @Html.ValidationMessageFor(m => m.Agencia.BancoId, "", new { @class = "note note-error" })
+                                </section>       
+                                <section class="col col-6">
+                                    @Html.LabelFor(m => m.Agencia.AgenciaCodigo, new { @class = "label" })
+                                    <label class="input">                                        
+                                        @Html.TextBoxFor(m => m.Agencia.AgenciaCodigo, new { @maxlength = "10", @class = "required" })
+                                    </label>                                     
+                                    @Html.ValidationMessageFor(m => m.Agencia.AgenciaCodigo, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-2">
+                                     @Html.LabelFor(m => m.Agencia.DVAgencia, new { @class = "label" })
+                                    <label class="input">                                        
+                                        @Html.TextBoxFor(m => m.Agencia.DVAgencia, new { @maxlength = "10" })
+                                    </label>                                     
+                                    @Html.ValidationMessageFor(m => m.Agencia.DVAgencia, "", new { @class = "note note-error" })
+                                </section>                                
+                            </div> 
+                            <div class="row">   
+                                <section class="col col-12">
+                                    @Html.LabelFor(m => m.Agencia.Nome, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.Nome, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.Nome, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">   
+                                <section class="col col-12">
+                                    @Html.LabelFor(m => m.Agencia.NomeContato, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.NomeContato, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.NomeContato, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">   
+                                <section class="col col-12">
+                                    @Html.LabelFor(m => m.Agencia.TelefoneContato, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.TelefoneContato, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.TelefoneContato, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">   
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.Agencia.TipoLogradouro, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.TipoLogradouro, new { @maxlength = "10"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.TipoLogradouro, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">   
+                                <section class="col col-9">
+                                    @Html.LabelFor(m => m.Agencia.Logradouro, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.Logradouro, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.Logradouro, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.Agencia.Numero, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.Numero, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.Numero, "", new { @class = "note note-error" })
+                                </section>
+                             </div>
+                             <div class="row">
+                                 <section class="col col-9">
+                                    @Html.LabelFor(m => m.Agencia.Complemento, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.Complemento, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.Complemento, "", new { @class = "note note-error" })
+                                </section>
+@*                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.Agencia.Bairro, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.Bairro, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.Bairro, "", new { @class = "note note-error" })
+                                </section>*@
+                             </div>
+                             <div class="row">
+                                <section class="col col-9">
+                                    @Html.LabelFor(m => m.Agencia.Cidade, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.Cidade, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.Cidade, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                           @*  <div class="row">
+                                 <section class="col col-9">
+                                    @Html.LabelFor(m => m.Agencia.CEP, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.CEP, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.CEP, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-3">
+                                    @Html.LabelFor(m => m.Agencia.Telefone, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Agencia.Telefone, new { @maxlength = "50"  })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Agencia.Telefone, "", new { @class = "note note-error" })
+                                </section>
+                             </div>*@
+                        </fieldset>
+                        <footer>
+                            @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
+                                                                             
+                            <button type="button" id="btnDeletar" class="btn btn-primary">
+                                Deletar
+                            </button>
+                            <button id="btnSalvar" type="submit" class="btn btn-primary">
+                                Salvar
+                            </button> 
+                                                       
+                        </footer>
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+
+<script type="text/javascript">
+    $("#btnDeletar").on("click", function() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletar", "Agencia")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: $('#@Html.IdFor(m => m.Agencia.Id)').val()
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);            
+            clearForm();
+            doFilter();
+        });
+    });
+
+
+    function clearForm() {
+        $('#@Html.IdFor(m => m.Agencia.Id)').val('');
+        $('#@Html.IdFor(m => m.Agencia.Banco)').val('');
+        $('#@Html.IdFor(m => m.Agencia.AgenciaCodigo)').val('');
+        $('#@Html.IdFor(m => m.Agencia.DVAgencia)').val('');
+        $('#@Html.IdFor(m => m.Agencia.Nome)').prop('checked', false);
+        $('#@Html.IdFor(m => m.Agencia.NomeContato)').val('');
+        $('#@Html.IdFor(m => m.Agencia.TelefoneContato)').val('');
+        $('#@Html.IdFor(m => m.Agencia.TipoLogradouro)').val('');
+        $('#@Html.IdFor(m => m.Agencia.Logradouro)').val('');
+        $('#@Html.IdFor(m => m.Agencia.Complemento)').val('');
+        $('#@Html.IdFor(m => m.Agencia.Numero)').val('');
+        $('#@Html.IdFor(m => m.Agencia.Cidade)').val('');
+        $('#@Html.IdFor(m => m.Agencia.Complemento)').val('');
+    }
+
+  
+</script>
+
+

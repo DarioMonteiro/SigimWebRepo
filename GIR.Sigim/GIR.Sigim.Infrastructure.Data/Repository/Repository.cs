@@ -54,7 +54,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository
             }
         }
 
-        public void Alterar(TEntity item)
+        public virtual void Alterar(TEntity item)
         {
             unitOfWork.SetModified<TEntity>(item);
         }
@@ -64,7 +64,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository
             var set = unitOfWork.CreateSet<TEntity>().AsQueryable<TEntity>();
 
             if (includes.Any())
-                set = includes.Aggregate(set, (current, expression) => current.Include(expression));
+                set = includes.Aggregate(set, (current, expression) => current.Include(expression).DefaultIfEmpty());
 
             return set;
         }
@@ -91,6 +91,12 @@ namespace GIR.Sigim.Infrastructure.Data.Repository
         public IEnumerable<TEntity> ListarTodos()
         {
             return unitOfWork.CreateSet<TEntity>();
+        }
+
+        public IEnumerable<TEntity> ListarTodos(params Expression<Func<TEntity, object>>[] includes)
+        {
+            var set = CreateSetAsQueryable(includes);
+            return set;
         }
 
         public IEnumerable<TEntity> ListarPeloFiltro(Expression<Func<TEntity, bool>> filtro, params Expression<Func<TEntity, object>>[] includes)

@@ -9,12 +9,19 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Controllers
 {
     public class BancoController : BaseController
     {
-        private IBancoAppService bancoAppService;               
+        #region Declaration
+
+        private IBancoAppService bancoAppService;
+
+        #endregion
+
+        #region Constructor
 
         public BancoController(
             IBancoAppService bancoAppService,            
@@ -24,6 +31,11 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             this.bancoAppService = bancoAppService;            
         }
 
+        #endregion
+
+        #region Methods
+
+        [Authorize(Roles = Funcionalidade.BancoAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as BancoViewModel;
@@ -31,6 +43,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             {
                 model = new BancoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
             var banco = bancoAppService.ObterPeloId(id) ?? new BancoDTO(); ;
@@ -78,10 +91,12 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
         [HttpPost]
         public ActionResult Deletar(int? id)
-        {
+        {          
             bancoAppService.Deletar(id);
             return PartialView("_NotificationMessagesPartial");
         }
 
+       
+        #endregion
     }
 }

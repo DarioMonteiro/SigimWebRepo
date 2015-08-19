@@ -100,6 +100,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasPrecision(18, 5)
                 .HasColumnName("valorTotalItem")
                 .HasColumnOrder(15);
+
         }
     }
 }

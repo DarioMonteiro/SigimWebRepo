@@ -15,23 +15,48 @@ namespace GIR.Sigim.Application.Helper
     {
         public static void Initialise()
         {
+            Mapper.CreateMap<Caixa, CaixaDTO>();
+            Mapper.CreateMap<CaixaDTO, Caixa>();
+
             Mapper.CreateMap<CentroCusto, CentroCustoDTO>();
             Mapper.CreateMap<CentroCustoDTO, CentroCusto>();
 
             Mapper.CreateMap<Classe, ClasseDTO>();
             Mapper.CreateMap<ClasseDTO, Classe>();
 
-            Mapper.CreateMap<Caixa, CaixaDTO>();
-            Mapper.CreateMap<CaixaDTO, Caixa>();
+            Mapper.CreateMap<HistoricoContabil, HistoricoContabilDTO>();
+            Mapper.CreateMap<HistoricoContabilDTO, HistoricoContabil>();
+
+            Mapper.CreateMap<ImpostoFinanceiro, ImpostoFinanceiroDTO>();
+            Mapper.CreateMap<ImpostoFinanceiroDTO, ImpostoFinanceiro>();
+
+            Mapper.CreateMap<ImpostoPagar, ImpostoPagarDTO>();
+            Mapper.CreateMap<ImpostoPagarDTO, ImpostoPagar>();
+
+            Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
+            Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
+
+            Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
+            Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>()
+                .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));
 
             Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
             Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
+
+            Mapper.CreateMap<RateioAutomatico, RateioAutomaticoDTO>();
+            Mapper.CreateMap<RateioAutomaticoDTO, RateioAutomatico>();
+
+            Mapper.CreateMap<TaxaAdministracao, TaxaAdministracaoDTO>();
+            Mapper.CreateMap<TaxaAdministracaoDTO, TaxaAdministracao>();
 
             Mapper.CreateMap<TipoCompromisso, TipoCompromissoDTO>();
             Mapper.CreateMap<TipoCompromissoDTO, TipoCompromisso>();
 
             Mapper.CreateMap<TipoDocumento, TipoDocumentoDTO>();
             Mapper.CreateMap<TipoDocumentoDTO, TipoDocumento>();
+
+            Mapper.CreateMap<TipoMovimento, TipoMovimentoDTO>();
+            Mapper.CreateMap<TipoMovimentoDTO, TipoMovimento>();
 
             Mapper.CreateMap<TipoRateio, TipoRateioDTO>();
             Mapper.CreateMap<TipoRateioDTO, TipoRateio>();
@@ -42,77 +67,6 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TituloReceber, TituloReceberDTO>();
             Mapper.CreateMap<TituloReceberDTO, TituloReceber>();
 
-            Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
-            Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
-
-            Mapper.CreateMap<ParametrosUsuarioFinanceiro, ParametrosUsuarioFinanceiroDTO>();
-            Mapper.CreateMap<ParametrosUsuarioFinanceiroDTO, ParametrosUsuarioFinanceiro>();
-
-            Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
-            Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>();
-
-            Mapper.CreateMap<ImpostoFinanceiro, ImpostoFinanceiroDTO>();
-            Mapper.CreateMap<ImpostoFinanceiroDTO, ImpostoFinanceiro>();
-
-            Mapper.CreateMap<AssuntoContatoDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.AssuntoContato));
-            Mapper.CreateMap<TabelaBasicaDTO, AssuntoContatoDTO>();
-
-            Mapper.CreateMap<InteresseBairroDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.BairroInteresse));
-            Mapper.CreateMap<TabelaBasicaDTO, InteresseBairroDTO>();
-
-            Mapper.CreateMap<EstadoCivilDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.EstadoCivil));
-            Mapper.CreateMap<TabelaBasicaDTO, EstadoCivilDTO>();
-
-            Mapper.CreateMap<FonteNegocioDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.FonteNegocio));
-            Mapper.CreateMap<TabelaBasicaDTO, FonteNegocioDTO>();
-
-            Mapper.CreateMap<GrupoDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Grupo));
-            Mapper.CreateMap<TabelaBasicaDTO, GrupoDTO>();
-
-            Mapper.CreateMap<NacionalidadeDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Nacionalidade));
-            Mapper.CreateMap<TabelaBasicaDTO, NacionalidadeDTO>();
-
-            Mapper.CreateMap<ParentescoDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Parentesco));
-            Mapper.CreateMap<TabelaBasicaDTO, ParentescoDTO>();
-
-            Mapper.CreateMap<ProfissaoDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Profissao));
-            Mapper.CreateMap<TabelaBasicaDTO, ProfissaoDTO>();
-
-            Mapper.CreateMap<RamoAtividadeDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.RamoAtividade));
-            Mapper.CreateMap<TabelaBasicaDTO, RamoAtividadeDTO>();
-
-            Mapper.CreateMap<RelacionamentoDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Relacionamento));
-            Mapper.CreateMap<TabelaBasicaDTO, RelacionamentoDTO>();
-
-            Mapper.CreateMap<TipologiaDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Tipologia));
-            Mapper.CreateMap<TabelaBasicaDTO, TipologiaDTO>();
-
-            Mapper.CreateMap<TratamentoDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.Tratamento));
-            Mapper.CreateMap<TabelaBasicaDTO, TratamentoDTO>();
-
-            Mapper.CreateMap<TipoAreaDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoArea));
-            Mapper.CreateMap<TabelaBasicaDTO, TipoAreaDTO>();
-
-            Mapper.CreateMap<TipoCaracteristicaDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoCaracteristica));
-            Mapper.CreateMap<TabelaBasicaDTO, TipoCaracteristicaDTO>();
-
-            Mapper.CreateMap<TipoEspecificacaoDTO, TabelaBasicaDTO>()
-                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoEspecificacao));
-            Mapper.CreateMap<TabelaBasicaDTO, TipoEspecificacaoDTO>();
         }
     }
 }

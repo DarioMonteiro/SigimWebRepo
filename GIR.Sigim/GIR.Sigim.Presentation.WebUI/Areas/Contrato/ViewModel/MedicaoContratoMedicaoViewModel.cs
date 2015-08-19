@@ -20,12 +20,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public decimal? RetencaoContratual { get; set; }             
 
         public ContratoRetificacaoItemMedicaoDTO ContratoRetificacaoItemMedicao { get; set; }
+        public ContratoDTO Contrato { get; set; }
         
         [Display(Name="Tipo")]
         public SelectList ListaTipoDocumento { get; set; }
-
-        [Display(Name = "Multifornecedor")]
-        public SelectList ListaMultiFornecedor { get; set; }
 
         [Display(Name = "Tipo compra")]
         public SelectList ListaTipoCompra { get; set; }
@@ -46,7 +44,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public SelectList ListaCodigoContribuicao { get; set; }
 
         public string JsonListaRetificacaoProvisao { get; set; }
-        public string JsonListaContratoRetificacaoItemMedicao { get; set; }
         public int? DiasPagamentoParametrosContrato { get; set; }
         public int? DiasMedicaoParametrosContrato { get; set; }
         public Nullable<DateTime> DataLimiteMedicao { get; set; }
@@ -56,7 +53,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public bool EhSituacaoLiberado { get; set; }
 
         public bool PodeSalvar { get; set; }
-        public bool PodeCancelar { get; set; }
+        public bool PodeDeletar { get; set; }
         public bool PodeImprimir { get; set; }
 
         [Display(Name = "Preço unitário")]
@@ -65,6 +62,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public MedicaoContratoMedicaoViewModel()
         {
             this.ContratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicaoDTO();
+            this.ContratoRetificacaoItemMedicao.MultiFornecedor = new ClienteFornecedorDTO();
 
             EhSituacaoAguardandoAprovacao = true;
             EhSituacaoAguardandoLiberacao = false;

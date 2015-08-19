@@ -1,0 +1,75 @@
+﻿@using GIR.Sigim.Application.DTO.Admin
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<UsuarioPerfilDTO> Lista = Model.Records as IEnumerable<UsuarioPerfilDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls="dt_basic",
+                                @class="form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string usuarioSortingSuffix = "sorting";
+                            string moduloSortingSuffix = "sorting";
+                            string perfilSortingSuffix = "sorting";
+
+                            switch (Model.OrderBy)
+                            {
+                                case "usuario":
+                                    usuarioSortingSuffix += sortingSuffix;
+                                    break;
+                                case "modulo":
+                                    moduloSortingSuffix += sortingSuffix;
+                                    break;
+                                case "perfil":
+                                    perfilSortingSuffix += sortingSuffix;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        <th class="sorting @usuarioSortingSuffix" data-order="usuario">Usuário</th>
+                        <th class="sorting @moduloSortingSuffix" data-order="modulo">Módulo</th>
+                        <th class="sorting @perfilSortingSuffix" data-order="perfil">Perfil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td class="text-left">@Html.ActionLink(item.Usuario.Login.ToString(), "Cadastro", new { UsuarioId = item.UsuarioId, ModuloId = item.ModuloId})</td>
+                            <td class="text-left">@item.Modulo.NomeCompleto</td>
+                            @{if (item.Perfil == null) 
+                                {<td class="text-left"></td>}
+                              else
+                                {<td class="text-left">@item.Perfil.Descricao</td>}
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>

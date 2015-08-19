@@ -9,6 +9,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Controllers
 {
@@ -24,6 +25,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             this.formaRecebimentoAppService = formaRecebimentoAppService;            
         }
 
+        [Authorize(Roles = Funcionalidade.FormaRecebimentoAcessar)]
         public ActionResult Index(int? id)
         {
            
@@ -32,8 +34,15 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             {
                 model = new FormaRecebimentoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
-           
+
+            model.PodeSalvar = formaRecebimentoAppService.EhPermitidoSalvar();
+            model.PodeDeletar = formaRecebimentoAppService.EhPermitidoDeletar();
+            //model.PodeImprimir = formaRecebimentoAppService.EhPermitidoImprimir();
+
+            model.PodeHabilitarNumeroDias = false;
+
             var formaRecebimento = formaRecebimentoAppService.ObterPeloId(id) ?? new FormaRecebimentoDTO();
             
             if (id.HasValue && !formaRecebimento.Id.HasValue)
@@ -71,7 +80,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
         private void CarregarCombos(FormaRecebimentoViewModel model)
         {
-            model.ListaTipoRecebimento = new SelectList(formaRecebimentoAppService.ListarOpcoesTipoRecebimento(),"Id", "Descricao", model.FormaRecebimento.TipoRecebimento);
+            model.ListaTipoRecebimento = new SelectList(formaRecebimentoAppService.ListarTipoRecebimento(),"Id", "Descricao", model.FormaRecebimento.TipoRecebimento);
         }
 
         [HttpPost]

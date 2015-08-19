@@ -16,14 +16,18 @@ namespace GIR.Sigim.Application.DTO.Financeiro
 
         [Display(Name = "Situacao")]
         public string Situacao { get; set; }
-        public bool Inativo
+        public string DescricaoSituacao
         {
-            get { return Situacao == "I"; }
-            set { Situacao = value ? "I" : "A"; }
+            get { return Situacao == "A" ? "Ativa" : "Inativa"; }
+        }
+        public bool Ativa
+        {
+            get { return Situacao == "A"; }
+            set { Situacao = value ? "A" : "I"; }
         }
 
         [StringLength(20, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
-        [Display(Name = "CentroContabil")]
+        [Display(Name = "Centro contábil")]
         public string CentroContabil { get; set; }
 
         public CentroCustoDTO CentroCusto { get; set; }

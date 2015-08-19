@@ -12,5 +12,7 @@ namespace GIR.Sigim.Application.DTO.Sigim
         public ClienteFornecedorDTO ClienteFornecedor { get; set; }
         [Display(Name = "C.N.P.J")]
         public string Cnpj { get; set; }
+        public string NomeFantasia { get; set; }
+        public string InscricaoEstadual { get; set; }
     }
 }

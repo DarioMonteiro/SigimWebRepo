@@ -10,6 +10,7 @@ using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Sigim
 {
@@ -48,6 +49,12 @@ namespace GIR.Sigim.Application.Service.Sigim
 
         public bool Salvar(FormaRecebimentoDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.FormaRecebimentoGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (dto == null)
                 throw new ArgumentNullException("dto");
 
@@ -68,6 +75,7 @@ namespace GIR.Sigim.Application.Service.Sigim
             formaRecebimento.Automatico = dto.Automatico;
             formaRecebimento.TipoRecebimento = dto.TipoRecebimento;
             formaRecebimento.NumeroDias = dto.NumeroDias;
+            if (!dto.NumeroDias.HasValue) formaRecebimento.NumeroDias = 0;
 
             if (Validator.IsValid(formaRecebimento, out validationErrors))
             {
@@ -81,12 +89,20 @@ namespace GIR.Sigim.Application.Service.Sigim
                 return true;
             }
             else
+            {
                 messageQueue.AddRange(validationErrors, TypeMessage.Error);
-                return false;       
+                return false;
+            }
         }
 
         public bool Deletar(int? id)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.FormaRecebimentoDeletar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (id == null)
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
@@ -114,8 +130,24 @@ namespace GIR.Sigim.Application.Service.Sigim
             }
         }
 
-        public List<ItemListaDTO> ListarOpcoesTipoRecebimento()
+        public List<ItemListaDTO> ListarTipoRecebimento()
         { return typeof(TipoFormaRecebimento).ToItemListaDTO(); }
+
+        public bool EhPermitidoSalvar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.FormaRecebimentoGravar);
+        }
+
+        public bool EhPermitidoDeletar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.FormaRecebimentoDeletar);
+        }
+
+        //public bool EhPermitidoImprimir()
+        //{
+        //    return UsuarioLogado.IsInRole(Funcionalidade.FormaRecebimentoImprimir);
+        //}
+
 
     }
 }

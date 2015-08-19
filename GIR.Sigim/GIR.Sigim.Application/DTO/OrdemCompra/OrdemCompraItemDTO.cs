@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.Adapter;
-using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.DTO.Financeiro;
 
 namespace GIR.Sigim.Application.DTO.OrdemCompra
 {
@@ -15,7 +16,9 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public int? RequisicaoMaterialItemId { get; set; }
         public int? CotacaoItemId { get; set; }
         public int? MaterialId { get; set; }
+        public MaterialDTO Material { get; set; }
         public string CodigoClasse { get; set; }
+        public ClasseDTO Classe { get; set; }
         public int Sequencial { get; set; }
         public string Complemento { get; set; }
         public decimal? Quantidade { get; set; }
@@ -25,5 +28,15 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public decimal? PercentualDesconto { get; set; }
         public decimal? ValorTotalComImposto { get; set; }
         public decimal? ValorTotalItem { get; set; }
+        public decimal Saldo
+        {
+            get
+            {
+                decimal quantidadeEntregue = QuantidadeEntregue.HasValue ? QuantidadeEntregue.Value : 0;
+                decimal quantidade = Quantidade.HasValue ? Quantidade.Value : 0;
+                return quantidade - quantidadeEntregue;
+            }
+        }
+
     }
 }

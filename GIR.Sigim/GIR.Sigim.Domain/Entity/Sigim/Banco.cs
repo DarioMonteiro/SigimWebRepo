@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,20 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public int? NumeroRemessaPagamento { get; set; }
         public bool? InterfaceEletronica { get; set; }
         public ICollection<BancoLayout> ListaBancoLayout { get; set; }
+        public ICollection<Agencia> ListaAgencia { get; set; }
 
         public Banco()
         {
             this.ListaBancoLayout = new HashSet<BancoLayout>();
+            this.ListaAgencia = new HashSet<Agencia>();
+        }
+
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Id == 999)
+            {
+                yield return new ValidationResult(Resource.Financeiro.ErrorMessages.BancoCarteira);
+            }
         }
     }
 }

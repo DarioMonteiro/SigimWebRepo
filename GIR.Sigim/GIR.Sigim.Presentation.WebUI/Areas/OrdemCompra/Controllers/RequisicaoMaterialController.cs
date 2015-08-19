@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros;
@@ -36,6 +37,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.parametrosUsuarioAppService = parametrosUsuarioAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.RequisicaoMaterialAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as RequisicaoMaterialListaViewModel;
@@ -43,6 +45,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             {
                 model = new RequisicaoMaterialListaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             return View(model);
         }
@@ -62,14 +65,23 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 var result = requisicaoMaterialAppService.ListarPeloFiltro(model.Filtro, Usuario.Id, out totalRegistros);
                 if (result.Any())
                 {
-                    var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
-                    return PartialView("ListaPartial", listaViewModel);
+                    if (model.Filtro.PaginationParameters.PageIndex == 0 && result.Count == 1)
+                    {
+                        Session["Filtro"] = null;
+                        return PartialView("Redirect", Url.Action("Cadastro", "RequisicaoMaterial", new { id = result[0].Id }));
+                    }
+                    else
+                    {
+                        var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
+                        return PartialView("ListaPartial", listaViewModel);
+                    }
                 }
                 return PartialView("_EmptyListPartial");
             }
             return PartialView("_NotificationMessagesPartial");
         }
 
+        [Authorize(Roles = Funcionalidade.RequisicaoMaterialAcessar)]
         public ActionResult Cadastro(int? id)
         {
             RequisicaoMaterialCadastroViewModel model = new RequisicaoMaterialCadastroViewModel();
@@ -84,7 +96,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             if ((requisicaoMaterial.CentroCusto == null) || (string.IsNullOrEmpty(requisicaoMaterial.CentroCusto.Codigo)))
             {
                 var parametrosUsuario = parametrosUsuarioAppService.ObterPeloIdUsuario(Usuario.Id);
-                model.RequisicaoMaterial.CentroCusto = parametrosUsuario.CentroCusto;
+                model.RequisicaoMaterial.CentroCusto = parametrosUsuario != null ? parametrosUsuario.CentroCusto : null;
             }
 
             var parametros = parametrosOrdemCompraAppService.Obter();

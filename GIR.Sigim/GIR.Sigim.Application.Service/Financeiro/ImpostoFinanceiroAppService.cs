@@ -14,6 +14,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Financeiro;
 using GIR.Sigim.Application.Filtros;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -51,6 +52,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Salvar(ImpostoFinanceiroDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.ImpostoFinanceiroGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (dto == null) throw new ArgumentNullException("dto");
 
             if (ValidaSalvar(dto) == false) { return false; } 
@@ -97,6 +104,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Deletar(int? id)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.ImpostoFinanceiroDeletar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (id == null)
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
@@ -127,6 +140,22 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public List<ItemListaDTO> ListarOpcoesFatoGerador()
         {  return typeof(FatoGeradorImpostoFinanceiro).ToItemListaDTO();}
+
+
+        public bool EhPermitidoSalvar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.ImpostoFinanceiroGravar);
+        }
+
+        public bool EhPermitidoDeletar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.ImpostoFinanceiroDeletar);
+        }
+
+        //public bool EhPermitidoImprimir()
+        //{
+        //    return UsuarioLogado.IsInRole(Funcionalidade.ImpostoFinanceiroImprimir);
+        //}
 
         #endregion
 

@@ -49,15 +49,24 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
                     foreach (var item in listaTituloPagar)
                     {
-                        if ((item.Situacao != SituacaoTituloPagar.Cancelado) && (item.TipoTitulo != TipoTitulo.NaoVinculado))
+                        if ((item.Situacao != SituacaoTituloPagar.Cancelado) && (item.TipoTitulo != TipoTitulo.Pai))
                         {
                             var quantidadeDeZerosIniciais = item.Documento.Length - numeroNotaFiscal.Length;
                             numeroDeZerosIniciais = item.Documento.Substring(0, quantidadeDeZerosIniciais);
-                            if (Convert.ToInt32(numeroDeZerosIniciais) == 0)
+                            if (string.IsNullOrEmpty(numeroDeZerosIniciais))
                             {
-                                existe = true;
-                                break;
+                                numeroDeZerosIniciais = "0";
                             }
+                            int resultado;
+                            if (int.TryParse(numeroDeZerosIniciais, out resultado))
+                            {
+                                if (Convert.ToInt32(resultado) == 0)
+                                {
+                                    existe = true;
+                                    break;
+                                }
+                            }
+
                         }
                     }
                 }

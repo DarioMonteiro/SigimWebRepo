@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Admin;
 using GIR.Sigim.Domain.Entity.Financeiro;
-using GIR.Sigim.Domain.Resource;
+using GIR.Sigim.Domain.Resource.Sigim;
+using GIR.Sigim.Domain.Resource.OrdemCompra;
 
 namespace GIR.Sigim.Domain.Entity.OrdemCompra
 {
@@ -29,12 +30,20 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         {
             if (string.IsNullOrEmpty(CodigoCentroCusto))
             {
-                yield return new ValidationResult(string.Format(ErrorMessages.CampoObrigatorio, "Centro de Custo"));
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo"));
             }
 
             if (Data == DateTime.MinValue)
             {
-                yield return new ValidationResult(string.Format(ErrorMessages.CampoObrigatorio, "Data"));
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data"));
+            }
+
+            foreach (var item in ListaItens)
+            {
+                if (item.QuantidadeAprovada > item.Quantidade)
+                {
+                    yield return new ValidationResult(string.Format(Resource.OrdemCompra.ErrorMessages.QuantidadeAprovadaMaiorQueQuantidade, item.Sequencial.ToString()));
+                }
             }
         }
     }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace GIR.Sigim.Application.DTO.Sigim
 {
     public class BancoDTO : BaseDTO
-    {                
+    {
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Nome")]
         public string Nome { get; set; }
@@ -19,7 +19,7 @@ namespace GIR.Sigim.Application.DTO.Sigim
             get { return Situacao == "A"; }
             set { Situacao = value ? "A" : "I"; }
         }
-        public int NumeroRemessa { get; set; }                
+        public int? NumeroRemessa { get; set; }                
 
         public bool InterfaceEletronica { get; set; }
         public string InterfaceEletronicaDescricao
@@ -27,6 +27,14 @@ namespace GIR.Sigim.Application.DTO.Sigim
             get { return InterfaceEletronica == true ? "Sim" : "Não"; }
         }
 
-        public int NumeroRemessaPagamento { get; set; }       
+        public int? NumeroRemessaPagamento { get; set; }       
+
+        
+        public ICollection<AgenciaDTO> ListaAgencia { get; set; }
+
+        public BancoDTO()
+        {
+           this.ListaAgencia = new HashSet<AgenciaDTO>(); 
+        }
     }
 }

@@ -53,7 +53,16 @@
     <Compile Include="Adapter\Adapter.cs" />
     <Compile Include="Adapter\ImageAdapter.cs" />
     <Compile Include="Adapter\EnumAdapter.cs" />
+    <Compile Include="Constantes\HistoricoContabil.cs" />
+    <Compile Include="Constantes\Modulo.cs" />
+    <Compile Include="Constantes\Funcionalidade.cs" />
     <Compile Include="CustomAttribute\RequiredIfNotEmptyAttribute.cs" />
+    <Compile Include="DTO\Admin\UsuarioPerfilDTO.cs" />
+    <Compile Include="DTO\Admin\UsuarioFuncionalidadeDTO.cs" />
+    <Compile Include="DTO\Admin\FuncionalidadeDTO.cs" />
+    <Compile Include="DTO\Admin\PerfilFuncionalidadeDTO.cs" />
+    <Compile Include="DTO\Admin\ModuloDTO.cs" />
+    <Compile Include="DTO\Admin\PerfilDTO.cs" />
     <Compile Include="DTO\Admin\UsuarioDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoDTO.cs" />
@@ -67,13 +76,19 @@
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
-    <Compile Include="DTO\Contrato\TotalizadoresMedicaoDTO.cs" />
+    <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
+    <Compile Include="DTO\Estoque\MovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
+    <Compile Include="DTO\Financeiro\HistoricoContabilDTO.cs" />
+    <Compile Include="DTO\Financeiro\TipoMovimentoDTO.cs" />
+    <Compile Include="DTO\Financeiro\ImpostoPagarDTO.cs" />
+    <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />
+    <Compile Include="DTO\Financeiro\RateioAutomaticoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoFinanceiroDTO.cs" />
-    <Compile Include="DTO\Financeiro\TabelaBasicaDTO.cs" />
+    <Compile Include="DTO\Sigim\TabelaBasicaDTO.cs" />
     <Compile Include="DTO\Financeiro\MotivoCancelamentoDTO.cs" />
     <Compile Include="DTO\Financeiro\ParametrosFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\ParametrosUsuarioFinanceiroDTO.cs" />
@@ -90,11 +105,17 @@
     <Compile Include="DTO\Orcamento\ParametrosOrcamentoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\AbstractRequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\EntradaMaterialFormaPagamentoDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\EntradaMaterialImpostoDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\EntradaMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\EntradaMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\OrdemCompraDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\OrdemCompraFormaPagamentoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\OrdemCompraItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\CotacaoDTO.cs" />
     <Compile Include="DTO\OrdemCompra\CotacaoItemDTO.cs" />
     <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialItemDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\RelOCItensOrdemCompraDTO.cs" />
     <Compile Include="DTO\OrdemCompra\RequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\PreRequisicaoMaterialDTO.cs" />
     <Compile Include="DTO\OrdemCompra\InterfaceCotacaoDTO.cs" />
@@ -109,7 +130,10 @@
     <Compile Include="DTO\Sigim\BancoLayoutDTO.cs" />
     <Compile Include="DTO\Sigim\BloqueioContabilDTO.cs" />
     <Compile Include="DTO\Sigim\ComposicaoDTO.cs" />
+    <Compile Include="DTO\Sigim\AgenciaDTO.cs" />
+    <Compile Include="DTO\Sigim\ContaCorrenteDTO.cs" />
     <Compile Include="DTO\Sigim\FormaRecebimentoDTO.cs" />
+    <Compile Include="DTO\Sigim\MaterialClasseInsumoDTO.cs" />
     <Compile Include="DTO\Sigim\TipoAreaDTO.cs" />
     <Compile Include="DTO\Sigim\TipoCaracteristicaDTO.cs" />
     <Compile Include="DTO\Sigim\TipoEspecificacaoDTO.cs" />
@@ -140,22 +164,40 @@
     <Compile Include="DTO\Sigim\UnidadeMedidaDTO.cs" />
     <Compile Include="DTO\Sigim\MaterialDTO.cs" />
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
+    <Compile Include="Enums\ClienteFornecedorModuloAutoComplete.cs" />
+    <Compile Include="Enums\SimNaoAmbos.cs" />
+    <Compile Include="Enums\SituacaoAutoComplete.cs" />
+    <Compile Include="Enums\TipoClienteAutoComplete.cs" />
+    <Compile Include="Enums\TipoPesquisa.cs" />
     <Compile Include="Enums\TabelaBasicaFinanceiro.cs" />
+    <Compile Include="Filtros\Admin\UsuarioFuncionalidadeFiltro.cs" />
+    <Compile Include="Enums\TipoPessoaAutoComplete.cs" />
+    <Compile Include="Filtros\Admin\PerfilFiltro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
+    <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
+    <Compile Include="Filtros\Financeiro\HistoricoContabilFiltro.cs" />
+    <Compile Include="Filtros\Financeiro\TipoMovimentoFiltro.cs" />
     <Compile Include="Filtros\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
+    <Compile Include="Filtros\OrdemCompras\EntradaMaterialFiltro.cs" />
+    <Compile Include="Filtros\OrdemCompras\RelOcItensOrdemCompraFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\RequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\PreRequisicaoMaterialFiltro.cs" />
     <Compile Include="Filtros\PaginationParameters.cs" />
     <Compile Include="Filtros\Sigim\BancoFiltro.cs" />
+    <Compile Include="Filtros\Sigim\AgenciaFiltro.cs" />
+    <Compile Include="Filtros\Sigim\ClienteFornecedorPesquisaFiltro.cs" />
+    <Compile Include="Filtros\Sigim\ContaCorrenteFiltro.cs" />
+    <Compile Include="Filtros\Sigim\MaterialPesquisaFiltro.cs" />
     <Compile Include="Filtros\Sigim\FormaRecebimentoFiltro.cs" />
     <Compile Include="Filtros\Sac\Setor.cs" />
     <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />
     <Compile Include="Filtros\Sigim\UnidadeMedidaFiltro.cs" />
     <Compile Include="Helper\AdminMapperHelper.cs" />
     <Compile Include="Helper\ContratoMapperHelper.cs" />
+    <Compile Include="Helper\EstoqueMapperHelper.cs" />
     <Compile Include="Helper\SacMapperHelper.cs" />
     <Compile Include="Helper\SigimMapperHelper.cs" />
     <Compile Include="Helper\OrdemCompraMapperHelper.cs" />
@@ -167,6 +209,24 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relMedicao.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Contrato\relNotaFiscalLiberada.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relNotaFiscalLiberada.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\OrdemCompra\relEntradaMaterial.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relEntradaMaterial.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\OrdemCompra\relOrdemCompraItem.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relOrdemCompraItem.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\OrdemCompra\relPreRequisicaoMaterial.cs">
@@ -232,14 +292,20 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Service\Admin\IFuncionalidadeAppService.cs" />
+    <Compile Include="Service\Admin\IModuloAppService.cs" />
+    <Compile Include="Service\Admin\IPerfilAppService.cs" />
     <Compile Include="Service\Admin\IUsuarioAppService.cs" />
     <Compile Include="Service\Contrato\IContratoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoItemAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoItemImpostoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoItemMedicaoAppService.cs" />
-    <Compile Include="Service\Contrato\IContratoRetificacaoProvisaoAppService.cs" />
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
+    <Compile Include="Service\Financeiro\IHistoricoContabilAppService.cs" />
+    <Compile Include="Service\Financeiro\ITipoMovimentoAppService.cs" />
+    <Compile Include="Service\Financeiro\ITaxaAdministracaoAppService.cs" />
+    <Compile Include="Service\Financeiro\IRateioAutomaticoAppService.cs" />
     <Compile Include="Service\Financeiro\IImpostoFinanceiroAppService.cs" />
     <Compile Include="Service\Financeiro\ICaixaAppService.cs" />
     <Compile Include="Service\Financeiro\ITabelaBasicaAppService.cs" />
@@ -255,14 +321,19 @@
     <Compile Include="Service\IBaseAppService.cs" />
     <Compile Include="Service\Orcamento\IOrcamentoAppService.cs" />
     <Compile Include="Service\Orcamento\IParametrosOrcamentoAppService.cs" />
+    <Compile Include="Service\OrdemCompra\IEntradaMaterialAppService.cs" />
+    <Compile Include="Service\OrdemCompra\IOrdemCompraItemAppService.cs" />
     <Compile Include="Service\OrdemCompra\IRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IPreRequisicaoMaterialAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosOrdemCompraAppService.cs" />
     <Compile Include="Service\OrdemCompra\IParametrosUsuarioAppService.cs" />
     <Compile Include="Service\Sac\ISetorAppService.cs" />
     <Compile Include="Service\Sac\IParametrosSacAppService.cs" />
+    <Compile Include="Service\Sigim\IContaCorrenteAppService.cs" />
+    <Compile Include="Service\Sigim\IAgenciaAppService.cs" />
     <Compile Include="Service\Sigim\IBancoAppService.cs" />
     <Compile Include="Service\Sigim\IFormaRecebimentoAppService.cs" />
+    <Compile Include="Service\Sigim\IMaterialClasseInsumoAppService.cs" />
     <Compile Include="Service\Sigim\ITratamentoAppService.cs" />
     <Compile Include="Service\Sigim\ITipoAreaAppService.cs" />
     <Compile Include="Service\Sigim\ITipoEspecificacaoAppService.cs" />
@@ -311,6 +382,18 @@
     <EmbeddedResource Include="Reports\Contrato\relMedicao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relMedicao.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Contrato\relNotaFiscalLiberada.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relNotaFiscalLiberada.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OrdemCompra\relEntradaMaterial.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relEntradaMaterial.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\OrdemCompra\relOrdemCompraItem.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relOrdemCompraItem.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\OrdemCompra\relPreRequisicaoMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

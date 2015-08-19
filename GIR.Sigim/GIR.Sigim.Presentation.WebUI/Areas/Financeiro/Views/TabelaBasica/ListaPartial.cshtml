@@ -1,4 +1,4 @@
-﻿@using GIR.Sigim.Application.DTO.Financeiro
+﻿@using GIR.Sigim.Application.DTO.Sigim
 @model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
 
 @{
@@ -17,17 +17,16 @@
                             Model.PageSizeList,
                             new
                             {
-                                @id = "pageSizeSelector",
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
                                 @aria_controls = "dt_basic",
-                                @class = "form-control",
-                                onchange = "changePageSize();"
+                                @class = "form-control"
                             })
                     </label>
                 </div>
             </div>
         </div>
         <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-            <table id="tableSearchResult" class="table table-bordered table-striped table-condensed table-hover dataTable">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
                 <thead>
                     <tr role="row">
                         @{
@@ -62,6 +61,6 @@
                 </tbody>
             </table>
         </div>
-        @Html.Partial("_PaginationPartial", Model.Pagination)
+        @Html.Partial("_PaginationPartial", Model)
     }
 </div>

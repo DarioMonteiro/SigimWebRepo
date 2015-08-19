@@ -1,0 +1,101 @@
+﻿@using GIR.Sigim.Application.DTO.Sigim
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<AgenciaDTO> Lista = Model.Records as IEnumerable<AgenciaDTO>;    
+}
+
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls = "dt_basic",
+                                @class = "form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string bancoIdSortingSuffix = "sorting";
+                            string bancoNomeSortingSuffix = "sorting";          
+                            string agenciaCodigoSortingSuffix = "sorting";
+                            string DVAgenciaSortingSuffix = "sorting";
+                            string nomeSortingSuffix = "sorting";
+                            string nomeContatoSortingSuffix = "sorting";
+                            string telefoneContatoSortingSuffix = "sorting";
+
+                            switch (Model.OrderBy)
+                            {
+                                case "id":
+                                    bancoIdSortingSuffix += sortingSuffix;
+                                    break;
+                                case "bancoId":
+                                    bancoIdSortingSuffix += sortingSuffix;
+                                    break;
+                                case "bancoNome":
+                                    bancoNomeSortingSuffix += sortingSuffix;
+                                    break;                          
+                                case "agenciaCodigo":
+                                    agenciaCodigoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "DVAgencia":
+                                    DVAgenciaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "nome":
+                                    nomeSortingSuffix += sortingSuffix;
+                                    break;
+                                case "nomeContato":
+                                    nomeContatoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "telefoneContato":
+                                    telefoneContatoSortingSuffix += sortingSuffix;
+                                    break;                                                                          
+                                default:
+                                    break;
+                            }
+                        
+                        }
+                        <th class="sorting @bancoIdSortingSuffix text-center" data-order="bancoId" style="width:60px; ">Banco</th>  
+                        <th class="sorting @bancoNomeSortingSuffix text-left" data-order="bancoNome" style="min-width:65px;">Nome</th>                  
+                        <th class="sorting @agenciaCodigoSortingSuffix text-center" data-order="agenciaCodigo" style="min-width:65px;">Agência</th>
+                        <th class="sorting @DVAgenciaSortingSuffix text-center" data-order="DBAgencia" style="min-width:75px;">DV</th>
+                        <th class="sorting @nomeSortingSuffix text-left" data-order="nome" style="min-width:75px;">Nome</th>
+                        <th class="sorting @nomeContatoSortingSuffix text-left" data-order="nome" style="min-width:75px;">Nome contato</th>
+                        <th class="sorting @telefoneContatoSortingSuffix text-left" data-order="nome" style="min-width:75px;">Telefone contato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>                       
+                            <td class="text-center">@item.BancoId</td>
+                            <td class="text-left">@item.Banco.Nome</td>
+                            <td class="text-center">@Html.ActionLink(item.AgenciaCodigo.ToString(), "Cadastro", new { id = item.Id })</td>                                                       
+                            <td class="text-center">@item.DVAgencia</td>
+                            <td class="text-left">@item.Nome</td>
+                            <td class="text-left">@item.NomeContato</td>
+                            <td class="text-left">@item.TelefoneContato</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>

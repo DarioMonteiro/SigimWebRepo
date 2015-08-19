@@ -195,6 +195,10 @@ div.table-container div.empty-result
 	background-color: #FEFEFE;
 	color: #A90329;
 }
+div.table-container div.dt-toolbar-footer
+{
+	padding: 5px 10px;
+}
 
 table.dataTable
 {

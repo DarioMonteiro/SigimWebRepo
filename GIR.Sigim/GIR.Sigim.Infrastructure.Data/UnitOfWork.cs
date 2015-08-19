@@ -95,13 +95,19 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Properties<string>()
                 .Configure(p => p.HasColumnType("varchar"));
 
-            //Admin
-            //modelBuilder.Configurations.Add(new FuncionalidadeConfiguration());
-            modelBuilder.Configurations.Add(new ModuloConfiguration());
-            //modelBuilder.Configurations.Add(new PerfilConfiguration());
-            modelBuilder.Configurations.Add(new UsuarioConfiguration());
+            #region Admin
 
-            //Contrato
+            modelBuilder.Configurations.Add(new UsuarioConfiguration());
+            modelBuilder.Configurations.Add(new UsuarioFuncionalidadeConfiguration());
+            modelBuilder.Configurations.Add(new UsuarioPerfilConfiguration());
+            modelBuilder.Configurations.Add(new ModuloConfiguration());
+            modelBuilder.Configurations.Add(new PerfilConfiguration());
+            modelBuilder.Configurations.Add(new PerfilFuncionalidadeConfiguration());
+
+            #endregion
+
+            #region Contrato
+
             modelBuilder.Configurations.Add(new ParametrosContratoConfiguration());
             modelBuilder.Configurations.Add(new LicitacaoDescricaoConfiguration());
             modelBuilder.Configurations.Add(new LicitacaoConfiguration());
@@ -114,22 +120,44 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemImpostoConfiguration());
 
-            //Financeiro
+            #endregion
+
+            #region Estoque
+
+            modelBuilder.Configurations.Add(new EstoqueConfiguration());
+            modelBuilder.Configurations.Add(new EstoqueMaterialConfiguration());
+            modelBuilder.Configurations.Add(new MovimentoConfiguration());
+            modelBuilder.Configurations.Add(new MovimentoItemConfiguration());
+
+            #endregion
+
+            #region Financeiro
+
+            modelBuilder.Configurations.Add(new ApropriacaoConfiguration());
+            modelBuilder.Configurations.Add(new CaixaConfiguration());
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());
             modelBuilder.Configurations.Add(new CentroCustoEmpresaConfiguration());
             modelBuilder.Configurations.Add(new ClasseConfiguration());
-            modelBuilder.Configurations.Add(new CaixaConfiguration());
-            modelBuilder.Configurations.Add(new TipoCompromissoConfiguration());
+            modelBuilder.Configurations.Add(new HistoricoContabilConfiguration());
+            modelBuilder.Configurations.Add(new ImpostoFinanceiroConfiguration());
+            modelBuilder.Configurations.Add(new ImpostoPagarConfiguration());
             modelBuilder.Configurations.Add(new MotivoCancelamentoConfiguration());
-            modelBuilder.Configurations.Add(new ParametrosUsuarioFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new ParametrosFinanceiroConfiguration());
+            modelBuilder.Configurations.Add(new ParametrosUsuarioFinanceiroConfiguration());
+            modelBuilder.Configurations.Add(new RateioAutomaticoConfiguration());
+            modelBuilder.Configurations.Add(new TaxaAdministracaoConfiguration());
+            modelBuilder.Configurations.Add(new TipoCompromissoConfiguration());
             modelBuilder.Configurations.Add(new TipoDocumentoConfiguration());
+            modelBuilder.Configurations.Add(new TipoMovimentoConfiguration());
             modelBuilder.Configurations.Add(new TipoRateioConfiguration());
+            modelBuilder.Configurations.Add(new TituloPagarAdiantamentoConfiguration());
             modelBuilder.Configurations.Add(new TituloPagarConfiguration());
             modelBuilder.Configurations.Add(new TituloReceberConfiguration());
-            modelBuilder.Configurations.Add(new ImpostoFinanceiroConfiguration());
 
-            //Orcamento
+            #endregion
+
+            #region Orcamento
+
             modelBuilder.Configurations.Add(new ObraConfiguration());
             modelBuilder.Configurations.Add(new OrcamentoComposicaoConfiguration());
             modelBuilder.Configurations.Add(new OrcamentoComposicaoItemConfiguration());
@@ -137,10 +165,18 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new OrcamentoInsumoRequisitadoConfiguration());
             modelBuilder.Configurations.Add(new ParametrosOrcamentoConfiguration());
 
-            //OrdemCompra
+            #endregion
+
+            #region OrdemCompra
+
             modelBuilder.Configurations.Add(new CotacaoConfiguration());
             modelBuilder.Configurations.Add(new CotacaoItemConfiguration());
+            modelBuilder.Configurations.Add(new EntradaMaterialConfiguration());
+            modelBuilder.Configurations.Add(new EntradaMaterialFormaPagamentoConfiguration());
+            modelBuilder.Configurations.Add(new EntradaMaterialImpostoConfiguration());
+            modelBuilder.Configurations.Add(new EntradaMaterialItemConfiguration());
             modelBuilder.Configurations.Add(new OrdemCompraConfiguration());
+            modelBuilder.Configurations.Add(new OrdemCompraFormaPagamentoConfiguration());
             modelBuilder.Configurations.Add(new OrdemCompraItemConfiguration());
             modelBuilder.Configurations.Add(new ParametrosOrdemCompraConfiguration());
             modelBuilder.Configurations.Add(new ParametrosUsuarioConfiguration());
@@ -149,14 +185,22 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new RequisicaoMaterialConfiguration());
             modelBuilder.Configurations.Add(new RequisicaoMaterialItemConfiguration());
 
-            //Sigim
+            #endregion
+
+            #region Sigim
+
+            modelBuilder.Configurations.Add(new AgenciaConfiguration());
             modelBuilder.Configurations.Add(new AssuntoContatoConfiguration());
+            modelBuilder.Configurations.Add(new AvaliacaoFornecedorConfiguration());
+            modelBuilder.Configurations.Add(new AvaliacaoModeloConfiguration());
             modelBuilder.Configurations.Add(new BancoConfiguration());
             modelBuilder.Configurations.Add(new BancoLayoutConfiguration());
             modelBuilder.Configurations.Add(new ClienteFornecedorConfiguration());
+            modelBuilder.Configurations.Add(new ContaCorrenteConfiguration());
             modelBuilder.Configurations.Add(new PessoaFisicaConfiguration());
             modelBuilder.Configurations.Add(new PessoaJuridicaConfiguration()); 
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());
+            modelBuilder.Configurations.Add(new LogAcessoConfiguration());
             modelBuilder.Configurations.Add(new LogOperacaoConfiguration());
             modelBuilder.Configurations.Add(new InteresseBairroConfiguration());
             modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
@@ -188,13 +232,17 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new CodigoContribuicaoConfiguration());
             modelBuilder.Configurations.Add(new BloqueioContabilConfiguration());
 
-            //Sac
+            #endregion
+
+            #region Sac
+
             modelBuilder.Configurations.Add(new ParametrosSacConfiguration());
             modelBuilder.Configurations.Add(new SetorConfiguration());
             modelBuilder.Configurations.Add(new ParametrosEmailSacConfiguration());
             
-            
+            #endregion
         }
+
         #endregion
     }
 }

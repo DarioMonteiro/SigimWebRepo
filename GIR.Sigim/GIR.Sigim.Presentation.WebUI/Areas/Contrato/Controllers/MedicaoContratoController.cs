@@ -14,7 +14,7 @@ using GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.Adapter;
-
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -26,7 +26,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         private IClienteFornecedorAppService clienteFornecedorAppService;
         private IContratoAppService contratoAppService;
         private IContratoRetificacaoItemAppService contratoRetificacaoItemAppService;
-        private IContratoRetificacaoProvisaoAppService contratoRetificacaoProvisaoAppService;
         private ITipoDocumentoAppService tipoDocumentoAppService;
         private ITipoCompraAppService tipoCompraAppService;
         private ICifFobAppService cifFobAppService;
@@ -46,7 +45,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         public MedicaoContratoController(IClienteFornecedorAppService clienteFornecedorAppService,
                                          IContratoAppService contratoAppService,
                                          IContratoRetificacaoItemAppService contratoRetificacaoItemAppService,
-                                         IContratoRetificacaoProvisaoAppService contratoRetificacaoProvisaoAppService,
                                          ITipoDocumentoAppService tipoDocumentoAppService,
                                          ITipoCompraAppService tipoCompraAppService,
                                          ICifFobAppService cifFobAppService,
@@ -64,7 +62,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             this.clienteFornecedorAppService = clienteFornecedorAppService;
             this.contratoAppService = contratoAppService;
             this.contratoRetificacaoItemAppService = contratoRetificacaoItemAppService;
-            this.contratoRetificacaoProvisaoAppService = contratoRetificacaoProvisaoAppService;
             this.tipoDocumentoAppService = tipoDocumentoAppService;
             this.tipoCompraAppService = tipoCompraAppService;
             this.cifFobAppService = cifFobAppService;
@@ -82,20 +79,19 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
         #region Methods
 
+        [Authorize(Roles = Funcionalidade.MedicaoAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as MedicaoContratoListaViewModel;
             if (model == null)
             {
                 model = new MedicaoContratoListaViewModel();
-                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;  
+                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
-
-            CarregarCombosFiltro(model);
 
             return View(model);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -112,30 +108,40 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 var result = contratoAppService.ListarPeloFiltro(model.Filtro,Usuario.Id,out totalRegistros);
                 if (result.Any())
                 {
-                    var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
-                    return PartialView("ListaPartial", listaViewModel);
+                    if (model.Filtro.PaginationParameters.PageIndex == 0 && result.Count == 1)
+                    {
+                        Session["Filtro"] = null;
+
+                        return PartialView("Redirect", Url.Action("Medicao", "MedicaoContrato", new { id = result[0].Id }));
+                    }
+                    else
+                    {
+                        var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
+                        return PartialView("ListaPartial", listaViewModel);
+                    }
                 }
                 return PartialView("_EmptyListPartial");
             }
             return PartialView("_NotificationMessagesPartial");
         }
 
-        public ActionResult Medicao(int? idContrato)
+        [Authorize(Roles = Funcionalidade.MedicaoAcessar)]
+        public ActionResult Medicao(int? id)
         {
             MedicaoContratoMedicaoViewModel model = new MedicaoContratoMedicaoViewModel();
             ICollection<ContratoRetificacaoItemDTO> ListaItensUltimoContratoRetificacao = new HashSet<ContratoRetificacaoItemDTO>(); 
 
-            var contrato = contratoAppService.ObterPeloId(idContrato, Usuario.Id) ?? new ContratoDTO();
+            var contrato = contratoAppService.ObterPeloId(id, Usuario.Id) ?? new ContratoDTO();
             model.ListaServicoContratoRetificacaoItem = new SelectList(new List<ContratoRetificacaoItemDTO>(), "Id", "SequencialDescricaoItemComplemento");
 
             model.ContratoRetificacaoItemMedicao.ContratoId = contrato.Id.Value;
-            model.ContratoRetificacaoItemMedicao.Contrato = contrato;
+            model.Contrato = contrato;
 
             CarregarCombosMedicao(model);
- 
-            model.PodeSalvar = false;
-            model.PodeCancelar = false;
-            model.PodeImprimir = true;
+
+            model.PodeSalvar = contratoAppService.EhPermitidoSalvarMedicao();
+            model.PodeDeletar = contratoAppService.EhPermitidoDeletarMedicao();
+            model.PodeImprimir = contratoAppService.EhPermitidoImprimirMedicao();
 
             ParametrosContratoDTO parametros = parametrosContratoAppService.Obter();
             if (parametros != null)
@@ -149,7 +155,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             model.EhSituacaoAguardandoLiberacao = false;
             model.EhSituacaoLiberado = false;
 
-            if (idContrato.HasValue && !contratoAppService.EhContratoExistente(contrato))
+            if (id.HasValue && !contratoAppService.EhContratoExistente(contrato))
             {
                 return View(model);
             }
@@ -168,12 +174,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (!contratoRetificacaoAppService.EhRetificacaoAprovada(contratoRetificacao))
             {
-                return View(model);
-            }
-
-            if (!contratoAppService.EhContratoAssinado(contrato))
-            {
-                return View(model);
             }
 
             model.RetencaoContratual = 0;
@@ -197,90 +197,81 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         {
             if (ModelState.IsValid)
             {
-                //if (contratoRetificacaoItemMedicaoAppService.Salvar(model.ContratoRetificacaoItemMedicao))
-                //    return PartialView("Redirect", Url.Action("Medicao", "MedicaoContrato", new { idContrato = model.ContratoRetificacaoItemMedicao.ContratoId }));
-                contratoRetificacaoItemMedicaoAppService.Salvar(model.ContratoRetificacaoItemMedicao);
+                contratoAppService.SalvarMedicao(model.ContratoRetificacaoItemMedicao);
             }
             return PartialView("_NotificationMessagesPartial");
         }
 
         [HttpPost]
-        public ActionResult RecuperaContratoRetificacaoItem(int? codigo)
+        public ActionResult RecuperaContratoRetificacaoItem(int? contratoId,int? contratoRetificacaoItemId)
         {
             List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisao = null;
-            ContratoRetificacaoItemDTO contratoRetificacaoItem = null;
+            ContratoRetificacaoItemDTO contratoRetificacaoItem = new ContratoRetificacaoItemDTO();
 
-            if (codigo.HasValue)
+            if (contratoId.HasValue && contratoRetificacaoItemId.HasValue)
             {
-                listaContratoRetificacaoProvisao = contratoRetificacaoProvisaoAppService.ObterListaCronograma(codigo.Value);
+                listaContratoRetificacaoProvisao = contratoAppService.ObterListaCronograma(contratoId.Value, contratoRetificacaoItemId.Value);
 
-                if (!contratoRetificacaoProvisaoAppService.ExisteContratoRetificacaoProvisao(listaContratoRetificacaoProvisao))
+                ContratoDTO contrato = contratoAppService.ObterPeloId(contratoId.Value, Usuario.Id);
+                contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemId).SingleOrDefault();
+
+                bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
+                bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
+
+                if (!contratoAppService.EhContratoAssinado(contrato))
                 {
+                    var msg = messageQueue.GetAll()[0].Text;
+                    messageQueue.Clear();
+                    return Json(new
+                    {
+                        ehRecuperou = false,
+                        errorMessage = msg,
+                        ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
+                        ehNaturezaItemPorPrecoUnitario = EhNaturezaItemPorPrecoUnitario,
+                        contratoRetificacaoItem = contratoRetificacaoItem,
+                    });
+                }
+
+
+                if (!contratoAppService.ExisteContratoRetificacaoProvisao(listaContratoRetificacaoProvisao))
+                {
+
                     var msg = messageQueue.GetAll()[0].Text;
                     messageQueue.Clear();
                     return Json(new
                                 {
                                     ehRecuperou = false,
                                     errorMessage = msg,
-                                    complementoDescricao = "",
-                                    ehNaturezaItemPorPrecoGlobal = false,
-                                    descricaoNaturezaItem = "",
-                                    siglaUnidadeMedida = "",
-                                    valorItem = "",
-                                    retencaoItem = "",
-                                    precoUnitario = "",
-                                    baseRetencaoItem = "",
-                                    sequencialItem = "",
-                                    listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
+                                    ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
+                                    ehNaturezaItemPorPrecoUnitario = EhNaturezaItemPorPrecoUnitario,
+                                    contratoRetificacaoItem = contratoRetificacaoItem,
                                 });
                 }
                 else
                 {
                     contratoRetificacaoItem = listaContratoRetificacaoProvisao.ElementAt(0).ContratoRetificacaoItem;
 
-                    bool EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
-                    bool EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
+                    EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
+                    EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
 
                     return Json(new
                     {
                         ehRecuperou = true,
                         errorMessage = string.Empty,
-                        complementoDescricao = contratoRetificacaoItem.ComplementoDescricao,
                         ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
-                        descricaoNaturezaItem = contratoRetificacaoItem.DescricaoNaturezaItem,
-                        siglaUnidadeMedida = contratoRetificacaoItem.Servico.SiglaUnidadeMedida,
-                        valorItem = contratoRetificacaoItem.ValorItem,
-                        retencaoItem = contratoRetificacaoItem.RetencaoItem,
-                        precoUnitario = contratoRetificacaoItem.PrecoUnitario,
-                        baseRetencaoItem = contratoRetificacaoItem.BaseRetencaoItem,
-                        sequencialItem = contratoRetificacaoItem.Sequencial,
-                        listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao)
-
-                        //listaContratoRetificacaoProvisao = Newtonsoft.Json.JsonConvert.SerializeObject(listaContratoRetificacaoProvisao,
-                        //                                                                               Formatting.Indented,
-                        //                                                                               new JsonSerializerSettings
-                        //                                                                               {
-                        //                                                                                   ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        //                                                                                   //ReferenceLoopHandling = ReferenceLoopHandling.Serialize
-                        //                                                                                   //PreserveReferencesHandling = PreserveReferencesHandling.Objects
-                        //                                                                               })
+                        ehNaturezaItemPorPrecoUnitario = EhNaturezaItemPorPrecoUnitario,
+                        contratoRetificacaoItem = contratoRetificacaoItem,
+                        listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
                     });
                 }
             }
             return Json(new 
             {
-                ehRecuperou = false, 
-                errorMessage = string.Empty, 
-                complementoDescricao = "",
-                ehNaturezaItemPorPrecoGlobal = false,
-                descricaoNaturezaItem = "",
-                siglaUnidadeMedida = "",
-                valorItem = "",
-                retencaoItem = "",
-                precoUnitario = "",
-                baseRetencaoItem = "",
-                sequencialItem = "",
-                listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
+                ehRecuperou = false,
+                errorMessage = string.Empty,
+                ehNaturezaItemPorPrecoGlobal = true,
+                ehNaturezaItemPorPrecoUnitario = false,
+                contratoRetificacaoItem = contratoRetificacaoItem,
             });
         }
 
@@ -291,7 +282,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (contratoId.HasValue && sequencialItem.HasValue)
             {
-                listaMedicao = contratoRetificacaoItemMedicaoAppService.ObtemPorSequencialItem(contratoId.Value, sequencialItem.Value);
+                listaMedicao = contratoAppService.ObtemMedicaoPorSequencialItem(contratoId.Value, sequencialItem.Value);
 
                 if (listaMedicao.Count > 0)
                 {
@@ -299,7 +290,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         ehRecuperou = true,
                         errorMessage = string.Empty,
-                        listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(listaMedicao)
+                        listaContratoRetificacaoItemMedicao = listaMedicao
                     });
                 }
 
@@ -308,22 +299,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return Json(new
             {
                 ehRecuperou = false,
-                errorMessage = string.Empty,
-                listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(listaMedicao)
+                errorMessage = string.Empty
             });
 
         }
 
         [HttpPost]
-        public ActionResult RecuperaContratoRetificacaoItemMedicao(int? contratoRetificacaoItemMedicaoId)
+        public ActionResult RecuperaContratoRetificacaoItemMedicao(int? contratoId, int? contratoRetificacaoItemMedicaoId)
         {
             ContratoRetificacaoItemMedicaoDTO medicao = null;
 
             if (contratoRetificacaoItemMedicaoId.HasValue)
             {
-                medicao = contratoRetificacaoItemMedicaoAppService.ObterPeloId(contratoRetificacaoItemMedicaoId.Value);
+                medicao = contratoAppService.ObtemMedicaoPorId(contratoId.Value, contratoRetificacaoItemMedicaoId.Value);
 
-                if (!contratoRetificacaoItemMedicaoAppService.EhValidaMedicaoRecuperada(medicao))
+                if (!contratoAppService.ExisteMedicao(medicao))
                 {
                     var msg = messageQueue.GetAll()[0].Text;
                     messageQueue.Clear();
@@ -339,7 +329,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         ehRecuperou = true,
                         errorMessage = string.Empty,
-                        medicaoRecuperada = Newtonsoft.Json.JsonConvert.SerializeObject(medicao)
+                        medicaoRecuperada = medicao
                     });
                 }
             }
@@ -351,12 +341,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         }
 
         [HttpPost]
-        public ActionResult Cancelar(int? id)
+        public ActionResult Deletar(int? id,int? contratoId)
         {
             bool cancelou = false;
 
             string msg = "";
-            cancelou = contratoRetificacaoItemMedicaoAppService.Cancelar(id);
+            cancelou = contratoAppService.ExcluirMedicao(contratoId, id);
             if (messageQueue.GetAll().Count > 0)
             {
                 msg = messageQueue.GetAll()[0].Text;
@@ -385,12 +375,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                                                   int? tipoDocumentoId,
                                                                   string numeroDocumento,
                                                                   Nullable<DateTime> dataEmissao,
-                                                                  int? contratadoId)
+                                                                  int? contratadoId,
+                                                                  int? multiFornecedorId)
         {
             List<ContratoRetificacaoItemMedicaoDTO> listaMedicao = null;
 
+            if (contratadoId.HasValue && multiFornecedorId.HasValue)
+            {
+                contratadoId = multiFornecedorId;
+            }
             string msg = "";
-            bool ehValido = contratoRetificacaoItemMedicaoAppService.EhValidaVisualizacaoMedicao(contratoId,tipoDocumentoId,numeroDocumento,dataEmissao,contratadoId);
+            bool ehValido = contratoAppService.EhValidoParametrosVisualizacaoMedicao(contratoId,tipoDocumentoId,numeroDocumento,dataEmissao,contratadoId);
             if (messageQueue.GetAll().Count > 0)
             {
                 msg = messageQueue.GetAll()[0].Text;
@@ -399,42 +394,35 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (ehValido)
             {
-                listaMedicao = contratoRetificacaoItemMedicaoAppService.RecuperaMedicaoPorContratoDadosDaNota(contratoId.Value, 
-                                                                                                              tipoDocumentoId.Value, 
-                                                                                                              numeroDocumento, 
-                                                                                                              dataEmissao.Value, 
-                                                                                                              contratadoId.Value);
-                var novaListaMedicao = listaMedicao;
-                foreach (var medicao in novaListaMedicao)
-                {
-                    medicao.Contrato.ListaContratoRetificacao.Clear();
-                    medicao.Contrato.ListaContratoRetificacaoItem.Clear();
-                    medicao.Contrato.ListaContratoRetificacaoItemCronograma.Clear();
-                    medicao.Contrato.ListaContratoRetificacaoItemImposto.Clear();
-                    medicao.Contrato.ListaContratoRetificacaoItemMedicao.Clear();
-                    medicao.Contrato.ListaContratoRetificacaoProvisao.Clear();
-                }
-
-
+                listaMedicao = contratoAppService.RecuperaMedicaoPorDadosDaNota(contratoId.Value, 
+                                                                                tipoDocumentoId.Value, 
+                                                                                numeroDocumento, 
+                                                                                dataEmissao.Value, 
+                                                                                contratadoId.Value);
                 if (listaMedicao.Count > 0)
                 {
                     return Json(new
                     {
                         ehRecuperou = true,
                         errorMessage = string.Empty,
-                        listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(novaListaMedicao)
+                        listaContratoRetificacaoItemMedicao = listaMedicao
                     });
                 }
-
+                else
+                {
+                    return Json(new
+                    {
+                        ehRecuperou = false,
+                        errorMessage = string.Empty
+                    });
+                }
             }
 
             return Json(new
             {
                 ehRecuperou = false,
-                errorMessage = msg,
-                listaContratoRetificacaoItemMedicao = Newtonsoft.Json.JsonConvert.SerializeObject(listaMedicao)
+                errorMessage = msg
             });
-
         }
 
         public ActionResult Imprimir(int? contratadoId,
@@ -456,11 +444,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             DateTime dtEmissao = DateTime.Parse(dataEmissao);
 
 
-            //if (contratoRetificacaoItemMedicaoAppService.EhValidaImpressao(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao))
-            //{
-            //}
+            var arquivo = contratoAppService.ExportarMedicao(contratoId, contratadoId, tipoDocumentoId, numeroDocumento, dtEmissao, retencaoContratual, valorContratadoItem, formato);
 
-            var arquivo = contratoRetificacaoItemMedicaoAppService.Exportar(contratadoId, contratoId, tipoDocumentoId, numeroDocumento, dtEmissao,retencaoContratual,valorContratadoItem, formato);
             if (arquivo != null)
             {
                 Response.Buffer = false;
@@ -472,28 +457,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        private void CarregarCombosFiltro(MedicaoContratoListaViewModel model) 
-        {
-            int? contratanteId = null;
-            int? contratadoId = null;
-
-            if (model.Filtro != null) 
-            {
-                contratanteId = model.Filtro.ContratanteId;
-                contratadoId = model.Filtro.ContratadoId;
-            }
-
-            model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratanteId);
-            model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", contratadoId);
-
-            //model.ListaContratante = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3,0,2), "Id", "Nome", contratanteId);
-            //model.ListaContratado = new SelectList(clienteFornecedorAppService.ListarClienteFornecedor(3, 0, 2), "Id", "Nome", contratadoId); 
-        }
-
         private void CarregarCombosMedicao(MedicaoContratoMedicaoViewModel model)
         {
             int? tipoDocumentoId = null;
-            int? multifornecedorId = null;
             string tipoCompraCodigo = null;
             int? cifFobId = null;
             string naturezaOperacaoCodigo = null;
@@ -502,11 +468,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             string codigoContribuicaoCodigo = null;
 
             tipoDocumentoId = model.ContratoRetificacaoItemMedicao.TipoDocumentoId;
-
-            if (model.ContratoRetificacaoItemMedicao.MultiFornecedorId.HasValue)
-            {
-                multifornecedorId = model.ContratoRetificacaoItemMedicao.MultiFornecedorId.Value;
-            }
 
             tipoCompraCodigo = model.ContratoRetificacaoItemMedicao.TipoCompraCodigo;
 
@@ -525,7 +486,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             codigoContribuicaoCodigo = model.ContratoRetificacaoItemMedicao.CodigoContribuicaoCodigo;
 
             model.ListaTipoDocumento = new SelectList(tipoDocumentoAppService.ListarTodos(), "Id", "Sigla", tipoDocumentoId);
-            model.ListaMultiFornecedor = new SelectList(clienteFornecedorAppService.ListarAtivosDeContrato(), "Id", "Nome", multifornecedorId);
             model.ListaTipoCompra = new SelectList(tipoCompraAppService.ListarTodos(), "Codigo", "Descricao", tipoCompraCodigo);
             model.ListaCifFob = new SelectList(cifFobAppService.ListarTodos(), "Id", "Descricao", cifFobId);
             model.ListaNaturezaOperacao = new SelectList(naturezaOperacaoAppService.ListarTodos(), "Codigo", "Descricao", naturezaOperacaoCodigo);
@@ -538,9 +498,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         public ActionResult ExisteNumeroDocumento(  Nullable<DateTime> dataEmissao,
                                                     Nullable<DateTime> dataVencimento,
                                                     string numeroDocumento, 
-                                                    int? contratadoId)
+                                                    int? contratadoId,
+                                                    int? multiFornecedorId)
         {
-            bool existeNumeroDocumento = contratoRetificacaoItemMedicaoAppService.ExisteNumeroDocumento(dataEmissao, numeroDocumento, contratadoId);
+            if (multiFornecedorId.HasValue)
+            {
+                contratadoId = multiFornecedorId.Value;
+            }
+            bool existeNumeroDocumento = contratoAppService.ExisteNumeroDocumento(dataEmissao, numeroDocumento, contratadoId);
+
             if (!existeNumeroDocumento) tituloPagarAppService.ExisteNumeroDocumento(dataEmissao, dataVencimento, numeroDocumento, contratadoId);
 
             return Json(new

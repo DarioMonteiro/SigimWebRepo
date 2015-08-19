@@ -1,0 +1,7 @@
+﻿@using MvcSiteMapProvider.Web.Html
+<ul style="">
+    <li>
+        <a href="@Url.Content("~/Admin/Home")" title="Painel"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Home</span></a>
+    </li>
+</ul>
+@Html.MvcSiteMap().Menu(Html.MvcSiteMap().SiteMap.FindSiteMapNode(Url.Action("Index", "Home", new { area = "Admin" })), true, false)

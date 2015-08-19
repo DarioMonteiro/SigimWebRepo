@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.Service.OrdemCompra;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel;
@@ -20,10 +21,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.parametrosUsuarioAppService = parametrosUsuarioAppService;
         }
 
+        [Authorize(Roles = Funcionalidade.ParametroUsuarioOrdemCompraAcessar)]
         public ActionResult Index()
         {
             ParametrosUsuarioViewModel model = new ParametrosUsuarioViewModel();
             model.ParametrosUsuario = parametrosUsuarioAppService.ObterPeloIdUsuario(Usuario.Id);
+            model.PodeSalvar = parametrosUsuarioAppService.EhPermitidoSalvar();
             return View(model);
         }
 

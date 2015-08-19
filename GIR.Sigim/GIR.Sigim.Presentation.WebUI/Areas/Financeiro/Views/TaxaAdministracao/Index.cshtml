@@ -1,0 +1,51 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.TaxaAdministracaoViewModel
+
+@{
+    ViewBag.Title = "Taxa de administração";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+        @Html.ActionLink("Novo", "Cadastro", null, new { @class = "btn btn-primary", @style = "float:right;" })
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Lista",
+                        "TaxaAdministracao",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@*@section scripts{
+    @Html.EditorFor(new GIR.Sigim.Application.Filtros.PaginationParameters(), "ListPageScript")
+}*@
+
+<script type="text/javascript">
+
+    $(document).ready(function ()
+    {
+        listar();
+    });
+
+    function listar()
+    {
+        $('#formFilter').submit();
+    }
+
+</script>

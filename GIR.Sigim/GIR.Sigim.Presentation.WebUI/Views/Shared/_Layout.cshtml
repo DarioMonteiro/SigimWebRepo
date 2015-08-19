@@ -27,29 +27,20 @@
     <aside id="left-panel">
         <div class="login-info">
             <span>
-                <a href="@Url.Action("ChangePassword", "Account", new { area = "" })" title="@User.Identity.Name">
-                    <img src="~/Content/img/avatars/male.png" alt="@User.Identity.Name" class="online">
-                    <span>@User.Identity.Name</span>
+                @*<a href="@Url.Action("ChangePassword", "Account", new { area = "" })" title="@User.Identity.Name">*@
+                <a href="#" title="@User.Identity.Name">
+                    @*<img src="~/Content/img/avatars/male.png" alt="@User.Identity.Name" class="online">*@
+                    <span style="font-size:small">@User.Identity.Name</span>
                 </a>
             </span>
         </div>
         <nav>
             @Html.Partial("_MenuPartial")
         </nav>
-        <span class="minifyme" data-action="minifyMenu">
-            <i class="fa fa-arrow-circle-left hit"></i>
-        </span>
     </aside>
     <div id="main" role="main">
         <div id="ribbon">
-            <ol class="breadcrumb">
-                <li>
-                    @Html.ActionLink("Painel", "Index", "Painel", new { area = "" }, null)
-                </li>
-                <li>UI Elements</li>
-                <li>Icons</li>
-                <li>Font Awesome</li>
-            </ol>
+            @Html.MvcSiteMap().SiteMapPath()
         </div>
         <div id="content">
             <section id="widget-grid" class="">

@@ -13,7 +13,7 @@ $(function () {
 
     $(document).ajaxStart(function () {
         showLoading();
-});
+    });
 
     $(document).ajaxStop(function () {
         hideLoading();
@@ -130,7 +130,7 @@ function initializeDecimalBehaviour() {
 
 function roundDecimal(value, precision) {
     var originalValue = 0 + value;
-    var roundedValue = parseFloat(originalValue.toString().replace(".", "").replace(",", ".")).toFixed(precision);
+    var roundedValue = parseFloat(stringToFloat(originalValue.toString())).toFixed(precision);
     return roundedValue.replace(".", ",");
 }
 
@@ -198,7 +198,7 @@ function smartAlert(title, message, type) {
 
     $.smallBox({
         title: title,
-        content: message,
+        content: message.replace("\n", "<br />"),
         color: color,
         timeout: 4000,
         icon: icon
@@ -291,7 +291,7 @@ function diasDecorridos(dt1, dt2){
     return Math.ceil(dif / dia);
 }
 
-$('.numeric').on('input', function (event) {
+$(document).on('input', '.numeric', function (event) {
     this.value = this.value.replace(/[^0-9]/g, '');
 });
 
@@ -313,6 +313,17 @@ function isValidDate(format, value)
 
     return isValid;
 }
+
 function goToTop() {
     $('html, body').animate({ scrollTop: 0 }, 'slow');
+}
+
+// Pad Right
+String.prototype.padRight = function (l, c) {
+    return this + Array(l - this.length + 1).join(c || " ");
+}
+
+// Pad Left
+String.prototype.padLeft = function (l, c) {
+    return Array(l - this.length + 1).join(c || " ") + this;
 }

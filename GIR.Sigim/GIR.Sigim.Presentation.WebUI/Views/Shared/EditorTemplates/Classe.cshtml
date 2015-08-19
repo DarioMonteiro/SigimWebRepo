@@ -81,13 +81,13 @@
 
                 $('#@Html.IdFor(m => m.Codigo)_tree.tree').find('li').not(':has(ul)').find(' > span').css({ cursor: 'pointer' }).on('click', function (e) {
                     $('#@Html.IdFor(m => m.Codigo)').val($(this).data("codigo-centro-custo")).change();
-                    $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('toggle');
+                    $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('hide');
                 });
 
                 @if (!somenteNivelFolha.Value) {
                     @:$('#@Html.IdFor(m => m.Codigo)_tree.tree').find('li:has(ul)').find(' > span').css({ cursor: 'pointer' }).on('dblclick', function (e) {
                     @:  $('#@Html.IdFor(m => m.Codigo)').val($(this).data("codigo-centro-custo")).change();
-                    @:  $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('toggle');
+                    @:  $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('hide');
                     @:});
                 }
             });
@@ -103,7 +103,8 @@
             }
         }
 
-        $(document).on("centroCustoValidado",            function (e) {
+        $(document).on("centroCustoValidado",
+            function (e) {
                 $("#orcamentoClasseDespesaId").val(0);
                 if (e.codigo != '') {
                     $.ajax({
@@ -135,7 +136,13 @@
                     @:  limpaClasseForm_@(Html.IdFor(m => m.Codigo))();
                     @:}
                 }
-            }        );        @if (centroCustoRequerido.Value) {            @:validaCentroCusto();        }    });
+            }
+        );
+
+        @if (centroCustoRequerido.Value) {
+            @:validaCentroCusto();
+        }
+    });
 
     function limpaClasseForm_@(Html.IdFor(m => m.Codigo))() {
         $("#@Html.IdFor(m => m.Codigo)").val('');

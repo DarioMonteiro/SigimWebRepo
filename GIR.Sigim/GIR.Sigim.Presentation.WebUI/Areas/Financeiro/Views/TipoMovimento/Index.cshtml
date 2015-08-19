@@ -1,0 +1,196 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.TipoMovimentoViewModel
+
+@{
+    ViewBag.Title = "Tipo de movimento";    
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Salvar",
+                            "TipoMovimento",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                    @Html.AntiForgeryToken()
+                    <div class="panel-body no-padding">
+                        <fieldset>
+                            <div class="row">
+                                <section class="col col-12">
+                                    @Html.LabelFor(m => m.TipoMovimento.Descricao, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.TipoMovimento.Descricao, new { @maxlength = "50",  @class = "required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.TipoMovimento.Descricao, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-12">
+                                    @Html.HiddenFor(m => m.TipoMovimento.Id)
+                                    @Html.LabelFor(m => m.TipoMovimento.HistoricoContabilId, new { @class = "label" })
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.TipoMovimento.HistoricoContabilId, Model.ListaHistoricoContabil, string.Empty)<i></i>
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.TipoMovimento.HistoricoContabilId, "", new { @class = "note note-error" })
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="col col-6"> 
+                                    <div style="border:1px solid lightgray; width:200px;">
+                                        <label class="label">Tipo</label>
+									    <div class="inline-group" style="padding-left:15px;">
+										    <label class="radio"> @Html.RadioButtonFor(m => m.TipoMovimento.Tipo,"B", new { id = "TipoBancario" }) <i></i>Bancário</label>
+										    <label class="radio"> @Html.RadioButtonFor(m => m.TipoMovimento.Tipo,"C", new { id = "TipoCaixa" }) <i></i>Caixa</label>
+									    </div>
+                                    </div>
+								</section>
+                                <section class="col col-6"> 
+                                    <div style="border:1px solid lightgray; width:200px;">
+                                        <label class="label">Operação</label>
+									    <div class="inline-group" style="padding-left:15px;">
+										    <label class="radio"> @Html.RadioButtonFor(m => m.TipoMovimento.Operacao, "C", new { id = "OperacaoCredito" }) <i></i>Crédito</label>
+										    <label class="radio"> @Html.RadioButtonFor(m => m.TipoMovimento.Operacao,"D", new { id = "OperacaoDebito" }) <i></i>Débito</label>
+									    </div>
+                                    </div>
+								</section>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <footer>
+                        <button type="button" id="btnDeletar" class="btn btn-primary">
+                            Deletar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Salvar
+                        </button>
+                    </footer>
+                    }
+                    @using (Ajax.BeginForm(
+                            "Lista",
+                            "TipoMovimento",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                            new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        listarFiltro();
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                listarFiltro();
+            }
+        );
+
+    });
+
+    $("#btnDeletar").on("click", function() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletar", "TipoMovimento")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: $('#@Html.IdFor(m => m.TipoMovimento.Id)').val()
+            })
+        })
+        .success(function (result) {
+            $('#notificationMessages').html(result);
+            limpaPaginacao();
+            clearForm();
+            listarFiltro();
+        });
+    });
+
+    function clearForm() {
+        $('#@Html.IdFor(m => m.TipoMovimento.Id)').val(null);
+        $('#@Html.IdFor(m => m.TipoMovimento.Descricao)').val(null);
+        $('#@Html.IdFor(m => m.TipoMovimento.HistoricoContabilId)').val(null);
+        $('#TipoBancario').val("B").prop('checked', true);
+        $('#OperacaoCredito').val("C").prop('checked', true);
+    }
+
+    function novo() {
+        clearForm();
+        $('#notificationMessages').html('');
+        $('#TipoMovimento_Descricao-error').remove();
+    }
+
+    function refresh() {
+        onSuccess();
+        clearForm();
+        listarFiltro();
+    }
+
+    function loadItem(id) {
+        novo();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CarregarItem", "TipoMovimento")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id: id
+            })
+        })
+        .success(function (result) {
+            $('#@Html.IdFor(m => m.TipoMovimento.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.TipoMovimento.Descricao)').val(result.Descricao);
+            $('#@Html.IdFor(m => m.TipoMovimento.HistoricoContabilId)').val(result.HistoricoContabilId);
+            if (result.Tipo == "B") {
+                $('#TipoBancario').val(result.Tipo).prop('checked', true);
+            }
+            if (result.Tipo == "C") {
+                $('#TipoCaixa').val(result.Tipo).prop('checked', true);
+            }
+            if (result.Operacao == "D") {
+                $('#OperacaoDebito').val(result.Operacao).prop('checked', true);
+            }
+            if (result.Operacao == "C") {
+                $('#OperacaoCredito').val(result.Operacao).prop('checked', true);
+            }
+            $('#@Html.IdFor(m => m.TipoMovimento.Operacao)').val(result.Operacao);
+            goToTop();
+        });
+    }
+
+    function limpaPaginacao() {
+        $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
+    };
+
+    function listarFiltro() {
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
+
+</script>

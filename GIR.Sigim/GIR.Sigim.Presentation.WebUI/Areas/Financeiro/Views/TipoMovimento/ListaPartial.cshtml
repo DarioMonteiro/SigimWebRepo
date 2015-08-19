@@ -1,0 +1,84 @@
+﻿@using GIR.Sigim.Application.DTO.Financeiro
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<TipoMovimentoDTO> Lista = Model.Records as IEnumerable<TipoMovimentoDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls = "dt_basic",
+                                @class = "form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            //string idSortingSuffix = "sorting";
+                            string descricaoSortingSuffix = "sorting";
+                            string historicoContabilSortingSuffix = "sorting";
+                            string tipoSortingSuffix = "sorting";
+                            string operacaoSortingSuffix = "sorting";
+
+                            switch (Model.OrderBy)
+                            {
+                                //case "id":
+                                //    idSortingSuffix += sortingSuffix;
+                                //    break;
+                                case "descricao":
+                                    descricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "historicoContabil":
+                                    historicoContabilSortingSuffix += sortingSuffix;
+                                    break;
+                                case "tipo":
+                                    tipoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "operacao":
+                                    operacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                default:
+                                    descricaoSortingSuffix += sortingSuffix;
+                                    break;
+                            }
+                        }
+                        @*<th class="sorting @idSortingSuffix text-center" data-order="id" style="width:60px; ">Código</th>*@
+                        <th class="sorting @descricaoSortingSuffix text-left" data-order="descricao" style="min-width:65px;">Descrição</th>
+                        <th class="sorting @historicoContabilSortingSuffix text-left" data-order="historicoContabil" style="width:100px;">Histórico Contábil</th>
+                        <th class="sorting @tipoSortingSuffix text-center" data-order="tipo" style="min-width:65px;">Tipo</th>
+                        <th class="sorting @operacaoSortingSuffix text-center" data-order="operacao" style="width:100px;">Operação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td class="text-left"><a href="javascript:loadItem(@item.Id.ToString());">@item.Descricao</a></td>
+                            <td class="text-left">@item.HistoricoContabilDescricao</td>
+                            <td class="text-center">@item.TipoDescricao</td>
+                            <td class="text-center">@item.OperacaoDescricao</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>

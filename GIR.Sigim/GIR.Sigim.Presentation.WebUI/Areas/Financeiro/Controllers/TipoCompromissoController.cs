@@ -11,6 +11,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -26,12 +27,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.tipoCompromissoAppService = tipoCompromissoAppService;
         }
 
-        /*public ActionResult Index()
-        {
-            TipoCompromissoViewModel model = new TipoCompromissoViewModel();
-            return View(model);
-        }*/
-
+        [Authorize(Roles = Funcionalidade.TipoCompromissoAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as TipoCompromissoViewModel;
@@ -39,6 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 model = new TipoCompromissoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             var tipoCompromisso = tipoCompromissoAppService.ObterPeloId(id) ?? new TipoCompromissoDTO();
 

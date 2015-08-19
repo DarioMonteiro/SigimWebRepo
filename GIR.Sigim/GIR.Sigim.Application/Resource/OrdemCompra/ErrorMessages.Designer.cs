@@ -61,6 +61,24 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entrada de Material \&quot;{0}\&quot;..
+        /// </summary>
+        public static string EntradaMaterialSituacaoInvalida {
+            get {
+                return ResourceManager.GetString("EntradaMaterialSituacaoInvalida", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Informe o motivo do cancelamento da Entrada de Material..
+        /// </summary>
+        public static string InformeMotivoCancelamentoEntradaMaterial {
+            get {
+                return ResourceManager.GetString("InformeMotivoCancelamentoEntradaMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Informe o motivo do cancelamento da Pré-requisicao..
         /// </summary>
         public static string InformeMotivoCancelamentoPreRequisicao {
@@ -129,6 +147,33 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         public static string SelecioneUmItemParaAprocacao {
             get {
                 return ResourceManager.GetString("SelecioneUmItemParaAprocacao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O título {0}, já está pago..
+        /// </summary>
+        public static string TituloEstaPago {
+            get {
+                return ResourceManager.GetString("TituloEstaPago", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O título de frete {0}, já está pago..
+        /// </summary>
+        public static string TituloFreteEstaPago {
+            get {
+                return ResourceManager.GetString("TituloFreteEstaPago", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O título de imposto {0}, já está pago..
+        /// </summary>
+        public static string TituloImpostoEstaPago {
+            get {
+                return ResourceManager.GetString("TituloImpostoEstaPago", resourceCulture);
             }
         }
     }

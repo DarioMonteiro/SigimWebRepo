@@ -1,31 +1,7 @@
-﻿<ul style="">
+﻿@using MvcSiteMapProvider.Web.Html
+<ul style="">
     <li>
         <a href="@Url.Content("~/Financeiro/Home")" title="Painel"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Home</span></a>
     </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Sistema</span></a>
-        <ul>
-            <li>@Html.ActionLink("Parâmetros", "Index", "ParametrosFinanceiro")</li>
-            <li>@Html.ActionLink("Parâmetros - usuário", "Index", "ParametrosUsuarioFinanceiro")</li>
-        </ul>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-cog"></i><span class="menu-item-parent">Cadastro</span></a>
-        <ul>
-            <li>@Html.ActionLink("Caixa", "", "Caixa")</li>
-            <li>@Html.ActionLink("Imposto financeiro", "", "ImpostoFinanceiro")</li>
-            <li>@Html.ActionLink("Forma de recebimento", "", "FormaRecebimento")</li>
-            <li>@Html.ActionLink("Motivo de cancelamento", "", "MotivoCancelamento")</li>
-            <li>@Html.ActionLink("Tabelas básicas", "", "TabelaBasica")</li>
-            <li>@Html.ActionLink("Tipo de compromisso", "", "TipoCompromisso")</li>
-            <li>@Html.ActionLink("Tipo de documento", "", "TipoDocumento")</li>
-            <li>@Html.ActionLink("Tipo rateio", "", "TipoRateio")</li>            
-            <li>
-                <a href="#">Bancário</a>
-                <ul>
-                    <li>@Html.ActionLink("Banco", "", "Banco")</li>
-                </ul>
-            </li>            
-        </ul>
-    </li>
 </ul>
+@Html.MvcSiteMap().Menu(Html.MvcSiteMap().SiteMap.FindSiteMapNode(Url.Action("Index", "Home", new { area = "Financeiro" })), true, false)

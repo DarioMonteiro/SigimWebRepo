@@ -7,7 +7,8 @@
 
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
-    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>        
+    <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>   
+    @Html.ActionLink("Agência", "Index", "Agencia", new { @id = Model.Banco.Id  }, new { @class = "btn btn-primary", @style = "float:right;" })       
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -29,10 +30,10 @@
                     <div class="panel-body no-padding">
                         <fieldset>
                             <div class="row">
-                            <section class="col col-3">                             
-                                @Html.LabelFor(m => m.Banco.Id, new { @class = "label" })
+                            <section class="col col-3">  
+                                @Html.LabelFor(m => m.Banco.Id, "Código do banco", new { @class = "label" })
                                 <label class="input">
-                                    @Html.TextBoxFor(m => m.Banco.Id, new { @maxlength = "50",  @class = "required" })
+                                    @Html.TextBoxFor(m => m.Banco.Id, new { @maxlength = "3",  @class = "numeric required" })
                                 </label>
                                 @Html.ValidationMessageFor(m => m.Banco.Id, "", new { @class = "note note-error" })
                             </section>
@@ -61,7 +62,7 @@
                                     <label class="input">
                                         @Html.TextBoxFor(m => m.Banco.NumeroRemessaPagamento)
                                     </label>                                   
-                                </section>
+                                </section>                               
                             </div>                                                       
                         </fieldset>
                     </div>
@@ -79,13 +80,14 @@
                             "Banco",
                             null,
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
-                            new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                            new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
                     }
                     <div id="resultadoBusca"></div>
                 </div>
@@ -98,7 +100,18 @@
 }
 
 <script type="text/javascript">
-    $("#btnDeletar").on("click", function () {
+    $(document).ready(function () {
+        listarFiltro();
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                listarFiltro();
+            }
+        );
+
+    });
+
+     $("#btnDeletar").on("click", function () {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Deletar", "Banco")',
@@ -113,7 +126,7 @@
             $('#notificationMessages').html(result);
             limpaPaginacao();
             clearForm();
-            doFilter();
+            listarFiltro();
         });
     });
 
@@ -129,13 +142,14 @@
         clearForm();
         $('#notificationMessages').html('');
         $('#Banco_Id-error').remove();
+        $('#Banco_BancoCodigo-error').remove();
         $('#Banco_Nome-error').remove();
     }
 
     function refresh() {
         onSuccess();
         clearForm();
-        doFilter();
+        listarFiltro();
     }
 
     function loadItem(id) {
@@ -151,7 +165,7 @@
             })
         })
         .success(function (result) {
-            $('#@Html.IdFor(m => m.Banco.Id)').val(result.Id);
+            $('#@Html.IdFor(m => m.Banco.Id)').val(result.Id.toString().padLeft(3, '0'));
             $('#@Html.IdFor(m => m.Banco.Nome)').val(result.Nome);
             $('#@Html.IdFor(m => m.Banco.InterfaceEletronica)').prop('checked', result.InterfaceEletronica);
             $('#@Html.IdFor(m => m.Banco.NumeroRemessa)').val(result.NumeroRemessa);
@@ -165,6 +179,9 @@
         $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
     }
 
-    
+    function listarFiltro() {
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
+
 </script>
 

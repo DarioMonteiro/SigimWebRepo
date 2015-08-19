@@ -13,6 +13,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Sigim;
 using System.Linq.Expressions;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Sigim
 {
@@ -54,6 +55,13 @@ namespace GIR.Sigim.Application.Service.Sigim
 
         public bool Salvar(UnidadeMedidaDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.OrdemCompraUnidadeMedidaGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+
             if (dto == null)
                 throw new ArgumentNullException("dto");
 
@@ -87,7 +95,13 @@ namespace GIR.Sigim.Application.Service.Sigim
         }
 
         public bool Deletar(string sigla)
-        {           
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.OrdemCompraUnidadeMedidaDeletar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (sigla == null)
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
@@ -110,6 +124,20 @@ namespace GIR.Sigim.Application.Service.Sigim
             }
         }
 
+        public bool EhPermitidoSalvar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.OrdemCompraUnidadeMedidaGravar);
+        }
+
+        public bool EhPermitidoDeletar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.OrdemCompraUnidadeMedidaDeletar);
+        }
+
+        //public bool EhPermitidoImprimir()
+        //{
+        //    return UsuarioLogado.IsInRole(Funcionalidade.OrdemCompraUnidadeMedidaImprimir);
+        //}
         #endregion
     }
 }

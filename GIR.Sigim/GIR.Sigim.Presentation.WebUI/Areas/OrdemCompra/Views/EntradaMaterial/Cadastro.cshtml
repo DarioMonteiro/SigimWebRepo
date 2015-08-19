@@ -1,0 +1,441 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel.EntradaMaterialCadastroViewModel
+
+@{
+    ViewBag.Title = "Entrada de material";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+    @{
+        string disablebtnLiberarTitulos = string.Empty;
+        if (!Model.PodeLiberarTitulos)
+        {
+            disablebtnLiberarTitulos = "disabled";
+        }
+    }
+    <button id="btnLiberarTitulos" type="button" class="btn btn-primary @disablebtnLiberarTitulos" title="Liberar títulos para o Financeiro">
+        Liberar Títulos
+    </button>
+    @Html.ActionLink("Novo", "Cadastro", new { @id = "" }, new { @class = "btn btn-primary", @style = "float:right;" })
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Cadastro",
+                        "EntradaMaterial",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "notificationMessages" },
+                        new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseGeral" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Entrada de material
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseGeral" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.Id, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.Id, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.Data, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.Data, "{0:dd/MM/yyyy}", new { @class = "required" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.Data, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $('#@Html.IdFor(m => m.EntradaMaterial.Data)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            onClose: function (selectedDate) {
+                                                                $(this).valid();
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.SituacaoDescricao, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.SituacaoDescricao, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                @Html.EditorFor(m => m.EntradaMaterial.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo", @somenteNivelFolha = true, @required = true, @podeEdidar = Model.PodeEditarCentroCusto })
+                                                <input type="hidden" id="orcamentoId" value="0" />
+                                            </div>
+                                            <div class="row">
+                                                @Html.EditorFor(m => m.EntradaMaterial.ClienteFornecedor, "ClienteFornecedor", 
+                                                    new { @sectionClass = "col col-6", 
+                                                            @required = true, 
+                                                            @label = "Fornecedor", 
+                                                            @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.OrdemCompra),
+                                                            @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                            @exibirBotaoPesquisa = true,
+                                                            @podeEdidar = Model.PodeEditarFornecedor
+                                                    })
+
+                                                @Html.EditorFor(m => m.EntradaMaterial.FornecedorNota, "ClienteFornecedor", 
+                                                    new { @sectionClass = "col col-6", 
+                                                            @required = false, 
+                                                            @label = "Fornecedor NF", 
+                                                            @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.OrdemCompra),
+                                                            @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                            @exibirBotaoPesquisa = true
+                                                    })
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12" style="margin-top:15px;">
+                                                    <ul id="notaFiscalTab" class="nav nav-tabs bordered">
+											            <li class="active">
+												            <a href="#notaFiscalTabContentDadosNF" data-toggle="tab">Dados da Nota Fiscal</a>
+											            </li>
+											            <li>
+												            <a href="#notaFiscalTabContentDadosGerais" data-toggle="tab">Dados Gerais</a>
+											            </li>
+                                                        <li>
+												            <a href="#notaFiscalTabContentCodigoBarras" data-toggle="tab">Código de barras</a>
+											            </li>
+										            </ul>
+
+                                                    <div id="notaFiscalTabContent" class="tab-content padding-10">
+											            <div class="tab-pane fade active in" id="notaFiscalTabContentDadosNF">
+                                                            <div class="row">
+                                                                <section class="col col-3">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.TipoNotaFiscalId, new { @class = "label" })
+                                                                    <label class="select">
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.TipoNotaFiscalId, Model.ListaTipoNotaFiscal, string.Empty, new { @class = "required" })
+                                                                        <i></i>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.TipoNotaFiscalId, "", new { @class = "note note-error" })
+                                                                </section>
+                                                                <section class="col col-3">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.NumeroNotaFiscal, new { @class = "label" })
+                                                                    <label class="input">
+                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.NumeroNotaFiscal, new { @class = "required" })
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.NumeroNotaFiscal, "", new { @class = "note note-error" })
+                                                                </section>
+                                                                <section class="col col-3">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.DataEmissaoNota, new { @class = "label" })
+                                                                    <label class="input">
+                                                                        <i class="icon-append fa fa-calendar"></i>
+                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataEmissaoNota, "{0:dd/MM/yyyy}", new { @class = "required" })
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.DataEmissaoNota, "Informe uma data válida.", new { @class = "note note-error" })
+                                                                </section>
+                                                                <script type="text/javascript">
+                                                                    $(document).ready(function () {
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)').datepicker({
+                                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                                            changeMonth: true,
+                                                                            changeYear: true,
+                                                                            onClose: function (selectedDate) {
+                                                                                $(this).valid();
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                </script>
+                                                                <section class="col col-3">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.DataEntregaNota, new { @class = "label" })
+                                                                    <label class="input">
+                                                                        <i class="icon-append fa fa-calendar"></i>
+                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataEntregaNota, "{0:dd/MM/yyyy}", new { @class = "required" })
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.DataEntregaNota, "Informe uma data válida.", new { @class = "note note-error" })
+                                                                </section>
+                                                                <script type="text/javascript">
+                                                                    $(document).ready(function () {
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.DataEntregaNota)').datepicker({
+                                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                                            changeMonth: true,
+                                                                            changeYear: true,
+                                                                            onClose: function (selectedDate) {
+                                                                                $(this).valid();
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                </script>
+                                                            </div>
+											            </div>
+											            <div class="tab-pane fade" id="notaFiscalTabContentDadosGerais">
+												            <div class="row">
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.CodigoTipoCompra, new { @class = "label" })
+                                                                    <label class="select">
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoTipoCompra, Model.ListaTipoCompra, string.Empty)
+                                                                        <i></i>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoTipoCompra, "", new { @class = "note note-error" })
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.CifFobId, new { @class = "label" })
+                                                                    <label class="select">
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CifFobId, Model.ListaCifFob, string.Empty)
+                                                                        <i></i>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.CifFobId, "", new { @class = "note note-error" })
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.CodigoNaturezaOperacao, new { @class = "label" })
+                                                                    <label class="select">
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoNaturezaOperacao, Model.ListaNaturezaOperacao, string.Empty)
+                                                                        <i></i>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoNaturezaOperacao, "", new { @class = "note note-error" })
+                                                                </section>
+                                                            </div>
+                                                            <div class="row">
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.SerieNFId, new { @class = "label" })
+                                                                    <label class="select">
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.SerieNFId, Model.ListaSerieNF, string.Empty)
+                                                                        <i></i>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.SerieNFId, "", new { @class = "note note-error" })
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.CodigoCST, new { @class = "label" })
+                                                                    <label class="select">
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoCST, Model.ListaCST, string.Empty)
+                                                                        <i></i>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoCST, "", new { @class = "note note-error" })
+                                                                </section>
+                                                                <section class="col col-4">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.CodigoContribuicaoId, new { @class = "label" })
+                                                                    <label class="select">
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoContribuicaoId, Model.ListaCodigoContribuicao, string.Empty)
+                                                                        <i></i>
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoContribuicaoId, "", new { @class = "note note-error" })
+                                                                </section>
+                                                            </div>
+											            </div>
+                                                        <div class="tab-pane fade" id="notaFiscalTabContentCodigoBarras">
+                                                            <div class="row">
+                                                                <section class="col col-12">
+                                                                    @Html.LabelFor(m => m.EntradaMaterial.CodigoBarras, new { @class = "label" })
+                                                                    <label class="input">
+                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.CodigoBarras, new { @class = "text-right numeric", @maxlength = 50 })
+                                                                    </label>
+                                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoBarras, "", new { @class = "note note-error" })
+                                                                </section>
+                                                            </div>
+                                                        </div>
+										            </div>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.Observacao, new { @class = "label" })
+                                                    <label class="textarea">
+                                                        @Html.TextAreaFor(m => m.EntradaMaterial.Observacao, new { rows = 4 })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.Observacao, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.LoginUsuarioCadastro, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.LoginUsuarioCadastro, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.DataCadastro, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataCadastro, "{0:dd/MM/yyyy}", new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.LoginUsuarioLiberacao, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.LoginUsuarioLiberacao, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.DataLiberacao, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataLiberacao, "{0:dd/MM/yyyy}", new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer>
+                            @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
+                            @{
+                                string disableBtnCancelar = string.Empty;
+                                if (!Model.PodeCancelarEntrada)
+                                {
+                                    disableBtnCancelar = "disabled";
+                                }
+                            }
+                            <a id="btnCancelarEntrada" href="#" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
+                            @if (Model.PodeCancelarEntrada) {
+                                <div class="modal fade" id="MotivoCancelamento_ModalPanel" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title">
+                                                    Motivo do Cancelamento
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                @if (Model.ExisteEstoqueParaCentroCusto && !Model.ExisteMovimentoNoEstoque) {
+                                                    <article class="col-sm-12">
+                                                        <div class="alert alert-info alert-block fade in">
+                                                            <h4 class="alert-heading">Informação</h4>
+                                                            O cancelamento não irá abater a quantidade do insumo no estoque.
+                                                            Porque, quando da entrada desse insumo, o sistema não o incluiu no estoque.<br />
+                                                            Em caso de dúvida, favor anotar o número da Entrada de Material e reportar a GIR.
+                                                        </div>
+                                                    </article>
+                                                }
+                                                <label class="textarea">
+                                                    @Html.TextAreaFor(m => m.EntradaMaterial.MotivoCancelamento, new { @rows = "3" })
+                                                </label>
+                                            </div>
+                                            <div class="modal-footer">
+								                <button type="button" id="btnConfirmaCancelamentoEntrada" class="btn btn-primary">
+									                Ok
+								                </button>
+							                </div>
+                                        </div>
+                                    </div>
+                                    <script type="text/javascript">
+                                        $("#btnCancelarEntrada").on("click", function (e) {
+                                            e.preventDefault();
+                                            $.ajax({
+                                                type: 'POST',
+                                                url: '@Url.Action("HaPossibilidadeCancelamentoEntradaMaterial", "EntradaMaterial")',
+                                                cache: false,
+                                                //async: false,
+                                                contentType: 'application/json; charset=utf-8',
+                                                data: JSON.stringify({
+                                                    entradaMaterialId: '@Html.DisplayFor(m => m.EntradaMaterial.Id)'
+                                                })
+                                            })
+                                            .success(function (result) {
+                                                if (result.HaPossibilidadeCancelamentoEntradaMaterial)
+                                                    $('#MotivoCancelamento_ModalPanel').modal('show');
+                                                else {
+                                                    var errorMessages = result.ErrorMessages;
+                                                    if (errorMessages.length !== 0) {
+                                                        for (var i = 0; i < errorMessages.length; i++)
+                                                            smartAlert("Erro", errorMessages[i].Text, "error");
+                                                    }
+                                                }
+                                            });
+                                        });
+
+                                        $("#btnConfirmaCancelamentoEntrada").on("click", function () {
+                                            var motivo = $("#@Html.IdFor(m => m.EntradaMaterial.MotivoCancelamento)").val();
+                                            if (motivo.length != 0) {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("Cancelar", "EntradaMaterial")',
+                                                    cache: false,
+                                                    //async: false,
+                                                    contentType: 'application/json; charset=utf-8',
+                                                    data: JSON.stringify({
+                                                        id: '@Html.DisplayFor(m => m.EntradaMaterial.Id)',
+                                                        motivo: motivo
+                                                    })
+                                                })
+                                                .success(function (result) {
+                                                    $('#notificationMessages').html(result);
+                                                });
+                                            }
+                                            else
+                                                smartAlert("Erro", "@GIR.Sigim.Application.Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoEntradaMaterial", "error");
+                                        });
+                                    </script>
+                                </div>
+                            }
+
+                            @{
+                                var url = Url.Action("Imprimir", "EntradaMaterial") + "/" + @Html.DisplayFor(m => m.EntradaMaterial.Id);
+                            }
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url } )
+                            
+                            @{
+                                string disableBtnSalvar = string.Empty;
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
+                            }
+                            <button id="btnSalvar" type="submit" class="btn btn-primary right @disableBtnSalvar">
+                                Salvar
+                            </button>
+                        </footer>
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnLiberarTitulos').on("click", function () {
+            $.SmartMessageBox({
+                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a liberação dos títulos para o Financeiro?",
+                content: "Esta ação não poderá ser revertida.",
+                buttons: '[Não][Sim]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Sim") {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("LiberarTitulos", "EntradaMaterial")',
+                        cache: false,
+                        async: false,
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({
+                            id: '@Model.EntradaMaterial.Id'
+                        })
+                    })
+                    .success(function (result) {
+                        $('#notificationMessages').html(result);
+                    })
+                }
+            });
+        });
+
+    });
+</script>

@@ -11,6 +11,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -25,7 +26,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         {
             this.caixaAppService = caixaAppService;
         }
-        
+
+        [Authorize(Roles = Funcionalidade.CaixaAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as CaixaViewModel;
@@ -33,7 +35,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 model = new CaixaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
+
+            model.PodeSalvar = caixaAppService.EhPermitidoSalvar();
+            model.PodeDeletar = caixaAppService.EhPermitidoDeletar();
+            //model.PodeImprimir = caixaAppService.EhPermitidoImprimir();
+
             var caixa = caixaAppService.ObterPeloId(id) ?? new CaixaDTO();
 
             if (id.HasValue && !caixa.Id.HasValue)

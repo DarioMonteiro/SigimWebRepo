@@ -17,12 +17,8 @@ namespace GIR.Sigim.Application.Filtros.Contrato
         [Display(Name = "Contrato")]
         public int? Id { get; set; }
 
-        [Display(Name = "Contratante")]
-        public int? ContratanteId { get; set; }
         public ClienteFornecedorDTO Contratante { get; set; }
 
-        [Display(Name = "Contratado")]
-        public int? ContratadoId { get; set; }
         public ClienteFornecedorDTO Contratado { get; set; }
 
     }

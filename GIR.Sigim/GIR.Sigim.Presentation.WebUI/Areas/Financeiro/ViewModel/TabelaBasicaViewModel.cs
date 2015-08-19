@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using GIR.Sigim.Application.DTO.Financeiro;
+using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel

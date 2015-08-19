@@ -619,6 +619,7 @@
         $("#@Html.IdFor(m => m.ItemId)").val('');
         $("#@Html.IdFor(m => m.Sequencial)").val('');
         limpaCentroCusto();
+        limpaClasse();
     }
 
     function cancelarItensSelecionados() {
@@ -700,6 +701,12 @@
         $("#@Html.IdFor(m => m.CentroCusto.Codigo)").val("");
         $("#@Html.IdFor(m => m.CentroCusto.Descricao)").val("");
     }
+
+    function limpaClasse() {
+        $("#@Html.IdFor(m => m.Classe.Codigo)").val("");
+        $("#@Html.IdFor(m => m.Classe.Descricao)").val("");
+    }
+
 
     function processData(node) {
         var fieldId = node.getAttribute ? node.getAttribute('id') : '';

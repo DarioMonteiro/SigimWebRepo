@@ -22,13 +22,14 @@
                         "PreRequisicaoMaterial",
                         null,
                         new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
-                        new { @id = "formFilter", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                        new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -86,36 +87,38 @@
                                                 <section class="col col-3">
                                                     @Html.LabelFor(m => m.Filtro.Id, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10" })
+                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10", @class = "numeric" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.Id, "", new { @class = "note note-error" })
                                                 </section>
                                                 <section class="col col-3">
-                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align" title="Buscar" onclick="javascript:goToPage(0);">
+                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
                                                         <i class="fa fa-search fa-lg"></i>
                                                     </button>
                                                 </section>
                                             </div>
                                             <div class="row">
                                                 <section class="col col-12">
-                                                    <label class="label">Situação</label>
-                                                    <div class="inline-group">
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhRequisitada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhRequisitada)
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhFechada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhParcialmenteAprovada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhParcialmenteAprovada)
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhCancelada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhCancelada)
-                                                        </label>
+                                                    <div style="border:1px solid lightgray; width:550px;">
+                                                        <label class="label">Situação</label>
+                                                        <div class="inline-group" style="padding-left:15px;">
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhRequisitada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhRequisitada)
+                                                            </label>
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhFechada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
+                                                            </label>
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhParcialmenteAprovada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhParcialmenteAprovada)
+                                                            </label>
+                                                            <label class="checkbox">
+                                                                @Html.CheckBoxFor(m => m.Filtro.EhCancelada)
+                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhCancelada)
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </section>
                                             </div>
@@ -134,3 +137,38 @@
 @section scripts{
     @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var preRequisicaoIdFiltro = null;
+        var dataInicialFiltro = null;
+        var dataFinalFiltro = null;
+        var situacaoFiltro = false;
+        var condicao = false;
+
+        preRequisicaoIdFiltro = $("#@Html.IdFor(m => m.Filtro.Id)").val();
+        dataInicialFiltro = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
+        dataFinalFiltro = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
+        situacaoFiltro = $("#@Html.IdFor(m => m.Filtro.EhParcialmenteAprovada)")[0].checked;
+        situacaoFiltro = situacaoFiltro || $("#@Html.IdFor(m => m.Filtro.EhCancelada)")[0].checked;
+        situacaoFiltro = situacaoFiltro || $("#@Html.IdFor(m => m.Filtro.EhFechada)")[0].checked;
+        situacaoFiltro = situacaoFiltro || $("#@Html.IdFor(m => m.Filtro.EhRequisitada)")[0].checked;
+
+        condicao = (preRequisicaoIdFiltro != "") || (dataInicialFiltro != "") || (dataFinalFiltro != "") || (situacaoFiltro == true);
+
+        if (condicao) {
+            listarFiltro();
+        }
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                listarFiltro();
+            }
+        );
+    });
+
+    function listarFiltro() {
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
+
+</script>

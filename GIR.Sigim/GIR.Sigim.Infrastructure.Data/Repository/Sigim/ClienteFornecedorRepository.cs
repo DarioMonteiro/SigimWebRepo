@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Repository.Sigim;
+using GIR.Sigim.Domain.Specification;
 
 namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
 {
@@ -35,6 +37,24 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
                 .Where(l => l.Situacao == "A" & l.ClienteContrato == "S")
                 .OrderBy(l => l.Nome); 
         }
+
+        public IEnumerable<ClienteFornecedor> Pesquisar(ISpecification<ClienteFornecedor> specification,
+                                                        int pageIndex,
+                                                        int pageCount,
+                                                        string orderBy,
+                                                        bool ascending,
+                                                        out int totalRecords,
+                                                        params Expression<Func<ClienteFornecedor, object>>[] includes)
+        {
+            var set = CreateSetAsQueryable(includes);
+            set = set.Where(specification.SatisfiedBy());
+            totalRecords = set.Count();
+            set = ConfigurarOrdenacao(set, orderBy, ascending);
+
+            //return set.ToList();
+            return set.Skip(pageCount * pageIndex).Take(pageCount);
+        }
+
 
         //public IEnumerable<ClienteFornecedor> ListarClienteFornecedor(ClassificacaoClienteFornecedor classificacaoClienteFornecedor, SituacaoClienteFornecedor situacaoClienteFornecedor, TipoPessoa tipoPessoa)
         //{
@@ -88,6 +108,34 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
         //    return set;
 
         //}
+
+        #endregion
+
+        #region Metodos Privados
+
+        private static IQueryable<ClienteFornecedor> ConfigurarOrdenacao(IQueryable<ClienteFornecedor> set, string orderBy, bool ascending)
+        {
+            switch (orderBy)
+            {
+                case "rg":
+                    set = ascending ? set.OrderBy(l => l.PessoaFisica.Rg) : set.OrderByDescending(l => l.PessoaFisica.Rg);
+                    break;
+                case "razaoSocial":
+                    set = ascending ? set.OrderBy(l => l.PessoaJuridica.NomeFantasia) : set.OrderByDescending(l => l.PessoaJuridica.NomeFantasia);
+                    break;
+                case "cnpj":
+                    set = ascending ? set.OrderBy(l => l.PessoaJuridica.Cnpj) : set.OrderByDescending(l => l.PessoaJuridica.Cnpj);
+                    break;
+                case "cpf":
+                    set = ascending ? set.OrderBy(l => l.PessoaFisica.Cpf) : set.OrderByDescending(l => l.PessoaFisica.Cpf);
+                    break;
+                case "nomeFantasia":
+                default:
+                    set = ascending ? set.OrderBy(l => l.Nome) : set.OrderByDescending(l => l.Nome);
+                    break;
+            }
+            return set;
+        }
 
         #endregion
     }

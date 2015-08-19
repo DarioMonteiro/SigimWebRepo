@@ -11,6 +11,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -26,7 +27,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.tipoDocumentoAppService = tipoDocumentoAppService;
         }
 
-
+        [Authorize(Roles = Funcionalidade.TipoDocumentoAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as TipoDocumentoViewModel;
@@ -34,6 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 model = new TipoDocumentoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
             var tipoDocumento = tipoDocumentoAppService.ObterPeloId(id) ?? new TipoDocumentoDTO();
 

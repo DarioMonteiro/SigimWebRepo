@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="Painel" controller="Painel" action="Index">
+
+    <mvcSiteMapNode title="Admin" controller="Home" action="Index" area="Admin">
+      <mvcSiteMapNode title="Acessos" url="#" clickable="false" roles="PERFIL_ACESSAR,USUARIOFUNCIONALIDADE_ACESSAR">
+        <mvcSiteMapNode title="Perfil" controller="Perfil" action="Index">
+          <mvcSiteMapNode title="Cadastro" controller="Perfil" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+        </mvcSiteMapNode>
+        <mvcSiteMapNode title="Usuário funcionalidades" controller="UsuarioFuncionalidade" action="Index">
+          <mvcSiteMapNode title="Cadastro" controller="UsuarioFuncionalidade" action="Cadastro" visibility="SiteMapPathHelper,!*"/>
+        </mvcSiteMapNode>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Contrato" controller="Home" action="Index" area="Contrato">
+      <mvcSiteMapNode title="Medição e Liberação" url="#" clickable="false" roles="MEDICAO_ACESSAR">
+        <mvcSiteMapNode title="Medição" controller="MedicaoContrato" action="Index"/>
+        <mvcSiteMapNode title="Medição" controller="MedicaoContrato" action="Medicao" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_NF_LIBERADAS_ACESSAR">
+        <mvcSiteMapNode title="Notas fiscais liberadas" controller="RelNotaFiscalLiberada" action="Index"/>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Financeiro" controller="Home" action="Index" area="Financeiro">
+      <mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_FINANCEIRO_ACESSAR,PARAMETRO_USUARIO_FINANCEIRO_ACESSAR">
+        <mvcSiteMapNode title="Parâmetros" controller="ParametrosFinanceiro" action="Index"/>
+        <mvcSiteMapNode title="Parâmetros - usuário" controller="ParametrosUsuarioFinanceiro" action="Index"/>
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Cadastros" url="#" clickable="false" roles="CAIXA_ACESSAR,
+                                                                         IMPOSTOFINANCEIRO_ACESSAR,
+                                                                         FORMARECEBIMENTO_ACESSAR,
+                                                                         MOTIVOCANCELAMENTO_ACESSAR,
+                                                                         RATEIOAUTOMATICO_ACESSAR,
+                                                                         TABELABASICA_FINANCEIRO_ACESSAR,
+                                                                         TAXAADMINISTRACAO_ACESSAR,
+                                                                         TIPOMOVIMENTO_ACESSAR
+                                                                         TIPOCOMPROMISSO_ACESSAR,
+                                                                         TIPODOCUMENTO_ACESSAR,
+                                                                         TIPORATEIO_ACESSAR,
+                                                                         BANCO_ACESSAR,
+                                                                         AGENCIA_ACESSAR">
+          <mvcSiteMapNode title="Caixa" controller="Caixa" action="Index"/>
+          <mvcSiteMapNode title="Imposto financeiro" controller="ImpostoFinanceiro" action="Index"/>
+          <mvcSiteMapNode title="Forma de recebimento" controller="FormaRecebimento" action="Index"/>
+          <mvcSiteMapNode title="Motivo de cancelamento" controller="MotivoCancelamento" action="Index"/>
+          <mvcSiteMapNode title="Rateio automático" controller="RateioAutomatico" action="Index"/>
+          <mvcSiteMapNode title="Tabelas básicas" controller="TabelaBasica" action="Index"/>
+          <mvcSiteMapNode title="Taxa de administração" controller="TaxaAdministracao" action="Index">
+            <mvcSiteMapNode title="Cadastro" controller="TaxaAdministracao" action="Cadastro" visibility="SiteMapPathHelper,!*"/>
+          </mvcSiteMapNode>
+          <mvcSiteMapNode title="Tipo de movimento" controller="TipoMovimento" action="Index"/>
+          <mvcSiteMapNode title="Tipo de compromisso" controller="TipoCompromisso" action="Index"/>
+          <mvcSiteMapNode title="Tipo de documento" controller="TipoDocumento" action="Index"/>
+          <mvcSiteMapNode title="Tipo de rateio" controller="TipoRateio" action="Index"/>
+          <mvcSiteMapNode title="Bancário" url="#" clickable="false" roles="BANCO_ACESSAR,AGENCIA_ACESSAR,CONTACORRENTE_ACESSAR">
+            <mvcSiteMapNode title="Banco" controller="Banco" action="Index"/>
+            <mvcSiteMapNode title="Agência" controller="Agencia" action="Index">
+              <mvcSiteMapNode title="Cadastro" controller="Agencia" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+            </mvcSiteMapNode>
+            <!--<mvcSiteMapNode title="Conta corrente" controller="ContaCorrente" action="Index"/>-->
+          </mvcSiteMapNode>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+    
+    <mvcSiteMapNode title="Ordem de Compra" controller="Home" action="Index" area="OrdemCompra">
+      <mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_ORDEMCOMPRA_ACESSAR,
+                                                                       PARAMETRO_USUARIO_ORDEMCOMPRA_ACESSAR">
+        <mvcSiteMapNode title="Parâmetros" controller="Parametros" action="Index"/>
+        <mvcSiteMapNode title="Parâmetros - usuário" controller="ParametrosUsuario" action="Index"/>
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Cadastros" url="#" clickable="false" roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR,
+                                                                         ORDEMCOMPRA_MATERIAL_ACESSAR">
+        <mvcSiteMapNode title="Unidade de medida" controller="UnidadeMedida" action="Index" roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR"/>
+        <!--<mvcSiteMapNode title="Material" controller="Material" action="Index" roles="ORDEMCOMPRA_MATERIAL_ACESSAR"/>-->
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Requisição de Material" url="#" clickable="false" roles="PREREQUISICAOMATERIAL_ACESSAR,REQUISICAOMATERIAL_ACESSAR">
+        <mvcSiteMapNode title="Pré-requisição de Material" controller="PreRequisicaoMaterial" action="Index">
+          <mvcSiteMapNode title="Cadastro" controller="PreRequisicaoMaterial" action="Index" visibility="MenuHelper,!*"/>
+          <mvcSiteMapNode title="Cadastro" controller="PreRequisicaoMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+        </mvcSiteMapNode>
+        <mvcSiteMapNode title="Cadastro" controller="RequisicaoMaterial" action="Index" visibility="MenuHelper,!*"/>
+        <mvcSiteMapNode title="Cadastro" controller="RequisicaoMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Entrada de Material" controller="EntradaMaterial" action="Index">
+        <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Index" visibility="MenuHelper,!*"/>
+        <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="RELATORIOITENSORDEMCOMPRA_ACESSAR">
+        <mvcSiteMapNode title="Ordem de Compra" url="#" clickable="false" roles="RELATORIOITENSORDEMCOMPRA_ACESSAR">
+          <mvcSiteMapNode title="Itens de ordem de compra" controller="RelOCItensOrdemCompra" action="Index"/>
+        </mvcSiteMapNode>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Sac" controller="Home" action="Index" area="Sac">
+      <mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_SAC_ACESSAR,SETOR_SAC_ACESSAR">
+        <mvcSiteMapNode title="Parâmetros" controller="Parametros" action="Index"/>
+        <mvcSiteMapNode title="Setor" controller="Setor" action="Index" preservedRouteParameters="id"/>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+  </mvcSiteMapNode>
+</mvcSiteMap>

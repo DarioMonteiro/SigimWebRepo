@@ -1,0 +1,101 @@
+﻿@using GIR.Sigim.Application.DTO.Sigim
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<MaterialDTO> Lista = Model.Records as IEnumerable<MaterialDTO>;
+}
+
+<div class="table-container" style="padding:0;">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs" style="padding: 6px 7px 1px; box-sizing: border-box;">
+            <div class="col-sm-12 col-xs-12" style="height: 37px;">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls="dt_basic",
+                                @class="form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="tableSearchResult@(Model.UniqueIdentifier)" class="table-responsive" style="max-height: 315px; border: 1px solid #ddd; overflow-x: auto;">
+            <table class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string descricaoSortingSuffix = "sorting";
+                            string unidadeMedidaSortingSuffix = "sorting";
+                            string idSortingSuffix = "sorting";
+                            string classeInsumoSortingSuffix = "sorting";
+                            string precoUnitarioSortingSuffix = "sorting";
+                            string tipoTabelaSortingSuffix = "sorting";
+                            string mesAnoSortingSuffix = "sorting";
+                            string codigoExternoSortingSuffix = "sorting";
+                        
+                            switch (Model.OrderBy)
+                            {
+                                case "unidadeMedida":
+                                    unidadeMedidaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "id":
+                                    idSortingSuffix += sortingSuffix;
+                                    break;
+                                case "classeInsumo":
+                                    classeInsumoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "precoUnitario":
+                                    precoUnitarioSortingSuffix += sortingSuffix;
+                                    break;
+                                case "tipoTabela":
+                                    tipoTabelaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "mesAno":
+                                    mesAnoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "codigoExterno":
+                                    codigoExternoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricao":
+                                default:
+                                    descricaoSortingSuffix += sortingSuffix;
+                                    break;
+                            }
+                        }
+
+                        <th class="sorting @descricaoSortingSuffix" data-order="descricao">Descrição</th>
+                        <th class="sorting @unidadeMedidaSortingSuffix text-center" data-order="unidadeMedida" style="min-width:65px;">Unidade medida</th>
+                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="min-width:65px;">Código</th>
+                        <th class="sorting @classeInsumoSortingSuffix" data-order="classeInsumo" style="min-width:55px;">Classe insumo</th>
+                        <th class="sorting @precoUnitarioSortingSuffix text-center" data-order="precoUnitario" style="min-width:85px;">Preço unit.</th>
+                        <th class="sorting @tipoTabelaSortingSuffix text-center" data-order="tipoTabela" style="min-width:65px;">Tipo de tabela</th>
+                        <th class="sorting @mesAnoSortingSuffix text-center" data-order="mesAno" style="min-width:75px;">Mês/Ano</th>
+                        <th class="sorting @codigoExternoSortingSuffix text-center" data-order="codigoExterno" style="min-width:65px;">Código externo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td><a href="javascript:TratarSelecaoMaterial@(Model.UniqueIdentifier)(@item.Id, '@item.Descricao.Replace("'", "\\\'").Replace("\"", "\\\"")', '@item.SiglaUnidadeMedida');">@item.Descricao</a></td>
+                            <td class="text-center">@item.SiglaUnidadeMedida</td>
+                            <td class="text-right">@item.Id</td>
+                            <td>@item.CodigoMaterialClasseInsumo</td>
+                            <td class="text-right">@item.PrecoUnitario</td>
+                            <td class="text-center">@item.DescricaoTipoTabela</td>
+                            <td class="text-center">@item.AnoMes</td>
+                            <td class="text-center">@item.CodigoExterno</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>

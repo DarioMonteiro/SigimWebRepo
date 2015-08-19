@@ -10,6 +10,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
     public interface IParametrosOrdemCompraAppService
     {
         ParametrosOrdemCompraDTO Obter();
-        void Salvar(ParametrosOrdemCompraDTO dto);
+        bool Salvar(ParametrosOrdemCompraDTO dto);
+        bool EhPermitidoSalvar();
     }
 }

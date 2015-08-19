@@ -15,5 +15,6 @@ namespace GIR.Sigim.Application.Service.Sigim
         BancoDTO ObterPeloId(int? Id);
         bool Salvar(BancoDTO dto);
         bool Deletar(int? Id);
+
     }
 }
