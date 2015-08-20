@@ -155,6 +155,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             entradaMaterial.NumeroNotaFrete = null;
             entradaMaterial.TipoNotaFreteId = null;
             entradaMaterial.TipoNotaFrete = null;
+            entradaMaterial.OrdemCompraFreteId = null;
+            entradaMaterial.OrdemCompraFrete = null;
 
             LiberarFreteDaOrdemCampra(entradaMaterial);
             LiberarOrdemCompra(entradaMaterial);
