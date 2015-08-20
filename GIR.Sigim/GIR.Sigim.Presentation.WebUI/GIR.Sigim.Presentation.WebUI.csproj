@@ -222,7 +222,7 @@
     <Compile Include="Areas\OrdemCompra\ViewModel\PreRequisicaoMaterialListaViewModel.cs" />
     <Compile Include="Areas\Sac\Controllers\HomeController.cs" />
     <Compile Include="Areas\Sac\Controllers\SetorController.cs" />
-    <Compile Include="Areas\Sac\Controllers\ParametrosController.cs" />
+    <Compile Include="Areas\Sac\Controllers\ParametrosSacController.cs" />
     <Compile Include="Areas\Sac\SacAreaRegistration.cs" />
     <Compile Include="Areas\Sac\ViewModel\SetorViewModel.cs" />
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
@@ -339,7 +339,7 @@
     <Content Include="Areas\Sac\Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Areas\Sac\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Sac\Views\Home\Index.cshtml" />
-    <Content Include="Areas\Sac\Views\Parametros\Index.cshtml" />
+    <Content Include="Areas\Sac\Views\ParametrosSac\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\MotivoCancelamento\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\MotivoCancelamento\ListaPartial.cshtml" />
     <Content Include="Areas\Financeiro\Views\TipoDocumento\ListaPartial.cshtml" />

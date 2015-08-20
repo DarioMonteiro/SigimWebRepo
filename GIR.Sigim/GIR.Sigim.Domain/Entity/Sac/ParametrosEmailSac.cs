@@ -13,7 +13,7 @@ namespace GIR.Sigim.Domain.Entity.Sac
         public ParametrosSac Parametros { get; set; }      
         public int? SetorId { get; set; }
         public Setor Setor { get; set; }                
-        public int? Tipo { get; set; }
+        public SituacaoSolicitacaoSac? Tipo { get; set; }
         public string Email { get; set; }
         public bool Anexo { get; set; }
     }

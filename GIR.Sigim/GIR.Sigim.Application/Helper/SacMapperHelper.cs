@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.Sac;
 using GIR.Sigim.Domain.Entity.Sac;
 
@@ -20,7 +21,8 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<Setor, SetorDTO>();
             Mapper.CreateMap<SetorDTO, Setor>();
 
-            Mapper.CreateMap<ParametrosEmailSac, ParametrosEmailSacDTO>();
+            Mapper.CreateMap<ParametrosEmailSac, ParametrosEmailSacDTO>()
+                .ForMember(d => d.DescricaoTipo, m => m.MapFrom(s => s.Tipo.ObterDescricao()));
             Mapper.CreateMap<ParametrosEmailSacDTO, ParametrosEmailSac>();
         }
     }

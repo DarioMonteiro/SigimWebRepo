@@ -11,6 +11,7 @@ namespace GIR.Sigim.Application.Service.Sac
     public interface ISetorAppService : IBaseAppService 
     {
         List<SetorDTO> ListarPeloFiltro(SetorFiltro filtro, out int totalRegistros);
+        List<SetorDTO> ListarTodos();
         SetorDTO ObterPeloId(int? id);
         bool Salvar(SetorDTO dto);
         bool Deletar(int? id);
