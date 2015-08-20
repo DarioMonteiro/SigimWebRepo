@@ -131,7 +131,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaImposto,
                 l => l.ListaMovimentoEstoque,
                 l => l.OrdemCompraFrete,
-                l => l.TituloFrete);
+                l => l.TituloFrete.ListaApropriacao);
 
             if (!EhCancelamentoPossivel(entradaMaterial))
                 return false;
@@ -416,6 +416,23 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 listaTitulosAlterados.Add(titulo);
                 CancelarTitulosPagarDesdobrados(titulo.ListaFilhos, motivo, listaTitulosAlterados);
             }
+
+            ReverterTituloFrete(entradaMaterial, motivo, listaTitulosAlterados);
+        }
+
+        private void ReverterTituloFrete(EntradaMaterial entradaMaterial, string motivo, List<TituloPagar> listaTitulosAlterados)
+        {
+            if (entradaMaterial.TituloFreteId.HasValue)
+            {
+                entradaMaterial.TituloFrete.Situacao = SituacaoTituloPagar.Provisionado;
+                entradaMaterial.TituloFrete.TipoDocumentoId = null;
+                entradaMaterial.TituloFrete.TipoDocumento = null;
+                entradaMaterial.TituloFrete.ValorImposto = 0;
+                entradaMaterial.TituloFrete.Desconto = 0;
+                entradaMaterial.TituloFrete.DataLimiteDesconto = null;
+                entradaMaterial.TituloFrete.TipoTitulo = TipoTitulo.Normal;
+                CancelarTitulosPagarDesdobrados(entradaMaterial.TituloFrete.ListaFilhos, motivo, listaTitulosAlterados);
+            }
         }
 
         private void CancelarTitulosPagarDesdobrados(IEnumerable<TituloPagar> listaTituloPagar, string motivo, List<TituloPagar> listaTitulosAlterados)
@@ -437,10 +454,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private void ReprovisionarApropriacoesDasFormasPagamentoNaoUtilizadas(EntradaMaterial entradaMaterial)
         {
-            foreach (var ordemCompra in entradaMaterial.ListaItens.Select(l => l.OrdemCompraItem.OrdemCompra))
+            foreach (var ordemCompra in entradaMaterial.ListaItens.Select(l => l.OrdemCompraItem.OrdemCompra).Distinct())
             {
                 var listaFormaPagamentoNaoUtulizada = ordemCompra.ListaOrdemCompraFormaPagamento.Where(l => l.EhUtilizada == false);
-                var listaApropriacao = listaFormaPagamentoNaoUtulizada.SelectMany(o => o.TituloPagar.ListaApropriacao);
+                List<Apropriacao> listaApropriacao = listaFormaPagamentoNaoUtulizada.SelectMany(o => o.TituloPagar.ListaApropriacao).ToList();
+                if (entradaMaterial.TituloFreteId.HasValue)
+                    listaApropriacao.AddRange(entradaMaterial.TituloFrete.ListaApropriacao);
+
                 for (int i = listaApropriacao.Count() - 1; i >= 0; i--)
                 {
                     var apropriacao = listaApropriacao.ToList()[i];
@@ -465,13 +485,25 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
                         formaPagamento.TituloPagar.ListaApropriacao.Add(apropriacao);
                     }
+
+                    if (entradaMaterial.TituloFreteId.HasValue)
+                    {
+                        Apropriacao apropriacaoTituloFrete = new Apropriacao();
+                        apropriacaoTituloFrete.CodigoClasse = codigoClasse;
+                        apropriacaoTituloFrete.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
+                        apropriacaoTituloFrete.TituloPagarId = entradaMaterial.TituloFreteId;
+                        apropriacaoTituloFrete.Percentual = percentualClasse.Value;
+                        apropriacaoTituloFrete.Valor = (entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100).Value;
+
+                        entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
+                    }
                 }
             }
         }
 
         private void RemoverImpostoPagar(EntradaMaterial entradaMaterial)
         {
-            var listaImpostoPagar = entradaMaterial.ListaFormaPagamento.SelectMany(l => l.TituloPagar.ListaImpostoPagar).Where(o => !o.TituloPagarId.HasValue);
+            var listaImpostoPagar = entradaMaterial.ListaFormaPagamento.SelectMany(l => l.TituloPagar.ListaImpostoPagar);
             for (int i = listaImpostoPagar.Count() - 1; i >= 0; i--)
             {
                 var impostoPagar = listaImpostoPagar.ToList()[i];
