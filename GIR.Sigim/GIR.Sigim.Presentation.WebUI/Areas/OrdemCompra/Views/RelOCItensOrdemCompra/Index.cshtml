@@ -106,7 +106,15 @@
                                                         });
                                                     });
                                                 </script>
-                                                <section class="col col-2">
+                                                @Html.EditorFor(m => m.Filtro.OrdemCompra, "OrdemCompraPesquisaGenerica", new { @sectionClass = "col col-2", @label = "O.C", @exibirBotaoPesquisa = true })
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.OrdemCompra.Id)").on("change", function () {
+                                                            limpaLista();
+                                                        });
+                                                    });
+                                                </script>
+@*                                                <section class="col col-2">
                                                     @Html.LabelFor(m => m.Filtro.OrdemCompraId, new { @class = "label" })
                                                     <label class="input">
                                                         @Html.TextBoxFor(m => m.Filtro.OrdemCompraId, new { @maxlength = "10",@class = "numeric" })
@@ -119,7 +127,7 @@
                                                         </script>
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.OrdemCompraId, "", new { @class = "note note-error" })
-                                                </section>
+                                                </section>*@
                                                 <section class="col col-4">
                                                     <div class="inline-group" style="padding-top:28px;">
                                                         <label class="checkbox">

@@ -1,0 +1,81 @@
+﻿@using GIR.Sigim.Application.DTO.OrdemCompra
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<OrdemCompraDTO> Lista = Model.Records as IEnumerable<OrdemCompraDTO>;
+}
+
+<div class="table-container" style="padding:0;">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs" style="padding: 6px 7px 1px; box-sizing: border-box;">
+            <div class="col-sm-12 col-xs-12" style="height: 37px;">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls="dt_basic",
+                                @class="form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="tableSearchResult@(Model.UniqueIdentifier)" class="table-responsive" style="max-height: 315px; border: 1px solid #ddd; overflow-x: auto;">
+            <table class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string idSortingSuffix = "sorting";
+                            string dataOrdemCompraSortingSuffix = "sorting";
+                            string centroCustoSortingSuffix = "sorting";
+                            string fornecedorSortingSuffix = "sorting";
+                        
+                            switch (Model.OrderBy)
+                            {
+                                case "dataOrdemCompra":
+                                    dataOrdemCompraSortingSuffix += sortingSuffix;
+                                    break;                                  
+                                case "centroCusto":
+                                    centroCustoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "fornecedor":
+                                    fornecedorSortingSuffix += sortingSuffix;
+                                    break;
+                                case "id":
+                                default:
+                                    idSortingSuffix += sortingSuffix;
+                                    break;
+                            }
+                        }
+                        <th class="sorting @idSortingSuffix text-left" data-order="id" style="min-width:65px;">Código</th>
+                        <th class="sorting @dataOrdemCompraSortingSuffix text-nowrap" data-order="dataOrdemCompra" style="min-width:105px;">Data Ordem de Compra</th>
+                        <th class="sorting @centroCustoSortingSuffix text-left" data-order="centroCusto" style="min-width:65px;">Centro Custo</th>
+                        <th class="sorting @fornecedorSortingSuffix text-left" data-order="fornecedor" style="min-width:85px;">Fornecedor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        string dataOrdemCompra = item.Data.ToString().Remove((item.Data.ToString().Length - 3), 3);
+                        if (item.Data.ToString().Contains("00:00:00"))
+                        {
+                            dataOrdemCompra = item.Data.ToShortDateString();
+                        }
+                        <tr>
+                            <td class="text-right"><a href="javascript:TratarSelecaoOrdemCompra@(Model.UniqueIdentifier)(@item.Id);">@item.Id</a></td>
+                            <td class="text-center">@dataOrdemCompra</td>
+                            <td class="text-left">@item.DescricaoCentroCusto</td>
+                            <td class="text-left">@item.ClienteFornecedor.Nome</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>

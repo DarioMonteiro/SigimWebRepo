@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.DTO.OrdemCompra;
 
 
 namespace GIR.Sigim.Application.Filtros.OrdemCompras
@@ -22,9 +23,10 @@ namespace GIR.Sigim.Application.Filtros.OrdemCompras
         [Display(Name = "Data final")]
         public Nullable<DateTime> DataFinal { get; set; }
 
-        [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
-        [Display(Name = "Ordem Compra")]
-        public int? OrdemCompraId { get; set; }
+        //[RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        //[Display(Name = "Ordem Compra")]
+        //public int? OrdemCompraId { get; set; }
+        public OrdemCompraDTO OrdemCompra { get; set; }
 
         public CentroCustoDTO CentroCusto { get; set; }
 

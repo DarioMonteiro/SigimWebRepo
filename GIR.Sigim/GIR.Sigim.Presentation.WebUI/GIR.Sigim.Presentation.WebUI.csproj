@@ -199,6 +199,7 @@
     <Compile Include="Areas\Orcamento\Controllers\OrcamentoController.cs" />
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\EntradaMaterialController.cs" />
+    <Compile Include="Areas\OrdemCompra\Controllers\OrdemCompraController.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\PossibilidadeCancelamentoEntradaMaterialViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialListaViewModel.cs" />
@@ -383,6 +384,8 @@
     </Content>
     <Content Include="Areas\Contrato\Views\Shared\EditorTemplates\ContratoPesquisaGenerica.cshtml" />
     <Content Include="Areas\Contrato\Views\Contrato\ListaPesquisaPartial.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\Shared\EditorTemplates\OrdemCompraPesquisaGenerica.cshtml" />
+    <Content Include="Areas\OrdemCompra\Views\OrdemCompra\ListaPesquisaPartial.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>

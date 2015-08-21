@@ -18,6 +18,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<IParametrosOrdemCompraRepository, ParametrosOrdemCompraRepository>();
             Container.Current.RegisterType<IParametrosUsuarioRepository, ParametrosUsuarioRepository>();
             Container.Current.RegisterType<IPreRequisicaoMaterialRepository, PreRequisicaoMaterialRepository>();
+            Container.Current.RegisterType<IOrdemCompraRepository, OrdemCompraRepository>();
             Container.Current.RegisterType<IOrdemCompraItemRepository, OrdemCompraItemRepository>();
             Container.Current.RegisterType<IRequisicaoMaterialRepository, RequisicaoMaterialRepository>();
         }

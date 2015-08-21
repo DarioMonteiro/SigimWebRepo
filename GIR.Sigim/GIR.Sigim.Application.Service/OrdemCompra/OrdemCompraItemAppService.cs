@@ -87,8 +87,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(usuarioId, Resource.Sigim.NomeModulo.OrdemCompra))
                 specification &= OrdemCompraItemSpecification.UsuarioPossuiAcessoAoCentroCusto(usuarioId, Resource.Sigim.NomeModulo.OrdemCompra);
 
-            if (filtro.OrdemCompraId.HasValue)
-                specification &= OrdemCompraItemSpecification.PertenceAhOrdemCompraId(filtro.OrdemCompraId);
+            if (filtro.OrdemCompra.Id.HasValue)
+                specification &= OrdemCompraItemSpecification.PertenceAhOrdemCompraId(filtro.OrdemCompra.Id);
             else
             {
                 specification &= OrdemCompraItemSpecification.DataOrdemCompraMaiorOuIgual(filtro.DataInicial);
