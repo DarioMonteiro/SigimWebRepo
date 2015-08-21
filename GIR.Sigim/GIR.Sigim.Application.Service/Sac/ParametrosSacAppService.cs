@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.Sac;
+using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Domain.Entity.Sac;
 using GIR.Sigim.Domain.Repository.Sac;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
@@ -101,5 +102,9 @@ namespace GIR.Sigim.Application.Service.Sac
             }
             return true;
         }
+
+        public List<ItemListaDTO> ListaSituacaoSolicitacaoSac()
+        { return typeof(SituacaoSolicitacaoSac).ToItemListaDTO(); }
+
     }
 }

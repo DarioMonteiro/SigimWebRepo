@@ -345,7 +345,7 @@
                                                 type: 'POST',
                                                 url: '@Url.Action("HaPossibilidadeCancelamentoEntradaMaterial", "EntradaMaterial")',
                                                 cache: false,
-                                                async: false,
+                                                //async: false,
                                                 contentType: 'application/json; charset=utf-8',
                                                 data: JSON.stringify({
                                                     entradaMaterialId: '@Html.DisplayFor(m => m.EntradaMaterial.Id)'
@@ -371,7 +371,7 @@
                                                     type: 'POST',
                                                     url: '@Url.Action("Cancelar", "EntradaMaterial")',
                                                     cache: false,
-                                                    async: false,
+                                                    //async: false,
                                                     contentType: 'application/json; charset=utf-8',
                                                     data: JSON.stringify({
                                                         id: '@Html.DisplayFor(m => m.EntradaMaterial.Id)',

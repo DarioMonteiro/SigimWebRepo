@@ -25,6 +25,6 @@ namespace GIR.Sigim.Domain.Entity.Sac
         Cancelada = 5,
 
         [Description("Solicitação web")]
-        SolicitaçãoWeb = 6,
+        SolicitacaoWeb = 6,
     }
 }

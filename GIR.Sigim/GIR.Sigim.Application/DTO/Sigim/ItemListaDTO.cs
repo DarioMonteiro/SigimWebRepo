@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GIR.Sigim.Application.DTO.Sigim
 {
-    public class ItemListaDTO// : BaseDTO
+    public class ItemListaDTO
     {
         public int Id { get; set; }
         public string Descricao { get; set; }
