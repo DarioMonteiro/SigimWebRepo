@@ -161,6 +161,7 @@
     <Compile Include="Areas\Admin\ViewModel\UsuarioFuncionalidadeViewModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\PerfilViewModel.cs" />
     <Compile Include="Areas\Contrato\ContratoAreaRegistration.cs" />
+    <Compile Include="Areas\Contrato\Controllers\ContratoController.cs" />
     <Compile Include="Areas\Contrato\Controllers\HomeController.cs" />
     <Compile Include="Areas\Contrato\Controllers\MedicaoContratoController.cs" />
     <Compile Include="Areas\Contrato\Controllers\RelNotaFiscalLiberadaController.cs" />
@@ -380,6 +381,8 @@
     <Content Include="Mvc.sitemap">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Areas\Contrato\Views\Shared\EditorTemplates\ContratoPesquisaGenerica.cshtml" />
+    <Content Include="Areas\Contrato\Views\Contrato\ListaPesquisaPartial.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>

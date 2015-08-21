@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using GIR.Sigim.Application.Adapter;  
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
-using GIR.Sigim.Domain.Entity.Contrato;    
+using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Application.Filtros;    
 
 namespace GIR.Sigim.Application.DTO.Contrato
 {
@@ -15,30 +16,26 @@ namespace GIR.Sigim.Application.DTO.Contrato
     {
         public string CodigoCentroCusto { get; set; }
         public CentroCustoDTO CentroCusto { get; set; }
-
+        public string DescricaoCentroCusto 
+        {
+            get { return CentroCusto != null ? CentroCusto.Codigo + " - " + CentroCusto.Descricao : ""; }
+        }
         public int? LicitacaoId { get; set; }
         public LicitacaoDTO Licitacao { get; set; }
-
         public int ContratanteId { get; set; }
         public ClienteFornecedorDTO Contratante { get; set; }
-
         public int ContratadoId { get; set; }
         public ClienteFornecedorDTO Contratado { get; set; }
-
         public int? IntervenienteId { get; set; }
         public ClienteFornecedorDTO Interveniente { get; set; }
-
         public int ContratoDescricaoId { get; set; }
         public LicitacaoDescricaoDTO ContratoDescricao { get; set; }
-
         public SituacaoContrato Situacao { get; set; }
         public string SituacaoDescricao
         {
             get { return this.Situacao.ObterDescricao(); }
         }
-
         public Nullable<DateTime> DataAssinatura { get; set; }
-
         public string DocumentoOrigem { get; set; }
         public string NumeroEmpenho { get; set; }
         public decimal? ValorContrato { get; set; }
@@ -48,6 +45,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public string UsuarioCancela { get; set; }
         public string MotivoCancela { get; set; }
         public int TipoContrato { get; set; }
+        public PaginationParameters PaginationParameters { get; set; }
 
         public List<ContratoRetificacaoDTO> ListaContratoRetificacao { get; set; }
         public List<ContratoRetificacaoItemDTO> ListaContratoRetificacaoItem { get; set; }
@@ -66,6 +64,9 @@ namespace GIR.Sigim.Application.DTO.Contrato
             this.ListaContratoRetificacaoItemCronograma = new List<ContratoRetificacaoItemCronogramaDTO>();
             this.ListaContratoRetificacaoItemImposto = new List<ContratoRetificacaoItemImpostoDTO>();
             this.ListaContratoRetificacaoProvisao = new List<ContratoRetificacaoProvisaoDTO>();
+
+            PaginationParameters = new PaginationParameters();
+            PaginationParameters.UniqueIdentifier = "_" + Guid.NewGuid().ToString().Replace("-", string.Empty);
 
         }
     }

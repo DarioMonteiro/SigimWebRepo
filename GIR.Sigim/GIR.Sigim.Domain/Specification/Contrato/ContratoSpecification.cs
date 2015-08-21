@@ -64,5 +64,200 @@ namespace GIR.Sigim.Domain.Specification.Contrato
             return specification;
         }
 
+        public static Specification<Domain.Entity.Contrato.Contrato> IdNoIntervalo(int? inicio, int? fim)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (inicio.HasValue)
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Id >= inicio);
+                specification &= directSpecification;
+            }
+
+            if (fim.HasValue)
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Id <= fim);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> CentroCustoContem(string descricao)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (!string.IsNullOrEmpty(descricao))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => (l.CodigoCentroCusto + " - " + l.CentroCusto.Descricao).Contains(descricao));
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> CentroCustoNoIntervalo(string inicio, string fim)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (!string.IsNullOrEmpty(inicio))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => (l.CodigoCentroCusto + " - " + l.CentroCusto.Descricao).CompareTo(inicio) >= 0);
+                specification &= directSpecification;
+            }
+
+            if (!string.IsNullOrEmpty(fim))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => (l.CodigoCentroCusto + " - " + l.CentroCusto.Descricao).Substring(0, fim.Length).CompareTo(fim) <= 0);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> DescricaoContratoContem(string descricaoContrato)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (!string.IsNullOrEmpty(descricaoContrato))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.ContratoDescricao.Descricao.Contains(descricaoContrato));
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> DescricaoContratoNoIntervalo(string inicio, string fim)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (!string.IsNullOrEmpty(inicio))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.ContratoDescricao.Descricao.CompareTo(inicio) >= 0);
+                specification &= directSpecification;
+            }
+
+            if (!string.IsNullOrEmpty(fim))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.ContratoDescricao.Descricao.Substring(0, fim.Length).CompareTo(fim) <= 0);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> ContratanteContem(string nome)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (!string.IsNullOrEmpty(nome))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Contratante.Nome.Contains(nome));
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> ContratanteNoIntervalo(string inicio, string fim)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (!string.IsNullOrEmpty(inicio))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Contratante.Nome.CompareTo(inicio) >= 0);
+                specification &= directSpecification;
+            }
+
+            if (!string.IsNullOrEmpty(fim))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Contratante.Nome.Substring(0, fim.Length).CompareTo(fim) <= 0);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> ContratadoContem(string nome)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (!string.IsNullOrEmpty(nome))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Contratado.Nome.Contains(nome));
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> ContratadoNoIntervalo(string inicio, string fim)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (!string.IsNullOrEmpty(inicio))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Contratado.Nome.CompareTo(inicio) >= 0);
+                specification &= directSpecification;
+            }
+
+            if (!string.IsNullOrEmpty(fim))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Contratado.Nome.Substring(0, fim.Length).CompareTo(fim) <= 0);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> DataAssinaturaContem(Nullable<DateTime> dataAssinatura)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (dataAssinatura.HasValue)
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.DataAssinatura == dataAssinatura);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> DataAssinaturaNoIntervalo(Nullable<DateTime> inicio, Nullable<DateTime> fim)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (inicio.HasValue)
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.DataAssinatura.Value >= inicio);
+                specification &= directSpecification;
+            }
+
+            if (fim.HasValue)
+            {
+                DateTime dataUltimaHora = new DateTime(fim.Value.Year, fim.Value.Month, fim.Value.Day, 23, 59, 59);
+
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.DataAssinatura.Value <= dataUltimaHora);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> EhSituacaoIgual(SituacaoContrato? situacao)
+        {
+            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            if (situacao.HasValue)
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Situacao == situacao);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+
     }
 }

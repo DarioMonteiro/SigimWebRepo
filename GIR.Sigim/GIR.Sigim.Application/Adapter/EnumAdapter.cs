@@ -27,7 +27,15 @@ namespace GIR.Sigim.Application.Adapter
             foreach (System.Enum item in System.Enum.GetValues(enumType))
             {
                 var valorEnum = item.GetType().GetField(item.ToString()).GetRawConstantValue();
-                lista.Add(new ItemListaDTO() { Id = (int)valorEnum, Descricao = ObterDescricao(item) });
+
+                try
+                {
+                    lista.Add(new ItemListaDTO() { Id = (int)valorEnum, Descricao = ObterDescricao(item) });
+                }
+                catch (InvalidCastException e)
+                {
+                    lista.Add(new ItemListaDTO() { Id = (short)valorEnum, Descricao = ObterDescricao(item) });
+                }
             }
 
             return lista;

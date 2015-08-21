@@ -96,8 +96,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             if (contratoId.HasValue)
             {
                 GIR.Sigim.Application.DTO.Contrato.ContratoDTO contrato = null;
-
-                contrato = contratoAppService.ObterPeloId(contratoId,Usuario.Id);
+                contrato = contratoAppService.ObterPeloId(contratoId,null);
 
                 if (contrato != null)
                 {

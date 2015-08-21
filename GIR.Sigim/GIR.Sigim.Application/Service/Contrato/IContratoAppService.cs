@@ -30,5 +30,6 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool EhPermitidoSalvarMedicao();
         bool EhPermitidoDeletarMedicao();
         bool EhPermitidoImprimirMedicao();
+        List<ContratoDTO> PesquisarContratosPeloFiltro(ContratoPesquisaFiltro filtro, out int totalRegistros);
     }
 }
