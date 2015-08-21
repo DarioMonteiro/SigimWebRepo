@@ -154,7 +154,7 @@
             autoSelect: true,
             minLength: 2,
             select: function (event, ui) {
-                TratarSelecaoMaterial(ui.item.id, ui.item.label);
+                TratarSelecaoMaterial@(uniqueIdentifier)(ui.item.id, ui.item.label);
             },
             change: function (event, ui) {
                 if (ui.item == null) {
@@ -292,7 +292,7 @@
     }
 
 
-    function TratarSelecaoMaterial(id, descricao) {
+    function TratarSelecaoMaterial@(uniqueIdentifier)(id, descricao) {
         $('#@(uniqueIdentifier)').val(id);
         $('#@Html.IdFor(m => m.Descricao)').val(descricao);
         $('#@(uniqueIdentifier)_Pesquisa_ModalPanel').modal('hide');
