@@ -352,11 +352,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private void DeletarTitulosPagarAdiantamento(EntradaMaterial entradaMaterial)
         {
-            foreach (var titulo in entradaMaterial.ListaFormaPagamento
+            List<TituloPagarAdiantamento> listaTituloPagarAdiantamento = entradaMaterial.ListaFormaPagamento
                 .Where(l => l.OrdemCompraFormaPagamento.EhPagamentoAntecipado == true)
-                .SelectMany(l => l.ListaTituloPagarAdiantamento))
+                .SelectMany(l => l.ListaTituloPagarAdiantamento).ToList();
+
+            for (int i = listaTituloPagarAdiantamento.Count() - 1; i >= 0; i--)
             {
-                tituloPagarRepository.RemoverTituloPagarAdiantamento(titulo);
+                tituloPagarRepository.RemoverTituloPagarAdiantamento(listaTituloPagarAdiantamento[i]);
             }
         }
 
