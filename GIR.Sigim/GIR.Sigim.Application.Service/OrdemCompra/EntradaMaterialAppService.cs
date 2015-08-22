@@ -126,7 +126,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.ListaOrdemCompraFormaPagamento.Select(s => s.TituloPagar.ListaApropriacao)),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar.Select(s => s.TituloPagarImposto)),
-                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento),
+                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TituloPagar.ListaImpostoPagar),
                 l => l.ListaFormaPagamento.Select(o => o.ListaTituloPagarAdiantamento),
                 l => l.ListaImposto,
                 l => l.ListaMovimentoEstoque,
