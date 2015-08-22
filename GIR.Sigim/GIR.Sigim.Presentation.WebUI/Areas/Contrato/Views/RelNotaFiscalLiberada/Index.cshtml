@@ -113,20 +113,15 @@
                                                 </section>
                                             </div>
                                             <div class="row">
-                                                <section class="col col-2">
-                                                    @Html.LabelFor(m => m.Filtro.ContratoId, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.ContratoId, new { @maxlength = "10",@class = "numeric" })
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                $("#@Html.IdFor(m => m.Filtro.ContratoId)").on("change", function () {
-                                                                    limpaLista();
-                                                                });
-                                                            });
-                                                        </script>
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.Filtro.ContratoId, "", new { @class = "note note-error" })
-                                                </section>
+                                                @Html.EditorFor(m => m.Filtro.Contrato, "ContratoPesquisaGenerica", new { @sectionClass = "col col-2", @label = "Contrato", @exibirBotaoPesquisa = true })
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.Contrato.Id)").on("change", function () {
+                                                            recuperaDescricaoContrato();
+                                                            limpaLista();
+                                                        });
+                                                    });
+                                                </script>
                                                 <section class="col col-4">
                                                     <label class="label">Descrição</label>
                                                     <label class="input">
@@ -282,9 +277,14 @@
         }
     }
 
+    $(document).on("contratoEscolhido",
+        function (e) {
+            recuperaDescricaoContrato();
+        }
+    );
 
-    function limpaLista() {
-        var contratoId = $("#@Html.IdFor(m => m.Filtro.ContratoId)").val();
+    function recuperaDescricaoContrato() {
+        var contratoId = $("#@Html.IdFor(m => m.Filtro.Contrato.Id)").val();
         $.ajax({
             type: 'POST',
             url: '@Url.Action("RecuperaDescricaoContrato", "RelNotaFiscalLiberada", new { area = "Contrato" })',
@@ -301,7 +301,9 @@
         .error(function (result) {
             $("#@Html.IdFor(m => m.Filtro.DescricaoContrato)").val("");
         });
+    }
 
+    function limpaLista() {
         tratarBotoes(false);
         $("#resultadoBusca").empty();
     }
@@ -328,6 +330,5 @@
         tratarBotoes(true);
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
     }
-
 
 </script>

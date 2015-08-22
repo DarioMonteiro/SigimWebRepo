@@ -214,6 +214,7 @@
     <Compile Include="Repository\Orcamento\IParametrosOrcamentoRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IEntradaMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IOrdemCompraItemRepository.cs" />
+    <Compile Include="Repository\OrdemCompra\IOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="Specification\OrdemCompra\AbstractRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\EntradaMaterialSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\OrdemCompraItemSpecification.cs" />
+    <Compile Include="Specification\OrdemCompra\OrdemCompraSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\RequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\PreRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrSpecification.cs" />

@@ -14,6 +14,7 @@ namespace GIR.Sigim.Application.Service.IoC
         public static void Initialise()
         {
             Container.Current.RegisterType<IEntradaMaterialAppService, EntradaMaterialAppService>();
+            Container.Current.RegisterType<IOrdemCompraAppService, OrdemCompraAppService>();
             Container.Current.RegisterType<IOrdemCompraItemAppService, OrdemCompraItemAppService>();
             Container.Current.RegisterType<IParametrosOrdemCompraAppService, ParametrosOrdemCompraAppService>();
             Container.Current.RegisterType<IParametrosUsuarioAppService, ParametrosUsuarioAppService>();

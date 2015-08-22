@@ -20,6 +20,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.Service.Financeiro;
 using CrystalDecisions.Shared;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Application.Enums;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -95,8 +96,11 @@ namespace GIR.Sigim.Application.Service.Contrato
         {
             var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
 
-            if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
-                specification &= ContratoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+            if (idUsuario.HasValue)
+            {
+                if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
+                    specification &= ContratoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+            }
 
             return contratoRepository.ObterPeloId(id, 
                                                   specification, 
@@ -597,6 +601,101 @@ namespace GIR.Sigim.Application.Service.Contrato
                 return false;
 
             return true;
+        }
+
+        public List<ContratoDTO> PesquisarContratosPeloFiltro(ContratoPesquisaFiltro filtro, out int totalRegistros)
+        {
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+            int? inicio;
+            int? fim;
+
+            bool EhTipoSelecaoContem = filtro.TipoSelecao == TipoPesquisa.Contem;
+            switch (filtro.Campo)
+            {
+                case "centroCusto":
+                    specification &= EhTipoSelecaoContem ? ContratoSpecification.CentroCustoContem(filtro.TextoInicio)
+                        : ContratoSpecification.CentroCustoNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "descricaoContrato":
+                    specification &= EhTipoSelecaoContem ? ContratoSpecification.DescricaoContratoContem(filtro.TextoInicio)
+                        : ContratoSpecification.DescricaoContratoNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "contratante":
+                    specification &= EhTipoSelecaoContem ? ContratoSpecification.ContratanteContem(filtro.TextoInicio)
+                        : ContratoSpecification.ContratanteNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "contratado":
+                    specification &= EhTipoSelecaoContem ? ContratoSpecification.ContratadoContem(filtro.TextoInicio)
+                        : ContratoSpecification.ContratadoNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "dataAssinatura":
+                    Nullable<DateTime> datInicio = !string.IsNullOrEmpty(filtro.TextoInicio) ? Convert.ToDateTime(filtro.TextoInicio) : (Nullable<DateTime>)null;
+                    Nullable<DateTime> datFim = !string.IsNullOrEmpty(filtro.TextoFim) ? Convert.ToDateTime(filtro.TextoFim) : (Nullable<DateTime>)null;
+                    specification &= EhTipoSelecaoContem ? ContratoSpecification.DataAssinaturaContem(datInicio)
+                        : ContratoSpecification.DataAssinaturaNoIntervalo(datInicio, datFim);
+                    break;
+
+                case "descricaoSituacao":
+                    List<ItemListaDTO> listaSituacao = typeof(SituacaoContrato).ToItemListaDTO();
+                    if (EhTipoSelecaoContem)
+                    {
+                        if (!string.IsNullOrEmpty(filtro.TextoInicio)){
+                            foreach (ItemListaDTO item in listaSituacao.OrderBy(l => l.Id))
+                            {
+                                SituacaoContrato situacao = (SituacaoContrato)item.Id;
+
+                                if (item.Descricao.Contains(filtro.TextoInicio))
+                                {
+                                    specification &= ContratoSpecification.EhSituacaoIgual(situacao);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if ((!string.IsNullOrEmpty(filtro.TextoInicio)) || (!string.IsNullOrEmpty(filtro.TextoFim))){
+                            foreach (ItemListaDTO item in listaSituacao.OrderBy(l => l.Id))
+                            {
+                                SituacaoContrato situacao = (SituacaoContrato)item.Id;
+
+                                if ((!string.IsNullOrEmpty(filtro.TextoInicio)) && (item.Descricao.Contains(filtro.TextoInicio)))
+                                {
+                                    specification &= ContratoSpecification.EhSituacaoIgual(situacao);
+                                }
+                                else
+                                {
+                                    if ((!string.IsNullOrEmpty(filtro.TextoFim)) && (item.Descricao.Contains(filtro.TextoFim)))
+                                    {
+                                        specification &= ContratoSpecification.EhSituacaoIgual(situacao);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "fornecedor":
+                    specification &= EhTipoSelecaoContem ? ContratoSpecification.ContratadoContem(filtro.TextoInicio)
+                        : ContratoSpecification.ContratadoNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "id":
+                default:
+                    inicio = !string.IsNullOrEmpty(filtro.TextoInicio) ? Convert.ToInt32(filtro.TextoInicio) : (int?)null;
+                    fim = !string.IsNullOrEmpty(filtro.TextoFim) ? Convert.ToInt32(filtro.TextoFim) : (int?)null;
+                    specification &= EhTipoSelecaoContem ? ContratoSpecification.MatchingId(inicio)
+                        : ContratoSpecification.IdNoIntervalo(inicio, fim);
+                    break;
+            }
+
+            return contratoRepository.Pesquisar(specification,
+                                                filtro.PageIndex,
+                                                filtro.PageSize,
+                                                filtro.OrderBy,
+                                                filtro.Ascending,
+                                                out totalRegistros,
+                                                l => l.CentroCusto,
+                                                l => l.ContratoDescricao,
+                                                l => l.Contratante,
+                                                l => l.Contratado).To<List<ContratoDTO>>();
         }
 
         #endregion

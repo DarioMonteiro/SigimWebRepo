@@ -106,6 +106,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
             PerfilDTO perfil = new PerfilDTO();
             int PerfilId = 0;
 
+            model.NovoItem = true;
+
             if ((UsuarioId != null) && (ModuloId != null))
             {
                 var usuario = usuarioAppService.ObterUsuarioPorId(UsuarioId.Value) ?? new UsuarioDTO();
@@ -130,7 +132,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
                 var listaFuncionalidadesAvulsas = usuario.ListaUsuarioFuncionalidade.Where(l => l.ModuloId == ModuloId).ToList<UsuarioFuncionalidadeDTO>();
                 listaFuncionalidadesAvulsas = LimpaFuncionalidadeUsuario(listaFuncionalidadesAvulsas);
 
-                model.NovoItem = true;
                 if ((PerfilId !=0) || (listaFuncionalidadesAvulsas.Count > 0))
                 {
                     model.NovoItem = false;

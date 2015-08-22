@@ -1,4 +1,4 @@
-﻿@model GIR.Sigim.Application.DTO.Sigim.MaterialDTO
+﻿@model GIR.Sigim.Application.DTO.OrdemCompra.OrdemCompraDTO
 @{
     string uniqueIdentifier = Html.IdFor(m => m.Id).ToHtmlString();
     Model.PaginationParameters.UniqueIdentifier = uniqueIdentifier;
@@ -6,14 +6,11 @@
 <section class="@ViewBag.sectionClass" style="margin: 0;">
     <label class="label">@ViewBag.label</label>
     @{
-        string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
-        @Html.HiddenFor(m => m.Id)
-        
         if (ViewBag.exibirBotaoPesquisa)
         {
             <div class="input-group">
                 <label class="input">
-                    @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                    @Html.TextBoxFor(m => m.Id, new { @placeholder = "Digite o No da " + @ViewBag.label, @maxlength = "10", @class = "numeric" })
                 </label>
                 <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
             </div>
@@ -21,11 +18,11 @@
         else
         {
             <label class="input">
-                @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                @Html.TextBoxFor(m => m.Id, new { @placeholder = "Digite o No da " + @ViewBag.label, @maxlength = "10", @class = "numeric" })
             </label>
         }
     }
-    @Html.ValidationMessageFor(m => m.Id, "", new { @id = uniqueIdentifier + "_ValidationMessage", @class = "note note-error" })
+    @Html.ValidationMessageFor(m => m.Id, "", new { @id = Html.IdFor(m => m.Id) + "_ValidationMessage", @class = "note note-error" })
 </section>
 
 <div class="modal fade" id="@(uniqueIdentifier)_Pesquisa_ModalPanel" tabindex="-1" role="dialog">
@@ -35,7 +32,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     &times;
                 </button>
-                <h4 class="modal-title">Material
+                <h4 class="modal-title">Ordem de Compra
                 </h4>
             </div>
             <div id="@(uniqueIdentifier)_Pesquisa_ModalBody" class="modal-body no-padding" style="min-height:290px;">
@@ -63,11 +60,10 @@
                                             <label class="label" for="@(uniqueIdentifier)_cboCampo">Campo</label>
                                             <label class="select">
                                                 <select id="@(uniqueIdentifier)_cboCampo" name="@(uniqueIdentifier)_cboCampo">
-                                                    <option value="descricao">Descrição</option>
-                                                    <option value="unidadeMedida">Unidade medida</option>
                                                     <option value="id">Código</option>
-                                                    <option value="classeInsumo">Classe insumo</option>
-                                                    <option value="codigoExterno">Código externo</option>
+                                                    <option value="dataOrdemCompra">Data Ordem Compra</option>
+                                                    <option value="centroCusto">Centro Custo</option>
+                                                    <option value="fornecedor">Fornecedor</option>
                                                 </select>
                                                 <i></i>
                                             </label>
@@ -122,94 +118,10 @@
 
 @Html.EditorFor(m => m.PaginationParameters, "ListPageScript")
 
+
 <script type="text/javascript">
-    var codigoCentroCusto_@(uniqueIdentifier);
-    var codigoClasse_@(uniqueIdentifier);
-
     $(document).ready(function () {
-        $("#@Html.IdFor(m => m.Descricao)").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("ListarAtivosPeloCentroCustoEDescricao", "Material", new { area = "" })',
-                    cache: false,
-                    dataType: "json",
-                    data: {
-                        codigoCentroCusto: codigoCentroCusto_@(uniqueIdentifier),
-                        descricao: request.term
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                id: item.Id,
-                                label: item.Descricao,
-                                value: item.Descricao,
-                                unidade: item.SiglaUnidadeMedida
-                            }
-                        }));
-                    }
-                });
-            },
-            autoFocus: true,
-            autoSelect: true,
-            minLength: 2,
-            select: function (event, ui) {
-                TratarSelecaoMaterial@(uniqueIdentifier)(ui.item.id, ui.item.label);
-            },
-            change: function (event, ui) {
-                if (ui.item == null) {
-                    limpaMaterialForm_@(uniqueIdentifier)();
-                }
-            }
-        }).data("ui-autocomplete")._renderItem = function (ul, item) {
-            return $("<li>")
-                .append("<a>" + highlight(item.label, this.term) + " - " + item.unidade + "</a>")
-                .appendTo(ul);
-        };
-
-        @{
-            bool? centroCustoRequerido = ViewBag.centroCustoRequerido as bool? ?? false;
-            string linkModal = "#" + uniqueIdentifier + "_Pesquisa_ModalPanel";
-            string linkNotificarObrigatoriedadeCentroCusto = "javascript:notificarObrigatoriedadeCentroCusto();";
-            string href = linkModal;
-            if (centroCustoRequerido.Value)
-            {
-                href = linkNotificarObrigatoriedadeCentroCusto;
-            }
-        }
-
-        $(document).on("centroCustoValidado",
-            function (e) {
-                codigoCentroCusto_@(uniqueIdentifier) = e.codigo;
-
-                @if (centroCustoRequerido.Value)
-                {
-                    @:if (e.isValid) {
-                    @:  if (e.codigo != '')
-                    @:      unblockMaterialForm_@(uniqueIdentifier)();
-                    @:  else {
-                    @:      blockMaterialForm_@(uniqueIdentifier)();
-                    @:      limpaMaterialForm_@(uniqueIdentifier)();
-                    @:  }
-                    @:}
-                    @:else {
-                    @:  blockMaterialForm_@(uniqueIdentifier)();
-                    @:  limpaMaterialForm_@(uniqueIdentifier)();
-                    @:}
-                }
-            }
-        );
-
-        $(document).on("classeValidada",
-            function (e) {
-                codigoClasse_@(uniqueIdentifier) = e.isValid ? e.codigo : '';
-            }
-        );
-
-        @if (centroCustoRequerido.Value)
-        {
-            @:validaCentroCusto();
-        }
+        TratarSelecaoCombo@(uniqueIdentifier)();
 
         $('input[type=radio][name=tipoSelecao]').change(function () {
             if ($(this).val() == '@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)') {
@@ -227,34 +139,14 @@
             $('#@(uniqueIdentifier)_txtAte').val('');
             $('#@(uniqueIdentifier)_cboCampo').val($('#@(uniqueIdentifier)_cboCampo option:first').val());
             $('#@(uniqueIdentifier)_resultadoBusca').html('');
-            SetTipoSelecao('Contem');
+            SetTipoSelecao('Intervalo');
         });
 
-        function SetTipoSelecao(tipo) {
-            var radioId = '#@(uniqueIdentifier)_radTipoSelecao' + tipo;
-            $(radioId)
-                .attr('checked', true)
-                .trigger('change')
-                .trigger('click');
-        }
-
-        $(document).on("change", "#@(uniqueIdentifier)_cboCampo", function () {
-            $('#@(uniqueIdentifier)_txtDe').val('');
-            $('#@(uniqueIdentifier)_txtAte').val('');
-            $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val($(this).val());
-            $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(true);
-            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'id') {
-                $('#@(uniqueIdentifier)_txtDe').addClass('text-right numeric');
-                $('#@(uniqueIdentifier)_txtAte').addClass('text-right numeric');
-                SetTipoSelecao('Intervalo');
-                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', true);
+        $(document).on("change", "#@(uniqueIdentifier)_cboCampo",
+            function (e) {
+                TratarSelecaoCombo@(uniqueIdentifier)();
             }
-            else {
-                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
-                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
-                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
-            }
-        });
+        );
 
         $('#@(uniqueIdentifier)_btnSearch').on("click", function () {
             goToPage@(Model.PaginationParameters.UniqueIdentifier)(0);
@@ -262,15 +154,76 @@
 
         $(document).on("doFilter@(uniqueIdentifier)",
             function (e) {
-                Pesquisar@(uniqueIdentifier)();               
+                if (!ValidaPesquisa()) return;                
+                Pesquisar@(uniqueIdentifier)();
             }
         );
+
     });
+
+    function ValidaPesquisa() {
+        if ($('#@(uniqueIdentifier)_cboCampo').val() == 'dataOrdemCompra') {
+            if ($('#@(uniqueIdentifier)_txtDe').val() != "") {
+                if (!isValidDate("dd/mm/yy", $('#@(uniqueIdentifier)_txtDe').val())) {
+                    smartAlert("Erro", "A data 'De' é inválida !", "error");
+                    return false;
+                }
+            }
+            if ($('#@(uniqueIdentifier)_txtAte').val() != "") {
+                if (!isValidDate("dd/mm/yy", $('#@(uniqueIdentifier)_txtAte').val())) {
+                    smartAlert("Erro", "A data 'Até' é inválida !", "error");
+                    return false;
+                }
+            }
+
+            var start = $('#@(uniqueIdentifier)_txtDe').val();
+            var end = $('#@(uniqueIdentifier)_txtAte').val();
+            if (compararDatas(start, end) > 0) {
+                smartAlert("Erro", "A data 'De' não pode ser maior que a 'Até' !", "error");
+                return false;
+            }
+
+        }
+        
+        return true;
+    }
+
+    function SetTipoSelecao(tipo) {
+        var radioId = '#@(uniqueIdentifier)_radTipoSelecao' + tipo;
+        $(radioId)
+            .attr('checked', true)
+            .trigger('change')
+            .trigger('click');
+    }
+
+    function TratarSelecaoCombo@(uniqueIdentifier)() {
+        $('#@(uniqueIdentifier)_txtDe').val('');
+        $('#@(uniqueIdentifier)_txtAte').val('');
+        $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val($('#@(uniqueIdentifier)_cboCampo').val());
+        $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(true);
+        if (($('#@(uniqueIdentifier)_cboCampo').val() == 'id') || ($('#@(uniqueIdentifier)_cboCampo').val() == 'dataOrdemCompra')) {
+            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'id') {
+                $('#@(uniqueIdentifier)_txtDe').addClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').addClass('text-right numeric');
+            }
+            else {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+            }
+            SetTipoSelecao('Intervalo');
+            $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', true);
+        }
+        else {
+            $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+            $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+            $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+        }
+    }
 
     function Pesquisar@(uniqueIdentifier)() {
         $.ajax({
             type: 'POST',
-            url: '@Url.Action("PesquisarMaterial", "Material", new { area = "" })',
+            url: '@Url.Action("PesquisarOrdensCompra", "OrdemCompra", new { area = "OrdemCompra" })',
             cache: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
@@ -278,7 +231,6 @@
                 TipoSelecao: $('input[type=radio][name=tipoSelecao]:checked').val(),
                 TextoInicio: $('#@(uniqueIdentifier)_txtDe').val(),
                 TextoFim: $('#@(uniqueIdentifier)_txtAte').val(),
-                CodigoCentroCusto: codigoCentroCusto_@(uniqueIdentifier),
                 PageIndex: $('#@Html.IdFor(m => m.PaginationParameters.PageIndex)').val(),
                 PageSize: $('#@Html.IdFor(m => m.PaginationParameters.PageSize)').val(),
                 OrderBy: $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val(),
@@ -291,28 +243,15 @@
         });
     }
 
-
-    function TratarSelecaoMaterial@(uniqueIdentifier)(id, descricao) {
+    function TratarSelecaoOrdemCompra@(uniqueIdentifier)(id) {
         $('#@(uniqueIdentifier)').val(id);
-        $('#@Html.IdFor(m => m.Descricao)').val(descricao);
+        $('#@Html.IdFor(m => m.Id)').val(id);
         $('#@(uniqueIdentifier)_Pesquisa_ModalPanel').modal('hide');
-    }
 
-    function limpaMaterialForm_@(uniqueIdentifier)() {
-        $("#@(Html.IdFor(m => m.Id))").val('');
-        $("#@Html.IdFor(m => m.Descricao)").val('');
-    }
-
-    function blockMaterialForm_@(uniqueIdentifier)() {
-        $("#@Html.IdFor(m => m.Descricao)").attr("readonly", true);
-        $("#@Html.IdFor(m => m.Descricao)").addClass("readonly");
-        $("#BtnShowModalPanel_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
-    }
-
-    function unblockMaterialForm_@(uniqueIdentifier)() {
-        $("#@Html.IdFor(m => m.Descricao)").attr("readonly", false);
-        $("#@Html.IdFor(m => m.Descricao)").removeClass("readonly");
-        $("#BtnShowModalPanel_@(uniqueIdentifier)").attr('href', '@linkModal');
+        $.event.trigger({
+            type: "ordemCompraEscolhido",
+            contrato: id
+        });
     }
 
 </script>

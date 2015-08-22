@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.DTO.Contrato;
 
 namespace GIR.Sigim.Application.Filtros.Contrato
 {
@@ -21,9 +22,7 @@ namespace GIR.Sigim.Application.Filtros.Contrato
         [Display(Name = "Data final")]
         public Nullable<DateTime> DataFinal { get; set; }
 
-        [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
-        [Display(Name = "Contrato")]
-        public int? ContratoId { get; set; }
+        public ContratoDTO Contrato { get; set; }
 
         public string DescricaoContrato { get; set; }
 
