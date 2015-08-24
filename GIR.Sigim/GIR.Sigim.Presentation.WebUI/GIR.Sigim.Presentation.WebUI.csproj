@@ -840,7 +840,6 @@
     <Content Include="Views\Shared\EditorTemplates\ClienteFornecedor.cshtml" />
     <Content Include="Views\Agencia\Cadastro.cshtml" />
     <Content Include="Views\ContaCorrente\Index.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\MaterialComPesquisaGenerica.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ClasseInsumo.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TreeNode.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TreeView.cshtml" />
