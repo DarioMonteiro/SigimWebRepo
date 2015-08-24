@@ -99,7 +99,7 @@
 
     <mvcSiteMapNode title="Sac" controller="Home" action="Index" area="Sac">
       <mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_SAC_ACESSAR,SETOR_SAC_ACESSAR">
-        <mvcSiteMapNode title="Parâmetros" controller="Parametros" action="Index"/>
+        <mvcSiteMapNode title="Parâmetros" controller="ParametrosSac" action="Index"/>
         <mvcSiteMapNode title="Setor" controller="Setor" action="Index" preservedRouteParameters="id"/>
       </mvcSiteMapNode>
     </mvcSiteMapNode>
