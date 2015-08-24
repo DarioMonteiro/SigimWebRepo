@@ -4,26 +4,64 @@
     Model.PaginationParameters.UniqueIdentifier = uniqueIdentifier;
 }
 <section class="@ViewBag.sectionClass" style="margin: 0;">
-    <section class="col col-10" style="padding-left: 0;">
-        @Html.LabelFor(m => m.Descricao, "Material", new { @class = "label" })
-        <div class="input-group">
-            <label class="input">
-                @{
-                    string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+    @{   
+        string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+        ViewBag.label = !(string.IsNullOrEmpty(ViewBag.label)) ? ViewBag.label : "Material";
+        ViewBag.exibirBotaoPesquisa = (ViewBag.exibirBotaoPesquisa as bool? ?? true);
+        ViewBag.exibirCampoUnidadeMedida = (ViewBag.exibirCampoUnidadeMedida as bool? ?? true);
+                
+        @Html.HiddenFor(m => m.Id)
+          
+        if (ViewBag.exibirCampoUnidadeMedida)
+        {
+            <section class="col col-10" style="padding-left: 0;">
+            
+                <label class="label">@ViewBag.label</label>
+                @if (ViewBag.exibirBotaoPesquisa)
+                {
+                    <div class="input-group">
+                        <label class="input">
+                            @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                        </label>
+                        <a id="BtnShowModalPanel1_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+                    </div>
                 }
-                @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do material", @class = cssClass })
-                @Html.HiddenFor(m => m.Id)
-            </label>
-            <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
-        </div>
-        @Html.ValidationMessageFor(m => m.Id, "", new { @id = uniqueIdentifier + "_ValidationMessage", @class = "note note-error" })
-    </section>
-    <section class="col col-2" style="padding-right: 0;">
-        @Html.LabelFor(m => m.SiglaUnidadeMedida, "UN", new { @class = "label" })
-        <label class="input">
-            @Html.TextBoxFor(m => m.SiglaUnidadeMedida, new { @readonly = "", @class = "readonly" })
-        </label>
-    </section>
+                else
+                {
+                    <label class="input">
+                        @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                    </label>
+                }
+            </section>
+            <section class="col col-2" style="padding-right: 0;">
+                @Html.LabelFor(m => m.SiglaUnidadeMedida, "UN", new { @class = "label" })
+                <label class="input">
+                    @Html.TextBoxFor(m => m.SiglaUnidadeMedida, new { @readonly = "", @class = "readonly" })
+                </label>
+            </section>
+            
+        }
+        else
+        {
+            <label class="label">@ViewBag.label</label>
+            if (ViewBag.exibirBotaoPesquisa)
+            {
+                <div class="input-group">
+                    <label class="input">
+                        @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                    </label>
+                    <a id="BtnShowModalPanel2_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+                </div>
+            }
+            else
+            {
+                <label class="input">
+                    @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                </label>
+            }
+        }
+    }
+    @Html.ValidationMessageFor(m => m.Id, "", new { @id = uniqueIdentifier + "_ValidationMessage", @class = "note note-error" })
 </section>
 
 <div class="modal fade" id="@(uniqueIdentifier)_Pesquisa_ModalPanel" tabindex="-1" role="dialog">
@@ -245,7 +283,8 @@
             string linkModal = "#" + uniqueIdentifier + "_Pesquisa_ModalPanel";
             string linkNotificarObrigatoriedadeCentroCusto = "javascript:notificarObrigatoriedadeCentroCusto();";
             string href = linkModal;
-            if (centroCustoRequerido.Value) {
+            if (centroCustoRequerido.Value)
+            {
                 href = linkNotificarObrigatoriedadeCentroCusto;
             }
         }
@@ -254,7 +293,8 @@
             function (e) {
                 codigoCentroCusto_@(uniqueIdentifier) = e.codigo;
 
-                @if (centroCustoRequerido.Value) {
+                @if (centroCustoRequerido.Value)
+                {
                     @:if (e.isValid) {
                     @:  if (e.codigo != '')
                     @:      unblockMaterialForm_@(uniqueIdentifier)();
@@ -277,7 +317,8 @@
             }
         );
 
-        @if (centroCustoRequerido.Value) {
+        @if (centroCustoRequerido.Value)
+        {
             @:validaCentroCusto();
         }
 
@@ -368,7 +409,8 @@
         $('#@Html.IdFor(m => m.SiglaUnidadeMedida)').val(unidadeMedida);
         $('#@(uniqueIdentifier)_Pesquisa_ModalPanel').modal('hide');
 
-        @if (insumoControlado.Value) {
+        @if (insumoControlado.Value)
+        {
             @:itemInsumoSelecionado = false;
             @:ObterInterfaceOrcamento_@(uniqueIdentifier)();
         }
@@ -431,13 +473,23 @@
     function blockMaterialForm_@(uniqueIdentifier)() {
         $("#@Html.IdFor(m => m.Descricao)").attr("readonly", true);
         $("#@Html.IdFor(m => m.Descricao)").addClass("readonly");
-        $("#BtnShowModalPanel_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+        if ("#@ViewBag.exibirCampoUnidadeMedida") {
+            $("#BtnShowModalPanel1_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+        }
+        else {
+            $("#BtnShowModalPanel2_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+        }
     }
 
     function unblockMaterialForm_@(uniqueIdentifier)() {
         $("#@Html.IdFor(m => m.Descricao)").attr("readonly", false);
         $("#@Html.IdFor(m => m.Descricao)").removeClass("readonly");
-        $("#BtnShowModalPanel_@(uniqueIdentifier)").attr('href', '@linkModal');
+        if ("#@ViewBag.exibirCampoUnidadeMedida") {
+            $("#BtnShowModalPanel1_@(uniqueIdentifier)").attr('href', '@linkModal');
+        }
+        else {
+            $("#BtnShowModalPanel2_@(uniqueIdentifier)").attr('href', '@linkModal');
+        }
     }
 
     function initializeFieldBehaviour() {
@@ -451,4 +503,5 @@
             });
         });
     }
+
 </script>

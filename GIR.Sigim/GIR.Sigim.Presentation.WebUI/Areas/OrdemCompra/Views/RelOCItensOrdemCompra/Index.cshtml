@@ -234,11 +234,11 @@
                                                 </script>
                                             </div>
                                             <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.Material, "MaterialComPesquisaGenerica", new { @sectionClass = "col col-10", 
-                                                                                                                             @required = false, 
-                                                                                                                             @centroCustoRequerido = false, 
-                                                                                                                             @label = "Material", 
-                                                                                                                             @exibirBotaoPesquisa = false})
+                                                @Html.EditorFor(m => m.Filtro.Material, "Material", new { @sectionClass = "col col-10", 
+                                                                                                          @required = false, 
+                                                                                                          @centroCustoRequerido = false,
+                                                                                                          @exibirCampoUnidadeMedida = false,
+                                                                                                          @exibirBotaoPesquisa = false })
                                                 <script type="text/javascript">
                                                     $(document).ready(function () {
                                                         $("#@Html.IdFor(m => m.Filtro.Material.Id)").on("change", function () {
