@@ -32,7 +32,7 @@ namespace GIR.Sigim.Application.Service.Admin
 
         public List<ModuloDTO> ListarTodos()
         {
-            return moduloRepository.ListarTodos().Where(l => l.Nome.Contains("WEB")).OrderBy(l => l.Nome).To<List<ModuloDTO>>();
+            return moduloRepository.ListarTodos().Where(l => l.Nome.Contains("WEB")).Where(l => l.Nome != "SIGIMWEB").OrderBy(l => l.Nome).To<List<ModuloDTO>>();
         }
 
         public ModuloDTO ObterPeloId(int? id)
