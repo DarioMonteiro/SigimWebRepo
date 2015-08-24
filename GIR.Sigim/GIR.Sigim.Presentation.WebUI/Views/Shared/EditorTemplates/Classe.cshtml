@@ -34,6 +34,15 @@
                 <h4 class="modal-title">Classe
                 </h4>
             </div>
+            <fieldset style="border-bottom:solid 1px #CCCCCC; padding:14px;">
+                <div class="row">
+                    <section class="col col-12" style="margin-bottom:0;">
+                        <label class="input">
+                            <input id="filtro@(Html.IdFor(m => m.Descricao))" name="filtro@(Html.IdFor(m => m.Descricao))" type="text" placeholder="Digite aqui a descrição">
+                        </label>
+                    </section>
+                </div>
+            </fieldset>
             <div id="@Html.IdFor(m => m.Codigo)_ModalBody" class="modal-body no-padding sigimModalBody">
                 <div id="@Html.IdFor(m => m.Codigo)_tree" class="tree smart-form">
                 </div>
@@ -52,7 +61,18 @@
             validaClasse();
         });
 
+        var timeout = '';
+        $(document).on('input', '#filtro@(Html.IdFor(m => m.Descricao))', function () {
+            clearTimeout(timeout);
+            var descricao = $(this).val();
+            timeout = setTimeout(function () {
+                resetTreeView($('#@Html.IdFor(m => m.Codigo)_tree.tree'));
+                highlightNodes($('#@Html.IdFor(m => m.Codigo)_tree.tree'), descricao);
+            }, 250);
+        });
+
         $(document).on("show.bs.modal", "#@Html.IdFor(m => m.Codigo)_ModalPanel", function () {
+            $('#filtro@(Html.IdFor(m => m.Descricao))').val('');
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("TreeView", "Classe", new { area = "Financeiro" })',

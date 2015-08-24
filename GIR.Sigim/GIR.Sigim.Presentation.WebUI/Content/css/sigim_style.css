@@ -304,3 +304,15 @@ div#generalLoading
 		text-align: center;
 		font-weight: bold;
 	}
+
+.tree .highlight
+{
+	color: #666666;
+	background: #B2D0FD!important;
+}
+
+.tree li.parent_li > span:hover + ul li span.highlight
+{
+	color: #666666;
+	background: #B2D0FD!important;
+}

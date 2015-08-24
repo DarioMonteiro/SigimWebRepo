@@ -327,3 +327,43 @@ String.prototype.padRight = function (l, c) {
 String.prototype.padLeft = function (l, c) {
     return Array(l - this.length + 1).join(c || " ") + this;
 }
+
+//contains case insensitive
+jQuery.expr[':'].contains = function (a, i, m) {
+    return jQuery(a).text().toUpperCase()
+        .indexOf(m[3].toUpperCase()) >= 0;
+};
+
+//Filtro TreeView
+function resetTreeView(treeView) {
+    treeView.find('li:not(.rootNode) > span').removeClass('highlight').each(function () {
+        var children = $(this).parent('li.parent_li').find(' > ul > li');
+        if (children.length > 0) {
+            children.hide();
+            $(this).find(' > i').addClass("fa-plus-circle").removeClass("fa-minus-circle");
+        }
+    });
+}
+
+function highlightNodes(treeView, descricao) {
+    descricao = $.trim(descricao);
+    if (descricao != '') {
+        treeView.find('li:not(.rootNode) > span:contains("' + descricao + '")').each(function () {
+            $(this).addClass('highlight');
+            openNode($(this).parent('li.parent_li'));
+            openUntilRootNode($(this).parent('li'));
+        });
+    }
+}
+
+function openNode(node) {
+    node.find(' > ul > li').show();
+    if (node.find(' > ul > li').length > 0)
+        node.find(' > span > i').addClass("fa-minus-circle").removeClass("fa-plus-circle");
+}
+
+function openUntilRootNode(node) {
+    openNode(node);
+    if (node.parent('ul').parent('li').length > 0)
+        openUntilRootNode(node.parent('ul').parent('li'));
+}

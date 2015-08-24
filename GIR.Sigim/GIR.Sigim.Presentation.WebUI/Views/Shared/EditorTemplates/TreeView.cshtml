@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<GIR.Sigim.Application.DTO.Sigim.TreeNodeDTO>
 
 <ul>
-    <li>
+    <li class="rootNode">
         <span><i class="fa fa-lg fa-minus-circle"></i> @ViewBag.FirstNode</span>
         <ul>
             @foreach (var item in Model)
