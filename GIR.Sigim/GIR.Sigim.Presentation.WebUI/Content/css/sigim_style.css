@@ -148,6 +148,11 @@ div#ribbon ol.breadcrumb li a:hover
 	padding: 0 13px 13px 13px;
 }
 
+.jarviswidget div.table-container div.table-responsive
+{
+	clear: both;
+}
+
 @media (min-width:601px)
 {
 	.base-align
