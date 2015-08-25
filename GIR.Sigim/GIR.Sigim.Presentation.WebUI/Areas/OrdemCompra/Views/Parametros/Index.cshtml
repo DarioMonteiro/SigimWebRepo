@@ -38,15 +38,6 @@
                                 <div id="collapseGeral" class="panel-collapse collapse in">
                                     <div class="panel-body no-padding">
                                         <fieldset>
-@*                                            <div class="row">
-                                                <section class="col col-12">
-                                                    @Html.LabelFor(m => m.Parametros.ClienteId, new { @class = "label" })
-                                                    <label class="select">
-                                                        @Html.DropDownListFor(m => m.Parametros.ClienteId, Model.ListaEmpresa, string.Empty)
-                                                        <i></i>
-                                                    </label>
-                                                </section>
-                                            </div>*@
                                             @Html.EditorFor(m => m.Parametros.Cliente, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-12", 
                                                                                                                                   @required = false, 
                                                                                                                                   @label = "Empresa",
