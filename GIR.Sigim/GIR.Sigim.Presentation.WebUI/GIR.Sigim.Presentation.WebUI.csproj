@@ -837,7 +837,7 @@
     <Content Include="Views\FormaRecebimento\ListaPartial.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\ClienteFornecedor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClienteFornecedorPesquisaGenerica.cshtml" />
     <Content Include="Views\Agencia\Cadastro.cshtml" />
     <Content Include="Views\ContaCorrente\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ClasseInsumo.cshtml" />

@@ -128,13 +128,13 @@
                                                         @Html.TextBoxFor(m => m.Filtro.DescricaoContrato, new { @readonly = "", @class = "readonly" })
                                                     </label>
                                                 </section>
-                                                @Html.EditorFor(m => m.Filtro.FornecedorCliente, "ClienteFornecedor", new { @sectionClass = "col col-6", 
-                                                                                                                            @required = false, 
-                                                                                                                            @label = "Fornecedor/Cliente",
-                                                                                                                            @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
-                                                                                                                            @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
-                                                                                                                            @exibirBotaoPesquisa = true
-                                                                                                                            })
+                                                @Html.EditorFor(m => m.Filtro.FornecedorCliente, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-6", 
+                                                                                                                                            @required = false, 
+                                                                                                                                            @label = "Fornecedor/Cliente",
+                                                                                                                                            @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
+                                                                                                                                            @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                                                                                            @exibirBotaoPesquisa = true
+                                                                                                                                            })
                                                 <script type="text/javascript">
                                                     $(document).ready(function () {
                                                         $("#@Html.IdFor(m => m.Filtro.FornecedorCliente.Id)").on("change", function () {

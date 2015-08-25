@@ -106,7 +106,7 @@
                                                         });
                                                     });
                                                 </script>
-                                                @Html.EditorFor(m => m.Filtro.OrdemCompra, "OrdemCompraPesquisaGenerica", new { @sectionClass = "col col-2", @label = "Ordem Compra", @exibirBotaoPesquisa = true })
+                                                @Html.EditorFor(m => m.Filtro.OrdemCompra, "OrdemCompraPesquisaGenerica", new { @sectionClass = "col col-3", @label = "Ordem Compra", @exibirBotaoPesquisa = true })
                                                 <script type="text/javascript">
                                                     $(document).ready(function () {
                                                         $("#@Html.IdFor(m => m.Filtro.OrdemCompra.Id)").on("change", function () {
@@ -114,21 +114,7 @@
                                                         });
                                                     });
                                                 </script>
-@*                                                <section class="col col-2">
-                                                    @Html.LabelFor(m => m.Filtro.OrdemCompraId, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.OrdemCompraId, new { @maxlength = "10",@class = "numeric" })
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                $("#@Html.IdFor(m => m.Filtro.OrdemCompraId)").on("change", function () {
-                                                                    limpaLista();
-                                                                });
-                                                            });
-                                                        </script>
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.Filtro.OrdemCompraId, "", new { @class = "note note-error" })
-                                                </section>*@
-                                                <section class="col col-4">
+                                                <section class="col col-3">
                                                     <div class="inline-group" style="padding-top:28px;">
                                                         <label class="checkbox">
                                                             @Html.CheckBoxFor(m => m.Filtro.EhExibirSomentecomSaldo)
@@ -217,7 +203,7 @@
                                                 </script>
                                             </div>
                                             <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.ClienteFornecedor, "ClienteFornecedor", 
+                                                @Html.EditorFor(m => m.Filtro.ClienteFornecedor, "ClienteFornecedorPesquisaGenerica", 
                                                             new { @sectionClass = "col col-10", 
                                                                   @required = false, 
                                                                   @label = "Fornecedor", 
