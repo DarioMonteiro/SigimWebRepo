@@ -205,7 +205,8 @@
         $('#@(uniqueIdentifier)_txtAte').val('');
         $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val($('#@(uniqueIdentifier)_cboCampo').val());
         $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(true);
-        if (($('#@(uniqueIdentifier)_cboCampo').val() == 'id') || ($('#@(uniqueIdentifier)_cboCampo').val() == 'dataAssinatura')) {
+        if (($('#@(uniqueIdentifier)_cboCampo').val() == 'id') || ($('#@(uniqueIdentifier)_cboCampo').val() == 'dataAssinatura')) 
+        {
             if ($('#@(uniqueIdentifier)_cboCampo').val() == 'id') {
                 $('#@(uniqueIdentifier)_txtDe').addClass('text-right numeric');
                 $('#@(uniqueIdentifier)_txtAte').addClass('text-right numeric');
@@ -214,13 +215,30 @@
                 $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
                 $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
             }
+            $('#@(uniqueIdentifier)_radTipoSelecaoIntervalo').attr('disabled', false);
             SetTipoSelecao('Intervalo');
             $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', true);
         }
         else {
+            @*            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'descricaoSituacao') {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+                SetTipoSelecao('Contem');
+                $('#@(uniqueIdentifier)_radTipoSelecaoIntervalo').attr('disabled', true);
+            }
+            else {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+                $('#@(uniqueIdentifier)_radTipoSelecaoIntervalo').attr('disabled', false);
+            }*@
+
             $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
             $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
             $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+            $('#@(uniqueIdentifier)_radTipoSelecaoIntervalo').attr('disabled', false);
+
         }
     }
 
