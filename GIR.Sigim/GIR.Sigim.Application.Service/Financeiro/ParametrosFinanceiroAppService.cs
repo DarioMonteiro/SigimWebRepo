@@ -12,6 +12,7 @@ using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -31,7 +32,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public ParametrosFinanceiroDTO Obter()
         {
-            ParametrosFinanceiroDTO parametros = parametrosRepository.ListarTodos().FirstOrDefault().To<ParametrosFinanceiroDTO>();
+            ParametrosFinanceiroDTO parametros = parametrosRepository.ListarTodos(l => l.Cliente).FirstOrDefault().To<ParametrosFinanceiroDTO>();
+            if (parametros.Cliente == null)
+            {
+                parametros.Cliente = new ClienteFornecedorDTO();
+            }
 
             PreencherCheckBoxBloqueioSituacaoLiberado(parametros);
 

@@ -12,7 +12,7 @@ namespace GIR.Sigim.Application.DTO.Financeiro
     {
 
         [Display(Name = "Empresa")]
-        public int? ClienteId { get; set; }
+        //public int? ClienteId { get; set; }
         public ClienteFornecedorDTO Cliente { get; set; }
 
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
@@ -112,6 +112,11 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public bool BloqueioApropriacao { get; set; }
         
         public short Interface { get; set; }
+
+        public ParametrosFinanceiroDTO()
+        {
+            Cliente = new ClienteFornecedorDTO();
+        }
       
     }
 }
