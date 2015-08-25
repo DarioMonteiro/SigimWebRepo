@@ -2,8 +2,9 @@
 @{
     string uniqueIdentifier = Html.IdFor(m => m.Id).ToHtmlString();
     Model.PaginationParameters.UniqueIdentifier = uniqueIdentifier;
+    ViewBag.sectionStyle = !(string.IsNullOrEmpty(ViewBag.sectionStyle)) ? ViewBag.sectionStyle : "margin: 0px;";       
 }
-<section class="@ViewBag.sectionClass" style="margin: 0;">
+<section class="@ViewBag.sectionClass" style="@ViewBag.sectionStyle">
     <label class="label">@ViewBag.label</label>
     @{
         string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
@@ -169,6 +170,10 @@
                                 value: item.Nome
                             }
                         }));
+                    },
+                    error: function () {
+                        response([]);
+                        smartAlert("Erro", "Ocorreu erro na pesquisa !", "error");
                     }
                 });
             },

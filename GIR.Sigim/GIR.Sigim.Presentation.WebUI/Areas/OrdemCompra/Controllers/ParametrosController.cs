@@ -79,7 +79,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 
         private void CarregarCombos(ParametrosViewModel model)
         {
-            int? clienteId = null;
             int? assuntoContatoId = null;
             int? tipoCompromissoFreteId = null;
             int? layoutSPEDId = null;
@@ -87,14 +86,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 
             if (model.Parametros != null)
             {
-                clienteId = model.Parametros.ClienteId;
                 assuntoContatoId = model.Parametros.AssuntoContatoId;
                 tipoCompromissoFreteId = model.Parametros.TipoCompromissoFreteId;
                 layoutSPEDId = model.Parametros.LayoutSPEDId;
                 interfaceCotacaoModelo = model.Parametros.InterfaceCotacao.Modelo;
             }
             
-            model.ListaEmpresa = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", clienteId);
             model.ListaAssuntoContatoEmail = new SelectList(assuntoContatoAppService.ListarTodos(), "Id", "Descricao", assuntoContatoId);
             model.ListaTipoCompromissoFrete = new SelectList(tipoCompromissoAppService.ListarTipoPagar(), "Id", "Descricao", tipoCompromissoFreteId);
             model.ListaLayoutSPED = new SelectList(bancoLayoutAppService.ListarPeloTipoInterfaceSpedFiscal(), "Id", "Descricao", layoutSPEDId);
