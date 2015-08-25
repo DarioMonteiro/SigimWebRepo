@@ -94,7 +94,7 @@
                             @Html.HiddenFor(m => m.OrcamentoInsumoRequisitado.Composicao.Id)
                             @Html.HiddenFor(m => m.OrcamentoInsumoRequisitado.Material.Id)
                             <div class="row">
-                                @Html.EditorFor(m => m.Material, "Material", new { @sectionClass = "col col-6", @required = true, @centroCustoRequerido = true, @insumoControlado = true })
+                                @Html.EditorFor(m => m.Material, "MaterialPesquisaGenerica", new { @sectionClass = "col col-6", @required = true, @centroCustoRequerido = true, @insumoControlado = true })
                                 <section class="col col-6">
                                     @Html.LabelFor(m => m.Complemento, new { @class = "label" })
                                     <label class="input">
