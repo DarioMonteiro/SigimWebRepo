@@ -139,7 +139,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string OrdemCompraUnidadeMedidaDeletar = "ORDEMCOMPRA_UNIDADEMEDIDA_DELETAR";
         //public const string OrdemCompraUnidadeMedidaImprimir = "ORDEMCOMPRA_UNIDADEMEDIDA_IMPRIMIR";
 
-        public const string OrdemCompraMaterialAcessar = "ORDEMCOMPRA_MATERIAL_ACESSAR";
+        //public const string OrdemCompraMaterialAcessar = "ORDEMCOMPRA_MATERIAL_ACESSAR";
         //public const string OrdemCompraMaterialGravar = "ORDEMCOMPRA_MATERIAL_GRAVAR";
         //public const string OrdemCompraMaterialDeletar = "ORDEMCOMPRA_MATERIAL_DELETAR";
         //public const string OrdemCompraMaterialImprimir = "ORDEMCOMPRA_MATERIAL_IMPRIMIR";
@@ -301,7 +301,7 @@ namespace GIR.Sigim.Application.Constantes
         {
             MenuOrdemCompra = new System.Collections.Hashtable();
 
-            MenuOrdemCompra.Add(OrdemCompraMaterialAcessar, "Material - acessar");
+            //MenuOrdemCompra.Add(OrdemCompraMaterialAcessar, "Material - acessar");
             //MenuOrdemCompra.Add(OrdemCompraMaterialGravar, "Material - gravar");
             //MenuOrdemCompra.Add(OrdemCompraMaterialDeletar, "Material - deletar");
             //MenuOrdemCompra.Add(OrdemCompraMaterialImprimir, "Material - Imprimir");

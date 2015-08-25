@@ -57,22 +57,22 @@
                                                 </section>
                                             </div>
                                             <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.Contratante, "ClienteFornecedor", new { @sectionClass = "col col-12", 
-                                                                                                                      @required = false, 
-                                                                                                                      @label = "Contratante",
-                                                                                                                      @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
-                                                                                                                      @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
-                                                                                                                      @exibirBotaoPesquisa = true
-                                                                                                                    })
+                                                @Html.EditorFor(m => m.Filtro.Contratante, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-12", 
+                                                                                                                                      @required = false, 
+                                                                                                                                      @label = "Contratante",
+                                                                                                                                      @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
+                                                                                                                                      @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                                                                                      @exibirBotaoPesquisa = true
+                                                                                                                                    })
                                             </div>
                                             <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.Contratado, "ClienteFornecedor", new { @sectionClass = "col col-12", 
-                                                                                                                     @required = false, 
-                                                                                                                     @label = "Contratado",
-                                                                                                                     @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
-                                                                                                                     @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
-                                                                                                                     @exibirBotaoPesquisa = true
-                                                                                                                   })
+                                                @Html.EditorFor(m => m.Filtro.Contratado, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-12", 
+                                                                                                                                     @required = false, 
+                                                                                                                                     @label = "Contratado",
+                                                                                                                                     @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
+                                                                                                                                     @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                                                                                     @exibirBotaoPesquisa = true
+                                                                                                                                   })
                                             </div>
                                         </fieldset> 
                                     </div>

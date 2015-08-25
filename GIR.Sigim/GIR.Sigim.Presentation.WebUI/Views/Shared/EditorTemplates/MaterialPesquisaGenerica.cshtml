@@ -4,25 +4,61 @@
     Model.PaginationParameters.UniqueIdentifier = uniqueIdentifier;
 }
 <section class="@ViewBag.sectionClass" style="margin: 0;">
-    <label class="label">@ViewBag.label</label>
-    @{
+    @{   
         string cssClass = (ViewBag.required as bool? ?? false) ? "required" : string.Empty;
+        ViewBag.label = !(string.IsNullOrEmpty(ViewBag.label)) ? ViewBag.label : "Material";
+        ViewBag.exibirBotaoPesquisa = (ViewBag.exibirBotaoPesquisa as bool? ?? true);
+        ViewBag.exibirCampoUnidadeMedida = (ViewBag.exibirCampoUnidadeMedida as bool? ?? true);
+                
         @Html.HiddenFor(m => m.Id)
-        
-        if (ViewBag.exibirBotaoPesquisa)
+          
+        if (ViewBag.exibirCampoUnidadeMedida)
         {
-            <div class="input-group">
+            <section class="col col-10" style="padding-left: 0;">
+            
+                <label class="label">@ViewBag.label</label>
+                @if (ViewBag.exibirBotaoPesquisa)
+                {
+                    <div class="input-group">
+                        <label class="input">
+                            @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                        </label>
+                        <a id="BtnShowModalPanel1_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+                    </div>
+                }
+                else
+                {
+                    <label class="input">
+                        @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                    </label>
+                }
+            </section>
+            <section class="col col-2" style="padding-right: 0;">
+                @Html.LabelFor(m => m.SiglaUnidadeMedida, "UN", new { @class = "label" })
                 <label class="input">
-                    @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                    @Html.TextBoxFor(m => m.SiglaUnidadeMedida, new { @readonly = "", @class = "readonly" })
                 </label>
-                <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
-            </div>
+            </section>
+            
         }
         else
         {
-            <label class="input">
-                @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
-            </label>
+            <label class="label">@ViewBag.label</label>
+            if (ViewBag.exibirBotaoPesquisa)
+            {
+                <div class="input-group">
+                    <label class="input">
+                        @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                    </label>
+                    <a id="BtnShowModalPanel2_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+                </div>
+            }
+            else
+            {
+                <label class="input">
+                    @Html.TextBoxFor(m => m.Descricao, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                </label>
+            }
         }
     }
     @Html.ValidationMessageFor(m => m.Id, "", new { @id = uniqueIdentifier + "_ValidationMessage", @class = "note note-error" })
@@ -122,9 +158,50 @@
 
 @Html.EditorFor(m => m.PaginationParameters, "ListPageScript")
 
+<div class="modal fade" id="@(uniqueIdentifier)_ModalPanel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Insumos controlados
+                </h4>
+            </div>
+            <div id="@(uniqueIdentifier)_ModalBody" class="modal-body no-padding">
+                <div class="table-responsive" style="max-height: 350px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                    <table id="@(uniqueIdentifier)_tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                        <thead>
+                            <tr role="row">
+                                <th>Composição</th>
+                                <th>Classe</th>
+                                <th>Material</th>
+                                <th class="text-right">Qtd. orçada</th>
+                                <th class="text-right">Qtd. requisitada</th>
+                                <th class="text-right">Qtd. saldo</th>
+                                <th class="text-right">Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+				<button type="button" id="btnAdicionarInterfaceOrcamentoItem" class="btn btn-primary">
+					Ok
+				</button>
+			</div>
+        </div>
+    </div>
+</div>
+@{
+    bool? insumoControlado = ViewBag.insumoControlado as bool? ?? false;
+}
 <script type="text/javascript">
     var codigoCentroCusto_@(uniqueIdentifier);
     var codigoClasse_@(uniqueIdentifier);
+    var itemInsumoSelecionado = false;
 
     $(document).ready(function () {
         $("#@Html.IdFor(m => m.Descricao)").autocomplete({
@@ -150,11 +227,9 @@
                     }
                 });
             },
-            autoFocus: true,
-            autoSelect: true,
             minLength: 2,
             select: function (event, ui) {
-                TratarSelecaoMaterial@(uniqueIdentifier)(ui.item.id, ui.item.label);
+                TratarSelecaoMaterial@(uniqueIdentifier)(ui.item.id, ui.item.label, ui.item.unidade);
             },
             change: function (event, ui) {
                 if (ui.item == null) {
@@ -166,6 +241,42 @@
                 .append("<a>" + highlight(item.label, this.term) + " - " + item.unidade + "</a>")
                 .appendTo(ul);
         };
+
+        $(document).on("click", "#btnAdicionarInterfaceOrcamentoItem", function () {
+            $('td[class=quantidadeInsumo] input[type=text]').each(function () {
+                if (parseFloat($(this).val().replace(".", "").replace(",", ".")) > 0) {
+                    itemInsumoSelecionado = true;
+                    $('#@(uniqueIdentifier)_ModalPanel').modal('hide');
+
+                    $.event.trigger({
+                        type: "interfaceOrcamentoSelecionado",
+                        composicaoId: $(this).data('composicao'),
+                        materialId: $(this).data('material'),
+                        quantidade: $(this).val(),
+                        codigoClasse: $(this).data('codigo-classe'),
+                        descricaoClasse: $(this).data('descricao-classe')
+                    });
+
+                    return false;
+                }
+            });
+
+            if (!itemInsumoSelecionado)
+                smartAlert("Erro", "Selecione um insumo para requisitar.", "error");
+        });
+
+        $(document).on("hide.bs.modal", "#@(uniqueIdentifier)_ModalPanel", function () {
+            if (!itemInsumoSelecionado) {
+                $.event.trigger({
+                    type: "interfaceOrcamentoSelecionado",
+                    composicaoId: null,
+                    materialId: null,
+                    quantidade: null,
+                    codigoClasse: null,
+                    descricaoClasse: null
+                });
+            }
+        });
 
         @{
             bool? centroCustoRequerido = ViewBag.centroCustoRequerido as bool? ?? false;
@@ -262,9 +373,10 @@
 
         $(document).on("doFilter@(uniqueIdentifier)",
             function (e) {
-                Pesquisar@(uniqueIdentifier)();               
+                Pesquisar@(uniqueIdentifier)();
             }
         );
+
     });
 
     function Pesquisar@(uniqueIdentifier)() {
@@ -291,28 +403,105 @@
         });
     }
 
-
-    function TratarSelecaoMaterial@(uniqueIdentifier)(id, descricao) {
+    function TratarSelecaoMaterial@(uniqueIdentifier)(id, descricao, unidadeMedida) {
         $('#@(uniqueIdentifier)').val(id);
         $('#@Html.IdFor(m => m.Descricao)').val(descricao);
+        $('#@Html.IdFor(m => m.SiglaUnidadeMedida)').val(unidadeMedida);
         $('#@(uniqueIdentifier)_Pesquisa_ModalPanel').modal('hide');
+
+        @if (insumoControlado.Value)
+        {
+            @:itemInsumoSelecionado = false;
+            @:ObterInterfaceOrcamento_@(uniqueIdentifier)();
+        }
+    }
+
+    function fillTableInterfaceOrcamentoItem_@(uniqueIdentifier)(listaInterfaceOrcamentoItem) {
+        $("#@(uniqueIdentifier)_tableItens tbody").empty();
+        for (var i = 0; i < listaInterfaceOrcamentoItem.length; i++) {
+            var row = $('<tr />')
+            $("#@(uniqueIdentifier)_tableItens tbody").append(row);
+
+            row.append($('<td class="text-nowrap">' + listaInterfaceOrcamentoItem[i].Composicao.Descricao + '</td>'));
+            row.append($('<td class="text-nowrap">' + listaInterfaceOrcamentoItem[i].Classe.Codigo + ' - ' + listaInterfaceOrcamentoItem[i].Classe.Descricao + '</td>'));
+            row.append($('<td class="text-nowrap">' + listaInterfaceOrcamentoItem[i].Material.Descricao + '</td>'));
+            row.append($('<td class="text-nowrap text-right">' + roundDecimal(floatToString(listaInterfaceOrcamentoItem[i].QuantidadeOrcada), 5) + '</td>'));
+            row.append($('<td class="text-nowrap text-right">' + roundDecimal(floatToString(listaInterfaceOrcamentoItem[i].QuantidadeRequisitada), 4) + '</td>'));
+            var saldo = roundDecimal(floatToString(listaInterfaceOrcamentoItem[i].QuantidadeOrcada - listaInterfaceOrcamentoItem[i].QuantidadeRequisitada), 4);
+            row.append($('<td class="text-nowrap text-right">' + saldo + '</td>'));
+            row.append($('<td class="quantidadeInsumo"><input type="text" class="text-right decimal-4-casas" style="width:100px;" value="0,0000" data-saldo="' + saldo + '" data-material="' + listaInterfaceOrcamentoItem[i].Material.Id + '" data-composicao="' + listaInterfaceOrcamentoItem[i].Composicao.Id + '" data-codigo-classe="' + listaInterfaceOrcamentoItem[i].Classe.Codigo + '" data-descricao-classe="' + listaInterfaceOrcamentoItem[i].Classe.Descricao + '"></td>'));
+        }
+    }
+
+    function ObterInterfaceOrcamento_@(uniqueIdentifier)() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ObterInterfaceOrcamento", "Material", new { area = "" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                materialId: $("#@(Html.IdFor(m => m.Id))").val(),
+                codigoCentroCusto: codigoCentroCusto_@(uniqueIdentifier),
+                codigoClasse: codigoClasse_@(uniqueIdentifier)
+            })
+        })
+        .success(function (result) {
+            var interfaceOrcamento = result;
+            if (interfaceOrcamento.ErrorMessages.length !== 0) {
+                for (var i = 0; i < interfaceOrcamento.ErrorMessages.length; i++) {
+                    smartAlert("Erro", interfaceOrcamento.ErrorMessages[i].Text, "error");
+                    limpaMaterialForm_@(uniqueIdentifier)();
+                }
+            }
+            else {
+                if (interfaceOrcamento.ExibirTelaInterfaceOrcamento) {
+                    fillTableInterfaceOrcamentoItem_@(uniqueIdentifier)(interfaceOrcamento.ListaItens);
+                    initializeFieldBehaviour();
+                    $('#@(uniqueIdentifier)_ModalPanel').modal('show');
+                }
+            }
+        });
     }
 
     function limpaMaterialForm_@(uniqueIdentifier)() {
         $("#@(Html.IdFor(m => m.Id))").val('');
         $("#@Html.IdFor(m => m.Descricao)").val('');
+        $("#@Html.IdFor(m => m.SiglaUnidadeMedida)").val('');
     }
 
     function blockMaterialForm_@(uniqueIdentifier)() {
         $("#@Html.IdFor(m => m.Descricao)").attr("readonly", true);
         $("#@Html.IdFor(m => m.Descricao)").addClass("readonly");
-        $("#BtnShowModalPanel_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+        if ("#@ViewBag.exibirCampoUnidadeMedida") {
+            $("#BtnShowModalPanel1_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+        }
+        else {
+            $("#BtnShowModalPanel2_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+        }
     }
 
     function unblockMaterialForm_@(uniqueIdentifier)() {
         $("#@Html.IdFor(m => m.Descricao)").attr("readonly", false);
         $("#@Html.IdFor(m => m.Descricao)").removeClass("readonly");
-        $("#BtnShowModalPanel_@(uniqueIdentifier)").attr('href', '@linkModal');
+        if ("#@ViewBag.exibirCampoUnidadeMedida") {
+            $("#BtnShowModalPanel1_@(uniqueIdentifier)").attr('href', '@linkModal');
+        }
+        else {
+            $("#BtnShowModalPanel2_@(uniqueIdentifier)").attr('href', '@linkModal');
+        }
+    }
+
+    function initializeFieldBehaviour() {
+        initializeDecimalBehaviour();
+        $('td[class=quantidadeInsumo] input[type=text]').each(function () {
+            $(this).on("focusout", function () {
+                if (parseFloat($(this).val()) > parseFloat($(this).data('saldo'))) {
+                    smartAlert("Erro", "A quantidade informada está maior que o saldo disponível para ser requisitado.", "error");
+                    $(this).val(roundDecimal(0, 4));
+                }
+            });
+        });
     }
 
 </script>
