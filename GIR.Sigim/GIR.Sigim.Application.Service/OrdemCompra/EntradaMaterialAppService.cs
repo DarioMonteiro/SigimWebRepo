@@ -150,13 +150,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             entradaMaterial.TransportadoraId = null;
             entradaMaterial.Transportadora = null;
             entradaMaterial.TituloFreteId = null;
-            entradaMaterial.TituloFrete = null;
+            //entradaMaterial.TituloFrete = null;
             entradaMaterial.ValorFrete = null;
             entradaMaterial.NumeroNotaFrete = null;
             entradaMaterial.TipoNotaFreteId = null;
             entradaMaterial.TipoNotaFrete = null;
             entradaMaterial.OrdemCompraFreteId = null;
-            entradaMaterial.OrdemCompraFrete = null;
+            //entradaMaterial.OrdemCompraFrete = null;
 
             LiberarFreteDaOrdemCampra(entradaMaterial);
             LiberarOrdemCompra(entradaMaterial);
@@ -364,14 +364,14 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private void ProcessarCancelamentoTitulosDeImpostos(EntradaMaterial entradaMaterial, string motivo, List<TituloPagar> listaTitulosAlterados)
         {
-            foreach (var titulo in entradaMaterial.ListaFormaPagamento.Where(l =>
+            foreach (var impostoPagar in entradaMaterial.ListaFormaPagamento.Where(l =>
                 !l.OrdemCompraFormaPagamento.EhPagamentoAntecipado.HasValue ||
                 l.OrdemCompraFormaPagamento.EhPagamentoAntecipado == false)
-                    .Select(o => o.OrdemCompraFormaPagamento.TituloPagar)
-                        .Where(s => s.ListaImpostoPagar.Any(l => l.TituloPagarImpostoId.HasValue)))
+                    .SelectMany(o => o.OrdemCompraFormaPagamento.TituloPagar.ListaImpostoPagar)
+                        .Where(s => s.TituloPagarImpostoId.HasValue))
             {
-                CancelarTituloDeImposto(titulo, motivo, listaTitulosAlterados);
-                ProcessarCancelamentoTitulosDeImpostosDesdobrados(titulo.ListaFilhos, motivo, listaTitulosAlterados);
+                CancelarTituloDeImposto(impostoPagar.TituloPagarImposto, motivo, listaTitulosAlterados);
+                ProcessarCancelamentoTitulosDeImpostosDesdobrados(impostoPagar.TituloPagarImposto.ListaFilhos, motivo, listaTitulosAlterados);
             }
         }
 
@@ -424,11 +424,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private void ReverterTituloFrete(EntradaMaterial entradaMaterial, string motivo, List<TituloPagar> listaTitulosAlterados)
         {
-            if (entradaMaterial.TituloFreteId.HasValue)
+            if (entradaMaterial.TituloFrete != null)
             {
                 entradaMaterial.TituloFrete.Situacao = SituacaoTituloPagar.Provisionado;
                 entradaMaterial.TituloFrete.TipoDocumentoId = null;
                 entradaMaterial.TituloFrete.TipoDocumento = null;
+                entradaMaterial.TituloFrete.Documento = null;
                 entradaMaterial.TituloFrete.ValorImposto = 0;
                 entradaMaterial.TituloFrete.Desconto = 0;
                 entradaMaterial.TituloFrete.DataLimiteDesconto = null;
