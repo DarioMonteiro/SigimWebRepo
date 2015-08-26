@@ -45,6 +45,11 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public string UsuarioCancela { get; set; }
         public string MotivoCancela { get; set; }
         public int TipoContrato { get; set; }
+        public bool TemMedicaoALiberar { get; set; }
+        public string DescricaoMedicaoLiberada
+        {
+            get { return this.TemMedicaoALiberar ? "Sim" : "Não"; }
+        }
         public PaginationParameters PaginationParameters { get; set; }
 
         public List<ContratoRetificacaoDTO> ListaContratoRetificacao { get; set; }

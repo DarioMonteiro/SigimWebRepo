@@ -184,6 +184,18 @@ namespace GIR.Sigim.Domain.Entity.Contrato
             return valorTotalMedidoLiberadoContrato;
         }
 
+        public bool TemMedicaoALiberar(int? contratoId)
+        {
+            int quantidadeMedicaoALiberar = (from med in ListaContratoRetificacaoItemMedicao
+                                             where ((med.ContratoId == contratoId) && 
+                                                    (med.Situacao == SituacaoMedicao.AguardandoAprovacao || 
+                                                     med.Situacao == SituacaoMedicao.AguardandoLiberacao))
+                                             select med.Id).Count();
+            bool temMedicaoALiberar = (quantidadeMedicaoALiberar > 0) ? true : false;
+
+            return temMedicaoALiberar;
+        }
+
         public ICollection<ContratoRetificacao> ListaContratoRetificacao { get; set; }
         public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }

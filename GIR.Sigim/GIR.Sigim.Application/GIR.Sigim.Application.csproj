@@ -175,6 +175,7 @@
     <Compile Include="Filtros\Admin\PerfilFiltro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
     <Compile Include="Filtros\Contrato\ContratoPesquisaFiltro.cs" />
+    <Compile Include="Filtros\Contrato\LiberacaoContratoFiltro.cs" />
     <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\HistoricoContabilFiltro.cs" />

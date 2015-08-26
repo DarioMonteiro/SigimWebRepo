@@ -144,6 +144,8 @@ namespace GIR.Sigim.Application.Service.Admin
         public bool UsuarioPossuiCentroCustoDefinidoNoModulo(int? idUsuario, string modulo)
         {
             var usuario = usuarioRepository.ObterPeloId(idUsuario, l => l.ListaUsuarioCentroCusto);
+
+            if ((usuario.Login.ToUpper().Contains("SIGIM")) || (usuario.Login.ToUpper().Contains("GIR"))) return false;
             return usuario.ListaUsuarioCentroCusto.Any(l => l.Modulo.Nome == modulo);
         }
 
