@@ -34,9 +34,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         public ActionResult Index()
         {
             ParametrosFinanceiroViewModel model = new ParametrosFinanceiroViewModel();
-            model.Parametros = parametrosAppService.Obter();
+            model.Parametros = parametrosAppService.Obter() ?? new ParametrosFinanceiroDTO();
             model.PodeSalvar = parametrosAppService.EhPermitidoSalvar();
-            CarregarCombos(model);
+            //CarregarCombos(model);
             return View(model);
         }
 
@@ -65,9 +65,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        private void CarregarCombos(ParametrosFinanceiroViewModel model)
-        {
-            model.ListaEmpresa = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.Parametros.ClienteId);
-        }
+        //private void CarregarCombos(ParametrosFinanceiroViewModel model)
+        //{
+        //    model.ListaEmpresa = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.Parametros.ClienteId);
+        //}
     }
 }

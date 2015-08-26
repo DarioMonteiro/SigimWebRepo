@@ -827,7 +827,7 @@
     <Content Include="Views\Shared\_PaginationPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ListPageScript.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Classe.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Material.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MaterialPesquisaGenerica.cshtml" />
     <Content Include="Views\Shared\Redirect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Imprimir.cshtml" />
     <Content Include="Views\Material\Index.cshtml" />
@@ -837,10 +837,9 @@
     <Content Include="Views\FormaRecebimento\ListaPartial.cshtml" />
     <Content Include="Views\Banco\Index.cshtml" />
     <Content Include="Views\Banco\ListaPartial.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\ClienteFornecedor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ClienteFornecedorPesquisaGenerica.cshtml" />
     <Content Include="Views\Agencia\Cadastro.cshtml" />
     <Content Include="Views\ContaCorrente\Index.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\MaterialComPesquisaGenerica.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ClasseInsumo.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TreeNode.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TreeView.cshtml" />

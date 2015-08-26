@@ -14,6 +14,7 @@ using GIR.Sigim.Application.Service.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Application.Service.OrdemCompra
 {
@@ -37,7 +38,14 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public ParametrosOrdemCompraDTO Obter()
         {
-            return parametrosRepository.Obter().To<ParametrosOrdemCompraDTO>();
+            ParametrosOrdemCompraDTO parametros = new ParametrosOrdemCompraDTO();
+            parametros = parametrosRepository.Obter().To<ParametrosOrdemCompraDTO>();
+            if (parametros.Cliente == null)
+            {
+                parametros.Cliente = new ClienteFornecedorDTO();
+            }
+
+            return parametros;
         }
 
         public bool Salvar(ParametrosOrdemCompraDTO dto)

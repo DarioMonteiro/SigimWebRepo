@@ -14,10 +14,11 @@ namespace GIR.Sigim.Application.Service.Sigim
         List<ClienteFornecedorDTO> ListarAtivos();
         List<ClienteFornecedorDTO> ListarAtivosDeContrato();
         ClienteFornecedorDTO ObterPeloId(int? id);
-        //List<ClienteFornecedorDTO> ListarClienteFornecedor(ClassificacaoClienteFornecedor classificacaoClienteFornecedor, SituacaoClienteFornecedor situacaoClienteFornecedor, TipoPessoa tipoPessoa);
         List<ClienteFornecedorDTO> ListarClienteContratoAtivosPorNome(string nome);
         List<ClienteFornecedorDTO> ListarClienteOrdemCompraAtivosPorNome(string nome);
+        List<ClienteFornecedorDTO> ListarClienteTodosModulosAtivosPorNome(string nome);
         List<ClienteFornecedorDTO> PesquisarClientesDeContratoAtivosPeloFiltro(ClienteFornecedorPesquisaFiltro filtro, out int totalRegistros);
         List<ClienteFornecedorDTO> PesquisarClientesDeOrdemCompraAtivosPeloFiltro(ClienteFornecedorPesquisaFiltro filtro, out int totalRegistros);
+        List<ClienteFornecedorDTO> PesquisarClientesDeTodosOsModulosAtivosPeloFiltro(ClienteFornecedorPesquisaFiltro filtro, out int totalRegistros);
     }
 }

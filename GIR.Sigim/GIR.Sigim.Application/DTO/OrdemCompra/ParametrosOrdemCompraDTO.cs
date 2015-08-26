@@ -11,7 +11,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
     public class ParametrosOrdemCompraDTO : BaseDTO
     {
         [Display(Name = "Empresa")]
-        public int? ClienteId { get; set; }
+        //public int? ClienteId { get; set; }
         public ClienteFornecedorDTO Cliente { get; set; }
 
         [StringLength(30, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]

@@ -38,7 +38,7 @@
                                 <div id="collapseCliente" class="panel-collapse collapse in">
                                     <div class="panel-body no-padding">
                                         <fieldset>
-                                            <div class="row">
+@*                                            <div class="row">
                                                 <section class="col col-12">
                                                     @Html.LabelFor(m => m.Parametros.ClienteId, new { @class = "label" })
                                                     <label class="select">
@@ -46,7 +46,16 @@
                                                         <i></i>
                                                     </label>
                                                 </section>
-                                            </div>
+                                            </div>*@
+
+                                            @Html.EditorFor(m => m.Parametros.Cliente, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-12", 
+                                                                                                                                  @required = false, 
+                                                                                                                                  @label = "Empresa",
+                                                                                                                                  @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Todos),
+                                                                                                                                  @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                                                                                  @exibirBotaoPesquisa = true,
+                                                                                                                                  @sectionStyle = "margin-bottom: 10px; margin-left: -15px;"
+                                                                                                                                })
                                             <div class="row">
                                                 <section class="col col-6">
                                                     @Html.LabelFor(m => m.Parametros.Responsavel, new { @class = "label" })
@@ -360,7 +369,7 @@
                                 }
                             }
                             <button type="submit" class="btn btn-primary @disableBtnSalvar">
-                                Salvar
+                                Gravar
                             </button>
                         </footer>
                     }

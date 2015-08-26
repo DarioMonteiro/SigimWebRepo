@@ -245,19 +245,40 @@ namespace GIR.Sigim.Domain.Specification.Contrato
             return specification;
         }
 
-        public static Specification<Domain.Entity.Contrato.Contrato> EhSituacaoIgual(SituacaoContrato? situacao)
+        public static Specification<Domain.Entity.Contrato.Contrato> EhMinuta()
         {
-            Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
-
-            if (situacao.HasValue)
-            {
-                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Situacao == situacao);
-                specification &= directSpecification;
-            }
-
-            return specification;
+            return new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Situacao == SituacaoContrato.Minuta);
         }
 
+        public static Specification<Domain.Entity.Contrato.Contrato> EhAguardandoAssinatura()
+        {
+            return new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Situacao == SituacaoContrato.AguardandoAssinatura);
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> EhAssinado()
+        {
+            return new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Situacao == SituacaoContrato.Assinado);
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> EhRetificacao()
+        {
+            return new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Situacao == SituacaoContrato.Retificacao);
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> EhSuspenso()
+        {
+            return new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Situacao == SituacaoContrato.Suspenso);
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> EhConcluido()
+        {
+            return new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Situacao == SituacaoContrato.Concluido);
+        }
+
+        public static Specification<Domain.Entity.Contrato.Contrato> EhCancelado()
+        {
+            return new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.Situacao == SituacaoContrato.Cancelado);
+        }
 
     }
 }

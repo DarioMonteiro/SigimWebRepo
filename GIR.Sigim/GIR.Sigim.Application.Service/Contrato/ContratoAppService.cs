@@ -637,38 +637,137 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                 case "descricaoSituacao":
                     List<ItemListaDTO> listaSituacao = typeof(SituacaoContrato).ToItemListaDTO();
+                    bool ehMinuta = false;
+                    bool ehAguardandoAssinatura = false;
+                    bool ehAssinado = false;
+                    bool ehRetificacao = false;
+                    bool ehSuspenso = false;
+                    bool ehConcluido = false;
+                    bool ehCancelado = false;
+
                     if (EhTipoSelecaoContem)
                     {
                         if (!string.IsNullOrEmpty(filtro.TextoInicio)){
+
                             foreach (ItemListaDTO item in listaSituacao.OrderBy(l => l.Id))
                             {
                                 SituacaoContrato situacao = (SituacaoContrato)item.Id;
 
-                                if (item.Descricao.Contains(filtro.TextoInicio))
+                                if (item.Descricao.ToUpper().Contains(filtro.TextoInicio.ToUpper()))
                                 {
-                                    specification &= ContratoSpecification.EhSituacaoIgual(situacao);
+                                    switch (situacao){
+                                        case SituacaoContrato.Minuta:
+                                            ehMinuta = true;
+                                            break;
+                                        case SituacaoContrato.AguardandoAssinatura:
+                                            ehAguardandoAssinatura = true;
+                                            break;
+                                        case SituacaoContrato.Assinado:
+                                            ehAssinado = true;
+                                            break;
+                                        case SituacaoContrato.Retificacao:
+                                            ehRetificacao = true;
+                                            break;
+                                        case SituacaoContrato.Suspenso:
+                                            ehSuspenso = true;
+                                            break;
+                                        case SituacaoContrato.Concluido:
+                                            ehConcluido = true;
+                                            break;
+                                        case SituacaoContrato.Cancelado:
+                                            ehCancelado = true;
+                                            break;
+                                    }
                                 }
+                            }
+
+                            if (ehMinuta || ehAguardandoAssinatura || ehAssinado || ehRetificacao || ehSuspenso || ehConcluido || ehCancelado)
+                            {
+                                specification &= ((ehMinuta ? ContratoSpecification.EhMinuta() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehAguardandoAssinatura ? ContratoSpecification.EhAguardandoAssinatura() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehAssinado ? ContratoSpecification.EhAssinado() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehRetificacao ? ContratoSpecification.EhRetificacao() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehSuspenso ? ContratoSpecification.EhSuspenso() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehConcluido ? ContratoSpecification.EhConcluido() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehCancelado ? ContratoSpecification.EhCancelado() : new FalseSpecification<Domain.Entity.Contrato.Contrato>()));
                             }
                         }
                     }
                     else
                     {
-                        if ((!string.IsNullOrEmpty(filtro.TextoInicio)) || (!string.IsNullOrEmpty(filtro.TextoFim))){
-                            foreach (ItemListaDTO item in listaSituacao.OrderBy(l => l.Id))
+                        if ((!string.IsNullOrEmpty(filtro.TextoInicio)) || (!string.IsNullOrEmpty(filtro.TextoFim)))
+                        {
+                            if (!string.IsNullOrEmpty(filtro.TextoInicio))
                             {
-                                SituacaoContrato situacao = (SituacaoContrato)item.Id;
+                                foreach (ItemListaDTO item in listaSituacao.OrderBy(l => l.Descricao))
+                                {
+                                    SituacaoContrato situacao = (SituacaoContrato)item.Id;
 
-                                if ((!string.IsNullOrEmpty(filtro.TextoInicio)) && (item.Descricao.Contains(filtro.TextoInicio)))
-                                {
-                                    specification &= ContratoSpecification.EhSituacaoIgual(situacao);
-                                }
-                                else
-                                {
-                                    if ((!string.IsNullOrEmpty(filtro.TextoFim)) && (item.Descricao.Contains(filtro.TextoFim)))
+                                    if ((item.Descricao.ToUpper().CompareTo(filtro.TextoInicio.ToUpper()) >= 0))
                                     {
-                                        specification &= ContratoSpecification.EhSituacaoIgual(situacao);
+                                        switch (situacao)
+                                        {
+                                            case SituacaoContrato.Minuta:
+                                                ehMinuta = true;
+                                                break;
+                                            case SituacaoContrato.AguardandoAssinatura:
+                                                ehAguardandoAssinatura = true;
+                                                break;
+                                            case SituacaoContrato.Assinado:
+                                                ehAssinado = true;
+                                                break;
+                                            case SituacaoContrato.Retificacao:
+                                                ehRetificacao = true;
+                                                break;
+                                            case SituacaoContrato.Suspenso:
+                                                ehSuspenso = true;
+                                                break;
+                                            case SituacaoContrato.Concluido:
+                                                ehConcluido = true;
+                                                break;
+                                            case SituacaoContrato.Cancelado:
+                                                ehCancelado = true;
+                                                break;
+                                        }
+                                    }
+                                    if ((!string.IsNullOrEmpty(filtro.TextoFim)) && (item.Descricao.ToUpper().Substring(0, filtro.TextoFim.Length).CompareTo(filtro.TextoFim.ToUpper()) > 0))
+                                    {
+                                        switch (situacao)
+                                        {
+                                            case SituacaoContrato.Minuta:
+                                                ehMinuta = false;
+                                                break;
+                                            case SituacaoContrato.AguardandoAssinatura:
+                                                ehAguardandoAssinatura = false;
+                                                break;
+                                            case SituacaoContrato.Assinado:
+                                                ehAssinado = false;
+                                                break;
+                                            case SituacaoContrato.Retificacao:
+                                                ehRetificacao = false;
+                                                break;
+                                            case SituacaoContrato.Suspenso:
+                                                ehSuspenso = false;
+                                                break;
+                                            case SituacaoContrato.Concluido:
+                                                ehConcluido = false;
+                                                break;
+                                            case SituacaoContrato.Cancelado:
+                                                ehCancelado = false;
+                                                break;
+                                        }
                                     }
                                 }
+                            }
+                            if (ehMinuta || ehAguardandoAssinatura || ehAssinado || ehRetificacao || ehSuspenso || ehConcluido || ehCancelado)
+                            {
+                                specification &= ((ehMinuta ? ContratoSpecification.EhMinuta() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehAguardandoAssinatura ? ContratoSpecification.EhAguardandoAssinatura() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehAssinado ? ContratoSpecification.EhAssinado() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehRetificacao ? ContratoSpecification.EhRetificacao() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehSuspenso ? ContratoSpecification.EhSuspenso() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehConcluido ? ContratoSpecification.EhConcluido() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                                    || (ehCancelado ? ContratoSpecification.EhCancelado() : new FalseSpecification<Domain.Entity.Contrato.Contrato>()));
                             }
                         }
                     }
