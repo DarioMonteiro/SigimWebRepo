@@ -69,7 +69,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var specification = (Specification<EntradaMaterial>)new TrueSpecification<EntradaMaterial>();
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(UsuarioLogado.Id, Resource.Sigim.NomeModulo.OrdemCompra))
+            {
                 specification &= EntradaMaterialSpecification.UsuarioPossuiAcessoAoCentroCusto(UsuarioLogado.Id, Resource.Sigim.NomeModulo.OrdemCompra);
+            }
+            else
+            {
+                specification &= EntradaMaterialSpecification.EhCentroCustoAtivo();
+            }
 
             if (filtro.Id.HasValue)
                 specification &= EntradaMaterialSpecification.MatchingId(filtro.Id);
@@ -786,7 +792,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var specification = (Specification<EntradaMaterial>)new TrueSpecification<EntradaMaterial>();
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.OrdemCompra))
+            {
                 specification &= EntradaMaterialSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.OrdemCompra);
+            }
+            else
+            {
+                specification &= EntradaMaterialSpecification.EhCentroCustoAtivo();
+            }
 
             return entradaMaterialRepository.ObterPeloId(id, specification, includes);
         }

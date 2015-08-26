@@ -30,12 +30,23 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
             {
                 var directSpecification = new DirectSpecification<RequisicaoMaterial>(l =>
                     l.CentroCusto.ListaUsuarioCentroCusto.Any(c =>
-                        c.UsuarioId == idUsuario && c.Modulo.Nome == modulo));
+                        c.UsuarioId == idUsuario && c.Modulo.Nome == modulo && c.CentroCusto.Situacao == "A"));
                 specification &= directSpecification;
             }
 
             return specification;
         }
+
+        public static Specification<RequisicaoMaterial> EhCentroCustoAtivo()
+        {
+            Specification<RequisicaoMaterial> specification = new TrueSpecification<RequisicaoMaterial>();
+
+            var directSpecification = new DirectSpecification<RequisicaoMaterial>(l => l.CentroCusto.Situacao == "A");
+            specification &= directSpecification;
+
+            return specification;
+        }
+
 
         public static Specification<RequisicaoMaterial> EhAprovada()
         {

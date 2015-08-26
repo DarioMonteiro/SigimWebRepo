@@ -64,15 +64,12 @@ namespace GIR.Sigim.Domain.Specification.Contrato
             return specification;
         }
 
-        public static Specification<Domain.Entity.Contrato.Contrato> EhCentroCustoAtivos(int? idUsuario)
+        public static Specification<Domain.Entity.Contrato.Contrato> EhCentroCustoAtivo()
         {
             Specification<Domain.Entity.Contrato.Contrato> specification = new TrueSpecification<Domain.Entity.Contrato.Contrato>();
 
-            if ((idUsuario.HasValue))
-            {
-                var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.CentroCusto.Situacao == "A");
-                specification &= directSpecification;
-            }
+            var directSpecification = new DirectSpecification<Domain.Entity.Contrato.Contrato>(l => l.CentroCusto.Situacao == "A");
+            specification &= directSpecification;
 
             return specification;
         }

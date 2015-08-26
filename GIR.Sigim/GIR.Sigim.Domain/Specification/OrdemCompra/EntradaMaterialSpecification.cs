@@ -69,9 +69,19 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
             {
                 var directSpecification = new DirectSpecification<EntradaMaterial>(l =>
                     l.CentroCusto.ListaUsuarioCentroCusto.Any(c =>
-                        c.UsuarioId == idUsuario && c.Modulo.Nome == modulo));
+                        c.UsuarioId == idUsuario && c.Modulo.Nome == modulo && c.CentroCusto.Situacao == "A"));
                 specification &= directSpecification;
             }
+
+            return specification;
+        }
+
+        public static Specification<EntradaMaterial> EhCentroCustoAtivo()
+        {
+            Specification<EntradaMaterial> specification = new TrueSpecification<EntradaMaterial>();
+
+            var directSpecification = new DirectSpecification<EntradaMaterial>(l => l.CentroCusto.Situacao == "A");
+            specification &= directSpecification;
 
             return specification;
         }

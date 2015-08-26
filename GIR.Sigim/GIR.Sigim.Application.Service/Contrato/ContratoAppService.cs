@@ -73,7 +73,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
             else
             {
-                specification &= ContratoSpecification.EhCentroCustoAtivos(idUsuario);
+                specification &= ContratoSpecification.EhCentroCustoAtivo();
             }
 
             if (filtro.Id.HasValue)
@@ -127,7 +127,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
             else
             {
-                specification &= ContratoSpecification.EhCentroCustoAtivos(idUsuario);
+                specification &= ContratoSpecification.EhCentroCustoAtivo();
             }
 
             if (filtro.Id.HasValue)
@@ -160,7 +160,13 @@ namespace GIR.Sigim.Application.Service.Contrato
             if (idUsuario.HasValue)
             {
                 if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
+                {
                     specification &= ContratoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+                }
+                else
+                {
+                    specification &= ContratoSpecification.EhCentroCustoAtivo();
+                }
             }
 
             return contratoRepository.ObterPeloId(id, 

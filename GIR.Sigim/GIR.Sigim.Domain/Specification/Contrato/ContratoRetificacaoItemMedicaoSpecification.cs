@@ -39,6 +39,16 @@ namespace GIR.Sigim.Domain.Specification.Contrato
             return specification;
         }
 
+        public static Specification<ContratoRetificacaoItemMedicao> EhCentroCustoAtivo()
+        {
+            Specification<ContratoRetificacaoItemMedicao> specification = new TrueSpecification<ContratoRetificacaoItemMedicao>();
+
+            var directSpecification = new DirectSpecification<ContratoRetificacaoItemMedicao>(l => l.Contrato.CentroCusto.Situacao == "A");
+            specification &= directSpecification;
+
+            return specification;
+        }
+
         public static Specification<ContratoRetificacaoItemMedicao> PertenceAoContratoComSituacaoLiberado(int? contratoId)
         {
             Specification<ContratoRetificacaoItemMedicao> specification = new TrueSpecification<ContratoRetificacaoItemMedicao>();
