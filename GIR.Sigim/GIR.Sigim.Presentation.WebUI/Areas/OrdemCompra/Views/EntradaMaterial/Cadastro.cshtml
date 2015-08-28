@@ -615,7 +615,128 @@
                                 <div id="collapseFormasPagamentoOrdemCompra" class="panel-collapse collapse">
                                     <div class="panel-body no-padding">
                                         <fieldset>
-
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.OrdemCompraId, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.OrdemCompraId, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.DataVencimento, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.DataVencimento, "{0:dd/MM/yyyy}", new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.DataVencimento, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.QuantidadeDiasAposEmissao, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.QuantidadeDiasAposEmissao)
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.DataVencimentoLiberado, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.DataVencimentoLiberado, "{0:dd/MM/yyyy}", new { @class = "required" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.DataVencimentoLiberado, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $('#@Html.IdFor(m => m.DataVencimentoLiberado)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            onClose: function (selectedDate) {
+                                                                $(this).valid();
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ValorParcela, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorParcela, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ValorParcelaLiberado, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorParcelaLiberado, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <button id="btnAddFormaPagamento" type="button" class="btn btn-primary right">
+                                                        Adicionar
+                                                    </button>
+                                                </section>
+                                            </div>
+                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                <table id="tableOrdemCompraFormaPagamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th class="text-right">OC</th>
+                                                            <th>Data vencimento</th>
+                                                            <th>Valor parcela</th>
+                                                            <th class="text-center">Compromisso</th>
+                                                            <th class="text-right">Título pagar</th>
+                                                            <th class="text-right">Data vencimento lib.</th>
+                                                            <th>Valor liberado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ValorTotalEM, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalEM, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ValorTotalDistribuido, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalDistribuido, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ValorTotalPendente, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalPendente, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.ValorTotalLiberado, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalLiberado, new { @readonly = "", @class = "readonly" })
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="table-responsive" style="min-height: 85px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                <table id="tableOrdemCompraValor" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th class="text-right">OC</th>
+                                                            <th>Valor da OC</th>
+                                                            <th>Valor distribuído</th>
+                                                            <th>Valor pendente</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </fieldset>
                                     </div>
                                 </div>

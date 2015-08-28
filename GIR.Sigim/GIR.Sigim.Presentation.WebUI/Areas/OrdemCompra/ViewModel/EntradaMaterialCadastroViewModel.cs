@@ -96,6 +96,36 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         [Display(Name = "Natureza da receita")]
         public int? NaturezaReceitaId { get; set; }
 
+        [Display(Name = "OC")]
+        public int? OrdemCompraId { get; set; }
+
+        [Display(Name = "Data vencimento")]
+        public Nullable<DateTime> DataVencimento { get; set; }
+
+        [Display(Name = "Dias após emissão")]
+        public int? QuantidadeDiasAposEmissao { get; set; }
+
+        [Display(Name = "Data vencimento lib.")]
+        public Nullable<DateTime> DataVencimentoLiberado { get; set; }
+
+        [Display(Name = "Valor da parcela")]
+        public decimal? ValorParcela { get; set; }
+
+        [Display(Name = "Valor da parcela lib.")]
+        public decimal? ValorParcelaLiberado { get; set; }
+
+        [Display(Name = "Total EM")]
+        public decimal? ValorTotalEM { get; set; }
+
+        [Display(Name = "Total distribuído")]
+        public decimal? ValorTotalDistribuido { get; set; }
+
+        [Display(Name = "Total pendente")]
+        public decimal? ValorTotalPendente { get; set; }
+
+        [Display(Name = "Total liberado")]
+        public decimal? ValorTotalLiberado { get; set; }
+
         public bool ExisteEstoqueParaCentroCusto { get; set; }
         public bool ExisteMovimentoNoEstoque { get; set; }
         public bool PodeSalvar { get; set; }
