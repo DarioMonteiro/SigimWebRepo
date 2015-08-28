@@ -15,11 +15,11 @@ namespace GIR.Sigim.Application.Helper
         public static void Initialise()
         {
             Mapper.CreateMap<Contrato, ContratoDTO>()
-                .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()));
+                .ForMember(d => d.SituacaoDescricao, m => m.MapFrom(s => s.Situacao.ObterDescricao()))
+                .ForMember(d => d.TemMedicaoALiberar, m => m.MapFrom(s => s.TemMedicaoALiberar(s.Id)));
             Mapper.CreateMap<ContratoDTO, Contrato>()
                 .ForMember(d => d.CentroCusto, m => m.UseValue(null))
                 .ForMember(d => d.CodigoCentroCusto, m => m.MapFrom(s => s.CentroCusto.Codigo));
-
             Mapper.CreateMap<ContratoRetificacao, ContratoRetificacaoDTO>();
             Mapper.CreateMap<ContratoRetificacaoDTO, ContratoRetificacao>();
 

@@ -68,7 +68,13 @@ namespace GIR.Sigim.Application.Service.Contrato
             var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
+            {
                 specification &= ContratoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+            }
+            else
+            {
+                specification &= ContratoSpecification.EhCentroCustoAtivo();
+            }
 
             if (filtro.Id.HasValue)
                 specification &= ContratoSpecification.MatchingId(filtro.Id);
@@ -92,6 +98,61 @@ namespace GIR.Sigim.Application.Service.Contrato
                 l => l.Contratado.ListaContratoContratado).To<List<ContratoDTO>>();
         }
 
+        public List<ContratoDTO> ListarPeloFiltro(LiberacaoContratoFiltro filtro, int? idUsuario, out int totalRegistros)
+        {
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            bool ehMinuta = false;
+            bool ehAguardandoAssinatura = false;
+            bool ehAssinado = true;
+            bool ehRetificacao = false;
+            bool ehSuspenso = false;
+            bool ehConcluido = true;
+            bool ehCancelado = false;
+
+            if (ehMinuta || ehAguardandoAssinatura || ehAssinado || ehRetificacao || ehSuspenso || ehConcluido || ehCancelado)
+            {
+                specification &= ((ehMinuta ? ContratoSpecification.EhMinuta() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                    || (ehAguardandoAssinatura ? ContratoSpecification.EhAguardandoAssinatura() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                    || (ehAssinado ? ContratoSpecification.EhAssinado() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                    || (ehRetificacao ? ContratoSpecification.EhRetificacao() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                    || (ehSuspenso ? ContratoSpecification.EhSuspenso() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                    || (ehConcluido ? ContratoSpecification.EhConcluido() : new FalseSpecification<Domain.Entity.Contrato.Contrato>())
+                    || (ehCancelado ? ContratoSpecification.EhCancelado() : new FalseSpecification<Domain.Entity.Contrato.Contrato>()));
+            }
+
+            if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
+            {
+                specification &= ContratoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+            }
+            else
+            {
+                specification &= ContratoSpecification.EhCentroCustoAtivo();
+            }
+
+            if (filtro.Id.HasValue)
+                specification &= ContratoSpecification.MatchingId(filtro.Id);
+            else
+            {
+                specification &= ContratoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
+                specification &= ContratoSpecification.PertenceAoContratante(filtro.Contratante.Id);
+                specification &= ContratoSpecification.PertenceAoContratado(filtro.Contratado.Id);
+            }
+
+            return contratoRepository.ListarPeloFiltroComPaginacao(
+                specification,
+                filtro.PaginationParameters.PageIndex,
+                filtro.PaginationParameters.PageSize,
+                filtro.PaginationParameters.OrderBy,
+                filtro.PaginationParameters.Ascending,
+                out totalRegistros,
+                l => l.CentroCusto,
+                l => l.ContratoDescricao.ListaContrato,
+                l => l.Contratante.ListaContratoContratante,
+                l => l.Contratado.ListaContratoContratado,
+                l => l.ListaContratoRetificacaoItemMedicao).To<List<ContratoDTO>>();
+        }
+
         public ContratoDTO ObterPeloId(int? id, int? idUsuario)
         {
             var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
@@ -99,7 +160,13 @@ namespace GIR.Sigim.Application.Service.Contrato
             if (idUsuario.HasValue)
             {
                 if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
+                {
                     specification &= ContratoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+                }
+                else
+                {
+                    specification &= ContratoSpecification.EhCentroCustoAtivo();
+                }
             }
 
             return contratoRepository.ObterPeloId(id, 

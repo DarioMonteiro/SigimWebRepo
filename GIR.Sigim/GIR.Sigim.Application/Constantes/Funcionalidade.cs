@@ -36,6 +36,9 @@ namespace GIR.Sigim.Application.Constantes
 
         #region Contrato
 
+        public const string LiberacaoAcessar = "LIBERACAO_ACESSAR";
+
+
         public const string MedicaoAcessar = "MEDICAO_ACESSAR";
         public const string MedicaoGravar = "MEDICAO_GRAVAR";
         public const string MedicaoDeletar = "MEDICAO_DELETAR";
@@ -206,6 +209,8 @@ namespace GIR.Sigim.Application.Constantes
         private void FuncionalidadeContrato()
         {
             MenuContrato = new System.Collections.Hashtable();
+
+            MenuContrato.Add(LiberacaoAcessar, "Liberação - acessar");
 
             MenuContrato.Add(MedicaoAcessar, "Medição - acessar");
             MenuContrato.Add(MedicaoGravar, "Medição - gravar");

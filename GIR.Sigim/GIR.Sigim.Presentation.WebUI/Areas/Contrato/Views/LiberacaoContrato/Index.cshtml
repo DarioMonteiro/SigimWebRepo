@@ -1,0 +1,154 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel.LiberacaoContratoListaViewModel     
+
+@{
+    ViewBag.Title = "Liberação";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Lista",
+                        "LiberacaoContrato",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Filtro
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFiltro" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-4", @labelText = "Centro de Custo" })
+                                                <section class="col col-2">
+                                                    @Html.LabelFor(m => m.Filtro.Id, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Filtro.Id, new { @maxlength = "10", @class = "numeric" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Filtro.Id, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-1">
+                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
+                                                        <i class="fa fa-search fa-lg"></i>
+                                                    </button>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                @Html.EditorFor(m => m.Filtro.Contratante, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-12", 
+                                                                                                                                      @required = false, 
+                                                                                                                                      @label = "Contratante",
+                                                                                                                                      @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
+                                                                                                                                      @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                                                                                      @exibirBotaoPesquisa = true
+                                                                                                                                    })
+                                            </div>
+                                            <div class="row">
+                                                @Html.EditorFor(m => m.Filtro.Contratado, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-12", 
+                                                                                                                                     @required = false, 
+                                                                                                                                     @label = "Contratado",
+                                                                                                                                     @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.Contrato),
+                                                                                                                                     @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                                                                                     @exibirBotaoPesquisa = true
+                                                                                                                                   })
+                                            </div>
+                                        </fieldset> 
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+
+@section scripts{
+   @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var codigoCentroCusto = null;
+        var contratoId = null;
+        var contratadoId = null;
+        var contratanteId = null;
+
+        contratoId = $("#@Html.IdFor(m => m.Filtro.Id)").val();
+        codigoCentroCusto = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
+        contratadoId = $("#@Html.IdFor(m => m.Filtro.Contratado.Id)").val();
+        contratanteId = $("#@Html.IdFor(m => m.Filtro.Contratante.Id)").val();
+
+        var condicao = (codigoCentroCusto != "") || (contratadoId != "") || (contratanteId != "") || (contratoId != "");
+
+        if (condicao) {
+            listarFiltro();
+        }
+
+        jQuery.validator.addMethod(
+            "ehCentroCustoValido",
+            function (value, element, params) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.ehCentroCustoValido = $('#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
+
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').validate({
+            rules: {
+                '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
+                    ehCentroCustoValido: true
+                }
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
+        });
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                listarFiltro();
+            }
+        );
+
+    });
+
+    function listarFiltro() {
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
+</script>

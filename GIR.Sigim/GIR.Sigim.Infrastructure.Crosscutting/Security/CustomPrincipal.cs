@@ -23,7 +23,7 @@ namespace GIR.Sigim.Infrastructure.Crosscutting.Security
 
         public bool IsInRole(string role)
         {
-            if ((Login.ToUpper() == "SIGIM") || (Login.ToUpper() == "GIR"))
+            if ((Login.ToUpper().Contains("SIGIM")) || (Login.ToUpper().Contains("GIR")))
                 return true;
 
             return Roles.Any(l => l == role);

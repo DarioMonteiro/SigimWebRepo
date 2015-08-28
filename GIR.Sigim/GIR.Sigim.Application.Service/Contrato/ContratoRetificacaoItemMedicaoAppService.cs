@@ -652,7 +652,14 @@ namespace GIR.Sigim.Application.Service.Contrato
             var specification = (Specification<ContratoRetificacaoItemMedicao>)new TrueSpecification<ContratoRetificacaoItemMedicao>();
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Contrato))
+            {
                 specification &= ContratoRetificacaoItemMedicaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+            }
+            else
+            {
+                specification &= ContratoRetificacaoItemMedicaoSpecification.EhCentroCustoAtivo();
+            }
+
 
             if (filtro.Contrato.Id.HasValue)
                 specification &= ContratoRetificacaoItemMedicaoSpecification.PertenceAoContratoComSituacaoLiberado(filtro.Contrato.Id);

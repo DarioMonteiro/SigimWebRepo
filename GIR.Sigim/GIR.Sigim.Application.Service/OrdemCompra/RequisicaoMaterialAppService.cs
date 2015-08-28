@@ -57,7 +57,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var specification = (Specification<RequisicaoMaterial>)new TrueSpecification<RequisicaoMaterial>();
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.OrdemCompra))
+            {
                 specification &= RequisicaoMaterialSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.OrdemCompra);
+            }
+            else
+            {
+                specification &= RequisicaoMaterialSpecification.EhCentroCustoAtivo();
+            }
 
             if (filtro.Id.HasValue)
                 specification &= RequisicaoMaterialSpecification.MatchingId(filtro.Id);

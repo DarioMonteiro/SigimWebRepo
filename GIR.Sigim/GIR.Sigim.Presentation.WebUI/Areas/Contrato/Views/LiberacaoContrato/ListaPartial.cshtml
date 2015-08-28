@@ -1,0 +1,125 @@
+﻿@using GIR.Sigim.Application.DTO.Contrato
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<ContratoDTO> Lista = Model.Records as IEnumerable<ContratoDTO>; 
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls="dt_basic",
+                                @class="form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string idSortingSuffix = "sorting";
+                            string centroCustoSortingSuffix = "sorting";
+                            string descricaoContratoSortingSuffix = "sorting";
+                            string contratanteSortingSuffix = "sorting";
+                            string contratadoSortingSuffix = "sorting";
+                            string dataAssinaturaSortingSuffix = "sorting";
+                            string situacaoSortingSuffix = "sorting";
+                            string valorContratoSortingSuffix = "sorting";
+                            //string descricaoMedicaoLiberarSortingSuffix = "sorting";
+                            
+                            switch (Model.OrderBy)
+                            {
+                                case "centroCusto":
+                                    centroCustoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoContrato":
+                                    descricaoContratoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "contratante":
+                                    contratanteSortingSuffix += sortingSuffix;
+                                    break;
+                                case "contratado":
+                                    contratadoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataAssinatura":
+                                    dataAssinaturaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "situacao":
+                                    situacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "valorContrato":
+                                    valorContratoSortingSuffix += sortingSuffix;
+                                    break;
+                                //case "descricaoMedicaoLiberar":
+                                //    descricaoMedicaoLiberarSortingSuffix += sortingSuffix;
+                                //    break;
+                                default:
+                                    idSortingSuffix += sortingSuffix;
+                                    break;
+                            }
+                        }
+                        
+                        <th class="sorting @idSortingSuffix text-left" data-order="id" style="min-width:50px;">Código</th>
+                        <th class="sorting @centroCustoSortingSuffix" data-order="centroCusto">Empreendimento</th>
+                        <th class="sorting @descricaoContratoSortingSuffix" data-order="descricaoContrato">Descrição</th>
+                        <th class="sorting @contratanteSortingSuffix" data-order="contratante">Contratante</th>
+                        <th class="sorting @contratadoSortingSuffix" data-order="contratado">Contratado</th>
+                        <th class="sorting @dataAssinaturaSortingSuffix text-left" data-order="dataAssinatura" style="min-width:65px;">Data assinatura</th>
+                        <th class="sorting @situacaoSortingSuffix text-center" data-order="situacao" style="min-width:75px;">Situação</th>
+                        <th class="sorting @valorContratoSortingSuffix text-left" data-order="valorContrato" style="min-width:75px;">Valor do Contrato</th>
+                        @*<th class="sorting @descricaoMedicaoLiberarSortingSuffix text-left" data-order="descricaoMedicaoLiberar" style="min-width:75px;">Medição a liberar</th>*@
+                        <th class="text-left" style="min-width:75px;">Medição a liberar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        decimal valorContrato = 0;
+                        if (@item.ValorContrato.HasValue){
+                            valorContrato = @item.ValorContrato.Value;
+                        }
+                        string style = "color:black";
+                        if (@item.TemMedicaoALiberar)
+                        {
+                            style = "color:red";
+                        }
+                        string dataAssinatura = "";
+                        if (@item.DataAssinatura.HasValue)
+                        {
+                            dataAssinatura = item.DataAssinatura.Value.ToString().Remove((item.DataAssinatura.Value.ToString().Length - 3), 3);
+                            if (item.DataAssinatura.Value.ToString().Contains("00:00:00"))
+                            {
+                                dataAssinatura = item.DataAssinatura.Value.ToShortDateString();
+                            }
+                        }
+                        <tr>
+                            <td class="text-right">@Html.ActionLink(item.Id.ToString(), "Medicao", new { id = item.Id })</td>
+                            <td class="text-nowrap">@item.CentroCusto.CentroCustoDescricao</td>
+                            <td class="text-nowrap">@item.ContratoDescricao.Descricao</td>
+                            <td class="text-nowrap">@item.Contratante.Nome</td>
+                            <td class="text-nowrap">@item.Contratado.Nome</td>
+                            <td class="text-center text-nowrap">@dataAssinatura</td>
+                            <td class="text-center text-nowrap">@item.SituacaoDescricao</td>
+                            <td class="text-right text-nowrap">@valorContrato.ToString("N2")</td>
+                            <td class="text-center text-nowrap" style="@style">@item.DescricaoMedicaoLiberada</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>
