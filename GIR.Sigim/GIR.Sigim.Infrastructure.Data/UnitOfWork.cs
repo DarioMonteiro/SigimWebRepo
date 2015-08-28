@@ -133,6 +133,7 @@ namespace GIR.Sigim.Infrastructure.Data
 
             #region Financeiro
 
+            modelBuilder.Configurations.Add(new ApropriacaoAdiantamentoConfiguration());
             modelBuilder.Configurations.Add(new ApropriacaoConfiguration());
             modelBuilder.Configurations.Add(new CaixaConfiguration());
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());

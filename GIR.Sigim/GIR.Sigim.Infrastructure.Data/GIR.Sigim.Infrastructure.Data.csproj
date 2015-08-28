@@ -80,6 +80,7 @@
     <Compile Include="Configuration\Financeiro\CentroCustoEmpresaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\CaixaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ApropriacaoConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\ApropriacaoAdiantamentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\HistoricoContabilConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoMovimentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ImpostoPagarConfiguration.cs" />
