@@ -28,6 +28,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         private ISerieNFAppService serieNFAppService;
         private ICSTAppService CSTAppService;
         private ICodigoContribuicaoAppService codigoContribuicaoAppService;
+        private IComplementoNaturezaOperacaoAppService complementoNaturezaOperacaoAppService;
+        private IComplementoCSTAppService complementoCSTAppService;
+        private INaturezaReceitaAppService naturezaReceitaAppService;
 
         public EntradaMaterialController(
             IEntradaMaterialAppService entradaMaterialAppService,
@@ -38,6 +41,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             ISerieNFAppService serieNFAppService,
             ICSTAppService CSTAppService,
             ICodigoContribuicaoAppService codigoContribuicaoAppService,
+            IComplementoNaturezaOperacaoAppService complementoNaturezaOperacaoAppService,
+            IComplementoCSTAppService complementoCSTAppService,
+            INaturezaReceitaAppService naturezaReceitaAppService,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -49,6 +55,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.serieNFAppService = serieNFAppService;
             this.CSTAppService = CSTAppService;
             this.codigoContribuicaoAppService = codigoContribuicaoAppService;
+            this.complementoNaturezaOperacaoAppService = complementoNaturezaOperacaoAppService;
+            this.complementoCSTAppService = complementoCSTAppService;
+            this.naturezaReceitaAppService = naturezaReceitaAppService;
         }
 
         [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
@@ -118,9 +127,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.ExisteMovimentoNoEstoque = entradaMaterialAppService.ExisteMovimentoNoEstoque(entradaMaterial);
             model.PodeImprimir = entradaMaterialAppService.EhPermitidoImprimir(entradaMaterial);
             model.PodeLiberarTitulos = entradaMaterialAppService.EhPermitidoLiberarTitulos(entradaMaterial);
-            //model.PodeAdicionarItem = requisicaoMaterialAppService.EhPermitidoAdicionarItem(entradaMaterial);
-            //model.PodeCancelarItem = requisicaoMaterialAppService.EhPermitidoCancelarItem(entradaMaterial);
-            //model.PodeEditarItem = requisicaoMaterialAppService.EhPermitidoEditarItem(entradaMaterial);
+            model.PodeAdicionarItem = entradaMaterialAppService.EhPermitidoAdicionarItem(entradaMaterial);
+            model.PodeCancelarItem = entradaMaterialAppService.EhPermitidoCancelarItem(entradaMaterial);
+            model.PodeEditarItem = entradaMaterialAppService.EhPermitidoEditarItem(entradaMaterial);
             //model.PodeAprovarRequisicao = requisicaoMaterialAppService.EhPermitidoAprovarRequisicao(entradaMaterial);
             //model.PodeCancelarAprovacao = requisicaoMaterialAppService.EhPermitidoCancelarAprovacao(entradaMaterial);
             model.PodeEditarCentroCusto = entradaMaterialAppService.EhPermitidoEditarCentroCusto(entradaMaterial);
@@ -158,6 +167,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.ListaSerieNF = new SelectList(serieNFAppService.ListarTodos(), "Id", "Descricao", tipoNotaFiscalId);
             model.ListaCST = new SelectList(CSTAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
             model.ListaCodigoContribuicao = new SelectList(codigoContribuicaoAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
+            model.ListaComplementoNaturezaOperacao = new SelectList(complementoNaturezaOperacaoAppService.ListarTodos(), "Codigo", "Descricao");
+            model.ListaComplementoCST = new SelectList(complementoCSTAppService.ListarTodos(), "Codigo", "Descricao");
+            model.ListaNaturezaReceita = new SelectList(naturezaReceitaAppService.ListarTodos(), "Codigo", "Descricao");
         }
 
         [HttpPost]

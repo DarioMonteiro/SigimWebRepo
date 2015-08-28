@@ -44,6 +44,12 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<CodigoContribuicao, CodigoContribuicaoDTO>();
             Mapper.CreateMap<CodigoContribuicaoDTO, CodigoContribuicao>();
 
+            Mapper.CreateMap<ComplementoCST, ComplementoCSTDTO>();
+            Mapper.CreateMap<ComplementoCSTDTO, ComplementoCST>();
+
+            Mapper.CreateMap<ComplementoNaturezaOperacao, ComplementoNaturezaOperacaoDTO>();
+            Mapper.CreateMap<ComplementoNaturezaOperacaoDTO, ComplementoNaturezaOperacao>();
+
             Mapper.CreateMap<ContaCorrente, ContaCorrenteDTO>();
             Mapper.CreateMap<ContaCorrenteDTO, ContaCorrente>();
 
@@ -69,6 +75,9 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<NaturezaOperacao, NaturezaOperacaoDTO>();
             Mapper.CreateMap<NaturezaOperacaoDTO, NaturezaOperacao>();
+
+            Mapper.CreateMap<NaturezaReceita, NaturezaReceitaDTO>();
+            Mapper.CreateMap<NaturezaReceitaDTO, NaturezaReceita>();
 
             Mapper.CreateMap<PessoaFisica, PessoaFisicaDTO>();
             Mapper.CreateMap<PessoaFisicaDTO, PessoaFisica>();

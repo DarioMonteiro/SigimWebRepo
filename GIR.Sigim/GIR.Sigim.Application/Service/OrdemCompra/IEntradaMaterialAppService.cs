@@ -19,6 +19,10 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         bool EhPermitidoCancelar(EntradaMaterialDTO dto);
         bool EhPermitidoImprimir(EntradaMaterialDTO dto);
         bool EhPermitidoLiberarTitulos(EntradaMaterialDTO dto);
+        bool EhPermitidoAdicionarItem(EntradaMaterialDTO dto);
+        bool EhPermitidoCancelarItem(EntradaMaterialDTO dto);
+        bool EhPermitidoEditarItem(EntradaMaterialDTO dto);
+
         bool EhPermitidoEditarCentroCusto(EntradaMaterialDTO entradaMaterial);
         bool EhPermitidoEditarFornecedor(EntradaMaterialDTO entradaMaterial);
         bool ExisteEstoqueParaCentroCusto(string codigoCentroCusto);

@@ -130,6 +130,9 @@
     <Compile Include="Configuration\Sigim\ComposicaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AvaliacaoModeloConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AvaliacaoFornecedorConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\ComplementoCSTConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\ComplementoNaturezaOperacaoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\NaturezaReceitaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\LogAcessoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AgenciaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ContaCorrenteConfiguration.cs" />
@@ -224,6 +227,9 @@
     <Compile Include="Repository\Sigim\BancoRepository.cs" />
     <Compile Include="Repository\Sigim\AgenciaRepository.cs" />
     <Compile Include="Repository\Sigim\ContaCorrenteRepository.cs" />
+    <Compile Include="Repository\Sigim\ComplementoCSTRepository.cs" />
+    <Compile Include="Repository\Sigim\ComplementoNaturezaOperacaoRepository.cs" />
+    <Compile Include="Repository\Sigim\NaturezaReceitaRepository.cs" />
     <Compile Include="Repository\Sigim\LogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\FormaRecebimentoRepository.cs" />
     <Compile Include="Repository\Sigim\MaterialClasseInsumoRepository.cs" />

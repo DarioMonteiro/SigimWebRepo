@@ -21,6 +21,8 @@ namespace GIR.Sigim.Application.Service.IoC
             Container.Current.RegisterType<ICifFobAppService, CifFobAppService>();
             Container.Current.RegisterType<IClienteFornecedorAppService, ClienteFornecedorAppService>();
             Container.Current.RegisterType<ICodigoContribuicaoAppService, CodigoContribuicaoAppService>();
+            Container.Current.RegisterType<IComplementoCSTAppService, ComplementoCSTAppService>();
+            Container.Current.RegisterType<IComplementoNaturezaOperacaoAppService, ComplementoNaturezaOperacaoAppService>();
             Container.Current.RegisterType<IContaCorrenteAppService, ContaCorrenteAppService>();
             Container.Current.RegisterType<ICSTAppService, CSTAppService>();
             Container.Current.RegisterType<IEstadoCivilAppService, EstadoCivilAppService>();
@@ -33,6 +35,7 @@ namespace GIR.Sigim.Application.Service.IoC
             Container.Current.RegisterType<IMaterialClasseInsumoAppService, MaterialClasseInsumoAppService>();
             Container.Current.RegisterType<INacionalidadeAppService, NacionalidadeAppService>();
             Container.Current.RegisterType<INaturezaOperacaoAppService, NaturezaOperacaoAppService>();
+            Container.Current.RegisterType<INaturezaReceitaAppService, NaturezaReceitaAppService>();
             Container.Current.RegisterType<IParentescoAppService, ParentescoAppService>();
             Container.Current.RegisterType<IProfissaoAppService, ProfissaoAppService>();
             Container.Current.RegisterType<IRamoAtividadeAppService, RamoAtividadeAppService>();

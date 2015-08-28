@@ -267,6 +267,21 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return true;
         }
 
+        public bool EhPermitidoAdicionarItem(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
+        }
+
+        public bool EhPermitidoCancelarItem(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
+        }
+
+        public bool EhPermitidoEditarItem(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
+        }
+
         public bool EhPermitidoEditarCentroCusto(EntradaMaterialDTO dto)
         {
             if (!EhPermitidoSalvar(dto))
