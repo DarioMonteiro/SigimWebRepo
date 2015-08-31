@@ -45,6 +45,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .WithRequired(l => l.TipoDocumento)
                 .HasForeignKey(c => c.TipoDocumentoId);
 
+            HasMany<ContratoRetencaoLiberada>(l => l.ListaContratoRetencaoLiberada)
+                .WithRequired(c => c.TipoDocumento)
+                .HasForeignKey(c => c.TipoDocumentoId);
         }
     }
 }

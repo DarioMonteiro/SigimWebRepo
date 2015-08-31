@@ -20,6 +20,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<EntradaMaterial> ListaEntradaMaterialNotaFiscal { get; set; }
         public ICollection<EntradaMaterial> ListaEntradaMaterialNotaFrete { get; set; }
         public ICollection<AvaliacaoFornecedor> ListaAvaliacaoFornecedor { get; set; }
+        public ICollection<ContratoRetencaoLiberada> ListaContratoRetencaoLiberada { get; set; }
 
         public TipoDocumento()
         {
@@ -29,6 +30,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaEntradaMaterialNotaFiscal = new HashSet<EntradaMaterial>();
             this.ListaEntradaMaterialNotaFrete = new HashSet<EntradaMaterial>();
             this.ListaAvaliacaoFornecedor = new HashSet<AvaliacaoFornecedor>();
+            this.ListaContratoRetencaoLiberada = new HashSet<ContratoRetencaoLiberada>();
         }
     }
 }

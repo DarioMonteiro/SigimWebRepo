@@ -278,6 +278,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasMaxLength(30)
                 .HasColumnOrder(42);
 
+            HasMany<ContratoRetencao>(l => l.ListaContratoRetencao)
+                .WithRequired(c => c.ContratoRetificacaoItemMedicao)
+                .HasForeignKey(c => c.ContratoRetificacaoItemMedicaoId);  
         }
     }
 }

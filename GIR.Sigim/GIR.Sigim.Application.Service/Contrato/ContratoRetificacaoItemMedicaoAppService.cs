@@ -337,6 +337,16 @@ namespace GIR.Sigim.Application.Service.Contrato
             return true;
         }
 
+        public bool EhSituacaoMedicaoLiberado(ContratoRetificacaoItemMedicaoDTO dto)
+        {
+            if (dto.Situacao != SituacaoMedicao.Liberado)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Métodos privados

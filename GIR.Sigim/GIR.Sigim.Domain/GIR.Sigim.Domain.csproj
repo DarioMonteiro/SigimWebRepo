@@ -48,6 +48,8 @@
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Admin\Usuario.cs" />
     <Compile Include="Entity\Contrato\Contrato.cs" />
+    <Compile Include="Entity\Contrato\ContratoRetencao.cs" />
+    <Compile Include="Entity\Contrato\ContratoRetencaoLiberada.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItem.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemCronograma.cs" />

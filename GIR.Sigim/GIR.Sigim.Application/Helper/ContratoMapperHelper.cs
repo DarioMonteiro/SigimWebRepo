@@ -20,6 +20,13 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ContratoDTO, Contrato>()
                 .ForMember(d => d.CentroCusto, m => m.UseValue(null))
                 .ForMember(d => d.CodigoCentroCusto, m => m.MapFrom(s => s.CentroCusto.Codigo));
+
+            Mapper.CreateMap<ContratoRetencao, ContratoRetencaoDTO>();
+            Mapper.CreateMap<ContratoRetencaoDTO, ContratoRetencao>();
+
+            Mapper.CreateMap<ContratoRetencaoLiberada, ContratoRetencaoLiberadaDTO>();
+            Mapper.CreateMap<ContratoRetencaoLiberadaDTO, ContratoRetencaoLiberada>();
+
             Mapper.CreateMap<ContratoRetificacao, ContratoRetificacaoDTO>();
             Mapper.CreateMap<ContratoRetificacaoDTO, ContratoRetificacao>();
 

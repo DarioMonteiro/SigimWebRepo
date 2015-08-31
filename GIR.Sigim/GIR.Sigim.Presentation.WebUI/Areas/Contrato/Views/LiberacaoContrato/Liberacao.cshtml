@@ -1,0 +1,262 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel.LiberacaoContratoLiberacaoViewModel
+
+@{
+    ViewBag.Title = "Liberação";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-8 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                            "Liberacao",
+                            "LiberacaoContrato",
+                            null,
+                            new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
+                            new { @id = "formLiberacao", @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                       
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" id="aHrefContrato" data-parent="#accordion" href="#collapseContrato" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Contrato
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseContrato" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="label">Contrato</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.ContratoId, new { @class="readonly", @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                    <label class="label">Descrição Contrato</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Contrato.ContratoDescricao.Descricao, new { @class="readonly", @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, Model.ListaServicoContratoRetificacaoItem, "Selecione um ítem" ,new {@class="required", @novalidate = "novalidate" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, "", new { @id = Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId) + "_ValidationMessage", @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <fieldset>
+                                                <legend>Resumo</legend>
+                                                <div class="row">
+                                                        <section class="col col-4">
+                                                            @Html.LabelFor(m => m.Resumo.ValorContratado, new { @class = "label" })
+                                                            <label class="input">
+                                                                @Html.TextBoxFor(m => m.Resumo.ValorContratado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                            </label>
+                                                        </section>
+                                                        <section class="col col-4">
+                                                            @Html.LabelFor(m => m.Resumo.ValorRetidoContrato, new { @class = "label" })
+                                                            <label class="input">
+                                                                @Html.TextBoxFor(m => m.Resumo.ValorRetidoContrato, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                            </label>
+                                                        </section>
+                                                        <section class="col col-4">
+                                                            @Html.LabelFor(m => m.Resumo.ValorProvisionado, new { @class = "label" })
+                                                            <label class="input">
+                                                                @Html.TextBoxFor(m => m.Resumo.ValorProvisionado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                            </label>
+                                                        </section>
+                                                
+                                                </div>
+                                                <div class="row">
+                                                    <section class="col col-4">
+                                                        @Html.LabelFor(m => m.Resumo.ValorMedido, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.Resumo.ValorMedido, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                        </label>
+                                                    </section>
+                                                    @{
+                                                        string propStyle = "font-weight:bold";
+                                                        if (Model.Resumo.Diferenca < 0)
+                                                        {
+                                                            propStyle = "font-weight:bold; color:red";
+                                                        }
+                                                    }
+
+                                                    <section class="col col-4">
+                                                        @Html.LabelFor(m => m.Resumo.Diferenca, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.Resumo.Diferenca, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style=@propStyle})  
+                                                        </label>
+                                                    </section>
+                                                </div>
+                                                <div class="row">
+                                                        <section class="col col-4">
+                                                            @Html.LabelFor(m => m.Resumo.AguardandoLiberacao, new { @class = "label" })
+                                                            <label class="input">
+                                                                @Html.TextBoxFor(m => m.Resumo.AguardandoLiberacao, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                            </label>
+                                                        </section>
+                                                        <section class="col col-4">
+                                                            @Html.LabelFor(m => m.Resumo.Retido, new { @class = "label" })
+                                                            <label class="input">
+                                                                @Html.TextBoxFor(m => m.Resumo.Retido, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                            </label>
+                                                        </section>
+                                                        <section class="col col-4">
+                                                            @Html.LabelFor(m => m.Resumo.Liberado, new { @class = "label" })
+                                                            <label class="input">
+                                                                @Html.TextBoxFor(m => m.Resumo.Liberado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                            </label>
+                                                        </section>
+                                                
+                                                </div>
+                                                <div class="row">
+                                                    <section class="col col-4">
+                                                        @Html.LabelFor(m => m.Resumo.RetencaoLiberada, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.Resumo.RetencaoLiberada, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                        </label>
+                                                    </section>
+                                                    <section class="col col-4">
+                                                        @Html.LabelFor(m => m.Resumo.Saldo, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.Resumo.Saldo, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                        </label>
+                                                    </section>
+                                                </div>
+                                            </fieldset>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseLiberacao" class="collapsed" id="accordionLiberacao">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Liberação
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseLiberacao" class="panel-collapse collapse" style="height: 0px;">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer>
+                            @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
+                        </footer>                        
+                    }
+                </div>
+            </div>
+        </div>
+    </article>
+</div> 
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        exibeInfoContrato();
+
+        $(document).on("change", "#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)", function () {
+            exibeInfoContrato();
+            recuperaContratoRetificacaoItem();
+        });
+
+    });
+
+    function exibeInfoContrato() {
+        var infoContrato = "Contrato : " + $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+        infoContrato = infoContrato + " " + $("#@Html.IdFor(m => m.Contrato.ContratoDescricao.Descricao)").val();
+        var e = document.getElementById("@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)");
+        var itemSelecionado = e.options[e.selectedIndex].text;
+        if (itemSelecionado.length > 0) {
+            infoContrato = infoContrato + " - Item : " + itemSelecionado;
+        }
+
+        document.getElementById("aHrefContrato").innerText = infoContrato;
+    }
+
+    function recuperaContratoRetificacaoItem() {
+        var isRecuperou = false;
+        var codigoContratoRetificacaoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)").val();
+        var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("RecuperaContratoRetificacaoItem", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoId: contratoId,
+                contratoRetificacaoItemId: codigoContratoRetificacaoItem
+            }),
+            success: function (result) {
+                showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
+
+                if (result.ehRecuperou) {
+                    $('#@Html.IdFor(m => m.Resumo.ValorContratado)').val(roundDecimal(floatToString(result.resumo.ValorContratado),2));
+                    $('#@Html.IdFor(m => m.Resumo.ValorRetidoContrato)').val(roundDecimal(floatToString(result.resumo.ValorRetidoContrato),2));
+                    $('#@Html.IdFor(m => m.Resumo.ValorProvisionado)').val(roundDecimal(floatToString(result.resumo.ValorProvisionado), 2));
+                    $('#@Html.IdFor(m => m.Resumo.ValorMedido)').val(roundDecimal(floatToString(result.resumo.ValorMedido), 2));
+                    $('#@Html.IdFor(m => m.Resumo.Diferenca)').val(roundDecimal(floatToString(result.resumo.Diferenca), 2));
+                    if (result.resumo.Diferenca < 0) {
+                        document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "red";
+                    }
+                    else {
+                        document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "black";
+                    }
+                    $('#@Html.IdFor(m => m.Resumo.AguardandoLiberacao)').val(roundDecimal(floatToString(result.resumo.AguardandoLiberacao), 2));
+                    $('#@Html.IdFor(m => m.Resumo.Retido)').val(roundDecimal(floatToString(result.resumo.Retido), 2));
+                    $('#@Html.IdFor(m => m.Resumo.Liberado)').val(roundDecimal(floatToString(result.resumo.Liberado), 2));
+                    $('#@Html.IdFor(m => m.Resumo.RetencaoLiberada)').val(roundDecimal(floatToString(result.resumo.RetencaoLiberada), 2));
+                    $('#@Html.IdFor(m => m.Resumo.Saldo)').val(roundDecimal(floatToString(result.resumo.Saldo), 2));
+                }
+                else {
+                    limpaResumo();
+                }
+                isRecuperou = result.ehRecuperou;
+            },
+            error: function (result) {
+                showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
+                limpaResumo();
+            }
+        });
+
+        return isRecuperou;
+    }
+
+    function limpaResumo() {
+        $('#@Html.IdFor(m => m.Resumo.ValorContratado)').val(roundDecimal(floatToString(0), 2));
+        $('#@Html.IdFor(m => m.Resumo.ValorRetidoContrato)').val(roundDecimal(floatToString(0), 2));
+        $('#@Html.IdFor(m => m.Resumo.ValorProvisionado)').val(roundDecimal(floatToString(0), 2));
+        $('#@Html.IdFor(m => m.Resumo.ValorMedido)').val(roundDecimal(floatToString(0), 2));
+        $('#@Html.IdFor(m => m.Resumo.Diferenca)').val(roundDecimal(floatToString(0), 2));
+        document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "black";
+        $('#@Html.IdFor(m => m.Resumo.AguardandoLiberacao)').val(roundDecimal(floatToString(0), 2));
+        $('#@Html.IdFor(m => m.Resumo.Retido)').val(roundDecimal(floatToString(0), 2));
+        $('#@Html.IdFor(m => m.Resumo.Liberado)').val(roundDecimal(floatToString(0), 2));
+        $('#@Html.IdFor(m => m.Resumo.RetencaoLiberada)').val(roundDecimal(floatToString(0), 2));
+        $('#@Html.IdFor(m => m.Resumo.Saldo)').val(roundDecimal(floatToString(0), 2));
+    }
+</script>

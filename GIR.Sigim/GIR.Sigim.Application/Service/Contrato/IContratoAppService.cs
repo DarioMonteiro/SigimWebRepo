@@ -17,7 +17,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool EhContratoAssinado(ContratoDTO dto);
         bool EhContratoExistente(ContratoDTO dto);
         bool EhContratoComCentroCustoAtivo(ContratoDTO dto);
-        List<ContratoRetificacaoProvisaoDTO> ObterListaCronograma(int contratoId, int contratoRetificacaoItemId);
+        List<ContratoRetificacaoProvisaoDTO> ObterListaCronogramaPorContratoEhRetificacaoItem(int contratoId, int contratoRetificacaoItemId);
         List<ContratoRetificacaoItemMedicaoDTO> ObtemMedicaoPorSequencialItem(int contratoId, int sequencialItem);
         bool ExisteContratoRetificacaoProvisao(List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisao);
         bool ExisteMedicao(ContratoRetificacaoItemMedicaoDTO dto);
@@ -32,5 +32,6 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool EhPermitidoDeletarMedicao();
         bool EhPermitidoImprimirMedicao();
         List<ContratoDTO> PesquisarContratosPeloFiltro(ContratoPesquisaFiltro filtro, out int totalRegistros);
+        void PreencherResumo(ContratoDTO contrato, ContratoRetificacaoItemDTO contratoRetificacaoItemSelecionado, ResumoLiberacaoDTO resumo);
     }
 }

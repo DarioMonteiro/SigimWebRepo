@@ -21,7 +21,7 @@
         <mvcSiteMapNode title="Medição" controller="MedicaoContrato" action="Index"/>
         <mvcSiteMapNode title="Medição" controller="MedicaoContrato" action="Medicao" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
         <mvcSiteMapNode title="Liberação" controller="LiberacaoContrato" action="Index"/>
-        <!--<mvcSiteMapNode title="Liberação" controller="LiberacaoContrato" action="Liberacao" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>-->
+        <mvcSiteMapNode title="Liberação" controller="LiberacaoContrato" action="Liberacao" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
       </mvcSiteMapNode>
       <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_NF_LIBERADAS_ACESSAR">
         <mvcSiteMapNode title="Notas fiscais liberadas" controller="RelNotaFiscalLiberada" action="Index"/>
