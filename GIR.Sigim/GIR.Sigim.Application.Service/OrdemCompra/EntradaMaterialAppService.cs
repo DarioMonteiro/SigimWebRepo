@@ -40,6 +40,18 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private IApropriacaoRepository apropriacaoRepository;
         private ILogOperacaoAppService logOperacaoAppService;
 
+        private ParametrosOrdemCompra parametrosOrdemCompra;
+        public ParametrosOrdemCompra ParametrosOrdemCompra
+        {
+            get
+            {
+                if (parametrosOrdemCompra == null)
+                    parametrosOrdemCompra = parametrosOrdemCompraRepository.Obter();
+
+                return parametrosOrdemCompra;
+            }
+        }
+
         public EntradaMaterialAppService(
             IEntradaMaterialRepository entradaMaterialRepository,
             IUsuarioAppService usuarioAppService,
@@ -187,6 +199,173 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return true;
         }
 
+        public bool LiberarTitulos(int? id)
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialLiberar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            var entradaMaterial = ObterPeloIdEUsuario(id, UsuarioLogado.Id,
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.ListaOrdemCompraFormaPagamento.Select(s => s.TituloPagar.ListaApropriacao)),
+                l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar.Select(s => s.TituloPagarImposto)),
+                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TituloPagar.ListaImpostoPagar),
+                l => l.ListaFormaPagamento.Select(o => o.ListaTituloPagarAdiantamento.Select(s => s.ListaApropriacaoAdiantamento)),
+                l => l.ListaImposto,
+                l => l.ListaMovimentoEstoque,
+                l => l.OrdemCompraFrete,
+                l => l.TituloFrete.ListaApropriacao);
+
+            //if (!EhCancelamentoPossivel(entradaMaterial))
+            //    return false;
+
+            var fornecedorId = entradaMaterial.FornecedorNotaId.HasValue ? entradaMaterial.FornecedorNotaId : entradaMaterial.ClienteFornecedorId;
+
+            GerarTitulosAdiantamento(entradaMaterial, fornecedorId);
+            
+
+            entradaMaterial.Situacao = SituacaoEntradaMaterial.Fechada;
+            entradaMaterial.DataLiberacao = DateTime.Now;
+            entradaMaterial.LoginUsuarioLiberacao = UsuarioLogado.Login;
+
+            entradaMaterialRepository.Alterar(entradaMaterial);
+            entradaMaterialRepository.UnitOfWork.Commit();
+            //GravarLogOperacaoCancelamento(entradaMaterial, listaTitulosAlterados);
+            messageQueue.Add(Resource.OrdemCompra.SuccessMessages.CancelamentoComSucesso, TypeMessage.Success);
+            return true;
+        }
+
+        private void GerarTitulosAdiantamento(EntradaMaterial entradaMaterial, int? fornecedorId)
+        {
+            var valorTotalLiberado = entradaMaterial.ListaFormaPagamento.Where(l => !l.OrdemCompraFormaPagamento.EhPagamentoAntecipado.Value).Sum(s => s.Valor);
+            var valorTotalItens = entradaMaterial.ListaItens.Sum(l => l.ValorTotal);
+            var valorDesconto = (decimal)(entradaMaterial.PercentualDesconto.HasValue ? valorTotalItens * entradaMaterial.Desconto / 100 : entradaMaterial.Desconto);
+
+            foreach (var formaPagamentoEM in entradaMaterial.ListaFormaPagamento)
+            {
+                var percentualTitulo = formaPagamentoEM.Valor / valorTotalLiberado * 100;
+                var descontoTitulo = (decimal)(valorDesconto * percentualTitulo / 100);
+                TituloPagarAdiantamento tituloPagarAdiantamento = null;
+                #region Geração de títulos
+
+                if (formaPagamentoEM.OrdemCompraFormaPagamento.EhPagamentoAntecipado.Value)
+                {
+                    tituloPagarAdiantamento = new TituloPagarAdiantamento();
+                    tituloPagarAdiantamento.ClienteId = fornecedorId;
+                    tituloPagarAdiantamento.Identificacao = "Ref.OC : " + formaPagamentoEM.OrdemCompraFormaPagamento.OrdemCompraId + " EM : " + entradaMaterial.Id;
+                    tituloPagarAdiantamento.TipoDocumentoId = entradaMaterial.TipoNotaFiscalId;
+                    tituloPagarAdiantamento.Documento = entradaMaterial.NumeroNotaFiscal;
+                    tituloPagarAdiantamento.DataEmissaoDocumento = entradaMaterial.DataEmissaoNota.Value;
+                    tituloPagarAdiantamento.ValorAdiantamento = formaPagamentoEM.Valor;
+                    tituloPagarAdiantamento.LoginUsuarioCadastro = UsuarioLogado.Login;
+                    tituloPagarAdiantamento.DataCadastro = DateTime.Now;
+                    tituloPagarAdiantamento.TituloPagarId = formaPagamentoEM.TituloPagarId;
+                    tituloPagarAdiantamento.EntradaMaterialFormaPagamentoId = formaPagamentoEM.Id;
+                    formaPagamentoEM.ListaTituloPagarAdiantamento.Add(tituloPagarAdiantamento);
+                }
+                else
+                {
+                    if (!formaPagamentoEM.TituloPagarId.HasValue)
+                    {
+                        formaPagamentoEM.TituloPagar = new TituloPagar();
+                        formaPagamentoEM.TituloPagar.TipoCompromissoId = formaPagamentoEM.TipoCompromissoId;
+                        formaPagamentoEM.TituloPagar.TipoTitulo = TipoTitulo.Normal;
+                        formaPagamentoEM.TituloPagar.Multa = 0;
+                        formaPagamentoEM.TituloPagar.EhMultaPercentual = false;
+                        formaPagamentoEM.TituloPagar.TaxaPermanencia = 0;
+                        formaPagamentoEM.TituloPagar.EhTaxaPermanenciaPercentual = false;
+                        formaPagamentoEM.TituloPagar.LoginUsuarioCadastro = UsuarioLogado.Login;
+                        formaPagamentoEM.TituloPagar.DataCadastro = DateTime.Now;
+                        formaPagamentoEM.TituloPagar.SistemaOrigem = "OC";
+                    }
+
+                    formaPagamentoEM.TituloPagar.Identificacao = "Ref.OC : " + formaPagamentoEM.OrdemCompraFormaPagamento.OrdemCompraId + " EM : " + entradaMaterial.Id;
+					formaPagamentoEM.TituloPagar.ClienteId = fornecedorId.Value;
+                    formaPagamentoEM.TituloPagar.DataVencimento = formaPagamentoEM.Data;
+					formaPagamentoEM.TituloPagar.ValorTitulo = formaPagamentoEM.Valor;
+                    formaPagamentoEM.TituloPagar.ValorImposto = entradaMaterial.ListaImposto.Where(l => l.ImpostoFinanceiro.EhRetido.Value).Sum(l => l.Valor) * percentualTitulo / 100;
+					formaPagamentoEM.TituloPagar.DataEmissaoDocumento = entradaMaterial.DataEmissaoNota.Value;
+					formaPagamentoEM.TituloPagar.Situacao = ParametrosOrdemCompra.GeraTituloAguardando.Value ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado;
+					formaPagamentoEM.TituloPagar.TipoDocumentoId = entradaMaterial.TipoNotaFiscalId;
+					formaPagamentoEM.TituloPagar.Documento = entradaMaterial.NumeroNotaFiscal;
+					formaPagamentoEM.TituloPagar.Desconto = entradaMaterial.Desconto;
+                    formaPagamentoEM.TituloPagar.DataLimiteDesconto = null;
+                    if (valorDesconto > 0)
+                        formaPagamentoEM.TituloPagar.DataLimiteDesconto = formaPagamentoEM.Data;
+
+                    formaPagamentoEM.TituloPagar.LoginUsuarioApropriacao = UsuarioLogado.Login;
+                    formaPagamentoEM.TituloPagar.DataApropriacao = DateTime.Now;
+
+                    formaPagamentoEM.OrdemCompraFormaPagamento.Data = formaPagamentoEM.Data;
+                    formaPagamentoEM.OrdemCompraFormaPagamento.Valor = formaPagamentoEM.Valor;
+                    formaPagamentoEM.OrdemCompraFormaPagamento.TituloPagar = formaPagamentoEM.TituloPagar;
+                }
+
+                #endregion
+
+                foreach (var ordemCompra in entradaMaterial.ListaItens.Select(l => l.OrdemCompraItem.OrdemCompra).Distinct())
+                {
+                    //var listaFormaPagamentoNaoUtulizada = ordemCompra.ListaOrdemCompraFormaPagamento.Where(l => l.EhUtilizada == false);
+                    //List<Apropriacao> listaApropriacao = listaFormaPagamentoNaoUtulizada.SelectMany(o => o.TituloPagar.ListaApropriacao).ToList();
+                    //if (entradaMaterial.TituloFreteId.HasValue)
+                    //    listaApropriacao.AddRange(entradaMaterial.TituloFrete.ListaApropriacao);
+
+                    //for (int i = listaApropriacao.Count() - 1; i >= 0; i--)
+                    //{
+                    //    var apropriacao = listaApropriacao.ToList()[i];
+                    //    apropriacaoRepository.Remover(apropriacao);
+                    //}
+
+                    var listaItensPorOC = entradaMaterial.ListaItens.Where(l => l.OrdemCompraItem.OrdemCompraId == ordemCompra.Id).ToList();
+                    var valorTotal = listaItensPorOC.Sum(o => o.ValorTotal);
+                    //var valorTotalPendente = ordemCompra.ListaItens.Where(l => l.Quantidade > l.QuantidadeEntregue).Sum(o => (o.Quantidade - o.QuantidadeEntregue) * o.ValorUnitario);
+                    var listaCodigoClasses = ordemCompra.ListaItens.Where(l => l.OrdemCompraId == ordemCompra.Id).Select(o => o.CodigoClasse).Distinct();
+                    foreach (var codigoClasse in listaCodigoClasses)
+                    {
+                        var valorTotalClasse = listaItensPorOC.Where(l => l.CodigoClasse == codigoClasse).Sum(o => o.ValorTotal);
+                        var percentualClasse = decimal.Round((valorTotalClasse / valorTotal * 100).Value, 5);
+
+                        Apropriacao apropriacao = new Apropriacao();
+                        apropriacao.CodigoClasse = codigoClasse;
+                        apropriacao.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
+                        apropriacao.TituloPagar = formaPagamentoEM.TituloPagar;
+                        apropriacao.Percentual = percentualClasse;
+                        apropriacao.Valor = formaPagamentoEM.Valor * apropriacao.Percentual / 100;
+
+                        formaPagamentoEM.TituloPagar.ListaApropriacao.Add(apropriacao);
+
+                        if (tituloPagarAdiantamento != null)
+                        {
+                            ApropriacaoAdiantamento apropriacaoAdiantamento = new ApropriacaoAdiantamento();
+                            apropriacaoAdiantamento.CodigoClasse = codigoClasse;
+                            apropriacaoAdiantamento.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
+                            apropriacaoAdiantamento.TituloPagarAdiantamento = tituloPagarAdiantamento;
+                            apropriacaoAdiantamento.Percentual = percentualClasse;
+                            apropriacaoAdiantamento.Valor = formaPagamentoEM.Valor * apropriacao.Percentual / 100;
+
+                            tituloPagarAdiantamento.ListaApropriacaoAdiantamento.Add(apropriacaoAdiantamento);
+                        }
+
+                        //if (entradaMaterial.TituloFreteId.HasValue)
+                        //{
+                        //    Apropriacao apropriacaoTituloFrete = new Apropriacao();
+                        //    apropriacaoTituloFrete.CodigoClasse = codigoClasse;
+                        //    apropriacaoTituloFrete.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
+                        //    apropriacaoTituloFrete.TituloPagarId = entradaMaterial.TituloFreteId;
+                        //    apropriacaoTituloFrete.Percentual = percentualClasse;
+                        //    apropriacaoTituloFrete.Valor = entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100;
+
+                        //    entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
+                        //}
+                    }
+                }
+
+
+            }
+        }
+
         public FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato)
         {
             if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialImprimir))
@@ -214,13 +393,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             objRel.Database.Tables["OrdemCompra_entradaMaterialFormaPagamentoRelatorio"].SetDataSource(ListaFormaPagamentoToDataTable(entradaMaterial.ListaFormaPagamento.ToList()));
             objRel.Database.Tables["OrdemCompra_entradaMaterialImpostoRelatorio"].SetDataSource(ListaImpostoToDataTable(entradaMaterial.ListaImposto.ToList()));
 
-            var parametros = parametrosOrdemCompraRepository.Obter();
             var centroCusto = centroCustoRepository.ObterPeloCodigo(entradaMaterial.CodigoCentroCusto, l => l.ListaCentroCustoEmpresa);
 
-            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, ParametrosOrdemCompra);
             objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 
-            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, ParametrosOrdemCompra);
             objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
 
             FileDownloadDTO arquivo = new FileDownloadDTO(
@@ -268,6 +446,15 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         public bool EhPermitidoLiberarTitulos(EntradaMaterialDTO dto)
         {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialLiberar))
+                return false;
+
+            if (!dto.Id.HasValue)
+                return false;
+
+            if (!PodeLiberarNaSituacaoAtual(dto.Situacao))
+                return false;
+
             return true;
         }
 
@@ -828,6 +1015,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private bool PodeCancelarNaSituacaoAtual(SituacaoEntradaMaterial situacao)
         {
             return situacao != SituacaoEntradaMaterial.Cancelada;
+        }
+
+        private bool PodeLiberarNaSituacaoAtual(SituacaoEntradaMaterial situacao)
+        {
+            return situacao == SituacaoEntradaMaterial.Pendente;
         }
 
         private bool JaHouvePagamentoEfetuado(EntradaMaterial entradaMaterial)

@@ -204,5 +204,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 
             return PartialView("_NotificationMessagesPartial");
         }
+
+        [HttpPost]
+        public ActionResult LiberarTitulos(int? id, string motivo)
+        {
+            if (entradaMaterialAppService.LiberarTitulos(id))
+                return PartialView("Redirect", Url.Action("Cadastro", "EntradaMaterial", new { id = id }));
+
+            return PartialView("_NotificationMessagesPartial");
+        }
     }
 }
