@@ -61,6 +61,8 @@
     <Compile Include="Configuration\Admin\UsuarioFuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Admin\PerfilFuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoConfiguration.cs" />
+    <Compile Include="Configuration\Contrato\ContratoRetencaoConfiguration.cs" />
+    <Compile Include="Configuration\Contrato\ContratoRetencaoLiberadaConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemCronogramaConfiguration.cs" />

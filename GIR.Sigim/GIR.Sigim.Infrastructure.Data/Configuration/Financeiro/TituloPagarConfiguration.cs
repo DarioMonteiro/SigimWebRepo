@@ -177,6 +177,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             Property(l => l.TituloPrincipalAgrupamentoId)
                 .HasColumnName("tituloPrincipalAgrupamento");
+
+            HasMany<ContratoRetencaoLiberada>(l => l.ListaContratoRetencaoLiberada)
+                .WithOptional(c => c.TituloPagar)
+                .HasForeignKey(c => c.TituloPagarId);
+
         }
     }
 }

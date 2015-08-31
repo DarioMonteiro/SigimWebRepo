@@ -66,6 +66,8 @@
     <Compile Include="DTO\Admin\UsuarioDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoDTO.cs" />
+    <Compile Include="DTO\Contrato\ContratoRetencaoDTO.cs" />
+    <Compile Include="DTO\Contrato\ContratoRetencaoLiberadaDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoItemCronogramaDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetificacaoItemDTO.cs" />
@@ -75,8 +77,10 @@
     <Compile Include="DTO\Contrato\LicitacaoCronogramaDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDTO.cs" />
+    <Compile Include="DTO\Contrato\ListaLiberacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
     <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
+    <Compile Include="DTO\Contrato\ResumoLiberacaoDTO.cs" />
     <Compile Include="DTO\Estoque\MovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />

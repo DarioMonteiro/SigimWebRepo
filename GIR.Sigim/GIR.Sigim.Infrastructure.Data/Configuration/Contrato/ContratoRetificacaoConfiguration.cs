@@ -106,6 +106,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
             HasMany<ContratoRetificacaoItemImposto>(l => l.ListaContratoRetificacaoItemImposto)
                 .WithRequired(c => c.ContratoRetificacao)
                 .HasForeignKey(c => c.ContratoRetificacaoId);
+
+            HasMany<ContratoRetencao>(l => l.ListaContratoRetencao)
+                .WithRequired(c => c.ContratoRetificacao)
+                .HasForeignKey(c => c.ContratoRetificacaoId);  
+
         }
     }
 }

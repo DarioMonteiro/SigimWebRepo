@@ -69,6 +69,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<EntradaMaterialFormaPagamento> ListaEntradaMaterialFormaPagamento { get; set; }
         public ICollection<TituloPagarAdiantamento> ListaTituloPagarAdiantamento { get; set; }
         public ICollection<Apropriacao> ListaApropriacao { get; set; }
+        public ICollection<ContratoRetencaoLiberada> ListaContratoRetencaoLiberada { get; set; }
 
         public TituloPagar()
         {
@@ -80,6 +81,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaEntradaMaterialFormaPagamento = new HashSet<EntradaMaterialFormaPagamento>();
             this.ListaTituloPagarAdiantamento = new HashSet<TituloPagarAdiantamento>();
             this.ListaApropriacao = new HashSet<Apropriacao>();
+            this.ListaContratoRetencaoLiberada = new HashSet<ContratoRetencaoLiberada>();
         }
     }
 }

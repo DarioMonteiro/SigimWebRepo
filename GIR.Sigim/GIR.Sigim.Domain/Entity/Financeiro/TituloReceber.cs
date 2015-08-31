@@ -16,10 +16,12 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ContratoRetificacaoProvisao ContratoRetificacaoProvisao { get; set; }
 
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
+        public ICollection<ContratoRetencaoLiberada> ListaContratoRetencaoLiberada { get; set; }
 
         public TituloReceber()
         {
             this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
+            this.ListaContratoRetencaoLiberada = new HashSet<ContratoRetencaoLiberada>();
         }
     }
 }

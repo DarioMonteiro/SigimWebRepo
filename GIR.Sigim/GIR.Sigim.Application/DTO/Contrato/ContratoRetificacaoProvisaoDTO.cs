@@ -11,7 +11,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
     {
         public int ContratoId { get; set; }
         //public ContratoDTO Contrato { get; set; }
-        public int ContratoRetificaocaoId { get; set; }
+        public int ContratoRetificacaoId { get; set; }
         public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
         public int? ContratoRetificacaoItemId { get; set; }
         public ContratoRetificacaoItemDTO ContratoRetificacaoItem { get; set; }
@@ -52,14 +52,6 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public Nullable<DateTime> DataAntecipacao { get; set; }
         public string UsuarioAntecipacao { get; set; }
         public string DocumentoAntecipacao { get; set; }
-
-
-        //public TotalizadoresMedicaoDTO Totalizadores { get; set; }
-
-        //public ContratoRetificacaoProvisaoDTO()
-        //{
-        //    this.Totalizadores = new TotalizadoresMedicaoDTO();
-        //}
 
     }
 }

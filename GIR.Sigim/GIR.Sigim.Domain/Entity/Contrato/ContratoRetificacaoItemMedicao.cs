@@ -66,6 +66,12 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public Nullable<DateTime> DataCadastro { get; set; }
         public decimal? Desconto { get; set; }
         public string MotivoDesconto { get; set; }
+        public ICollection<ContratoRetencao> ListaContratoRetencao { get; set; }
+
+        public ContratoRetificacaoItemMedicao()
+        {
+            this.ListaContratoRetencao = new HashSet<ContratoRetencao>();
+        }
 
         private bool ValidaData(string Data)
         {

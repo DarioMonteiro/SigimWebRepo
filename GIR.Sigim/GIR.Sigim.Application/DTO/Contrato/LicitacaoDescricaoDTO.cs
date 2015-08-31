@@ -10,11 +10,11 @@ namespace GIR.Sigim.Application.DTO.Contrato
     {
         public string Descricao { get; set; }
 
-        public ICollection<ContratoDTO> ListaContrato { get; set; }
+        public List<ContratoDTO> ListaContrato { get; set; }
 
         public LicitacaoDescricaoDTO()
         {
-            this.ListaContrato = new HashSet<ContratoDTO>(); 
+            this.ListaContrato = new List<ContratoDTO>(); 
         }
 
     }

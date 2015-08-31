@@ -30,6 +30,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .WithOptional(l => l.TituloReceber)
                 .HasForeignKey(c => c.TituloReceberId);
 
+            HasMany<ContratoRetencaoLiberada>(l => l.ListaContratoRetencaoLiberada)
+                .WithOptional(c => c.TituloReceber)
+                .HasForeignKey(c => c.TituloReceberId);
+
         }
     }
 }

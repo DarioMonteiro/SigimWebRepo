@@ -9,6 +9,8 @@ using GIR.Sigim.Application.Service.Contrato;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel;
+using GIR.Sigim.Application.DTO.Contrato;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -19,6 +21,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
         private IClienteFornecedorAppService clienteFornecedorAppService;
         private IContratoAppService contratoAppService;
+        private IContratoRetificacaoAppService contratoRetificacaoAppService;
+        private IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
 
         #endregion
 
@@ -26,11 +30,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
         public LiberacaoContratoController(IClienteFornecedorAppService clienteFornecedorAppService,
                                            IContratoAppService contratoAppService,
+                                           IContratoRetificacaoAppService contratoRetificacaoAppService,
+                                           IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
                                            MessageQueue messageQueue) 
             : base(messageQueue) 
         {
             this.clienteFornecedorAppService = clienteFornecedorAppService;
             this.contratoAppService = contratoAppService;
+            this.contratoRetificacaoAppService = contratoRetificacaoAppService;
+            this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
         }
 
         #endregion
@@ -83,7 +91,132 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
+        [Authorize(Roles = Funcionalidade.LiberacaoAcessar)]
+        public ActionResult Liberacao(int? id)
+        {
+            LiberacaoContratoLiberacaoViewModel model = new LiberacaoContratoLiberacaoViewModel();
+            ICollection<ContratoRetificacaoItemDTO> ListaItensUltimoContratoRetificacao = new HashSet<ContratoRetificacaoItemDTO>();
+
+            ContratoDTO contrato = contratoAppService.ObterPeloId(id, Usuario.Id) ?? new ContratoDTO();
+            ContratoRetificacaoItemDTO contratoRetificacaoItem = new ContratoRetificacaoItemDTO();
+
+            model.ListaServicoContratoRetificacaoItem = new SelectList(new List<ContratoRetificacaoItemDTO>(), "Id", "SequencialDescricaoItemComplemento");
+
+            model.ContratoRetificacaoItemMedicao.ContratoId = contrato.Id.Value;
+            model.Contrato = contrato;
+
+            if (id.HasValue && !contratoAppService.EhContratoExistente(contrato))
+            {
+                return View(model);
+            }
+
+            if (!contratoAppService.EhContratoComCentroCustoAtivo(contrato))
+            {
+                return View(model);
+            }
+
+            ContratoRetificacaoDTO contratoRetificacao = contrato.ListaContratoRetificacao.Last();
+
+            if (!contratoRetificacaoAppService.EhRetificacaoExistente(contratoRetificacao))
+            {
+                return View(model);
+            }
+
+            if (!contratoRetificacaoAppService.EhRetificacaoAprovada(contratoRetificacao))
+            {
+            }
+
+            model.ContratoRetificacaoItemMedicao.ContratoRetificacaoId = contratoRetificacao.Id.Value;
+
+            ListaItensUltimoContratoRetificacao = contratoRetificacao.ListaContratoRetificacaoItem;
+
+            ListaItensUltimoContratoRetificacao.Add(CriaRetificacaoItemFakeTodosOsItens());
+
+            model.ListaServicoContratoRetificacaoItem = new SelectList(ListaItensUltimoContratoRetificacao.OrderBy(l => l.Sequencial), "Id", "SequencialDescricaoItemComplemento", ListaItensUltimoContratoRetificacao.Select(l => l.Id.Value));
+
+            contratoAppService.PreencherResumo(contrato, contratoRetificacaoItem, model.Resumo);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult RecuperaContratoRetificacaoItem(int? contratoId, int? contratoRetificacaoItemId)
+        {
+            ResumoLiberacaoDTO resumo = new ResumoLiberacaoDTO();
+
+            if (contratoId.HasValue && contratoRetificacaoItemId.HasValue)
+            {
+                ContratoDTO contrato = contratoAppService.ObterPeloId(contratoId, Usuario.Id) ?? new ContratoDTO();
+
+                if (contratoId.HasValue && !contratoAppService.EhContratoExistente(contrato))
+                {
+                    var msg = messageQueue.GetAll()[0].Text;
+                    messageQueue.Clear();
+
+                    return Json(new
+                    {
+                        ehRecuperou = false,
+                        errorMessage = msg,
+                        resumo = resumo
+                    });
+                }
+
+                if (!contratoAppService.EhContratoComCentroCustoAtivo(contrato))
+                {
+                    var msg = messageQueue.GetAll()[0].Text;
+                    messageQueue.Clear();
+
+                    return Json(new
+                    {
+                        ehRecuperou = false,
+                        errorMessage = msg,
+                        resumo = resumo
+                    });
+                }
+
+                ContratoRetificacaoItemDTO contratoRetificacaoItem = new ContratoRetificacaoItemDTO();
+                if (contratoRetificacaoItemId.HasValue)
+                {
+                    if (contratoRetificacaoItemId > 0)
+                    {
+                        contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemId).FirstOrDefault() ?? new ContratoRetificacaoItemDTO();
+                    }
+                    contratoAppService.PreencherResumo(contrato, contratoRetificacaoItem,resumo);
+                    return Json(new
+                    {
+                        ehRecuperou = true,
+                        errorMessage = string.Empty,
+                        resumo = resumo
+                    });
+                }
+            }
+
+            return Json(new
+            {
+                ehRecuperou = false,
+                errorMessage = string.Empty,
+                resumo = resumo
+            });
+
+        }
+
+
         #endregion
 
+        #region Métodos Privados"
+
+        private ContratoRetificacaoItemDTO CriaRetificacaoItemFakeTodosOsItens()
+        {
+            ContratoRetificacaoItemDTO contratoRetificacaoItemTodos = new ContratoRetificacaoItemDTO();
+            contratoRetificacaoItemTodos.Servico = new ServicoDTO();
+            contratoRetificacaoItemTodos.Id = 0;
+            contratoRetificacaoItemTodos.Sequencial = 0;
+            contratoRetificacaoItemTodos.Servico.Id = 0;
+            contratoRetificacaoItemTodos.Servico.Descricao = "Todos os ítens do contrato";
+
+            return contratoRetificacaoItemTodos;
+        }
+
+        #endregion
     }
 }

@@ -166,6 +166,7 @@
     <Compile Include="Areas\Contrato\Controllers\LiberacaoContratoController.cs" />
     <Compile Include="Areas\Contrato\Controllers\MedicaoContratoController.cs" />
     <Compile Include="Areas\Contrato\Controllers\RelNotaFiscalLiberadaController.cs" />
+    <Compile Include="Areas\Contrato\ViewModel\LiberacaoContratoLiberacaoViewModel.cs" />
     <Compile Include="Areas\Contrato\ViewModel\LiberacaoContratoListaViewModel.cs" />
     <Compile Include="Areas\Contrato\ViewModel\MedicaoContratoListaViewModel.cs" />
     <Compile Include="Areas\Contrato\ViewModel\MedicaoContratoMedicaoViewModel.cs" />
@@ -390,6 +391,7 @@
     <Content Include="Areas\OrdemCompra\Views\OrdemCompra\ListaPesquisaPartial.cshtml" />
     <Content Include="Areas\Contrato\Views\LiberacaoContrato\Index.cshtml" />
     <Content Include="Areas\Contrato\Views\LiberacaoContrato\ListaPartial.cshtml" />
+    <Content Include="Areas\Contrato\Views\LiberacaoContrato\Liberacao.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>

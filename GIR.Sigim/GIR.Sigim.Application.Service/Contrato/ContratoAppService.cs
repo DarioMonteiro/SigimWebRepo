@@ -177,7 +177,10 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                   l => l.ContratoDescricao, 
                                                   l => l.ListaContratoRetificacao,
                                                   l => l.ListaContratoRetificacaoItem.Select(d => d.Servico),
-                                                  l => l.ListaContratoRetificacaoItemMedicao).To<ContratoDTO>();
+                                                  l => l.ListaContratoRetificacaoItemMedicao,
+                                                  l => l.ListaContratoRetificacaoItemCronograma,
+                                                  l => l.ListaContratoRetificacaoProvisao,
+                                                  l => l.ListaContratoRetencao.Select(d => d.ListaContratoRetencaoLiberada)).To<ContratoDTO>();
         }
 
         public bool EhContratoAssinado(ContratoDTO dto)
@@ -213,8 +216,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             return true;
         }
 
-
-        public List<ContratoRetificacaoProvisaoDTO> ObterListaCronograma(int contratoId, int contratoRetificacaoItemId)
+        public List<ContratoRetificacaoProvisaoDTO> ObterListaCronogramaPorContratoEhRetificacaoItem(int contratoId, int contratoRetificacaoItemId)
         {
             var contrato = contratoRepository.ObterPeloId(contratoId, 
                                                           l => l.ListaContratoRetificacaoItem.Select(i => i.Servico),
@@ -863,6 +865,133 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                 l => l.Contratante,
                                                 l => l.Contratado).To<List<ContratoDTO>>();
         }
+
+
+        public void PreencherResumo(ContratoDTO contrato, ContratoRetificacaoItemDTO contratoRetificacaoItemSelecionado, ResumoLiberacaoDTO resumo)
+        {
+            decimal valorTotalItem = 0;
+            decimal valorTotalItemSemRetencao = 0;
+            decimal valorTotalProvisionado = 0;
+            decimal valorTotalMedido = 0;
+            decimal totalAdiantado = 0;
+            decimal totalValorAdiantadoDescontado = 0;
+            decimal valorTotalAguardando = 0;
+            decimal valorTotalRetido = 0;
+            decimal valorRetido = 0;
+            decimal valorTotalRetencaoLiberada = 0;
+            decimal valorTotalLiberado = 0;
+            List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisao = null;
+            List<ContratoRetificacaoItemMedicaoDTO> listaContratoRetificacaoItemMedicao = null;
+            List<ContratoRetencaoLiberadaDTO> listaContratoRetencaoLiberada = null;
+
+            ContratoRetificacaoDTO contratoRetificacao = contrato.ListaContratoRetificacao.Last();
+
+
+            if (!contratoRetificacaoItemSelecionado.Id.HasValue)
+            {
+                listaContratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao;
+                listaContratoRetificacaoProvisao = contrato.ListaContratoRetificacaoProvisao.Where(l => l.ContratoRetificacaoId == contratoRetificacao.Id && l.ContratoRetificacaoItemId.HasValue).ToList();
+                listaContratoRetencaoLiberada = contrato.ListaContratoRetencao.SelectMany(l => l.ListaContratoRetencaoLiberada).ToList();
+                if (contrato.ValorContrato.HasValue) valorTotalItem = contrato.ValorContrato.Value;
+            }
+            else
+            {
+                listaContratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.SequencialItem == contratoRetificacaoItemSelecionado.Sequencial).ToList();
+                listaContratoRetificacaoProvisao = contrato.ListaContratoRetificacaoProvisao.Where(l => l.ContratoRetificacaoItemId == contratoRetificacaoItemSelecionado.Id).ToList();
+                listaContratoRetencaoLiberada = contrato.ListaContratoRetencao.
+                                                SelectMany(l => l.ListaContratoRetencaoLiberada.
+                                                                Where(m => m.ContratoRetencao.ContratoRetificacaoItem.Sequencial == contratoRetificacaoItemSelecionado.Sequencial)).ToList();
+                if (contratoRetificacaoItemSelecionado.ValorItem.HasValue) valorTotalItem = contratoRetificacaoItemSelecionado.ValorItem.Value;
+            }
+            valorTotalItemSemRetencao = valorTotalItem;
+
+
+
+            decimal retencaoContratual = 0;
+            if (contratoRetificacao.RetencaoContratual.HasValue)
+            {
+                retencaoContratual = contratoRetificacao.RetencaoContratual.Value;
+            }
+            decimal valorContratoRetido = 0;
+            if (retencaoContratual > 0)
+            {
+                valorTotalItemSemRetencao = valorTotalItem - (valorTotalItem * retencaoContratual) / 100;
+                valorContratoRetido = valorTotalItem - valorTotalItemSemRetencao;
+            }
+            else
+            {
+                if (!contratoRetificacaoItemSelecionado.Id.HasValue)
+                {
+                    valorContratoRetido = (from item in contratoRetificacao.ListaContratoRetificacaoItem
+                                           select (((((item.ValorItem.HasValue ? item.ValorItem.Value : 0) * (item.BaseRetencaoItem.HasValue ? item.BaseRetencaoItem.Value : 0)) / 100) * (item.RetencaoItem.HasValue ? item.RetencaoItem.Value : 0)) / 100)).Sum();
+                }
+                else
+                {
+                    valorContratoRetido = (from item in contratoRetificacao.ListaContratoRetificacaoItem
+                                           where (item.Id == contratoRetificacaoItemSelecionado.Id)
+                                           select (((((item.ValorItem.HasValue ? item.ValorItem.Value : 0) * (item.BaseRetencaoItem.HasValue ? item.BaseRetencaoItem.Value : 0)) / 100) * (item.RetencaoItem.HasValue ? item.RetencaoItem.Value : 0)) / 100)).Sum();
+                }
+                valorTotalItemSemRetencao = valorTotalItem - valorContratoRetido;
+            }
+
+            if (listaContratoRetificacaoProvisao.Count > 0)
+            {
+                foreach (var provisao in listaContratoRetificacaoProvisao)
+                {
+                    valorTotalProvisionado = valorTotalProvisionado + provisao.Valor;
+                    bool ehPagamentoAntecipado = provisao.PagamentoAntecipado.HasValue ? provisao.PagamentoAntecipado.Value : false;
+                    if (ehPagamentoAntecipado)
+                    {
+                        totalAdiantado = totalAdiantado + provisao.Valor;
+                        if (provisao.ValorAdiantadoDescontado.HasValue)
+                        {
+                            totalValorAdiantadoDescontado = totalValorAdiantadoDescontado + provisao.ValorAdiantadoDescontado.Value;
+                        }
+                    }
+                }
+            }
+
+            if (listaContratoRetificacaoItemMedicao.Count > 0)
+            {
+                foreach (var medicao in listaContratoRetificacaoItemMedicao)
+                {
+                    valorTotalMedido = valorTotalMedido + medicao.Valor;
+                    bool ehSituacaoMedicaoLiberado = contratoRetificacaoItemMedicaoAppService.EhSituacaoMedicaoLiberado(medicao);
+                    if (ehSituacaoMedicaoLiberado)
+                    {
+                        valorTotalLiberado = valorTotalLiberado + medicao.Valor;
+                    }
+                    else
+                    {
+                        valorTotalAguardando = valorTotalAguardando + medicao.Valor;
+                    }
+                    valorRetido = 0;
+                    if (medicao.ValorRetido.HasValue) valorRetido = medicao.ValorRetido.Value;
+                    valorTotalRetido = valorTotalRetido + valorRetido;
+                }
+            }
+
+            if (listaContratoRetencaoLiberada.Count > 0)
+            {
+                foreach (var retLib in listaContratoRetencaoLiberada)
+                {
+                    valorTotalRetencaoLiberada = valorTotalRetencaoLiberada + retLib.ValorLiberado;
+                }
+            }
+
+            resumo.ValorContratado = valorTotalItem;
+            resumo.ValorRetidoContrato = valorContratoRetido;
+            resumo.ValorProvisionado = valorTotalProvisionado;
+            resumo.ValorMedido = valorTotalMedido;
+            resumo.Diferenca = valorTotalItem - valorTotalProvisionado - valorTotalMedido - totalAdiantado + totalValorAdiantadoDescontado;
+            resumo.AguardandoLiberacao = valorTotalAguardando;
+            resumo.Retido = valorTotalRetido - valorTotalRetencaoLiberada;
+            resumo.Liberado = valorTotalLiberado;
+            resumo.RetencaoLiberada = valorTotalRetencaoLiberada;
+            resumo.Saldo = valorTotalItem - valorTotalMedido;
+
+        }
+
 
         #endregion
 

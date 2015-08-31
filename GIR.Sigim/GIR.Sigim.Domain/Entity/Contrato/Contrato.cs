@@ -33,6 +33,26 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public string UsuarioCancela { get; set; }
         public string MotivoCancela { get; set; }
         public int TipoContrato { get; set; }
+        public ICollection<ContratoRetificacao> ListaContratoRetificacao { get; set; }
+        public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
+        public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
+        public ICollection<ContratoRetificacaoItemCronograma> ListaContratoRetificacaoItemCronograma { get; set; }
+        public ICollection<ContratoRetificacaoItemImposto> ListaContratoRetificacaoItemImposto { get; set; }
+        public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
+        public ICollection<ContratoRetencao> ListaContratoRetencao { get; set; }
+
+        public Contrato()
+        {
+            this.Situacao = SituacaoContrato.Minuta;
+            this.ListaContratoRetificacao = new HashSet<ContratoRetificacao>();
+            this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>();
+            this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
+            this.ListaContratoRetificacaoItemCronograma = new HashSet<ContratoRetificacaoItemCronograma>();
+            this.ListaContratoRetificacaoItemImposto = new HashSet<ContratoRetificacaoItemImposto>();
+            this.ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisao>();
+            this.ListaContratoRetencao = new HashSet<ContratoRetencao>();
+        }
+
 
         public decimal ObterQuantidadeTotalMedida(int? sequencialItem, int? sequencialCronograma)
         {
@@ -194,24 +214,6 @@ namespace GIR.Sigim.Domain.Entity.Contrato
             bool temMedicaoALiberar = (quantidadeMedicaoALiberar > 0) ? true : false;
 
             return temMedicaoALiberar;
-        }
-
-        public ICollection<ContratoRetificacao> ListaContratoRetificacao { get; set; }
-        public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
-        public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
-        public ICollection<ContratoRetificacaoItemCronograma> ListaContratoRetificacaoItemCronograma { get; set; }
-        public ICollection<ContratoRetificacaoItemImposto> ListaContratoRetificacaoItemImposto { get; set; }
-        public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
-
-        public Contrato()
-        {
-            this.Situacao = SituacaoContrato.Minuta;
-            this.ListaContratoRetificacao = new HashSet<ContratoRetificacao>();
-            this.ListaContratoRetificacaoItem = new HashSet<ContratoRetificacaoItem>(); 
-            this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
-            this.ListaContratoRetificacaoItemCronograma = new HashSet<ContratoRetificacaoItemCronograma>();
-            this.ListaContratoRetificacaoItemImposto = new HashSet<ContratoRetificacaoItemImposto>();
-            this.ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisao>();
         }
 
     }

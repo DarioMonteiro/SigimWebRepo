@@ -113,6 +113,8 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new LicitacaoConfiguration());
             modelBuilder.Configurations.Add(new LicitacaoCronogramaConfiguration());
             modelBuilder.Configurations.Add(new ContratoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetencaoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetencaoLiberadaConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoProvisaoConfiguration());

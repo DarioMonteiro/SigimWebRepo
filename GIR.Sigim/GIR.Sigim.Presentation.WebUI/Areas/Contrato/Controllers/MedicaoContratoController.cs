@@ -210,7 +210,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (contratoId.HasValue && contratoRetificacaoItemId.HasValue)
             {
-                listaContratoRetificacaoProvisao = contratoAppService.ObterListaCronograma(contratoId.Value, contratoRetificacaoItemId.Value);
+                listaContratoRetificacaoProvisao = contratoAppService.ObterListaCronogramaPorContratoEhRetificacaoItem(contratoId.Value, contratoRetificacaoItemId.Value);
 
                 ContratoDTO contrato = contratoAppService.ObterPeloId(contratoId.Value, Usuario.Id);
                 contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemId).SingleOrDefault();
@@ -271,7 +271,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 errorMessage = string.Empty,
                 ehNaturezaItemPorPrecoGlobal = true,
                 ehNaturezaItemPorPrecoUnitario = false,
-                contratoRetificacaoItem = contratoRetificacaoItem,
+                contratoRetificacaoItem = contratoRetificacaoItem
             });
         }
 
