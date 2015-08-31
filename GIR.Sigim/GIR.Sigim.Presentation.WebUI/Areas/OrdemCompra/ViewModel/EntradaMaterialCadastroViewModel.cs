@@ -25,6 +25,76 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public SelectList ListaSerieNF { get; set; }
         public SelectList ListaCST { get; set; }
         public SelectList ListaCodigoContribuicao { get; set; }
+        public SelectList ListaComplementoNaturezaOperacao { get; set; }
+        public SelectList ListaComplementoCST { get; set; }
+        public SelectList ListaNaturezaReceita { get; set; }
+
+        public MaterialDTO Material { get; set; }
+        public ClasseDTO Classe { get; set; }
+
+        [Display(Name = "Complemento")]
+        public string Complemento { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Quantidade")]
+        public decimal Quantidade { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Valor unitário")]
+        public decimal ValorUnitario { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Desconto %")]
+        public decimal Desconto { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Total")]
+        public decimal ValorTotal { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Base ICMS")]
+        public decimal BaseICMS { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "ICMS %")]
+        public decimal PercentualICMS { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Valor ICMS")]
+        public decimal ValorICMS { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Base IPI")]
+        public decimal BaseIPI { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "IPI %")]
+        public decimal PercentualIPI { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Valor IPI")]
+        public decimal ValorIPI { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Base ICMSST")]
+        public decimal BaseICMSST { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "ICMSST %")]
+        public decimal PercentualICMSST { get; set; }
+
+        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [Display(Name = "Valor ICMSST")]
+        public decimal ValorICMSST { get; set; }
+
+        [Display(Name = "Complemento natureza operação")]
+        public int? ComplementoNaturezaOperacaoId { get; set; }
+
+        [Display(Name = "Complemento CST")]
+        public int? ComplementoCSTId { get; set; }
+
+        [Display(Name = "Natureza da receita")]
+        public int? NaturezaReceitaId { get; set; }
 
         public bool ExisteEstoqueParaCentroCusto { get; set; }
         public bool ExisteMovimentoNoEstoque { get; set; }
@@ -32,8 +102,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public bool PodeCancelarEntrada { get; set; }
         public bool PodeImprimir { get; set; }
         public bool PodeLiberarTitulos { get; set; }
+        public bool PodeAdicionarItem { get; set; }
+        public bool PodeCancelarItem { get; set; }
+        public bool PodeEditarItem { get; set; }
 
         public bool PodeEditarCentroCusto { get; set; }
         public bool PodeEditarFornecedor { get; set; }
+
+        public EntradaMaterialCadastroViewModel()
+        {
+            Material = new MaterialDTO();
+            Classe = new ClasseDTO();
+        }
     }
 }

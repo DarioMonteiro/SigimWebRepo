@@ -133,7 +133,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.ListaOrdemCompraFormaPagamento.Select(s => s.TituloPagar.ListaApropriacao)),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar.Select(s => s.TituloPagarImposto)),
                 l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TituloPagar.ListaImpostoPagar),
-                l => l.ListaFormaPagamento.Select(o => o.ListaTituloPagarAdiantamento),
+                l => l.ListaFormaPagamento.Select(o => o.ListaTituloPagarAdiantamento.Select(s => s.ListaApropriacaoAdiantamento)),
                 l => l.ListaImposto,
                 l => l.ListaMovimentoEstoque,
                 l => l.OrdemCompraFrete,
@@ -147,22 +147,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 messageQueue.Add(Resource.OrdemCompra.ErrorMessages.InformeMotivoCancelamentoEntradaMaterial, TypeMessage.Error);
                 return false;
             }
-
-            entradaMaterial.MotivoCancelamento = motivo;
-            entradaMaterial.Situacao = SituacaoEntradaMaterial.Cancelada;
-            entradaMaterial.DataCancelamento = DateTime.Now;
-            entradaMaterial.LoginUsuarioCancelamento = UsuarioLogado.Login;
-            entradaMaterial.DataFrete = null;
-            entradaMaterial.TransportadoraId = null;
-            entradaMaterial.Transportadora = null;
-            entradaMaterial.TituloFreteId = null;
-            //entradaMaterial.TituloFrete = null;
-            entradaMaterial.ValorFrete = null;
-            entradaMaterial.NumeroNotaFrete = null;
-            entradaMaterial.TipoNotaFreteId = null;
-            entradaMaterial.TipoNotaFrete = null;
-            entradaMaterial.OrdemCompraFreteId = null;
-            //entradaMaterial.OrdemCompraFrete = null;
 
             LiberarFreteDaOrdemCampra(entradaMaterial);
             LiberarOrdemCompra(entradaMaterial);
@@ -181,6 +165,20 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             RemoverEntradaMaterialItem(entradaMaterial);
             RemoverEntradaMaterialImposto(entradaMaterial);
             RemoverEntradaMaterialFormaPagamento(entradaMaterial);
+
+            entradaMaterial.MotivoCancelamento = motivo;
+            entradaMaterial.Situacao = SituacaoEntradaMaterial.Cancelada;
+            entradaMaterial.DataCancelamento = DateTime.Now;
+            entradaMaterial.LoginUsuarioCancelamento = UsuarioLogado.Login;
+            entradaMaterial.DataFrete = null;
+            entradaMaterial.TransportadoraId = null;
+            entradaMaterial.Transportadora = null;
+            entradaMaterial.TituloFreteId = null;
+            entradaMaterial.ValorFrete = null;
+            entradaMaterial.NumeroNotaFrete = null;
+            entradaMaterial.TipoNotaFreteId = null;
+            entradaMaterial.TipoNotaFrete = null;
+            entradaMaterial.OrdemCompraFreteId = null;
 
             entradaMaterialRepository.Alterar(entradaMaterial);
             entradaMaterialRepository.UnitOfWork.Commit();
@@ -271,6 +269,21 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         public bool EhPermitidoLiberarTitulos(EntradaMaterialDTO dto)
         {
             return true;
+        }
+
+        public bool EhPermitidoAdicionarItem(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
+        }
+
+        public bool EhPermitidoCancelarItem(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
+        }
+
+        public bool EhPermitidoEditarItem(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
         }
 
         public bool EhPermitidoEditarCentroCusto(EntradaMaterialDTO dto)
@@ -364,6 +377,10 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             for (int i = listaTituloPagarAdiantamento.Count() - 1; i >= 0; i--)
             {
+                var listaApropriacaoAdiantamento = listaTituloPagarAdiantamento[i].ListaApropriacaoAdiantamento.ToList();
+                for (int j = listaApropriacaoAdiantamento.Count() - 1; j >= 0; j--)
+                    tituloPagarRepository.RemoverApropriacaoAdiantamento(listaApropriacaoAdiantamento[j]);
+
                 tituloPagarRepository.RemoverTituloPagarAdiantamento(listaTituloPagarAdiantamento[i]);
             }
         }
@@ -481,7 +498,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 foreach (var codigoClasse in listaCodigoClasses)
                 {
                     var valorPendenteClasse = ordemCompra.ListaItens.Where(l => l.CodigoClasse == codigoClasse && l.Quantidade > l.QuantidadeEntregue).Sum(o => (o.Quantidade - o.QuantidadeEntregue) * o.ValorUnitario);
-                    var percentualClasse = valorPendenteClasse / valorTotalPendente * 100;
+                    var percentualClasse = decimal.Round((valorPendenteClasse / valorTotalPendente * 100).Value, 5);
 
                     foreach (var formaPagamento in listaFormaPagamentoNaoUtulizada)
                     {
@@ -489,8 +506,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                         apropriacao.CodigoClasse = codigoClasse;
                         apropriacao.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
                         apropriacao.TituloPagarId = formaPagamento.TituloPagarId;
-                        apropriacao.Percentual = percentualClasse.Value;
-                        apropriacao.Valor = (formaPagamento.Valor * percentualClasse / 100).Value;
+                        apropriacao.Percentual = percentualClasse;
+                        apropriacao.Valor = formaPagamento.Valor * apropriacao.Percentual / 100;
 
                         formaPagamento.TituloPagar.ListaApropriacao.Add(apropriacao);
                     }
@@ -501,8 +518,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                         apropriacaoTituloFrete.CodigoClasse = codigoClasse;
                         apropriacaoTituloFrete.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
                         apropriacaoTituloFrete.TituloPagarId = entradaMaterial.TituloFreteId;
-                        apropriacaoTituloFrete.Percentual = percentualClasse.Value;
-                        apropriacaoTituloFrete.Valor = (entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100).Value;
+                        apropriacaoTituloFrete.Percentual = percentualClasse;
+                        apropriacaoTituloFrete.Valor = entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100;
 
                         entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
                     }

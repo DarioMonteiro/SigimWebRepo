@@ -24,5 +24,12 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public TituloPagar TituloPagar { get; set; }
         public int? EntradaMaterialFormaPagamentoId { get; set; }
         public EntradaMaterialFormaPagamento EntradaMaterialFormaPagamento { get; set; }
+
+        public ICollection<ApropriacaoAdiantamento> ListaApropriacaoAdiantamento { get; set; }
+
+        public TituloPagarAdiantamento()
+        {
+            this.ListaApropriacaoAdiantamento = new HashSet<ApropriacaoAdiantamento>();
+        }
     }
 }

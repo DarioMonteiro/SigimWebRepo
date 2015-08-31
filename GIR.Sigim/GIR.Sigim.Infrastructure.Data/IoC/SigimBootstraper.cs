@@ -22,6 +22,8 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<ICifFobRepository, CifFobRepository>();
             Container.Current.RegisterType<IClienteFornecedorRepository, ClienteFornecedorRepository>();
             Container.Current.RegisterType<ICodigoContribuicaoRepository, CodigoContribuicaoRepository>();
+            Container.Current.RegisterType<IComplementoCSTRepository, ComplementoCSTRepository>();
+            Container.Current.RegisterType<IComplementoNaturezaOperacaoRepository, ComplementoNaturezaOperacaoRepository>();
             Container.Current.RegisterType<IContaCorrenteRepository, ContaCorrenteRepository>();
             Container.Current.RegisterType<ICSTRepository, CSTRepository>();
             Container.Current.RegisterType<IEstadoCivilRepository, EstadoCivilRepository>();
@@ -35,6 +37,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<IMaterialRepository, MaterialRepository>();
             Container.Current.RegisterType<INacionalidadeRepository, NacionalidadeRepository>();
             Container.Current.RegisterType<INaturezaOperacaoRepository, NaturezaOperacaoRepository>();
+            Container.Current.RegisterType<INaturezaReceitaRepository, NaturezaReceitaRepository>();
             Container.Current.RegisterType<IParentescoRepository, ParentescoRepository>();
             Container.Current.RegisterType<IProfissaoRepository, ProfissaoRepository>();
             Container.Current.RegisterType<IRamoAtividadeRepository, RamoAtividadeRepository>();

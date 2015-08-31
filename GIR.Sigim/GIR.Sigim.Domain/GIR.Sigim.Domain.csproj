@@ -71,6 +71,7 @@
     <Compile Include="Entity\Estoque\TipoMovimentoEstoque.cs" />
     <Compile Include="Entity\Financeiro\AbstractTitulo.cs" />
     <Compile Include="Entity\Financeiro\Apropriacao.cs" />
+    <Compile Include="Entity\Financeiro\ApropriacaoAdiantamento.cs" />
     <Compile Include="Entity\Financeiro\BloqueioSituacaoLiberado.cs" />
     <Compile Include="Entity\Financeiro\CentroCusto.cs" />
     <Compile Include="Entity\Financeiro\CentroCustoEmpresa.cs" />
@@ -145,6 +146,8 @@
     <Compile Include="Entity\Sigim\Agencia.cs" />
     <Compile Include="Entity\Sigim\ContaCorrente.cs" />
     <Compile Include="Entity\Sigim\AvaliacaoModelo.cs" />
+    <Compile Include="Entity\Sigim\ComplementoNaturezaOperacao.cs" />
+    <Compile Include="Entity\Sigim\NaturezaReceita.cs" />
     <Compile Include="Entity\Sigim\TipoValidade.cs" />
     <Compile Include="Entity\Sigim\TipoContaCorrente.cs" />
     <Compile Include="Entity\Sigim\LogAcesso.cs" />
@@ -221,6 +224,9 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\IComplementoCSTRepository.cs" />
+    <Compile Include="Repository\Sigim\IComplementoNaturezaOperacaoRepository.cs" />
+    <Compile Include="Repository\Sigim\INaturezaReceitaRepository.cs" />
     <Compile Include="Repository\Sigim\ILogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\IContaCorrenteRepository.cs" />
     <Compile Include="Repository\Sigim\IAgenciaRepository.cs" />
