@@ -213,5 +213,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 
             return PartialView("_NotificationMessagesPartial");
         }
+
+        [HttpPost]
+        public ActionResult ListarItensDeOrdemCompraLiberadaComSaldo(int? entradaMaterialId)
+        {
+            var jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItensDeOrdemCompraLiberadaComSaldo(entradaMaterialId));
+            var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll().First().Text : string.Empty;
+            messageQueue.Clear();
+            return Json(new { errorMessage = msg, itens = jsonItens });
+        }
     }
 }

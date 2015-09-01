@@ -31,6 +31,8 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
             get { return quantidadeEntregue.HasValue ? quantidadeEntregue : 0; }
             set { quantidadeEntregue = value; }
         }
+
+        public decimal? Saldo { get { return Quantidade - QuantidadeEntregue; } }
         
         public decimal? ValorUnitario { get; set; }
         public decimal? PercentualIPI { get; set; }

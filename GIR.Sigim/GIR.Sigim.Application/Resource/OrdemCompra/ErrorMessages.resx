@@ -144,6 +144,9 @@
   <data name="RequisicaoSituacaoInvalida" xml:space="preserve">
     <value>Requisição \"{0}\".</value>
   </data>
+  <data name="SelecioneUmaEntradaMaterial" xml:space="preserve">
+    <value>Selecione uma entrada de material.</value>
+  </data>
   <data name="SelecioneUmItemParaAprocacao" xml:space="preserve">
     <value>Selecione pelo menos 1 item para aprovação.</value>
   </data>

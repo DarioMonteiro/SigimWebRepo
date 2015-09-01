@@ -13,6 +13,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
     public class OrdemCompraItemDTO : BaseDTO
     {
         public int? OrdemCompraId { get; set; }
+        public DateTime DataOrdemCompra { get; set; }
         public int? RequisicaoMaterialItemId { get; set; }
         public int? CotacaoItemId { get; set; }
         public int? MaterialId { get; set; }
@@ -28,15 +29,6 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public decimal? PercentualDesconto { get; set; }
         public decimal? ValorTotalComImposto { get; set; }
         public decimal? ValorTotalItem { get; set; }
-        public decimal Saldo
-        {
-            get
-            {
-                decimal quantidadeEntregue = QuantidadeEntregue.HasValue ? QuantidadeEntregue.Value : 0;
-                decimal quantidade = Quantidade.HasValue ? Quantidade.Value : 0;
-                return quantidade - quantidadeEntregue;
-            }
-        }
-
+        public decimal? Saldo { get; set; }
     }
 }

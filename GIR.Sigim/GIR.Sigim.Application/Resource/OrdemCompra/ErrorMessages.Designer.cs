@@ -142,6 +142,15 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selecione uma entrada de material..
+        /// </summary>
+        public static string SelecioneUmaEntradaMaterial {
+            get {
+                return ResourceManager.GetString("SelecioneUmaEntradaMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selecione pelo menos 1 item para aprovação..
         /// </summary>
         public static string SelecioneUmItemParaAprocacao {

@@ -39,6 +39,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private ITituloPagarRepository tituloPagarRepository;
         private IApropriacaoRepository apropriacaoRepository;
         private ILogOperacaoAppService logOperacaoAppService;
+        private IOrdemCompraRepository ordemCompraRepository;
 
         private ParametrosOrdemCompra parametrosOrdemCompra;
         public ParametrosOrdemCompra ParametrosOrdemCompra
@@ -61,6 +62,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             ITituloPagarRepository tituloPagarRepository,
             IApropriacaoRepository apropriacaoRepository,
             ILogOperacaoAppService logOperacaoAppService,
+            IOrdemCompraRepository ordemCompraRepository,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -72,6 +74,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             this.tituloPagarRepository = tituloPagarRepository;
             this.apropriacaoRepository = apropriacaoRepository;
             this.logOperacaoAppService = logOperacaoAppService;
+            this.ordemCompraRepository = ordemCompraRepository;
         }
 
         #region IEntradaMaterialAppService Members
@@ -130,6 +133,29 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
                 l => l.ListaImposto,
                 l => l.ListaMovimentoEstoque).To<EntradaMaterialDTO>();
+        }
+
+        public List<OrdemCompraItemDTO> ListarItensDeOrdemCompraLiberadaComSaldo(int? entradaMaterialId)
+        {
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId, UsuarioLogado.Id);
+            if (entradaMaterial != null)
+            {
+                var specification = (Specification<Domain.Entity.OrdemCompra.OrdemCompra>)new TrueSpecification<Domain.Entity.OrdemCompra.OrdemCompra>();
+
+                specification &= OrdemCompraSpecification.EhLiberada();
+                specification &= OrdemCompraSpecification.PertenceAoCentroCustoIniciadoPor(entradaMaterial.CodigoCentroCusto);
+                specification &= OrdemCompraSpecification.MatchingFornecedorId(entradaMaterial.ClienteFornecedorId);
+
+                var listaOrdemCompra = ordemCompraRepository.ListarPeloFiltro(specification,
+                    l => l.ListaItens.Select(o => o.Classe),
+                    l => l.ListaItens.Select(o => o.Material));
+
+                return listaOrdemCompra.SelectMany(l => l.ListaItens.Where(o => o.Saldo > 0)).To<List<OrdemCompraItemDTO>>();
+            }
+            else {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return null;
+            }
         }
 
         public bool CancelarEntrada(int? id, string motivo)

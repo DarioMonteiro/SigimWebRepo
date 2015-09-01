@@ -39,7 +39,8 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<OrdemCompra, OrdemCompraDTO>();
             Mapper.CreateMap<OrdemCompraDTO, OrdemCompra>();
 
-            Mapper.CreateMap<OrdemCompraItem, OrdemCompraItemDTO>();
+            Mapper.CreateMap<OrdemCompraItem, OrdemCompraItemDTO>()
+                .ForMember(d => d.DataOrdemCompra, m => m.MapFrom(s => s.OrdemCompra.Data));
             Mapper.CreateMap<OrdemCompraItemDTO, OrdemCompraItem>();
 
             Mapper.CreateMap<ParametrosOrdemCompra, ParametrosOrdemCompraDTO>();
