@@ -120,7 +120,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         {
             var valorImpostoRetido = (from med in ListaContratoRetificacaoItemMedicao
                                       join itemImposto in ListaContratoRetificacaoItemImposto on med.ContratoRetificacaoItemId equals itemImposto.ContratoRetificacaoItemId
-                                      where (itemImposto.ImpostoFinanceiro.Retido == true) &&
+                                      where (itemImposto.ImpostoFinanceiro.EhRetido == true) &&
                                             ( med.SequencialItem == sequencialItem && 
                                               med.SequencialCronograma == sequencialCronograma &&
                                               med.ContratoRetificacaoItemId == contratoRetificacaoItemId) 
@@ -136,7 +136,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         {
             var valorImpostoRetidoMedicao = (from med in ListaContratoRetificacaoItemMedicao
                                              join itemImposto in ListaContratoRetificacaoItemImposto on med.ContratoRetificacaoItemId equals itemImposto.ContratoRetificacaoItemId
-                                             where (itemImposto.ImpostoFinanceiro.Retido == true) &&
+                                             where (itemImposto.ImpostoFinanceiro.EhRetido == true) &&
                                                    (med.SequencialItem == sequencialItem &&
                                                     med.SequencialCronograma == sequencialCronograma &&
                                                     med.ContratoRetificacaoItemId == contratoRetificacaoItemId &&

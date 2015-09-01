@@ -77,7 +77,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             impostoFinanceiro.ContaContabil = dto.ContaContabil;
             impostoFinanceiro.ClienteId = dto.ClienteId;
             impostoFinanceiro.TipoCompromissoId = dto.TipoCompromissoId;
-            impostoFinanceiro.Retido = dto.Retido;
+            impostoFinanceiro.EhRetido = dto.Retido;
             impostoFinanceiro.Indireto = dto.Indireto;
             impostoFinanceiro.PagamentoEletronico = dto.PagamentoEletronico;
             impostoFinanceiro.Periodicidade = dto.Periodicidade;

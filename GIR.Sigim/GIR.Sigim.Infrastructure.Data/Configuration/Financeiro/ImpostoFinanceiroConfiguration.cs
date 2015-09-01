@@ -39,7 +39,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                .HasPrecision(18, 5)
                .HasColumnOrder(4);
 
-            Property(l => l.Retido)
+            Property(l => l.EhRetido)
                .HasColumnName("retido")
                .HasColumnOrder(5);
 

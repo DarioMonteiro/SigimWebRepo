@@ -164,6 +164,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string EntradaMaterialGravar = "ENTRADAMATERIAL_GRAVAR";
         public const string EntradaMaterialCancelar = "ENTRADAMATERIAL_CANCELAR";
         public const string EntradaMaterialImprimir = "ENTRADAMATERIAL_IMPRIMIR";
+        public const string EntradaMaterialLiberar = "ENTRADAMATERIAL_LIBERAR";
 
         public const string RelatorioItensOrdemCompraAcessar = "RELATORIOITENSORDEMCOMPRA_ACESSAR";
         public const string RelatorioItensOrdemCompraImprimir = "RELATORIOITENSORDEMCOMPRA_IMPRIMIR";

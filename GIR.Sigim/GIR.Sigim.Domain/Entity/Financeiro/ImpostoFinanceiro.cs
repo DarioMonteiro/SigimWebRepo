@@ -14,7 +14,12 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public string Sigla { get; set; }
         public string Descricao { get; set; }
         public decimal Aliquota { get; set; }
-        public bool? Retido { get; set; }
+        private bool? ehRetido;
+        public bool? EhRetido
+        {
+            get { return ehRetido.HasValue ? ehRetido : false; }
+            set { ehRetido = value; }
+        }
         public bool? Indireto { get; set; }
         public bool? PagamentoEletronico { get; set; }
         public TipoCompromisso TipoCompromisso { get; set; }

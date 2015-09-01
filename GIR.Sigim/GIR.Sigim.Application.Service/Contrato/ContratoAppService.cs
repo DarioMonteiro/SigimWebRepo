@@ -1329,7 +1329,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                             from i in contrato.ListaContratoRetificacaoItemImposto
                             join m in contrato.ListaContratoRetificacaoItemMedicao 
                             on i.ContratoRetificacaoItemId equals m.ContratoRetificacaoItemId 
-                            where ((i.ImpostoFinanceiro.Retido == true || i.ImpostoFinanceiro.Indireto == true) &&
+                            where ((i.ImpostoFinanceiro.EhRetido == true || i.ImpostoFinanceiro.Indireto == true) &&
                                    (m.TipoDocumentoId == tipoDocumentoId &&
                                     m.NumeroDocumento == numeroDocumento &&
                                     m.DataEmissao == dataEmissao &&
@@ -1345,7 +1345,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                             from i in contrato.ListaContratoRetificacaoItemImposto
                             join m in contrato.ListaContratoRetificacaoItemMedicao
                             on i.ContratoRetificacaoItemId equals m.ContratoRetificacaoItemId
-                            where ((i.ImpostoFinanceiro.Retido == true || i.ImpostoFinanceiro.Indireto == true) &&
+                            where ((i.ImpostoFinanceiro.EhRetido == true || i.ImpostoFinanceiro.Indireto == true) &&
                                    (m.TipoDocumentoId == tipoDocumentoId &&
                                     m.NumeroDocumento == numeroDocumento &&
                                     m.DataEmissao == dataEmissao))
@@ -1726,7 +1726,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 row[impostoFinanceiro] = item.Imposto.ImpostoFinanceiroId;
                 row[percentualBaseCalculo] = item.Imposto.PercentualBaseCalculo;
                 row[aliquota] = item.Imposto.ImpostoFinanceiro.Aliquota;
-                row[retido] = item.Imposto.ImpostoFinanceiro.Retido;
+                row[retido] = item.Imposto.ImpostoFinanceiro.EhRetido;
                 row[descricaoImposto] = item.Imposto.ImpostoFinanceiro.Descricao;
                 //Esse campo está no rpt mais vem da procedure Contrato.contratoRetificacaoItemImposto_RecuperaPorContratoDadosNota do desktop
                 //row[valorTotalMedido] = null;
