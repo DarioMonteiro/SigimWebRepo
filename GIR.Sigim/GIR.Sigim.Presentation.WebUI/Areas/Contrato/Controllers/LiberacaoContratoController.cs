@@ -11,6 +11,7 @@ using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel;
 using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.DTO.Sigim;
+using Newtonsoft.Json;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -124,6 +125,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             if (!contratoRetificacaoAppService.EhRetificacaoAprovada(contratoRetificacao))
             {
+                return View(model);
             }
 
             model.ContratoRetificacaoItemMedicao.ContratoRetificacaoId = contratoRetificacao.Id.Value;
@@ -134,7 +136,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             model.ListaServicoContratoRetificacaoItem = new SelectList(ListaItensUltimoContratoRetificacao.OrderBy(l => l.Sequencial), "Id", "SequencialDescricaoItemComplemento", ListaItensUltimoContratoRetificacao.Select(l => l.Id.Value));
 
-            contratoAppService.PreencherResumo(contrato, contratoRetificacaoItem, model.Resumo);
+            List<ItemListaLiberacaoDTO> listaItemListaLiberacao = new List<ItemListaLiberacaoDTO>();
+            contratoAppService.PreencherResumo(contrato, contratoRetificacaoItem, model.Resumo, listaItemListaLiberacao);
+
+            model.JsonListaItemListaLiberacao = JsonConvert.SerializeObject(listaItemListaLiberacao);
 
             return View(model);
         }
@@ -143,6 +148,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         public ActionResult RecuperaContratoRetificacaoItem(int? contratoId, int? contratoRetificacaoItemId)
         {
             ResumoLiberacaoDTO resumo = new ResumoLiberacaoDTO();
+            List<ItemListaLiberacaoDTO> listaItemListaLiberacao = new List<ItemListaLiberacaoDTO>();
 
             if (contratoId.HasValue && contratoRetificacaoItemId.HasValue)
             {
@@ -181,12 +187,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemId).FirstOrDefault() ?? new ContratoRetificacaoItemDTO();
                     }
-                    contratoAppService.PreencherResumo(contrato, contratoRetificacaoItem,resumo);
+                    contratoAppService.PreencherResumo(contrato, contratoRetificacaoItem, resumo, listaItemListaLiberacao);
                     return Json(new
                     {
                         ehRecuperou = true,
                         errorMessage = string.Empty,
-                        resumo = resumo
+                        resumo = resumo,
+                        listaItemListaLiberacao = JsonConvert.SerializeObject(listaItemListaLiberacao)
+
+                        //listaItemListaLiberacao = listaItemListaLiberacao
+
                     });
                 }
             }

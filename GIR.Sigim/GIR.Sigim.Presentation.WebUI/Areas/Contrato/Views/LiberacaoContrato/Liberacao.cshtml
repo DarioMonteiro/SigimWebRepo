@@ -22,6 +22,8 @@
                             new { @id = "formLiberacao", @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
+
+                        @Html.HiddenFor(m => m.JsonListaItemListaLiberacao)
                        
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
@@ -159,6 +161,35 @@
                                 <div id="collapseLiberacao" class="panel-collapse collapse" style="height: 0px;">
                                     <div class="panel-body no-padding">
                                         <fieldset>
+                                            <div class="widget-body">
+                                                <hr class="simple">
+                                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                    <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <th class="text-left">Item</th>
+                                                                <th class="text-left">Medição</th>
+                                                                <th class="text-left">Vencimento</th>
+                                                                <th class="text-left">Tipo documento</th>
+                                                                <th class="text-left">Nº documento</th>
+                                                                <th class="text-left">Emissão</th>
+                                                                <th class="text-left">Situação</th>
+                                                                <th class="text-left">Valor</th>
+                                                                <th class="text-left">Valor retido</th>
+                                                                <th class="text-left">Resp. medição</th>
+                                                                <th class="text-left">Título</th>
+                                                                <th class="text-left">Liberação</th>
+                                                                <th class="text-left">Resp. liberação</th>
+                                                                <th class="text-left" style="min-width: 90px;">Evento</th>
+                                                                <th class="text-left">Data cadastro</th>
+                                                                <th class="text-left">Avaliação</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </fieldset>
                                     </div>
                                 </div>
@@ -174,9 +205,12 @@
     </article>
 </div> 
 <script type="text/javascript">
+    jsonListaItemListaLiberacaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemListaLiberacao)").val());
+
     $(document).ready(function () {
 
         exibeInfoContrato();
+        preencheListaLiberacao();
 
         $(document).on("change", "#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)", function () {
             exibeInfoContrato();
@@ -231,6 +265,12 @@
                     $('#@Html.IdFor(m => m.Resumo.Liberado)').val(roundDecimal(floatToString(result.resumo.Liberado), 2));
                     $('#@Html.IdFor(m => m.Resumo.RetencaoLiberada)').val(roundDecimal(floatToString(result.resumo.RetencaoLiberada), 2));
                     $('#@Html.IdFor(m => m.Resumo.Saldo)').val(roundDecimal(floatToString(result.resumo.Saldo), 2));
+
+                    @*$('#@Html.IdFor(m => m.JsonListaItemListaLiberacao)').val(JSON.stringify(result.listaItemListaLiberacao));*@
+                    $('#@Html.IdFor(m => m.JsonListaItemListaLiberacao)').val(result.listaItemListaLiberacao);
+
+                    jsonListaItemListaLiberacaoArray = JSON.parse(result.listaItemListaLiberacao);
+
                 }
                 else {
                     limpaResumo();
@@ -242,6 +282,8 @@
                 limpaResumo();
             }
         });
+
+        preencheListaLiberacao();
 
         return isRecuperou;
     }
@@ -259,4 +301,119 @@
         $('#@Html.IdFor(m => m.Resumo.RetencaoLiberada)').val(roundDecimal(floatToString(0), 2));
         $('#@Html.IdFor(m => m.Resumo.Saldo)').val(roundDecimal(floatToString(0), 2));
     }
+
+    function preencheListaLiberacao() {
+
+        $("#tableItens thead").empty();
+        var row = $('<tr role="row">');
+        $("#tableItens thead").append(row);
+        row.append($('<th class="text-left">Item</th>'));
+        row.append($('<th class="text-left">Medição</th>'));
+        row.append($('<th class="text-left">Vencimento</th>'));
+        row.append($('<th class="text-left">Tipo documento</th>'));
+        row.append($('<th class="text-left">Nº documento</th>'));
+        row.append($('<th class="text-left">Emissão</th>'));
+        row.append($('<th class="text-left">Situação</th>'));
+        row.append($('<th class="text-left">Valor</th>'));
+        row.append($('<th class="text-left">Valor retido</th>'));
+        row.append($('<th class="text-left">Resp. medição</th>'));
+        row.append($('<th class="text-left">Título</th>'));
+        row.append($('<th class="text-left">Liberação</th>'));
+        row.append($('<th class="text-left">Resp. liberação</th>'));
+        row.append($('<th class="text-left" style="min-width: 90px;">Evento</th>'));
+        row.append($('<th class="text-left">Data cadastro</th>'));
+        row.append($('<th class="text-left">Avaliação</th>'));
+        row.append($('<tr />'));
+
+        var totalValor = 0;
+        var totalValorRetido = 0;
+
+        $("#tableItens tbody").empty();
+
+        if (jsonListaItemListaLiberacaoArray != null) {
+            for (var i = 0; i < jsonListaItemListaLiberacaoArray.length; i++) {
+
+                totalValor = totalValor + jsonListaItemListaLiberacaoArray[i].Valor;
+                totalValorRetido = totalValorRetido + jsonListaItemListaLiberacaoArray[i].ValorRetido;
+
+                var cor = jsonListaItemListaLiberacaoArray[i].CorLinha;
+
+                var row = $('<tr />')
+
+                $("#tableItens tbody").append(row);
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].SequencialItem + '</td>'));
+                if (jsonListaItemListaLiberacaoArray[i].DataMedicao != null) {
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataMedicao.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                }
+                else {
+                    row.append($('<td class="text-center"></td>'));
+                }
+                if (jsonListaItemListaLiberacaoArray[i].DataVencimento != null) {
+                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataVencimento.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemListaLiberacaoArray[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
+                }
+                else {
+                    row.append($('<td class="text-center"></td>'));
+                }
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].TipoDocumento + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].NumeroDocumento + '</td>'));
+                if (jsonListaItemListaLiberacaoArray[i].DataEmissao != null) {
+                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataEmissao.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemListaLiberacaoArray[i].DataEmissao).toFormatDDMMYYYY() + '</td>'));
+                }
+                else {
+                    row.append($('<td class="text-center"></td>'));
+                }
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].DescricaoSituacao + '</td>'));
+                row.append($('<td class="text-right" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemListaLiberacaoArray[i].Valor), 2) + '</td>'));
+                row.append($('<td class="text-right" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemListaLiberacaoArray[i].ValorRetido), 2) + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].ResponsavelMedicao + '</td>'));
+                row.append($('<td class="text-right" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].TituloId + '</td>'));
+                if (jsonListaItemListaLiberacaoArray[i].DataLiberacao != null) {
+                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataLiberacao.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemListaLiberacaoArray[i].DataLiberacao).toFormatDDMMYYYY() + '</td>'));
+                }
+                else {
+                    row.append($('<td class="text-center"></td>'));
+                }
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].ResponsavelLiberacao + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].DescricaoEvento + '</td>'));
+                if (jsonListaItemListaLiberacaoArray[i].DataCadastro != null) {
+                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataCadastro.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemListaLiberacaoArray[i].DataCadastro).toFormatDDMMYYYY() + '</td>'));
+                }
+                else {
+                    row.append($('<td class="text-center"></td>'));
+                }
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].Avaliacao + '</td>'));
+            }
+
+            var row = $('<tr />')
+
+            $("#tableItens tbody").append(row);
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
+            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorRetido), 2) + '</td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            row.append($('<td></td>'));
+            var row = $('<tr />')
+            $("#tableItens tbody").append(row);
+        }
+
+        //setarAbaProvisionamento();
+
+        jsonListaItemListaLiberacaoArray = null;
+    }
+
 </script>

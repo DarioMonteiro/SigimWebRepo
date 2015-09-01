@@ -10,7 +10,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
     public class ContratoRetificacaoDTO : BaseDTO
     {
         public int ContratoId { get; set; }
-        public ContratoDTO Contrato { get; set; }
+        //public ContratoDTO Contrato { get; set; }
         public int Sequencial { get; set; }
         public bool Aprovada { get; set; }
         public Nullable<DateTime> DataAprovacao { get; set; }

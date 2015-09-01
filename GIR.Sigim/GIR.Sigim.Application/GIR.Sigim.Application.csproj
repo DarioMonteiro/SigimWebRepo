@@ -77,7 +77,7 @@
     <Compile Include="DTO\Contrato\LicitacaoCronogramaDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDTO.cs" />
-    <Compile Include="DTO\Contrato\ListaLiberacaoDTO.cs" />
+    <Compile Include="DTO\Contrato\ItemListaLiberacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
     <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
     <Compile Include="DTO\Contrato\ResumoLiberacaoDTO.cs" />
