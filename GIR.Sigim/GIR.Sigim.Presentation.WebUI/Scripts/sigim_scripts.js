@@ -130,8 +130,10 @@ function initializeDecimalBehaviour() {
 
 function roundDecimal(value, precision) {
     var originalValue = 0 + value;
-    var sinal = value.substring(0, 1);
-    if (sinal == "-") { originalValue = sinal + 0 + value.substring(1,value.length) }
+    if (value != null) {
+        var sinal = value.substring(0, 1);
+        if (sinal == "-") { originalValue = sinal + 0 + value.substring(1, value.length) }
+    }
     var roundedValue = parseFloat(stringToFloat(originalValue.toString())).toFixed(precision);
     return roundedValue.replace(".", ",");
 }
