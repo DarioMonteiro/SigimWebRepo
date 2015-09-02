@@ -129,7 +129,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.CentroCusto,
                 l => l.ClienteFornecedor,
                 l => l.FornecedorNota,
-                l => l.ListaItens,
+                l => l.ListaItens.Select(o => o.Classe),
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
                 l => l.ListaImposto,
                 l => l.ListaMovimentoEstoque).To<EntradaMaterialDTO>();
@@ -140,6 +141,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId, UsuarioLogado.Id);
             if (entradaMaterial != null)
             {
+                if (!PodeSerSalvaNaSituacaoAtual(entradaMaterial.Situacao))
+                {
+                    var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return null;
+                }
+
                 var specification = (Specification<Domain.Entity.OrdemCompra.OrdemCompra>)new TrueSpecification<Domain.Entity.OrdemCompra.OrdemCompra>();
 
                 specification &= OrdemCompraSpecification.EhLiberada();
@@ -156,6 +164,79 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
                 return null;
             }
+        }
+
+        public bool AdicionarItens(int? entradaMaterialId, int?[] itens)
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId, UsuarioLogado.Id, l => l.ListaItens);
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return false;
+            }
+
+            if (!PodeSerSalvaNaSituacaoAtual(entradaMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            var listaOrdemCompraItem = ordemCompraRepository.ListarItensPeloId(itens);
+
+            foreach (var ordemCompraItem in listaOrdemCompraItem)
+            {
+                int sequencial = entradaMaterial.ListaItens.Any() ? entradaMaterial.ListaItens.Max(l => l.Sequencial) + 1 : 1;
+                var entradaMaterialItem = new EntradaMaterialItem();
+                entradaMaterialItem.OrdemCompraItem = ordemCompraItem;
+                entradaMaterialItem.CodigoClasse = ordemCompraItem.CodigoClasse;
+                entradaMaterialItem.Sequencial = sequencial;
+                entradaMaterialItem.Quantidade = ordemCompraItem.Saldo;
+                entradaMaterialItem.ValorUnitario = ordemCompraItem.ValorUnitario;
+                entradaMaterialItem.PercentualIPI = ordemCompraItem.PercentualIPI;
+                entradaMaterialItem.PercentualDesconto = ordemCompraItem.PercentualDesconto;
+                entradaMaterialItem.ValorTotal = ordemCompraItem.ValorTotalComImposto;
+                entradaMaterialItem.BaseIPI = ordemCompraItem.Quantidade * ordemCompraItem.ValorUnitario;
+                entradaMaterial.ListaItens.Add(entradaMaterialItem);
+
+                ordemCompraItem.QuantidadeEntregue += entradaMaterialItem.Quantidade;
+            }
+
+            try
+            {
+                entradaMaterialRepository.Alterar(entradaMaterial);
+                entradaMaterialRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return false;
+        }
+
+        public List<EntradaMaterialItemDTO> ListarItens(int? entradaMaterialId)
+        {
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId,
+                UsuarioLogado.Id,
+                l => l.ListaItens.Select(o => o.Classe),
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.Material));
+
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return null;
+            }
+
+            return entradaMaterial.ListaItens.To<List<EntradaMaterialItemDTO>>();
         }
 
         public bool CancelarEntrada(int? id, string motivo)

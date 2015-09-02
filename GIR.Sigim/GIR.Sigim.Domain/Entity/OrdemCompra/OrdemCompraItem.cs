@@ -35,8 +35,21 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public decimal? Saldo { get { return Quantidade - QuantidadeEntregue; } }
         
         public decimal? ValorUnitario { get; set; }
-        public decimal? PercentualIPI { get; set; }
-        public decimal? PercentualDesconto { get; set; }
+
+        private decimal? percentualIPI;
+        public decimal? PercentualIPI
+        {
+            get { return percentualIPI.HasValue ? percentualIPI : 0; }
+            set { percentualIPI = value; }
+        }
+
+        private decimal? percentualDesconto;
+        public decimal? PercentualDesconto
+        {
+            get { return percentualDesconto.HasValue ? percentualDesconto : 0; }
+            set { percentualDesconto = value; }
+        }
+
         public decimal? ValorTotalComImposto { get; set; }
         public decimal? ValorTotalItem { get; set; }
 

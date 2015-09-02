@@ -105,7 +105,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
 
             model.EntradaMaterial = entradaMaterial;
-            //model.JsonItens = JsonConvert.SerializeObject(entradaMaterial.ListaItens);
+            model.JsonItens = JsonConvert.SerializeObject(entradaMaterial.ListaItens);
 
             //if ((entradaMaterial.CentroCusto == null) || (string.IsNullOrEmpty(entradaMaterial.CentroCusto.Codigo)))
             //{
@@ -221,6 +221,18 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll().First().Text : string.Empty;
             messageQueue.Clear();
             return Json(new { errorMessage = msg, itens = jsonItens });
+        }
+
+        [HttpPost]
+        public ActionResult AdicionarItens(int? entradaMaterialId, int?[] itens)
+        {
+            string jsonItens = "[]";
+            if (entradaMaterialAppService.AdicionarItens(entradaMaterialId, itens))
+                jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItens(entradaMaterialId));
+
+            var messages = messageQueue.GetAll();
+            messageQueue.Clear();
+            return Json(new { Messages = messages, Itens = jsonItens });
         }
     }
 }

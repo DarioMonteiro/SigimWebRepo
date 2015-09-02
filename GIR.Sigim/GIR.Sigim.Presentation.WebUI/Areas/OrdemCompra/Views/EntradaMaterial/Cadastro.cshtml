@@ -293,55 +293,213 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseItensOrdemCompra" class="collapsed" id="btnItensOrdemCompra">
-                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                            Seleção de itens de ordem de compra
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapseItensOrdemCompra" class="panel-collapse collapse">
-                                    <div class="panel-body no-padding">
-                                        <fieldset>
-                                            <div class="row">
-                                                <section class="col col-12">
-                                                    <button id="btnSelecionarItensOrdemCompra" type="button" class="btn btn-primary right">
-                                                        Selecionar Item
-                                                    </button>
-                                                </section>
-                                            </div>
-                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                <table id="tableItensOrdemCompra" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                    <thead>
-                                                        <tr role="row">
-                                                            <th><label class="checkbox"><input type="checkbox" id="chkSelecionarTodosItensOrdemCompra"><i></i>&nbsp;</label></th>
-                                                            <th class="text-right">OC</th>
-                                                            <th class="text-right">Item OC</th>
-                                                            <th class="text-center">Data OC</th>
-                                                            <th class="text-right">Material</th>
-                                                            <th>Descrição</th>
-                                                            <th>Complemento</th>
-                                                            <th class="text-center">UN</th>
-                                                            <th class="text-right" style="min-width: 70px;">Quantidade</th>
-                                                            <th class="text-right" style="min-width: 70px;">Valor unitário</th>
-                                                            <th>Classe</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </fieldset>
+                            @if (Model.PodeAdicionarItem) {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseItensOrdemCompra" class="collapsed" id="btnItensOrdemCompra">
+                                                <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                Seleção de itens de ordem de compra
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseItensOrdemCompra" class="panel-collapse collapse">
+                                        <div class="panel-body no-padding">
+                                            <fieldset>
+                                                <div class="row">
+                                                    <section class="col col-12">
+                                                        <button id="btnSelecionarItensOrdemCompra" type="button" class="btn btn-primary right">
+                                                            Selecionar Item
+                                                        </button>
+                                                    </section>
+                                                </div>
+                                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                    <table id="tableItensOrdemCompra" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <th><label class="checkbox"><input type="checkbox" id="chkSelecionarTodosItensOrdemCompra"><i></i>&nbsp;</label></th>
+                                                                <th class="text-right">OC</th>
+                                                                <th class="text-right">Item OC</th>
+                                                                <th class="text-center">Data OC</th>
+                                                                <th class="text-right">Material</th>
+                                                                <th>Descrição</th>
+                                                                <th>Complemento</th>
+                                                                <th class="text-center">UN</th>
+                                                                <th class="text-right" style="min-width: 70px;">Quantidade</th>
+                                                                <th class="text-right" style="min-width: 70px;">Valor unitário</th>
+                                                                <th>Classe</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </fieldset>
+                                            <script type="text/javascript">
+                                                $(document).ready(function () {
+                                                    $('#btnItensOrdemCompra').on('click', function () {
+                                                        $("#tableItensOrdemCompra tbody").empty();
+                                                        if (!$('#collapseItensOrdemCompra').is(":visible")) {
+                                                            if (houveAlteracao) {
+                                                                smartAlert("Erro", "A Entrada de Material foi alterada.<br />Salve os dados antes de incluir novos itens.", "error");
+                                                            }
+                                                            else {
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: '@Url.Action("ListarItensDeOrdemCompraLiberadaComSaldo", "EntradaMaterial")',
+                                                                    cache: false,
+                                                                    //async: false,
+                                                                    contentType: 'application/json; charset=utf-8',
+                                                                    data: JSON.stringify({
+                                                                        entradaMaterialId: '@Html.DisplayFor(m => m.EntradaMaterial.Id)'
+                                                                    })
+                                                                })
+                                                                .success(function (result) {
+                                                                    if (result.errorMessage.length > 0)
+                                                                        smartAlert("Erro", result.errorMessage, "error");
+                                                                    else {
+                                                                        fillTableItensOrdemCompra(JSON.parse(result.itens));
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    });
+
+                                                    $('#btnSelecionarItensOrdemCompra').on('click', function () {
+                                                        adicionarItensSelecionados();
+                                                    });
+
+                                                    function adicionarItensSelecionados() {
+                                                        var arrItemOC = [];
+                                                        $('#tableItensOrdemCompra tbody input[type=checkbox]:checked').each(function () {
+                                                            arrItemOC.push(parseInt($(this).val()));
+                                                        });
+
+                                                        if (arrItemOC.length > 0) {
+                                                            $.SmartMessageBox({
+                                                                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a inclusão dos itens selecionados na Entrada de Material?",
+                                                                //content: "Esta ação não poderá ser revertida.",
+                                                                buttons: '[Não][Sim]'
+                                                            }, function (ButtonPressed) {
+                                                                if (ButtonPressed === "Sim") {
+                                                                    $.ajax({
+                                                                        type: 'POST',
+                                                                        url: '@Url.Action("AdicionarItens", "EntradaMaterial")',
+                                                                        cache: false,
+                                                                        async: false,
+                                                                        contentType: 'application/json; charset=utf-8',
+                                                                        data: JSON.stringify({
+                                                                            entradaMaterialId: '@Model.EntradaMaterial.Id',
+                                                                            itens: arrItemOC
+                                                                        })
+                                                                    })
+                                                                    .success(function (result) {
+                                                                        var houveErro = false;
+                                                                        $(result.Messages).each(function () {
+                                                                            if (this.Type.toString() == '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Error)') {
+                                                                                houveErro = true;
+                                                                            }
+                                                                        });
+
+                                                                        if (!houveErro) {
+                                                                            $('#@Html.IdFor(m => m.JsonItens)').val(result.Itens);
+                                                                            fillTableItens();
+                                                                            $('#btnItens').click();
+                                                                            setTimeout(function () {
+                                                                                $('html, body').animate({
+                                                                                    scrollTop: $("#headerPanelItens").offset().top
+                                                                                }, 500);
+                                                                            }, 500);
+                                                                        }
+
+                                                                        $(result.Messages).each(function () {
+                                                                            var typeMessage = '';
+                                                                            var titleMessage = '';
+                                                                            switch(this.Type.toString()) {
+                                                                                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Info)':
+                                                                                    typeMessage = 'info';
+                                                                                    titleMessage = 'Informação';
+                                                                                    break;
+                                                                                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Success)':
+                                                                                    typeMessage = 'success';
+                                                                                    titleMessage = 'Sucesso';
+                                                                                    break;
+                                                                                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Warning)':
+                                                                                    typeMessage = 'warning';
+                                                                                    titleMessage = 'Alerta';
+                                                                                    break;
+                                                                                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Error)':
+                                                                                default:
+                                                                                    typeMessage = 'error';
+                                                                                    titleMessage = 'Erro';
+                                                                                    break;
+                                                                            }
+                                                                            smartAlert(titleMessage, this.Text, typeMessage);
+                                                                        });
+
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                        else
+                                                            smartAlert("Erro", "Selecione pelo menos 1 item.", "error");
+                                                    }
+
+                                                    $('#chkSelecionarTodosItensOrdemCompra').on('change', function () {
+                                                        checkOrUncheckAllItensOrdemCompra($(this).prop('checked'));
+                                                    });
+
+                                                    $(document).on('change', '.chkItemOrdemCompra', function () {
+                                                        $('#chkSelecionarTodosItensOrdemCompra').prop('checked', isAllItensOrdemCompraChecked());
+                                                    });
+                                                });
+
+                                                function isAllItensOrdemCompraChecked() {
+                                                    var isAllChecked = true;
+                                                    $($('#tableItensOrdemCompra tbody input[type=checkbox]').get().reverse()).each(function () {
+                                                        if (!$(this).prop('checked')) {
+                                                            isAllChecked = false;
+                                                            return false;
+                                                        }
+                                                    });
+                                                    return isAllChecked;
+                                                }
+
+                                                function checkOrUncheckAllItensOrdemCompra(checked) {
+                                                    $($('#tableItensOrdemCompra input[type=checkbox]').get().reverse()).each(function () {
+                                                        if (!$(this).is(":disabled")) {
+                                                            $(this).prop("checked", checked);
+                                                        }
+                                                    });
+                                                }
+
+                                                function fillTableItensOrdemCompra(jsonItensOrdemCompra) {
+                                                    for (var i = 0; i < jsonItensOrdemCompra.length; i++) {
+                                                        var row = $('<tr />')
+                                                        $("#tableItensOrdemCompra tbody").append(row);
+                                                        row.append($('<td><label class="checkbox"><input type="checkbox" class="chkItemOrdemCompra" name="checkbox" value="' + jsonItensOrdemCompra[i].Id + '"><i></i>&nbsp;</label></td>'));
+                                                        row.append($('<td class="text-right">' + jsonItensOrdemCompra[i].OrdemCompraId + '</td>'));
+                                                        row.append($('<td class="text-right">' + jsonItensOrdemCompra[i].Sequencial + '</td>'));
+                                                        row.append($('<td class="text-center">' + new Date(jsonItensOrdemCompra[i].DataOrdemCompra).toFormatDDMMYYYY() + '</td>'));
+                                                        row.append($('<td class="text-right">' + jsonItensOrdemCompra[i].MaterialId + '</td>'));
+                                                        row.append($('<td class="text-nowrap">' + jsonItensOrdemCompra[i].Material.Descricao + '</td>'));
+                                                        row.append($('<td class="text-nowrap">' + jsonItensOrdemCompra[i].Complemento + '</td>'));
+                                                        row.append($('<td class="text-center">' + jsonItensOrdemCompra[i].Material.SiglaUnidadeMedida + '</td>'));
+                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItensOrdemCompra[i].Saldo), 5) + '</td>'));
+                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItensOrdemCompra[i].ValorUnitario), 5) + '</td>'));
+                                                        row.append($('<td class="text-nowrap">' + jsonItensOrdemCompra[i].Classe.ClasseDescricao + '</td>'));
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                             <div class="panel panel-default">
-                                <div class="panel-heading">
+                                <div id="headerPanelItens" class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseItens" class="collapsed">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseItens" class="collapsed" id="btnItens">
                                             <i class="fa fa-lg fa-angle-down pull-right"></i>
                                             <i class="fa fa-lg fa-angle-up pull-right"></i>
                                             Itens
@@ -570,7 +728,8 @@
                                                     </button>
                                                 </section>
                                             </div>
-                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                            @Html.HiddenFor(m => m.JsonItens)
+                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow-x: auto;">
                                                 <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                     <thead>
                                                         <tr role="row">
@@ -599,6 +758,36 @@
                                                 </table>
                                             </div>
                                         </fieldset>
+                                        <script type="text/javascript">
+                                            $(document).ready(function () {
+                                                fillTableItens();
+                                            });
+                                            function fillTableItens() {
+                                                var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+                                                for (var i = 0; i < jsonItens.length; i++) {
+                                                    var row = $('<tr />')
+                                                    $("#tableItens tbody").append(row);
+                                                    row.append($('<td><label class="checkbox"><input type="checkbox" class="chkItemOrdemCompra" name="checkbox" value="' + jsonItens[i].Id + '"><i></i>' + jsonItens[i].Sequencial + '</label></td>'));
+                                                    row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.OrdemCompraId + '</td>'));
+                                                    row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.Id + '</td>'));
+                                                    row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.Material.Id + '</td>'));
+                                                    row.append($('<td class="text-nowrap">' + jsonItens[i].OrdemCompraItem.Material.Descricao + '</td>'));
+                                                    row.append($('<td class="text-nowrap">' + jsonItens[i].OrdemCompraItem.Complemento + '</td>'));
+                                                    row.append($('<td class="text-center">' + jsonItens[i].OrdemCompraItem.Material.SiglaUnidadeMedida + '</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].Quantidade), 4) + '</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].ValorUnitario), 4) + '</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualIPI), 4) + '</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualDesconto), 4) + '</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].ValorTotal), 4) + '</td>'));
+                                                    row.append($('<td class="text-nowrap">' + jsonItens[i].Classe.ClasseDescricao + '</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualICMS), 4) + '</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualICMSST), 4) + '</td>'));
+                                                    row.append($('<td class="text-right">' + jsonItens[i].CodigoComplementoNaturezaOperacao + '</td>'));
+                                                    row.append($('<td class="text-right">' + jsonItens[i].CodigoComplementoCST + '</td>'));
+                                                    row.append($('<td class="text-right">' + jsonItens[i].CodigoNaturezaReceita + '</td>'));
+                                                }
+                                            }
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -806,7 +995,8 @@
                                 }
                             }
                             <a id="btnCancelarEntrada" href="#" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
-                            @if (Model.PodeCancelarEntrada) {
+                            @if (Model.PodeCancelarEntrada)
+                            {
                                 <div class="modal fade" id="MotivoCancelamento_ModalPanel" tabindex="-1" role="dialog">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -819,7 +1009,8 @@
                                                 </h4>
                                             </div>
                                             <div class="modal-body">
-                                                @if (Model.ExisteEstoqueParaCentroCusto && !Model.ExisteMovimentoNoEstoque) {
+                                                @if (Model.ExisteEstoqueParaCentroCusto && !Model.ExisteMovimentoNoEstoque)
+                                                {
                                                     <article class="col-sm-12">
                                                         <div class="alert alert-info alert-block fade in">
                                                             <h4 class="alert-heading">Informação</h4>
@@ -892,16 +1083,16 @@
                             }
 
                             @{
-                                var url = Url.Action("Imprimir", "EntradaMaterial") + "/" + @Html.DisplayFor(m => m.EntradaMaterial.Id);
+                            var url = Url.Action("Imprimir", "EntradaMaterial") + "/" + @Html.DisplayFor(m => m.EntradaMaterial.Id);
                             }
-                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url } )
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
                             
                             @{
-                                string disableBtnSalvar = string.Empty;
-                                if (!Model.PodeSalvar)
-                                {
-                                    disableBtnSalvar = "disabled";
-                                }
+                            string disableBtnSalvar = string.Empty;
+                            if (!Model.PodeSalvar)
+                            {
+                                disableBtnSalvar = "disabled";
+                            }
                             }
                             <button id="btnSalvar" type="submit" class="btn btn-primary right @disableBtnSalvar">
                                 Salvar
@@ -916,34 +1107,6 @@
 <script type="text/javascript">
     var houveAlteracao = false;
     $(document).ready(function () {
-        $('#btnItensOrdemCompra').on('click', function () {
-            $("#tableItensOrdemCompra tbody").empty();
-            if (!$('#collapseItensOrdemCompra').is(":visible")) {
-                if (houveAlteracao) {
-                    smartAlert("Erro", "A Entrada de Material foi alterada.<br />Salve os dados antes de incluir novos itens.", "error");
-                }
-                else {
-                    $.ajax({
-                        type: 'POST',
-                        url: '@Url.Action("ListarItensDeOrdemCompraLiberadaComSaldo", "EntradaMaterial")',
-                        cache: false,
-                        //async: false,
-                        contentType: 'application/json; charset=utf-8',
-                        data: JSON.stringify({
-                            entradaMaterialId: '@Html.DisplayFor(m => m.EntradaMaterial.Id)'
-                        })
-                    })
-                    .success(function (result) {
-                        if (result.errorMessage.length > 0)
-                            smartAlert("Erro", result.errorMessage, "error");
-                        else {
-                            fillTableItensOrdemCompra(JSON.parse(result.itens));
-                        }
-                    });
-                }
-            }
-        });
-
         $('#btnLiberarTitulos').on("click", function () {
             $.SmartMessageBox({
                 title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a liberação dos títulos para o Financeiro?",
@@ -967,50 +1130,5 @@
                 }
             });
         });
-
-        $('#chkSelecionarTodosItensOrdemCompra').on('change', function () {
-            checkOrUncheckAllItensOrdemCompra($(this).prop('checked'));
-        });
-
-        $(document).on('change', '.chkItemOrdemCompra', function () {
-            $('#chkSelecionarTodosItensOrdemCompra').prop('checked', isAllItensOrdemCompraChecked());
-        });
     });
-
-    function isAllItensOrdemCompraChecked() {
-        var isAllChecked = true;
-        $($('#tableItensOrdemCompra tbody input[type=checkbox]').get().reverse()).each(function () {
-            if (!$(this).prop('checked')) {
-                isAllChecked = false;
-                return false;
-            }
-        });
-        return isAllChecked;
-    }
-
-    function checkOrUncheckAllItensOrdemCompra(checked) {
-        $($('#tableItensOrdemCompra input[type=checkbox]').get().reverse()).each(function () {
-            if (!$(this).is(":disabled")) {
-                $(this).prop("checked", checked);
-            }
-        });
-    }
-
-    function fillTableItensOrdemCompra(jsonItensOrdemCompra) {
-        for (var i = 0; i < jsonItensOrdemCompra.length; i++) {
-            var row = $('<tr />')
-            $("#tableItensOrdemCompra tbody").append(row);
-            row.append($('<td><label class="checkbox"><input type="checkbox" class="chkItemOrdemCompra" name="checkbox" value="' + jsonItensOrdemCompra[i].Sequencial + '"><i></i>&nbsp;</label></td>'));
-            row.append($('<td class="text-right">' + jsonItensOrdemCompra[i].OrdemCompraId + '</td>'));
-            row.append($('<td class="text-right">' + jsonItensOrdemCompra[i].Sequencial + '</td>'));
-            row.append($('<td class="text-center">' + new Date(jsonItensOrdemCompra[i].DataOrdemCompra).toFormatDDMMYYYY() + '</td>'));
-            row.append($('<td class="text-right">' + jsonItensOrdemCompra[i].MaterialId + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItensOrdemCompra[i].Material.Descricao + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItensOrdemCompra[i].Complemento + '</td>'));
-            row.append($('<td class="text-center">' + jsonItensOrdemCompra[i].Material.SiglaUnidadeMedida + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItensOrdemCompra[i].Saldo), 5) + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItensOrdemCompra[i].ValorUnitario), 5) + '</td>'));
-            row.append($('<td class="text-nowrap">' + jsonItensOrdemCompra[i].Classe.ClasseDescricao + '</td>'));
-        }
-    }
 </script>

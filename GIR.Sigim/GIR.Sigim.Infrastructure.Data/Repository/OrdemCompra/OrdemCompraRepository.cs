@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Domain.Specification.OrdemCompra;
@@ -41,6 +43,17 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra
             return set.Skip(pageCount * pageIndex).Take(pageCount);
         }
 
+        public IEnumerable<OrdemCompraItem> ListarItensPeloId(int?[] itensId, params Expression<Func<OrdemCompraItem, object>>[] includes)
+        {
+            var set = QueryableUnitOfWork.CreateSet<OrdemCompraItem>().AsQueryable<OrdemCompraItem>();
+
+            if (includes.Any())
+                set = includes.Aggregate(set, (current, expression) => current.Include(expression).DefaultIfEmpty());
+
+            set = set.Where(l => itensId.Contains(l.Id));
+            return set.ToList();
+        }
+
         #endregion
 
         #region Métodos Privados
@@ -67,6 +80,5 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra
         }
 
         #endregion
-
     }
 }

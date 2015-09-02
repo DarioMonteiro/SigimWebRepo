@@ -14,6 +14,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         List<EntradaMaterialDTO> ListarPeloFiltro(EntradaMaterialFiltro filtro, out int totalRegistros);
         EntradaMaterialDTO ObterPeloId(int? id);
         List<OrdemCompraItemDTO> ListarItensDeOrdemCompraLiberadaComSaldo(int? entradaMaterialId);
+        bool AdicionarItens(int? entradaMaterialId, int?[] itens);
+        List<EntradaMaterialItemDTO> ListarItens(int? entradaMaterialId);
         bool CancelarEntrada(int? id, string motivo);
         bool LiberarTitulos(int? id);
         FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato);
