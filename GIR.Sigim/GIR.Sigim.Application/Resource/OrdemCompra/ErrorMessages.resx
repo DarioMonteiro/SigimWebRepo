@@ -159,4 +159,7 @@
   <data name="TituloImpostoEstaPago" xml:space="preserve">
     <value>O título de imposto {0}, já está pago.</value>
   </data>
+  <data name="ExisteFormaPagamentoParaItemSelecionado" xml:space="preserve">
+    <value>Existe(m) forma(s) de pagamento(s) para a ordem de compra do item selecionado.</value>
+  </data>
 </root>

@@ -223,6 +223,64 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return false;
         }
 
+        public bool RemoverItens(int? entradaMaterialId, int?[] itens)
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId,
+                UsuarioLogado.Id,
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra),
+                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento));
+
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return false;
+            }
+
+            if (!PodeSerSalvaNaSituacaoAtual(entradaMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            var listaItens = entradaMaterial.ListaItens.Where(l => itens.Contains(l.Id)).ToList();
+            var listaFormasPagamentoOC = entradaMaterial.ListaFormaPagamento.Select(l => l.OrdemCompraFormaPagamento.OrdemCompraId).Distinct();
+
+            if (listaFormasPagamentoOC.Intersect(listaItens.Select(l => l.OrdemCompraItem.OrdemCompraId)).Any())
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.ExisteFormaPagamentoParaItemSelecionado, TypeMessage.Error);
+                return false;
+            }
+
+            for (int i = listaItens.Count() - 1; i >= 0; i--)
+            {
+                var entradaMaterialItem = listaItens[i];
+                entradaMaterialItem.OrdemCompraItem.QuantidadeEntregue -= entradaMaterialItem.Quantidade;
+                entradaMaterialItem.OrdemCompraItem.OrdemCompra.Situacao = SituacaoOrdemCompra.Liberada;
+                entradaMaterialRepository.RemoverEntradaMaterialItem(entradaMaterialItem);
+            }
+            
+            try
+            {
+                entradaMaterialRepository.Alterar(entradaMaterial);
+                entradaMaterialRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return false;
+        }
+
         public List<EntradaMaterialItemDTO> ListarItens(int? entradaMaterialId)
         {
             var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId,
@@ -570,7 +628,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return EhPermitidoSalvar(dto);
         }
 
-        public bool EhPermitidoCancelarItem(EntradaMaterialDTO dto)
+        public bool EhPermitidoRemoverItem(EntradaMaterialDTO dto)
         {
             return EhPermitidoSalvar(dto);
         }

@@ -128,7 +128,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.PodeImprimir = entradaMaterialAppService.EhPermitidoImprimir(entradaMaterial);
             model.PodeLiberarTitulos = entradaMaterialAppService.EhPermitidoLiberarTitulos(entradaMaterial);
             model.PodeAdicionarItem = entradaMaterialAppService.EhPermitidoAdicionarItem(entradaMaterial);
-            model.PodeCancelarItem = entradaMaterialAppService.EhPermitidoCancelarItem(entradaMaterial);
+            model.PodeRemoverItem = entradaMaterialAppService.EhPermitidoRemoverItem(entradaMaterial);
             model.PodeEditarItem = entradaMaterialAppService.EhPermitidoEditarItem(entradaMaterial);
             //model.PodeAprovarRequisicao = requisicaoMaterialAppService.EhPermitidoAprovarRequisicao(entradaMaterial);
             //model.PodeCancelarAprovacao = requisicaoMaterialAppService.EhPermitidoCancelarAprovacao(entradaMaterial);
@@ -228,6 +228,18 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         {
             string jsonItens = "[]";
             if (entradaMaterialAppService.AdicionarItens(entradaMaterialId, itens))
+                jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItens(entradaMaterialId));
+
+            var messages = messageQueue.GetAll();
+            messageQueue.Clear();
+            return Json(new { Messages = messages, Itens = jsonItens });
+        }
+
+        [HttpPost]
+        public ActionResult RemoverItens(int? entradaMaterialId, int?[] itens)
+        {
+            string jsonItens = "[]";
+            if (entradaMaterialAppService.RemoverItens(entradaMaterialId, itens))
                 jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItens(entradaMaterialId));
 
             var messages = messageQueue.GetAll();

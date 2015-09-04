@@ -378,8 +378,7 @@
 
                                                         if (arrItemOC.length > 0) {
                                                             $.SmartMessageBox({
-                                                                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a inclusão dos itens selecionados na Entrada de Material?",
-                                                                //content: "Esta ação não poderá ser revertida.",
+                                                                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a inclusão do(s) iten(s) selecionado(s) na Entrada de Material?",
                                                                 buttons: '[Não][Sim]'
                                                             }, function (ButtonPressed) {
                                                                 if (ButtonPressed === "Sim") {
@@ -413,31 +412,7 @@
                                                                             }, 500);
                                                                         }
 
-                                                                        $(result.Messages).each(function () {
-                                                                            var typeMessage = '';
-                                                                            var titleMessage = '';
-                                                                            switch(this.Type.toString()) {
-                                                                                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Info)':
-                                                                                    typeMessage = 'info';
-                                                                                    titleMessage = 'Informação';
-                                                                                    break;
-                                                                                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Success)':
-                                                                                    typeMessage = 'success';
-                                                                                    titleMessage = 'Sucesso';
-                                                                                    break;
-                                                                                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Warning)':
-                                                                                    typeMessage = 'warning';
-                                                                                    titleMessage = 'Alerta';
-                                                                                    break;
-                                                                                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Error)':
-                                                                                default:
-                                                                                    typeMessage = 'error';
-                                                                                    titleMessage = 'Erro';
-                                                                                    break;
-                                                                            }
-                                                                            smartAlert(titleMessage, this.Text, typeMessage);
-                                                                        });
-
+                                                                        showMessages(result.Messages);
                                                                     });
                                                                 }
                                                             });
@@ -717,14 +692,14 @@
                                                     </button>
 
                                                     @{
-                                                        string disableBtnCancelarItem = string.Empty;
-                                                        if (!Model.PodeCancelarItem)
+                                                        string disableBtnRemoverItem = string.Empty;
+                                                        if (!Model.PodeRemoverItem)
                                                         {
-                                                            disableBtnCancelarItem = "disabled";
+                                                            disableBtnRemoverItem = "disabled";
                                                         }
                                                     }
-                                                    <button id="btnCancelarItem" type="button" class="btn btn-danger @disableBtnCancelarItem">
-                                                        Cancelar Item
+                                                    <button id="btnRemoverItem" type="button" class="btn btn-danger @disableBtnRemoverItem">
+                                                        Remover Item
                                                     </button>
                                                 </section>
                                             </div>
@@ -761,9 +736,61 @@
                                         <script type="text/javascript">
                                             $(document).ready(function () {
                                                 fillTableItens();
+
+                                                $('#btnRemoverItem').on('click', function () {
+                                                    if (houveAlteracao) {
+                                                        smartAlert("Erro", "A Entrada de Material foi alterada.<br />Salve os dados antes de remover algum item.", "error");
+                                                    }
+                                                    else {
+                                                        var arrItemEM = [];
+                                                        $('#tableItens tbody input[type=checkbox]:checked').each(function () {
+                                                            arrItemEM.push(parseInt($(this).val()));
+                                                        });
+
+                                                        if (arrItemEM.length > 0) {
+                                                            $.SmartMessageBox({
+                                                                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a exclusão do(s) iten(s) selecionado(s)?",
+                                                                buttons: '[Não][Sim]'
+                                                            }, function (ButtonPressed) {
+                                                                if (ButtonPressed === "Sim") {
+                                                                    $.ajax({
+                                                                        type: 'POST',
+                                                                        url: '@Url.Action("RemoverItens", "EntradaMaterial")',
+                                                                        cache: false,
+                                                                        async: false,
+                                                                        contentType: 'application/json; charset=utf-8',
+                                                                        data: JSON.stringify({
+                                                                            entradaMaterialId: '@Model.EntradaMaterial.Id',
+                                                                            itens: arrItemEM
+                                                                        })
+                                                                    })
+                                                                    .success(function (result) {
+                                                                        var houveErro = false;
+                                                                        $(result.Messages).each(function () {
+                                                                            if (this.Type.toString() == '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Error)') {
+                                                                                houveErro = true;
+                                                                            }
+                                                                        });
+
+                                                                        if (!houveErro) {
+                                                                            $('#@Html.IdFor(m => m.JsonItens)').val(result.Itens);
+                                                                            fillTableItens();
+                                                                        }
+
+                                                                        showMessages(result.Messages);
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                        else
+                                                            smartAlert("Erro", "Selecione pelo menos 1 item.", "error");
+                                                    }
+                                                });
                                             });
+
                                             function fillTableItens() {
                                                 var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+                                                $("#tableItens tbody").empty();
                                                 for (var i = 0; i < jsonItens.length; i++) {
                                                     var row = $('<tr />')
                                                     $("#tableItens tbody").append(row);
@@ -1131,4 +1158,31 @@
             });
         });
     });
+
+    function showMessages(messages) {
+        $(messages).each(function () {
+            var typeMessage = '';
+            var titleMessage = '';
+            switch (this.Type.toString()) {
+                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Info)':
+                    typeMessage = 'info';
+                    titleMessage = 'Informação';
+                    break;
+                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Success)':
+                    typeMessage = 'success';
+                    titleMessage = 'Sucesso';
+                    break;
+                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Warning)':
+                    typeMessage = 'warning';
+                    titleMessage = 'Alerta';
+                    break;
+                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Error)':
+                default:
+                    typeMessage = 'error';
+                    titleMessage = 'Erro';
+                    break;
+            }
+            smartAlert(titleMessage, this.Text, typeMessage);
+        });
+    }
 </script>

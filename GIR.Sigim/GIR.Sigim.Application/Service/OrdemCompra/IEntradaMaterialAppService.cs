@@ -15,6 +15,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         EntradaMaterialDTO ObterPeloId(int? id);
         List<OrdemCompraItemDTO> ListarItensDeOrdemCompraLiberadaComSaldo(int? entradaMaterialId);
         bool AdicionarItens(int? entradaMaterialId, int?[] itens);
+        bool RemoverItens(int? entradaMaterialId, int?[] itens);
         List<EntradaMaterialItemDTO> ListarItens(int? entradaMaterialId);
         bool CancelarEntrada(int? id, string motivo);
         bool LiberarTitulos(int? id);
@@ -24,7 +25,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         bool EhPermitidoImprimir(EntradaMaterialDTO dto);
         bool EhPermitidoLiberarTitulos(EntradaMaterialDTO dto);
         bool EhPermitidoAdicionarItem(EntradaMaterialDTO dto);
-        bool EhPermitidoCancelarItem(EntradaMaterialDTO dto);
+        bool EhPermitidoRemoverItem(EntradaMaterialDTO dto);
         bool EhPermitidoEditarItem(EntradaMaterialDTO dto);
 
         bool EhPermitidoEditarCentroCusto(EntradaMaterialDTO entradaMaterial);
