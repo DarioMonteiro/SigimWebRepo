@@ -31,6 +31,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
 
         public MaterialDTO Material { get; set; }
         public ClasseDTO Classe { get; set; }
+        public string JsonItens { get; set; }
 
         [Display(Name = "Complemento")]
         public string Complemento { get; set; }
@@ -133,7 +134,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public bool PodeImprimir { get; set; }
         public bool PodeLiberarTitulos { get; set; }
         public bool PodeAdicionarItem { get; set; }
-        public bool PodeCancelarItem { get; set; }
+        public bool PodeRemoverItem { get; set; }
         public bool PodeEditarItem { get; set; }
 
         public bool PodeEditarCentroCusto { get; set; }

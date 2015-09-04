@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.OrdemCompra;
 
 namespace GIR.Sigim.Domain.Specification.OrdemCompra
 {
     public class OrdemCompraSpecification : BaseSpecification<Domain.Entity.OrdemCompra.OrdemCompra>
     {
-
         public static Specification<Domain.Entity.OrdemCompra.OrdemCompra> IdNoIntervalo(int? inicio, int? fim)
         {
             Specification<Domain.Entity.OrdemCompra.OrdemCompra> specification = new TrueSpecification<Domain.Entity.OrdemCompra.OrdemCompra>();
@@ -59,7 +59,6 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
 
             return specification;
         }
-
 
         public static Specification<Domain.Entity.OrdemCompra.OrdemCompra> FornecedorContem(string nome)
         {
@@ -127,5 +126,35 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
             return specification;
         }
 
+        public static Specification<Domain.Entity.OrdemCompra.OrdemCompra> PertenceAoCentroCustoIniciadoPor(string centroCustoId)
+        {
+            Specification<Domain.Entity.OrdemCompra.OrdemCompra> specification = new TrueSpecification<Domain.Entity.OrdemCompra.OrdemCompra>();
+
+            if (!string.IsNullOrEmpty(centroCustoId))
+            {
+                var directSpecification = new DirectSpecification<Domain.Entity.OrdemCompra.OrdemCompra>(l => l.CentroCusto.Codigo.StartsWith(centroCustoId));
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.OrdemCompra.OrdemCompra> MatchingFornecedorId(int? fornecedorId)
+        {
+            Specification<Domain.Entity.OrdemCompra.OrdemCompra> specification = new TrueSpecification<Domain.Entity.OrdemCompra.OrdemCompra>();
+
+            if (fornecedorId.HasValue)
+            {
+                var idSpecification = new DirectSpecification<Domain.Entity.OrdemCompra.OrdemCompra>(l => l.ClienteFornecedorId == fornecedorId);
+                specification &= idSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<Domain.Entity.OrdemCompra.OrdemCompra> EhLiberada()
+        {
+            return new DirectSpecification<Domain.Entity.OrdemCompra.OrdemCompra>(l => l.Situacao == SituacaoOrdemCompra.Liberada);
+        }
     }
 }

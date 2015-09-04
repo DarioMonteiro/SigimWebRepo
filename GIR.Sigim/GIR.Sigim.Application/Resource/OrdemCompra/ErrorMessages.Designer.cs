@@ -70,6 +70,15 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Existe(m) forma(s) de pagamento(s) para a ordem de compra do item selecionado..
+        /// </summary>
+        public static string ExisteFormaPagamentoParaItemSelecionado {
+            get {
+                return ResourceManager.GetString("ExisteFormaPagamentoParaItemSelecionado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Informe o motivo do cancelamento da Entrada de Material..
         /// </summary>
         public static string InformeMotivoCancelamentoEntradaMaterial {
@@ -138,6 +147,15 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         public static string RequisicaoSituacaoInvalida {
             get {
                 return ResourceManager.GetString("RequisicaoSituacaoInvalida", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selecione uma entrada de material..
+        /// </summary>
+        public static string SelecioneUmaEntradaMaterial {
+            get {
+                return ResourceManager.GetString("SelecioneUmaEntradaMaterial", resourceCulture);
             }
         }
         

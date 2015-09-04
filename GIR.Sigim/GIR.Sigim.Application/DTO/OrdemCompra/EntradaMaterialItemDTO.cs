@@ -13,27 +13,26 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
 {
     public class EntradaMaterialItemDTO : BaseDTO
     {
-        public EntradaMaterialDTO EntradaMaterial { get; set; }
+        public int? EntradaMaterialId { get; set; }
         public OrdemCompraItemDTO OrdemCompraItem { get; set; }
         public ClasseDTO Classe { get; set; }
         public int Sequencial { get; set; }
-        public decimal? Quantidade { get; set; }
-        public decimal? ValorUnitario { get; set; }
-        public decimal? PercentualIPI { get; set; }
-        public decimal? PercentualDesconto { get; set; }
-        public decimal? ValorTotal { get; set; }
-        public decimal? BaseICMS { get; set; }
-        public decimal? PercentualICMS { get; set; }
-        public decimal? BaseIPI { get; set; }
-        public decimal? BaseICMSST { get; set; }
-        public decimal? PercentualICMSST { get; set; }
+        public decimal Quantidade { get; set; }
+        public decimal ValorUnitario { get; set; }
+        public decimal PercentualIPI { get; set; }
+        public decimal PercentualDesconto { get; set; }
+        public decimal ValorTotal { get; set; }
+        public decimal BaseICMS { get; set; }
+        public decimal PercentualICMS { get; set; }
+        public decimal BaseIPI { get; set; }
+        public decimal BaseICMSST { get; set; }
+        public decimal PercentualICMSST { get; set; }
         public string CodigoComplementoNaturezaOperacao { get; set; }
         public string CodigoComplementoCST { get; set; }
         public string CodigoNaturezaReceita { get; set; }
 
         public EntradaMaterialItemDTO()
         {
-            this.EntradaMaterial = new EntradaMaterialDTO();
             this.OrdemCompraItem = new OrdemCompraItemDTO();
             this.Classe = new ClasseDTO();
         }

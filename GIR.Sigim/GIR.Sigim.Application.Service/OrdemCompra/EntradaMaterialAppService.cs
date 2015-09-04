@@ -39,6 +39,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private ITituloPagarRepository tituloPagarRepository;
         private IApropriacaoRepository apropriacaoRepository;
         private ILogOperacaoAppService logOperacaoAppService;
+        private IOrdemCompraRepository ordemCompraRepository;
 
         private ParametrosOrdemCompra parametrosOrdemCompra;
         public ParametrosOrdemCompra ParametrosOrdemCompra
@@ -61,6 +62,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             ITituloPagarRepository tituloPagarRepository,
             IApropriacaoRepository apropriacaoRepository,
             ILogOperacaoAppService logOperacaoAppService,
+            IOrdemCompraRepository ordemCompraRepository,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -72,6 +74,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             this.tituloPagarRepository = tituloPagarRepository;
             this.apropriacaoRepository = apropriacaoRepository;
             this.logOperacaoAppService = logOperacaoAppService;
+            this.ordemCompraRepository = ordemCompraRepository;
         }
 
         #region IEntradaMaterialAppService Members
@@ -126,10 +129,172 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.CentroCusto,
                 l => l.ClienteFornecedor,
                 l => l.FornecedorNota,
-                l => l.ListaItens,
+                l => l.ListaItens.Select(o => o.Classe),
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
                 l => l.ListaImposto,
                 l => l.ListaMovimentoEstoque).To<EntradaMaterialDTO>();
+        }
+
+        public List<OrdemCompraItemDTO> ListarItensDeOrdemCompraLiberadaComSaldo(int? entradaMaterialId)
+        {
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId, UsuarioLogado.Id);
+            if (entradaMaterial != null)
+            {
+                if (!PodeSerSalvaNaSituacaoAtual(entradaMaterial.Situacao))
+                {
+                    var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return null;
+                }
+
+                var specification = (Specification<Domain.Entity.OrdemCompra.OrdemCompra>)new TrueSpecification<Domain.Entity.OrdemCompra.OrdemCompra>();
+
+                specification &= OrdemCompraSpecification.EhLiberada();
+                specification &= OrdemCompraSpecification.PertenceAoCentroCustoIniciadoPor(entradaMaterial.CodigoCentroCusto);
+                specification &= OrdemCompraSpecification.MatchingFornecedorId(entradaMaterial.ClienteFornecedorId);
+
+                var listaOrdemCompra = ordemCompraRepository.ListarPeloFiltro(specification,
+                    l => l.ListaItens.Select(o => o.Classe),
+                    l => l.ListaItens.Select(o => o.Material));
+
+                return listaOrdemCompra.SelectMany(l => l.ListaItens.Where(o => o.Saldo > 0)).To<List<OrdemCompraItemDTO>>();
+            }
+            else {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return null;
+            }
+        }
+
+        public bool AdicionarItens(int? entradaMaterialId, int?[] itens)
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId, UsuarioLogado.Id, l => l.ListaItens);
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return false;
+            }
+
+            if (!PodeSerSalvaNaSituacaoAtual(entradaMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            var listaOrdemCompraItem = ordemCompraRepository.ListarItensPeloId(itens);
+
+            foreach (var ordemCompraItem in listaOrdemCompraItem)
+            {
+                int sequencial = entradaMaterial.ListaItens.Any() ? entradaMaterial.ListaItens.Max(l => l.Sequencial) + 1 : 1;
+                var entradaMaterialItem = new EntradaMaterialItem();
+                entradaMaterialItem.OrdemCompraItem = ordemCompraItem;
+                entradaMaterialItem.CodigoClasse = ordemCompraItem.CodigoClasse;
+                entradaMaterialItem.Sequencial = sequencial;
+                entradaMaterialItem.Quantidade = ordemCompraItem.Saldo;
+                entradaMaterialItem.ValorUnitario = ordemCompraItem.ValorUnitario;
+                entradaMaterialItem.PercentualIPI = ordemCompraItem.PercentualIPI;
+                entradaMaterialItem.PercentualDesconto = ordemCompraItem.PercentualDesconto;
+                entradaMaterialItem.ValorTotal = ordemCompraItem.ValorTotalComImposto;
+                entradaMaterialItem.BaseIPI = ordemCompraItem.Quantidade * ordemCompraItem.ValorUnitario;
+                entradaMaterial.ListaItens.Add(entradaMaterialItem);
+
+                ordemCompraItem.QuantidadeEntregue += entradaMaterialItem.Quantidade;
+            }
+
+            try
+            {
+                entradaMaterialRepository.Alterar(entradaMaterial);
+                entradaMaterialRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return false;
+        }
+
+        public bool RemoverItens(int? entradaMaterialId, int?[] itens)
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId,
+                UsuarioLogado.Id,
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra),
+                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento));
+
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return false;
+            }
+
+            if (!PodeSerSalvaNaSituacaoAtual(entradaMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            var listaItens = entradaMaterial.ListaItens.Where(l => itens.Contains(l.Id)).ToList();
+            var listaFormasPagamentoOC = entradaMaterial.ListaFormaPagamento.Select(l => l.OrdemCompraFormaPagamento.OrdemCompraId).Distinct();
+
+            if (listaFormasPagamentoOC.Intersect(listaItens.Select(l => l.OrdemCompraItem.OrdemCompraId)).Any())
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.ExisteFormaPagamentoParaItemSelecionado, TypeMessage.Error);
+                return false;
+            }
+
+            for (int i = listaItens.Count() - 1; i >= 0; i--)
+            {
+                var entradaMaterialItem = listaItens[i];
+                entradaMaterialItem.OrdemCompraItem.QuantidadeEntregue -= entradaMaterialItem.Quantidade;
+                entradaMaterialItem.OrdemCompraItem.OrdemCompra.Situacao = SituacaoOrdemCompra.Liberada;
+                entradaMaterialRepository.RemoverEntradaMaterialItem(entradaMaterialItem);
+            }
+            
+            try
+            {
+                entradaMaterialRepository.Alterar(entradaMaterial);
+                entradaMaterialRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return false;
+        }
+
+        public List<EntradaMaterialItemDTO> ListarItens(int? entradaMaterialId)
+        {
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId,
+                UsuarioLogado.Id,
+                l => l.ListaItens.Select(o => o.Classe),
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.Material));
+
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return null;
+            }
+
+            return entradaMaterial.ListaItens.To<List<EntradaMaterialItemDTO>>();
         }
 
         public bool CancelarEntrada(int? id, string motivo)
@@ -463,7 +628,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return EhPermitidoSalvar(dto);
         }
 
-        public bool EhPermitidoCancelarItem(EntradaMaterialDTO dto)
+        public bool EhPermitidoRemoverItem(EntradaMaterialDTO dto)
         {
             return EhPermitidoSalvar(dto);
         }
