@@ -970,7 +970,36 @@
                                 <div id="collapseFormasPagamento" class="panel-collapse collapse">
                                     <div class="panel-body no-padding">
                                         <fieldset>
-
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    @{
+                                                        string disableBtnRemoverFormaPagamento = string.Empty;
+                                                        if (!Model.PodeRemoverItem)
+                                                        {
+                                                            disableBtnRemoverFormaPagamento = "disabled";
+                                                        }
+                                                    }
+                                                    <button id="btnRemoverFormaPagamento" type="button" class="btn btn-danger @disableBtnRemoverFormaPagamento">
+                                                        Remover Forma de Pagamento
+                                                    </button>
+                                                </section>
+                                            </div>
+                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow-x: auto;">
+                                                <table id="tableFormaPagamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th>OC</th>
+                                                            <th>Data vencimento</th>
+                                                            <th class="text-right">Valor</th>
+                                                            <th>Tipo de compromisso</th>
+                                                            <th>Liberado</th>
+                                                            <th>Título</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </fieldset>
                                     </div>
                                 </div>
