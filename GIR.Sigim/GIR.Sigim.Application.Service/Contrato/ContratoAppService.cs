@@ -867,7 +867,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         }
 
 
-        public void PreencherResumo(ContratoDTO contrato, ContratoRetificacaoItemDTO contratoRetificacaoItemSelecionado, ResumoLiberacaoDTO resumo)
+        public void PreencherResumo(ContratoDTO contrato, ContratoRetificacaoItemDTO contratoRetificacaoItemSelecionado, ResumoLiberacaoDTO resumo, List<ItemListaLiberacaoDTO> listaItemListaLiberacao)
         {
             decimal valorTotalItem = 0;
             decimal valorTotalItemSemRetencao = 0;
@@ -938,16 +938,49 @@ namespace GIR.Sigim.Application.Service.Contrato
             {
                 foreach (var provisao in listaContratoRetificacaoProvisao)
                 {
-                    valorTotalProvisionado = valorTotalProvisionado + provisao.Valor;
+                    ItemListaLiberacaoDTO itemListaLiberacao = new ItemListaLiberacaoDTO();
+                    if (provisao.SequencialItem.HasValue) itemListaLiberacao.SequencialItem = provisao.SequencialItem.Value;
+                    itemListaLiberacao.DataVencimento = provisao.ContratoRetificacaoItemCronograma.DataVencimento;
+                    
+                    itemListaLiberacao.ResponsavelLiberacao = !string.IsNullOrEmpty(provisao.UsuarioAntecipacao) ? provisao.UsuarioAntecipacao : "";
+                    itemListaLiberacao.TipoDocumento = "";
+                    itemListaLiberacao.NumeroDocumento = "";
                     bool ehPagamentoAntecipado = provisao.PagamentoAntecipado.HasValue ? provisao.PagamentoAntecipado.Value : false;
+                    itemListaLiberacao.EhPagamentoAntecipado = ehPagamentoAntecipado;
                     if (ehPagamentoAntecipado)
                     {
+                        itemListaLiberacao.NumeroDocumento = RecuperaDocumentoAntecipacao(contrato, provisao.SequencialCronograma, provisao.SequencialItem, provisao.ContratoRetificacaoId);
+                        itemListaLiberacao.DescricaoSituacao = "Antecipado";
+                        if (provisao.DataAntecipacao.HasValue) itemListaLiberacao.DataLiberacao = provisao.DataAntecipacao.Value;
+
                         totalAdiantado = totalAdiantado + provisao.Valor;
                         if (provisao.ValorAdiantadoDescontado.HasValue)
                         {
                             totalValorAdiantadoDescontado = totalValorAdiantadoDescontado + provisao.ValorAdiantadoDescontado.Value;
                         }
+                        itemListaLiberacao.CorLinha = "color:purple";
                     }
+                    else
+                    {
+                        itemListaLiberacao.DescricaoSituacao = "Provisionado";
+                        valorTotalProvisionado = valorTotalProvisionado + provisao.Valor;
+                        itemListaLiberacao.CorLinha = "color:blue";
+                    }
+                    itemListaLiberacao.Valor = provisao.Valor;
+                    itemListaLiberacao.ValorRetido = 0;
+                    itemListaLiberacao.ResponsavelMedicao = "";
+                    if (contrato.TipoContrato == 0){
+                        itemListaLiberacao.TituloId = provisao.TituloPagarId.HasValue ? provisao.TituloPagarId.Value : 0;
+                    }
+                    else{
+                        itemListaLiberacao.TituloId = provisao.TituloReceberId.HasValue ? provisao.TituloReceberId.Value : 0;
+                    }
+                    itemListaLiberacao.Avaliacao = "";
+                    itemListaLiberacao.DescricaoEvento = provisao.ContratoRetificacaoItemCronograma.Descricao;
+                    itemListaLiberacao.ContratoRetificacaoProvisao = provisao;
+                    
+
+                    listaItemListaLiberacao.Add(itemListaLiberacao);
                 }
             }
 
@@ -989,9 +1022,9 @@ namespace GIR.Sigim.Application.Service.Contrato
             resumo.Liberado = valorTotalLiberado;
             resumo.RetencaoLiberada = valorTotalRetencaoLiberada;
             resumo.Saldo = valorTotalItem - valorTotalMedido;
+            listaItemListaLiberacao = listaItemListaLiberacao.OrderBy(l => l.DataVencimento).ToList();
 
         }
-
 
         #endregion
 
@@ -1722,6 +1755,24 @@ namespace GIR.Sigim.Application.Service.Contrato
             return dta;
         }
 
+        private string RecuperaDocumentoAntecipacao(ContratoDTO contrato, int? sequencialCronograma, int? sequencialItem, int? contratoRetificacaoId)
+        {
+            string documentoAntecipacao = "";
+            if (contrato.ListaContratoRetificacaoItemMedicao.Count > 0 && sequencialCronograma.HasValue && sequencialItem.HasValue && contratoRetificacaoId.HasValue)
+            {
+                List<ContratoRetificacaoItemMedicaoDTO> listaMedicao =
+                    contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.SequencialCronograma == sequencialCronograma.Value && l.SequencialItem == sequencialItem.Value && l.ContratoRetificacaoId <= contratoRetificacaoId.Value).ToList();
+                foreach (var medicao in listaMedicao)
+                {
+                    documentoAntecipacao = documentoAntecipacao + medicao.NumeroDocumento + "/";
+                }
+                if (documentoAntecipacao.Length > 0)
+                {
+                    documentoAntecipacao = documentoAntecipacao.Substring(0, documentoAntecipacao.Length - 1);
+                }
+            }
+            return documentoAntecipacao;
+        }
 
         #endregion
     }

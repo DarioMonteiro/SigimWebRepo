@@ -12,7 +12,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public int ContratoId { get; set; }
         //public ContratoDTO Contrato { get; set; }
         public int ContratoRetificacaoId { get; set; }
-        public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
+        //public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
         public int? ContratoRetificacaoItemId { get; set; }
         public ContratoRetificacaoItemDTO ContratoRetificacaoItem { get; set; }
         public int? SequencialItem { get; set; }
