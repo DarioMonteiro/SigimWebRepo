@@ -9,9 +9,9 @@ using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
-    public interface IContratoAppService : IBaseAppService 
+    public interface IContratoAppService : IBaseAppService
     {
-        List<ContratoDTO> ListarPeloFiltro(MedicaoContratoFiltro filtro,int? idUsuario, out int totalRegistros);
+        List<ContratoDTO> ListarPeloFiltro(MedicaoContratoFiltro filtro, int? idUsuario, out int totalRegistros);
         List<ContratoDTO> ListarPeloFiltro(LiberacaoContratoFiltro filtro, int? idUsuario, out int totalRegistros);
         ContratoDTO ObterPeloId(int? id, int? idUsuario);
         bool EhContratoAssinado(ContratoDTO dto);
@@ -25,13 +25,18 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool EhValidoParametrosVisualizacaoMedicao(int? contratoId, int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao, int? contratadoId);
         List<ContratoRetificacaoItemMedicaoDTO> RecuperaMedicaoPorDadosDaNota(int contratoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, int? contratadoId);
         bool ExisteNumeroDocumento(Nullable<DateTime> dataEmissao, string numeroDocumento, int? contratadoId);
-        FileDownloadDTO ExportarMedicao(int contratoId,int? contratadoId,int tipoDocumentoId,string numeroDocumento,DateTime dataEmissao,string retencaoContratual,string valorContratadoItem,FormatoExportacaoArquivo formato);
+        FileDownloadDTO ExportarMedicao(int contratoId, int? contratadoId, int tipoDocumentoId, string numeroDocumento, DateTime dataEmissao, string retencaoContratual, string valorContratadoItem, FormatoExportacaoArquivo formato);
         bool ExcluirMedicao(int? contratoId, int? contratoRetificacaoItemMedicaoId);
         bool SalvarMedicao(ContratoRetificacaoItemMedicaoDTO dto);
         bool EhPermitidoSalvarMedicao();
         bool EhPermitidoDeletarMedicao();
         bool EhPermitidoImprimirMedicao();
         List<ContratoDTO> PesquisarContratosPeloFiltro(ContratoPesquisaFiltro filtro, out int totalRegistros);
-        void PreencherResumo(ContratoDTO contrato, ContratoRetificacaoItemDTO contratoRetificacaoItemSelecionado, ResumoLiberacaoDTO resumo, List<ItemListaLiberacaoDTO> listaItemListaLiberacao);
+        void RecuperarMedicoesALiberar(ContratoDTO contrato, ContratoRetificacaoItemDTO contratoRetificacaoItemSelecionado, ResumoLiberacaoDTO resumo, out List<ItemLiberacaoDTO> listaItemLiberacao);
+        bool PodeConcluirContrato(ContratoDTO contrato);
+        bool EhPermitidoHabilitarBotoes(ContratoDTO dto);
+        bool EhUltimoContratoRetificacao(int? contratoId, int? contratoRetificacaoId);
+        bool AtualizarSituacaoParaConcluido(int? contratoId);
+        bool AprovaListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO);
     }
 }

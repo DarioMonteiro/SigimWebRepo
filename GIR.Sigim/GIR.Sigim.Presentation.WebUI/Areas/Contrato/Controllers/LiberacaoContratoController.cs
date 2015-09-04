@@ -128,6 +128,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                 return View(model);
             }
 
+            model.ContratoRetificacao = contratoRetificacao;
+
             model.ContratoRetificacaoItemMedicao.ContratoRetificacaoId = contratoRetificacao.Id.Value;
 
             ListaItensUltimoContratoRetificacao = contratoRetificacao.ListaContratoRetificacaoItem;
@@ -136,19 +138,30 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             model.ListaServicoContratoRetificacaoItem = new SelectList(ListaItensUltimoContratoRetificacao.OrderBy(l => l.Sequencial), "Id", "SequencialDescricaoItemComplemento", ListaItensUltimoContratoRetificacao.Select(l => l.Id.Value));
 
-            List<ItemListaLiberacaoDTO> listaItemListaLiberacao = new List<ItemListaLiberacaoDTO>();
-            contratoAppService.PreencherResumo(contrato, contratoRetificacaoItem, model.Resumo, listaItemListaLiberacao);
+            List<ItemLiberacaoDTO> listaItemLiberacao = new List<ItemLiberacaoDTO>();
+            contratoAppService.RecuperarMedicoesALiberar(contrato, contratoRetificacaoItem, model.Resumo, out listaItemLiberacao);
+            model.PodeConcluirContrato =  contratoAppService.PodeConcluirContrato(contrato);
 
-            model.JsonListaItemListaLiberacao = JsonConvert.SerializeObject(listaItemListaLiberacao);
+            model.JsonListaItemLiberacao = JsonConvert.SerializeObject(listaItemLiberacao);
+
+            model.PodeHabilitarBotoes = contratoAppService.EhPermitidoHabilitarBotoes(contrato);
+
+            model.PodeAprovarLiberar = true;
+            model.PodeAprovar = true;
+            model.PodeLiberar = true;
+            model.PodeCancelarLiberacao = true;
+            model.PodeAssociarNF = true;
+            model.PodeAlterarDataVencimento = true;
+            model.PodeImprimirMedicao = true;
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult RecuperaContratoRetificacaoItem(int? contratoId, int? contratoRetificacaoItemId)
+        public ActionResult RecuperaContratoRetificacaoItem(int? contratoId,int ? contratoRetificacaoId, int? contratoRetificacaoItemId)
         {
             ResumoLiberacaoDTO resumo = new ResumoLiberacaoDTO();
-            List<ItemListaLiberacaoDTO> listaItemListaLiberacao = new List<ItemListaLiberacaoDTO>();
+            List<ItemLiberacaoDTO> listaItemLiberacao = new List<ItemLiberacaoDTO>();
 
             if (contratoId.HasValue && contratoRetificacaoItemId.HasValue)
             {
@@ -163,7 +176,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         ehRecuperou = false,
                         errorMessage = msg,
-                        resumo = resumo
+                        resumo = resumo,
+                        listaItemLiberacao = listaItemLiberacao,
+                        podeConcluirContrato = false,
+                        redirectToUrl = string.Empty
                     });
                 }
 
@@ -176,8 +192,25 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         ehRecuperou = false,
                         errorMessage = msg,
-                        resumo = resumo
+                        resumo = resumo,
+                        listaItemLiberacao = listaItemLiberacao,
+                        podeConcluirContrato = false,
+                        redirectToUrl = string.Empty
                     });
+                }
+
+                if (!contratoAppService.EhUltimoContratoRetificacao(contrato.Id, contratoRetificacaoId))
+                {
+
+                    return Json(new
+                            {
+                                ehRecuperou = false,
+                                errorMessage = string.Empty,
+                                resumo = resumo,
+                                listaItemLiberacao = listaItemLiberacao,
+                                podeConcluirContrato = false,
+                                redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contrato.Id })
+                            });
                 }
 
                 ContratoRetificacaoItemDTO contratoRetificacaoItem = new ContratoRetificacaoItemDTO();
@@ -187,16 +220,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemId).FirstOrDefault() ?? new ContratoRetificacaoItemDTO();
                     }
-                    contratoAppService.PreencherResumo(contrato, contratoRetificacaoItem, resumo, listaItemListaLiberacao);
+                    contratoAppService.RecuperarMedicoesALiberar(contrato, contratoRetificacaoItem, resumo, out listaItemLiberacao);
+                    bool podeConcluirContrato = contratoAppService.PodeConcluirContrato(contrato);
                     return Json(new
                     {
                         ehRecuperou = true,
                         errorMessage = string.Empty,
                         resumo = resumo,
-                        listaItemListaLiberacao = JsonConvert.SerializeObject(listaItemListaLiberacao)
-
-                        //listaItemListaLiberacao = listaItemListaLiberacao
-
+                        listaItemLiberacao = JsonConvert.SerializeObject(listaItemLiberacao),
+                        podeConcluirContrato = podeConcluirContrato,
+                        redirectToUrl = string.Empty
                     });
                 }
             }
@@ -205,7 +238,78 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             {
                 ehRecuperou = false,
                 errorMessage = string.Empty,
-                resumo = resumo
+                resumo = resumo,
+                listaItemLiberacao = listaItemLiberacao,
+                podeConcluirContrato = false,
+                redirectToUrl = string.Empty
+            });
+        }
+
+
+        [HttpPost]
+        public ActionResult ConcluirContrato(int? contratoId, int? contratoRetificacaoId)
+        {
+            bool ehConcluido = false;
+            string msg = "";
+
+            if (contratoId.HasValue && contratoRetificacaoId.HasValue)
+            {
+                if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
+                {
+                    ehConcluido = false;
+                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                }
+                else
+                {
+                    ehConcluido = contratoAppService.AtualizarSituacaoParaConcluido(contratoId);
+                    if (messageQueue.GetAll().Count > 0)
+                    {
+                        msg = messageQueue.GetAll()[0].Text;
+                        messageQueue.Clear();
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                ehConcluido = ehConcluido,
+                message = msg
+            });
+        }
+
+        [HttpPost]
+        public ActionResult TratarAprovar(int? contratoId, int? contratoRetificacaoId, string listaItemLiberacao)
+        {
+            bool ehAprovado = false;
+            string msg = "";
+
+            if (contratoId.HasValue && contratoRetificacaoId.HasValue)
+            {
+                if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
+                {
+                    ehAprovado = false;
+                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(listaItemLiberacao))
+                    {
+                        List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
+
+                        ehAprovado = contratoAppService.AprovaListaItemLiberacao(contratoId.Value,listaItemLiberacaoDTO);
+                        if (messageQueue.GetAll().Count > 0)
+                        {
+                            msg = messageQueue.GetAll()[0].Text;
+                            messageQueue.Clear();
+                        }
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                ehAprovado = ehAprovado,
+                message = msg
             });
 
         }

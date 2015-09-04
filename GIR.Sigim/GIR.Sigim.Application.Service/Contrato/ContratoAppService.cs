@@ -177,15 +177,22 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                   l => l.ContratoDescricao, 
                                                   l => l.ListaContratoRetificacao,
                                                   l => l.ListaContratoRetificacaoItem.Select(d => d.Servico),
-                                                  l => l.ListaContratoRetificacaoItemMedicao,
+                                                  l => l.ListaContratoRetificacaoItemMedicao.Select(d => d.TipoDocumento),
                                                   l => l.ListaContratoRetificacaoItemCronograma,
                                                   l => l.ListaContratoRetificacaoProvisao,
-                                                  l => l.ListaContratoRetencao.Select(d => d.ListaContratoRetencaoLiberada)).To<ContratoDTO>();
+                                                  l => l.ListaContratoRetencao.Select(d => d.ListaContratoRetencaoLiberada),
+                                                  l => l.ListaAvaliacaoFornecedor).To<ContratoDTO>();
         }
 
         public bool EhContratoAssinado(ContratoDTO dto)
         {
-            return PodeSerUmContratoAssinado(dto.Situacao);
+            bool ehContratoAssinado =  PodeSerUmContratoAssinado(dto.Situacao);
+            if (!ehContratoAssinado)
+            {
+                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.ContratoNaoAssinado, TypeMessage.Error);
+            }
+
+            return ehContratoAssinado;
         }
 
         public bool EhContratoExistente(ContratoDTO dto)
@@ -867,7 +874,52 @@ namespace GIR.Sigim.Application.Service.Contrato
         }
 
 
-        public void PreencherResumo(ContratoDTO contrato, ContratoRetificacaoItemDTO contratoRetificacaoItemSelecionado, ResumoLiberacaoDTO resumo, List<ItemListaLiberacaoDTO> listaItemListaLiberacao)
+        public bool PodeConcluirContrato(ContratoDTO contrato)
+        {
+            decimal valorTotalProvisionado = 0;
+
+            List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisao = null;
+
+            ContratoRetificacaoDTO contratoRetificacao = contrato.ListaContratoRetificacao.Last();
+
+            if (!PodeSerUmContratoAssinado(contrato.Situacao))
+            {
+                return false;
+            }
+
+            if (contratoRetificacao == null)
+            {
+                return false;
+            }
+
+            if (!contratoRetificacao.Aprovada)
+            {
+                return false;
+            }
+
+            listaContratoRetificacaoProvisao = contrato.ListaContratoRetificacaoProvisao.Where(l => l.ContratoRetificacaoId == contratoRetificacao.Id && l.ContratoRetificacaoItemId.HasValue).ToList();
+
+            if (listaContratoRetificacaoProvisao == null)
+            {
+                return false;
+            }
+
+            if (listaContratoRetificacaoProvisao.Count > 0)
+            {
+                return false;
+            }
+
+            valorTotalProvisionado  = contrato.ListaContratoRetificacaoProvisao.Where(l => l.ContratoRetificacaoId == contratoRetificacao.Id && l.ContratoRetificacaoItemId == null).Select(l => l.Valor).FirstOrDefault();
+
+            if (valorTotalProvisionado > 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void RecuperarMedicoesALiberar(ContratoDTO contrato, ContratoRetificacaoItemDTO contratoRetificacaoItemSelecionado, ResumoLiberacaoDTO resumo, out List<ItemLiberacaoDTO> listaItemLiberacao)
         {
             decimal valorTotalItem = 0;
             decimal valorTotalItemSemRetencao = 0;
@@ -883,9 +935,9 @@ namespace GIR.Sigim.Application.Service.Contrato
             List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisao = null;
             List<ContratoRetificacaoItemMedicaoDTO> listaContratoRetificacaoItemMedicao = null;
             List<ContratoRetencaoLiberadaDTO> listaContratoRetencaoLiberada = null;
+            List<ItemLiberacaoDTO> listaItemLiberacaoAux = new List<ItemLiberacaoDTO>();
 
             ContratoRetificacaoDTO contratoRetificacao = contrato.ListaContratoRetificacao.Last();
-
 
             if (!contratoRetificacaoItemSelecionado.Id.HasValue)
             {
@@ -938,49 +990,50 @@ namespace GIR.Sigim.Application.Service.Contrato
             {
                 foreach (var provisao in listaContratoRetificacaoProvisao)
                 {
-                    ItemListaLiberacaoDTO itemListaLiberacao = new ItemListaLiberacaoDTO();
-                    if (provisao.SequencialItem.HasValue) itemListaLiberacao.SequencialItem = provisao.SequencialItem.Value;
-                    itemListaLiberacao.DataVencimento = provisao.ContratoRetificacaoItemCronograma.DataVencimento;
-                    
-                    itemListaLiberacao.ResponsavelLiberacao = !string.IsNullOrEmpty(provisao.UsuarioAntecipacao) ? provisao.UsuarioAntecipacao : "";
-                    itemListaLiberacao.TipoDocumento = "";
-                    itemListaLiberacao.NumeroDocumento = "";
+                    ItemLiberacaoDTO itemLiberacao = new ItemLiberacaoDTO();
+                    if (provisao.SequencialItem.HasValue) itemLiberacao.SequencialItem = provisao.SequencialItem.Value;
+                    itemLiberacao.DataVencimento = provisao.ContratoRetificacaoItemCronograma.DataVencimento;
+
+                    itemLiberacao.ResponsavelLiberacao = !string.IsNullOrEmpty(provisao.UsuarioAntecipacao) ? provisao.UsuarioAntecipacao : "";
+                    itemLiberacao.TipoDocumento = "";
+                    itemLiberacao.NumeroDocumento = "";
                     bool ehPagamentoAntecipado = provisao.PagamentoAntecipado.HasValue ? provisao.PagamentoAntecipado.Value : false;
-                    itemListaLiberacao.EhPagamentoAntecipado = ehPagamentoAntecipado;
+                    itemLiberacao.EhPagamentoAntecipado = ehPagamentoAntecipado;
                     if (ehPagamentoAntecipado)
                     {
-                        itemListaLiberacao.NumeroDocumento = RecuperaDocumentoAntecipacao(contrato, provisao.SequencialCronograma, provisao.SequencialItem, provisao.ContratoRetificacaoId);
-                        itemListaLiberacao.DescricaoSituacao = "Antecipado";
-                        if (provisao.DataAntecipacao.HasValue) itemListaLiberacao.DataLiberacao = provisao.DataAntecipacao.Value;
+                        itemLiberacao.NumeroDocumento = RecuperaDocumentoAntecipacao(contrato, provisao.SequencialCronograma, provisao.SequencialItem, provisao.ContratoRetificacaoId);
+                        itemLiberacao.DescricaoSituacao = "Antecipado";
+                        if (provisao.DataAntecipacao.HasValue) itemLiberacao.DataLiberacao = provisao.DataAntecipacao.Value;
 
                         totalAdiantado = totalAdiantado + provisao.Valor;
                         if (provisao.ValorAdiantadoDescontado.HasValue)
                         {
                             totalValorAdiantadoDescontado = totalValorAdiantadoDescontado + provisao.ValorAdiantadoDescontado.Value;
                         }
-                        itemListaLiberacao.CorLinha = "color:purple";
+                        itemLiberacao.CorTexto = "color:purple";
                     }
                     else
                     {
-                        itemListaLiberacao.DescricaoSituacao = "Provisionado";
+                        itemLiberacao.DescricaoSituacao = "Provisionado";
                         valorTotalProvisionado = valorTotalProvisionado + provisao.Valor;
-                        itemListaLiberacao.CorLinha = "color:blue";
+                        itemLiberacao.CorTexto = "color:blue";
                     }
-                    itemListaLiberacao.Valor = provisao.Valor;
-                    itemListaLiberacao.ValorRetido = 0;
-                    itemListaLiberacao.ResponsavelMedicao = "";
+                    itemLiberacao.CodigoSituacao = (int)SituacaoMedicao.Provisionado;
+                    itemLiberacao.Valor = provisao.Valor;
+                    itemLiberacao.ValorRetido = 0;
+                    itemLiberacao.ResponsavelMedicao = "";
                     if (contrato.TipoContrato == 0){
-                        itemListaLiberacao.TituloId = provisao.TituloPagarId.HasValue ? provisao.TituloPagarId.Value : 0;
+                        itemLiberacao.TituloId = provisao.TituloPagarId.HasValue ? provisao.TituloPagarId.Value : 0;
                     }
                     else{
-                        itemListaLiberacao.TituloId = provisao.TituloReceberId.HasValue ? provisao.TituloReceberId.Value : 0;
+                        itemLiberacao.TituloId = provisao.TituloReceberId.HasValue ? provisao.TituloReceberId.Value : 0;
                     }
-                    itemListaLiberacao.Avaliacao = "";
-                    itemListaLiberacao.DescricaoEvento = provisao.ContratoRetificacaoItemCronograma.Descricao;
-                    itemListaLiberacao.ContratoRetificacaoProvisao = provisao;
-                    
+                    itemLiberacao.Avaliacao = "";
+                    itemLiberacao.DescricaoEvento = provisao.ContratoRetificacaoItemCronograma.Descricao;
+                    itemLiberacao.ContratoRetificacaoProvisaoId = provisao.Id;
+                    itemLiberacao.Ordem = 1;
 
-                    listaItemListaLiberacao.Add(itemListaLiberacao);
+                    listaItemLiberacaoAux.Add(itemLiberacao);
                 }
             }
 
@@ -988,6 +1041,46 @@ namespace GIR.Sigim.Application.Service.Contrato
             {
                 foreach (var medicao in listaContratoRetificacaoItemMedicao)
                 {
+                    ItemLiberacaoDTO itemLiberacao = new ItemLiberacaoDTO();
+                    itemLiberacao.SequencialItem = medicao.SequencialItem;
+                    itemLiberacao.DataMedicao = medicao.DataMedicao;
+                    itemLiberacao.DataVencimento = medicao.DataVencimento;
+                    itemLiberacao.TipoDocumento = medicao.TipoDocumento.Sigla;
+                    itemLiberacao.NumeroDocumento = medicao.NumeroDocumento;
+                    itemLiberacao.DataEmissao = medicao.DataEmissao;
+                    itemLiberacao.CodigoSituacao = (int)medicao.Situacao;
+                    itemLiberacao.DescricaoSituacao = medicao.Situacao.ObterDescricao();
+                    itemLiberacao.Valor = medicao.Valor;
+                    valorRetido = medicao.ValorRetido.HasValue ? medicao.ValorRetido.Value : 0;
+                    itemLiberacao.ValorRetido = valorRetido;
+                    itemLiberacao.ResponsavelMedicao = medicao.UsuarioMedicao;
+                    if (contrato.TipoContrato == 0)
+                    {
+                        itemLiberacao.TituloId = medicao.TituloPagarId.HasValue ? medicao.TituloPagarId.Value : 0;
+                    }
+                    else
+                    {
+                        itemLiberacao.TituloId = medicao.TituloReceberId.HasValue ? medicao.TituloReceberId.Value : 0;
+                    }
+                    itemLiberacao.DataLiberacao = medicao.DataLiberacao;
+                    itemLiberacao.ResponsavelLiberacao = !string.IsNullOrEmpty(medicao.UsuarioLiberacao) ? medicao.UsuarioLiberacao : "";
+                    itemLiberacao.DataCadastro = medicao.DataCadastro;
+                    if (medicao.Situacao == SituacaoMedicao.Liberado)
+                    {
+                        itemLiberacao.CorTexto = "color:black";
+                    }
+                    else
+                    {
+                        itemLiberacao.CorTexto = "color:red";
+                    }
+                    itemLiberacao.Avaliacao = "";
+                    if (!string.IsNullOrEmpty(medicao.NumeroDocumento))
+                    {
+                        bool existeAvaliacao = contrato.ListaAvaliacaoFornecedor.Any(l => l.ContratoId == medicao.ContratoId && l.Documento == medicao.NumeroDocumento);
+                        itemLiberacao.Avaliacao = existeAvaliacao ? "S" : "";
+                    }
+                    itemLiberacao.DescricaoEvento = medicao.ContratoRetificacaoItemCronograma.Descricao;
+
                     valorTotalMedido = valorTotalMedido + medicao.Valor;
                     bool ehSituacaoMedicaoLiberado = contratoRetificacaoItemMedicaoAppService.EhSituacaoMedicaoLiberado(medicao);
                     if (ehSituacaoMedicaoLiberado)
@@ -1001,6 +1094,11 @@ namespace GIR.Sigim.Application.Service.Contrato
                     valorRetido = 0;
                     if (medicao.ValorRetido.HasValue) valorRetido = medicao.ValorRetido.Value;
                     valorTotalRetido = valorTotalRetido + valorRetido;
+
+                    itemLiberacao.ContratoRetificacaoItemMedicaoId = medicao.Id;
+                    itemLiberacao.Ordem = 2;
+
+                    listaItemLiberacaoAux.Add(itemLiberacao);
                 }
             }
 
@@ -1008,7 +1106,35 @@ namespace GIR.Sigim.Application.Service.Contrato
             {
                 foreach (var retLib in listaContratoRetencaoLiberada)
                 {
+                    ItemLiberacaoDTO itemLiberacao = new ItemLiberacaoDTO();
+                    itemLiberacao.SequencialItem = retLib.ContratoRetencao.ContratoRetificacaoItem.Sequencial;
+                    itemLiberacao.DataVencimento = retLib.DataVencimento;
+                    itemLiberacao.TipoDocumento = retLib.ContratoRetencao.ContratoRetificacaoItemMedicao.TipoDocumento.Sigla;
+                    itemLiberacao.NumeroDocumento = retLib.ContratoRetencao.ContratoRetificacaoItemMedicao.NumeroDocumento;
+                    itemLiberacao.DescricaoSituacao = "Liberado";
+                    itemLiberacao.CodigoSituacao = (int)SituacaoMedicao.Retencao;
+                    itemLiberacao.Valor = retLib.ValorLiberado;
+                    itemLiberacao.ValorRetido = 0;
+                    itemLiberacao.ResponsavelMedicao = "";
+                    if (contrato.TipoContrato == 0)
+                    {
+                        itemLiberacao.TituloId = retLib.TituloPagarId.HasValue ? retLib.TituloPagarId.Value : 0;
+                    }
+                    else
+                    {
+                        itemLiberacao.TituloId = retLib.TituloReceberId.HasValue ? retLib.TituloReceberId.Value : 0;
+                    }
+                    itemLiberacao.DataLiberacao = retLib.DataLiberacao;
+                    itemLiberacao.ResponsavelLiberacao = retLib.UsuarioLiberacao;
+                    itemLiberacao.DescricaoEvento = "";
+                    itemLiberacao.CorTexto = "color:green";
+                    itemLiberacao.Avaliacao = "";
+                    itemLiberacao.Ordem = 3;
+                    itemLiberacao.ContratoRetificacaoItemMedicaoId = retLib.Id;
+
                     valorTotalRetencaoLiberada = valorTotalRetencaoLiberada + retLib.ValorLiberado;
+
+                    listaItemLiberacaoAux.Add(itemLiberacao);
                 }
             }
 
@@ -1022,8 +1148,145 @@ namespace GIR.Sigim.Application.Service.Contrato
             resumo.Liberado = valorTotalLiberado;
             resumo.RetencaoLiberada = valorTotalRetencaoLiberada;
             resumo.Saldo = valorTotalItem - valorTotalMedido;
-            listaItemListaLiberacao = listaItemListaLiberacao.OrderBy(l => l.DataVencimento).ToList();
+            listaItemLiberacao = listaItemLiberacaoAux.OrderBy(l => l.Ordem).ThenBy(l => l.DataVencimento).ToList();
 
+            int posicaoLista = 0;
+            foreach (ItemLiberacaoDTO item in listaItemLiberacao)
+            {
+                item.PosicaoLista = posicaoLista;
+                posicaoLista = posicaoLista + 1;
+                item.Selecionado = false;
+            }
+
+        }
+
+        public bool EhPermitidoHabilitarBotoes(ContratoDTO dto)
+        {
+            bool ehPermitidoHabilitarBotoes = PodeSerUmContratoCancelado(dto.Situacao) || PodeSerUmContratoConcluido(dto.Situacao) || PodeSerUmContratoSuspenso(dto.Situacao);
+
+            return !ehPermitidoHabilitarBotoes;
+        }
+
+        public bool EhUltimoContratoRetificacao(int? contratoId,int? contratoRetificacaoId)
+        {
+            if (!contratoId.HasValue)
+            {              
+                return false;
+            }
+
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId,
+                                                                                      specification,
+                                                                                      l => l.ListaContratoRetificacao);
+            if (contrato.ListaContratoRetificacao == null)
+            {
+                return false;
+            }
+
+            if (contrato.ListaContratoRetificacao.Last().Id != contratoRetificacaoId)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool AtualizarSituacaoParaConcluido(int? contratoId)
+        {
+            if (!contratoId.HasValue)
+            {
+                return false;
+            }
+
+            ContratoDTO contratoDTO = ObterPeloId(contratoId, null);
+
+            if (!PodeConcluirContrato(contratoDTO))
+            {
+                return false;
+            }
+
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId,specification);
+
+            try
+            {
+                contrato.Situacao = SituacaoContrato.Concluido;
+
+                if (Validator.IsValid(contrato, out validationErrors))
+                {
+                    contratoRepository.Alterar(contrato);
+                    contratoRepository.UnitOfWork.Commit();
+
+                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                    return true;
+                }
+                else
+                {
+                    messageQueue.AddRange(validationErrors, TypeMessage.Error);
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return false;
+        }
+
+        public bool AprovaListaItemLiberacao(int contratoId,List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        {
+            if (listaItemLiberacaoDTO == null)
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return false;
+            }
+
+            if (listaItemLiberacaoDTO.All(l => l.Selecionado == false))
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return false;
+            }
+
+            if (listaItemLiberacaoDTO.Any(l => l.Selecionado == true && l.CodigoSituacao != (int)SituacaoMedicao.AguardandoAprovacao)){
+                messageQueue.Add("Existe(m) medição(ões) com situacao diferente de Aguardando aprovação !", TypeMessage.Info);
+                return false;
+            }
+
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification,l => l.ListaContratoRetificacaoItemMedicao);
+
+            foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao == (int)SituacaoMedicao.AguardandoAprovacao))
+            {
+                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
+                contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoLiberacao;
+            }
+
+            try
+            {
+                if (Validator.IsValid(contrato, out validationErrors))
+                {
+                    contratoRepository.Alterar(contrato);
+                    contratoRepository.UnitOfWork.Commit();
+
+                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                    return true;
+                }
+                else
+                {
+                    messageQueue.AddRange(validationErrors, TypeMessage.Error);
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return true;
         }
 
         #endregion
@@ -1272,7 +1535,36 @@ namespace GIR.Sigim.Application.Service.Contrato
         {
             if (situacao != SituacaoContrato.Assinado)
             {
-                messageQueue.Add(Application.Resource.Contrato.ErrorMessages.ContratoNaoAssinado, TypeMessage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool PodeSerUmContratoCancelado(SituacaoContrato situacao)
+        {
+            if (situacao != SituacaoContrato.Cancelado)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool PodeSerUmContratoConcluido(SituacaoContrato situacao)
+        {
+            if (situacao != SituacaoContrato.Concluido)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool PodeSerUmContratoSuspenso(SituacaoContrato situacao)
+        {
+            if (situacao != SituacaoContrato.Suspenso)
+            {
                 return false;
             }
 
