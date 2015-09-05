@@ -23,7 +23,17 @@
                     {
                         @Html.AntiForgeryToken()
 
-                        @Html.HiddenFor(m => m.JsonListaItemListaLiberacao)
+                        @Html.HiddenFor(m => m.JsonListaItemLiberacao)
+                        @Html.HiddenFor(m => m.PodeHabilitarBotoes)
+                        @Html.HiddenFor(m => m.PodeAprovarLiberar)
+                        @Html.HiddenFor(m => m.PodeAprovar)
+                        @Html.HiddenFor(m => m.PodeLiberar)
+                        @Html.HiddenFor(m => m.PodeCancelarLiberacao)
+                        @Html.HiddenFor(m => m.PodeAssociarNF)
+                        @Html.HiddenFor(m => m.PodeAlterarDataVencimento)
+                        @Html.HiddenFor(m => m.PodeImprimirMedicao)
+                        @Html.HiddenFor(m => m.ContratoRetificacao.Id)
+                        @Html.HiddenFor(m => m.PodeConcluirContrato)
                        
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
@@ -161,26 +171,35 @@
                                 <div id="collapseLiberacao" class="panel-collapse collapse" style="height: 0px;">
                                     <div class="panel-body no-padding">
                                         <fieldset>
+                                            <div class="btn-toolbar">
+                                                <a class="btn btn-default btn-xs disabled" id="btnAprovarLiberar" href="javascript:void(0);">Aprovar e Liberar</a>
+                                                <a class="btn btn-default btn-xs disabled" id="btnAprovar" href="javascript:trataAprovar();">Aprovar</a>
+                                                <a class="btn btn-default btn-xs disabled" id="btnLiberar" href="javascript:void(0);">Liberar</a>
+                                                <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:void(0);">Cancelar Liberação</a>
+                                                <a class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="javascript:void(0);">Associar NF</a>
+                                                <a class="btn btn-default btn-xs disabled" id="btnAlterarVencimento" href="javascript:void(0);">Alterar Vencimento</a>
+                                                <a class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="javascript:void(0);">Imprimir Medição</a>
+                                            </div>
                                             <div class="widget-body">
                                                 <hr class="simple">
                                                 <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                    <table id="tableItens" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                    <table id="tableItens" class="table table-bordered table-condensed table-hover dataTable">
                                                         <thead>
-                                                            <tr role="row">
+                                                            <tr role="row" style="col">
                                                                 <th class="text-left">Item</th>
                                                                 <th class="text-left">Medição</th>
                                                                 <th class="text-left">Vencimento</th>
                                                                 <th class="text-left">Tipo documento</th>
                                                                 <th class="text-left">Nº documento</th>
                                                                 <th class="text-left">Emissão</th>
-                                                                <th class="text-left">Situação</th>
+                                                                <th class="text-left" style="min-width: 150px;">Situação</th>
                                                                 <th class="text-left">Valor</th>
                                                                 <th class="text-left">Valor retido</th>
                                                                 <th class="text-left">Resp. medição</th>
                                                                 <th class="text-left">Título</th>
                                                                 <th class="text-left">Liberação</th>
                                                                 <th class="text-left">Resp. liberação</th>
-                                                                <th class="text-left" style="min-width: 90px;">Evento</th>
+                                                                <th class="text-left" style="min-width: 200px;">Evento</th>
                                                                 <th class="text-left">Data cadastro</th>
                                                                 <th class="text-left">Avaliação</th>
                                                             </tr>
@@ -195,6 +214,23 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                            tabindex="-1" role="dialog" aria-describedby="dlgSimpleConcluirContrato" aria-labelledby="ui-id-1" 
+                                style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                <span id="ui-id-1" class="ui-dialog-title">
+                                </span>
+                            </div>
+                            <div id="dlgSimpleConcluirContrato" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+	                            <p>
+		                            Deseja concluir o contrato ?
+	                            </p>
+                            </div>
+                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                <div class="ui-dialog-buttonset">
+                                </div>
+                            </div>
+                        </div>
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                         </footer>                        
@@ -205,19 +241,65 @@
     </article>
 </div> 
 <script type="text/javascript">
-    jsonListaItemListaLiberacaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemListaLiberacao)").val());
+    jsonListaItemLiberacaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
 
     $(document).ready(function () {
 
+        //$('#dialog_link').click(function () {
+        //    $('#dialog_simple').dialog('open');
+        //    return false;
+        //});
+
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimpleConcluirContrato').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Concluir",
+                "class": "btn btn-primary",
+                click: function () {
+                    $(this).dialog("close");
+                    executarConcluirContrato();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
         exibeInfoContrato();
         preencheListaLiberacao();
+        exibeModalConcluirContrato();
 
         $(document).on("change", "#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)", function () {
             exibeInfoContrato();
             recuperaContratoRetificacaoItem();
+            exibeModalConcluirContrato();
         });
 
     });
+
+    function exibeModalConcluirContrato() {
+        var podeConcluirContrato = $("#@Html.IdFor(m => m.PodeConcluirContrato)").val();
+        if (podeConcluirContrato === '@true') {
+            $('#dlgSimpleConcluirContrato').dialog('open');
+        }
+    }
 
     function exibeInfoContrato() {
         var infoContrato = "Contrato : " + $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
@@ -231,10 +313,38 @@
         document.getElementById("aHrefContrato").innerText = infoContrato;
     }
 
+    function executarConcluirContrato() {
+        var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+        var contratoRetificacaoId = $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ConcluirContrato", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoId: contratoId,
+                contratoRetificacaoId: contratoRetificacaoId
+            }),
+            success: function (result) {
+                if (result.ehConcluido) {
+                    smartAlert("Sucesso", result.message, "success");
+                }
+                else {
+                    smartAlert("Ocorreu erro na conclusão do contrato", result.message, "error");
+                }
+            },
+            error: function (result) {
+                smartAlert("Ocorreu erro na conclusão do contrato", result.message, "error");
+            }
+        });
+    }
+
     function recuperaContratoRetificacaoItem() {
         var isRecuperou = false;
         var codigoContratoRetificacaoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)").val();
         var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+        var contratoRetificacaoId = $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val();
         $.ajax({
             type: 'POST',
             url: '@Url.Action("RecuperaContratoRetificacaoItem", "LiberacaoContrato", new { Area = "Contrato" })',
@@ -243,43 +353,58 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 contratoId: contratoId,
+                contratoRetificacaoId: contratoRetificacaoId,
                 contratoRetificacaoItemId: codigoContratoRetificacaoItem
             }),
             success: function (result) {
-                showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
-
-                if (result.ehRecuperou) {
-                    $('#@Html.IdFor(m => m.Resumo.ValorContratado)').val(roundDecimal(floatToString(result.resumo.ValorContratado),2));
-                    $('#@Html.IdFor(m => m.Resumo.ValorRetidoContrato)').val(roundDecimal(floatToString(result.resumo.ValorRetidoContrato),2));
-                    $('#@Html.IdFor(m => m.Resumo.ValorProvisionado)').val(roundDecimal(floatToString(result.resumo.ValorProvisionado), 2));
-                    $('#@Html.IdFor(m => m.Resumo.ValorMedido)').val(roundDecimal(floatToString(result.resumo.ValorMedido), 2));
-                    $('#@Html.IdFor(m => m.Resumo.Diferenca)').val(roundDecimal(floatToString(result.resumo.Diferenca), 2));
-                    if (result.resumo.Diferenca < 0) {
-                        document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "red";
-                    }
-                    else {
-                        document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "black";
-                    }
-                    $('#@Html.IdFor(m => m.Resumo.AguardandoLiberacao)').val(roundDecimal(floatToString(result.resumo.AguardandoLiberacao), 2));
-                    $('#@Html.IdFor(m => m.Resumo.Retido)').val(roundDecimal(floatToString(result.resumo.Retido), 2));
-                    $('#@Html.IdFor(m => m.Resumo.Liberado)').val(roundDecimal(floatToString(result.resumo.Liberado), 2));
-                    $('#@Html.IdFor(m => m.Resumo.RetencaoLiberada)').val(roundDecimal(floatToString(result.resumo.RetencaoLiberada), 2));
-                    $('#@Html.IdFor(m => m.Resumo.Saldo)').val(roundDecimal(floatToString(result.resumo.Saldo), 2));
-
-                    @*$('#@Html.IdFor(m => m.JsonListaItemListaLiberacao)').val(JSON.stringify(result.listaItemListaLiberacao));*@
-                    $('#@Html.IdFor(m => m.JsonListaItemListaLiberacao)').val(result.listaItemListaLiberacao);
-
-                    jsonListaItemListaLiberacaoArray = JSON.parse(result.listaItemListaLiberacao);
-
+                if (result.redirectToUrl.length > 0) {
+                    window.location.href = result.redirectToUrl;
                 }
                 else {
-                    limpaResumo();
+                    showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
+
+                    if (result.ehRecuperou) {
+                        $('#@Html.IdFor(m => m.Resumo.ValorContratado)').val(roundDecimal(floatToString(result.resumo.ValorContratado), 2));
+                        $('#@Html.IdFor(m => m.Resumo.ValorRetidoContrato)').val(roundDecimal(floatToString(result.resumo.ValorRetidoContrato), 2));
+                        $('#@Html.IdFor(m => m.Resumo.ValorProvisionado)').val(roundDecimal(floatToString(result.resumo.ValorProvisionado), 2));
+                        $('#@Html.IdFor(m => m.Resumo.ValorMedido)').val(roundDecimal(floatToString(result.resumo.ValorMedido), 2));
+                        $('#@Html.IdFor(m => m.Resumo.Diferenca)').val(roundDecimal(floatToString(result.resumo.Diferenca), 2));
+                        if (result.resumo.Diferenca < 0) {
+                            document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "red";
+                        }
+                        else {
+                            document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "black";
+                        }
+                        $('#@Html.IdFor(m => m.Resumo.AguardandoLiberacao)').val(roundDecimal(floatToString(result.resumo.AguardandoLiberacao), 2));
+                        $('#@Html.IdFor(m => m.Resumo.Retido)').val(roundDecimal(floatToString(result.resumo.Retido), 2));
+                        $('#@Html.IdFor(m => m.Resumo.Liberado)').val(roundDecimal(floatToString(result.resumo.Liberado), 2));
+                        $('#@Html.IdFor(m => m.Resumo.RetencaoLiberada)').val(roundDecimal(floatToString(result.resumo.RetencaoLiberada), 2));
+                        $('#@Html.IdFor(m => m.Resumo.Saldo)').val(roundDecimal(floatToString(result.resumo.Saldo), 2));
+                        $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val(result.listaItemLiberacao);
+                        jsonListaItemLiberacaoArray = JSON.parse(result.listaItemLiberacao);
+                        if (result.podeConcluirContrato) {
+                            $("#@Html.IdFor(m => m.PodeConcluirContrato)").val('@true');
+                        }
+                        else {
+                            $("#@Html.IdFor(m => m.PodeConcluirContrato)").val('@false');
+                        }
+                    }
+                    else {
+                        limpaResumo();
+                        $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val(null);
+                        jsonListaItemLiberacaoArray = null;
+                        $("#@Html.IdFor(m => m.PodeConcluirContrato)").val('@false');
+
+                    }
                 }
                 isRecuperou = result.ehRecuperou;
             },
             error: function (result) {
                 showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)'), result.errorMessage);
                 limpaResumo();
+                $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val(null);
+                jsonListaItemLiberacaoArray = null;
+                $("#@Html.IdFor(m => m.PodeConcluirContrato)").val('@false');
             }
         });
 
@@ -313,14 +438,14 @@
         row.append($('<th class="text-left">Tipo documento</th>'));
         row.append($('<th class="text-left">Nº documento</th>'));
         row.append($('<th class="text-left">Emissão</th>'));
-        row.append($('<th class="text-left">Situação</th>'));
+        row.append($('<th class="text-left" style="min-width: 150px;">Situação</th>'));
         row.append($('<th class="text-left">Valor</th>'));
         row.append($('<th class="text-left">Valor retido</th>'));
         row.append($('<th class="text-left">Resp. medição</th>'));
         row.append($('<th class="text-left">Título</th>'));
         row.append($('<th class="text-left">Liberação</th>'));
         row.append($('<th class="text-left">Resp. liberação</th>'));
-        row.append($('<th class="text-left" style="min-width: 90px;">Evento</th>'));
+        row.append($('<th class="text-left" style="min-width: 200px;">Evento</th>'));
         row.append($('<th class="text-left">Data cadastro</th>'));
         row.append($('<th class="text-left">Avaliação</th>'));
         row.append($('<tr />'));
@@ -330,90 +455,237 @@
 
         $("#tableItens tbody").empty();
 
-        if (jsonListaItemListaLiberacaoArray != null) {
-            for (var i = 0; i < jsonListaItemListaLiberacaoArray.length; i++) {
+        if (jsonListaItemLiberacaoArray != null) {
+            for (var i = 0; i < jsonListaItemLiberacaoArray.length; i++) {
 
-                totalValor = totalValor + jsonListaItemListaLiberacaoArray[i].Valor;
-                totalValorRetido = totalValorRetido + jsonListaItemListaLiberacaoArray[i].ValorRetido;
-
-                var cor = jsonListaItemListaLiberacaoArray[i].CorLinha;
+                var cor = jsonListaItemLiberacaoArray[i].CorTexto;
+                if (jsonListaItemLiberacaoArray[i].Selecionado) {
+                    cor = cor + ";" + jsonListaItemLiberacaoArray[i].CorLinhaSelecionada + ";";
+                }
 
                 var row = $('<tr />')
 
                 $("#tableItens tbody").append(row);
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].SequencialItem + '</td>'));
-                if (jsonListaItemListaLiberacaoArray[i].DataMedicao != null) {
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataMedicao.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '" onclick="trataItemLiberacaoSelecionado(' + jsonListaItemLiberacaoArray[i].PosicaoLista + ');">' + jsonListaItemLiberacaoArray[i].SequencialItem + '</td>'));
+                if (jsonListaItemLiberacaoArray[i].DataMedicao != null) {
+                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataMedicao.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataMedicao).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
-                    row.append($('<td class="text-center"></td>'));
+                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
                 }
-                if (jsonListaItemListaLiberacaoArray[i].DataVencimento != null) {
-                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataVencimento.substr(6))).toFormatDDMMYYYY() + '</td>'));
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemListaLiberacaoArray[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
-                }
-                else {
-                    row.append($('<td class="text-center"></td>'));
-                }
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].TipoDocumento + '</td>'));
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].NumeroDocumento + '</td>'));
-                if (jsonListaItemListaLiberacaoArray[i].DataEmissao != null) {
-                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataEmissao.substr(6))).toFormatDDMMYYYY() + '</td>'));
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemListaLiberacaoArray[i].DataEmissao).toFormatDDMMYYYY() + '</td>'));
+                if (jsonListaItemLiberacaoArray[i].DataVencimento != null) {
+                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataVencimento.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
-                    row.append($('<td class="text-center"></td>'));
+                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
                 }
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].DescricaoSituacao + '</td>'));
-                row.append($('<td class="text-right" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemListaLiberacaoArray[i].Valor), 2) + '</td>'));
-                row.append($('<td class="text-right" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemListaLiberacaoArray[i].ValorRetido), 2) + '</td>'));
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].ResponsavelMedicao + '</td>'));
-                row.append($('<td class="text-right" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].TituloId + '</td>'));
-                if (jsonListaItemListaLiberacaoArray[i].DataLiberacao != null) {
-                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataLiberacao.substr(6))).toFormatDDMMYYYY() + '</td>'));
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemListaLiberacaoArray[i].DataLiberacao).toFormatDDMMYYYY() + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].TipoDocumento + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].NumeroDocumento + '</td>'));
+                if (jsonListaItemLiberacaoArray[i].DataEmissao != null) {
+                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataEmissao.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataEmissao).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
-                    row.append($('<td class="text-center"></td>'));
+                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
                 }
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].ResponsavelLiberacao + '</td>'));
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].DescricaoEvento + '</td>'));
-                if (jsonListaItemListaLiberacaoArray[i].DataCadastro != null) {
-                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemListaLiberacaoArray[i].DataCadastro.substr(6))).toFormatDDMMYYYY() + '</td>'));
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemListaLiberacaoArray[i].DataCadastro).toFormatDDMMYYYY() + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].DescricaoSituacao + '</td>'));
+                row.append($('<td class="text-right" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].Valor), 2) + '</td>'));
+                row.append($('<td class="text-right" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].ValorRetido), 2) + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].ResponsavelMedicao + '</td>'));
+                row.append($('<td class="text-right" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].TituloId + '</td>'));
+                if (jsonListaItemLiberacaoArray[i].DataLiberacao != null) {
+                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataLiberacao.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataLiberacao).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
-                    row.append($('<td class="text-center"></td>'));
+                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
                 }
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemListaLiberacaoArray[i].Avaliacao + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].ResponsavelLiberacao + '</td>'));
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].DescricaoEvento + '</td>'));
+                if (jsonListaItemLiberacaoArray[i].DataCadastro != null) {
+                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataCadastro.substr(6))).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataCadastro).toFormatDDMMYYYY() + '</td>'));
+                }
+                else {
+                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
+                }
+                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].Avaliacao + '</td>'));
             }
 
             var row = $('<tr />')
 
-            $("#tableItens tbody").append(row);
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorRetido), 2) + '</td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            row.append($('<td></td>'));
-            var row = $('<tr />')
-            $("#tableItens tbody").append(row);
+            jsonListaItemLiberacaoArray = null;
         }
 
-        //setarAbaProvisionamento();
-
-        jsonListaItemListaLiberacaoArray = null;
     }
+
+    function trataItemLiberacaoSelecionado(posicaoLista) {
+        jsonListaItemLiberacaoArray = JSON.parse($('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val());
+
+        var podeHabilitarBotoes = $('#@Html.IdFor(m => m.PodeHabilitarBotoes)').val();
+
+        if (podeHabilitarBotoes === '@false') {
+            return;
+        }
+
+        desabilitarBotoes();
+
+        var qtdAguardandoAprovacao = 0;
+        var qtdAguardandoLiberacao = 0;
+        var foiSelecionado = false;
+        var codigoSituacaoEscolhido = -1;
+        var codigoSituacaoSelecionadoUltimoDaLista = -1;
+
+        if ((jsonListaItemLiberacaoArray != null) && (posicaoLista != null)) {
+
+            if (jsonListaItemLiberacaoArray[posicaoLista].Selecionado === false) {
+                jsonListaItemLiberacaoArray[posicaoLista].Selecionado = true;
+                foiSelecionado = true;
+                codigoSituacaoEscolhido = jsonListaItemLiberacaoArray[posicaoLista].CodigoSituacao;
+            }
+            else {
+                jsonListaItemLiberacaoArray[posicaoLista].Selecionado = false;
+                foiSelecionado = false;
+                codigoSituacaoEscolhido = jsonListaItemLiberacaoArray[posicaoLista].CodigoSituacao;
+            }
+
+            for (var i = 0; i < jsonListaItemLiberacaoArray.length; i++) {
+                if (jsonListaItemLiberacaoArray[i].Selecionado) {
+                    if (jsonListaItemLiberacaoArray[i].CodigoSituacao == 0) {
+                        qtdAguardandoAprovacao = qtdAguardandoAprovacao + 1;
+                    }
+                    if (jsonListaItemLiberacaoArray[i].CodigoSituacao == 1) {
+                        qtdAguardandoLiberacao = qtdAguardandoLiberacao + 1;
+                    }
+                    codigoSituacaoSelecionadoUltimoDaLista = jsonListaItemLiberacaoArray[i].CodigoSituacao;
+                }
+            }
+
+            if (foiSelecionado === true){
+                if ((codigoSituacaoEscolhido == 0) || (codigoSituacaoEscolhido == 1)) {
+                    if ((qtdAguardandoAprovacao > 0) && (qtdAguardandoLiberacao > 0)) {
+                        codigoSituacaoEscolhido = 0;
+                    }
+                    else {
+                        if (qtdAguardandoAprovacao == 0) {
+                            codigoSituacaoEscolhido = 1;
+                        }
+                        else {
+                            codigoSituacaoEscolhido = 0;
+                        }
+                    }
+                }
+                habilitarDesabilitarBotoes(codigoSituacaoEscolhido);
+            }
+            else {
+                habilitarDesabilitarBotoes(codigoSituacaoSelecionadoUltimoDaLista);
+            }
+
+            $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val(JSON.stringify(jsonListaItemLiberacaoArray));
+            preencheListaLiberacao();
+            jsonListaItemLiberacaoArray = null;
+        }
+    }
+
+    function desabilitarBotoes() {
+        document.getElementById('btnAprovarLiberar').className = "btn btn-default btn-xs disabled";
+        document.getElementById('btnAprovar').className = "btn btn-default btn-xs disabled";
+        document.getElementById('btnLiberar').className = "btn btn-default btn-xs disabled";
+        document.getElementById('btnCancelarLiberacao').className = "btn btn-default btn-xs disabled";
+        document.getElementById('btnAssociarNF').className = "btn btn-default btn-xs disabled";
+        document.getElementById('btnAlterarVencimento').className = "btn btn-default btn-xs disabled";
+        document.getElementById('btnImprimirMedicao').className = "btn btn-default btn-xs disabled";
+    }
+
+    function habilitarDesabilitarBotoes(codigoSituacao) {
+        var podeAprovarLiberar = $('#@Html.IdFor(m => m.PodeAprovarLiberar)').val();
+        var podeAprovar = $('#@Html.IdFor(m => m.PodeAprovar)').val();
+        var podeLiberar = $('#@Html.IdFor(m => m.PodeLiberar)').val();
+        var podeCancelarLiberacao = $('#@Html.IdFor(m => m.PodeCancelarLiberacao)').val();
+        var podeAssociarNF = $('#@Html.IdFor(m => m.PodeAssociarNF)').val();
+        var podeAlterarVencimento = $('#@Html.IdFor(m => m.PodeAlterarDataVencimento)').val();
+        var podeImprimirMedicao = $('#@Html.IdFor(m => m.PodeImprimirMedicao)').val();
+
+        switch (codigoSituacao) {
+            case 0:
+                if (podeAprovarLiberar === '@true') {
+                    document.getElementById('btnAprovarLiberar').className = "btn bg-color-green txt-color-white btn-xs";
+                }
+                if (podeAprovar === '@true') {
+                    document.getElementById('btnAprovar').className = "btn btn-primary btn-xs";
+                }
+                if (podeAssociarNF === '@true') {
+                    document.getElementById('btnAssociarNF').className = "btn bg-color-orange txt-color-white btn-xs";
+                }
+                if (podeImprimirMedicao === '@true') {
+                    document.getElementById('btnImprimirMedicao').className = "btn btn-primary btn-xs";
+                }
+
+                break;
+            case 1:
+                if (podeAprovarLiberar === '@true') {
+                    document.getElementById('btnAprovarLiberar').className = "btn btn bg-color-green txt-color-white btn-xs";
+                }
+                if (podeLiberar === '@true') {
+                    document.getElementById('btnLiberar').className = "btn btn bg-color-green txt-color-white btn-xs";
+                }
+                if (podeAssociarNF === '@true') {
+                    document.getElementById('btnAssociarNF').className = "btn bg-color-orange txt-color-white btn-xs";
+                }
+                if (podeImprimirMedicao === '@true') {
+                    document.getElementById('btnImprimirMedicao').className = "btn btn-primary btn-xs";
+                }
+
+                break;
+            case 2:
+                if (podeCancelarLiberacao === '@true') {
+                    document.getElementById('btnCancelarLiberacao').className = "btn bg-color-red txt-color-white btn-xs";
+                }
+                if (podeImprimirMedicao === '@true') {
+                    document.getElementById('btnImprimirMedicao').className = "btn btn-primary btn-xs";
+                }
+                break;
+            case 9:
+                if (podeAlterarVencimento === '@true') {
+                    document.getElementById('btnAlterarVencimento').className = "btn bg-color-pink txt-color-white btn-xs";
+                }
+                break;
+            default:
+                desabilitarBotoes();
+                break;
+        }
+
+    }
+
+    function trataAprovar() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("TratarAprovar", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
+                contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
+                listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()
+            }),
+            success: function (result) {
+                if (result.ehAprovado) {
+                    smartAlert("Sucesso", result.message, "success");
+                }
+                else {
+                    smartAlert("Ocorreu erro na aprovação", result.message, "error");
+                }
+            },
+            error: function (result) {
+                smartAlert("Ocorreu erro na aprovação", result.message, "error");
+            }
+        });
+
+
+    }
+
 
 </script>

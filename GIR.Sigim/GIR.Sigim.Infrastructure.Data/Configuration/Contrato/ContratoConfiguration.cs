@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 {
@@ -153,7 +154,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
 
             HasMany<ContratoRetencao>(l => l.ListaContratoRetencao)
                 .WithRequired(c => c.Contrato)
+                .HasForeignKey(c => c.ContratoId);
+
+            HasMany<AvaliacaoFornecedor>(l => l.ListaAvaliacaoFornecedor)
+                .WithOptional(c => c.Contrato)
                 .HasForeignKey(c => c.ContratoId);  
+
 
         }
 

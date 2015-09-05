@@ -26,6 +26,9 @@ namespace GIR.Sigim.Application.Helper
                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.AssuntoContato));
             Mapper.CreateMap<TabelaBasicaDTO, AssuntoContatoDTO>();
 
+            Mapper.CreateMap<AvaliacaoFornecedor, AvaliacaoFornecedorDTO>();
+            Mapper.CreateMap<AvaliacaoFornecedorDTO, AvaliacaoFornecedor>();
+
             Mapper.CreateMap<Banco, BancoDTO>();
             Mapper.CreateMap<BancoDTO, Banco>();
 

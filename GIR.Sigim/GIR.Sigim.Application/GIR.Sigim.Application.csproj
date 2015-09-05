@@ -77,7 +77,7 @@
     <Compile Include="DTO\Contrato\LicitacaoCronogramaDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDescricaoDTO.cs" />
     <Compile Include="DTO\Contrato\LicitacaoDTO.cs" />
-    <Compile Include="DTO\Contrato\ItemListaLiberacaoDTO.cs" />
+    <Compile Include="DTO\Contrato\ItemLiberacaoDTO.cs" />
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
     <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
     <Compile Include="DTO\Contrato\ResumoLiberacaoDTO.cs" />
@@ -92,6 +92,7 @@
     <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />
     <Compile Include="DTO\Financeiro\RateioAutomaticoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoFinanceiroDTO.cs" />
+    <Compile Include="DTO\Sigim\AvaliacaoFornecedorDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoNaturezaOperacaoDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoCSTDTO.cs" />
     <Compile Include="DTO\Sigim\NaturezaReceitaDTO.cs" />

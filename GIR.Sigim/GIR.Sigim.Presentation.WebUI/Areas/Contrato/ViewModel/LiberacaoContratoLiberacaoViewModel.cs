@@ -14,9 +14,20 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public SelectList ListaServicoContratoRetificacaoItem { get; set; }
         public ContratoRetificacaoItemMedicaoDTO ContratoRetificacaoItemMedicao { get; set; }
         public ContratoDTO Contrato { get; set; }
+        public ContratoRetificacaoDTO ContratoRetificacao { get; set; }
         public ResumoLiberacaoDTO Resumo { get; set; }
-        public string JsonListaItemListaLiberacao { get; set; }
+        public string JsonListaItemLiberacao { get; set; }
 
+        public bool PodeHabilitarBotoes { get; set; }
+        public bool PodeAprovarLiberar { get; set; }
+        public bool PodeAprovar { get; set; }
+        public bool PodeLiberar { get; set; }
+        public bool PodeCancelarLiberacao { get; set; }
+        public bool PodeAssociarNF { get; set; }
+        public bool PodeAssociarNotaFiscal { get; set; }
+        public bool PodeAlterarDataVencimento { get; set; }
+        public bool PodeImprimirMedicao { get; set; }
+        public bool PodeConcluirContrato { get; set; }
 
         public LiberacaoContratoLiberacaoViewModel()
         {

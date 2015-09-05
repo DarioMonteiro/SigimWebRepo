@@ -7,15 +7,17 @@ using GIR.Sigim.Application.DTO.Financeiro;
 
 namespace GIR.Sigim.Application.DTO.Contrato
 {
-    public class ItemListaLiberacaoDTO : BaseDTO
+    public class ItemLiberacaoDTO : BaseDTO
     {
-        public ContratoRetificacaoProvisaoDTO ContratoRetificacaoProvisao { get; set; }
+        public int? ContratoRetificacaoProvisaoId { get; set; }
+        public int? ContratoRetificacaoItemMedicaoId { get; set; }
         public int SequencialItem { get; set; }
         public Nullable<DateTime> DataMedicao { get; set; }
         public DateTime DataVencimento { get; set; }
         public string TipoDocumento { get; set; }
         public string NumeroDocumento { get; set; }
         public Nullable<DateTime> DataEmissao { get; set; }
+        public int CodigoSituacao { get; set; }
         public string DescricaoSituacao { get; set; }
         public decimal Valor { get; set; }
         public decimal? ValorRetido { get; set; }
@@ -27,6 +29,16 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public Nullable<DateTime> DataCadastro { get; set; }
         public string Avaliacao { get; set; }
         public bool EhPagamentoAntecipado { get; set; }
-        public string CorLinha { get; set; }
+        public string CorTexto { get; set; }
+        public string CorLinhaSelecionada
+        {
+            get
+            {
+                return "background-color:yellow";
+            }
+        }
+        public int Ordem { get; set; }
+        public int PosicaoLista { get; set; }
+        public bool Selecionado { get; set; }
     }
 }

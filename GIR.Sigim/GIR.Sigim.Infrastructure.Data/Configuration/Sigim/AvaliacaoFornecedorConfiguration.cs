@@ -69,6 +69,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
             HasOptional(l => l.EntradaMaterial)
                 .WithMany(l => l.ListaAvaliacaoFornecedor)
                 .HasForeignKey(l => l.EntradaMaterialId);
+
+            Property(l => l.ContratoId)
+                .HasColumnName("contrato");
+
+            HasOptional<Domain.Entity.Contrato.Contrato>(l => l.Contrato)
+                .WithMany(l => l.ListaAvaliacaoFornecedor)
+                .HasForeignKey(l => l.ContratoId);
+
         }
     }
 }
