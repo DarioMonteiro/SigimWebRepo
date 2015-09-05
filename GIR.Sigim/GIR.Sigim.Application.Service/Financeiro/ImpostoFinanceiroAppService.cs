@@ -80,10 +80,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
             impostoFinanceiro.EhRetido = dto.Retido;
             impostoFinanceiro.Indireto = dto.Indireto;
             impostoFinanceiro.PagamentoEletronico = dto.PagamentoEletronico;
-            impostoFinanceiro.Periodicidade = dto.Periodicidade;
-            impostoFinanceiro.FimDeSemana = dto.FimDeSemana;
+            impostoFinanceiro.Periodicidade = (PeriodicidadeImpostoFinanceiro)dto.Periodicidade;
+            impostoFinanceiro.FimDeSemana = (FimDeSemanaImpostoFinanceiro)dto.FimDeSemana;
             impostoFinanceiro.DiaVencimento = dto.DiaVencimento;
-            impostoFinanceiro.FatoGerador = dto.FatoGerador;
+            impostoFinanceiro.FatoGerador = (FatoGeradorImpostoFinanceiro)dto.FatoGerador;
             
             if (Validator.IsValid(impostoFinanceiro, out validationErrors))
             {

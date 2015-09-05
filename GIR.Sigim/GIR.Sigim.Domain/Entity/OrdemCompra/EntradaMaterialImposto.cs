@@ -16,6 +16,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public Nullable<DateTime> DataVencimento { get; set; }
         public decimal BaseCalculo { get; set; }
         public decimal Valor { get; set; }
-        public int? TituloPagar { get; set; }
+        public int? TituloPagarImpostoId { get; set; }
+        public TituloPagar TituloPagarImposto { get; set; }
     }
 }

@@ -73,16 +73,19 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                .HasColumnOrder(10);
 
             Property(l => l.Periodicidade)
-               .HasColumnName("periodicidade")
-               .HasColumnOrder(11);
+                .IsOptional()
+                .HasColumnName("periodicidade")
+                .HasColumnOrder(11);
 
-            Property(l => l.FimDeSemana )
-                 .HasColumnName("fimDeSemana")
-                 .HasColumnOrder(12);
+            Property(l => l.FimDeSemana)
+                .IsOptional()
+                .HasColumnName("fimDeSemana")
+                .HasColumnOrder(12);
 
             Property(l => l.FatoGerador)
-                 .HasColumnName("fatoGerador")
-                 .HasColumnOrder(13);
+                .IsOptional()
+                .HasColumnName("fatoGerador")
+                .HasColumnOrder(13);
 
             Property(l => l.DiaVencimento)
                .HasColumnName("diaVencimento")

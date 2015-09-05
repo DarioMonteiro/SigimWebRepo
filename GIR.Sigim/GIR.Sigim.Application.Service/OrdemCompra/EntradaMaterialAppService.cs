@@ -14,6 +14,7 @@ using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Filtros.OrdemCompras;
 using GIR.Sigim.Application.Reports.OrdemCompra;
 using GIR.Sigim.Application.Service.Admin;
+using GIR.Sigim.Application.Service.Financeiro;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Domain.Entity.Estoque;
 using GIR.Sigim.Domain.Entity.Financeiro;
@@ -34,12 +35,14 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private IEntradaMaterialRepository entradaMaterialRepository;
         private IUsuarioAppService usuarioAppService;
         private IParametrosOrdemCompraRepository parametrosOrdemCompraRepository;
+        private IParametrosFinanceiroAppService parametrosFinanceiroAppService;
         private ICentroCustoRepository centroCustoRepository;
         private IEstoqueRepository estoqueRepository;
         private ITituloPagarRepository tituloPagarRepository;
         private IApropriacaoRepository apropriacaoRepository;
         private ILogOperacaoAppService logOperacaoAppService;
         private IOrdemCompraRepository ordemCompraRepository;
+        private IFeriadoRepository feriadoRepository;
 
         private ParametrosOrdemCompra parametrosOrdemCompra;
         public ParametrosOrdemCompra ParametrosOrdemCompra
@@ -53,28 +56,44 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
         }
 
+        private ParametrosFinanceiroDTO parametrosFinanceiro;
+        public ParametrosFinanceiroDTO ParametrosFinanceiro
+        {
+            get
+            {
+                if (parametrosFinanceiro == null)
+                    parametrosFinanceiro = parametrosFinanceiroAppService.Obter();
+
+                return parametrosFinanceiro;
+            }
+        }
+
         public EntradaMaterialAppService(
             IEntradaMaterialRepository entradaMaterialRepository,
             IUsuarioAppService usuarioAppService,
             IParametrosOrdemCompraRepository parametrosOrdemCompraRepository,
+            IParametrosFinanceiroAppService parametrosFinanceiroAppService,
             ICentroCustoRepository centroCustoRepository,
             IEstoqueRepository estoqueRepository,
             ITituloPagarRepository tituloPagarRepository,
             IApropriacaoRepository apropriacaoRepository,
             ILogOperacaoAppService logOperacaoAppService,
             IOrdemCompraRepository ordemCompraRepository,
+            IFeriadoRepository feriadoRepository,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.entradaMaterialRepository = entradaMaterialRepository;
             this.usuarioAppService = usuarioAppService;
             this.parametrosOrdemCompraRepository = parametrosOrdemCompraRepository;
+            this.parametrosFinanceiroAppService = parametrosFinanceiroAppService;
             this.centroCustoRepository = centroCustoRepository;
             this.estoqueRepository = estoqueRepository;
             this.tituloPagarRepository = tituloPagarRepository;
             this.apropriacaoRepository = apropriacaoRepository;
             this.logOperacaoAppService = logOperacaoAppService;
             this.ordemCompraRepository = ordemCompraRepository;
+            this.feriadoRepository = feriadoRepository;
         }
 
         #region IEntradaMaterialAppService Members
@@ -378,7 +397,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar.Select(s => s.TituloPagarImposto)),
                 l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TituloPagar.ListaImpostoPagar),
                 l => l.ListaFormaPagamento.Select(o => o.ListaTituloPagarAdiantamento.Select(s => s.ListaApropriacaoAdiantamento)),
-                l => l.ListaImposto,
+                l => l.ListaImposto.Select(o => o.ImpostoFinanceiro),
                 l => l.ListaMovimentoEstoque,
                 l => l.OrdemCompraFrete,
                 l => l.TituloFrete.ListaApropriacao);
@@ -388,21 +407,33 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             var fornecedorId = entradaMaterial.FornecedorNotaId.HasValue ? entradaMaterial.FornecedorNotaId : entradaMaterial.ClienteFornecedorId;
 
-            GerarTitulosAdiantamento(entradaMaterial, fornecedorId);
-            
+            ProcessarLiberacao(entradaMaterial, fornecedorId);
+
+            if (entradaMaterial.TituloFreteId.HasValue)
+            {
+                if (entradaMaterial.TituloFrete.DataEmissaoDocumento > entradaMaterial.DataFrete.Value)
+                    entradaMaterial.TituloFrete.DataEmissaoDocumento = entradaMaterial.DataFrete.Value;
+
+                entradaMaterial.TituloFrete.DataVencimento = entradaMaterial.DataFrete.Value;
+                entradaMaterial.TituloFrete.ValorTitulo = entradaMaterial.ValorFrete.Value;
+                entradaMaterial.TituloFrete.Situacao = ParametrosOrdemCompra.GeraTituloAguardando.Value ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado;
+                entradaMaterial.TituloFrete.TipoDocumentoId = entradaMaterial.TipoNotaFreteId;
+                entradaMaterial.TituloFrete.Documento = entradaMaterial.NumeroNotaFrete;
+                entradaMaterial.TituloFrete.TipoCompromissoId = ParametrosOrdemCompra.TipoCompromissoFreteId;
+            }
 
             entradaMaterial.Situacao = SituacaoEntradaMaterial.Fechada;
             entradaMaterial.DataLiberacao = DateTime.Now;
             entradaMaterial.LoginUsuarioLiberacao = UsuarioLogado.Login;
 
             entradaMaterialRepository.Alterar(entradaMaterial);
-            entradaMaterialRepository.UnitOfWork.Commit();
+            //entradaMaterialRepository.UnitOfWork.Commit();
             //GravarLogOperacaoCancelamento(entradaMaterial, listaTitulosAlterados);
             messageQueue.Add(Resource.OrdemCompra.SuccessMessages.CancelamentoComSucesso, TypeMessage.Success);
             return true;
         }
 
-        private void GerarTitulosAdiantamento(EntradaMaterial entradaMaterial, int? fornecedorId)
+        private void ProcessarLiberacao(EntradaMaterial entradaMaterial, int? fornecedorId)
         {
             var valorTotalLiberado = entradaMaterial.ListaFormaPagamento.Where(l => !l.OrdemCompraFormaPagamento.EhPagamentoAntecipado.Value).Sum(s => s.Valor);
             var valorTotalItens = entradaMaterial.ListaItens.Sum(l => l.ValorTotal);
@@ -470,36 +501,20 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
                 #endregion
 
+                #region Apropriação de Títulos
+
                 foreach (var ordemCompra in entradaMaterial.ListaItens.Select(l => l.OrdemCompraItem.OrdemCompra).Distinct())
                 {
-                    //var listaFormaPagamentoNaoUtulizada = ordemCompra.ListaOrdemCompraFormaPagamento.Where(l => l.EhUtilizada == false);
-                    //List<Apropriacao> listaApropriacao = listaFormaPagamentoNaoUtulizada.SelectMany(o => o.TituloPagar.ListaApropriacao).ToList();
-                    //if (entradaMaterial.TituloFreteId.HasValue)
-                    //    listaApropriacao.AddRange(entradaMaterial.TituloFrete.ListaApropriacao);
-
-                    //for (int i = listaApropriacao.Count() - 1; i >= 0; i--)
-                    //{
-                    //    var apropriacao = listaApropriacao.ToList()[i];
-                    //    apropriacaoRepository.Remover(apropriacao);
-                    //}
-
                     var listaItensPorOC = entradaMaterial.ListaItens.Where(l => l.OrdemCompraItem.OrdemCompraId == ordemCompra.Id).ToList();
                     var valorTotal = listaItensPorOC.Sum(o => o.ValorTotal);
-                    //var valorTotalPendente = ordemCompra.ListaItens.Where(l => l.Quantidade > l.QuantidadeEntregue).Sum(o => (o.Quantidade - o.QuantidadeEntregue) * o.ValorUnitario);
-                    var listaCodigoClasses = ordemCompra.ListaItens.Where(l => l.OrdemCompraId == ordemCompra.Id).Select(o => o.CodigoClasse).Distinct();
+                    var listaCodigoClasses = entradaMaterial.ListaItens
+                        .Where(l => l.OrdemCompraItem.OrdemCompraId == ordemCompra.Id)
+                        .Select(o => o.CodigoClasse).Distinct();
+
                     foreach (var codigoClasse in listaCodigoClasses)
                     {
                         var valorTotalClasse = listaItensPorOC.Where(l => l.CodigoClasse == codigoClasse).Sum(o => o.ValorTotal);
                         var percentualClasse = decimal.Round((valorTotalClasse / valorTotal * 100).Value, 5);
-
-                        Apropriacao apropriacao = new Apropriacao();
-                        apropriacao.CodigoClasse = codigoClasse;
-                        apropriacao.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
-                        apropriacao.TituloPagar = formaPagamentoEM.TituloPagar;
-                        apropriacao.Percentual = percentualClasse;
-                        apropriacao.Valor = formaPagamentoEM.Valor * apropriacao.Percentual / 100;
-
-                        formaPagamentoEM.TituloPagar.ListaApropriacao.Add(apropriacao);
 
                         if (tituloPagarAdiantamento != null)
                         {
@@ -508,27 +523,147 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                             apropriacaoAdiantamento.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
                             apropriacaoAdiantamento.TituloPagarAdiantamento = tituloPagarAdiantamento;
                             apropriacaoAdiantamento.Percentual = percentualClasse;
-                            apropriacaoAdiantamento.Valor = formaPagamentoEM.Valor * apropriacao.Percentual / 100;
+                            apropriacaoAdiantamento.Valor = formaPagamentoEM.Valor * percentualClasse / 100;
 
                             tituloPagarAdiantamento.ListaApropriacaoAdiantamento.Add(apropriacaoAdiantamento);
                         }
+                        else
+                        {
+                            Apropriacao apropriacao = new Apropriacao();
+                            apropriacao.CodigoClasse = codigoClasse;
+                            apropriacao.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
+                            apropriacao.TituloPagar = formaPagamentoEM.TituloPagar;
+                            apropriacao.Percentual = percentualClasse;
+                            apropriacao.Valor = formaPagamentoEM.Valor * apropriacao.Percentual / 100;
 
-                        //if (entradaMaterial.TituloFreteId.HasValue)
-                        //{
-                        //    Apropriacao apropriacaoTituloFrete = new Apropriacao();
-                        //    apropriacaoTituloFrete.CodigoClasse = codigoClasse;
-                        //    apropriacaoTituloFrete.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
-                        //    apropriacaoTituloFrete.TituloPagarId = entradaMaterial.TituloFreteId;
-                        //    apropriacaoTituloFrete.Percentual = percentualClasse;
-                        //    apropriacaoTituloFrete.Valor = entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100;
+                            formaPagamentoEM.TituloPagar.ListaApropriacao.Add(apropriacao);
+                        }
 
-                        //    entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
-                        //}
+                        if (entradaMaterial.TituloFreteId.HasValue)
+                        {
+                            Apropriacao apropriacaoTituloFrete = new Apropriacao();
+                            apropriacaoTituloFrete.CodigoClasse = codigoClasse;
+                            apropriacaoTituloFrete.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
+                            apropriacaoTituloFrete.TituloPagarId = entradaMaterial.TituloFreteId;
+                            apropriacaoTituloFrete.Percentual = percentualClasse;
+                            apropriacaoTituloFrete.Valor = entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100;
+
+                            entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
+                        }
+                    }
+
+                    if (ordemCompra.ListaItens.All(l => l.Quantidade == l.QuantidadeEntregue))
+                    {
+                        ordemCompra.Situacao = SituacaoOrdemCompra.Fechada;
                     }
                 }
 
+                #endregion
 
+                #region Gerar Impostos
+
+                int contadorImposto = 1;
+                foreach (var imposto in entradaMaterial.ListaImposto)
+	            {
+                    ImpostoPagar impostoPagar = new ImpostoPagar();
+                    impostoPagar.TituloPagar = formaPagamentoEM.TituloPagar;
+                    impostoPagar.ImpostoFinanceiroId = imposto.ImpostoFinanceiroId;
+                    impostoPagar.BaseCalculo = decimal.Round((imposto.BaseCalculo * percentualTitulo / 100), 5);
+                    impostoPagar.ValorImposto = decimal.Round((imposto.Valor * percentualTitulo / 100), 5);
+
+                    formaPagamentoEM.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
+
+                    if (DeveGerarTituloImposto(imposto))
+                    {
+                        CalcularDataVencimentoImposto(formaPagamentoEM, imposto);
+
+                        TituloPagar tituloPagar = new TituloPagar();
+                        tituloPagar.ClienteId = imposto.ImpostoFinanceiro.ClienteId.Value;
+                        tituloPagar.TipoCompromissoId = imposto.ImpostoFinanceiro.TipoCompromissoId;
+                        tituloPagar.Identificacao = imposto.ImpostoFinanceiro.Sigla + " - " + formaPagamentoEM.TituloPagar.Cliente.Nome;
+                        tituloPagar.Situacao = ParametrosOrdemCompra.GeraTituloAguardando.Value ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado;
+                        tituloPagar.TipoDocumentoId = formaPagamentoEM.TituloPagar.TipoDocumentoId;
+                        tituloPagar.Documento = formaPagamentoEM.TituloPagar.Documento + "/" + contadorImposto++;
+                        tituloPagar.DataVencimento = imposto.DataVencimento.Value;
+                        tituloPagar.DataEmissaoDocumento = formaPagamentoEM.TituloPagar.DataEmissaoDocumento;
+                        tituloPagar.TipoTitulo = TipoTitulo.Normal;
+                        tituloPagar.ValorTitulo = decimal.Round((imposto.Valor * percentualTitulo / 100), 5);
+                        tituloPagar.LoginUsuarioCadastro = UsuarioLogado.Login;
+                        tituloPagar.DataCadastro = DateTime.Now;
+                        tituloPagar.LoginUsuarioApropriacao = UsuarioLogado.Login;
+                        tituloPagar.DataApropriacao = DateTime.Now;
+                        tituloPagar.FormaPagamento = formaPagamentoEM.TituloPagar.FormaPagamento;
+                        tituloPagar.CodigoInterface = formaPagamentoEM.TituloPagar.CodigoInterface;
+                        tituloPagar.SistemaOrigem = formaPagamentoEM.TituloPagar.SistemaOrigem;
+                        impostoPagar.TituloPagarImposto = tituloPagar;
+                        imposto.TituloPagarImposto = tituloPagar;
+
+                        #region Apropriação dos títulos
+                        decimal percentualTotal = formaPagamentoEM.TituloPagar.ListaApropriacao.Sum(l => l.Percentual);
+                        if (percentualTotal < 100)
+                        {
+                            foreach (var apropriacaoTituloOrigem in formaPagamentoEM.TituloPagar.ListaApropriacao)
+                            {
+                                Apropriacao apropriacao = new Apropriacao();
+                                apropriacao.TituloPagar = tituloPagar;
+                                apropriacao.CodigoClasse = apropriacaoTituloOrigem.CodigoClasse;
+                                apropriacao.CodigoCentroCusto = apropriacaoTituloOrigem.CodigoCentroCusto;
+                                apropriacao.Percentual = decimal.Round((apropriacaoTituloOrigem.Percentual / percentualTotal * 100), 5);
+                                apropriacao.Valor = decimal.Round((tituloPagar.ValorTitulo * apropriacaoTituloOrigem.Percentual / percentualTotal), 5);
+                                tituloPagar.ListaApropriacao.Add(apropriacao);
+                            }
+                        }
+
+                        #endregion
+                    }
+                }
+
+                #endregion
             }
+        }
+
+        private void CalcularDataVencimentoImposto(EntradaMaterialFormaPagamento formaPagamentoEM, EntradaMaterialImposto imposto)
+        {
+            if (imposto.ImpostoFinanceiro.Periodicidade != null && !imposto.DataVencimento.HasValue)
+            {
+                DateTime dataGeradora = formaPagamentoEM.TituloPagar.DataVencimento;
+
+                if (imposto.ImpostoFinanceiro.FatoGerador == FatoGeradorImpostoFinanceiro.EmissaoDocumento)
+                    dataGeradora = formaPagamentoEM.TituloPagar.DataEmissaoDocumento;
+
+                dataGeradora = dataGeradora.AddMonths(1);
+                if (imposto.ImpostoFinanceiro.Periodicidade == PeriodicidadeImpostoFinanceiro.Quinzenal)
+                {
+                    if (dataGeradora.Day > 15)
+                        imposto.DataVencimento = new DateTime(dataGeradora.Year, dataGeradora.Month, 15);
+                    else
+                        imposto.DataVencimento = new DateTime(dataGeradora.Year, dataGeradora.Month, DateTime.DaysInMonth(dataGeradora.Year, dataGeradora.Month));
+                }
+                else if (imposto.ImpostoFinanceiro.Periodicidade == PeriodicidadeImpostoFinanceiro.Mensal)
+                {
+                    imposto.DataVencimento = new DateTime(dataGeradora.Year, dataGeradora.Month, imposto.ImpostoFinanceiro.DiaVencimento.Value);
+                }
+
+                var listaFeriados = feriadoRepository.ListarTodos();
+                while (imposto.DataVencimento.Value.DayOfWeek == DayOfWeek.Saturday
+                    || imposto.DataVencimento.Value.DayOfWeek == DayOfWeek.Sunday
+                    || listaFeriados.Any(l => l.Data == imposto.DataVencimento))
+                {
+                    if (imposto.ImpostoFinanceiro.FimDeSemana == FimDeSemanaImpostoFinanceiro.Antecipa)
+                    {
+                        imposto.DataVencimento.Value.AddDays(-1);
+                    }
+                    else if (imposto.ImpostoFinanceiro.FimDeSemana == FimDeSemanaImpostoFinanceiro.Posterga)
+                    {
+                        imposto.DataVencimento.Value.AddDays(1);
+                    }
+                }
+            }
+        }
+
+        private bool DeveGerarTituloImposto(EntradaMaterialImposto imposto)
+        {
+            return ParametrosFinanceiro.GeraTituloImposto && imposto.ImpostoFinanceiro.ClienteId.HasValue && imposto.ImpostoFinanceiro.EhRetido.Value;
         }
 
         public FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato)
@@ -1440,17 +1575,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             dta.Columns.Add(descricao);
             dta.Columns.Add(aliquota);
 
-            foreach (var item in listaImposto)
+            foreach (var imposto in listaImposto)
             {
                 DataRow row = dta.NewRow();
-                row[codigo] = item.Id.Value;
-                row[baseCalculo] = item.BaseCalculo;
-                row[valorImposto] = item.Valor;
-                row[dataVencimento] = item.DataVencimento.HasValue ? item.DataVencimento.Value.ToString("dd/MM/yyyy") : string.Empty;
-                row[TituloPagarImposto] = item.TituloPagar;
-                row[sigla] = item.ImpostoFinanceiro.Sigla;
-                row[descricao] = item.ImpostoFinanceiro.Descricao;
-                row[aliquota] = item.ImpostoFinanceiro.Aliquota;
+                row[codigo] = imposto.Id.Value;
+                row[baseCalculo] = imposto.BaseCalculo;
+                row[valorImposto] = imposto.Valor;
+                row[dataVencimento] = imposto.DataVencimento.HasValue ? imposto.DataVencimento.Value.ToString("dd/MM/yyyy") : string.Empty;
+                row[TituloPagarImposto] = imposto.TituloPagarImposto;
+                row[sigla] = imposto.ImpostoFinanceiro.Sigla;
+                row[descricao] = imposto.ImpostoFinanceiro.Descricao;
+                row[aliquota] = imposto.ImpostoFinanceiro.Aliquota;
                 dta.Rows.Add(row);
             }
 

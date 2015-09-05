@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Enums;
@@ -27,7 +28,10 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<HistoricoContabil, HistoricoContabilDTO>();
             Mapper.CreateMap<HistoricoContabilDTO, HistoricoContabil>();
 
-            Mapper.CreateMap<ImpostoFinanceiro, ImpostoFinanceiroDTO>();
+            Mapper.CreateMap<ImpostoFinanceiro, ImpostoFinanceiroDTO>()
+                .ForMember(d => d.PeriodicidadeDescricao, m => m.MapFrom(s => s.Periodicidade.ObterDescricao()))
+                .ForMember(d => d.FimDeSemanaDescricao, m => m.MapFrom(s => s.FimDeSemana.ObterDescricao()))
+                .ForMember(d => d.FatoGeradorDescricao, m => m.MapFrom(s => s.FatoGerador.ObterDescricao()));
             Mapper.CreateMap<ImpostoFinanceiroDTO, ImpostoFinanceiro>();
 
             Mapper.CreateMap<ImpostoPagar, ImpostoPagarDTO>();

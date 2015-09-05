@@ -50,7 +50,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasColumnName("valorImposto")
                 .HasColumnOrder(6);
 
-            Property(l => l.TituloPagar)
+            Property(l => l.TituloPagarImpostoId)
                 .HasColumnName("tituloPagarImposto")
                 .HasColumnOrder(7);
         }

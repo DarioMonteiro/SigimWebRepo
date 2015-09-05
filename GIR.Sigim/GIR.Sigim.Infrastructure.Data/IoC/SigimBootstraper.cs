@@ -27,6 +27,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<IContaCorrenteRepository, ContaCorrenteRepository>();
             Container.Current.RegisterType<ICSTRepository, CSTRepository>();
             Container.Current.RegisterType<IEstadoCivilRepository, EstadoCivilRepository>();
+            Container.Current.RegisterType<IFeriadoRepository, FeriadoRepository>();
             Container.Current.RegisterType<IFonteNegocioRepository, FonteNegocioRepository>();
             Container.Current.RegisterType<IFormaRecebimentoRepository, FormaRecebimentoRepository>();
             Container.Current.RegisterType<IGrupoRepository, GrupoRepository>();

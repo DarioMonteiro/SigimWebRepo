@@ -208,6 +208,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ContaCorrenteConfiguration());
             modelBuilder.Configurations.Add(new CSTConfiguration());
             modelBuilder.Configurations.Add(new EstadoCivilConfiguration());
+            modelBuilder.Configurations.Add(new FeriadoConfiguration());
             modelBuilder.Configurations.Add(new FonteNegocioConfiguration());
             modelBuilder.Configurations.Add(new FormaRecebimentoConfiguration());
             modelBuilder.Configurations.Add(new GrupoConfiguration());
