@@ -27,10 +27,10 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ClienteFornecedor Cliente { get; set; }
         public int? ClienteId { get; set; }
         public string ContaContabil { get; set; }
-        public PeriodicidadeImpostoFinanceiro Periodicidade { get; set; }
+        public PeriodicidadeImpostoFinanceiro? Periodicidade { get; set; }
         public short? DiaVencimento { get; set; }
-        public FimDeSemanaImpostoFinanceiro FimDeSemana { get; set; }
-        public FatoGeradorImpostoFinanceiro FatoGerador { get; set; }
+        public FimDeSemanaImpostoFinanceiro? FimDeSemana { get; set; }
+        public FatoGeradorImpostoFinanceiro? FatoGerador { get; set; }
 
         public ICollection<ContratoRetificacaoItemImposto> ListaContratoRetificacaoItemImposto { get; set; }
         public ICollection<EntradaMaterialImposto> ListaEntradaMaterialImposto { get; set; }
