@@ -431,7 +431,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                      string numeroDocumento,
                                      string dataEmissao,
                                      int? multiFornecedorId,
-                                     string retencaoContratual,
                                      string valorContratadoItem,
                                      FormatoExportacaoArquivo formato)
         {
@@ -443,8 +442,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             DateTime dtEmissao = DateTime.Parse(dataEmissao);
 
-
-            var arquivo = contratoAppService.ExportarMedicao(contratoId, contratadoId, tipoDocumentoId, numeroDocumento, dtEmissao, retencaoContratual, valorContratadoItem, formato);
+            var arquivo = contratoAppService.ExportarMedicao(contratoId, contratadoId, tipoDocumentoId, numeroDocumento, dtEmissao, valorContratadoItem, formato);
 
             if (arquivo != null)
             {

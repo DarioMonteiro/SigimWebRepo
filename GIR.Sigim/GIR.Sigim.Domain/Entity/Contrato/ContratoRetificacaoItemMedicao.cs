@@ -183,39 +183,42 @@ namespace GIR.Sigim.Domain.Entity.Contrato
 
             if (Quantidade == 0 )
             {
-                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Quantidade medição atual"));
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Quantidade medição atual"));          
             }
 
-            if (ContratoRetificacaoItem.NaturezaItem == NaturezaItem.PrecoGlobal)
+            if (ContratoRetificacaoItem != null)
             {
-                if (Valor == 0)
+                if (ContratoRetificacaoItem.NaturezaItem == NaturezaItem.PrecoGlobal)
                 {
-                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Valor medição atual"));
+                    if (Valor == 0)
+                    {
+                        yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Valor medição atual"));
+                    }
+
+                    decimal valorTotalMedido = Contrato.ObterValorTotalMedido(SequencialItem, SequencialCronograma);
+                    decimal valorItem = 0;
+                    if (ContratoRetificacaoItem.ValorItem.HasValue)
+                    {
+                        valorItem = ContratoRetificacaoItem.ValorItem.Value;
+                    }
+
+                    decimal valorPendente = valorItem - valorTotalMedido;
+
+                    if (Valor > valorPendente)
+                    {
+                        yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.ValorMaiorQue, "Valor medição atual", "Valor pendente"));
+                    }
                 }
-
-                decimal valorTotalMedido = Contrato.ObterValorTotalMedido(SequencialItem, SequencialCronograma);
-                decimal valorItem = 0;
-                if (ContratoRetificacaoItem.ValorItem.HasValue)
+                else if (ContratoRetificacaoItem.NaturezaItem == NaturezaItem.PrecoUnitario)
                 {
-                    valorItem = ContratoRetificacaoItem.ValorItem.Value;
-                }
 
-                decimal valorPendente = valorItem - valorTotalMedido;
+                    decimal quantidadeTotalMedida = Contrato.ObterQuantidadeTotalMedida(SequencialItem, SequencialCronograma);
+                    decimal quantidadePendente = ContratoRetificacaoItem.Quantidade - quantidadeTotalMedida;
 
-                if (Valor > valorPendente)
-                {
-                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.ValorMaiorQue, "Valor medição atual", "Valor pendente"));
-                }
-            }
-            else if (ContratoRetificacaoItem.NaturezaItem == NaturezaItem.PrecoUnitario)
-            {
-
-                decimal quantidadeTotalMedida = Contrato.ObterQuantidadeTotalMedida(SequencialItem, SequencialCronograma);
-                decimal quantidadePendente = ContratoRetificacaoItem.Quantidade - quantidadeTotalMedida;
-
-                if (Quantidade > quantidadePendente)
-                {
-                    yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.ValorMaiorQue, "Quantidade medição atual", "Quantidade pendente"));
+                    if (Quantidade > quantidadePendente)
+                    {
+                        yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.ValorMaiorQue, "Quantidade medição atual", "Quantidade pendente"));
+                    }
                 }
             }
 
@@ -238,8 +241,6 @@ namespace GIR.Sigim.Domain.Entity.Contrato
                     yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Desconto"));
                 }
             }
-
-
         }
     }
 }

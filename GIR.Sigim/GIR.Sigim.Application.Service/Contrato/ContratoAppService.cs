@@ -409,17 +409,14 @@ namespace GIR.Sigim.Application.Service.Contrato
             return existe;
         }
 
-
         public FileDownloadDTO ExportarMedicao(int contratoId,
                                                int? contratadoId,
                                                int tipoDocumentoId,
                                                string numeroDocumento,
                                                DateTime dataEmissao,
-                                               string retencaoContratual,
                                                string valorContratadoItem,
                                                FormatoExportacaoArquivo formato)
         {
-
             if (!UsuarioLogado.IsInRole(Funcionalidade.MedicaoImprimir))
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
@@ -437,6 +434,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                        l => l.Contratado.PessoaJuridica,
                                                                        l => l.Contratante.PessoaFisica,
                                                                        l => l.Contratante.PessoaJuridica,
+                                                                       l => l.ListaContratoRetificacao,
                                                                        l => l.ListaContratoRetificacaoItemMedicao.Select(i => i.MultiFornecedor.PessoaFisica),
                                                                        l => l.ListaContratoRetificacaoItemMedicao.Select(i => i.MultiFornecedor.PessoaJuridica),
                                                                        l => l.ListaContratoRetificacaoItemMedicao.Select(i => i.TipoDocumento),
@@ -454,6 +452,26 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                             l => l.ListaContratoRetificacaoItemImposto.Select(i => i.ImpostoFinanceiro),
                                                                             l => l.ListaContratoRetificacaoItem,
                                                                             l => l.ListaContratoRetificacaoItemMedicao);
+
+            decimal retencaoContrato = 0;
+            foreach (var retificacao in listaMedicao.Select(l => l.ContratoRetificacao).Where(l => l.RetencaoContratual.HasValue))
+            {
+                if (retificacao.RetencaoContratual.Value > 0)
+                {
+                    retencaoContrato = retificacao.RetencaoContratual.Value;
+                }
+            }
+
+            decimal retencaoItem = 0;
+            foreach (var retificacaoItem in listaMedicao.Select(l => l.ContratoRetificacaoItem).Where(l => l.RetencaoItem.HasValue))
+            {
+                if (retificacaoItem.RetencaoItem.Value > 0)
+                {
+                    retencaoItem = retificacaoItem.RetencaoItem.Value;
+                }
+            }
+
+            decimal percentualRetencao = retencaoItem > 0 ? retencaoItem : (retencaoContrato > 0 ? retencaoContrato : 0);
 
             relMedicao objRel = new relMedicao();
 
@@ -508,7 +526,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             objRel.SetParameterValue("parContratado", contratado);
             objRel.SetParameterValue("parContrato", listaMedicao.ElementAt(0).ContratoId);
             objRel.SetParameterValue("parDescricaoContrato", listaMedicao.ElementAt(0).Contrato.ContratoDescricao.Descricao);
-            objRel.SetParameterValue("parRetencao", retencaoContratual);
+            objRel.SetParameterValue("parRetencao", percentualRetencao);
             objRel.SetParameterValue("parValorContratadoItem", valorContratadoItem);
             objRel.SetParameterValue("parValorTotalImposto", valorTotalImposto);
 
@@ -873,7 +891,6 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                 l => l.Contratado).To<List<ContratoDTO>>();
         }
 
-
         public bool PodeConcluirContrato(ContratoDTO contrato)
         {
             decimal valorTotalProvisionado = 0;
@@ -1194,16 +1211,17 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         public bool AtualizarSituacaoParaConcluido(int? contratoId)
         {
+            bool retorno = false;
             if (!contratoId.HasValue)
             {
-                return false;
+                return retorno;
             }
 
             ContratoDTO contratoDTO = ObterPeloId(contratoId, null);
 
             if (!PodeConcluirContrato(contratoDTO))
             {
-                return false;
+                return retorno;
             }
 
             var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
@@ -1220,12 +1238,13 @@ namespace GIR.Sigim.Application.Service.Contrato
                     contratoRepository.UnitOfWork.Commit();
 
                     messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
-                    return true;
+                    retorno = true;
+                    return retorno;
                 }
                 else
                 {
                     messageQueue.AddRange(validationErrors, TypeMessage.Error);
-                    return false;
+                    return retorno;
                 }
             }
             catch (Exception exception)
@@ -1233,11 +1252,80 @@ namespace GIR.Sigim.Application.Service.Contrato
                 QueueExeptionMessages(exception);
             }
 
-            return false;
+            return retorno;
         }
 
-        public bool AprovaListaItemLiberacao(int contratoId,List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        public bool AprovarListaItemLiberacao(int contratoId,List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
         {
+            bool retorno = false;
+            if (listaItemLiberacaoDTO == null)
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return false;
+            }
+
+            if (listaItemLiberacaoDTO.All(l => l.Selecionado == false))
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (listaItemLiberacaoDTO.Any(l => l.Selecionado == true && l.CodigoSituacao != (int)SituacaoMedicao.AguardandoAprovacao)){
+                messageQueue.Add("Existe(m) medição(ões) com situacao diferente de Aguardando aprovação !", TypeMessage.Info);
+                return retorno;
+            }
+
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification,l => l.ListaContratoRetificacaoItemMedicao);
+
+            bool modificou = false;
+            foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao == (int)SituacaoMedicao.AguardandoAprovacao))
+            {
+                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
+                if (contratoRetificacaoItemMedicao.Situacao == SituacaoMedicao.AguardandoAprovacao)
+                {
+                    modificou = true;
+                    contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoLiberacao;
+                }
+            }
+
+            if (!modificou)
+            {
+                messageQueue.Add("A(s) medição(ões) escolhidas estão desatualizadas recupere o contrato novamente !", TypeMessage.Info);
+                return retorno;
+            }
+
+            try
+            {
+                if (Validator.IsValid(contrato, out validationErrors))
+                {
+                    contratoRepository.Alterar(contrato);
+                    contratoRepository.UnitOfWork.Commit();
+
+                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                    retorno = true;
+                    return retorno;
+                }
+                else
+                {
+                    messageQueue.AddRange(validationErrors, TypeMessage.Error);
+                    return retorno;
+                }
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+
+            return retorno;
+        }
+
+        public bool ValidarImpressaoMedicaoPelaLiberacao(int? contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO, out int? contratoRetificacaoItemMedicaoId)
+        {
+            contratoRetificacaoItemMedicaoId = null;
+
             if (listaItemLiberacaoDTO == null)
             {
                 messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
@@ -1250,43 +1338,59 @@ namespace GIR.Sigim.Application.Service.Contrato
                 return false;
             }
 
-            if (listaItemLiberacaoDTO.Any(l => l.Selecionado == true && l.CodigoSituacao != (int)SituacaoMedicao.AguardandoAprovacao)){
-                messageQueue.Add("Existe(m) medição(ões) com situacao diferente de Aguardando aprovação !", TypeMessage.Info);
+            ItemLiberacaoDTO itemLiberacao = listaItemLiberacaoDTO.Where(l => l.Selecionado == true).FirstOrDefault();
+            if (itemLiberacao.CodigoSituacao > (int)SituacaoMedicao.Liberado)
+            {
+                messageQueue.Add("Não é permitido imprimir a medição do item selecionado", TypeMessage.Error);
                 return false;
             }
 
             var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
 
-            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification,l => l.ListaContratoRetificacaoItemMedicao);
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId,
+                                                                                      specification,
+                                                                                      l => l.ListaContratoRetificacao,
+                                                                                      l => l.ListaContratoRetificacaoItem,
+                                                                                      l => l.ListaContratoRetificacaoItemMedicao);
 
-            foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao == (int)SituacaoMedicao.AguardandoAprovacao))
+            ContratoRetificacaoItemMedicao medicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == itemLiberacao.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
+            if (medicao == null)
             {
-                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
-                contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoLiberacao;
+                messageQueue.Add("Medição inexistente", TypeMessage.Error);
+                return false;
             }
 
-            try
-            {
-                if (Validator.IsValid(contrato, out validationErrors))
-                {
-                    contratoRepository.Alterar(contrato);
-                    contratoRepository.UnitOfWork.Commit();
-
-                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
-                    return true;
-                }
-                else
-                {
-                    messageQueue.AddRange(validationErrors, TypeMessage.Error);
-                    return false;
-                }
-            }
-            catch (Exception exception)
-            {
-                QueueExeptionMessages(exception);
-            }
+            contratoRetificacaoItemMedicaoId = medicao.Id;
 
             return true;
+        }
+
+
+        public FileDownloadDTO ImprimirMedicaoPelaLiberacao(FormatoExportacaoArquivo formato,int? contratoId, int? contratoRetificacaoItemMedicaoId)
+        {
+
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, 
+                                                                                      specification, 
+                                                                                      l => l.ListaContratoRetificacao,
+                                                                                      l => l.ListaContratoRetificacaoItem,
+                                                                                      l => l.ListaContratoRetificacaoItemMedicao);
+
+            ContratoRetificacaoItemMedicao medicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == contratoRetificacaoItemMedicaoId).FirstOrDefault();
+
+            int contratadoId = medicao.MultiFornecedorId != null ? medicao.MultiFornecedorId.Value : contrato.ContratadoId;
+            decimal valorContrato = contrato.ValorContrato.HasValue ? contrato.ValorContrato.Value : 0;
+
+            FileDownloadDTO arquivo = ExportarMedicao(contratoId.Value,
+                                                      contratadoId,
+                                                      medicao.TipoDocumentoId,
+                                                      medicao.NumeroDocumento,
+                                                      medicao.DataEmissao,
+                                                      valorContrato.ToString(),
+                                                      formato);
+
+            return arquivo;
         }
 
         #endregion

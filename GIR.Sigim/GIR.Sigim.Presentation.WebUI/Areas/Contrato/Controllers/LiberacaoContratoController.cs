@@ -296,23 +296,64 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
 
-                        ehAprovado = contratoAppService.AprovaListaItemLiberacao(contratoId.Value,listaItemLiberacaoDTO);
+                        ehAprovado = contratoAppService.AprovarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO);
                         if (messageQueue.GetAll().Count > 0)
                         {
                             msg = messageQueue.GetAll()[0].Text;
                             messageQueue.Clear();
                         }
                     }
+                    else
+                    {
+                        ehAprovado = false;
+                        msg = "Nenhum item da lista foi selecionado";
+                    }
                 }
+            }
+            return Json(new
+            {
+                ehAprovado = ehAprovado,
+                message = msg,
+                redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
+            });
+        }
+
+        [HttpPost]
+        public ActionResult ValidarImprimirMedicao(int? contratoId, string listaItemLiberacao)
+        {
+            string msg = "";
+            List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
+            int? contratoRetificacaoItemMedicaoId;
+
+            bool ehValido = contratoAppService.ValidarImpressaoMedicaoPelaLiberacao(contratoId, listaItemLiberacaoDTO, out contratoRetificacaoItemMedicaoId);
+            if (messageQueue.GetAll().Count > 0)
+            {
+                msg = messageQueue.GetAll()[0].Text;
+                messageQueue.Clear();
             }
 
             return Json(new
             {
-                ehAprovado = ehAprovado,
-                message = msg
+                message = msg,
+                contratoRetificacaoItemMedicaoId = contratoRetificacaoItemMedicaoId 
             });
-
         }
+
+        public ActionResult ImprimirMedicao(FormatoExportacaoArquivo formato,int? contratoId,int? contratoRetificacaoItemMedicaoId)
+        {
+            var arquivo = contratoAppService.ImprimirMedicaoPelaLiberacao(formato, contratoId, contratoRetificacaoItemMedicaoId);
+
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
 
 
         #endregion
