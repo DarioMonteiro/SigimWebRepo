@@ -126,4 +126,7 @@
   <data name="CancelamentoComSucesso" xml:space="preserve">
     <value>Cancelamento realizado com sucesso.</value>
   </data>
+  <data name="LiberacaoRealizadaComSucesso" xml:space="preserve">
+    <value>Liberação realizada com sucesso.</value>
+  </data>
 </root>

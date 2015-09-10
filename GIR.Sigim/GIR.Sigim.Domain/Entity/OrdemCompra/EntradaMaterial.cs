@@ -26,7 +26,14 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public Nullable<DateTime> DataEntregaNota { get; set; }
         public string Observacao { get; set; }
         public decimal? PercentualDesconto { get; set; }
-        public decimal? Desconto { get; set; }
+
+        private decimal? desconto;
+        public decimal? Desconto
+        {
+            get { return desconto.HasValue ? desconto : 0; }
+            set { desconto = value; }
+        }
+
         public decimal? PercentualISS { get; set; }
         public decimal? ISS { get; set; }
         public decimal? FreteIncluso { get; set; }
