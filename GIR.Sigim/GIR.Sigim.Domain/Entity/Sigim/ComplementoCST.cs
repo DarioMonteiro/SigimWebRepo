@@ -11,5 +11,12 @@ namespace GIR.Sigim.Domain.Entity.Sigim
     {
         public string Codigo { get; set; }
         public string Descricao { get; set; }
+
+        public ICollection<EntradaMaterialItem> ListaEntradaMaterialItem { get; set; }
+
+        public ComplementoCST()
+        {
+            this.ListaEntradaMaterialItem = new HashSet<EntradaMaterialItem>();
+        }
     }
 }

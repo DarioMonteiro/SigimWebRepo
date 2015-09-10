@@ -31,6 +31,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         private IComplementoNaturezaOperacaoAppService complementoNaturezaOperacaoAppService;
         private IComplementoCSTAppService complementoCSTAppService;
         private INaturezaReceitaAppService naturezaReceitaAppService;
+        private IParametrosUsuarioAppService parametrosUsuarioAppService;
 
         public EntradaMaterialController(
             IEntradaMaterialAppService entradaMaterialAppService,
@@ -44,6 +45,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             IComplementoNaturezaOperacaoAppService complementoNaturezaOperacaoAppService,
             IComplementoCSTAppService complementoCSTAppService,
             INaturezaReceitaAppService naturezaReceitaAppService,
+            IParametrosUsuarioAppService parametrosUsuarioAppService,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -58,6 +60,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.complementoNaturezaOperacaoAppService = complementoNaturezaOperacaoAppService;
             this.complementoCSTAppService = complementoCSTAppService;
             this.naturezaReceitaAppService = naturezaReceitaAppService;
+            this.parametrosUsuarioAppService = parametrosUsuarioAppService;
         }
 
         [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
@@ -107,11 +110,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.EntradaMaterial = entradaMaterial;
             model.JsonItens = JsonConvert.SerializeObject(entradaMaterial.ListaItens);
 
-            //if ((entradaMaterial.CentroCusto == null) || (string.IsNullOrEmpty(entradaMaterial.CentroCusto.Codigo)))
-            //{
-            //    var parametrosUsuario = parametrosUsuarioAppService.ObterPeloIdUsuario(Usuario.Id);
-            //    model.RequisicaoMaterial.CentroCusto = parametrosUsuario.CentroCusto;
-            //}
+            if ((entradaMaterial.CentroCusto == null) || (string.IsNullOrEmpty(entradaMaterial.CentroCusto.Codigo)))
+            {
+                var parametrosUsuario = parametrosUsuarioAppService.ObterPeloIdUsuario(Usuario.Id);
+                model.EntradaMaterial.CentroCusto = parametrosUsuario.CentroCusto;
+            }
 
             //var parametros = parametrosOrdemCompraAppService.Obter();
             //if (parametros != null)
@@ -144,7 +147,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             int? tipoNotaFiscalId = null;
             string CodigoTipoCompra = null;
             int? CifFobId = null;
-            string CodigoNaturezaOperacao = null;
+            string codigoNaturezaOperacao = null;
             int? SerieNFId = null;
             string CodigoCST = null;
             string CodigoContribuicaoId = null;
@@ -154,7 +157,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 tipoNotaFiscalId = model.EntradaMaterial.TipoNotaFiscalId;
                 CodigoTipoCompra = model.EntradaMaterial.CodigoTipoCompra;
                 CifFobId = model.EntradaMaterial.CifFobId;
-                CodigoNaturezaOperacao = model.EntradaMaterial.CodigoNaturezaOperacao;
+                codigoNaturezaOperacao = model.EntradaMaterial.CodigoNaturezaOperacao;
                 SerieNFId = model.EntradaMaterial.SerieNFId;
                 CodigoCST = model.EntradaMaterial.CodigoCST;
                 CodigoContribuicaoId = model.EntradaMaterial.CodigoContribuicaoId;
@@ -167,9 +170,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.ListaSerieNF = new SelectList(serieNFAppService.ListarTodos(), "Id", "Descricao", tipoNotaFiscalId);
             model.ListaCST = new SelectList(CSTAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
             model.ListaCodigoContribuicao = new SelectList(codigoContribuicaoAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
-            model.ListaComplementoNaturezaOperacao = new SelectList(complementoNaturezaOperacaoAppService.ListarTodos(), "Codigo", "Descricao");
+            model.ListaComplementoNaturezaOperacao = new SelectList(complementoNaturezaOperacaoAppService.ListarPorNaturezaOperacao(codigoNaturezaOperacao), "Codigo", "Descricao");
             model.ListaComplementoCST = new SelectList(complementoCSTAppService.ListarTodos(), "Codigo", "Descricao");
             model.ListaNaturezaReceita = new SelectList(naturezaReceitaAppService.ListarTodos(), "Codigo", "Descricao");
+        }
+
+        [HttpPost]
+        public ActionResult ListaComplementoNaturezaOperacao(string codigoNaturezaOperacao)
+        {
+            var lista = complementoNaturezaOperacaoAppService.ListarPorNaturezaOperacao(codigoNaturezaOperacao);
+            return Json(lista);
         }
 
         [HttpPost]

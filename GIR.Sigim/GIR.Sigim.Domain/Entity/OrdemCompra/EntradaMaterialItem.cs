@@ -28,7 +28,10 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public decimal? BaseICMSST { get; set; }
         public decimal? PercentualICMSST { get; set; }
         public string CodigoComplementoNaturezaOperacao { get; set; }
+        public ComplementoNaturezaOperacao ComplementoNaturezaOperacao { get; set; }
         public string CodigoComplementoCST { get; set; }
+        public ComplementoCST ComplementoCST { get; set; }
         public string CodigoNaturezaReceita { get; set; }
+        public NaturezaReceita NaturezaReceita { get; set; }
     }
 }

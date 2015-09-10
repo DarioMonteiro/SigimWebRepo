@@ -33,7 +33,8 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<EntradaMaterialItem, EntradaMaterialItemDTO>()
                 .ForMember(d => d.CodigoComplementoCST, m => m.MapFrom(s => string.IsNullOrEmpty(s.CodigoComplementoCST) ? string.Empty : s.CodigoComplementoCST))
                 .ForMember(d => d.CodigoComplementoNaturezaOperacao, m => m.MapFrom(s => string.IsNullOrEmpty(s.CodigoComplementoNaturezaOperacao) ? string.Empty : s.CodigoComplementoNaturezaOperacao))
-                .ForMember(d => d.CodigoNaturezaReceita, m => m.MapFrom(s => string.IsNullOrEmpty(s.CodigoNaturezaReceita) ? string.Empty : s.CodigoNaturezaReceita));
+                .ForMember(d => d.CodigoNaturezaReceita, m => m.MapFrom(s => string.IsNullOrEmpty(s.CodigoNaturezaReceita) ? string.Empty : s.CodigoNaturezaReceita))
+                .ForMember(d => d.QuantidadeInicial, m => m.MapFrom(s => s.Quantidade));
             Mapper.CreateMap<EntradaMaterialItemDTO, EntradaMaterialItem>();
 
             Mapper.CreateMap<InterfaceCotacao, InterfaceCotacaoDTO>();
