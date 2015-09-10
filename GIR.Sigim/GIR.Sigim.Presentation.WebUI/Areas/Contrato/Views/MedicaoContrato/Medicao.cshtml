@@ -614,7 +614,6 @@
             var dataEmissao = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.DataEmissao)").val();
             var contratadoId = $("#@Html.IdFor(m => m.Contrato.ContratadoId)").val();
             var multiFornecedorId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.MultiFornecedor.Id)").val();
-            var retencaoContratual = $("#@Html.IdFor(m => m.RetencaoContratual)").val();
             var valorContratadoItem = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)").val();
 
             if ((multiFornecedorId != "") && (multiFornecedorId > 0)) {
@@ -656,7 +655,6 @@
             parametrosUrlImpressao += '&numeroDocumento=' + numeroDocumento;
             parametrosUrlImpressao += '&dataEmissao=' + dataEmissao;
             parametrosUrlImpressao += '&multiFornecedorId=' + multiFornecedorId;
-            parametrosUrlImpressao += '&retencaoContratual=' + retencaoContratual;
             parametrosUrlImpressao += '&valorContratadoItem=' + valorContratadoItem;
         });
 

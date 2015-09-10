@@ -1,4 +1,7 @@
-﻿@model GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel.LiberacaoContratoLiberacaoViewModel
+﻿@using GIR.Sigim.Application.Adapter;
+@using GIR.Sigim.Application.DTO.Sigim;
+
+@model GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel.LiberacaoContratoLiberacaoViewModel
 
 @{
     ViewBag.Title = "Liberação";
@@ -178,7 +181,49 @@
                                                 <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:void(0);">Cancelar Liberação</a>
                                                 <a class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="javascript:void(0);">Associar NF</a>
                                                 <a class="btn btn-default btn-xs disabled" id="btnAlterarVencimento" href="javascript:void(0);">Alterar Vencimento</a>
-                                                <a class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="javascript:void(0);">Imprimir Medição</a>
+                                                <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="#FormatoImpressaoMedicao_ModalPanel">Imprimir Medição</a>
+                                                @if (Model.PodeImprimirMedicao) {
+                                                    <div class="modal fade" id="FormatoImpressaoMedicao_ModalPanel" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                                        &times;
+                                                                    </button>
+                                                                    <h4 class="modal-title">
+                                                                        Formato do Arquivo para Impressão
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col col-12">
+                                                                            @{
+                                                                                var listaFormatoExportacaoArquivo = new SelectList(typeof(FormatoExportacaoArquivo).ToItemListaDTO(), "Id", "Descricao", (int)FormatoExportacaoArquivo.PDF);
+                                                                                foreach (var item in listaFormatoExportacaoArquivo)
+	                                                                            {
+                                                                                    var itemChecked = string.Empty;
+                                                                                    if (item.Selected)
+                                                                                    {
+                                                                                        itemChecked = "checked=\"checked\"";
+                                                                                    }
+                                                                                    @:<label class="radio">
+							                                                        @:  <input type="radio" name="formatoExportacaoArquivo" value="@item.Value" @itemChecked>
+							                                                        @:  <i></i>@item.Text
+                                                                                    @:</label>
+	                                                                            }
+                                                                            }
+					                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+					                                                <button type="button" id="btnConfirmarImpressaoMedicao" class="btn btn-primary" data-dismiss="modal">
+						                                                Ok
+					                                                </button>
+				                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
                                             </div>
                                             <div class="widget-body">
                                                 <hr class="simple">
@@ -241,9 +286,60 @@
     </article>
 </div> 
 <script type="text/javascript">
+    var parametrosUrlImpressaoMedicao = '';
     jsonListaItemLiberacaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
 
     $(document).ready(function () {
+
+        $(document).on("show.bs.modal", "#FormatoImpressaoMedicao_ModalPanel", function (e) {
+            var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+            var listaItemLiberacao = $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val();
+            var contratoRetificacaoItemMedicaoId = null;
+
+            if (listaItemLiberacao.length == 0) {
+                smartAlert("Atenção", "Nenhum item da lista foi selecionado", "error");
+                e.event.preventDefault();
+            }
+
+            if (contratoId == 0) {
+                smartAlert("Atenção", "Informe o contrato", "warning");
+                e.event.preventDefault();
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ValidarImprimirMedicao", "LiberacaoContrato", new { area = "Contrato" })',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    contratoId: contratoId,
+                    listaItemLiberacao: listaItemLiberacao
+                }),
+                success: function (result) {
+                    msgValidacaoImpressao = result.message;
+                    contratoRetificacaoItemMedicaoId = result.contratoRetificacaoItemMedicaoId;
+                },
+                error: function (result) {
+                    msgValidacaoImpressao = "Ocorreu erro na validação da impressão da medição";
+                }
+            });
+
+            if (msgValidacaoImpressao.length > 0) {
+                smartAlert("Atenção", msgValidacaoImpressao, "error");
+                e.event.preventDefault();
+            }
+
+            parametrosUrlImpressaoMedicao = '&contratoId=' + contratoId;
+            parametrosUrlImpressaoMedicao += '&contratoRetificacaoItemMedicaoId=' + contratoRetificacaoItemMedicaoId;
+        });
+
+        $("#btnConfirmarImpressaoMedicao").on("click", function () {
+            @{
+                var url = Url.Action("ImprimirMedicao","LiberacaoContrato");
+            }
+            window.open('@url?formato=' + $("input:radio[name=formatoExportacaoArquivo]:checked").val() + parametrosUrlImpressaoMedicao);
+        });
 
         //$('#dialog_link').click(function () {
         //    $('#dialog_simple').dialog('open');
@@ -468,14 +564,12 @@
                 $("#tableItens tbody").append(row);
                 row.append($('<td class="text-left" style="' + cor + '" onclick="trataItemLiberacaoSelecionado(' + jsonListaItemLiberacaoArray[i].PosicaoLista + ');">' + jsonListaItemLiberacaoArray[i].SequencialItem + '</td>'));
                 if (jsonListaItemLiberacaoArray[i].DataMedicao != null) {
-                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataMedicao.substr(6))).toFormatDDMMYYYY() + '</td>'));
                     row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataMedicao).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
                     row.append($('<td class="text-center" style="' + cor + '"></td>'));
                 }
                 if (jsonListaItemLiberacaoArray[i].DataVencimento != null) {
-                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataVencimento.substr(6))).toFormatDDMMYYYY() + '</td>'));
                     row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
@@ -484,7 +578,6 @@
                 row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].TipoDocumento + '</td>'));
                 row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].NumeroDocumento + '</td>'));
                 if (jsonListaItemLiberacaoArray[i].DataEmissao != null) {
-                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataEmissao.substr(6))).toFormatDDMMYYYY() + '</td>'));
                     row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataEmissao).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
@@ -496,7 +589,6 @@
                 row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].ResponsavelMedicao + '</td>'));
                 row.append($('<td class="text-right" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].TituloId + '</td>'));
                 if (jsonListaItemLiberacaoArray[i].DataLiberacao != null) {
-                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataLiberacao.substr(6))).toFormatDDMMYYYY() + '</td>'));
                     row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataLiberacao).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
@@ -505,7 +597,6 @@
                 row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].ResponsavelLiberacao + '</td>'));
                 row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].DescricaoEvento + '</td>'));
                 if (jsonListaItemLiberacaoArray[i].DataCadastro != null) {
-                    //row.append($('<td class="text-center" style="' + cor + '">' + new Date(parseInt(jsonListaItemLiberacaoArray[i].DataCadastro.substr(6))).toFormatDDMMYYYY() + '</td>'));
                     row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataCadastro).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
@@ -673,14 +764,15 @@
             }),
             success: function (result) {
                 if (result.ehAprovado) {
+                    window.location.href = result.redirectToUrl;
                     smartAlert("Sucesso", result.message, "success");
                 }
                 else {
-                    smartAlert("Ocorreu erro na aprovação", result.message, "error");
+                    smartAlert("Ocorreu erro ao aprovar !", result.message, "error");
                 }
             },
             error: function (result) {
-                smartAlert("Ocorreu erro na aprovação", result.message, "error");
+                smartAlert("Ocorreu erro ao aprovar !", result.message, "error");
             }
         });
 
