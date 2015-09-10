@@ -44,7 +44,7 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public Nullable<DateTime> DataCancela { get; set; }
         public string UsuarioCancela { get; set; }
         public string MotivoCancela { get; set; }
-        public int TipoContrato { get; set; }
+        public TipoContrato TipoContrato { get; set; }
         public bool TemMedicaoALiberar { get; set; }
         public string DescricaoMedicaoLiberada
         {

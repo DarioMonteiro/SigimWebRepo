@@ -21,6 +21,8 @@ using GIR.Sigim.Application.Service.Financeiro;
 using CrystalDecisions.Shared;
 using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.Enums;
+using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Repository.Financeiro;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -33,8 +35,9 @@ namespace GIR.Sigim.Application.Service.Contrato
         private IParametrosContratoRepository parametrosContratoRepository;
         private ILogOperacaoAppService logOperacaoAppService;
         private IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
-        private ITituloPagarAppService tituloPagarAppService;
         private IBloqueioContabilAppService bloqueioContabilAppService;
+        private ITituloPagarRepository tituloPagarRepository;
+        private ITituloReceberRepository tituloReceberRepository;
 
         #endregion
 
@@ -44,9 +47,10 @@ namespace GIR.Sigim.Application.Service.Contrato
                                   IUsuarioAppService usuarioAppService, 
                                   ILogOperacaoAppService logOperacaoAppService,
                                   IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
-                                  ITituloPagarAppService tituloPagarAppService,
                                   IBloqueioContabilAppService bloqueioContabilAppService,
                                   IParametrosContratoRepository parametrosContratoRepository,
+                                  ITituloPagarRepository tituloPagarRepository,
+                                  ITituloReceberRepository tituloReceberRepository,
                                   MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -54,9 +58,10 @@ namespace GIR.Sigim.Application.Service.Contrato
             this.usuarioAppService = usuarioAppService;
             this.logOperacaoAppService = logOperacaoAppService;
             this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
-            this.tituloPagarAppService = tituloPagarAppService;
             this.bloqueioContabilAppService = bloqueioContabilAppService;
             this.parametrosContratoRepository = parametrosContratoRepository;
+            this.tituloPagarRepository = tituloPagarRepository;
+            this.tituloReceberRepository = tituloReceberRepository;
         }
 
         #endregion
@@ -1261,7 +1266,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             if (listaItemLiberacaoDTO == null)
             {
                 messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
-                return false;
+                return retorno;
             }
 
             if (listaItemLiberacaoDTO.All(l => l.Selecionado == false))
@@ -1391,6 +1396,112 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                       formato);
 
             return arquivo;
+        }
+
+        public bool ValidarTrocaDataVencimentoListaItemLiberacao(int contratoId, Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        {
+            bool retorno = false;
+            if (listaItemLiberacaoDTO == null)
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (!dataVencimento.HasValue)
+            {
+                messageQueue.Add("Data de vencimento não foi informada", TypeMessage.Error);
+                return retorno;
+            }
+
+            DateTime hoje = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+
+            if (dataVencimento < hoje)
+            {
+                messageQueue.Add("Data de vencimento menor que a data de hoje", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (listaItemLiberacaoDTO.All(l => l.Selecionado == false))
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (listaItemLiberacaoDTO.Any(l => l.Selecionado == true && l.CodigoSituacao != (int)SituacaoMedicao.Provisionado))
+            {
+                messageQueue.Add("Existe uma ou mais medições com situação diferente de Provisionado !", TypeMessage.Info);
+                return retorno;
+            }
+
+            retorno = true;
+
+            return retorno;
+        }
+
+        public bool TrocarDataVencimentoListaItemLiberacao(int contratoId, Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        {
+            bool retorno = false;
+
+            if (!ValidarTrocaDataVencimentoListaItemLiberacao(contratoId, dataVencimento, listaItemLiberacaoDTO))
+            {
+                return retorno;
+            }
+
+            var specificationContrato = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specificationContrato, l => l.ListaContratoRetificacaoProvisao, l => l.ListaContratoRetificacaoItemCronograma);
+
+            bool trocou = false;
+            foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao == (int)SituacaoMedicao.Provisionado))
+            {
+                ContratoRetificacaoProvisao contratoRetificacaoProvisao = contrato.ListaContratoRetificacaoProvisao.Where(l => l.Id == item.ContratoRetificacaoProvisaoId).FirstOrDefault();
+                ContratoRetificacaoItemCronograma contratoRetificacaoItemCronograma = contrato.ListaContratoRetificacaoItemCronograma.Where(l => l.Id == contratoRetificacaoProvisao.ContratoRetificacaoItemCronogramaId).FirstOrDefault();
+                contratoRetificacaoItemCronograma.DataVencimento = dataVencimento.Value;
+                if (contrato.TipoContrato == TipoContrato.ContratoAPagar && contratoRetificacaoProvisao.TituloPagarId.HasValue)
+                {
+                    TituloPagar tituloPagar = tituloPagarRepository.ListarPeloFiltro(l => l.Situacao < SituacaoTituloPagar.Emitido && l.Id == contratoRetificacaoProvisao.TituloPagarId.Value).FirstOrDefault();
+                    tituloPagar.DataVencimento = dataVencimento.Value;
+                }
+                else
+                {
+                    if (contrato.TipoContrato == TipoContrato.contratoAReceber && contratoRetificacaoProvisao.TituloReceberId.HasValue)
+                    {
+                        TituloReceber tituloReceber = tituloReceberRepository.ListarPeloFiltro(l => l.Situacao < SituacaoTituloReceber.Predatado && l.Id == contratoRetificacaoProvisao.TituloReceberId.Value).FirstOrDefault();
+                        tituloReceber.DataVencimento = dataVencimento.Value;
+                    }
+                }
+                trocou = true;
+            }
+
+            if (!trocou)
+            {
+                messageQueue.Add("A(s) medição(ões) escolhidas estão desatualizadas recupere o contrato novamente !", TypeMessage.Info);
+                return retorno;
+            }
+
+            try
+            {
+                if (Validator.IsValid(contrato, out validationErrors))
+                {
+                    contratoRepository.Alterar(contrato);
+                    contratoRepository.UnitOfWork.Commit();
+
+                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                    retorno = true;
+                    return retorno;
+                }
+                else
+                {
+                    messageQueue.AddRange(validationErrors, TypeMessage.Error);
+                    return retorno;
+                }
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return retorno;
         }
 
         #endregion

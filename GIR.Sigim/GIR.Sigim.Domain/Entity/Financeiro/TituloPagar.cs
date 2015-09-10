@@ -12,6 +12,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
     public class TituloPagar : AbstractTitulo
     {
         public ClienteFornecedor Cliente { get; set; }
+        public SituacaoTituloPagar Situacao { get; set; }
         public TipoCompromisso TipoCompromisso { get; set; }
         public TipoDocumento TipoDocumento { get; set; }
         public ContratoRetificacaoProvisao ContratoRetificacaoProvisao { get; set; }

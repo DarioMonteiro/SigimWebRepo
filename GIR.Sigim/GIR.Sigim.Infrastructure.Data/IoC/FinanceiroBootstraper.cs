@@ -30,6 +30,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<ITipoMovimentoRepository, TipoMovimentoRepository>();
             Container.Current.RegisterType<ITipoRateioRepository, TipoRateioRepository>();
             Container.Current.RegisterType<ITituloPagarRepository, TituloPagarRepository>();
+            Container.Current.RegisterType<ITituloReceberRepository, TituloReceberRepository>();
         }
     }
 }

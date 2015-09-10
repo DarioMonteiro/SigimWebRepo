@@ -153,6 +153,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             model.PodeAssociarNF = true;
             model.PodeAlterarDataVencimento = true;
             model.PodeImprimirMedicao = true;
+            model.DataVencimento = DateTime.Now;
 
             return View(model);
         }
@@ -319,7 +320,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         }
 
         [HttpPost]
-        public ActionResult ValidarImprimirMedicao(int? contratoId, string listaItemLiberacao)
+        public ActionResult ValidarImpressaoMedicao(int? contratoId, string listaItemLiberacao)
         {
             string msg = "";
             List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
@@ -354,7 +355,93 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
+        [HttpPost]
+        public ActionResult ValidarTrocaDataVencimento(int? contratoId, int? contratoRetificacaoId, string dataVencimento, string listaItemLiberacao)
+        {
+            bool ehValidouTrocaDataVencimento = false;
+            string msg = "";
 
+
+            if (contratoId.HasValue && contratoRetificacaoId.HasValue && !string.IsNullOrEmpty(dataVencimento))
+            {
+                if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
+                {
+                    ehValidouTrocaDataVencimento = false;
+                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(listaItemLiberacao))
+                    {
+                        List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
+
+                        Nullable<DateTime> dtVencimento = DateTime.Parse(dataVencimento);
+
+                        ehValidouTrocaDataVencimento = contratoAppService.ValidarTrocaDataVencimentoListaItemLiberacao(contratoId.Value, dtVencimento, listaItemLiberacaoDTO);
+                        if (messageQueue.GetAll().Count > 0)
+                        {
+                            msg = messageQueue.GetAll()[0].Text;
+                            messageQueue.Clear();
+                        }
+                    }
+                    else
+                    {
+                        ehValidouTrocaDataVencimento = false;
+                        msg = "Nenhum item da lista foi selecionado";
+                    }
+                }
+            }
+            return Json(new
+            {
+                ehValidouTrocaDataVencimento = ehValidouTrocaDataVencimento,
+                message = msg
+            });
+        }
+
+
+        [HttpPost]
+        public ActionResult TratarTrocaDataVencimento(int? contratoId, int? contratoRetificacaoId, string dataVencimento, string listaItemLiberacao)
+        {
+            bool ehTrocouDataVencimento = false;
+            string msg = "";
+
+
+            if (contratoId.HasValue && contratoRetificacaoId.HasValue && !string.IsNullOrEmpty(dataVencimento) )
+            {
+                if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
+                {
+                    ehTrocouDataVencimento = false;
+                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(listaItemLiberacao))
+                    {
+                        List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
+
+                        Nullable<DateTime> dtVencimento = DateTime.Parse(dataVencimento);
+
+                        ehTrocouDataVencimento = contratoAppService.TrocarDataVencimentoListaItemLiberacao(contratoId.Value,dtVencimento, listaItemLiberacaoDTO);
+                        if (messageQueue.GetAll().Count > 0)
+                        {
+                            msg = messageQueue.GetAll()[0].Text;
+                            messageQueue.Clear();
+                        }
+                    }
+                    else
+                    {
+                        ehTrocouDataVencimento = false;
+                        msg = "Nenhum item da lista foi selecionado";
+                    }
+                }
+            }
+            return Json(new
+            {
+                ehTrocouDataVencimento = ehTrocouDataVencimento,
+                message = msg,
+                redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
+            });
+        }
 
         #endregion
 

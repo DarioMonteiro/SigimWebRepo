@@ -34,11 +34,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasMaxLength(70)
                 .HasColumnOrder(4);
 
-            Property(l => l.Situacao)
-                .HasColumnName("situacao")
-                .HasColumnType("smallint")
-                .HasColumnOrder(5);
-
             Property(l => l.TipoDocumentoId)
                 .HasColumnName("tipoDocumento")
                 .HasColumnOrder(6);
