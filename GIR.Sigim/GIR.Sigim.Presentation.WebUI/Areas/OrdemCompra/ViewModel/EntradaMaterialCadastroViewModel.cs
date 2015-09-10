@@ -56,7 +56,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
 
         [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Total")]
-        public decimal ValorTotal { get; set; }
+        public decimal ValorItem { get; set; }
 
         [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Base ICMS")]
@@ -127,6 +127,24 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
 
         [Display(Name = "Total liberado")]
         public decimal? ValorTotalLiberado { get; set; }
+
+        [Display(Name = "Total dos itens")]
+        public decimal ValorTotalItem { get; set; }
+
+        [Display(Name = "Descontos")]
+        public decimal ValorTotalDesconto { get; set; }
+
+        [Display(Name = "Desconto OC")]
+        public decimal ValorTotalDescontoOrdemCompra { get; set; }
+
+        [Display(Name = "Acréscimos")]
+        public decimal ValorTotalAcrescimo { get; set; }
+
+        [Display(Name = "Sub total")]
+        public decimal ValorSubTotal { get; set; }
+
+        [Display(Name = "Total")]
+        public decimal ValorTotal { get; set; }
 
         public bool ExisteEstoqueParaCentroCusto { get; set; }
         public bool ExisteMovimentoNoEstoque { get; set; }

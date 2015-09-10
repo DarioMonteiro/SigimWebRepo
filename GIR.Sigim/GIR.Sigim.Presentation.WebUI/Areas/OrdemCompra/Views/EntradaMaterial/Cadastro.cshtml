@@ -565,11 +565,11 @@
                                                                     @Html.ValidationMessageFor(m => m.PercentualDesconto, "", new { @class = "note note-error" })
                                                                 </section>
                                                                 <section class="col col-3">
-                                                                    @Html.LabelFor(m => m.ValorTotal, new { @class = "label" })
+                                                                    @Html.LabelFor(m => m.ValorItem, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ValorTotal, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                                        @Html.TextBoxFor(m => m.ValorItem, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.ValorTotal, "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.ValorItem, "", new { @class = "note note-error" })
                                                                 </section>
                                                             </div>
 											            </div>
@@ -738,6 +738,54 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalItem, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalItem, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotalItem, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalDesconto, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalDesconto, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotalDesconto, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalDescontoOrdemCompra, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalDescontoOrdemCompra, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotalDescontoOrdemCompra, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalAcrescimo, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalAcrescimo, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotalAcrescimo, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorSubTotal, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorSubTotal, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorSubTotal, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotal, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotal, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotal, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
                                         </fieldset>
                                         <script type="text/javascript">
                                             $(document).ready(function () {
@@ -876,19 +924,19 @@
                                                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualICMS), 4) + '</td>'));
                                                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualICMSST), 4) + '</td>'));
                                                     if (jsonItens[i].ComplementoNaturezaOperacao)
-                                                        row.append($('<td class="text-right">' + jsonItens[i].ComplementoNaturezaOperacao.Descricao + '</td>'));
+                                                        row.append($('<td  class="text-nowrap">' + jsonItens[i].ComplementoNaturezaOperacao.Descricao + '</td>'));
                                                     else
-                                                        row.append($('<td class="text-right">&nbsp;</td>'));
+                                                        row.append($('<td>&nbsp;</td>'));
 
                                                     if (jsonItens[i].ComplementoCST)
-                                                        row.append($('<td class="text-right">' + jsonItens[i].ComplementoCST.Descricao + '</td>'));
+                                                        row.append($('<td class="text-nowrap">' + jsonItens[i].ComplementoCST.Descricao + '</td>'));
                                                     else
-                                                        row.append($('<td class="text-right">&nbsp;</td>'));
+                                                        row.append($('<td>&nbsp;</td>'));
 
                                                     if (jsonItens[i].NaturezaReceita)
-                                                        row.append($('<td class="text-right">' + jsonItens[i].NaturezaReceita.Descricao + '</td>'));
+                                                        row.append($('<td class="text-nowrap">' + jsonItens[i].NaturezaReceita.Descricao + '</td>'));
                                                     else
-                                                        row.append($('<td class="text-right">&nbsp;</td>'));
+                                                        row.append($('<td>&nbsp;</td>'));
                                                 }
                                             }
 
@@ -913,7 +961,7 @@
                                                     $("#@Html.IdFor(m => m.Quantidade)").val(roundDecimal(floatToString(item.Quantidade), 4));
                                                     $("#@Html.IdFor(m => m.ValorUnitario)").val(roundDecimal(floatToString(item.ValorUnitario), 4));
                                                     $("#@Html.IdFor(m => m.PercentualDesconto)").val(roundDecimal(floatToString(item.PercentualDesconto), 4));
-                                                    $("#@Html.IdFor(m => m.ValorTotal)").val(roundDecimal(floatToString(item.ValorTotal), 2));
+                                                    $("#@Html.IdFor(m => m.ValorItem)").val(roundDecimal(floatToString(item.ValorItem), 2));
                                                     $("#@Html.IdFor(m => m.BaseICMS)").val(roundDecimal(floatToString(item.BaseICMS), 4));
                                                     $("#@Html.IdFor(m => m.PercentualICMS)").val(roundDecimal(floatToString(item.PercentualICMS), 4));
                                                     $("#@Html.IdFor(m => m.ValorICMS)").val(roundDecimal(floatToString(item.BaseICMS * item.PercentualICMS / 100), 4));
@@ -934,13 +982,13 @@
                                                         $("#@Html.IdFor(m => m.NaturezaReceita.Codigo)").val(item.NaturezaReceita.Codigo);
 
                                                     if (item.BaseICMS == 0)
-                                                        $("#@Html.IdFor(m => m.BaseICMS)").val(roundDecimal(floatToString(item.ValorTotal), 4));
+                                                        $("#@Html.IdFor(m => m.BaseICMS)").val(roundDecimal(floatToString(item.ValorItem), 4));
 
                                                     if (item.BaseICMSST == 0)
-                                                        $("#@Html.IdFor(m => m.BaseICMSST)").val(roundDecimal(floatToString(item.ValorTotal), 4));
+                                                        $("#@Html.IdFor(m => m.BaseICMSST)").val(roundDecimal(floatToString(item.ValorItem), 4));
 
                                                     if (item.BaseIPI == 0)
-                                                        $("#@Html.IdFor(m => m.BaseIPI)").val(roundDecimal(floatToString(item.ValorTotal), 4));
+                                                        $("#@Html.IdFor(m => m.BaseIPI)").val(roundDecimal(floatToString(item.ValorItem), 4));
                                                 }
                                             }
 
@@ -973,11 +1021,11 @@
                                                 var percentualIPI = parseFloat($("#@Html.IdFor(m => m.PercentualIPI)").val().replace(".", "").replace(",", "."));
                                                 var percentualDesconto = parseFloat($("#@Html.IdFor(m => m.PercentualDesconto)").val().replace(".", "").replace(",", "."));
 
-                                                var valorTotal = (quantidade * valorUnitario);
-                                                valorTotal = valorTotal + ((baseIPI * percentualIPI) / 100)
-                                                valorTotal = valorTotal - ((valorTotal * percentualDesconto) / 100)
+                                                var valorItem = (quantidade * valorUnitario);
+                                                valorItem = valorItem + ((baseIPI * percentualIPI) / 100)
+                                                valorItem = valorItem - ((valorItem * percentualDesconto) / 100)
 
-                                                $("#@Html.IdFor(m => m.ValorTotal)").val(roundDecimal(floatToString(valorTotal), 2));
+                                                $("#@Html.IdFor(m => m.ValorItem)").val(roundDecimal(floatToString(valorItem), 2));
                                             }
 
                                             function atualizarValorICMS() {
@@ -1001,7 +1049,7 @@
                                                     $.each(jsonItens, function (i, item) {
                                                         if ($('#@Html.IdFor(m => m.Sequencial)').val() == item.Sequencial) {
                                                             item.Quantidade = jsonObj.Quantidade;
-                                                            item.ValorTotal = jsonObj.ValorTotal;
+                                                            item.ValorTotal = jsonObj.ValorItem;
                                                             item.BaseICMS = jsonObj.BaseICMS;
                                                             item.PercentualICMS = jsonObj.PercentualICMS;
                                                             item.ValorICMS = jsonObj.ValorICMS;
@@ -1021,7 +1069,12 @@
                                                     $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(jsonItens));
                                                     clearFormItem();
                                                     fillTableItens();
+                                                    atualizarTotais();
                                                 }
+                                            }
+
+                                            function atualizarTotais() {
+                                                //****************************************************//
                                             }
 
                                             function processData(node) {
@@ -1042,7 +1095,7 @@
 
                                                 if (fieldName != '' &&
                                                     (fieldId == "@Html.IdFor(m => m.Quantidade)"
-                                                    || fieldId == "@Html.IdFor(m => m.ValorTotal)"
+                                                    || fieldId == "@Html.IdFor(m => m.ValorItem)"
                                                     || fieldId == "@Html.IdFor(m => m.BaseICMS)"
                                                     || fieldId == "@Html.IdFor(m => m.PercentualICMS)"
                                                     || fieldId == "@Html.IdFor(m => m.ValorICMS)"
@@ -1072,7 +1125,7 @@
                                                 $("#@Html.IdFor(m => m.Quantidade)").val("0,0000");
                                                 $("#@Html.IdFor(m => m.ValorUnitario)").val("0,0000");
                                                 $("#@Html.IdFor(m => m.PercentualDesconto)").val("0,0000");
-                                                $("#@Html.IdFor(m => m.ValorTotal)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.ValorItem)").val("0,0000");
                                                 $("#@Html.IdFor(m => m.BaseICMS)").val("0,0000");
                                                 $("#@Html.IdFor(m => m.PercentualICMS)").val("0,0000");
                                                 $("#@Html.IdFor(m => m.ValorICMS)").val("0,0000");
