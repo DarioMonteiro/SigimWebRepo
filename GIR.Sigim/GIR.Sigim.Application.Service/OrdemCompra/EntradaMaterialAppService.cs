@@ -411,8 +411,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var fornecedorId = entradaMaterial.FornecedorNotaId.HasValue ? entradaMaterial.FornecedorNotaId : entradaMaterial.ClienteFornecedorId;
 
             ProcessarLiberacao(entradaMaterial, fornecedorId);
+            ReprovisionarApropriacoesDasFormasPagamentoNaoUtilizadas(entradaMaterial);
 
-            if (entradaMaterial.TituloFreteId.HasValue)
+            if (entradaMaterial.TituloFrete != null)
             {
                 if (entradaMaterial.TituloFrete.DataEmissaoDocumento > entradaMaterial.DataFrete.Value)
                     entradaMaterial.TituloFrete.DataEmissaoDocumento = entradaMaterial.DataFrete.Value;
@@ -441,12 +442,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var valorTotalLiberado = entradaMaterial.ListaFormaPagamento.Where(l => !l.OrdemCompraFormaPagamento.EhPagamentoAntecipado.Value).Sum(s => s.Valor);
             var valorTotalItens = entradaMaterial.ListaItens.Sum(l => l.ValorTotal);
             var valorDesconto = (decimal)(entradaMaterial.PercentualDesconto.HasValue ? valorTotalItens * entradaMaterial.Desconto / 100 : entradaMaterial.Desconto);
+            var valorTotalImposto = entradaMaterial.ListaImposto.Where(l => l.ImpostoFinanceiro.EhRetido == true).Sum(o => o.Valor);
 
             foreach (var formaPagamentoEM in entradaMaterial.ListaFormaPagamento)
             {
                 var percentualTitulo = formaPagamentoEM.Valor / valorTotalLiberado * 100;
                 var descontoTitulo = (decimal)(valorDesconto * percentualTitulo / 100);
+                var valorImpostoTitulo = (decimal)(valorTotalImposto * percentualTitulo / 100);
+                var valorAbatimentoTitulo = descontoTitulo + valorImpostoTitulo;
+
                 TituloPagarAdiantamento tituloPagarAdiantamento = null;
+
                 #region Geração de títulos
 
                 if (formaPagamentoEM.OrdemCompraFormaPagamento.EhPagamentoAntecipado.Value)
@@ -484,7 +490,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 					formaPagamentoEM.TituloPagar.ClienteId = fornecedorId.Value;
                     formaPagamentoEM.TituloPagar.DataVencimento = formaPagamentoEM.Data;
 					formaPagamentoEM.TituloPagar.ValorTitulo = formaPagamentoEM.Valor;
-                    formaPagamentoEM.TituloPagar.ValorImposto = entradaMaterial.ListaImposto.Where(l => l.ImpostoFinanceiro.EhRetido.Value).Sum(l => l.Valor) * percentualTitulo / 100;
+                    formaPagamentoEM.TituloPagar.ValorImposto = valorImpostoTitulo;
 					formaPagamentoEM.TituloPagar.DataEmissaoDocumento = entradaMaterial.DataEmissaoNota.Value;
 					formaPagamentoEM.TituloPagar.Situacao = ParametrosOrdemCompra.GeraTituloAguardando.Value ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado;
 					formaPagamentoEM.TituloPagar.TipoDocumentoId = entradaMaterial.TipoNotaFiscalId;
@@ -518,6 +524,10 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     {
                         var valorTotalClasse = listaItensPorOC.Where(l => l.CodigoClasse == codigoClasse).Sum(o => o.ValorTotal);
                         var percentualClasse = decimal.Round((valorTotalClasse / valorTotal * 100).Value, 5);
+                        var valorAbatimentoClasse = decimal.Round((valorAbatimentoTitulo * percentualClasse / 100), 5);
+
+                        var valorClasseTitulo = (formaPagamentoEM.Valor * percentualClasse / 100) - valorAbatimentoClasse;
+                        var percentualClasseTitulo = decimal.Round((valorClasseTitulo / formaPagamentoEM.Valor * 100), 5);
 
                         if (tituloPagarAdiantamento != null)
                         {
@@ -526,7 +536,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                             apropriacaoAdiantamento.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
                             apropriacaoAdiantamento.TituloPagarAdiantamento = tituloPagarAdiantamento;
                             apropriacaoAdiantamento.Percentual = percentualClasse;
-                            apropriacaoAdiantamento.Valor = formaPagamentoEM.Valor * percentualClasse / 100;
+                            apropriacaoAdiantamento.Valor = decimal.Round((formaPagamentoEM.Valor * percentualClasse / 100), 5);
 
                             tituloPagarAdiantamento.ListaApropriacaoAdiantamento.Add(apropriacaoAdiantamento);
                         }
@@ -536,8 +546,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                             apropriacao.CodigoClasse = codigoClasse;
                             apropriacao.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
                             apropriacao.TituloPagar = formaPagamentoEM.TituloPagar;
-                            apropriacao.Percentual = percentualClasse;
-                            apropriacao.Valor = formaPagamentoEM.Valor * apropriacao.Percentual / 100;
+                            apropriacao.Percentual = percentualClasseTitulo;
+                            apropriacao.Valor = valorClasseTitulo;
 
                             formaPagamentoEM.TituloPagar.ListaApropriacao.Add(apropriacao);
                         }
@@ -549,7 +559,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                             apropriacaoTituloFrete.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
                             apropriacaoTituloFrete.TituloPagarId = entradaMaterial.TituloFreteId;
                             apropriacaoTituloFrete.Percentual = percentualClasse;
-                            apropriacaoTituloFrete.Valor = entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100;
+                            apropriacaoTituloFrete.Valor = decimal.Round((entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100), 5);
 
                             entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
                         }
@@ -602,6 +612,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                         imposto.TituloPagarImposto = tituloPagar;
 
                         #region Apropriação dos títulos
+
                         decimal percentualTotal = formaPagamentoEM.TituloPagar.ListaApropriacao.Sum(l => l.Percentual);
                         if (percentualTotal < 100)
                         {
