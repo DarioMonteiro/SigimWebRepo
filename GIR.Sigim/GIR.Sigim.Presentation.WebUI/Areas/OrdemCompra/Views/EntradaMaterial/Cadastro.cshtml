@@ -743,6 +743,25 @@
                                             $(document).ready(function () {
                                                 fillTableItens();
 
+                                                $(document).on('change', '#@Html.IdFor(m => m.EntradaMaterial.CodigoNaturezaOperacao)', function () {
+                                                    $('#@Html.IdFor(m => m.ComplementoNaturezaOperacao.Codigo)').html('').append($('<option>').text('').attr('value', ''));
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        url: '@Url.Action("ListaComplementoNaturezaOperacao", "EntradaMaterial")',
+                                                        cache: false,
+                                                        async: false,
+                                                        contentType: 'application/json; charset=utf-8',
+                                                        data: JSON.stringify({
+                                                            codigoNaturezaOperacao: $(this).val()
+                                                        })
+                                                    })
+                                                    .success(function (result) {
+                                                        $.each(result, function (index, item) {
+                                                            $('#@Html.IdFor(m => m.ComplementoNaturezaOperacao.Codigo)').append($('<option>').text(item.Descricao).attr('value', item.Codigo));
+                                                        });
+                                                    });
+                                                });
+
                                                 $('#btnAddItem').on('click', function () {
                                                     addItem();
                                                 });
@@ -874,6 +893,7 @@
                                             }
 
                                             function loadItem(sequencial) {
+                                                clearFormItem();
                                                 var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
                                                 var arr = jQuery.grep(jsonItens, function (item, i) {
                                                     return (item.Sequencial == sequencial);
@@ -1054,6 +1074,11 @@
                                                     $("#@Html.IdFor(m => m.Sequencial)").val('');
                                                     limpaCentroCusto();
                                                     limpaClasse();*@
+                                                    clearFormItem();
+                                                }
+
+                                                function clearFormItem() {
+
                                                 }
                                             }
                                         </script>

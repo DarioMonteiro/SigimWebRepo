@@ -10,19 +10,24 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 
 namespace GIR.Sigim.Application.Service.Sigim
 {
-    public class ComplementoCSTAppService : BaseAppService, IComplementoCSTAppService 
+    public class ComplementoNaturezaOperacaoAppService : BaseAppService, IComplementoNaturezaOperacaoAppService 
     {
-        private IComplementoCSTRepository complementoCSTRepository;
+        private IComplementoNaturezaOperacaoRepository complementoNaturezaOperacaoRepository;
 
-        public ComplementoCSTAppService(IComplementoCSTRepository complementoCSTRepository, MessageQueue messageQueue)
+        public ComplementoNaturezaOperacaoAppService(IComplementoNaturezaOperacaoRepository complementoNaturezaOperacaoRepository, MessageQueue messageQueue)
             : base(messageQueue)
         {
-            this.complementoCSTRepository = complementoCSTRepository;
+            this.complementoNaturezaOperacaoRepository = complementoNaturezaOperacaoRepository;
         }
 
-        public List<ComplementoCSTDTO> ListarTodos()
+        public List<ComplementoNaturezaOperacaoDTO> ListarTodos()
         {
-            return complementoCSTRepository.ListarTodos().To<List<ComplementoCSTDTO>>();
+            return complementoNaturezaOperacaoRepository.ListarTodos().To<List<ComplementoNaturezaOperacaoDTO>>();
+        }
+
+        public List<ComplementoNaturezaOperacaoDTO> ListarPorNaturezaOperacao(string codigoNaturezaOperacao)
+        {
+            return complementoNaturezaOperacaoRepository.ListarPeloFiltro(l => l.Codigo.StartsWith(codigoNaturezaOperacao.Trim())).To<List<ComplementoNaturezaOperacaoDTO>>();
         }
     }
 }

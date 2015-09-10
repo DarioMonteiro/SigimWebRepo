@@ -10,5 +10,6 @@ namespace GIR.Sigim.Application.Service.Sigim
     public interface IComplementoNaturezaOperacaoAppService
     {
         List<ComplementoNaturezaOperacaoDTO> ListarTodos();
+        List<ComplementoNaturezaOperacaoDTO> ListarPorNaturezaOperacao(string codigoNaturezaOperacao);
     }
 }
