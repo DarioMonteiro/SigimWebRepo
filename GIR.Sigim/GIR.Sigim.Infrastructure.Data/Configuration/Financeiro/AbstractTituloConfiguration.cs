@@ -17,6 +17,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             Property(l => l.Id)
                 .HasColumnName("codigo")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity)
                 .HasColumnOrder(1);
 
             Property(l => l.ClienteId)

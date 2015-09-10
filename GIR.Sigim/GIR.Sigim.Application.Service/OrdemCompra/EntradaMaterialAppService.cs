@@ -412,7 +412,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var fornecedorId = entradaMaterial.FornecedorNotaId.HasValue ? entradaMaterial.FornecedorNotaId : entradaMaterial.ClienteFornecedorId;
 
             ProcessarLiberacao(entradaMaterial, fornecedorId);
-            ReprovisionarApropriacoesDasFormasPagamentoNaoUtilizadas(entradaMaterial);
 
             if (entradaMaterial.TituloFrete != null)
             {
@@ -426,6 +425,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 entradaMaterial.TituloFrete.Documento = entradaMaterial.NumeroNotaFrete;
                 entradaMaterial.TituloFrete.TipoCompromissoId = ParametrosOrdemCompra.TipoCompromissoFreteId;
             }
+
+            ReprovisionarApropriacoesDasFormasPagamentoNaoUtilizadas(entradaMaterial);
 
             entradaMaterial.Situacao = SituacaoEntradaMaterial.Fechada;
             entradaMaterial.DataLiberacao = DateTime.Now;
@@ -605,26 +606,26 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     {
                         CalcularDataVencimentoImposto(formaPagamentoEM, imposto);
 
-                        TituloPagar tituloPagar = new TituloPagar();
-                        tituloPagar.ClienteId = imposto.ImpostoFinanceiro.ClienteId.Value;
-                        tituloPagar.TipoCompromissoId = imposto.ImpostoFinanceiro.TipoCompromissoId;
-                        tituloPagar.Identificacao = imposto.ImpostoFinanceiro.Sigla + " - " + formaPagamentoEM.TituloPagar.Cliente.Nome;
-                        tituloPagar.Situacao = ParametrosOrdemCompra.GeraTituloAguardando.Value ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado;
-                        tituloPagar.TipoDocumentoId = formaPagamentoEM.TituloPagar.TipoDocumentoId;
-                        tituloPagar.Documento = formaPagamentoEM.TituloPagar.Documento + "/" + contadorImposto++;
-                        tituloPagar.DataVencimento = imposto.DataVencimento.Value;
-                        tituloPagar.DataEmissaoDocumento = formaPagamentoEM.TituloPagar.DataEmissaoDocumento;
-                        tituloPagar.TipoTitulo = TipoTitulo.Normal;
-                        tituloPagar.ValorTitulo = decimal.Round((imposto.Valor * percentualTitulo / 100), 5);
-                        tituloPagar.LoginUsuarioCadastro = UsuarioLogado.Login;
-                        tituloPagar.DataCadastro = DateTime.Now;
-                        tituloPagar.LoginUsuarioApropriacao = UsuarioLogado.Login;
-                        tituloPagar.DataApropriacao = DateTime.Now;
-                        tituloPagar.FormaPagamento = formaPagamentoEM.TituloPagar.FormaPagamento;
-                        tituloPagar.CodigoInterface = formaPagamentoEM.TituloPagar.CodigoInterface;
-                        tituloPagar.SistemaOrigem = formaPagamentoEM.TituloPagar.SistemaOrigem;
-                        impostoPagar.TituloPagarImposto = tituloPagar;
-                        imposto.TituloPagarImposto = tituloPagar;
+                        TituloPagar tituloPagarImposto = new TituloPagar();
+                        tituloPagarImposto.ClienteId = imposto.ImpostoFinanceiro.ClienteId.Value;
+                        tituloPagarImposto.TipoCompromissoId = imposto.ImpostoFinanceiro.TipoCompromissoId;
+                        tituloPagarImposto.Identificacao = imposto.ImpostoFinanceiro.Sigla + " - " + formaPagamentoEM.TituloPagar.Cliente.Nome;
+                        tituloPagarImposto.Situacao = ParametrosOrdemCompra.GeraTituloAguardando.Value ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado;
+                        tituloPagarImposto.TipoDocumentoId = formaPagamentoEM.TituloPagar.TipoDocumentoId;
+                        tituloPagarImposto.Documento = formaPagamentoEM.TituloPagar.Documento + "/" + contadorImposto++;
+                        tituloPagarImposto.DataVencimento = imposto.DataVencimento.Value;
+                        tituloPagarImposto.DataEmissaoDocumento = formaPagamentoEM.TituloPagar.DataEmissaoDocumento;
+                        tituloPagarImposto.TipoTitulo = TipoTitulo.Normal;
+                        tituloPagarImposto.ValorTitulo = decimal.Round((imposto.Valor * percentualTitulo / 100), 5);
+                        tituloPagarImposto.LoginUsuarioCadastro = UsuarioLogado.Login;
+                        tituloPagarImposto.DataCadastro = DateTime.Now;
+                        tituloPagarImposto.LoginUsuarioApropriacao = UsuarioLogado.Login;
+                        tituloPagarImposto.DataApropriacao = DateTime.Now;
+                        tituloPagarImposto.FormaPagamento = formaPagamentoEM.TituloPagar.FormaPagamento;
+                        tituloPagarImposto.CodigoInterface = formaPagamentoEM.TituloPagar.CodigoInterface;
+                        tituloPagarImposto.SistemaOrigem = formaPagamentoEM.TituloPagar.SistemaOrigem;
+                        impostoPagar.TituloPagarImposto = tituloPagarImposto;
+                        imposto.TituloPagarImposto = tituloPagarImposto;
 
                         #region Apropriação dos títulos
 
@@ -634,12 +635,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                             foreach (var apropriacaoTituloOrigem in formaPagamentoEM.TituloPagar.ListaApropriacao)
                             {
                                 Apropriacao apropriacao = new Apropriacao();
-                                apropriacao.TituloPagar = tituloPagar;
+                                //apropriacao.TituloPagar = tituloPagarImposto;
                                 apropriacao.CodigoClasse = apropriacaoTituloOrigem.CodigoClasse;
                                 apropriacao.CodigoCentroCusto = apropriacaoTituloOrigem.CodigoCentroCusto;
                                 apropriacao.Percentual = decimal.Round((apropriacaoTituloOrigem.Percentual / percentualTotal * 100), 5);
-                                apropriacao.Valor = decimal.Round((tituloPagar.ValorTitulo * apropriacaoTituloOrigem.Percentual / percentualTotal), 5);
-                                tituloPagar.ListaApropriacao.Add(apropriacao);
+                                apropriacao.Valor = decimal.Round((tituloPagarImposto.ValorTitulo * apropriacaoTituloOrigem.Percentual / percentualTotal), 5);
+                                tituloPagarImposto.ListaApropriacao.Add(apropriacao);
                             }
                         }
 
@@ -1000,7 +1001,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 var listaFormaPagamentoNaoUtulizada = ordemCompra.ListaOrdemCompraFormaPagamento.Where(l => l.EhUtilizada == false);
                 List<Apropriacao> listaApropriacao = listaFormaPagamentoNaoUtulizada.SelectMany(o => o.TituloPagar.ListaApropriacao).ToList();
-                if (entradaMaterial.TituloFreteId.HasValue)
+                if (entradaMaterial.TituloFreteId.HasValue && entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado)
                     listaApropriacao.AddRange(entradaMaterial.TituloFrete.ListaApropriacao);
 
                 for (int i = listaApropriacao.Count() - 1; i >= 0; i--)
@@ -1030,7 +1031,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                             formaPagamento.TituloPagar.ListaApropriacao.Add(apropriacao);
                         }
 
-                        if (entradaMaterial.TituloFreteId.HasValue)
+                        if (entradaMaterial.TituloFreteId.HasValue && (entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado))
                         {
                             Apropriacao apropriacaoTituloFrete = new Apropriacao();
                             apropriacaoTituloFrete.CodigoClasse = codigoClasse;
@@ -1391,7 +1392,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 foreach (var item in tituloPagar.ListaImpostoPagar)
                 {
-                    if (item.TituloPagarImposto.TipoTitulo == TipoTitulo.Pai)
+                    if (item.TituloPagarImpostoId.HasValue && item.TituloPagarImposto.TipoTitulo == TipoTitulo.Pai)
                     {
                         if (PossuiTituloDesdobradoPago(item.TituloPagarImposto.ListaFilhos, out tituloPagarId))
                             return true;
@@ -1441,9 +1442,10 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private static bool EhTituloPago(TituloPagar titulo, out int? tituloPagarId)
         {
             tituloPagarId = null;
-            if ((titulo.Situacao == SituacaoTituloPagar.Emitido)
+            if ((titulo != null)
+                && ((titulo.Situacao == SituacaoTituloPagar.Emitido)
                 || (titulo.Situacao == SituacaoTituloPagar.Pago)
-                || (titulo.Situacao == SituacaoTituloPagar.Baixado))
+                || (titulo.Situacao == SituacaoTituloPagar.Baixado)))
             {
                 tituloPagarId = titulo.Id;
                 return true;
