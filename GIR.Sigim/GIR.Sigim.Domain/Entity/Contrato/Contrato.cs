@@ -32,7 +32,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public Nullable<DateTime> DataCancela { get; set; }
         public string UsuarioCancela { get; set; }
         public string MotivoCancela { get; set; }
-        public int TipoContrato { get; set; }
+        public TipoContrato TipoContrato { get; set; }
         public ICollection<ContratoRetificacao> ListaContratoRetificacao { get; set; }
         public ICollection<ContratoRetificacaoItem> ListaContratoRetificacaoItem { get; set; }
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }

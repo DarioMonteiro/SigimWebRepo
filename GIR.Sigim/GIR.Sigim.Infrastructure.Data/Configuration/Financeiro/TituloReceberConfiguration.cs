@@ -18,6 +18,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .WithMany(c => c.ListaTituloReceber)
                 .HasForeignKey(l => l.ClienteId);
 
+            Property(l => l.Situacao)
+                .HasColumnName("situacao")
+                .HasColumnType("smallint");
+              //.HasColumnOrder(5);
+
             HasOptional(l => l.TipoCompromisso)
                 .WithMany(c => c.ListaTituloReceber)
                 .HasForeignKey(l => l.TipoCompromissoId);

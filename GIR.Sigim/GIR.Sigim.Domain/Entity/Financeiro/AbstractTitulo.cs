@@ -12,7 +12,6 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public int ClienteId { get; set; }
         public int? TipoCompromissoId { get; set; }
         public string Identificacao { get; set; }
-        public SituacaoTituloPagar Situacao { get; set; }
         public int? TipoDocumentoId { get; set; }
         public string Documento { get; set; }
         public DateTime DataEmissaoDocumento { get; set; }

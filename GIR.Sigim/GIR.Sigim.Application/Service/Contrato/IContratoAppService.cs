@@ -40,5 +40,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool AprovarListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO);
         bool ValidarImpressaoMedicaoPelaLiberacao(int? contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO, out int? contratoRetificacaoItemMedicaoId);
         FileDownloadDTO ImprimirMedicaoPelaLiberacao(FormatoExportacaoArquivo formato, int? contratoId, int? contratoRetificacaoItemMedicaoId);
+        bool ValidarTrocaDataVencimentoListaItemLiberacao(int contratoId, Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO);
+        bool TrocarDataVencimentoListaItemLiberacao(int contratoId, Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO);
     }
 }

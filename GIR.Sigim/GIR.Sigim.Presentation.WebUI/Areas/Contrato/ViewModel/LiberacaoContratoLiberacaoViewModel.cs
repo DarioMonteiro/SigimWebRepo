@@ -18,6 +18,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public ResumoLiberacaoDTO Resumo { get; set; }
         public string JsonListaItemLiberacao { get; set; }
 
+        [Display(Name = "Data Vencimento")]
+        public Nullable<DateTime> DataVencimento { get; set; }
+
         public bool PodeHabilitarBotoes { get; set; }
         public bool PodeAprovarLiberar { get; set; }
         public bool PodeAprovar { get; set; }

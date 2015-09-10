@@ -96,8 +96,7 @@
                                                             <label class="input">
                                                                 @Html.TextBoxFor(m => m.Resumo.ValorProvisionado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
                                                             </label>
-                                                        </section>
-                                                
+                                                        </section>                                               
                                                 </div>
                                                 <div class="row">
                                                     <section class="col col-4">
@@ -113,7 +112,6 @@
                                                             propStyle = "font-weight:bold; color:red";
                                                         }
                                                     }
-
                                                     <section class="col col-4">
                                                         @Html.LabelFor(m => m.Resumo.Diferenca, new { @class = "label" })
                                                         <label class="input">
@@ -176,11 +174,11 @@
                                         <fieldset>
                                             <div class="btn-toolbar">
                                                 <a class="btn btn-default btn-xs disabled" id="btnAprovarLiberar" href="javascript:void(0);">Aprovar e Liberar</a>
-                                                <a class="btn btn-default btn-xs disabled" id="btnAprovar" href="javascript:trataAprovar();">Aprovar</a>
+                                                <a class="btn btn-default btn-xs disabled" id="btnAprovar" href="javascript:tratarAprovar();">Aprovar</a>
                                                 <a class="btn btn-default btn-xs disabled" id="btnLiberar" href="javascript:void(0);">Liberar</a>
                                                 <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:void(0);">Cancelar Liberação</a>
                                                 <a class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="javascript:void(0);">Associar NF</a>
-                                                <a class="btn btn-default btn-xs disabled" id="btnAlterarVencimento" href="javascript:void(0);">Alterar Vencimento</a>
+                                                <a class="btn btn-default btn-xs disabled" id="btnAlterarVencimento" href="javascript:validarTrocarDataVencimento();">Alterar Vencimento</a>
                                                 <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="#FormatoImpressaoMedicao_ModalPanel">Imprimir Medição</a>
                                                 @if (Model.PodeImprimirMedicao) {
                                                     <div class="modal fade" id="FormatoImpressaoMedicao_ModalPanel" tabindex="-1" role="dialog">
@@ -275,9 +273,51 @@
                                 <div class="ui-dialog-buttonset">
                                 </div>
                             </div>
+                        </div>                       
+                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                            tabindex="-1" role="dialog" aria-describedby="dialog-message" aria-labelledby="ui-id-2" 
+                                style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                <span id="ui-id-2" class="ui-dialog-title">
+                                </span>
+                            </div>
+                            <div id="dialog-message" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                                <div style="padding-left:20px;">
+                                    @Html.LabelFor(m => m.DataVencimento)
+                                    <label class="input">
+                                        <i class="icon-append fa fa-calendar"></i>
+                                        @Html.TextBoxFor(m => m.DataVencimento, "{0:dd/MM/yyyy}")
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.DataVencimento, "Informe uma data válida.", new { @class = "note note-error" })
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $('#@Html.IdFor(m => m.DataVencimento)').datepicker({
+                                                prevText: '<i class="fa fa-chevron-left"></i>',
+                                                nextText: '<i class="fa fa-chevron-right"></i>',
+                                                changeMonth: true,
+                                                changeYear: true,
+                                                minDate: 0,
+                                                onClose: function (selectedDate) {
+                                                    if (selectedDate == '') {
+                                                        $(this).datepicker('disable');
+                                                        $(this).datepicker('setDate', new Date());
+                                                        $(this).datepicker('enable');
+                                                        selectedDate = new Date();
+                                                    }
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                <div class="ui-dialog-buttonset">
+                                </div>
+                            </div>
                         </div>
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
+                            @*<a href="#" id="modal_link" class="btn bg-color-purple txt-color-white"> Open Modal Dialog </a>*@
                         </footer>                        
                     }
                 </div>
@@ -289,7 +329,7 @@
     var parametrosUrlImpressaoMedicao = '';
     jsonListaItemLiberacaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
 
-    $(document).ready(function () {
+    $(document).ready(function () {      
 
         $(document).on("show.bs.modal", "#FormatoImpressaoMedicao_ModalPanel", function (e) {
             var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
@@ -308,7 +348,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("ValidarImprimirMedicao", "LiberacaoContrato", new { area = "Contrato" })',
+                url: '@Url.Action("ValidarImpressaoMedicao", "LiberacaoContrato", new { area = "Contrato" })',
                 cache: false,
                 async: false,
                 contentType: 'application/json; charset=utf-8',
@@ -341,11 +381,6 @@
             window.open('@url?formato=' + $("input:radio[name=formatoExportacaoArquivo]:checked").val() + parametrosUrlImpressaoMedicao);
         });
 
-        //$('#dialog_link').click(function () {
-        //    $('#dialog_simple').dialog('open');
-        //    return false;
-        //});
-
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function (title) {
                 if (!this.options.title) {
@@ -355,6 +390,39 @@
                 }
             }
         }));
+
+        //$('#modal_link').click(function () {           
+        //    $('#dialog-message').dialog('open');
+        //    return false;
+        //});
+
+        $('#dialog-message').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4> Troca da data de vencimento</h4></div>",
+            buttons: [{
+                html: "Concluir",
+                "class": "btn btn-primary",
+                click: function () {
+                    $(this).dialog("close");
+                    trocarDataVencimento();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        //$('#dialog_link').click(function () {
+        //    $('#dialog_simple').dialog('open');
+        //    return false;
+        //});
+
 
         $('#dlgSimpleConcluirContrato').dialog({
             autoOpen: false,
@@ -377,6 +445,9 @@
                 }
             }]
         });
+
+        //remove focus do botão
+        $('.ui-dialog :button').blur();
 
         exibeInfoContrato();
         preencheListaLiberacao();
@@ -750,7 +821,7 @@
 
     }
 
-    function trataAprovar() {
+    function tratarAprovar() {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("TratarAprovar", "LiberacaoContrato", new { Area = "Contrato" })',
@@ -775,9 +846,61 @@
                 smartAlert("Ocorreu erro ao aprovar !", result.message, "error");
             }
         });
-
-
     }
 
+    function validarTrocarDataVencimento() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ValidarTrocaDataVencimento", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
+                contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
+                dataVencimento: $("#@Html.IdFor(m => m.DataVencimento)").val(),
+                listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()
+            }),
+            success: function (result) {
+                if (result.ehValidouTrocaDataVencimento) {
+                    $('#dialog-message').dialog('open');
+                }
+                else {
+                    smartAlert("Ocorreu erro ao trocar a data de vencimento !", result.message, "error");
+                }
+            },
+            error: function (result) {
+                smartAlert("Ocorreu erro ao trocar a data de vencimento !", result.message, "error");
+            }
+        });
+    }
+
+    function trocarDataVencimento() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("TratarTrocaDataVencimento", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
+                contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
+                dataVencimento: $("#@Html.IdFor(m => m.DataVencimento)").val(),
+                listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()
+            }),
+            success: function (result) {
+                if (result.ehTrocouDataVencimento) {
+                    window.location.href = result.redirectToUrl;
+                    smartAlert("Sucesso", result.message, "success");
+                }
+                else {
+                    smartAlert("Ocorreu erro ao trocar a data de vencimento !", result.message, "error");
+                }
+            },
+            error: function (result) {
+                smartAlert("Ocorreu erro ao trocar a data de vencimento !", result.message, "error");
+            }
+        });
+    }
 
 </script>

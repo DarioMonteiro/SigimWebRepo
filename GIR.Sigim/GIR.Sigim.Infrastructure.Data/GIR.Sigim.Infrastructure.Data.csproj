@@ -207,6 +207,7 @@
     <Compile Include="Repository\Financeiro\TipoCompromissoRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoDocumentoRepository.cs" />
     <Compile Include="Repository\Financeiro\TituloPagarRepository.cs" />
+    <Compile Include="Repository\Financeiro\TituloReceberRepository.cs" />
     <Compile Include="Repository\Orcamento\OrcamentoRepository.cs" />
     <Compile Include="Repository\Orcamento\ParametrosOrcamentoRepository.cs" />
     <Compile Include="Repository\Financeiro\CentroCustoRepository.cs" />
