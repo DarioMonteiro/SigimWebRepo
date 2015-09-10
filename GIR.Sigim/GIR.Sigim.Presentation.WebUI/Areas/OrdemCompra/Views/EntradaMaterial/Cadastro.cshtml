@@ -992,6 +992,38 @@
                                                 $("#@Html.IdFor(m => m.ValorICMSST)").val(roundDecimal(floatToString(baseICMSST * percentualICMSST / 100), 4));
                                             }
 
+                                            function addItem() {
+                                                var jsonObj = $("#formItem").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
+
+                                                if (validaQuantidadeItem()) {
+                                                    var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+
+                                                    $.each(jsonItens, function (i, item) {
+                                                        if ($('#@Html.IdFor(m => m.Sequencial)').val() == item.Sequencial) {
+                                                            item.Quantidade = jsonObj.Quantidade;
+                                                            item.ValorTotal = jsonObj.ValorTotal;
+                                                            item.BaseICMS = jsonObj.BaseICMS;
+                                                            item.PercentualICMS = jsonObj.PercentualICMS;
+                                                            item.ValorICMS = jsonObj.ValorICMS;
+                                                            item.BaseIPI = jsonObj.BaseIPI;
+                                                            item.PercentualIPI = jsonObj.PercentualIPI;
+                                                            item.ValorIPI = jsonObj.ValorIPI;
+                                                            item.BaseICMSST = jsonObj.BaseICMSST;
+                                                            item.PercentualICMSST = jsonObj.PercentualICMSST;
+                                                            item.ValorICMSST = jsonObj.ValorICMSST;
+                                                            item.ComplementoNaturezaOperacao = jsonObj.ComplementoNaturezaOperacao;
+                                                            item.ComplementoCST = jsonObj.ComplementoCST;
+                                                            item.NaturezaReceita = jsonObj.NaturezaReceita;
+                                                            return false;
+                                                        }
+                                                    });
+
+                                                    $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(jsonItens));
+                                                    clearFormItem();
+                                                    fillTableItens();
+                                                }
+                                            }
+
                                             function processData(node) {
                                                 var fieldId = node.getAttribute ? node.getAttribute('id') : '';
                                                 var fieldName = node.getAttribute ? node.getAttribute('name') : '';
@@ -1027,59 +1059,32 @@
                                                 return false;
                                             }
 
-                                            function addItem() {
-                                                var jsonObj = $("#formItem").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
-
-                                                //alert(item.ComplementoNaturezaOperacao.Descricao);
-
-                                                $('#formItem').append(JSON.stringify(jsonObj));
-
-                                                @*if (item["@Html.IdFor(m => m.Sequencial)"] == '') {
-                                                    if (jsonItemArray.length == 0)
-                                                        item["@Html.IdFor(m => m.Sequencial)"] = 1;
-                                                    else
-                                                        item["@Html.IdFor(m => m.Sequencial)"] = Math.max.apply(Math, jsonItemArray.map(function (o) { return o.Sequencial; })) + 1;
-                                                }*@
-
-                                                //item["Situacao"] = 0;
-                                                //item["SituacaoDescricao"] = "Requisitado";
-                                                //item["ListaRequisicaoMaterialItem"] = [];
-
-                                                if (validaQuantidadeItem()) {
-                                                    var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
-
-                                                    $.each(jsonItens, function (i, item) {
-                                                        if ($('#@Html.IdFor(m => m.Sequencial)').val() == item.Sequencial) {
-                                                            item.Quantidade = jsonObj.Quantidade;
-                                                            item.ValorTotal = jsonObj.ValorTotal;
-                                                            item.BaseICMS = jsonObj.BaseICMS;
-                                                            item.PercentualICMS = jsonObj.PercentualICMS;
-                                                            item.ValorICMS = jsonObj.ValorICMS;
-                                                            item.BaseIPI = jsonObj.BaseIPI;
-                                                            item.PercentualIPI = jsonObj.PercentualIPI;
-                                                            item.ValorIPI = jsonObj.ValorIPI;
-                                                            item.BaseICMSST = jsonObj.BaseICMSST;
-                                                            item.PercentualICMSST = jsonObj.PercentualICMSST;
-                                                            item.ValorICMSST = jsonObj.ValorICMSST;
-                                                            item.ComplementoNaturezaOperacao = jsonObj.ComplementoNaturezaOperacao;
-                                                            item.ComplementoCST = jsonObj.ComplementoCST;
-                                                            item.NaturezaReceita = jsonObj.NaturezaReceita;
-                                                            return false;
-                                                        }
-                                                    });
-
-                                                    $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(jsonItens));
-                                                    fillTableItens();
-                                                    @*$("#@Html.IdFor(m => m.ItemId)").val('');
-                                                    $("#@Html.IdFor(m => m.Sequencial)").val('');
-                                                    limpaCentroCusto();
-                                                    limpaClasse();*@
-                                                    clearFormItem();
-                                                }
-
-                                                function clearFormItem() {
-
-                                                }
+                                            function clearFormItem() {
+                                                $("#@Html.IdFor(m => m.Sequencial)").val('');
+                                                $("#@Html.IdFor(m => m.Material.Id)").val('');
+                                                $("#@Html.IdFor(m => m.Material.Descricao)").val('');
+                                                $("#@Html.IdFor(m => m.Material.SiglaUnidadeMedida)").val('');
+                                                $("#@Html.IdFor(m => m.Complemento)").val('');
+                                                $("#@Html.IdFor(m => m.Classe.Codigo)").val('');
+                                                $("#@Html.IdFor(m => m.Classe.Descricao)").val('');
+                                                $("#@Html.IdFor(m => m.Saldo)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.QuantidadeInicial)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.Quantidade)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.ValorUnitario)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.PercentualDesconto)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.ValorTotal)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.BaseICMS)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.PercentualICMS)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.ValorICMS)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.BaseIPI)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.PercentualIPI)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.ValorIPI)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.BaseICMSST)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.PercentualICMSST)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.ValorICMSST)").val("0,0000");
+                                                $("#@Html.IdFor(m => m.ComplementoNaturezaOperacao.Codigo)").val('');
+                                                $("#@Html.IdFor(m => m.ComplementoCST.Codigo)").val('');
+                                                $("#@Html.IdFor(m => m.NaturezaReceita.Codigo)").val('');
                                             }
                                         </script>
                                     </div>
