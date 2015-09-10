@@ -104,15 +104,27 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasColumnName("complementoNaturezaOperacao")
                 .HasColumnOrder(16);
 
+            HasOptional(l => l.ComplementoNaturezaOperacao)
+                .WithMany(l => l.ListaEntradaMaterialItem)
+                .HasForeignKey(l => l.CodigoComplementoNaturezaOperacao);
+
             Property(l => l.CodigoComplementoCST)
                 .HasMaxLength(10)
                 .HasColumnName("complementoCST")
                 .HasColumnOrder(17);
 
+            HasOptional(l => l.ComplementoCST)
+                .WithMany(l => l.ListaEntradaMaterialItem)
+                .HasForeignKey(l => l.CodigoComplementoCST);
+
             Property(l => l.CodigoNaturezaReceita)
                 .HasMaxLength(10)
                 .HasColumnName("naturezaReceita")
                 .HasColumnOrder(18);
+
+            HasOptional(l => l.NaturezaReceita)
+                .WithMany(l => l.ListaEntradaMaterialItem)
+                .HasForeignKey(l => l.CodigoNaturezaReceita);
         }
     }
 }

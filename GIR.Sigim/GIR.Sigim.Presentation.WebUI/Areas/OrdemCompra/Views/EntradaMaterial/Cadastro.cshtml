@@ -483,8 +483,9 @@
                                 </div>
                                 <div id="collapseItens" class="panel-collapse collapse">
                                     <div class="panel-body no-padding">
-                                        <fieldset>
+                                        <fieldset id="formItem">
                                             <div class="row">
+                                                @Html.HiddenFor(m => m.Sequencial)
                                                 <section class="col col-6" style="margin: 0;">
                                                     @Html.HiddenFor(m => m.Material.Id)
                                                     <section class="col col-10" style="padding-left: 0;">
@@ -538,11 +539,13 @@
 										            </ul>
                                                     <div id="itemTabContent" class="tab-content padding-10">
 											            <div class="tab-pane fade active in" id="itemTabContentDadosGerais">
+                                                            @Html.HiddenFor(m => m.Saldo)
+                                                            @Html.HiddenFor(m => m.QuantidadeInicial)
                                                             <div class="row">
                                                                 <section class="col col-3">
                                                                     @Html.LabelFor(m => m.Quantidade, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.Quantidade, new { @class = "required" })
+                                                                        @Html.TextBoxFor(m => m.Quantidade, "{0:F4}", new { @class = "text-right decimal-4-casas required" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.Quantidade, "", new { @class = "note note-error" })
@@ -550,21 +553,21 @@
                                                                 <section class="col col-3">
                                                                     @Html.LabelFor(m => m.ValorUnitario, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ValorUnitario, new { @readonly = "", @class = "readonly" })
+                                                                        @Html.TextBoxFor(m => m.ValorUnitario, "{0:F4}", new { @readonly = "", @class = "text-right decimal-4-casas readonly" })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.ValorUnitario, "", new { @class = "note note-error" })
                                                                 </section>
                                                                 <section class="col col-3">
-                                                                    @Html.LabelFor(m => m.Desconto, new { @class = "label" })
+                                                                    @Html.LabelFor(m => m.PercentualDesconto, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.Desconto, new { @readonly = "", @class = "readonly" })
+                                                                        @Html.TextBoxFor(m => m.PercentualDesconto, "{0:F4}", new { @readonly = "", @class = "text-right decimal-4-casas readonly" })
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.Desconto, "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.PercentualDesconto, "", new { @class = "note note-error" })
                                                                 </section>
                                                                 <section class="col col-3">
                                                                     @Html.LabelFor(m => m.ValorTotal, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ValorTotal, new { @readonly = "", @class = "readonly" })
+                                                                        @Html.TextBoxFor(m => m.ValorTotal, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.ValorTotal, "", new { @class = "note note-error" })
                                                                 </section>
@@ -575,7 +578,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.BaseICMS, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.BaseICMS)
+                                                                        @Html.TextBoxFor(m => m.BaseICMS, "{0:F4}", new { @class = "text-right decimal-4-casas" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.BaseICMS, "", new { @class = "note note-error" })
@@ -583,7 +586,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.PercentualICMS, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.PercentualICMS)
+                                                                        @Html.TextBoxFor(m => m.PercentualICMS, "{0:F4}", new { @class = "text-right decimal-4-casas" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.PercentualICMS, "", new { @class = "note note-error" })
@@ -591,7 +594,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.ValorICMS, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ValorICMS, new { @readonly = "", @class = "readonly" })
+                                                                        @Html.TextBoxFor(m => m.ValorICMS, "{0:F4}", new { @readonly = "", @class = "text-right decimal-4-casas readonly" })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.ValorICMS, "", new { @class = "note note-error" })
                                                                 </section>
@@ -600,7 +603,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.BaseIPI, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.BaseIPI, new { @readonly = "", @class = "readonly" })
+                                                                        @Html.TextBoxFor(m => m.BaseIPI, "{0:F4}", new { @readonly = "", @class = "text-right decimal-4-casas readonly" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.BaseIPI, "", new { @class = "note note-error" })
@@ -608,7 +611,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.PercentualIPI, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.PercentualIPI, new { @readonly = "", @class = "readonly" })
+                                                                        @Html.TextBoxFor(m => m.PercentualIPI, "{0:F4}", new { @readonly = "", @class = "text-right decimal-4-casas readonly" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.PercentualIPI, "", new { @class = "note note-error" })
@@ -616,7 +619,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.ValorIPI, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ValorIPI, new { @readonly = "", @class = "readonly" })
+                                                                        @Html.TextBoxFor(m => m.ValorIPI, "{0:F4}", new { @readonly = "", @class = "text-right decimal-4-casas readonly" })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.ValorIPI, "", new { @class = "note note-error" })
                                                                 </section>
@@ -625,7 +628,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.BaseICMSST, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.BaseICMSST)
+                                                                        @Html.TextBoxFor(m => m.BaseICMSST, "{0:F4}", new { @class = "text-right decimal-4-casas" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.BaseICMSST, "", new { @class = "note note-error" })
@@ -633,7 +636,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.PercentualICMSST, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.PercentualICMSST)
+                                                                        @Html.TextBoxFor(m => m.PercentualICMSST, "{0:F4}", new { @class = "text-right decimal-4-casas" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.PercentualICMSST, "", new { @class = "note note-error" })
@@ -641,7 +644,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.ValorICMSST, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ValorICMSST, new { @readonly = "", @class = "readonly" })
+                                                                        @Html.TextBoxFor(m => m.ValorICMSST, "{0:F4}", new { @readonly = "", @class = "text-right decimal-4-casas readonly" })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.ValorICMSST, "", new { @class = "note note-error" })
                                                                 </section>
@@ -650,28 +653,31 @@
                                                         <div class="tab-pane fade" id="itemTabContentComplementos">
                                                             <div class="row">
                                                                 <section class="col col-4">
-                                                                    @Html.LabelFor(m => m.ComplementoNaturezaOperacaoId, new { @class = "label" })
+                                                                    @Html.LabelFor(m => m.ComplementoNaturezaOperacao.Codigo, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.ComplementoNaturezaOperacaoId, Model.ListaComplementoNaturezaOperacao, string.Empty)
+                                                                        @Html.DropDownListFor(m => m.ComplementoNaturezaOperacao.Codigo, Model.ListaComplementoNaturezaOperacao, string.Empty)
+                                                                        @Html.HiddenFor(m => m.ComplementoNaturezaOperacao.Descricao)
                                                                         <i></i>
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.ComplementoNaturezaOperacaoId, "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.ComplementoNaturezaOperacao.Codigo, "", new { @class = "note note-error" })
                                                                 </section>
                                                                 <section class="col col-4">
-                                                                    @Html.LabelFor(m => m.ComplementoCSTId, new { @class = "label" })
+                                                                    @Html.LabelFor(m => m.ComplementoCST.Codigo, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.ComplementoCSTId, Model.ListaComplementoCST, string.Empty)
+                                                                        @Html.DropDownListFor(m => m.ComplementoCST.Codigo, Model.ListaComplementoCST, string.Empty)
+                                                                        @Html.HiddenFor(m => m.ComplementoCST.Descricao)
                                                                         <i></i>
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.ComplementoCSTId, "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.ComplementoCST.Codigo, "", new { @class = "note note-error" })
                                                                 </section>
                                                                 <section class="col col-4">
-                                                                    @Html.LabelFor(m => m.NaturezaReceitaId, new { @class = "label" })
+                                                                    @Html.LabelFor(m => m.NaturezaReceita.Codigo, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.NaturezaReceitaId, Model.ListaNaturezaReceita, string.Empty)
+                                                                        @Html.DropDownListFor(m => m.NaturezaReceita.Codigo, Model.ListaNaturezaReceita, string.Empty)
+                                                                        @Html.HiddenFor(m => m.NaturezaReceita.Descricao)
                                                                         <i></i>
                                                                     </label>
-                                                                    @Html.ValidationMessageFor(m => m.NaturezaReceitaId, "", new { @class = "note note-error" })
+                                                                    @Html.ValidationMessageFor(m => m.NaturezaReceita.Codigo, "", new { @class = "note note-error" })
                                                                 </section>
                                                             </div>
                                                         </div>
@@ -737,6 +743,10 @@
                                             $(document).ready(function () {
                                                 fillTableItens();
 
+                                                $('#btnAddItem').on('click', function () {
+                                                    addItem();
+                                                });
+
                                                 $('#btnRemoverItem').on('click', function () {
                                                     if (houveAlteracao) {
                                                         smartAlert("Erro", "A Entrada de Material foi alterada.<br />Salve os dados antes de remover algum item.", "error");
@@ -786,19 +796,56 @@
                                                             smartAlert("Erro", "Selecione pelo menos 1 item.", "error");
                                                     }
                                                 });
+
+                                                $(document).on('change', '#@Html.IdFor(m => m.Quantidade)', function () {
+                                                    if (validaQuantidadeItem())
+                                                        atualizarValorTotalItem();
+                                                });
+
+                                                $(document).on('change', '#@Html.IdFor(m => m.BaseICMS)', function () {
+                                                    atualizarValorICMS();
+                                                });
+
+                                                $(document).on('change', '#@Html.IdFor(m => m.PercentualICMS)', function () {
+                                                    atualizarValorICMS();
+                                                });
+
+                                                $(document).on('change', '#@Html.IdFor(m => m.BaseICMSST)', function () {
+                                                    atualizarValorICMSST();
+                                                });
+
+                                                $(document).on('change', '#@Html.IdFor(m => m.PercentualICMSST)', function () {
+                                                    atualizarValorICMSST();
+                                                });
                                             });
 
                                             function fillTableItens() {
                                                 var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
                                                 $("#tableItens tbody").empty();
+
+                                                var chkDisabled = '';
+                                                var labelClass = 'checkbox';
+                                                @if (!Model.PodeRemoverItem)
+                                                {
+                                                    @:chkDisabled = 'disabled';
+                                                    @:labelClass += ' state-disabled';
+                                                }
+
                                                 for (var i = 0; i < jsonItens.length; i++) {
                                                     var row = $('<tr />')
                                                     $("#tableItens tbody").append(row);
-                                                    row.append($('<td><label class="checkbox"><input type="checkbox" class="chkItemOrdemCompra" name="checkbox" value="' + jsonItens[i].Id + '"><i></i>' + jsonItens[i].Sequencial + '</label></td>'));
+                                                    row.append($('<td><label class="' + labelClass + '"><input type="checkbox" class="chkItemOrdemCompra" name="checkbox" value="' + jsonItens[i].Id + '" ' + chkDisabled + '><i></i>' + jsonItens[i].Sequencial + '</label></td>'));
                                                     row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.OrdemCompraId + '</td>'));
                                                     row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.Id + '</td>'));
                                                     row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.Material.Id + '</td>'));
-                                                    row.append($('<td class="text-nowrap">' + jsonItens[i].OrdemCompraItem.Material.Descricao + '</td>'));
+                                                    @if (Model.PodeEditarItem)
+                                                    {
+                                                        @:row.append($('<td class="text-nowrap" onclick="loadItem(' + jsonItens[i].Sequencial + ');">' + jsonItens[i].OrdemCompraItem.Material.Descricao + '</td>'));
+	                                                }
+                                                    else
+                                                    {
+                                                        @:row.append($('<td class="text-nowrap">' + jsonItens[i].OrdemCompraItem.Material.Descricao + '</td>'));
+                                                    }
                                                     row.append($('<td class="text-nowrap">' + jsonItens[i].OrdemCompraItem.Complemento + '</td>'));
                                                     row.append($('<td class="text-center">' + jsonItens[i].OrdemCompraItem.Material.SiglaUnidadeMedida + '</td>'));
                                                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].Quantidade), 4) + '</td>'));
@@ -809,9 +856,204 @@
                                                     row.append($('<td class="text-nowrap">' + jsonItens[i].Classe.ClasseDescricao + '</td>'));
                                                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualICMS), 4) + '</td>'));
                                                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualICMSST), 4) + '</td>'));
-                                                    row.append($('<td class="text-right">' + jsonItens[i].CodigoComplementoNaturezaOperacao + '</td>'));
-                                                    row.append($('<td class="text-right">' + jsonItens[i].CodigoComplementoCST + '</td>'));
-                                                    row.append($('<td class="text-right">' + jsonItens[i].CodigoNaturezaReceita + '</td>'));
+                                                    if (jsonItens[i].ComplementoNaturezaOperacao)
+                                                        row.append($('<td class="text-right">' + jsonItens[i].ComplementoNaturezaOperacao.Descricao + '</td>'));
+                                                    else
+                                                        row.append($('<td class="text-right">&nbsp;</td>'));
+
+                                                    if (jsonItens[i].ComplementoCST)
+                                                        row.append($('<td class="text-right">' + jsonItens[i].ComplementoCST.Descricao + '</td>'));
+                                                    else
+                                                        row.append($('<td class="text-right">&nbsp;</td>'));
+
+                                                    if (jsonItens[i].NaturezaReceita)
+                                                        row.append($('<td class="text-right">' + jsonItens[i].NaturezaReceita.Descricao + '</td>'));
+                                                    else
+                                                        row.append($('<td class="text-right">&nbsp;</td>'));
+                                                }
+                                            }
+
+                                            function loadItem(sequencial) {
+                                                var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+                                                var arr = jQuery.grep(jsonItens, function (item, i) {
+                                                    return (item.Sequencial == sequencial);
+                                                });
+
+                                                if (arr.length > 0) {
+                                                    var item = arr[0];
+                                                    $("#@Html.IdFor(m => m.Sequencial)").val(item.Sequencial);
+                                                    $("#@Html.IdFor(m => m.Material.Id)").val(item.OrdemCompraItem.Material.Id);
+                                                    $("#@Html.IdFor(m => m.Material.Descricao)").val(item.OrdemCompraItem.Material.Descricao);
+                                                    $("#@Html.IdFor(m => m.Material.SiglaUnidadeMedida)").val(item.OrdemCompraItem.Material.SiglaUnidadeMedida);
+                                                    $("#@Html.IdFor(m => m.Complemento)").val(item.Complemento);
+                                                    $("#@Html.IdFor(m => m.Classe.Codigo)").val(item.Classe.Codigo);
+                                                    $("#@Html.IdFor(m => m.Classe.Descricao)").val(item.Classe.Descricao);
+                                                    $("#@Html.IdFor(m => m.Saldo)").val(roundDecimal(floatToString(item.OrdemCompraItem.Saldo), 4));
+                                                    $("#@Html.IdFor(m => m.QuantidadeInicial)").val(roundDecimal(floatToString(item.QuantidadeInicial), 4));
+                                                    $("#@Html.IdFor(m => m.Quantidade)").val(roundDecimal(floatToString(item.Quantidade), 4));
+                                                    $("#@Html.IdFor(m => m.ValorUnitario)").val(roundDecimal(floatToString(item.ValorUnitario), 4));
+                                                    $("#@Html.IdFor(m => m.PercentualDesconto)").val(roundDecimal(floatToString(item.PercentualDesconto), 4));
+                                                    $("#@Html.IdFor(m => m.ValorTotal)").val(roundDecimal(floatToString(item.ValorTotal), 2));
+                                                    $("#@Html.IdFor(m => m.BaseICMS)").val(roundDecimal(floatToString(item.BaseICMS), 4));
+                                                    $("#@Html.IdFor(m => m.PercentualICMS)").val(roundDecimal(floatToString(item.PercentualICMS), 4));
+                                                    $("#@Html.IdFor(m => m.ValorICMS)").val(roundDecimal(floatToString(item.BaseICMS * item.PercentualICMS / 100), 4));
+                                                    $("#@Html.IdFor(m => m.BaseIPI)").val(roundDecimal(floatToString(item.BaseIPI), 4));
+                                                    $("#@Html.IdFor(m => m.PercentualIPI)").val(roundDecimal(floatToString(item.PercentualIPI), 4));
+                                                    $("#@Html.IdFor(m => m.ValorIPI)").val(roundDecimal(floatToString(item.BaseIPI * item.PercentualIPI / 100), 4));
+                                                    $("#@Html.IdFor(m => m.BaseICMSST)").val(roundDecimal(floatToString(item.BaseICMSST), 4));
+                                                    $("#@Html.IdFor(m => m.PercentualICMSST)").val(roundDecimal(floatToString(item.PercentualICMSST), 4));
+                                                    $("#@Html.IdFor(m => m.ValorICMSST)").val(roundDecimal(floatToString(item.BaseICMSST * item.PercentualICMSST / 100), 4));
+                                                    
+                                                    if (item.ComplementoNaturezaOperacao)
+                                                        $("#@Html.IdFor(m => m.ComplementoNaturezaOperacao.Codigo)").val(item.ComplementoNaturezaOperacao.Codigo);
+
+                                                    if (item.ComplementoCST)
+                                                        $("#@Html.IdFor(m => m.ComplementoCST.Codigo)").val(item.ComplementoCST.Codigo);
+
+                                                    if (item.NaturezaReceita)
+                                                        $("#@Html.IdFor(m => m.NaturezaReceita.Codigo)").val(item.NaturezaReceita.Codigo);
+
+                                                    if (item.BaseICMS == 0)
+                                                        $("#@Html.IdFor(m => m.BaseICMS)").val(roundDecimal(floatToString(item.ValorTotal), 4));
+
+                                                    if (item.BaseICMSST == 0)
+                                                        $("#@Html.IdFor(m => m.BaseICMSST)").val(roundDecimal(floatToString(item.ValorTotal), 4));
+
+                                                    if (item.BaseIPI == 0)
+                                                        $("#@Html.IdFor(m => m.BaseIPI)").val(roundDecimal(floatToString(item.ValorTotal), 4));
+                                                }
+                                            }
+
+
+                                            function validaQuantidadeItem() {
+                                                if ($('#@Html.IdFor(m => m.Sequencial)').val() != '' && $('#@Html.IdFor(m => m.Sequencial)').val() != '0') {
+                                                    var quantidade = parseFloat($("#@Html.IdFor(m => m.Quantidade)").val().replace(".", "").replace(",", "."));
+                                                    var saldo = parseFloat($("#@Html.IdFor(m => m.Saldo)").val().replace(".", "").replace(",", "."));
+                                                    var quantidadeInicial = parseFloat($("#@Html.IdFor(m => m.QuantidadeInicial)").val().replace(".", "").replace(",", "."));
+
+                                                    if (isNaN(quantidade) || (quantidade <= 0)) {
+                                                        smartAlert("Erro", "A quantidade dever ser maior que zero.", "error");
+                                                        return false;
+                                                    }
+                                                    else if (quantidade > (saldo + quantidadeInicial)) {
+                                                        smartAlert("Erro", "Quantidade maior que a pendente.", "error");
+                                                        return false;
+                                                    }
+                                                }
+                                                else
+                                                    return false;
+
+                                                return true;
+                                            }
+
+                                            function atualizarValorTotalItem() {
+                                                var quantidade = parseFloat($("#@Html.IdFor(m => m.Quantidade)").val().replace(".", "").replace(",", "."));
+                                                var valorUnitario = parseFloat($("#@Html.IdFor(m => m.ValorUnitario)").val().replace(".", "").replace(",", "."));
+                                                var baseIPI = parseFloat($("#@Html.IdFor(m => m.BaseIPI)").val().replace(".", "").replace(",", "."));
+                                                var percentualIPI = parseFloat($("#@Html.IdFor(m => m.PercentualIPI)").val().replace(".", "").replace(",", "."));
+                                                var percentualDesconto = parseFloat($("#@Html.IdFor(m => m.PercentualDesconto)").val().replace(".", "").replace(",", "."));
+
+                                                var valorTotal = (quantidade * valorUnitario);
+                                                valorTotal = valorTotal + ((baseIPI * percentualIPI) / 100)
+                                                valorTotal = valorTotal - ((valorTotal * percentualDesconto) / 100)
+
+                                                $("#@Html.IdFor(m => m.ValorTotal)").val(roundDecimal(floatToString(valorTotal), 2));
+                                            }
+
+                                            function atualizarValorICMS() {
+                                                var baseICMS = parseFloat($("#@Html.IdFor(m => m.BaseICMS)").val().replace(".", "").replace(",", "."));
+                                                var percentualICMS = parseFloat($("#@Html.IdFor(m => m.PercentualICMS)").val().replace(".", "").replace(",", "."));;
+                                                $("#@Html.IdFor(m => m.ValorICMS)").val(roundDecimal(floatToString(baseICMS * percentualICMS / 100), 4));
+                                            }
+
+                                            function atualizarValorICMSST() {
+                                                var baseICMSST = parseFloat($("#@Html.IdFor(m => m.BaseICMSST)").val().replace(".", "").replace(",", "."));
+                                                var percentualICMSST = parseFloat($("#@Html.IdFor(m => m.PercentualICMSST)").val().replace(".", "").replace(",", "."));;
+                                                $("#@Html.IdFor(m => m.ValorICMSST)").val(roundDecimal(floatToString(baseICMSST * percentualICMSST / 100), 4));
+                                            }
+
+                                            function processData(node) {
+                                                var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+                                                var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+                                                if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.ComplementoNaturezaOperacao.Descricao)")) {
+                                                    return { name: fieldName, value: $("#@Html.IdFor(m => m.ComplementoNaturezaOperacao.Codigo) option:selected").text() };
+                                                }
+
+                                                if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.ComplementoCST.Descricao)")) {
+                                                    return { name: fieldName, value: $("#@Html.IdFor(m => m.ComplementoCST.Codigo) option:selected").text() };
+                                                }
+
+                                                if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.NaturezaReceita.Descricao)")) {
+                                                    return { name: fieldName, value: $("#@Html.IdFor(m => m.NaturezaReceita.Codigo) option:selected").text() };
+                                                }
+
+                                                if (fieldName != '' &&
+                                                    (fieldId == "@Html.IdFor(m => m.Quantidade)"
+                                                    || fieldId == "@Html.IdFor(m => m.ValorTotal)"
+                                                    || fieldId == "@Html.IdFor(m => m.BaseICMS)"
+                                                    || fieldId == "@Html.IdFor(m => m.PercentualICMS)"
+                                                    || fieldId == "@Html.IdFor(m => m.ValorICMS)"
+                                                    || fieldId == "@Html.IdFor(m => m.BaseIPI)"
+                                                    || fieldId == "@Html.IdFor(m => m.PercentualIPI)"
+                                                    || fieldId == "@Html.IdFor(m => m.ValorIPI)"
+                                                    || fieldId == "@Html.IdFor(m => m.BaseICMSST)"
+                                                    || fieldId == "@Html.IdFor(m => m.PercentualICMSST)"
+                                                    || fieldId == "@Html.IdFor(m => m.ValorICMSST)")) {
+                                                    var value = $("#" + fieldId).val();
+                                                    return { name: fieldName, value: parseFloat(value.toString().replace(".", "").replace(",", ".")) };
+                                                }
+
+                                                return false;
+                                            }
+
+                                            function addItem() {
+                                                var jsonObj = $("#formItem").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
+
+                                                //alert(item.ComplementoNaturezaOperacao.Descricao);
+
+                                                $('#formItem').append(JSON.stringify(jsonObj));
+
+                                                @*if (item["@Html.IdFor(m => m.Sequencial)"] == '') {
+                                                    if (jsonItemArray.length == 0)
+                                                        item["@Html.IdFor(m => m.Sequencial)"] = 1;
+                                                    else
+                                                        item["@Html.IdFor(m => m.Sequencial)"] = Math.max.apply(Math, jsonItemArray.map(function (o) { return o.Sequencial; })) + 1;
+                                                }*@
+
+                                                //item["Situacao"] = 0;
+                                                //item["SituacaoDescricao"] = "Requisitado";
+                                                //item["ListaRequisicaoMaterialItem"] = [];
+
+                                                if (validaQuantidadeItem()) {
+                                                    var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+
+                                                    $.each(jsonItens, function (i, item) {
+                                                        if ($('#@Html.IdFor(m => m.Sequencial)').val() == item.Sequencial) {
+                                                            item.Quantidade = jsonObj.Quantidade;
+                                                            item.ValorTotal = jsonObj.ValorTotal;
+                                                            item.BaseICMS = jsonObj.BaseICMS;
+                                                            item.PercentualICMS = jsonObj.PercentualICMS;
+                                                            item.ValorICMS = jsonObj.ValorICMS;
+                                                            item.BaseIPI = jsonObj.BaseIPI;
+                                                            item.PercentualIPI = jsonObj.PercentualIPI;
+                                                            item.ValorIPI = jsonObj.ValorIPI;
+                                                            item.BaseICMSST = jsonObj.BaseICMSST;
+                                                            item.PercentualICMSST = jsonObj.PercentualICMSST;
+                                                            item.ValorICMSST = jsonObj.ValorICMSST;
+                                                            item.ComplementoNaturezaOperacao = jsonObj.ComplementoNaturezaOperacao;
+                                                            item.ComplementoCST = jsonObj.ComplementoCST;
+                                                            item.NaturezaReceita = jsonObj.NaturezaReceita;
+                                                            return false;
+                                                        }
+                                                    });
+
+                                                    $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(jsonItens));
+                                                    fillTableItens();
+                                                    @*$("#@Html.IdFor(m => m.ItemId)").val('');
+                                                    $("#@Html.IdFor(m => m.Sequencial)").val('');
+                                                    limpaCentroCusto();
+                                                    limpaClasse();*@
                                                 }
                                             }
                                         </script>
@@ -973,11 +1215,11 @@
                                             <div class="row">
                                                 <section class="col col-6">
                                                     @{
-                                                        string disableBtnRemoverFormaPagamento = string.Empty;
-                                                        if (!Model.PodeRemoverItem)
-                                                        {
-                                                            disableBtnRemoverFormaPagamento = "disabled";
-                                                        }
+                                                    string disableBtnRemoverFormaPagamento = string.Empty;
+                                                    if (!Model.PodeRemoverItem)
+                                                    {
+                                                        disableBtnRemoverFormaPagamento = "disabled";
+                                                    }
                                                     }
                                                     <button id="btnRemoverFormaPagamento" type="button" class="btn btn-danger @disableBtnRemoverFormaPagamento">
                                                         Remover Forma de Pagamento
@@ -1045,11 +1287,11 @@
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                             @{
-                                string disableBtnCancelar = string.Empty;
-                                if (!Model.PodeCancelarEntrada)
-                                {
-                                    disableBtnCancelar = "disabled";
-                                }
+                                                    string disableBtnCancelar = string.Empty;
+                                                    if (!Model.PodeCancelarEntrada)
+                                                    {
+                                                        disableBtnCancelar = "disabled";
+                                                    }
                             }
                             <a id="btnCancelarEntrada" href="#" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
                             @if (Model.PodeCancelarEntrada)

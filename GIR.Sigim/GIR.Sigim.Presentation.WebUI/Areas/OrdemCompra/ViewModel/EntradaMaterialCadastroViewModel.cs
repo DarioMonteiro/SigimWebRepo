@@ -29,6 +29,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public SelectList ListaComplementoCST { get; set; }
         public SelectList ListaNaturezaReceita { get; set; }
 
+        public int? ItemId { get; set; }
+        public int? Sequencial { get; set; }
+
         public MaterialDTO Material { get; set; }
         public ClasseDTO Classe { get; set; }
         public string JsonItens { get; set; }
@@ -40,13 +43,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         [Display(Name = "Quantidade")]
         public decimal Quantidade { get; set; }
 
+        public decimal QuantidadeInicial { get; set; }
+        public decimal Saldo { get; set; }
+
         [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Valor unitário")]
         public decimal ValorUnitario { get; set; }
 
         [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Desconto %")]
-        public decimal Desconto { get; set; }
+        public decimal PercentualDesconto { get; set; }
 
         [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Total")]
@@ -88,14 +94,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         [Display(Name = "Valor ICMSST")]
         public decimal ValorICMSST { get; set; }
 
-        [Display(Name = "Complemento natureza operação")]
-        public int? ComplementoNaturezaOperacaoId { get; set; }
-
-        [Display(Name = "Complemento CST")]
-        public int? ComplementoCSTId { get; set; }
-
-        [Display(Name = "Natureza da receita")]
-        public int? NaturezaReceitaId { get; set; }
+        public ComplementoNaturezaOperacaoDTO ComplementoNaturezaOperacao { get; set; }
+        public ComplementoCSTDTO ComplementoCST { get; set; }
+        public NaturezaReceitaDTO NaturezaReceita { get; set; }
 
         [Display(Name = "OC")]
         public int? OrdemCompraId { get; set; }

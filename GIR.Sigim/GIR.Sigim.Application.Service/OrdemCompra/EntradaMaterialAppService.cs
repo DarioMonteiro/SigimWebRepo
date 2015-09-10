@@ -150,6 +150,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.FornecedorNota,
                 l => l.ListaItens.Select(o => o.Classe),
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
+                l => l.ListaItens.Select(o => o.ComplementoCST),
+                l => l.ListaItens.Select(o => o.ComplementoNaturezaOperacao),
+                l => l.ListaItens.Select(o => o.NaturezaReceita),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
                 l => l.ListaImposto,
                 l => l.ListaMovimentoEstoque).To<EntradaMaterialDTO>();

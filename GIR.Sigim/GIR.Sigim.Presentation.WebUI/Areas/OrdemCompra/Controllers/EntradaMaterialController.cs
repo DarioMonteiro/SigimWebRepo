@@ -31,6 +31,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         private IComplementoNaturezaOperacaoAppService complementoNaturezaOperacaoAppService;
         private IComplementoCSTAppService complementoCSTAppService;
         private INaturezaReceitaAppService naturezaReceitaAppService;
+        private IParametrosUsuarioAppService parametrosUsuarioAppService;
 
         public EntradaMaterialController(
             IEntradaMaterialAppService entradaMaterialAppService,
@@ -44,6 +45,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             IComplementoNaturezaOperacaoAppService complementoNaturezaOperacaoAppService,
             IComplementoCSTAppService complementoCSTAppService,
             INaturezaReceitaAppService naturezaReceitaAppService,
+            IParametrosUsuarioAppService parametrosUsuarioAppService,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -58,6 +60,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.complementoNaturezaOperacaoAppService = complementoNaturezaOperacaoAppService;
             this.complementoCSTAppService = complementoCSTAppService;
             this.naturezaReceitaAppService = naturezaReceitaAppService;
+            this.parametrosUsuarioAppService = parametrosUsuarioAppService;
         }
 
         [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
@@ -107,11 +110,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.EntradaMaterial = entradaMaterial;
             model.JsonItens = JsonConvert.SerializeObject(entradaMaterial.ListaItens);
 
-            //if ((entradaMaterial.CentroCusto == null) || (string.IsNullOrEmpty(entradaMaterial.CentroCusto.Codigo)))
-            //{
-            //    var parametrosUsuario = parametrosUsuarioAppService.ObterPeloIdUsuario(Usuario.Id);
-            //    model.RequisicaoMaterial.CentroCusto = parametrosUsuario.CentroCusto;
-            //}
+            if ((entradaMaterial.CentroCusto == null) || (string.IsNullOrEmpty(entradaMaterial.CentroCusto.Codigo)))
+            {
+                var parametrosUsuario = parametrosUsuarioAppService.ObterPeloIdUsuario(Usuario.Id);
+                model.EntradaMaterial.CentroCusto = parametrosUsuario.CentroCusto;
+            }
 
             //var parametros = parametrosOrdemCompraAppService.Obter();
             //if (parametros != null)
