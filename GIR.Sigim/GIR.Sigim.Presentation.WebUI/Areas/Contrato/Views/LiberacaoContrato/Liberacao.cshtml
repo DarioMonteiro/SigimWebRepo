@@ -171,108 +171,104 @@
                                 </div>
                                 <div id="collapseLiberacao" class="panel-collapse collapse" style="height: 0px;">
                                     <div class="panel-body no-padding">
-                                        <fieldset>
-                                            <div class="btn-toolbar">
-                                                <a class="btn btn-default btn-xs disabled" id="btnAprovarLiberar" href="javascript:void(0);">Aprovar e Liberar</a>
-                                                <a class="btn btn-default btn-xs disabled" id="btnAprovar" href="javascript:tratarAprovar();">Aprovar</a>
-                                                <a class="btn btn-default btn-xs disabled" id="btnLiberar" href="javascript:void(0);">Liberar</a>
-                                                <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:void(0);">Cancelar Liberação</a>
-                                                <a class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="javascript:void(0);">Associar NF</a>
-                                                <a class="btn btn-default btn-xs disabled" id="btnAlterarVencimento" href="javascript:validarTrocarDataVencimento();">Alterar Vencimento</a>
-                                                <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="#FormatoImpressaoMedicao_ModalPanel">Imprimir Medição</a>
-                                                @if (Model.PodeImprimirMedicao) {
-                                                    <div class="modal fade" id="FormatoImpressaoMedicao_ModalPanel" tabindex="-1" role="dialog">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                                                        &times;
-                                                                    </button>
-                                                                    <h4 class="modal-title">
-                                                                        Formato do Arquivo para Impressão
-                                                                    </h4>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="row">
-                                                                        <div class="col col-12">
-                                                                            @{
-                                                                                var listaFormatoExportacaoArquivo = new SelectList(typeof(FormatoExportacaoArquivo).ToItemListaDTO(), "Id", "Descricao", (int)FormatoExportacaoArquivo.PDF);
-                                                                                foreach (var item in listaFormatoExportacaoArquivo)
-	                                                                            {
-                                                                                    var itemChecked = string.Empty;
-                                                                                    if (item.Selected)
-                                                                                    {
-                                                                                        itemChecked = "checked=\"checked\"";
-                                                                                    }
-                                                                                    @:<label class="radio">
-							                                                        @:  <input type="radio" name="formatoExportacaoArquivo" value="@item.Value" @itemChecked>
-							                                                        @:  <i></i>@item.Text
-                                                                                    @:</label>
-	                                                                            }
-                                                                            }
-					                                                    </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-					                                                <button type="button" id="btnConfirmarImpressaoMedicao" class="btn btn-primary" data-dismiss="modal">
-						                                                Ok
-					                                                </button>
-				                                                </div>
+                                        <div class="btn-toolbar">
+                                            <a class="btn btn-default btn-xs disabled" id="btnAprovarLiberar" href="javascript:void(0);">Aprovar e Liberar</a>
+                                            <a class="btn btn-default btn-xs disabled" id="btnAprovar" href="javascript:tratarAprovar();">Aprovar</a>
+                                            <a class="btn btn-default btn-xs disabled" id="btnLiberar" href="javascript:void(0);">Liberar</a>
+                                            <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:void(0);">Cancelar Liberação</a>
+                                            <a class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="javascript:void(0);">Associar NF</a>
+                                            <a class="btn btn-default btn-xs disabled" id="btnAlterarVencimento" href="javascript:validarTrocarDataVencimento();">Alterar Vencimento</a>
+                                            <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="#FormatoImpressaoMedicao_ModalPanel">Imprimir Medição</a>
+                                            @if (Model.PodeImprimirMedicao) {
+                                                <div class="modal fade" id="FormatoImpressaoMedicao_ModalPanel" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                                    &times;
+                                                                </button>
+                                                                <h4 class="modal-title">
+                                                                    Formato do Arquivo para Impressão
+                                                                </h4>
                                                             </div>
+                                                            <div class="modal-body">
+                                                                <div class="row">
+                                                                    <div class="col col-12">
+                                                                        @{
+                                                                            var listaFormatoExportacaoArquivo = new SelectList(typeof(FormatoExportacaoArquivo).ToItemListaDTO(), "Id", "Descricao", (int)FormatoExportacaoArquivo.PDF);
+                                                                            foreach (var item in listaFormatoExportacaoArquivo)
+	                                                                        {
+                                                                                var itemChecked = string.Empty;
+                                                                                if (item.Selected)
+                                                                                {
+                                                                                    itemChecked = "checked=\"checked\"";
+                                                                                }
+                                                                                @:<label class="radio">
+							                                                    @:  <input type="radio" name="formatoExportacaoArquivo" value="@item.Value" @itemChecked>
+							                                                    @:  <i></i>@item.Text
+                                                                                @:</label>
+	                                                                        }
+                                                                        }
+					                                                </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+					                                            <button type="button" id="btnConfirmarImpressaoMedicao" class="btn btn-primary" data-dismiss="modal">
+						                                            Ok
+					                                            </button>
+				                                            </div>
                                                         </div>
                                                     </div>
-                                                }
-                                            </div>
-                                            <div class="widget-body">
-                                                <hr class="simple">
-                                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                    <table id="tableItens" class="table table-bordered table-condensed table-hover dataTable">
-                                                        <thead>
-                                                            <tr role="row" style="col">
-                                                                <th class="text-left">Item</th>
-                                                                <th class="text-left">Medição</th>
-                                                                <th class="text-left">Vencimento</th>
-                                                                <th class="text-left">Tipo documento</th>
-                                                                <th class="text-left">Nº documento</th>
-                                                                <th class="text-left">Emissão</th>
-                                                                <th class="text-left" style="min-width: 150px;">Situação</th>
-                                                                <th class="text-left">Valor</th>
-                                                                <th class="text-left">Valor retido</th>
-                                                                <th class="text-left">Resp. medição</th>
-                                                                <th class="text-left">Título</th>
-                                                                <th class="text-left">Liberação</th>
-                                                                <th class="text-left">Resp. liberação</th>
-                                                                <th class="text-left" style="min-width: 200px;">Evento</th>
-                                                                <th class="text-left">Data cadastro</th>
-                                                                <th class="text-left">Avaliação</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                    </table>
                                                 </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                    <fieldset>
-                                        <legend>Total Selecionado</legend>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <section class="col col-6">
-                                                    @Html.LabelFor(m => m.Resumo.TotalValorSelecionado, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.Resumo.TotalValorSelecionado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
-                                                    </label>
-                                                </section>
-                                                <section class="col col-6">
-                                                    @Html.LabelFor(m => m.Resumo.TotalRetidoSelecionado, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.Resumo.TotalRetidoSelecionado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
-                                                    </label>
-                                                </section>
-                                            </section>
+                                            }
                                         </div>
-                                    </fieldset>
+                                        <div class="widget-body">
+                                            <hr class="simple">
+                                            <div id="divTableItens" class="table-responsive" style="min-height: 115px; height:320px; width: auto;  border: 1px solid #ddd; margin-bottom: 13px; overflow: auto;">
+                                                <table id="tableItens" class="table table-bordered table-condensed table-hover dataTable" style="font-size:11px;">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th class="text-left">Item</th>
+                                                            <th class="text-left">Medição</th>
+                                                            <th class="text-left">Vencimento</th>
+                                                            <th class="text-left">Tipo documento</th>
+                                                            <th class="text-left">Nº documento</th>
+                                                            <th class="text-left">Emissão</th>
+                                                            <th class="text-left" style="min-width: 150px;">Situação</th>
+                                                            <th class="text-left">Valor</th>
+                                                            <th class="text-left">Valor retido</th>
+                                                            <th class="text-left">Resp. medição</th>
+                                                            <th class="text-left">Título</th>
+                                                            <th class="text-left">Liberação</th>
+                                                            <th class="text-left">Resp. liberação</th>
+                                                            <th class="text-left" style="min-width: 250px;">Evento</th>
+                                                            <th class="text-left">Data cadastro</th>
+                                                            <th class="text-left">Avaliação</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 style="padding-left:10px;">Total Selecionado</h5>
+                                    <div class="row">
+                                        <section class="col col-6">
+                                            <section class="col col-6">
+                                                @Html.LabelFor(m => m.Resumo.TotalValorSelecionado, new { @class = "label" })
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.Resumo.TotalValorSelecionado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                </label>
+                                            </section>
+                                            <section class="col col-6">
+                                                @Html.LabelFor(m => m.Resumo.TotalRetidoSelecionado, new { @class = "label" })
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.Resumo.TotalRetidoSelecionado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                </label>
+                                            </section>
+                                        </section>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -347,7 +343,7 @@
     var parametrosUrlImpressaoMedicao = '';
     jsonListaItemLiberacaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
 
-    $(document).ready(function () {      
+    $(document).ready(function () {
 
         $(document).on("show.bs.modal", "#FormatoImpressaoMedicao_ModalPanel", function (e) {
             var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
@@ -665,7 +661,7 @@
         row.append($('<th class="text-left">Título</th>'));
         row.append($('<th class="text-left">Liberação</th>'));
         row.append($('<th class="text-left">Resp. liberação</th>'));
-        row.append($('<th class="text-left" style="min-width: 200px;">Evento</th>'));
+        row.append($('<th class="text-left" style="min-width: 250px;">Evento</th>'));
         row.append($('<th class="text-left">Data cadastro</th>'));
         row.append($('<th class="text-left">Avaliação</th>'));
         row.append($('<tr />'));
