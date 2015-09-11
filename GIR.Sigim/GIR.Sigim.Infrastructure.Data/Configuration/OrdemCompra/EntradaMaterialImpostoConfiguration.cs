@@ -24,7 +24,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasColumnName("entradaMaterial")
                 .HasColumnOrder(2);
 
-            HasOptional(l => l.EntradaMaterial)
+            HasRequired(l => l.EntradaMaterial)
                 .WithMany(l => l.ListaImposto)
                 .HasForeignKey(l => l.EntradaMaterialId);
 
