@@ -29,5 +29,9 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public decimal RetencaoLiberada { get; set; }
         [Display(Name = "Saldo")]
         public decimal Saldo { get; set; }
+        [Display(Name = "Valor")]
+        public decimal TotalValorSelecionado { get; set; }
+        [Display(Name = "Retido")]
+        public decimal TotalRetidoSelecionado { get; set; }
     }
 }

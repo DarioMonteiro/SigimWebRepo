@@ -254,6 +254,25 @@
                                             </div>
                                         </fieldset>
                                     </div>
+                                    <fieldset>
+                                        <legend>Total Selecionado</legend>
+                                        <div class="row">
+                                            <section class="col col-6">
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Resumo.TotalValorSelecionado, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Resumo.TotalValorSelecionado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Resumo.TotalRetidoSelecionado, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Resumo.TotalRetidoSelecionado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly", @style="font-weight:bold" })  
+                                                    </label>
+                                                </section>
+                                            </section>
+                                        </div>
+                                    </fieldset>
                                 </div>
                             </div>
                         </div>
@@ -317,7 +336,6 @@
                         </div>
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
-                            @*<a href="#" id="modal_link" class="btn bg-color-purple txt-color-white"> Open Modal Dialog </a>*@
                         </footer>                        
                     }
                 </div>
@@ -391,29 +409,39 @@
             }
         }));
 
-        //$('#modal_link').click(function () {           
-        //    $('#dialog-message').dialog('open');
-        //    return false;
-        //});
-
         $('#dialog-message').dialog({
             autoOpen: false,
             width: 300,
             resizable: false,
             modal: true,
             title: "<div class='widget-header'><h4> Troca da data de vencimento</h4></div>",
+            open: function () {
+                var $this = $(this);
+                $.validator.unobtrusive.parse($this);
+            },
             buttons: [{
                 html: "Concluir",
                 "class": "btn btn-primary",
                 click: function () {
                     $(this).dialog("close");
-                    trocarDataVencimento();
+                    var ehDataValida = validarData($("#@Html.IdFor(m => m.DataVencimento)").val());
+                    if (ehDataValida == true) {
+                        trocarDataVencimento();
+                    }
+                    else {
+                        var dataAtual = new Date().toFormatDDMMYYYY();
+                        $("#@Html.IdFor(m => m.DataVencimento)").val(dataAtual);
+                    }
+                    return false;
                 }
             }, {
                 html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
                 "class": "btn btn-default",
                 click: function () {
                     $(this).dialog("close");
+                    var dataAtual = new Date().toFormatDDMMYYYY();
+                    $("#@Html.IdFor(m => m.DataVencimento)").val(dataAtual);
+                    return false;
                 }
             }]
         });
@@ -455,11 +483,36 @@
 
         $(document).on("change", "#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)", function () {
             exibeInfoContrato();
+            desabilitarBotoes();
             recuperaContratoRetificacaoItem();
             exibeModalConcluirContrato();
         });
 
     });
+
+    function validarData(valor) {
+        var date=valor;
+        var ardt=new Array;
+        var ExpReg=new RegExp("(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[12][0-9]{3}");
+        ardt=date.split("/");
+        erro=false;
+        if ( date.search(ExpReg)==-1){
+            erro = true;
+        }
+        else if (((ardt[1]==4)||(ardt[1]==6)||(ardt[1]==9)||(ardt[1]==11))&&(ardt[0]>30))
+            erro = true;
+        else if ( ardt[1]==2) {
+            if ((ardt[0]>28)&&((ardt[2]%4)!=0))
+                erro = true;
+            if ((ardt[0]>29)&&((ardt[2]%4)==0))
+                erro = true;
+        }
+        if (erro) {
+            smartAlert("Atenção !", "Data de vencimento informada não é válida !", "error");
+            return false;
+        }
+        return true;
+    }
 
     function exibeModalConcluirContrato() {
         var podeConcluirContrato = $("#@Html.IdFor(m => m.PodeConcluirContrato)").val();
@@ -628,6 +681,8 @@
                 var cor = jsonListaItemLiberacaoArray[i].CorTexto;
                 if (jsonListaItemLiberacaoArray[i].Selecionado) {
                     cor = cor + ";" + jsonListaItemLiberacaoArray[i].CorLinhaSelecionada + ";";
+                    totalValor = totalValor + jsonListaItemLiberacaoArray[i].Valor;
+                    totalValorRetido = totalValorRetido + jsonListaItemLiberacaoArray[i].ValorRetido;
                 }
 
                 var row = $('<tr />')
@@ -680,6 +735,9 @@
 
             jsonListaItemLiberacaoArray = null;
         }
+
+        $('#@Html.IdFor(m => m.Resumo.TotalValorSelecionado)').val(roundDecimal(floatToString(totalValor), 2));
+        $('#@Html.IdFor(m => m.Resumo.TotalRetidoSelecionado)').val(roundDecimal(floatToString(totalValorRetido), 2));
 
     }
 
@@ -864,6 +922,7 @@
             success: function (result) {
                 if (result.ehValidouTrocaDataVencimento) {
                     $('#dialog-message').dialog('open');
+                    return false;
                 }
                 else {
                     smartAlert("Ocorreu erro ao trocar a data de vencimento !", result.message, "error");
