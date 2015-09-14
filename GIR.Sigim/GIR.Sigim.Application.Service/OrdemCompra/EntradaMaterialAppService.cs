@@ -20,6 +20,7 @@ using GIR.Sigim.Domain.Entity.Estoque;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Repository.Estoque;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Domain.Repository.OrdemCompra;
@@ -404,14 +405,16 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaImposto.Select(o => o.ImpostoFinanceiro),
                 l => l.ListaMovimentoEstoque,
                 l => l.OrdemCompraFrete,
-                l => l.TituloFrete.ListaApropriacao);
+                l => l.TituloFrete.ListaApropriacao,
+                l => l.ClienteFornecedor,
+                l => l.FornecedorNota);
 
             //if (!EhCancelamentoPossivel(entradaMaterial))
             //    return false;
 
-            var fornecedorId = entradaMaterial.FornecedorNotaId.HasValue ? entradaMaterial.FornecedorNotaId : entradaMaterial.ClienteFornecedorId;
+            var fornecedor = entradaMaterial.FornecedorNotaId.HasValue ? entradaMaterial.FornecedorNota : entradaMaterial.ClienteFornecedor;
 
-            ProcessarLiberacao(entradaMaterial, fornecedorId);
+            ProcessarLiberacao(entradaMaterial, fornecedor);
 
             if (entradaMaterial.TituloFrete != null)
             {
@@ -448,12 +451,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
         }
 
-        private void ProcessarLiberacao(EntradaMaterial entradaMaterial, int? fornecedorId)
+        private void ProcessarLiberacao(EntradaMaterial entradaMaterial, ClienteFornecedor fornecedor)
         {
             var valorTotalLiberado = entradaMaterial.ListaFormaPagamento.Where(l => !l.OrdemCompraFormaPagamento.EhPagamentoAntecipado.Value).Sum(s => s.Valor);
             var valorTotalItens = entradaMaterial.ListaItens.Sum(l => l.ValorTotal);
             var valorDesconto = (decimal)(entradaMaterial.PercentualDesconto.HasValue ? valorTotalItens * entradaMaterial.Desconto / 100 : entradaMaterial.Desconto);
             var valorTotalImposto = entradaMaterial.ListaImposto.Where(l => l.ImpostoFinanceiro.EhRetido == true).Sum(o => o.Valor);
+            bool jaApropriouTituloFrete = false;
 
             if (entradaMaterial.TituloFrete != null)
                 RemoverApropriacoesDoTitulo(entradaMaterial.TituloFrete);
@@ -472,7 +476,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 if (formaPagamentoEM.OrdemCompraFormaPagamento.EhPagamentoAntecipado.Value)
                 {
                     tituloPagarAdiantamento = new TituloPagarAdiantamento();
-                    tituloPagarAdiantamento.ClienteId = fornecedorId;
+                    tituloPagarAdiantamento.Cliente = fornecedor;
                     tituloPagarAdiantamento.Identificacao = "Ref.OC : " + formaPagamentoEM.OrdemCompraFormaPagamento.OrdemCompraId + " EM : " + entradaMaterial.Id;
                     tituloPagarAdiantamento.TipoDocumentoId = entradaMaterial.TipoNotaFiscalId;
                     tituloPagarAdiantamento.Documento = entradaMaterial.NumeroNotaFiscal;
@@ -501,7 +505,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     }
 
                     formaPagamentoEM.TituloPagar.Identificacao = "Ref.OC : " + formaPagamentoEM.OrdemCompraFormaPagamento.OrdemCompraId + " EM : " + entradaMaterial.Id;
-					formaPagamentoEM.TituloPagar.ClienteId = fornecedorId.Value;
+					formaPagamentoEM.TituloPagar.Cliente = fornecedor;
                     formaPagamentoEM.TituloPagar.DataVencimento = formaPagamentoEM.Data;
 					formaPagamentoEM.TituloPagar.ValorTitulo = formaPagamentoEM.Valor;
                     formaPagamentoEM.TituloPagar.ValorImposto = valorImpostoTitulo;
@@ -568,7 +572,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                             formaPagamentoEM.TituloPagar.ListaApropriacao.Add(apropriacao);
                         }
 
-                        if (entradaMaterial.TituloFreteId.HasValue)
+                        if (entradaMaterial.TituloFreteId.HasValue && !jaApropriouTituloFrete && entradaMaterial.OrdemCompraFreteId == ordemCompra.Id)
                         {
                             Apropriacao apropriacaoTituloFrete = new Apropriacao();
                             apropriacaoTituloFrete.CodigoClasse = codigoClasse;
@@ -580,6 +584,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                             entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
                         }
                     }
+
+                    if (entradaMaterial.TituloFreteId.HasValue && entradaMaterial.TituloFrete.ListaApropriacao.Any())
+                        jaApropriouTituloFrete = true;
 
                     if (ordemCompra.ListaItens.All(l => l.Quantidade == l.QuantidadeEntregue))
                     {
@@ -1019,28 +1026,31 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                         var valorPendenteClasse = ordemCompra.ListaItens.Where(l => l.CodigoClasse == codigoClasse && l.Quantidade > l.QuantidadeEntregue).Sum(o => (o.Quantidade - o.QuantidadeEntregue) * o.ValorUnitario);
                         var percentualClasse = decimal.Round((valorPendenteClasse / valorTotalPendente * 100).Value, 5);
 
-                        foreach (var formaPagamento in listaFormaPagamentoNaoUtulizada)
+                        if (valorPendenteClasse > 0)
                         {
-                            Apropriacao apropriacao = new Apropriacao();
-                            apropriacao.CodigoClasse = codigoClasse;
-                            apropriacao.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
-                            apropriacao.TituloPagarId = formaPagamento.TituloPagarId;
-                            apropriacao.Percentual = percentualClasse;
-                            apropriacao.Valor = formaPagamento.Valor * apropriacao.Percentual / 100;
+                            foreach (var formaPagamento in listaFormaPagamentoNaoUtulizada)
+                            {
+                                Apropriacao apropriacao = new Apropriacao();
+                                apropriacao.CodigoClasse = codigoClasse;
+                                apropriacao.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
+                                apropriacao.TituloPagarId = formaPagamento.TituloPagarId;
+                                apropriacao.Percentual = percentualClasse;
+                                apropriacao.Valor = formaPagamento.Valor * apropriacao.Percentual / 100;
 
-                            formaPagamento.TituloPagar.ListaApropriacao.Add(apropriacao);
-                        }
+                                formaPagamento.TituloPagar.ListaApropriacao.Add(apropriacao);
+                            }
 
-                        if (entradaMaterial.TituloFreteId.HasValue && (entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado))
-                        {
-                            Apropriacao apropriacaoTituloFrete = new Apropriacao();
-                            apropriacaoTituloFrete.CodigoClasse = codigoClasse;
-                            apropriacaoTituloFrete.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
-                            apropriacaoTituloFrete.TituloPagarId = entradaMaterial.TituloFreteId;
-                            apropriacaoTituloFrete.Percentual = percentualClasse;
-                            apropriacaoTituloFrete.Valor = entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100;
+                            if (entradaMaterial.TituloFreteId.HasValue && (entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado))
+                            {
+                                Apropriacao apropriacaoTituloFrete = new Apropriacao();
+                                apropriacaoTituloFrete.CodigoClasse = codigoClasse;
+                                apropriacaoTituloFrete.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
+                                apropriacaoTituloFrete.TituloPagarId = entradaMaterial.TituloFreteId;
+                                apropriacaoTituloFrete.Percentual = percentualClasse;
+                                apropriacaoTituloFrete.Valor = entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100;
 
-                            entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
+                                entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
+                            }
                         }
                     }
                 }
