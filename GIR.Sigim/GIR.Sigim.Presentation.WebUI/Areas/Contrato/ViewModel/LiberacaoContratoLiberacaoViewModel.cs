@@ -32,11 +32,27 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public bool PodeImprimirMedicao { get; set; }
         public bool PodeConcluirContrato { get; set; }
 
+        public string TipoDocumentoAntigo { get; set; }
+        public string NumeroDocumentoAntigo { get; set; }
+        public string DataEmissaoAntigo { get; set; }
+        public string DataVencimentoAntigo { get; set; }
+
+        public int TipoDocumentoNovoId { get; set; }
+        public string NumeroDocumentoNovo { get; set; }
+        public DateTime DataEmissaoNovo { get; set; }
+        public DateTime DataVencimentoNovo { get; set; }
+
+        public SelectList ListaTipoDocumentoNovo { get; set; }
+
         public LiberacaoContratoLiberacaoViewModel()
         {
             ContratoRetificacaoItemMedicao = new ContratoRetificacaoItemMedicaoDTO();
             Contrato = new ContratoDTO();
             Resumo = new ResumoLiberacaoDTO();
+
+            this.DataEmissaoNovo = DateTime.Now;
+            this.DataVencimentoNovo = DateTime.Now;
+
         }
     }
 }

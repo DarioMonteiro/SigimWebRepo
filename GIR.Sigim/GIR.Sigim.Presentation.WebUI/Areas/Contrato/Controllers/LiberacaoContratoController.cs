@@ -11,6 +11,7 @@ using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel;
 using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.Service.Financeiro;
 using Newtonsoft.Json;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
@@ -24,6 +25,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         private IContratoAppService contratoAppService;
         private IContratoRetificacaoAppService contratoRetificacaoAppService;
         private IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
+        private ITipoDocumentoAppService tipoDocumentoAppService;
 
         #endregion
 
@@ -33,6 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                            IContratoAppService contratoAppService,
                                            IContratoRetificacaoAppService contratoRetificacaoAppService,
                                            IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
+                                           ITipoDocumentoAppService tipoDocumentoAppService,
                                            MessageQueue messageQueue) 
             : base(messageQueue) 
         {
@@ -40,6 +43,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             this.contratoAppService = contratoAppService;
             this.contratoRetificacaoAppService = contratoRetificacaoAppService;
             this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
+            this.tipoDocumentoAppService = tipoDocumentoAppService;
         }
 
         #endregion
@@ -154,6 +158,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             model.PodeAlterarDataVencimento = true;
             model.PodeImprimirMedicao = true;
             model.DataVencimento = DateTime.Now;
+
+            CarregarCombos(model);
 
             return View(model);
         }
@@ -457,6 +463,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             contratoRetificacaoItemTodos.Servico.Descricao = "Todos os ítens do contrato";
 
             return contratoRetificacaoItemTodos;
+        }
+
+        private void CarregarCombos(LiberacaoContratoLiberacaoViewModel model)
+        {
+            int? tipoDocumentoId = null;
+
+            tipoDocumentoId = model.TipoDocumentoNovoId;
+
+            model.ListaTipoDocumentoNovo = new SelectList(tipoDocumentoAppService.ListarTodos(), "Id", "Sigla", tipoDocumentoId);
         }
 
         #endregion

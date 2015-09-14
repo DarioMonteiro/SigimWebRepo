@@ -176,7 +176,8 @@
                                             <a class="btn btn-default btn-xs disabled" id="btnAprovar" href="javascript:tratarAprovar();">Aprovar</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnLiberar" href="javascript:void(0);">Liberar</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:void(0);">Cancelar Liberação</a>
-                                            <a class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="javascript:void(0);">Associar NF</a>
+                                            @*<a class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="javascript:void(0);">Associar NF</a>*@
+                                            <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="#remoteModal">Associar NF</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnAlterarVencimento" href="javascript:validarTrocarDataVencimento();">Alterar Vencimento</a>
                                             <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="#FormatoImpressaoMedicao_ModalPanel">Imprimir Medição</a>
                                             @if (Model.PodeImprimirMedicao) {
@@ -288,15 +289,15 @@
                                 <div class="ui-dialog-buttonset">
                                 </div>
                             </div>
-                        </div>                       
+                        </div>
                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
-                            tabindex="-1" role="dialog" aria-describedby="dialog-message" aria-labelledby="ui-id-2" 
+                            tabindex="-1" role="dialog" aria-describedby="dlgTrocaDtVencto" aria-labelledby="ui-id-2" 
                                 style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                                 <span id="ui-id-2" class="ui-dialog-title">
                                 </span>
                             </div>
-                            <div id="dialog-message" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                            <div id="dlgTrocaDtVencto" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
                                 <div style="padding-left:20px;">
                                     @Html.LabelFor(m => m.DataVencimento)
                                     <label class="input">
@@ -330,12 +331,131 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal fade in" id="remoteModal" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false" style="display: none;">  
+				            <div class="modal-dialog">  
+					            <div class="modal-content">
+                                    <div class="modal-header">
+	                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+		                                    ×
+	                                    </button>
+	                                    <h4 class="modal-title" id="myModalLabel">Associa nota fiscal</h4>
+                                    </div>
+                                    <div class="modal-body" style="margin: 5px 10px 0px 0px;">
+	                                    <div class="row">
+                                            <section class="col col-3">
+                                                <label class="label">Tipo</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.TipoDocumentoAntigo, new { @class="readonly", @readonly = "" })  
+                                                </label>
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Nº</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.NumeroDocumentoAntigo, new { @class="readonly", @readonly = "" })  
+                                                </label>
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Data emissão</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.DataEmissaoAntigo, new { @class="readonly", @readonly = "" })  
+                                                </label>
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Data vencimento</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.DataVencimentoAntigo, new { @class="readonly", @readonly = "" })  
+                                                </label>
+                                            </section>
+	                                    </div>
+	                                    <div class="row">
+                                            <section class="col col-3">
+                                                <label class="label">Tipo</label>
+                                                <label class="select">
+                                                    @Html.DropDownListFor(m => m.TipoDocumentoNovoId, Model.ListaTipoDocumentoNovo, "" ,new {@class="required", @novalidate = "novalidate" })
+                                                    <i></i>
+                                                </label>
+                                                @Html.ValidationMessageFor(m => m.TipoDocumentoNovoId, "", new { @id = Html.IdFor(m => m.TipoDocumentoNovoId) + "_ValidationMessage", @class = "note note-error" })
+                                            </section>
+
+                                            <section class="col col-3">
+                                                <label class="label">Nº</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.NumeroDocumentoNovo, new { @class = "required", @maxlength = "10", @required = true })  
+                                                </label>
+                                                @Html.ValidationMessageFor(m => m.NumeroDocumentoNovo, "", new { @class = "note note-error" })
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Data emissão</label>
+                                                <label class="input">
+                                                    <i class="icon-append fa fa-calendar"></i>
+                                                    @Html.TextBoxFor(m => m.DataEmissaoNovo, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                </label>
+                                                @Html.ValidationMessageFor(m => m.DataEmissaoNovo, "Informe uma data válida.", new { @class = "note note-error" })
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Data vencimento</label>
+                                                <label class="input">
+                                                    <i class="icon-append fa fa-calendar"></i>
+                                                    @Html.TextBoxFor(m => m.DataVencimentoNovo, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                </label>
+                                                @Html.ValidationMessageFor(m => m.DataVencimentoNovo, "Informe uma data válida.", new { @class = "note note-error" })
+                                            </section>
+                                            <script type="text/javascript">
+                                                $(document).ready(function () {
+                                                    $('#@Html.IdFor(m => m.DataEmissaoNovo)').datepicker({
+                                                        prevText: '<i class="fa fa-chevron-left"></i>',
+                                                        nextText: '<i class="fa fa-chevron-right"></i>',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        onClose: function (selectedDate) {
+                                                            if ($(this).valid()) {
+                                                                $('#@Html.IdFor(m => m.DataVencimentoNovo)').datepicker('option', 'minDate', selectedDate);
+                                                            }
+                                                            else {
+                                                                $(this).val("");
+                                                            }
+                                                        }
+                                                    });
+                                                    $('#@Html.IdFor(m => m.DataVencimentoNovo)').datepicker({
+                                                        prevText: '<i class="fa fa-chevron-left"></i>',
+                                                        nextText: '<i class="fa fa-chevron-right"></i>',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        minDate: '#@Html.IdFor(m => m.DataEmissaoNovo)',
+                                                        onClose: function (selectedDate) {
+                                                            if ($(this).valid()) {
+                                                                $('#@Html.IdFor(m => m.DataEmissaoNovo)').datepicker('option', 'maxDate', selectedDate);
+                                                            }
+                                                            else {
+                                                                $(this).val("");
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+	                                    </div>
+                                    </div>
+                                    <div class="modal-footer">
+	                                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+		                                    Associar
+	                                    </button>
+	                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+		                                    Cancelar
+	                                    </button>
+                                    </div>
+					            </div>  
+				            </div>  
+			            </div>
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
+@*                            <a href="ajax/modal-content/model-content-1.html" data-toggle="modal" data-target="#remoteModal" class="btn btn-primary btn-lg">
+							    Launch remote modal
+						    </a>*@
                         </footer>                        
                     }
                 </div>
             </div>
+
         </div>
     </article>
 </div> 
@@ -405,7 +525,7 @@
             }
         }));
 
-        $('#dialog-message').dialog({
+        $('#dlgTrocaDtVencto').dialog({
             autoOpen: false,
             width: 300,
             resizable: false,
@@ -917,7 +1037,7 @@
             }),
             success: function (result) {
                 if (result.ehValidouTrocaDataVencimento) {
-                    $('#dialog-message').dialog('open');
+                    $('#dlgTrocaDtVencto').dialog('open');
                     return false;
                 }
                 else {
