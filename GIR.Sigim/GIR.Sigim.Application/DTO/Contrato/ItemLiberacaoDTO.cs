@@ -40,5 +40,6 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public int Ordem { get; set; }
         public int PosicaoLista { get; set; }
         public bool Selecionado { get; set; }
+        public long DataSelecionado { get; set; }
     }
 }
