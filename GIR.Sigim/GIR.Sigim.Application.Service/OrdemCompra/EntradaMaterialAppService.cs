@@ -464,7 +464,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             foreach (var formaPagamentoEM in entradaMaterial.ListaFormaPagamento)
             {
-                var percentualTitulo = formaPagamentoEM.Valor / valorTotalLiberado * 100;
+                var percentualTitulo = valorTotalLiberado > 0 ? (formaPagamentoEM.Valor / valorTotalLiberado * 100) : 0;
                 var descontoTitulo = (decimal)(valorDesconto * percentualTitulo / 100);
                 var valorImpostoTitulo = (decimal)(valorTotalImposto * percentualTitulo / 100);
                 var valorAbatimentoTitulo = descontoTitulo + valorImpostoTitulo;
@@ -489,7 +489,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     formaPagamentoEM.ListaTituloPagarAdiantamento.Add(tituloPagarAdiantamento);
                 }
                 else
-                {
+                {                    
+
                     if (!formaPagamentoEM.TituloPagarId.HasValue)
                     {
                         formaPagamentoEM.TituloPagar = new TituloPagar();
@@ -532,21 +533,22 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
                 #region Apropriação de Títulos
 
-                foreach (var ordemCompra in entradaMaterial.ListaItens.Select(l => l.OrdemCompraItem.OrdemCompra).Distinct())
-                {
+                //foreach (var ordemCompra in entradaMaterial.ListaItens.Select(l => l.OrdemCompraItem.OrdemCompra).Distinct())
+                //{
+                    var ordemCompra = formaPagamentoEM.OrdemCompraFormaPagamento.OrdemCompra;
                     var listaItensPorOC = entradaMaterial.ListaItens.Where(l => l.OrdemCompraItem.OrdemCompraId == ordemCompra.Id).ToList();
-                    var valorTotal = listaItensPorOC.Sum(o => o.ValorTotal);
+                    var valorTotal = decimal.Round(listaItensPorOC.Sum(o => o.ValorTotal).Value, 5);
                     var listaCodigoClasses = entradaMaterial.ListaItens
                         .Where(l => l.OrdemCompraItem.OrdemCompraId == ordemCompra.Id)
                         .Select(o => o.CodigoClasse).Distinct();
 
                     foreach (var codigoClasse in listaCodigoClasses)
                     {
-                        var valorTotalClasse = listaItensPorOC.Where(l => l.CodigoClasse == codigoClasse).Sum(o => o.ValorTotal);
-                        var percentualClasse = decimal.Round((valorTotalClasse / valorTotal * 100).Value, 5);
+                        var valorTotalClasse = decimal.Round(listaItensPorOC.Where(l => l.CodigoClasse == codigoClasse).Sum(o => o.ValorTotal).Value, 5);
+                        var percentualClasse = decimal.Round((valorTotalClasse / valorTotal * 100), 5);
                         var valorAbatimentoClasse = decimal.Round((valorAbatimentoTitulo * percentualClasse / 100), 5);
 
-                        var valorClasseTitulo = (formaPagamentoEM.Valor * percentualClasse / 100) - valorAbatimentoClasse;
+                        var valorClasseTitulo = decimal.Round((formaPagamentoEM.Valor * percentualClasse / 100) - valorAbatimentoClasse, 5);
                         var percentualClasseTitulo = decimal.Round((valorClasseTitulo / formaPagamentoEM.Valor * 100), 5);
 
                         if (tituloPagarAdiantamento != null)
@@ -592,7 +594,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     {
                         ordemCompra.Situacao = SituacaoOrdemCompra.Fechada;
                     }
-                }
+                //}
 
                 #endregion
 
@@ -1316,15 +1318,18 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     var estoqueMaterial = estoqueRepository.ObterEstoqueMaterialAtivoPeloCentroCustoEMaterial(entradaMaterial.CodigoCentroCusto, item.OrdemCompraItem.MaterialId, l => l.Estoque);
                     if (estoqueMaterial != null)
                     {
-                        if (item.Quantidade > estoqueMaterial.Quantidade)
+                        if (estoqueMaterial.Estoque.ListaMovimento.Any(l => l.EntradaMaterialId == entradaMaterial.Id))
                         {
-                            if (estoqueMaterial.Material.EhControladoPorEstoque.Value)
+                            if (item.Quantidade > estoqueMaterial.Quantidade)
                             {
-                                var msg = "Quantidade do estoque: " + estoqueMaterial.Quantidade.ToString() + "\n";
-                                msg += "Quantidade da entrada de material: " + item.Quantidade.ToString() + "\n";
-                                msg += "A quantidade do material: '" + item.OrdemCompraItem.Material.Descricao + "' que será retirado do estoque '" + estoqueMaterial.Estoque.Descricao + "' está maior que o saldo existente.";
-                                messageQueue.Add(msg, TypeMessage.Error);
-                                return false;
+                                if (estoqueMaterial.Material.EhControladoPorEstoque.Value)
+                                {
+                                    var msg = "Quantidade do estoque: " + estoqueMaterial.Quantidade.ToString() + "\n";
+                                    msg += "Quantidade da entrada de material: " + item.Quantidade.ToString() + "\n";
+                                    msg += "A quantidade do material: '" + item.OrdemCompraItem.Material.Descricao + "' que será retirado do estoque '" + estoqueMaterial.Estoque.Descricao + "' está maior que o saldo existente.";
+                                    messageQueue.Add(msg, TypeMessage.Error);
+                                    return false;
+                                }
                             }
                         }
                     }
