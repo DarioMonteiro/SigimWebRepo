@@ -37,6 +37,7 @@
                         @Html.HiddenFor(m => m.PodeImprimirMedicao)
                         @Html.HiddenFor(m => m.ContratoRetificacao.Id)
                         @Html.HiddenFor(m => m.PodeConcluirContrato)
+                        @Html.HiddenFor(m => m.ContratoRetificacaoItemMedicaoIdSelecionado)
                        
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
@@ -176,11 +177,11 @@
                                             <a class="btn btn-default btn-xs disabled" id="btnAprovar" href="javascript:tratarAprovar();">Aprovar</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnLiberar" href="javascript:void(0);">Liberar</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:void(0);">Cancelar Liberação</a>
-                                            <a class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="javascript:void(0);">Associar NF</a>
+                                            <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="#associarNotaFiscal_ModalPanel">Associar NF</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnAlterarVencimento" href="javascript:validarTrocarDataVencimento();">Alterar Vencimento</a>
-                                            <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="#FormatoImpressaoMedicao_ModalPanel">Imprimir Medição</a>
+                                            <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="#formatoImpressaoMedicao_ModalPanel">Imprimir Medição</a>
                                             @if (Model.PodeImprimirMedicao) {
-                                                <div class="modal fade" id="FormatoImpressaoMedicao_ModalPanel" tabindex="-1" role="dialog">
+                                                <div class="modal fade" id="formatoImpressaoMedicao_ModalPanel" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -288,15 +289,15 @@
                                 <div class="ui-dialog-buttonset">
                                 </div>
                             </div>
-                        </div>                       
+                        </div>
                         <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
-                            tabindex="-1" role="dialog" aria-describedby="dialog-message" aria-labelledby="ui-id-2" 
+                            tabindex="-1" role="dialog" aria-describedby="dlgTrocaDtVencto" aria-labelledby="ui-id-2" 
                                 style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
                             <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
                                 <span id="ui-id-2" class="ui-dialog-title">
                                 </span>
                             </div>
-                            <div id="dialog-message" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+                            <div id="dlgTrocaDtVencto" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
                                 <div style="padding-left:20px;">
                                     @Html.LabelFor(m => m.DataVencimento)
                                     <label class="input">
@@ -330,12 +331,128 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal fade in" id="associarNotaFiscal_ModalPanel" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false" style="display: none;">  
+				            <div class="modal-dialog">  
+					            <div class="modal-content">
+                                    <div class="modal-header">
+	                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+		                                    ×
+	                                    </button>
+	                                    <h4 class="modal-title" id="myModalLabel">Associa nota fiscal</h4>
+                                    </div>
+                                    <div class="modal-body" style="margin: 5px 10px 0px 0px;">
+	                                    <div class="row">
+                                            <section class="col col-3">
+                                                <label class="label">Tipo</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.TipoDocumentoAntigo, new { @class="readonly", @readonly = "" })  
+                                                </label>
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Nº</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.NumeroDocumentoAntigo, new { @class="readonly", @readonly = "" })  
+                                                </label>
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Data emissão</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.DataEmissaoAntigo, new { @class="readonly", @readonly = "" })  
+                                                </label>
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Data vencimento</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.DataVencimentoAntigo, new { @class="readonly", @readonly = "" })  
+                                                </label>
+                                            </section>
+	                                    </div>
+	                                    <div class="row">
+                                            <section class="col col-3">
+                                                <label class="label">Tipo</label>
+                                                <label class="select">
+                                                    @Html.DropDownListFor(m => m.TipoDocumentoNovoId, Model.ListaTipoDocumentoNovo, "" ,new {@class="required",@required = true, @novalidate = "novalidate" })
+                                                    <i></i>
+                                                </label>
+                                                @Html.ValidationMessageFor(m => m.TipoDocumentoNovoId, "Informe o tipo do documento.", new { @id = Html.IdFor(m => m.TipoDocumentoNovoId) + "_ValidationMessage", @class = "note note-error" })
+                                            </section>
+
+                                            <section class="col col-3">
+                                                <label class="label">Nº</label>
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.NumeroDocumentoNovo, new { @class = "required", @maxlength = "10", @required = true })  
+                                                </label>
+                                                @Html.ValidationMessageFor(m => m.NumeroDocumentoNovo, "Informe o número do documento.", new { @class = "note note-error" })
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Data emissão</label>
+                                                <label class="input">
+                                                    <i class="icon-append fa fa-calendar"></i>
+                                                    @Html.TextBoxFor(m => m.DataEmissaoNovo, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                </label>
+                                                @Html.ValidationMessageFor(m => m.DataEmissaoNovo, "Informe uma data válida.", new { @class = "note note-error" })
+                                            </section>
+                                            <section class="col col-3">
+                                                <label class="label">Data vencimento</label>
+                                                <label class="input">
+                                                    <i class="icon-append fa fa-calendar"></i>
+                                                    @Html.TextBoxFor(m => m.DataVencimentoNovo, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                </label>
+                                                @Html.ValidationMessageFor(m => m.DataVencimentoNovo, "Informe uma data válida.", new { @class = "note note-error" })
+                                            </section>
+                                            <script type="text/javascript">
+                                                $(document).ready(function () {
+                                                    $('#@Html.IdFor(m => m.DataEmissaoNovo)').datepicker({
+                                                        prevText: '<i class="fa fa-chevron-left"></i>',
+                                                        nextText: '<i class="fa fa-chevron-right"></i>',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        onClose: function (selectedDate) {
+                                                            if ($(this).valid()) {
+                                                                $('#@Html.IdFor(m => m.DataVencimentoNovo)').datepicker('option', 'minDate', selectedDate);
+                                                            }
+                                                            else {
+                                                                $(this).val("");
+                                                            }
+                                                        }
+                                                    });
+                                                    $('#@Html.IdFor(m => m.DataVencimentoNovo)').datepicker({
+                                                        prevText: '<i class="fa fa-chevron-left"></i>',
+                                                        nextText: '<i class="fa fa-chevron-right"></i>',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        minDate: '#@Html.IdFor(m => m.DataEmissaoNovo)',
+                                                        onClose: function (selectedDate) {
+                                                            if ($(this).valid()) {
+                                                                $('#@Html.IdFor(m => m.DataEmissaoNovo)').datepicker('option', 'maxDate', selectedDate);
+                                                            }
+                                                            else {
+                                                                $(this).val("");
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+	                                    </div>
+                                    </div>
+                                    <div class="modal-footer">
+	                                    <button id="btnAssociarNotaFiscal" type="button" class="btn btn-primary">
+		                                    Associar
+	                                    </button>
+	                                    <button id="btnCancelarAssociarNotaFiscal" type="button" class="btn btn-default" data-dismiss="modal">
+		                                    Cancelar
+	                                    </button>
+                                    </div>
+					            </div>  
+				            </div>  
+			            </div>
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                         </footer>                        
                     }
                 </div>
             </div>
+
         </div>
     </article>
 </div> 
@@ -345,19 +462,19 @@
 
     $(document).ready(function () {
 
-        $(document).on("show.bs.modal", "#FormatoImpressaoMedicao_ModalPanel", function (e) {
+        $(document).on("show.bs.modal", "#formatoImpressaoMedicao_ModalPanel", function (e) {
             var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
             var listaItemLiberacao = $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val();
             var contratoRetificacaoItemMedicaoId = null;
 
             if (listaItemLiberacao.length == 0) {
                 smartAlert("Atenção", "Nenhum item da lista foi selecionado", "error");
-                e.event.preventDefault();
+                e.preventDefault();
             }
 
             if (contratoId == 0) {
                 smartAlert("Atenção", "Informe o contrato", "warning");
-                e.event.preventDefault();
+                e.preventDefault();
             }
 
             $.ajax({
@@ -381,7 +498,7 @@
 
             if (msgValidacaoImpressao.length > 0) {
                 smartAlert("Atenção", msgValidacaoImpressao, "error");
-                e.event.preventDefault();
+                e.preventDefault();
             }
 
             parametrosUrlImpressaoMedicao = '&contratoId=' + contratoId;
@@ -405,7 +522,7 @@
             }
         }));
 
-        $('#dialog-message').dialog({
+        $('#dlgTrocaDtVencto').dialog({
             autoOpen: false,
             width: 300,
             resizable: false,
@@ -442,12 +559,6 @@
             }]
         });
 
-        //$('#dialog_link').click(function () {
-        //    $('#dialog_simple').dialog('open');
-        //    return false;
-        //});
-
-
         $('#dlgSimpleConcluirContrato').dialog({
             autoOpen: false,
             width: 300,
@@ -482,6 +593,74 @@
             desabilitarBotoes();
             recuperaContratoRetificacaoItem();
             exibeModalConcluirContrato();
+        });
+
+        $(document).on("show.bs.modal", "#associarNotaFiscal_ModalPanel", function (e) {
+            var validou = false;
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ValidarAssociacaoNotaFiscal", "LiberacaoContrato", new { Area = "Contrato" })',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
+                    contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
+                    dataVencimento: $("#@Html.IdFor(m => m.DataVencimento)").val(),
+                    listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()
+                }),
+                success: function (result) {
+                    if (result.ehValidouAssociacaoNF) {
+                        validou = result.ehValidouAssociacaoNF;
+                        $('#@Html.IdFor(m => m.TipoDocumentoAntigo)').val(result.itemLiberacao.TipoDocumento);
+                        $('#@Html.IdFor(m => m.NumeroDocumentoAntigo)').val(result.itemLiberacao.NumeroDocumento);
+                        $('#@Html.IdFor(m => m.DataEmissaoAntigo)').val(new Date(parseInt(result.itemLiberacao.DataEmissao.substr(6))).toFormatDDMMYYYY());
+                        $('#@Html.IdFor(m => m.DataVencimentoAntigo)').val(new Date(parseInt(result.itemLiberacao.DataVencimento.substr(6))).toFormatDDMMYYYY());
+                        $('#@Html.IdFor(m => m.DataEmissaoNovo)').val(new Date(parseInt(result.itemLiberacao.DataEmissao.substr(6))).toFormatDDMMYYYY());
+                        $('#@Html.IdFor(m => m.DataVencimentoNovo)').val(new Date(parseInt(result.itemLiberacao.DataVencimento.substr(6))).toFormatDDMMYYYY());
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicaoIdSelecionado)').val(result.itemLiberacao.ContratoRetificacaoItemMedicaoId);
+                    }
+                    else {
+                        smartAlert("Ocorreu erro ao trocar a data de vencimento !", result.message, "error");
+                        $('#@Html.IdFor(m => m.TipoDocumentoAntigo)').val("");
+                        $('#@Html.IdFor(m => m.NumeroDocumentoAntigo)').val("");
+                        $('#@Html.IdFor(m => m.DataEmissaoAntigo)').val("");
+                        $('#@Html.IdFor(m => m.DataVencimentoAntigo)').val("");
+                        $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicaoIdSelecionado)').val(null);
+                    }
+                },
+                error: function (result) {
+                    smartAlert("Ocorreu erro ao trocar a data de vencimento !", result.message, "error");
+                    $('#@Html.IdFor(m => m.TipoDocumentoAntigo)').val("");
+                    $('#@Html.IdFor(m => m.NumeroDocumentoAntigo)').val("");
+                    $('#@Html.IdFor(m => m.DataEmissaoAntigo)').val("");
+                    $('#@Html.IdFor(m => m.DataVencimentoAntigo)').val("");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicaoIdSelecionado)').val(null);
+                }
+            });
+
+            if (validou == false) {
+                e.preventDefault();
+            }
+        });
+
+        $("#btnAssociarNotaFiscal").on("click", function (e) {
+            var validou = false;
+
+            validou = validarAssociacaoNotaFiscal();
+            if (validou == true)
+            {
+                tratarAssociacaoNotaFiscal();
+            }
+            else
+            {
+                e.preventDefault();
+            }
+        });
+
+        $("#btnCancelarAssociarNotaFiscal").on("click", function (e) {
+            $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicaoIdSelecionado)').val(null);
         });
 
     });
@@ -758,24 +937,46 @@
 
             if (jsonListaItemLiberacaoArray[posicaoLista].Selecionado === false) {
                 jsonListaItemLiberacaoArray[posicaoLista].Selecionado = true;
+                jsonListaItemLiberacaoArray[posicaoLista].DataSelecionado = new Date().valueOf();
                 foiSelecionado = true;
                 codigoSituacaoEscolhido = jsonListaItemLiberacaoArray[posicaoLista].CodigoSituacao;
             }
             else {
                 jsonListaItemLiberacaoArray[posicaoLista].Selecionado = false;
+                jsonListaItemLiberacaoArray[posicaoLista].DataSelecionado = 0;
                 foiSelecionado = false;
-                codigoSituacaoEscolhido = jsonListaItemLiberacaoArray[posicaoLista].CodigoSituacao;
             }
 
-            for (var i = 0; i < jsonListaItemLiberacaoArray.length; i++) {
-                if (jsonListaItemLiberacaoArray[i].Selecionado) {
-                    if (jsonListaItemLiberacaoArray[i].CodigoSituacao == 0) {
-                        qtdAguardandoAprovacao = qtdAguardandoAprovacao + 1;
-                    }
-                    if (jsonListaItemLiberacaoArray[i].CodigoSituacao == 1) {
-                        qtdAguardandoLiberacao = qtdAguardandoLiberacao + 1;
-                    }
-                    codigoSituacaoSelecionadoUltimoDaLista = jsonListaItemLiberacaoArray[i].CodigoSituacao;
+            var arr = jQuery.grep(jsonListaItemLiberacaoArray, function (item, i) {
+                return (item.Selecionado == true)
+            });
+
+            var ultimoDataSelecionado = -1;
+            //for (var i = 0; i < jsonListaItemLiberacaoArray.length; i++) {
+            //    if (jsonListaItemLiberacaoArray[i].Selecionado) {
+            //        if (jsonListaItemLiberacaoArray[i].CodigoSituacao == 0) {
+            //            qtdAguardandoAprovacao = qtdAguardandoAprovacao + 1;
+            //        }
+            //        if (jsonListaItemLiberacaoArray[i].CodigoSituacao == 1) {
+            //            qtdAguardandoLiberacao = qtdAguardandoLiberacao + 1;
+            //        }
+            //        if (jsonListaItemLiberacaoArray[i].DataSelecionado > ultimoDataSelecionado){
+            //            codigoSituacaoSelecionadoUltimoDaLista = jsonListaItemLiberacaoArray[i].CodigoSituacao;
+            //            ultimoDataSelecionado = jsonListaItemLiberacaoArray[i].DataSelecionado;
+            //        }
+            //    }
+            //}
+
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].CodigoSituacao == 0) {
+                    qtdAguardandoAprovacao = qtdAguardandoAprovacao + 1;
+                }
+                if (arr[i].CodigoSituacao == 1) {
+                    qtdAguardandoLiberacao = qtdAguardandoLiberacao + 1;
+                }
+                if (arr[i].DataSelecionado > ultimoDataSelecionado) {
+                    codigoSituacaoSelecionadoUltimoDaLista = arr[i].CodigoSituacao;
+                    ultimoDataSelecionado = arr[i].DataSelecionado;
                 }
             }
 
@@ -917,7 +1118,7 @@
             }),
             success: function (result) {
                 if (result.ehValidouTrocaDataVencimento) {
-                    $('#dialog-message').dialog('open');
+                    $('#dlgTrocaDtVencto').dialog('open');
                     return false;
                 }
                 else {
@@ -944,7 +1145,7 @@
                 listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()
             }),
             success: function (result) {
-                if (result.ehTrocouDataVencimento) {
+                if (result.trocouDataVencimento) {
                     window.location.href = result.redirectToUrl;
                     smartAlert("Sucesso", result.message, "success");
                 }
@@ -954,6 +1155,142 @@
             },
             error: function (result) {
                 smartAlert("Ocorreu erro ao trocar a data de vencimento !", result.message, "error");
+            }
+        });
+    }
+
+    function validarAssociacaoNotaFiscal() {
+        var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+        var contratoRetificacaoId = $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val();
+        var tipoDocumentoId = $('#@Html.IdFor(m => m.TipoDocumentoNovoId)').val();
+        var numeroDocumento = $('#@Html.IdFor(m => m.NumeroDocumentoNovo)').val();
+        var dataEmissao = $('#@Html.IdFor(m => m.DataEmissaoNovo)').val();
+        var dataVencimento = $('#@Html.IdFor(m => m.DataVencimentoNovo)').val();
+        var contratoRetificacaoItemMedicaoId = $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicaoIdSelecionado)').val();
+
+        if (contratoId == null) {
+            smartAlert("Atenção", "Selecione um contrato !", "error");
+            return false;
+        }
+
+        if (contratoId.length == 0) {
+            smartAlert("Atenção","Selecione um contrato !","error");
+            return false;
+        }
+
+        if (contratoRetificacaoId == null) {
+            smartAlert("Atenção","Selecione um contrato !", "error");
+            return false;
+        }
+
+        if (contratoRetificacaoId.length == 0) {
+            smartAlert("Atenção","Selecione um contrato !", "error");
+            return false;
+        }
+
+        if (contratoRetificacaoItemMedicaoId == null) {
+            smartAlert("Atenção","Nenhum item da lista foi selecionado !", "error");
+            return false;
+        }
+
+        if (contratoRetificacaoItemMedicaoId.length == 0) {
+            smartAlert("Atenção","Nenhum item da lista foi selecionado !", "error");
+            return false;
+        }
+
+        if (tipoDocumentoId == null) {
+            smartAlert("Atenção","Informe o campo tipo da nota !", "error");
+            return false;
+        }
+
+        if (tipoDocumentoId.length == 0) {
+            smartAlert("Atenção","Informe o campo tipo da nota !","error");
+            return false;
+        }
+
+        if (numeroDocumento == null) {
+            smartAlert("Informe o campo número do documento", result.message, "error");
+            return false;
+        }
+
+        if (numeroDocumento.length == 0) {
+            smartAlert("Atenção","Informe o campo número do documento", "error");
+            return;
+        }
+
+        if (dataEmissao == null) {
+            smartAlert("Atenção","Informe o campo data de emissão","error");
+            return false;
+        }
+
+        if (dataEmissao.length == 0) {
+            smartAlert("Atenção","Informe o campo data de emissão", "error");
+            return;
+        }
+
+        var ehDataValida = false;
+        ehDataValida = validarData(dataEmissao);
+        if (ehDataValida == false) {
+            smartAlert("Atenção","Informe a data de emissão válida", "error");
+            return;
+        }
+
+        if (dataVencimento == null) {
+            smartAlert("Atenção","Informe o campo data de vencimento", "error");
+            return false;
+        }
+
+        if (dataVencimento.length == 0) {
+            smartAlert("Atenção","Informe o campo data de vencimento", "error");
+            return false;
+        }
+
+        ehDataValida = validarData(dataVencimento);
+        if (ehDataValida == false) {
+            smartAlert("Atenção","Informe a data de vencimento válida", "error");
+            return false;
+        }
+
+        return true;
+    }
+
+    function tratarAssociacaoNotaFiscal() {
+        var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
+        var contratoRetificacaoId = $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val();
+        var tipoDocumentoId = $('#@Html.IdFor(m => m.TipoDocumentoNovoId)').val();
+        var numeroDocumento = $('#@Html.IdFor(m => m.NumeroDocumentoNovo)').val();
+        var dataEmissao = $('#@Html.IdFor(m => m.DataEmissaoNovo)').val();
+        var dataVencimento = $('#@Html.IdFor(m => m.DataVencimentoNovo)').val();
+        var contratoRetificacaoItemMedicaoId = $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicaoIdSelecionado)').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("TratarAssociacaoNotaFiscal", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoId: contratoId,
+                contratoRetificacaoId: contratoRetificacaoId,
+                contratoRetificacaoItemMedicaoId : contratoRetificacaoItemMedicaoId,
+                tipoDocumentoId : tipoDocumentoId,
+                numeroDocumento : numeroDocumento,
+                dataEmissao : dataEmissao,
+                dataVencimento : dataVencimento
+            }),
+            success: function (result) {
+                if (result.associouNotaFiscal) {
+                    window.location.href = result.redirectToUrl;
+                    smartAlert("Sucesso", result.message, "success");
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicaoIdSelecionado)').val(null);
+                    $('#associarNotaFiscal_ModalPanel').modal('hide');
+                }
+                else {
+                    smartAlert("Ocorreu erro ao associar a nota fiscal !", result.message, "error");
+                }
+            },
+            error: function (result) {
+                smartAlert("Ocorreu erro ao associar a nota fiscal !", result.message, "error");
             }
         });
     }

@@ -1178,8 +1178,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                 item.PosicaoLista = posicaoLista;
                 posicaoLista = posicaoLista + 1;
                 item.Selecionado = false;
+                item.DataSelecionado = 0;
             }
-
         }
 
         public bool EhPermitidoHabilitarBotoes(ContratoDTO dto)
@@ -1398,9 +1398,10 @@ namespace GIR.Sigim.Application.Service.Contrato
             return arquivo;
         }
 
-        public bool ValidarTrocaDataVencimentoListaItemLiberacao(int contratoId, Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        public bool ValidarTrocaDataVencimentoListaItemLiberacao(Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
         {
             bool retorno = false;
+
             if (listaItemLiberacaoDTO == null)
             {
                 messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
@@ -1442,7 +1443,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         {
             bool retorno = false;
 
-            if (!ValidarTrocaDataVencimentoListaItemLiberacao(contratoId, dataVencimento, listaItemLiberacaoDTO))
+            if (!ValidarTrocaDataVencimentoListaItemLiberacao(dataVencimento, listaItemLiberacaoDTO))
             {
                 return retorno;
             }
@@ -1474,6 +1475,107 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
 
             if (!trocou)
+            {
+                messageQueue.Add("A(s) medição(ões) escolhidas estão desatualizadas recupere o contrato novamente !", TypeMessage.Info);
+                return retorno;
+            }
+
+            try
+            {
+                if (Validator.IsValid(contrato, out validationErrors))
+                {
+                    contratoRepository.Alterar(contrato);
+                    contratoRepository.UnitOfWork.Commit();
+
+                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                    retorno = true;
+                    return retorno;
+                }
+                else
+                {
+                    messageQueue.AddRange(validationErrors, TypeMessage.Error);
+                    return retorno;
+                }
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return retorno;
+        }
+
+        public bool ValidarAssociacaoNotaFiscalListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO, out ItemLiberacaoDTO itemLiberacao)
+        {
+            bool retorno = false;
+            itemLiberacao = new ItemLiberacaoDTO();
+
+            if (listaItemLiberacaoDTO == null)
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (listaItemLiberacaoDTO.All(l => l.Selecionado == false))
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return retorno;
+            }
+
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification, l => l.ListaContratoRetificacaoItemMedicao);
+
+            //RETORNA O ULTIMO ITEM SELECIONADO
+            ItemLiberacaoDTO item = listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao < (int)SituacaoMedicao.Liberado).OrderByDescending(l => l.DataSelecionado).FirstOrDefault();
+
+            if (item == null)
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada !", TypeMessage.Info);
+                return retorno;
+            }
+
+            if (item.Selecionado == true && item.CodigoSituacao > (int)SituacaoMedicao.AguardandoLiberacao)
+            {
+                messageQueue.Add("O item escolhido não possui permissão para essa funcionalidade !", TypeMessage.Info);
+                return retorno;
+            }
+
+            itemLiberacao = item;
+            retorno = true;
+
+            return retorno;
+        }
+
+        public bool AssociarNotaFiscalListaItemLiberacao(int? contratoId, int? contratoRetificacaoItemMedicaoId,int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao, Nullable<DateTime> dataVencimento)
+        {
+            bool retorno = false;
+
+            if (!ValidacaoAssociacaoNotaFiscalListaItemLiberacao(contratoRetificacaoItemMedicaoId,tipoDocumentoId, numeroDocumento, dataEmissao, dataVencimento))
+            {
+                return retorno;
+            }
+
+            var specificationContrato = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specificationContrato, l => l.ListaContratoRetificacaoItemMedicao);
+            ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicaoSelecionado = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == contratoRetificacaoItemMedicaoId).FirstOrDefault();
+            int tipoDocumentoIdSelecionado = contratoRetificacaoItemMedicaoSelecionado.TipoDocumentoId;
+            string numeroDocumentoSelecionado = contratoRetificacaoItemMedicaoSelecionado.NumeroDocumento;
+            
+            bool associou = false;
+            foreach (ContratoRetificacaoItemMedicao medicao in contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.TipoDocumentoId == tipoDocumentoIdSelecionado &&
+                                                                                                                       l.NumeroDocumento == numeroDocumentoSelecionado &&
+                                                                                                                       l.Situacao < SituacaoMedicao.Liberado))
+            {
+                medicao.TipoDocumentoId = tipoDocumentoId.Value;
+                medicao.NumeroDocumento = numeroDocumento;
+                medicao.DataEmissao = dataEmissao.Value;
+                medicao.DataVencimento = dataVencimento.Value;
+                associou = true;
+            }
+
+            if (!associou)
             {
                 messageQueue.Add("A(s) medição(ões) escolhidas estão desatualizadas recupere o contrato novamente !", TypeMessage.Info);
                 return retorno;
@@ -2281,6 +2383,44 @@ namespace GIR.Sigim.Application.Service.Contrato
             return documentoAntecipacao;
         }
 
+        private bool ValidacaoAssociacaoNotaFiscalListaItemLiberacao(int? contratoRetificacaoItemMedicaoId,int? tipoDocumentoId,string numeroDocumento,Nullable<DateTime> dataEmissao,Nullable<DateTime> dataVencimento){
+            bool retorno = false;
+
+            if (!contratoRetificacaoItemMedicaoId.HasValue)
+            {
+                messageQueue.Add("Nenhum item foi selecionado.", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (!tipoDocumentoId.HasValue)
+            {
+                messageQueue.Add("Informe o campo tipo da nota.", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (string.IsNullOrEmpty(numeroDocumento))
+            {
+                messageQueue.Add("Informe o campo número do documento.", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (!dataEmissao.HasValue)
+            {
+                messageQueue.Add("Informe o campo data de emissão.", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (!dataVencimento.HasValue)
+            {
+                messageQueue.Add("Informe o campo data de vencimento.", TypeMessage.Error);
+                return retorno;
+            }
+
+            retorno = true;
+            return retorno;
+        }
+
         #endregion
     }
+
 }

@@ -11,6 +11,7 @@ using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel;
 using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.Service.Financeiro;
 using Newtonsoft.Json;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
@@ -24,6 +25,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         private IContratoAppService contratoAppService;
         private IContratoRetificacaoAppService contratoRetificacaoAppService;
         private IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService;
+        private ITipoDocumentoAppService tipoDocumentoAppService;
 
         #endregion
 
@@ -33,6 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                                            IContratoAppService contratoAppService,
                                            IContratoRetificacaoAppService contratoRetificacaoAppService,
                                            IContratoRetificacaoItemMedicaoAppService contratoRetificacaoItemMedicaoAppService,
+                                           ITipoDocumentoAppService tipoDocumentoAppService,
                                            MessageQueue messageQueue) 
             : base(messageQueue) 
         {
@@ -40,6 +43,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             this.contratoAppService = contratoAppService;
             this.contratoRetificacaoAppService = contratoRetificacaoAppService;
             this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
+            this.tipoDocumentoAppService = tipoDocumentoAppService;
         }
 
         #endregion
@@ -154,6 +158,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             model.PodeAlterarDataVencimento = true;
             model.PodeImprimirMedicao = true;
             model.DataVencimento = DateTime.Now;
+
+            CarregarCombos(model);
 
             return View(model);
         }
@@ -377,7 +383,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
                         Nullable<DateTime> dtVencimento = DateTime.Parse(dataVencimento);
 
-                        ehValidouTrocaDataVencimento = contratoAppService.ValidarTrocaDataVencimentoListaItemLiberacao(contratoId.Value, dtVencimento, listaItemLiberacaoDTO);
+                        ehValidouTrocaDataVencimento = contratoAppService.ValidarTrocaDataVencimentoListaItemLiberacao(dtVencimento, listaItemLiberacaoDTO);
                         if (messageQueue.GetAll().Count > 0)
                         {
                             msg = messageQueue.GetAll()[0].Text;
@@ -398,11 +404,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             });
         }
 
-
         [HttpPost]
         public ActionResult TratarTrocaDataVencimento(int? contratoId, int? contratoRetificacaoId, string dataVencimento, string listaItemLiberacao)
         {
-            bool ehTrocouDataVencimento = false;
+            bool trocouDataVencimento = false;
             string msg = "";
 
 
@@ -410,7 +415,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             {
                 if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
                 {
-                    ehTrocouDataVencimento = false;
+                    trocouDataVencimento = false;
                     msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
                 }
                 else
@@ -421,7 +426,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
                         Nullable<DateTime> dtVencimento = DateTime.Parse(dataVencimento);
 
-                        ehTrocouDataVencimento = contratoAppService.TrocarDataVencimentoListaItemLiberacao(contratoId.Value,dtVencimento, listaItemLiberacaoDTO);
+                        trocouDataVencimento = contratoAppService.TrocarDataVencimentoListaItemLiberacao(contratoId.Value,dtVencimento, listaItemLiberacaoDTO);
                         if (messageQueue.GetAll().Count > 0)
                         {
                             msg = messageQueue.GetAll()[0].Text;
@@ -430,14 +435,100 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     }
                     else
                     {
-                        ehTrocouDataVencimento = false;
+                        trocouDataVencimento = false;
                         msg = "Nenhum item da lista foi selecionado";
                     }
                 }
             }
             return Json(new
             {
-                ehTrocouDataVencimento = ehTrocouDataVencimento,
+                trocouDataVencimento = trocouDataVencimento,
+                message = msg,
+                redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
+            });
+        }
+
+        [HttpPost]
+        public ActionResult ValidarAssociacaoNotaFiscal(int? contratoId, int? contratoRetificacaoId, string listaItemLiberacao)
+        {
+            bool ehValidou = false;
+            string msg = "";
+            ItemLiberacaoDTO itemLiberacao = new ItemLiberacaoDTO();
+
+            if (contratoId.HasValue && contratoRetificacaoId.HasValue)
+            {
+                if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
+                {
+                    ehValidou = false;
+                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(listaItemLiberacao))
+                    {
+                        List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
+
+                        ehValidou = contratoAppService.ValidarAssociacaoNotaFiscalListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO, out itemLiberacao);
+                        if (messageQueue.GetAll().Count > 0)
+                        {
+                            msg = messageQueue.GetAll()[0].Text;
+                            messageQueue.Clear();
+                        }
+                    }
+                    else
+                    {
+                        ehValidou = false;
+                        msg = "Nenhum item da lista foi selecionado";
+                    }
+                }
+            }
+            return Json(new
+            {
+                ehValidouAssociacaoNF = ehValidou,
+                message = msg,
+                itemLiberacao = itemLiberacao,
+                redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
+            });
+        }
+
+        [HttpPost]
+        public ActionResult TratarAssociacaoNotaFiscal(int? contratoId, int? contratoRetificacaoId, int? contratoRetificacaoItemMedicaoId, int? tipoDocumentoId, string numeroDocumento, string dataEmissao, string dataVencimento)
+        {
+            bool associouNotaFiscal = false;
+            string msg = "";
+
+
+            if (contratoId.HasValue && contratoRetificacaoId.HasValue && !string.IsNullOrEmpty(dataVencimento))
+            {
+                if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
+                {
+                    associouNotaFiscal = false;
+                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                }
+                else
+                {
+                    if ((contratoRetificacaoItemMedicaoId.HasValue) && (tipoDocumentoId.HasValue) && (!string.IsNullOrEmpty(numeroDocumento)) && (!string.IsNullOrEmpty(dataEmissao)) && (!string.IsNullOrEmpty(dataVencimento)) )
+                    {
+                        Nullable<DateTime> dtEmissao = DateTime.Parse(dataEmissao);
+                        Nullable<DateTime> dtVencimento = DateTime.Parse(dataVencimento);
+
+                        associouNotaFiscal = contratoAppService.AssociarNotaFiscalListaItemLiberacao(contratoId, contratoRetificacaoItemMedicaoId, tipoDocumentoId, numeroDocumento, dtEmissao, dtVencimento);
+                        if (messageQueue.GetAll().Count > 0)
+                        {
+                            msg = messageQueue.GetAll()[0].Text;
+                            messageQueue.Clear();
+                        }
+                    }
+                    else
+                    {
+                        associouNotaFiscal = false;
+                        msg = "Nenhum item da lista foi selecionado";
+                    }
+                }
+            }
+            return Json(new
+            {
+                associouNotaFiscal = associouNotaFiscal,
                 message = msg,
                 redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
             });
@@ -457,6 +548,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             contratoRetificacaoItemTodos.Servico.Descricao = "Todos os ítens do contrato";
 
             return contratoRetificacaoItemTodos;
+        }
+
+        private void CarregarCombos(LiberacaoContratoLiberacaoViewModel model)
+        {
+            int? tipoDocumentoId = null;
+
+            tipoDocumentoId = model.TipoDocumentoNovoId;
+
+            model.ListaTipoDocumentoNovo = new SelectList(tipoDocumentoAppService.ListarTodos(), "Id", "Sigla", tipoDocumentoId);
         }
 
         #endregion
