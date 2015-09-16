@@ -514,7 +514,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 					formaPagamentoEM.TituloPagar.Situacao = ParametrosOrdemCompra.GeraTituloAguardando.Value ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado;
 					formaPagamentoEM.TituloPagar.TipoDocumentoId = entradaMaterial.TipoNotaFiscalId;
 					formaPagamentoEM.TituloPagar.Documento = entradaMaterial.NumeroNotaFiscal;
-					formaPagamentoEM.TituloPagar.Desconto = entradaMaterial.Desconto;
+                    formaPagamentoEM.TituloPagar.Desconto = descontoTitulo;
                     formaPagamentoEM.TituloPagar.DataLimiteDesconto = null;
                     if (valorDesconto > 0)
                         formaPagamentoEM.TituloPagar.DataLimiteDesconto = formaPagamentoEM.Data;
@@ -1010,7 +1010,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 var listaFormaPagamentoNaoUtulizada = ordemCompra.ListaOrdemCompraFormaPagamento.Where(l => l.EhUtilizada == false);
                 List<Apropriacao> listaApropriacao = listaFormaPagamentoNaoUtulizada.SelectMany(o => o.TituloPagar.ListaApropriacao).ToList();
-                if (entradaMaterial.TituloFreteId.HasValue && entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado)
+                if (entradaMaterial.TituloFreteId.HasValue && entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado && entradaMaterial.OrdemCompraFreteId == ordemCompra.Id)
                     listaApropriacao.AddRange(entradaMaterial.TituloFrete.ListaApropriacao);
 
                 for (int i = listaApropriacao.Count() - 1; i >= 0; i--)
@@ -1042,7 +1042,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                                 formaPagamento.TituloPagar.ListaApropriacao.Add(apropriacao);
                             }
 
-                            if (entradaMaterial.TituloFreteId.HasValue && (entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado))
+                            if (entradaMaterial.TituloFreteId.HasValue && (entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado) && entradaMaterial.OrdemCompraFreteId == ordemCompra.Id)
                             {
                                 Apropriacao apropriacaoTituloFrete = new Apropriacao();
                                 apropriacaoTituloFrete.CodigoClasse = codigoClasse;
