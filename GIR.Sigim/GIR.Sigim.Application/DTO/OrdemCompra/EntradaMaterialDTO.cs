@@ -67,9 +67,15 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
 
         [Display(Name = "Data da entrega")]
         public Nullable<DateTime> DataEntregaNota { get; set; }
+
         public string Observacao { get; set; }
-        public decimal? PercentualDesconto { get; set; }
+
+        [Display(Name = "Percentual")]
+        public bool EhDescontoPercentual { get; set; }
+
+        [Display(Name = "Descontos")]
         public decimal? Desconto { get; set; }
+
         public decimal? PercentualISS { get; set; }
         public decimal? ISS { get; set; }
         public decimal? FreteIncluso { get; set; }

@@ -21,7 +21,8 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<CotacaoItemDTO, CotacaoItem>();
 
             Mapper.CreateMap<EntradaMaterial, EntradaMaterialDTO>()
-                .ForMember(d => d.PossuiAvaliacaoFornecedor, m => m.MapFrom(s => s.ListaAvaliacaoFornecedor.Any()));
+                .ForMember(d => d.PossuiAvaliacaoFornecedor, m => m.MapFrom(s => s.ListaAvaliacaoFornecedor.Any()))
+                .ForMember(d => d.EhDescontoPercentual, m => m.MapFrom(s => s.PercentualDesconto.HasValue));
             Mapper.CreateMap<EntradaMaterialDTO, EntradaMaterial>();
 
             Mapper.CreateMap<EntradaMaterialFormaPagamento, EntradaMaterialFormaPagamentoDTO>();
@@ -44,7 +45,8 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<OrdemCompraDTO, OrdemCompra>();
 
             Mapper.CreateMap<OrdemCompraItem, OrdemCompraItemDTO>()
-                .ForMember(d => d.DataOrdemCompra, m => m.MapFrom(s => s.OrdemCompra.Data));
+                .ForMember(d => d.DataOrdemCompra, m => m.MapFrom(s => s.OrdemCompra.Data))
+                .ForMember(d => d.PercentualDescontoOrdemCompra, m => m.MapFrom(s => s.OrdemCompra.PercentualDesconto));
             Mapper.CreateMap<OrdemCompraItemDTO, OrdemCompraItem>();
 
             Mapper.CreateMap<ParametrosOrdemCompra, ParametrosOrdemCompraDTO>();

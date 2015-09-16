@@ -35,6 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public MaterialDTO Material { get; set; }
         public ClasseDTO Classe { get; set; }
         public string JsonItens { get; set; }
+        public string JsonImpostos { get; set; }
 
         [Display(Name = "Complemento")]
         public string Complemento { get; set; }

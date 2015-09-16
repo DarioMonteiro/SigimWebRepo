@@ -109,6 +109,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 
             model.EntradaMaterial = entradaMaterial;
             model.JsonItens = JsonConvert.SerializeObject(entradaMaterial.ListaItens);
+            model.JsonImpostos = JsonConvert.SerializeObject(entradaMaterial.ListaImposto);
 
             if ((entradaMaterial.CentroCusto == null) || (string.IsNullOrEmpty(entradaMaterial.CentroCusto.Codigo)))
             {
