@@ -9,5 +9,6 @@ namespace GIR.Sigim.Domain.Repository.Financeiro
 {
     public interface IParametrosFinanceiroRepository : IRepository<ParametrosFinanceiro>
     {
+        ParametrosFinanceiro Obter();
     }
 }

@@ -35,12 +35,14 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<ContratoRetificacaoItemImposto> ListaContratoRetificacaoItemImposto { get; set; }
         public ICollection<EntradaMaterialImposto> ListaEntradaMaterialImposto { get; set; }
         public ICollection<ImpostoPagar> ListaImpostoPagar { get; set; }
+        public ICollection<ImpostoReceber> ListaImpostoReceber { get; set; }
 
         public ImpostoFinanceiro()
         {
             this.ListaContratoRetificacaoItemImposto = new HashSet<ContratoRetificacaoItemImposto>();
             this.ListaEntradaMaterialImposto = new HashSet<EntradaMaterialImposto>();
             this.ListaImpostoPagar = new HashSet<ImpostoPagar>();
+            this.ListaImpostoReceber = new HashSet<ImpostoReceber>();
         }
     }
 }

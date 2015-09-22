@@ -173,7 +173,7 @@
                                 <div id="collapseLiberacao" class="panel-collapse collapse" style="height: 0px;">
                                     <div class="panel-body no-padding">
                                         <div class="btn-toolbar">
-                                            <a class="btn btn-default btn-xs disabled" id="btnAprovarLiberar" href="javascript:void(0);">Aprovar e Liberar</a>
+                                            <a class="btn btn-default btn-xs disabled" id="btnAprovarLiberar" href="javascript:tratarAprovarLiberar();">Aprovar e Liberar</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnAprovar" href="javascript:tratarAprovar();">Aprovar</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnLiberar" href="javascript:void(0);">Liberar</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:void(0);">Cancelar Liberação</a>
@@ -477,6 +477,12 @@
                 e.preventDefault();
             }
 
+
+            var jsonListaArraySelecionados = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
+            var arr = jQuery.grep(jsonListaArraySelecionados, function (item, i) {
+                return (item.Selecionado == true)
+            });
+
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("ValidarImpressaoMedicao", "LiberacaoContrato", new { area = "Contrato" })',
@@ -485,7 +491,8 @@
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
                     contratoId: contratoId,
-                    listaItemLiberacao: listaItemLiberacao
+                    listaItemLiberacao: JSON.stringify(arr)
+                    //listaItemLiberacao: listaItemLiberacao
                 }),
                 success: function (result) {
                     msgValidacaoImpressao = result.message;
@@ -598,6 +605,11 @@
         $(document).on("show.bs.modal", "#associarNotaFiscal_ModalPanel", function (e) {
             var validou = false;
 
+
+            var jsonListaArraySelecionados = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
+            var arr = jQuery.grep(jsonListaArraySelecionados, function (item, i) {
+                return (item.Selecionado == true)
+            });
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("ValidarAssociacaoNotaFiscal", "LiberacaoContrato", new { Area = "Contrato" })',
@@ -608,7 +620,8 @@
                     contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
                     contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
                     dataVencimento: $("#@Html.IdFor(m => m.DataVencimento)").val(),
-                    listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()
+                    listaItemLiberacao: JSON.stringify(arr)
+                    @*listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()*@
                 }),
                 success: function (result) {
                     if (result.ehValidouAssociacaoNF) {
@@ -1077,6 +1090,10 @@
     }
 
     function tratarAprovar() {
+        var jsonListaArraySelecionados = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
+        var arr = jQuery.grep(jsonListaArraySelecionados, function (item, i) {
+            return (item.Selecionado == true)
+        });
         $.ajax({
             type: 'POST',
             url: '@Url.Action("TratarAprovar", "LiberacaoContrato", new { Area = "Contrato" })',
@@ -1086,7 +1103,8 @@
             data: JSON.stringify({
                 contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
                 contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
-                listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()
+                listaItemLiberacao:JSON.stringify(arr)
+                @*listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()*@
             }),
             success: function (result) {
                 if (result.ehAprovado) {
@@ -1104,6 +1122,10 @@
     }
 
     function validarTrocarDataVencimento() {
+        var jsonListaArraySelecionados = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
+        var arr = jQuery.grep(jsonListaArraySelecionados, function (item, i) {
+            return (item.Selecionado == true)
+        });
         $.ajax({
             type: 'POST',
             url: '@Url.Action("ValidarTrocaDataVencimento", "LiberacaoContrato", new { Area = "Contrato" })',
@@ -1114,7 +1136,8 @@
                 contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
                 contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
                 dataVencimento: $("#@Html.IdFor(m => m.DataVencimento)").val(),
-                listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()
+                listaItemLiberacao: JSON.stringify(arr)
+                @*listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()*@
             }),
             success: function (result) {
                 if (result.ehValidouTrocaDataVencimento) {
@@ -1132,6 +1155,10 @@
     }
 
     function trocarDataVencimento() {
+        var jsonListaArraySelecionados = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
+        var arr = jQuery.grep(jsonListaArraySelecionados, function (item, i) {
+            return (item.Selecionado == true)
+        });
         $.ajax({
             type: 'POST',
             url: '@Url.Action("TratarTrocaDataVencimento", "LiberacaoContrato", new { Area = "Contrato" })',
@@ -1142,7 +1169,8 @@
                 contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
                 contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
                 dataVencimento: $("#@Html.IdFor(m => m.DataVencimento)").val(),
-                listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()
+                listaItemLiberacao:JSON.stringify(arr)
+                @*listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()*@
             }),
             success: function (result) {
                 if (result.trocouDataVencimento) {
@@ -1294,5 +1322,37 @@
             }
         });
     }
+
+    function tratarAprovarLiberar() {
+        var jsonListaArraySelecionados = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
+        var arr = jQuery.grep(jsonListaArraySelecionados, function (item, i) {
+            return (item.Selecionado == true)
+        });
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("TratarAprovarLiberar", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
+                contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
+                listaItemLiberacao: JSON.stringify(arr)
+            }),
+            success: function (result) {
+                if (result.ehAprovado) {
+                    window.location.href = result.redirectToUrl;
+                    smartAlert("Sucesso", result.message, "success");
+                }
+                else {
+                    smartAlert("Ocorreu erro ao aprovar e liberar !", result.message, "error");
+                }
+            },
+            error: function (result) {
+                smartAlert("Ocorreu erro ao aprovar e liberar !", result.message, "error");
+            }
+        });
+    }
+
 
 </script>

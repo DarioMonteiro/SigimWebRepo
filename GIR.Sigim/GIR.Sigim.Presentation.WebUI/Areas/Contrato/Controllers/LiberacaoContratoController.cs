@@ -534,6 +534,47 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             });
         }
 
+        [HttpPost]
+        public ActionResult TratarAprovarLiberar(int? contratoId, int? contratoRetificacaoId, string listaItemLiberacao)
+        {
+            bool ehAprovado = false;
+            string msg = "";
+
+            if (contratoId.HasValue && contratoRetificacaoId.HasValue)
+            {
+                if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
+                {
+                    ehAprovado = false;
+                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(listaItemLiberacao))
+                    {
+                        List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
+
+                        ehAprovado = contratoAppService.AprovarLiberarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO);
+                        if (messageQueue.GetAll().Count > 0)
+                        {
+                            msg = messageQueue.GetAll()[0].Text;
+                            messageQueue.Clear();
+                        }
+                    }
+                    else
+                    {
+                        ehAprovado = false;
+                        msg = "Nenhum item da lista foi selecionado";
+                    }
+                }
+            }
+            return Json(new
+            {
+                ehAprovado = ehAprovado,
+                message = msg,
+                redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
+            });
+        }
+
         #endregion
 
         #region Métodos Privados"

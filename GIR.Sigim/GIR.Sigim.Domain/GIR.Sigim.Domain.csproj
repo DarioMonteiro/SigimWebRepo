@@ -80,6 +80,7 @@
     <Compile Include="Entity\Financeiro\Caixa.cs" />
     <Compile Include="Entity\Financeiro\HistoricoContabil.cs" />
     <Compile Include="Entity\Financeiro\ImpostoPagar.cs" />
+    <Compile Include="Entity\Financeiro\ImpostoReceber.cs" />
     <Compile Include="Entity\Financeiro\SituacaoTituloReceber.cs" />
     <Compile Include="Entity\Financeiro\TaxaAdministracao.cs" />
     <Compile Include="Entity\Financeiro\RateioAutomatico.cs" />

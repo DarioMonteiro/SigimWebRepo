@@ -39,9 +39,16 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
             Property(l => l.TituloPagarId)
                 .HasColumnName("tituloPagar");
 
-            HasRequired(l => l.TituloPagar)
+            HasOptional(l => l.TituloPagar)
                 .WithMany(l => l.ListaApropriacao)
                 .HasForeignKey(l => l.TituloPagarId);
+
+            Property(l => l.TituloReceberId)
+                .HasColumnName("tituloReceber");
+
+            HasOptional(l => l.TituloReceber)
+                .WithMany(l => l.ListaApropriacao)
+                .HasForeignKey(l => l.TituloReceberId);
 
             Property(l => l.MovimentoId)
                 .HasColumnName("movimento");

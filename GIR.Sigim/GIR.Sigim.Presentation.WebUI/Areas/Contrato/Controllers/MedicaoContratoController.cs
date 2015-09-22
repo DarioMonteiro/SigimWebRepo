@@ -505,7 +505,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             }
             bool existeNumeroDocumento = contratoAppService.ExisteNumeroDocumento(dataEmissao, numeroDocumento, contratadoId);
 
-            if (!existeNumeroDocumento) tituloPagarAppService.ExisteNumeroDocumento(dataEmissao, dataVencimento, numeroDocumento, contratadoId);
+            if (!existeNumeroDocumento)
+            {
+                existeNumeroDocumento = tituloPagarAppService.ExisteNumeroDocumento(dataEmissao, dataVencimento, numeroDocumento, contratadoId);
+            }
 
             return Json(new
             {

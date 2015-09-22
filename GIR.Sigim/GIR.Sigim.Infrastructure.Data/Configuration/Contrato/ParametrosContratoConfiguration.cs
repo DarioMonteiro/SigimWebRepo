@@ -38,6 +38,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnName("iconeRelatorio")
                 .HasColumnOrder(5);
 
+            Property(l => l.GeraTituloAguardando)
+                .HasColumnName("geraTituloAguardando")
+                .HasColumnType("bit")
+                .HasColumnOrder(7);
+
             Property(l => l.DiasMedicao)
                 .HasColumnName("diasMedicao")
                 .HasColumnOrder(23);

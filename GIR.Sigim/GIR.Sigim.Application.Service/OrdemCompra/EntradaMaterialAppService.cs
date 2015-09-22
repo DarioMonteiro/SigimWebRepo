@@ -603,7 +603,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 	            {
                     ImpostoPagar impostoPagar = new ImpostoPagar();
                     impostoPagar.TituloPagar = formaPagamentoEM.TituloPagar;
-                    impostoPagar.ImpostoFinanceiroId = imposto.ImpostoFinanceiroId;
+                    impostoPagar.ImpostoFinanceiroId = imposto.ImpostoFinanceiroId.HasValue ? imposto.ImpostoFinanceiroId.Value : 0;
                     impostoPagar.BaseCalculo = decimal.Round((imposto.BaseCalculo * percentualTitulo / 100), 5);
                     impostoPagar.ValorImposto = decimal.Round((imposto.Valor * percentualTitulo / 100), 5);
 

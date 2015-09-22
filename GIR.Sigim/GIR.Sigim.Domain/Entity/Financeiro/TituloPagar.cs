@@ -15,7 +15,6 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public SituacaoTituloPagar Situacao { get; set; }
         public TipoCompromisso TipoCompromisso { get; set; }
         public TipoDocumento TipoDocumento { get; set; }
-        public ContratoRetificacaoProvisao ContratoRetificacaoProvisao { get; set; }
         public int? TituloPaiId { get; set; }
         public virtual TituloPagar TituloPai { get; set; }
         public short? Parcela { get; set; }
@@ -71,6 +70,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<TituloPagarAdiantamento> ListaTituloPagarAdiantamento { get; set; }
         public ICollection<Apropriacao> ListaApropriacao { get; set; }
         public ICollection<ContratoRetencaoLiberada> ListaContratoRetencaoLiberada { get; set; }
+        public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
 
         public TituloPagar()
         {
@@ -83,6 +83,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaTituloPagarAdiantamento = new HashSet<TituloPagarAdiantamento>();
             this.ListaApropriacao = new HashSet<Apropriacao>();
             this.ListaContratoRetencaoLiberada = new HashSet<ContratoRetencaoLiberada>();
+            this.ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisao>();
         }
     }
 }
