@@ -22,10 +22,12 @@ namespace GIR.Sigim.Domain.Entity.Estoque
         }
 
         public ICollection<EstoqueMaterial> ListaEstoqueMaterial { get; set; }
+        public ICollection<Movimento> ListaMovimento { get; set; }
 
         public Estoque()
         {
             this.ListaEstoqueMaterial = new HashSet<EstoqueMaterial>();
+            this.ListaMovimento = new HashSet<Movimento>();
         }
     }
 }
