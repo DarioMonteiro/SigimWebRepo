@@ -77,7 +77,7 @@
                             <div class="row">
                                 <section class="col col-5">
                                     <div class="inline-group">
-                                        <label class="checkbox">@Html.CheckBoxFor(m => m.ImpostoFinanceiro.Retido)<i></i>@Html.DisplayNameFor(m => m.ImpostoFinanceiro.Retido) </label>
+                                        <label class="checkbox">@Html.CheckBoxFor(m => m.ImpostoFinanceiro.EhRetido)<i></i>@Html.DisplayNameFor(m => m.ImpostoFinanceiro.EhRetido) </label>
                                         <label class="checkbox">@Html.CheckBoxFor(m => m.ImpostoFinanceiro.Indireto)<i></i>@Html.DisplayNameFor(m => m.ImpostoFinanceiro.Indireto) </label>
                                         <label class="checkbox">@Html.CheckBoxFor(m => m.ImpostoFinanceiro.PagamentoEletronico)<i></i>@Html.DisplayNameFor(m => m.ImpostoFinanceiro.PagamentoEletronico) </label>
                                     </div>
@@ -207,7 +207,7 @@
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.ContaContabil)').val('');
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(0);
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.ClienteId)').val(0);
-        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Retido)').prop('checked', false);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.EhRetido)').prop('checked', false);
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)').prop('checked', false);
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.PagamentoEletronico)').prop('checked', false);
         $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.Periodicidade)']").each(function (i) {
@@ -258,7 +258,7 @@
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.ContaContabil)').val(result.ContaContabil);
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.ClienteId)').val(result.ClienteId);
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(result.TipoCompromissoId);
-            $('#@Html.IdFor(m => m.ImpostoFinanceiro.Retido)').prop('checked', result.Retido);
+            $('#@Html.IdFor(m => m.ImpostoFinanceiro.EhRetido)').prop('checked', result.EhRetido);
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)').prop('checked', result.Indireto);
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.PagamentoEletronico)').prop('checked', result.PagamentoEletronico);
             $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.Periodicidade)']").each(function (i)

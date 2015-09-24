@@ -28,10 +28,10 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public decimal Aliquota { get; set; }
 
         [Display(Name = "Retido")]
-        public bool Retido { get; set; }
+        public bool EhRetido { get; set; }
 
-        public string RetidoDescricao
-        { get { return Retido == true ? "Sim" : "Não"; } }
+        public string EhRetidoDescricao
+        { get { return EhRetido == true ? "Sim" : "Não"; } }
 
         [Display(Name = "Indireto")]
         public bool Indireto { get; set; }

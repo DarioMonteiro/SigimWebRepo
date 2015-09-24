@@ -17,6 +17,16 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public DateTime Data { get; set; }
         public SituacaoOrdemCompra Situacao { get; set; }
         public int? PrazoEntrega { get; set;}
+
+        private decimal? percentualDesconto;
+        public decimal? PercentualDesconto
+        {
+            get { return percentualDesconto.HasValue ? percentualDesconto : 0; }
+            set { percentualDesconto = value; }
+        }
+
+        public int? TituloFreteId { get; set; }
+        public TituloPagar TituloFrete { get; set; }
         public int? EntradaMaterialFreteId { get; set; }
         public EntradaMaterial EntradaMaterialFrete { get; set; }
 

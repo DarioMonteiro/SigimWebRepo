@@ -29,9 +29,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<HistoricoContabilDTO, HistoricoContabil>();
 
             Mapper.CreateMap<ImpostoFinanceiro, ImpostoFinanceiroDTO>()
-                .ForMember(d => d.PeriodicidadeDescricao, m => m.MapFrom(s => s.Periodicidade.ObterDescricao()))
-                .ForMember(d => d.FimDeSemanaDescricao, m => m.MapFrom(s => s.FimDeSemana.ObterDescricao()))
-                .ForMember(d => d.FatoGeradorDescricao, m => m.MapFrom(s => s.FatoGerador.ObterDescricao()));
+                .ForMember(d => d.PeriodicidadeDescricao, m => m.MapFrom(s => s.Periodicidade.HasValue ? s.Periodicidade.ObterDescricao() : string.Empty))
+                .ForMember(d => d.FimDeSemanaDescricao, m => m.MapFrom(s => s.FimDeSemana.HasValue ? s.FimDeSemana.ObterDescricao() : string.Empty))
+                .ForMember(d => d.FatoGeradorDescricao, m => m.MapFrom(s => s.FatoGerador.HasValue ? s.FatoGerador.ObterDescricao() : string.Empty));
             Mapper.CreateMap<ImpostoFinanceiroDTO, ImpostoFinanceiro>();
 
             Mapper.CreateMap<ImpostoPagar, ImpostoPagarDTO>();

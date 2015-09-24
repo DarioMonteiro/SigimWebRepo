@@ -26,7 +26,14 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public Nullable<DateTime> DataAlteracao { get; set; }
         public Nullable<DateTime> DataPreco { get; set; }
         public decimal? QuantidadeMinima { get; set; }
-        public bool? EhControladoPorEstoque { get; set; }
+
+        private bool? ehControladoPorEstoque;
+        public bool? EhControladoPorEstoque
+        {
+            get { return !ehControladoPorEstoque.HasValue ? false : ehControladoPorEstoque.Value; }
+            set { ehControladoPorEstoque = value; }
+        }
+
         public string ContaContabil { get; set; }
         public TipoTabela TipoTabela { get; set; }
         public int? AnoMes { get; set; }

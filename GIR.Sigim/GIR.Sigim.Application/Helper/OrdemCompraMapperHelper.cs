@@ -21,13 +21,16 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<CotacaoItemDTO, CotacaoItem>();
 
             Mapper.CreateMap<EntradaMaterial, EntradaMaterialDTO>()
-                .ForMember(d => d.PossuiAvaliacaoFornecedor, m => m.MapFrom(s => s.ListaAvaliacaoFornecedor.Any()));
+                .ForMember(d => d.PossuiAvaliacaoFornecedor, m => m.MapFrom(s => s.ListaAvaliacaoFornecedor.Any()))
+                .ForMember(d => d.EhDescontoPercentual, m => m.MapFrom(s => s.PercentualDesconto.HasValue));
             Mapper.CreateMap<EntradaMaterialDTO, EntradaMaterial>();
 
             Mapper.CreateMap<EntradaMaterialFormaPagamento, EntradaMaterialFormaPagamentoDTO>();
             Mapper.CreateMap<EntradaMaterialFormaPagamentoDTO, EntradaMaterialFormaPagamento>();
 
-            Mapper.CreateMap<EntradaMaterialImposto, EntradaMaterialImpostoDTO>();
+            Mapper.CreateMap<EntradaMaterialImposto, EntradaMaterialImpostoDTO>()
+                //BACALHAU para contornar gambiarra de data.
+                .ForMember(d => d.DataVencimento, m => m.MapFrom(s => s.DataVencimento.HasValue && s.DataVencimento != new DateTime(9999, 1, 1) ? s.DataVencimento : null));
             Mapper.CreateMap<EntradaMaterialImpostoDTO, EntradaMaterialImposto>();
 
             Mapper.CreateMap<EntradaMaterialItem, EntradaMaterialItemDTO>()
@@ -44,7 +47,8 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<OrdemCompraDTO, OrdemCompra>();
 
             Mapper.CreateMap<OrdemCompraItem, OrdemCompraItemDTO>()
-                .ForMember(d => d.DataOrdemCompra, m => m.MapFrom(s => s.OrdemCompra.Data));
+                .ForMember(d => d.DataOrdemCompra, m => m.MapFrom(s => s.OrdemCompra.Data))
+                .ForMember(d => d.PercentualDescontoOrdemCompra, m => m.MapFrom(s => s.OrdemCompra.PercentualDesconto));
             Mapper.CreateMap<OrdemCompraItemDTO, OrdemCompraItem>();
 
             Mapper.CreateMap<ParametrosOrdemCompra, ParametrosOrdemCompraDTO>();

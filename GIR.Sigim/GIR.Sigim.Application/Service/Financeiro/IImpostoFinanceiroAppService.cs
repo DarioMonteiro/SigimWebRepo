@@ -11,6 +11,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 {
     public interface IImpostoFinanceiroAppService
     {
+        List<ImpostoFinanceiroDTO> ListarTodos();
         List<ImpostoFinanceiroDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros);
         ImpostoFinanceiroDTO ObterPeloId(int? id);
         bool Salvar(ImpostoFinanceiroDTO dto);

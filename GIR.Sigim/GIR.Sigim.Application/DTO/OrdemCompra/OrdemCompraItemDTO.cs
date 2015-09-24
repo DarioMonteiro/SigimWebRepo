@@ -30,5 +30,6 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public decimal? ValorTotalComImposto { get; set; }
         public decimal? ValorTotalItem { get; set; }
         public decimal? Saldo { get; set; }
+        public decimal? PercentualDescontoOrdemCompra { get; set; }
     }
 }

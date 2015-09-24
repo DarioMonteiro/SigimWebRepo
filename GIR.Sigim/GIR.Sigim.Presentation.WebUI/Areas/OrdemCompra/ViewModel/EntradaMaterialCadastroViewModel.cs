@@ -28,6 +28,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public SelectList ListaComplementoNaturezaOperacao { get; set; }
         public SelectList ListaComplementoCST { get; set; }
         public SelectList ListaNaturezaReceita { get; set; }
+        public SelectList ListaImpostoFinanceiro { get; set; }
+
+        #region Accordion Itens
 
         public int? ItemId { get; set; }
         public int? Sequencial { get; set; }
@@ -98,6 +101,28 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public ComplementoCSTDTO ComplementoCST { get; set; }
         public NaturezaReceitaDTO NaturezaReceita { get; set; }
 
+        [Display(Name = "Total dos itens")]
+        public decimal ValorTotalItem { get; set; }
+
+        [Display(Name = "Descontos")]
+        public decimal ValorTotalDesconto { get; set; }
+
+        [Display(Name = "Desconto OC")]
+        public decimal ValorTotalDescontoOrdemCompra { get; set; }
+
+        [Display(Name = "Acréscimos")]
+        public decimal ValorTotalAcrescimo { get; set; }
+
+        [Display(Name = "Sub total")]
+        public decimal ValorSubTotal { get; set; }
+
+        [Display(Name = "Total")]
+        public decimal ValorTotal { get; set; }
+
+        #endregion
+
+        #region Accordion Seleção de Formas de Pagamento
+
         [Display(Name = "OC")]
         public int? OrdemCompraId { get; set; }
 
@@ -128,23 +153,38 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         [Display(Name = "Total liberado")]
         public decimal? ValorTotalLiberado { get; set; }
 
-        [Display(Name = "Total dos itens")]
-        public decimal ValorTotalItem { get; set; }
+        #endregion
 
-        [Display(Name = "Descontos")]
-        public decimal ValorTotalDesconto { get; set; }
+        #region Accordion Impostos
+        public string JsonImpostos { get; set; }
 
-        [Display(Name = "Desconto OC")]
-        public decimal ValorTotalDescontoOrdemCompra { get; set; }
+        public ImpostoFinanceiroDTO ImpostoFinanceiro { get; set; }
 
-        [Display(Name = "Acréscimos")]
-        public decimal ValorTotalAcrescimo { get; set; }
+        [Display(Name = "Base de cálculo")]
+        public decimal BaseCalculoImposto { get; set; }
 
-        [Display(Name = "Sub total")]
-        public decimal ValorSubTotal { get; set; }
+        [Display(Name = "Data vencimento")]
+        public Nullable<DateTime> DataVencimentoImposto { get; set; }
 
-        [Display(Name = "Total")]
-        public decimal ValorTotal { get; set; }
+        [Display(Name = "ICMS")]
+        public decimal ValorTotalICMS { get; set; }
+
+        [Display(Name = "IPI")]
+        public decimal ValorTotalIPI{ get; set; }
+
+        [Display(Name = "ICMSST")]
+        public decimal ValorTotalICMSST { get; set; }
+
+        [Display(Name = "Alíquota")]
+        public decimal PercentualTotalAliquota { get; set; }
+        
+        [Display(Name = "Valor")]
+        public decimal ValorTotalImposto { get; set; }
+
+        [Display(Name = "Retido")]
+        public decimal ValorTotalRetido { get; set; }
+
+        #endregion
 
         public bool ExisteEstoqueParaCentroCusto { get; set; }
         public bool ExisteMovimentoNoEstoque { get; set; }
@@ -155,6 +195,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public bool PodeAdicionarItem { get; set; }
         public bool PodeRemoverItem { get; set; }
         public bool PodeEditarItem { get; set; }
+        public bool PodeAdicionarImposto { get; set; }
+        public bool PodeRemoverImposto { get; set; }
+        public bool PodeEditarImposto { get; set; }
 
         public bool PodeEditarCentroCusto { get; set; }
         public bool PodeEditarFornecedor { get; set; }
