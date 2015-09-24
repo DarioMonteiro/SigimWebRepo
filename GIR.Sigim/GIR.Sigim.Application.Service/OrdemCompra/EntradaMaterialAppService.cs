@@ -155,7 +155,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaItens.Select(o => o.ComplementoNaturezaOperacao),
                 l => l.ListaItens.Select(o => o.NaturezaReceita),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
-                l => l.ListaImposto,
+                l => l.ListaImposto.Select(o => o.ImpostoFinanceiro),
                 l => l.ListaMovimentoEstoque).To<EntradaMaterialDTO>();
         }
 
@@ -806,6 +806,21 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         }
 
         public bool EhPermitidoEditarItem(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
+        }
+
+        public bool EhPermitidoAdicionarImposto(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
+        }
+
+        public bool EhPermitidoRemoverImposto(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
+        }
+
+        public bool EhPermitidoEditarImposto(EntradaMaterialDTO dto)
         {
             return EhPermitidoSalvar(dto);
         }

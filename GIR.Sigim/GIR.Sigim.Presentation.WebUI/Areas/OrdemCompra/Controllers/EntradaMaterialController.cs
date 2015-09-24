@@ -32,6 +32,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         private IComplementoCSTAppService complementoCSTAppService;
         private INaturezaReceitaAppService naturezaReceitaAppService;
         private IParametrosUsuarioAppService parametrosUsuarioAppService;
+        private IImpostoFinanceiroAppService impostoFinanceiroAppService;
 
         public EntradaMaterialController(
             IEntradaMaterialAppService entradaMaterialAppService,
@@ -46,6 +47,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             IComplementoCSTAppService complementoCSTAppService,
             INaturezaReceitaAppService naturezaReceitaAppService,
             IParametrosUsuarioAppService parametrosUsuarioAppService,
+            IImpostoFinanceiroAppService impostoFinanceiroAppService,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -61,6 +63,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.complementoCSTAppService = complementoCSTAppService;
             this.naturezaReceitaAppService = naturezaReceitaAppService;
             this.parametrosUsuarioAppService = parametrosUsuarioAppService;
+            this.impostoFinanceiroAppService = impostoFinanceiroAppService;
         }
 
         [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
@@ -131,13 +134,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.ExisteMovimentoNoEstoque = entradaMaterialAppService.ExisteMovimentoNoEstoque(entradaMaterial);
             model.PodeImprimir = entradaMaterialAppService.EhPermitidoImprimir(entradaMaterial);
             model.PodeLiberarTitulos = entradaMaterialAppService.EhPermitidoLiberarTitulos(entradaMaterial);
+            model.PodeEditarCentroCusto = entradaMaterialAppService.EhPermitidoEditarCentroCusto(entradaMaterial);
+            model.PodeEditarFornecedor = entradaMaterialAppService.EhPermitidoEditarFornecedor(entradaMaterial);
             model.PodeAdicionarItem = entradaMaterialAppService.EhPermitidoAdicionarItem(entradaMaterial);
             model.PodeRemoverItem = entradaMaterialAppService.EhPermitidoRemoverItem(entradaMaterial);
             model.PodeEditarItem = entradaMaterialAppService.EhPermitidoEditarItem(entradaMaterial);
-            //model.PodeAprovarRequisicao = requisicaoMaterialAppService.EhPermitidoAprovarRequisicao(entradaMaterial);
-            //model.PodeCancelarAprovacao = requisicaoMaterialAppService.EhPermitidoCancelarAprovacao(entradaMaterial);
-            model.PodeEditarCentroCusto = entradaMaterialAppService.EhPermitidoEditarCentroCusto(entradaMaterial);
-            model.PodeEditarFornecedor = entradaMaterialAppService.EhPermitidoEditarFornecedor(entradaMaterial);
+            model.PodeAdicionarImposto = entradaMaterialAppService.EhPermitidoAdicionarImposto(entradaMaterial);
+            model.PodeRemoverImposto = entradaMaterialAppService.EhPermitidoRemoverImposto(entradaMaterial);
+            model.PodeEditarImposto = entradaMaterialAppService.EhPermitidoEditarImposto(entradaMaterial);
             CarregarCombos(model);
 
             return View(model);
@@ -174,6 +178,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.ListaComplementoNaturezaOperacao = new SelectList(complementoNaturezaOperacaoAppService.ListarPorNaturezaOperacao(codigoNaturezaOperacao), "Codigo", "Descricao");
             model.ListaComplementoCST = new SelectList(complementoCSTAppService.ListarTodos(), "Codigo", "Descricao");
             model.ListaNaturezaReceita = new SelectList(naturezaReceitaAppService.ListarTodos(), "Codigo", "Descricao");
+            model.ListaImpostoFinanceiro = new SelectList(impostoFinanceiroAppService.ListarTodos(), "Id", "Sigla");
         }
 
         [HttpPost]

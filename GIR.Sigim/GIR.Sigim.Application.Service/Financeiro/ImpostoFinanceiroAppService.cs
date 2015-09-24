@@ -30,6 +30,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         #region IImpostoFinanceiroAppService Members
 
+        public List<ImpostoFinanceiroDTO> ListarTodos()
+        {
+            return impostoFinanceiroRepository.ListarTodos().To<List<ImpostoFinanceiroDTO>>();
+        }
+
         public List<ImpostoFinanceiroDTO> ListarPeloFiltro(BaseFiltro filtro, out int totalRegistros)
         {
             var specification = (Specification<ImpostoFinanceiro>)new TrueSpecification<ImpostoFinanceiro>();
@@ -77,7 +82,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             impostoFinanceiro.ContaContabil = dto.ContaContabil;
             impostoFinanceiro.ClienteId = dto.ClienteId;
             impostoFinanceiro.TipoCompromissoId = dto.TipoCompromissoId;
-            impostoFinanceiro.EhRetido = dto.Retido;
+            impostoFinanceiro.EhRetido = dto.EhRetido;
             impostoFinanceiro.Indireto = dto.Indireto;
             impostoFinanceiro.PagamentoEletronico = dto.PagamentoEletronico;
             impostoFinanceiro.Periodicidade = (PeriodicidadeImpostoFinanceiro)dto.Periodicidade;

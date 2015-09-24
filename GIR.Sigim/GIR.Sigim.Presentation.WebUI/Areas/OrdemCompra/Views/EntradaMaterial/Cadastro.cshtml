@@ -807,7 +807,10 @@
                                         <script type="text/javascript">
                                             $(document).ready(function () {
                                                 fillTableItens();
-                                                atualizarTotais();
+
+                                                jQuery.validator.setDefaults({
+                                                    ignore: '#formItem *'
+                                                });
 
                                                 $(document).on('change', '#@Html.IdFor(m => m.EntradaMaterial.CodigoNaturezaOperacao)', function () {
                                                     $('#@Html.IdFor(m => m.ComplementoNaturezaOperacao.Codigo)').html('').append($('<option>').text('').attr('value', ''));
@@ -829,7 +832,9 @@
                                                 });
 
                                                 $('#btnAddItem').on('click', function () {
-                                                    addItem();
+                                                    if ($('#formItem input').valid()) {
+                                                        addItem();
+                                                    }
                                                 });
 
                                                 $('#btnRemoverItem').on('click', function () {
@@ -1059,7 +1064,7 @@
                                             }
 
                                             function addItem() {
-                                                var jsonObj = $("#formItem").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
+                                                var jsonObj = $("#formItem").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processDataItem })
 
                                                 if (validaQuantidadeItem()) {
                                                     var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
@@ -1091,74 +1096,7 @@
                                                 }
                                             }
 
-                                            function atualizarTotais() {
-                                                var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
-                                                var jsonImpostos = JSON.parse($("#@Html.IdFor(m => m.JsonImpostos)").val());
-                                                var valorTotalItens = 0;
-                                                var valorTotalIPI = 0;
-                                                var valorTotalICMS = 0;
-                                                var valorTotalICMSST = 0;
-                                                var valorTotalDescontoOrdemCompra = 0;
-                                                var totalAliquota = 0;
-                                                var valorTotalImposto = 0;
-                                                var valorTotalRetido = 0;
-                                                var valorTotalDesconto = 0;
-                                                var valorSubTotal = 0;
-                                                var valorTotalAcrescimo = 0;
-                                                var valorTotal = 0;
-
-                                                $.each(jsonItens, function (i, item) {
-                                                    var valorIPI = item.ValorTotal * item.PercentualIPI / 100;
-                                                    valorTotalIPI += valorIPI;
-                                                    valorTotalItens += item.ValorTotal + valorIPI - (item.ValorTotal * item.PercentualDesconto / 100);
-
-                                                    var valorDescontoOC = item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100;
-                                                    valorTotalDescontoOrdemCompra += valorDescontoOC;
-
-                                                    var valorICMS = item.BaseICMS * item.PercentualICMS / 100;
-                                                    valorTotalICMS += valorICMS;
-
-                                                    var valorICMSST = item.BaseICMSST * item.PercentualICMSST / 100;
-                                                    valorTotalICMSST += valorICMSST;
-                                                });
-
-                                                valorSubTotal = valorTotalItens - valorTotalDescontoOrdemCompra;
-
-                                                $.each(jsonImpostos, function (i, imposto) {
-                                                    totalAliquota += imposto.ImpostoFinanceiro.Aliquota;
-                                                    totalValorImposto += imposto.Valor;
-                                                    if (imposto.ImpostoFinanceiro.EhRetido)
-                                                        valorTotalRetido += imposto.Valor;
-                                                });
-
-                                                var desconto = parseFloat($("#@Html.IdFor(m => m.EntradaMaterial.Desconto)").val().replace(".", "").replace(",", "."));
-                                                var ehDescontoPercentual = $('#@Html.IdFor(m => m.EntradaMaterial.EhDescontoPercentual)').prop('checked');
-                                                var valorDesconto = ehDescontoPercentual ? (valorSubTotal * desconto / 100) : desconto;
-
-                                                var valorDedutivel = valorTotalICMS + valorTotalRetido;
-                                                valorTotalDesconto = valorDesconto + valorDedutivel;
-
-                                                var valorFreteIncluso = 0;
-                                                valorTotalAcrescimo = valorFreteIncluso;
-
-                                                valorTotal = valorTotalItens - valorTotalDesconto + valorTotalAcrescimo;
-                                                
-                                                $("#@Html.IdFor(m => m.ValorTotalItem)").val(roundDecimal(floatToString(valorTotalItens), 2));
-                                                $("#@Html.IdFor(m => m.ValorTotalDescontoOrdemCompra)").val(roundDecimal(floatToString(valorTotalDescontoOrdemCompra), 2));
-                                                $("#@Html.IdFor(m => m.ValorSubTotal)").val(roundDecimal(floatToString(valorSubTotal), 2));
-                                                $("#@Html.IdFor(m => m.ValorTotalDesconto)").val(roundDecimal(floatToString(valorTotalDesconto), 2));
-                                                $("#@Html.IdFor(m => m.ValorTotalAcrescimo)").val(roundDecimal(floatToString(valorTotalAcrescimo), 2));
-                                                $("#@Html.IdFor(m => m.ValorTotal)").val(roundDecimal(floatToString(valorTotal), 2));
-                                                //valorTotalIPI
-                                                //valorTotalICMS
-                                                //valorTotalICMSST
-                                                //totalAliquota = 0;
-                                                //valorTotalImposto = 0;
-                                                //valorRetido = 0;
-
-                                            }
-
-                                            function processData(node) {
+                                            function processDataItem(node) {
                                                 var fieldId = node.getAttribute ? node.getAttribute('id') : '';
                                                 var fieldName = node.getAttribute ? node.getAttribute('name') : '';
 
@@ -1442,8 +1380,344 @@
                                 <div id="collapseImpostos" class="panel-collapse collapse">
                                     <div class="panel-body no-padding">
                                         <fieldset>
+                                            <div class="row" id="formImposto">
+                                                <input type="hidden" id="indexImposto" />
+                                                <input type="hidden" id="impostoId" />
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ImpostoFinanceiro.Id, "Imposto", new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.ImpostoFinanceiro.Id, Model.ListaImpostoFinanceiro, string.Empty, new { @class = "required" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ImpostoFinanceiro.Id, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.BaseCalculoImposto, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.BaseCalculoImposto, "{0:F5}", new { @class = "text-right decimal-5-casas required" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.BaseCalculoImposto, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.DataVencimentoImposto, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.DataVencimentoImposto, "{0:dd/MM/yyyy}")
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.DataVencimentoImposto, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $('#@Html.IdFor(m => m.DataVencimentoImposto)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            onClose: function (selectedDate) {
+                                                                $(this).valid();
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    @{
+                                                        string disableBtnAddImposto = string.Empty;
+                                                        if (!Model.PodeAdicionarImposto)
+                                                        {
+                                                            disableBtnAddImposto = "disabled";
+                                                        }
+                                                    }
+                                                    <button id="btnAddImposto" type="button" class="btn btn-primary @disableBtnAddImposto">
+                                                        Adicionar Imposto
+                                                    </button>
+
+                                                    @{
+                                                        string disableBtnRemoverImposto = string.Empty;
+                                                        if (!Model.PodeRemoverImposto)
+                                                        {
+                                                            disableBtnRemoverImposto = "disabled";
+                                                        }
+                                                    }
+                                                    <button id="btnRemoverImposto" type="button" class="btn btn-danger @disableBtnRemoverImposto">
+                                                        Remover Imposto
+                                                    </button>
+                                                </section>
+                                            </div>
                                             @Html.HiddenFor(m => m.JsonImpostos)
+                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow-x: auto;">
+                                                <table id="tableImpostos" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th>Sigla</th>
+                                                            <th>Descrição</th>
+                                                            <th class="text-right">Base de cálculo</th>
+                                                            <th class="text-right">Alíquota</th>
+                                                            <th class="text-right">Valor</th>
+                                                            <th class="text-center">Data vencimento</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <header>Totais dos impostos dos itens</header>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalICMS, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalICMS, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotalICMS, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalIPI, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalIPI, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotalIPI, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalICMSST, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalICMSST, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotalICMSST, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <header>Totais</header>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.PercentualTotalAliquota, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.PercentualTotalAliquota, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.PercentualTotalAliquota, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalImposto, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalImposto, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotalImposto, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalRetido, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalRetido, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.ValorTotalRetido, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
                                         </fieldset>
+                                        <script type="text/javascript">
+                                            $(document).ready(function () {
+                                                fillTableImpostos();
+
+                                                jQuery.validator.setDefaults({
+                                                    ignore: '#formImposto *'
+                                                });
+
+                                                $('#btnAddImposto').on("click", function () {
+                                                    if ($('#formImposto input, #formImposto select').valid()) {
+                                                        if (!ehImpostoRepetido()) {
+                                                            addImposto();
+                                                        }
+                                                        else {
+                                                            smartAlert("Erro", "O imposto informado já foi adicionado.", "error");
+                                                        }
+                                                    }
+                                                });
+
+                                                $('#formCadastro').validate({
+                                                    rules: {
+                                                        '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': 'required',
+                                                        '@Html.NameFor(m => m.BaseCalculoImposto)': 'required',
+                                                        '@Html.NameFor(m => m.DataVencimentoImposto)': {
+                                                            date: true
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': {
+                                                            required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Imposto")'
+                                                        },
+                                                        '@Html.NameFor(m => m.BaseCalculoImposto)': {
+                                                            required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Base de cálculo")'
+                                                        },
+                                                        '@Html.NameFor(m => m.DataVencimentoImposto)': {
+                                                            date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                                                        },
+                                                    },
+                                                    errorPlacement: function (error, element) {
+                                                        var span = getErrorMessageContainer(element.attr("name"));
+                                                        span.html(error.append());
+                                                    },
+                                                    highlight: function (element, errorClass) {
+                                                        var span = getErrorMessageContainer($(element).attr("name"));
+                                                        span.removeClass("field-validation-valid");
+                                                        span.addClass("field-validation-error");
+                                                    },
+                                                    unhighlight: function (element, errorClass) {
+                                                        var span = getErrorMessageContainer($(element).attr("name"));
+                                                        span.removeClass("field-validation-error");
+                                                        span.addClass("field-validation-valid");
+                                                    }
+                                                });
+                                            });
+
+                                            function fillTableImpostos() {
+                                                var jsonImpostos = JSON.parse($("#@Html.IdFor(m => m.JsonImpostos)").val());
+                                                $("#tableImpostos tbody").empty();
+
+                                                var chkDisabled = '';
+                                                var labelClass = 'checkbox';
+                                                @if (!Model.PodeRemoverItem)
+                                                {
+                                                    @:chkDisabled = 'disabled';
+                                                    @:labelClass += ' state-disabled';
+                                                }
+
+                                                for (var i = 0; i < jsonImpostos.length; i++) {
+                                                    var row = $('<tr />')
+                                                    $("#tableImpostos tbody").append(row);
+                                                    row.append($('<td><label class="' + labelClass + '"><input type="checkbox" class="chkImposto" name="checkbox" value="' + jsonImpostos[i].ImpostoFinanceiro.Id + '" ' + chkDisabled + '><i></i>' + jsonImpostos[i].ImpostoFinanceiro.Sigla + '</label></td>'));
+                                                    @if (Model.PodeEditarImposto)
+                                                    {
+                                                        @:row.append($('<td class="text-nowrap" onclick="loadImposto(' + jsonImpostos[i].ImpostoFinanceiro.Id + ');">' + jsonImpostos[i].ImpostoFinanceiro.Descricao + '</td>'));
+	                                                }
+                                                    else
+                                                    {
+                                                        @:row.append($('<td class="text-nowrap">' + jsonImpostos[i].ImpostoFinanceiro.Descricao + '</td>'));
+                                                    }
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonImpostos[i].BaseCalculo), 5) + '</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonImpostos[i].ImpostoFinanceiro.Aliquota), 5) + '</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonImpostos[i].Valor), 5) + '</td>'));
+                                                    if (jsonImpostos[i].DataVencimento != null)
+                                                        row.append($('<td class="text-right">' + new Date(jsonImpostos[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
+                                                    else
+                                                        row.append($('<td>&nbsp;</td>'));
+                                                }
+                                            }
+
+                                            function loadImposto(impostoFinanceiroId) {
+                                                clearFormImposto();
+                                                var jsonImpostos = JSON.parse($("#@Html.IdFor(m => m.JsonImpostos)").val());
+                                                var index = -1;
+                                                var arr = jQuery.map(jsonImpostos, function (item, i) {
+                                                    if (item.ImpostoFinanceiro.Id == impostoFinanceiroId) {
+                                                        index = i;
+                                                        return item;
+                                                    }
+                                                });
+
+                                                if (arr.length > 0) {
+                                                    var imposto = arr[0];
+
+                                                    $("#indexImposto").val(index);
+                                                    $("#impostoId").val(imposto.Id);
+                                                    if (imposto.ImpostoFinanceiro)
+                                                        $("#@Html.IdFor(m => m.ImpostoFinanceiro.Id)").val(imposto.ImpostoFinanceiro.Id);
+
+                                                    $("#@Html.IdFor(m => m.BaseCalculoImposto)").val(roundDecimal(floatToString(imposto.BaseCalculo), 5));
+
+                                                    if (imposto.DataVencimento != null)
+                                                        $("#@Html.IdFor(m => m.DataVencimentoImposto)").val(new Date(imposto.DataVencimento).toFormatDDMMYYYY());
+                                                }
+                                            }
+
+                                            function clearFormImposto() {
+                                                $("#indexImposto").val('');
+                                                $("#impostoId").val('');
+                                                $("#@Html.IdFor(m => m.ImpostoFinanceiro.Id)").val('');
+                                                var valorTotalITem = parseFloat($("#@Html.IdFor(m => m.ValorTotalItem)").val().replace(".", "").replace(",", "."));
+                                                $("#@Html.IdFor(m => m.BaseCalculoImposto)").val(roundDecimal(floatToString(valorTotalITem), 4));
+                                                $("#@Html.IdFor(m => m.DataVencimentoImposto)").val('');
+                                            }
+
+                                            function ehImpostoRepetido() {
+                                                var jsonImposto = JSON.parse($("#@Html.IdFor(m => m.JsonImpostos)").val());
+                                                var index = parseInt($("#indexImposto").val());
+                                                var result = false;
+                                                $.each(jsonImposto, function (i, obj) {
+                                                    if ((index != i) && (obj.ImpostoFinanceiro.Id == $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').val())) {
+                                                        result = true;
+                                                        return false;
+                                                    }
+                                                });
+                                                return result;
+                                            }
+
+                                            function addImposto() {
+                                                var imposto = $("#formImposto").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processDataImposto })
+
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CarregarItem", "ImpostoFinanceiro", new { @area = "Financeiro" })',
+                                                    cache: false,
+                                                    async: false,
+                                                    contentType: 'application/json; charset=utf-8',
+                                                    data: JSON.stringify({
+                                                        id: imposto.ImpostoFinanceiro.Id
+                                                    })
+                                                })
+                                                .success(function (result) {
+                                                    imposto["ImpostoFinanceiro"] = result;
+                                                    var valor = (imposto["BaseCalculo"] * result.Aliquota / 100).toFixed(2);
+                                                    imposto["Valor"] = parseFloat(valor);
+                                                });
+
+                                                var jsonImpostos = JSON.parse($("#@Html.IdFor(m => m.JsonImpostos)").val());
+                                                var index = parseInt($("#indexImposto").val());
+
+                                                if (isNaN(index))
+                                                    jsonImpostos.push(imposto);
+                                                else
+                                                    jsonImpostos.splice(index, 1, imposto);
+
+                                                $("#@Html.IdFor(m => m.JsonImpostos)").val(JSON.stringify(jsonImpostos));
+                                                clearFormImposto();
+                                                fillTableImpostos();
+                                                atualizarTotais();
+                                            }
+
+                                            function processDataImposto(node) {
+                                                var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+                                                var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+                                                if (fieldName != '' && (fieldId == "impostoId")) {
+                                                    return { name: "Id", value: $("#impostoId").val() };
+                                                }
+
+                                                if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.BaseCalculoImposto)")) {
+                                                    var value = $("#" + fieldId).val();
+                                                    return { name: "BaseCalculo", value: parseFloat(value.toString().replace(".", "").replace(",", ".")) };
+                                                }
+
+                                                if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.DataVencimentoImposto)")) {
+                                                    var date = $("#" + fieldId).datepicker("getDate");
+                                                    var jsonDate = "";
+                                                    if (date != null) {
+                                                        date.setHours(0, -date.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+                                                        jsonDate = date.toJSON();
+                                                    }
+                                                    return { name: "DataVencimento", value: jsonDate };
+                                                }
+
+                                                return false;
+                                            }
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -1451,11 +1725,11 @@
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                             @{
-                                                    string disableBtnCancelar = string.Empty;
-                                                    if (!Model.PodeCancelarEntrada)
-                                                    {
-                                                        disableBtnCancelar = "disabled";
-                                                    }
+                                string disableBtnCancelar = string.Empty;
+                                if (!Model.PodeCancelarEntrada)
+                                {
+                                    disableBtnCancelar = "disabled";
+                                }
                             }
                             <a id="btnCancelarEntrada" href="#" class="btn btn-danger @disableBtnCancelar">Cancelar</a>
                             @if (Model.PodeCancelarEntrada)
@@ -1570,6 +1844,8 @@
 <script type="text/javascript">
     var houveAlteracao = false;
     $(document).ready(function () {
+        atualizarTotais();
+
         $('#btnLiberarTitulos').on("click", function () {
             $.SmartMessageBox({
                 title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a liberação dos títulos para o Financeiro?",
@@ -1620,5 +1896,74 @@
             }
             smartAlert(titleMessage, this.Text, typeMessage);
         });
+    }
+
+    function atualizarTotais() {
+        var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+        var jsonImpostos = JSON.parse($("#@Html.IdFor(m => m.JsonImpostos)").val());
+        var valorTotalItens = 0;
+        var valorTotalIPI = 0;
+        var valorTotalICMS = 0;
+        var valorTotalICMSST = 0;
+        var valorTotalDescontoOrdemCompra = 0;
+        var percentualTotalAliquota = 0;
+        var valorTotalImposto = 0;
+        var valorTotalRetido = 0;
+        var valorTotalDesconto = 0;
+        var valorSubTotal = 0;
+        var valorTotalAcrescimo = 0;
+        var valorTotal = 0;
+
+        $.each(jsonItens, function (i, item) {
+            var valorIPI = item.ValorTotal * item.PercentualIPI / 100;
+            valorTotalIPI += valorIPI;
+            valorTotalItens += item.ValorTotal + valorIPI - (item.ValorTotal * item.PercentualDesconto / 100);
+
+            var valorDescontoOC = item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100;
+            valorTotalDescontoOrdemCompra += valorDescontoOC;
+
+            var valorICMS = item.BaseICMS * item.PercentualICMS / 100;
+            valorTotalICMS += valorICMS;
+
+            var valorICMSST = item.BaseICMSST * item.PercentualICMSST / 100;
+            valorTotalICMSST += valorICMSST;
+        });
+
+        valorSubTotal = valorTotalItens - valorTotalDescontoOrdemCompra;
+
+        $.each(jsonImpostos, function (i, imposto) {
+            percentualTotalAliquota += imposto.ImpostoFinanceiro.Aliquota;
+            valorTotalImposto += imposto.Valor;
+            if (imposto.ImpostoFinanceiro.EhRetido)
+                valorTotalRetido += imposto.Valor;
+        });
+
+        var desconto = parseFloat($("#@Html.IdFor(m => m.EntradaMaterial.Desconto)").val().replace(".", "").replace(",", "."));
+        var ehDescontoPercentual = $('#@Html.IdFor(m => m.EntradaMaterial.EhDescontoPercentual)').prop('checked');
+        var valorDesconto = ehDescontoPercentual ? (valorSubTotal * desconto / 100) : desconto;
+
+        var valorDedutivel = valorTotalICMS + valorTotalRetido;
+        valorTotalDesconto = valorDesconto + valorDedutivel;
+
+        var valorFreteIncluso = 0;
+        valorTotalAcrescimo = valorFreteIncluso;
+
+        valorTotal = valorTotalItens - valorTotalDesconto + valorTotalAcrescimo;
+
+        $("#@Html.IdFor(m => m.ValorTotalItem)").val(roundDecimal(floatToString(valorTotalItens), 2));
+        $("#@Html.IdFor(m => m.ValorTotalDescontoOrdemCompra)").val(roundDecimal(floatToString(valorTotalDescontoOrdemCompra), 2));
+        $("#@Html.IdFor(m => m.ValorSubTotal)").val(roundDecimal(floatToString(valorSubTotal), 2));
+        $("#@Html.IdFor(m => m.ValorTotalDesconto)").val(roundDecimal(floatToString(valorTotalDesconto), 2));
+        $("#@Html.IdFor(m => m.ValorTotalAcrescimo)").val(roundDecimal(floatToString(valorTotalAcrescimo), 2));
+        $("#@Html.IdFor(m => m.ValorTotal)").val(roundDecimal(floatToString(valorTotal), 2));
+        $("#@Html.IdFor(m => m.BaseCalculoImposto)").val(roundDecimal(floatToString(valorTotalItens), 5));
+
+        $("#@Html.IdFor(m => m.ValorTotalICMS)").val(roundDecimal(floatToString(valorTotalICMS), 2));
+        $("#@Html.IdFor(m => m.ValorTotalIPI)").val(roundDecimal(floatToString(valorTotalIPI), 2));
+        $("#@Html.IdFor(m => m.ValorTotalICMSST)").val(roundDecimal(floatToString(valorTotalICMSST), 2));
+
+        $("#@Html.IdFor(m => m.PercentualTotalAliquota)").val(roundDecimal(floatToString(percentualTotalAliquota), 5));
+        $("#@Html.IdFor(m => m.ValorTotalImposto)").val(roundDecimal(floatToString(valorTotalImposto), 2));
+        $("#@Html.IdFor(m => m.ValorTotalRetido)").val(roundDecimal(floatToString(valorTotalRetido), 2));
     }
 </script>

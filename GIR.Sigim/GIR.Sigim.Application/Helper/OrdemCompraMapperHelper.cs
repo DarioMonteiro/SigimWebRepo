@@ -28,7 +28,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<EntradaMaterialFormaPagamento, EntradaMaterialFormaPagamentoDTO>();
             Mapper.CreateMap<EntradaMaterialFormaPagamentoDTO, EntradaMaterialFormaPagamento>();
 
-            Mapper.CreateMap<EntradaMaterialImposto, EntradaMaterialImpostoDTO>();
+            Mapper.CreateMap<EntradaMaterialImposto, EntradaMaterialImpostoDTO>()
+                //BACALHAU para contornar gambiarra de data.
+                .ForMember(d => d.DataVencimento, m => m.MapFrom(s => s.DataVencimento.HasValue && s.DataVencimento != new DateTime(9999, 1, 1) ? s.DataVencimento : null));
             Mapper.CreateMap<EntradaMaterialImpostoDTO, EntradaMaterialImposto>();
 
             Mapper.CreateMap<EntradaMaterialItem, EntradaMaterialItemDTO>()
