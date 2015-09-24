@@ -20,6 +20,8 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<IClasseRepository, ClasseRepository>();
             Container.Current.RegisterType<IHistoricoContabilRepository, HistoricoContabilRepository>();
             Container.Current.RegisterType<IImpostoFinanceiroRepository, ImpostoFinanceiroRepository>();
+            Container.Current.RegisterType<IImpostoPagarRepository, ImpostoPagarRepository>();
+            Container.Current.RegisterType<IImpostoReceberRepository, ImpostoReceberRepository>();
             Container.Current.RegisterType<IMotivoCancelamentoRepository, MotivoCancelamentoRepository>();
             Container.Current.RegisterType<IParametrosFinanceiroRepository, ParametrosFinanceiroRepository>();
             Container.Current.RegisterType<IParametrosUsuarioFinanceiroRepository, ParametrosUsuarioFinanceiroRepository>();

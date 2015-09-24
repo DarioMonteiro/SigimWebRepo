@@ -111,10 +111,10 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         {
             bool condicao = false;
 
-            if (Situacao > SituacaoMedicao.AguardandoLiberacao)
-            {
-                yield return new ValidationResult(string.Format(Resource.Contrato.ErrorMessages.SituacaoNaoPermitida, "Situação da medição"));
-            }
+            //if (Situacao > SituacaoMedicao.AguardandoLiberacao)
+            //{
+            //    yield return new ValidationResult(string.Format(Resource.Contrato.ErrorMessages.SituacaoNaoPermitida, "Situação da medição"));
+            //}
 
             condicao = ((DataMedicao == null) || (DataMedicao == DateTime.MinValue));
             if (condicao)
@@ -181,9 +181,9 @@ namespace GIR.Sigim.Domain.Entity.Contrato
                 }
             }
 
-            if (Quantidade == 0 )
+            if (Quantidade == 0)
             {
-                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Quantidade medição atual"));          
+                yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Quantidade medição atual"));
             }
 
             if (ContratoRetificacaoItem != null)

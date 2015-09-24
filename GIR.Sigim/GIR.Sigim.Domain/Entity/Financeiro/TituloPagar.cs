@@ -63,6 +63,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
 
         public virtual ICollection<TituloPagar> ListaFilhos { get; set; }
         public virtual ICollection<ImpostoPagar> ListaImpostoPagar { get; set; }
+        //public ICollection<ImpostoPagar> ListaImpostoPagarTituloImposto { get; set; }
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
         public ICollection<OrdemCompraFormaPagamento> ListaOrdemCompraFormaPagamento { get; set; }
         public ICollection<EntradaMaterial> ListaEntradaMaterial { get; set; }
@@ -76,6 +77,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         {
             this.ListaFilhos = new HashSet<TituloPagar>();
             this.ListaImpostoPagar = new HashSet<ImpostoPagar>();
+            //this.ListaImpostoPagarTituloImposto = new HashSet<ImpostoPagar>();
             this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
             this.ListaOrdemCompraFormaPagamento = new HashSet<OrdemCompraFormaPagamento>();
             this.ListaEntradaMaterial = new HashSet<EntradaMaterial>();

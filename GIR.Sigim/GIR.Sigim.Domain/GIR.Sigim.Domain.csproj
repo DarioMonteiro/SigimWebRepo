@@ -200,6 +200,8 @@
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
     <Compile Include="Repository\Financeiro\IApropriacaoRepository.cs" />
+    <Compile Include="Repository\Financeiro\IImpostoPagarRepository.cs" />
+    <Compile Include="Repository\Financeiro\IImpostoReceberRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoMovimentoRepository.cs" />
     <Compile Include="Repository\Financeiro\IHistoricoContabilRepository.cs" />
     <Compile Include="Repository\Estoque\IEstoqueRepository.cs" />

@@ -10,5 +10,6 @@ namespace GIR.Sigim.Domain.Entity.Sigim
     {
         public Nullable<DateTime> Data { get; set; }
         public string Descricao { get; set; }
+        public bool Ativo { get; set; }
     }
 }

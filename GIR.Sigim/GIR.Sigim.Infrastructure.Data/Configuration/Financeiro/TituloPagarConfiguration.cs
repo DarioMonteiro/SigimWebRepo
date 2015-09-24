@@ -145,6 +145,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
             Property(l => l.MotivoCancelamentoId)
                 .HasColumnName("motivoCancelamento");
 
+            HasOptional(l => l.MotivoCancelamento)
+                .WithMany(c => c.ListaTituloPagar)
+                .HasForeignKey(l => l.MotivoCancelamentoId);
+
             Property(l => l.MovimentoId)
                 .HasColumnName("movimento");
 

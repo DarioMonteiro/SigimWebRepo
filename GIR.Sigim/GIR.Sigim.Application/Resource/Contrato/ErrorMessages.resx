@@ -147,6 +147,9 @@
   <data name="SelecioneUmaMedicao" xml:space="preserve">
     <value>Selecione uma medição.</value>
   </data>
+  <data name="SituacaoNaoPermitida" xml:space="preserve">
+    <value>A situação da medição não permite a gravação.</value>
+  </data>
   <data name="ValorMaiorQue" xml:space="preserve">
     <value>O valor do campo "{0}" está maior que o valor do campo "{1}".  </value>
   </data>

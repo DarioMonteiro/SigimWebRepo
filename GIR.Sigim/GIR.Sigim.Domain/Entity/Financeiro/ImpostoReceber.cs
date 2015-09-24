@@ -8,9 +8,9 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
 {
     public class ImpostoReceber : BaseEntity
     {
-        public int TituloReceberId { get; set; }
+        public int? TituloReceberId { get; set; }
         public TituloReceber TituloReceber { get; set; }
-        public int ImpostoFinanceiroId { get; set; }
+        public int? ImpostoFinanceiroId { get; set; }
         public ImpostoFinanceiro ImpostoFinanceiro { get; set; }
         public decimal BaseCalculo { get; set; }
         public decimal ValorImposto { get; set; }

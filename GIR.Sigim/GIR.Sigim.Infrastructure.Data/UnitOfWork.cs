@@ -144,6 +144,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new HistoricoContabilConfiguration());
             modelBuilder.Configurations.Add(new ImpostoFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new ImpostoPagarConfiguration());
+            modelBuilder.Configurations.Add(new ImpostoReceberConfiguration());
             modelBuilder.Configurations.Add(new MotivoCancelamentoConfiguration());
             modelBuilder.Configurations.Add(new ParametrosFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new ParametrosUsuarioFinanceiroConfiguration());

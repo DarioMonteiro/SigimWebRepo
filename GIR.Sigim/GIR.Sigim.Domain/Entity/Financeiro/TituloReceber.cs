@@ -14,10 +14,36 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public SituacaoTituloReceber Situacao { get; set; }
         public TipoCompromisso TipoCompromisso { get; set; }
         public TipoDocumento TipoDocumento { get; set; }
+        public int? TituloPaiId { get; set; }
+        public virtual TituloReceber TituloPai { get; set; }
+        public short? Parcela { get; set; }
         public decimal? ValorImposto { get; set; }
+
+        public decimal? Desconto { get; set; }
+        public Nullable<DateTime> DataLimiteDesconto { get; set; }
+        public decimal? Multa { get; set; }
+        public bool? EhMultaPercentual { get; set; }
+        public decimal? TaxaPermanencia { get; set; }
+        public bool? EhTaxaPermanenciaPercentual { get; set; }
+        public string MotivoDesconto { get; set; }
+        public Nullable<DateTime> DataRecebimento { get; set; }
+        public decimal? ValorRecebido { get; set; }
+        public string LoginUsuarioCadastro { get; set; }
+        public Nullable<DateTime> DataCadastro { get; set; }
+        public string LoginUsuarioSituacao { get; set; }
+        public Nullable<DateTime> DataSituacao { get; set; }
+        public string LoginUsuarioApropriacao { get; set; }
+        public Nullable<DateTime> DataApropriacao { get; set; }
+        public int? MotivoCancelamentoId { get; set; }
+        public MotivoCancelamento MotivoCancelamento { get; set; }
+        public Nullable<DateTime> DataBaixa { get; set; }
+        public string SistemaOrigem { get; set; }
+        public string Observacao { get; set; }
+
         public decimal? Retencao { get; set; }
 
-        public virtual ICollection<ImpostoReceber> ListaImpostoReceber { get; set; }
+        public virtual ICollection<TituloReceber> ListaFilhos { get; set; }
+        public ICollection<ImpostoReceber> ListaImpostoReceber { get; set; }
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
         public ICollection<ContratoRetencaoLiberada> ListaContratoRetencaoLiberada { get; set; }
         public ICollection<Apropriacao> ListaApropriacao { get; set; }

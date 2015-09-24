@@ -195,6 +195,8 @@
     <Compile Include="Repository\Estoque\EstoqueRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\ApropriacaoRepository.cs" />
+    <Compile Include="Repository\Financeiro\IImpostoReceberRepository.cs" />
+    <Compile Include="Repository\Financeiro\ImpostoPagarRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoMovimentoRepository.cs" />
     <Compile Include="Repository\Financeiro\HistoricoContabilRepository.cs" />
     <Compile Include="Repository\Financeiro\TaxaAdministracaoRepository.cs" />
