@@ -19,5 +19,16 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Financeiro
         }
 
         #endregion
+
+        #region IParametrosFinanceiroRepository Members
+
+        public ParametrosFinanceiro Obter()
+        {
+            var set = CreateSetAsQueryable(l => l.Cliente);
+            return set.FirstOrDefault();
+        }
+
+        #endregion
+
     }
 }

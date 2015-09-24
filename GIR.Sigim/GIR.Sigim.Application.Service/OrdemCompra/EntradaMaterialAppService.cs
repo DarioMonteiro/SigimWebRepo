@@ -515,7 +515,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             foreach (var formaPagamentoEM in entradaMaterial.ListaFormaPagamento)
             {
-                var percentualTitulo = formaPagamentoEM.Valor / valorTotalLiberado * 100;
+                var percentualTitulo = valorTotalLiberado > 0 ? (formaPagamentoEM.Valor / valorTotalLiberado * 100) : 0;
                 var descontoTitulo = (decimal)(valorDesconto * percentualTitulo / 100);
                 var valorImpostoTitulo = (decimal)(valorTotalImposto * percentualTitulo / 100);
                 var valorAbatimentoTitulo = descontoTitulo + valorImpostoTitulo;
@@ -540,7 +540,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     formaPagamentoEM.ListaTituloPagarAdiantamento.Add(tituloPagarAdiantamento);
                 }
                 else
-                {
+                {                    
+
                     if (!formaPagamentoEM.TituloPagarId.HasValue)
                     {
                         formaPagamentoEM.TituloPagar = new TituloPagar();
@@ -564,7 +565,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 					formaPagamentoEM.TituloPagar.Situacao = ParametrosOrdemCompra.GeraTituloAguardando.Value ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado;
 					formaPagamentoEM.TituloPagar.TipoDocumentoId = entradaMaterial.TipoNotaFiscalId;
 					formaPagamentoEM.TituloPagar.Documento = entradaMaterial.NumeroNotaFiscal;
-					formaPagamentoEM.TituloPagar.Desconto = entradaMaterial.Desconto;
+                    formaPagamentoEM.TituloPagar.Desconto = descontoTitulo;
                     formaPagamentoEM.TituloPagar.DataLimiteDesconto = null;
                     if (valorDesconto > 0)
                         formaPagamentoEM.TituloPagar.DataLimiteDesconto = formaPagamentoEM.Data;
@@ -583,21 +584,22 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
                 #region Apropriação de Títulos
 
-                foreach (var ordemCompra in entradaMaterial.ListaItens.Select(l => l.OrdemCompraItem.OrdemCompra).Distinct())
-                {
+                //foreach (var ordemCompra in entradaMaterial.ListaItens.Select(l => l.OrdemCompraItem.OrdemCompra).Distinct())
+                //{
+                    var ordemCompra = formaPagamentoEM.OrdemCompraFormaPagamento.OrdemCompra;
                     var listaItensPorOC = entradaMaterial.ListaItens.Where(l => l.OrdemCompraItem.OrdemCompraId == ordemCompra.Id).ToList();
-                    var valorTotal = listaItensPorOC.Sum(o => o.ValorTotal);
+                    var valorTotal = decimal.Round(listaItensPorOC.Sum(o => o.ValorTotal).Value, 5);
                     var listaCodigoClasses = entradaMaterial.ListaItens
                         .Where(l => l.OrdemCompraItem.OrdemCompraId == ordemCompra.Id)
                         .Select(o => o.CodigoClasse).Distinct();
 
                     foreach (var codigoClasse in listaCodigoClasses)
                     {
-                        var valorTotalClasse = listaItensPorOC.Where(l => l.CodigoClasse == codigoClasse).Sum(o => o.ValorTotal);
-                        var percentualClasse = decimal.Round((valorTotalClasse / valorTotal * 100).Value, 5);
+                        var valorTotalClasse = decimal.Round(listaItensPorOC.Where(l => l.CodigoClasse == codigoClasse).Sum(o => o.ValorTotal).Value, 5);
+                        var percentualClasse = decimal.Round((valorTotalClasse / valorTotal * 100), 5);
                         var valorAbatimentoClasse = decimal.Round((valorAbatimentoTitulo * percentualClasse / 100), 5);
 
-                        var valorClasseTitulo = (formaPagamentoEM.Valor * percentualClasse / 100) - valorAbatimentoClasse;
+                        var valorClasseTitulo = decimal.Round((formaPagamentoEM.Valor * percentualClasse / 100) - valorAbatimentoClasse, 5);
                         var percentualClasseTitulo = decimal.Round((valorClasseTitulo / formaPagamentoEM.Valor * 100), 5);
 
                         if (tituloPagarAdiantamento != null)
@@ -643,7 +645,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     {
                         ordemCompra.Situacao = SituacaoOrdemCompra.Fechada;
                     }
-                }
+                //}
 
                 #endregion
 
@@ -654,7 +656,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 	            {
                     ImpostoPagar impostoPagar = new ImpostoPagar();
                     impostoPagar.TituloPagar = formaPagamentoEM.TituloPagar;
-                    impostoPagar.ImpostoFinanceiroId = imposto.ImpostoFinanceiroId;
+                    impostoPagar.ImpostoFinanceiroId = imposto.ImpostoFinanceiroId.HasValue ? imposto.ImpostoFinanceiroId.Value : 0;
                     impostoPagar.BaseCalculo = decimal.Round((imposto.BaseCalculo * percentualTitulo / 100), 5);
                     impostoPagar.ValorImposto = decimal.Round((imposto.Valor * percentualTitulo / 100), 5);
 
@@ -1083,7 +1085,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 var listaFormaPagamentoNaoUtulizada = ordemCompra.ListaOrdemCompraFormaPagamento.Where(l => l.EhUtilizada == false);
                 List<Apropriacao> listaApropriacao = listaFormaPagamentoNaoUtulizada.SelectMany(o => o.TituloPagar.ListaApropriacao).ToList();
-                if (entradaMaterial.TituloFreteId.HasValue && entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado)
+                if (entradaMaterial.TituloFreteId.HasValue && entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado && entradaMaterial.OrdemCompraFreteId == ordemCompra.Id)
                     listaApropriacao.AddRange(entradaMaterial.TituloFrete.ListaApropriacao);
 
                 for (int i = listaApropriacao.Count() - 1; i >= 0; i--)
@@ -1115,7 +1117,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                                 formaPagamento.TituloPagar.ListaApropriacao.Add(apropriacao);
                             }
 
-                            if (entradaMaterial.TituloFreteId.HasValue && (entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado))
+                            if (entradaMaterial.TituloFreteId.HasValue && (entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado) && entradaMaterial.OrdemCompraFreteId == ordemCompra.Id)
                             {
                                 Apropriacao apropriacaoTituloFrete = new Apropriacao();
                                 apropriacaoTituloFrete.CodigoClasse = codigoClasse;
@@ -1391,15 +1393,18 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                     var estoqueMaterial = estoqueRepository.ObterEstoqueMaterialAtivoPeloCentroCustoEMaterial(entradaMaterial.CodigoCentroCusto, item.OrdemCompraItem.MaterialId, l => l.Estoque);
                     if (estoqueMaterial != null)
                     {
-                        if (item.Quantidade > estoqueMaterial.Quantidade)
+                        if (estoqueMaterial.Estoque.ListaMovimento.Any(l => l.EntradaMaterialId == entradaMaterial.Id))
                         {
-                            if (estoqueMaterial.Material.EhControladoPorEstoque.Value)
+                            if (item.Quantidade > estoqueMaterial.Quantidade)
                             {
-                                var msg = "Quantidade do estoque: " + estoqueMaterial.Quantidade.ToString() + "\n";
-                                msg += "Quantidade da entrada de material: " + item.Quantidade.ToString() + "\n";
-                                msg += "A quantidade do material: '" + item.OrdemCompraItem.Material.Descricao + "' que será retirado do estoque '" + estoqueMaterial.Estoque.Descricao + "' está maior que o saldo existente.";
-                                messageQueue.Add(msg, TypeMessage.Error);
-                                return false;
+                                if (estoqueMaterial.Material.EhControladoPorEstoque.Value)
+                                {
+                                    var msg = "Quantidade do estoque: " + estoqueMaterial.Quantidade.ToString() + "\n";
+                                    msg += "Quantidade da entrada de material: " + item.Quantidade.ToString() + "\n";
+                                    msg += "A quantidade do material: '" + item.OrdemCompraItem.Material.Descricao + "' que será retirado do estoque '" + estoqueMaterial.Estoque.Descricao + "' está maior que o saldo existente.";
+                                    messageQueue.Add(msg, TypeMessage.Error);
+                                    return false;
+                                }
                             }
                         }
                     }

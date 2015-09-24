@@ -31,6 +31,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .WithMany(c => c.ListaTituloReceber)
                 .HasForeignKey(l => l.TipoDocumentoId);
 
+            Property(l => l.ValorImposto)
+                .HasPrecision(18, 5)
+                .HasColumnName("valorImposto");
+
+            Property(l => l.Retencao)
+                .HasPrecision(18, 5)
+                .HasColumnName("retencao");
+
             HasMany<ContratoRetificacaoItemMedicao>(l => l.ListaContratoRetificacaoItemMedicao)
                 .WithOptional(l => l.TituloReceber)
                 .HasForeignKey(c => c.TituloReceberId);
@@ -39,6 +47,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .WithOptional(c => c.TituloReceber)
                 .HasForeignKey(c => c.TituloReceberId);
 
+            HasMany<ImpostoReceber>(l => l.ListaImpostoReceber)
+                .WithRequired(l => l.TituloReceber)
+                .HasForeignKey(c => c.TituloReceberId);
         }
     }
 }

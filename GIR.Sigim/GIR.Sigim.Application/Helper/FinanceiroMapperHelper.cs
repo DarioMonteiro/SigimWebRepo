@@ -37,6 +37,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<ImpostoPagar, ImpostoPagarDTO>();
             Mapper.CreateMap<ImpostoPagarDTO, ImpostoPagar>();
 
+            Mapper.CreateMap<ImpostoReceber, ImpostoReceberDTO>();
+            Mapper.CreateMap<ImpostoReceberDTO, ImpostoReceber>();
+
             Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
             Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
 

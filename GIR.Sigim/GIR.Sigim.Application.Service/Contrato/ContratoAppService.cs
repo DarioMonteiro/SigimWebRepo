@@ -38,6 +38,10 @@ namespace GIR.Sigim.Application.Service.Contrato
         private IBloqueioContabilAppService bloqueioContabilAppService;
         private ITituloPagarRepository tituloPagarRepository;
         private ITituloReceberRepository tituloReceberRepository;
+        private ITituloPagarAppService tituloPagarAppService;
+        private IImpostoFinanceiroRepository impostoFinanceiroRepository;
+        private IParametrosFinanceiroRepository parametrosFinanceiroRepository;
+
 
         #endregion
 
@@ -51,6 +55,9 @@ namespace GIR.Sigim.Application.Service.Contrato
                                   IParametrosContratoRepository parametrosContratoRepository,
                                   ITituloPagarRepository tituloPagarRepository,
                                   ITituloReceberRepository tituloReceberRepository,
+                                  ITituloPagarAppService tituloPagarAppService,
+                                  IImpostoFinanceiroRepository impostoFinanceiroRepository,
+                                  IParametrosFinanceiroRepository parametrosFinanceiroRepository,
                                   MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -62,6 +69,9 @@ namespace GIR.Sigim.Application.Service.Contrato
             this.parametrosContratoRepository = parametrosContratoRepository;
             this.tituloPagarRepository = tituloPagarRepository;
             this.tituloReceberRepository = tituloReceberRepository;
+            this.tituloPagarAppService = tituloPagarAppService;
+            this.impostoFinanceiroRepository = impostoFinanceiroRepository;
+            this.parametrosFinanceiroRepository = parametrosFinanceiroRepository;
         }
 
         #endregion
@@ -1178,8 +1188,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                 item.PosicaoLista = posicaoLista;
                 posicaoLista = posicaoLista + 1;
                 item.Selecionado = false;
+                item.DataSelecionado = 0;
             }
-
         }
 
         public bool EhPermitidoHabilitarBotoes(ContratoDTO dto)
@@ -1276,7 +1286,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
 
             if (listaItemLiberacaoDTO.Any(l => l.Selecionado == true && l.CodigoSituacao != (int)SituacaoMedicao.AguardandoAprovacao)){
-                messageQueue.Add("Existe(m) medição(ões) com situacao diferente de Aguardando aprovação !", TypeMessage.Info);
+                messageQueue.Add("Existe(m) medição(ões) com situação diferente de Aguardando aprovação !", TypeMessage.Info);
                 return retorno;
             }
 
@@ -1398,9 +1408,10 @@ namespace GIR.Sigim.Application.Service.Contrato
             return arquivo;
         }
 
-        public bool ValidarTrocaDataVencimentoListaItemLiberacao(int contratoId, Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        public bool ValidarTrocaDataVencimentoListaItemLiberacao(Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
         {
             bool retorno = false;
+
             if (listaItemLiberacaoDTO == null)
             {
                 messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
@@ -1442,7 +1453,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         {
             bool retorno = false;
 
-            if (!ValidarTrocaDataVencimentoListaItemLiberacao(contratoId, dataVencimento, listaItemLiberacaoDTO))
+            if (!ValidarTrocaDataVencimentoListaItemLiberacao(dataVencimento, listaItemLiberacaoDTO))
             {
                 return retorno;
             }
@@ -1504,9 +1515,674 @@ namespace GIR.Sigim.Application.Service.Contrato
             return retorno;
         }
 
+        public bool ValidarAssociacaoNotaFiscalListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO, out ItemLiberacaoDTO itemLiberacao)
+        {
+            bool retorno = false;
+            itemLiberacao = new ItemLiberacaoDTO();
+
+            if (listaItemLiberacaoDTO == null)
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (listaItemLiberacaoDTO.All(l => l.Selecionado == false))
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return retorno;
+            }
+
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification, l => l.ListaContratoRetificacaoItemMedicao);
+
+            //RETORNA O ULTIMO ITEM SELECIONADO
+            ItemLiberacaoDTO item = listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao < (int)SituacaoMedicao.Liberado).OrderByDescending(l => l.DataSelecionado).FirstOrDefault();
+
+            if (item == null)
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada !", TypeMessage.Info);
+                return retorno;
+            }
+
+            if (item.Selecionado == true && item.CodigoSituacao > (int)SituacaoMedicao.AguardandoLiberacao)
+            {
+                messageQueue.Add("O item escolhido não possui permissão para essa funcionalidade !", TypeMessage.Info);
+                return retorno;
+            }
+
+            itemLiberacao = item;
+            retorno = true;
+
+            return retorno;
+        }
+
+        public bool AssociarNotaFiscalListaItemLiberacao(int? contratoId, int? contratoRetificacaoItemMedicaoId,int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao, Nullable<DateTime> dataVencimento)
+        {
+            bool retorno = false;
+
+            if (!ValidacaoAssociacaoNotaFiscalListaItemLiberacao(contratoRetificacaoItemMedicaoId,tipoDocumentoId, numeroDocumento, dataEmissao, dataVencimento))
+            {
+                return retorno;
+            }
+
+            var specificationContrato = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specificationContrato, l => l.ListaContratoRetificacaoItemMedicao);
+            ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicaoSelecionado = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == contratoRetificacaoItemMedicaoId).FirstOrDefault();
+            int tipoDocumentoIdSelecionado = contratoRetificacaoItemMedicaoSelecionado.TipoDocumentoId;
+            string numeroDocumentoSelecionado = contratoRetificacaoItemMedicaoSelecionado.NumeroDocumento;
+            
+            bool associou = false;
+            foreach (ContratoRetificacaoItemMedicao medicao in contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.TipoDocumentoId == tipoDocumentoIdSelecionado &&
+                                                                                                                       l.NumeroDocumento == numeroDocumentoSelecionado &&
+                                                                                                                       l.Situacao < SituacaoMedicao.Liberado))
+            {
+                medicao.TipoDocumentoId = tipoDocumentoId.Value;
+                medicao.NumeroDocumento = numeroDocumento;
+                medicao.DataEmissao = dataEmissao.Value;
+                medicao.DataVencimento = dataVencimento.Value;
+                associou = true;
+            }
+
+            if (!associou)
+            {
+                messageQueue.Add("A(s) medição(ões) escolhidas estão desatualizadas recupere o contrato novamente !", TypeMessage.Info);
+                return retorno;
+            }
+
+            try
+            {
+                if (Validator.IsValid(contrato, out validationErrors))
+                {
+                    contratoRepository.Alterar(contrato);
+                    contratoRepository.UnitOfWork.Commit();
+
+                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                    retorno = true;
+                    return retorno;
+                }
+                else
+                {
+                    messageQueue.AddRange(validationErrors, TypeMessage.Error);
+                    return retorno;
+                }
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return retorno;
+        }
+
+        public bool AprovarLiberarListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        {
+            bool retorno = false;
+            if (listaItemLiberacaoDTO == null)
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (listaItemLiberacaoDTO.All(l => l.Selecionado == false))
+            {
+                messageQueue.Add("Nenhuma liberação foi selecionada", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (listaItemLiberacaoDTO.Any(l => l.Selecionado == true && l.CodigoSituacao > (int)SituacaoMedicao.AguardandoLiberacao))
+            {
+                messageQueue.Add("Existe(m) medição(ões) com situação diferente de Aguardando aprovação ou Aguardando liberação!", TypeMessage.Info);
+                return retorno;
+            }
+
+            var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification, l => l.ContratoDescricao,
+                                                                                                                 l => l.ListaContratoRetificacaoItem, 
+                                                                                                                 l => l.ListaContratoRetificacaoItemMedicao, 
+                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaApropriacao),
+                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar),
+                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaApropriacao),
+                                                                                                                 //l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaImpostoReceber), 
+                                                                                                                 l => l.ListaContratoRetificacaoItemImposto.Select(i => i.ImpostoFinanceiro),
+                                                                                                                 l => l.ListaContratoRetencao);
+            ParametrosContrato parametros = parametrosContratoRepository.Obter();
+            bool geraTituloSituacaoAguardandoLiberacao = parametros.GeraTituloAguardando.HasValue ? parametros.GeraTituloAguardando.Value : false;
+            ParametrosFinanceiro parametrosFinanceiro = parametrosFinanceiroRepository.Obter();
+            bool geraTituloImposto = parametrosFinanceiro.GeraTituloImposto.HasValue ? parametrosFinanceiro.GeraTituloImposto.Value : false;
+
+
+            bool ehValido = true;
+            foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao < (int)SituacaoMedicao.Liberado))
+            {
+                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
+                Nullable<DateTime> dataBloqueio;
+                string msg = "";
+
+                if (bloqueioContabilAppService.OcorreuBloqueioContabil(contrato.CodigoCentroCusto,
+                                                                       contratoRetificacaoItemMedicao.DataEmissao,
+                                                                       out dataBloqueio))
+                {
+                    msg = string.Format(Resource.Sigim.ErrorMessages.BloqueioContabilEncontrado, dataBloqueio.Value.ToShortDateString(), contrato.CodigoCentroCusto);
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    ehValido = false;
+                    break;
+                }
+
+                int clienteId = ObtemClienteFornecedor(contrato,contratoRetificacaoItemMedicao);
+
+                if (tituloPagarAppService.ExisteNumeroDocumento(contratoRetificacaoItemMedicao.DataEmissao, contratoRetificacaoItemMedicao.DataVencimento, contratoRetificacaoItemMedicao.NumeroDocumento, clienteId))
+                {
+                    msg = "Documento " + contratoRetificacaoItemMedicao.NumeroDocumento + " existente no Financeiro !";
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    ehValido = false;
+                    break;
+                }
+            }
+
+            if (!ehValido)
+            {
+                return retorno;
+            }
+
+            List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas = new List<ContratoRetificacaoItemMedicao>();
+
+            CriarListaDeMedicaoSelecionadas(listaItemLiberacaoDTO, contrato, listaMedicaoSelecionadas);
+            AtualizarContratoRetencao(listaMedicaoSelecionadas, contrato);
+            ReprovisionarContratoProvisao(listaMedicaoSelecionadas, contrato);
+            GerarTitulosApropriadosLiberacao(listaMedicaoSelecionadas, contrato, geraTituloSituacaoAguardandoLiberacao, geraTituloImposto);
+
+
+            return retorno;
+        }
+
         #endregion
 
         #region Métodos Privados
+
+        private void GerarTitulosApropriadosLiberacao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato, bool geraTituloAguardandoLiberacao, bool geraTituloImposto )
+        {
+
+            string identificacaoTitulo = MontaIdentificacaoTitulo(contrato);
+
+            var medicaoGrupoTitulos = listaMedicaoSelecionadas.GroupBy(l => new { l.MultiFornecedorId, l.TipoDocumentoId, l.NumeroDocumento, l.DataVencimento, l.DataEmissao }).Select(o => o.First()).ToList();
+
+            List<ContratoRetificacaoItemImposto> listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
+
+            foreach (var medicaoItemTitulo in medicaoGrupoTitulos)
+            {
+                var listaItensMedicaoGrupoTitulos = listaMedicaoSelecionadas.Where(l =>
+                                                                            l.MultiFornecedorId == medicaoItemTitulo.MultiFornecedorId &&
+                                                                            l.TipoDocumentoId == medicaoItemTitulo.TipoDocumentoId &&
+                                                                            l.NumeroDocumento == medicaoItemTitulo.NumeroDocumento &&
+                                                                            l.DataVencimento == medicaoItemTitulo.DataVencimento &&
+                                                                            l.DataEmissao == medicaoItemTitulo.DataEmissao).ToList();
+
+                decimal valorTitulo = listaItensMedicaoGrupoTitulos.Sum(o => o.Valor);
+                decimal? valorDesconto = listaItensMedicaoGrupoTitulos.Where(o => o.Desconto.HasValue && o.Desconto.Value > 0).Sum(o => o.Desconto);
+                decimal? valorRetido = listaItensMedicaoGrupoTitulos.Where(o => o.ValorRetido.HasValue && o.ValorRetido.Value > 0).Sum(o => o.ValorRetido);
+                string motivoDesconto = listaItensMedicaoGrupoTitulos.Where(o => o.MotivoDesconto != "").LastOrDefault() != null ? listaItensMedicaoGrupoTitulos.Where(o => o.MotivoDesconto != "").LastOrDefault().MotivoDesconto : null;
+
+                int clienteId = ObtemClienteFornecedor(contrato, medicaoItemTitulo);
+
+                TituloPagar tituloPagar = new TituloPagar();
+
+                if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
+                {
+                    PreencherTituloPagarMedicao(tituloPagar,
+                                                clienteId,
+                                                identificacaoTitulo,
+                                                geraTituloAguardandoLiberacao ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado,
+                                                medicaoItemTitulo.TipoDocumentoId,
+                                                medicaoItemTitulo.NumeroDocumento,
+                                                medicaoItemTitulo.DataVencimento,
+                                                medicaoItemTitulo.DataEmissao,
+                                                valorTitulo,
+                                                valorDesconto,
+                                                motivoDesconto,
+                                                valorRetido);
+
+                    listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
+                    foreach (ContratoRetificacaoItemMedicao medicao in listaItensMedicaoGrupoTitulos)
+                    {
+                        ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == medicao.Id).FirstOrDefault();
+                        contratoRetificacaoItemMedicao.TituloPagar = tituloPagar;
+
+                        listaImpostosMedicaoSelecionadas.AddRange(medicao.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto);
+                    }
+
+                    var impostosGrupo = listaImpostosMedicaoSelecionadas.GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
+
+                    foreach (var impostoItem in impostosGrupo)
+                    {
+                        decimal baseCalculo = (valorTitulo * impostoItem.PercentualBaseCalculo) / 100;
+                        if (baseCalculo > 0 && impostoItem.ImpostoFinanceiro.Aliquota > 0)
+                        {
+                            decimal valorImposto = Math.Round(((baseCalculo * impostoItem.ImpostoFinanceiro.Aliquota) / 100), 2);
+
+                            bool ehRetido = impostoItem.ImpostoFinanceiro.EhRetido.HasValue ? impostoItem.ImpostoFinanceiro.EhRetido.Value : false;
+                            bool ehIndireto = impostoItem.ImpostoFinanceiro.Indireto.HasValue ? impostoItem.ImpostoFinanceiro.Indireto.Value : false;
+                            if (ehRetido || ehIndireto) tituloPagar.ValorImposto = valorImposto;
+
+                            ImpostoPagar impostoPagar = new ImpostoPagar();
+                            PreencherImpostoPagar(impostoPagar,
+                                                  impostoItem.ImpostoFinanceiroId,
+                                                  tituloPagar,
+                                                  baseCalculo,
+                                                  valorImposto);
+
+                            tituloPagar.ListaImpostoPagar.Add(impostoPagar);
+
+
+                            //if (geraTituloImposto)
+                            //{
+                            //    decimal valorLiquido = valorTitulo;
+                            //    if (valorRetido.HasValue) valorLiquido = valorLiquido - valorRetido.Value;
+                            //    if (valorDesconto.HasValue) valorLiquido = valorLiquido - valorDesconto.Value;
+
+                            //    TituloPagar tituloImpostoPagar = new TituloPagar();
+                            //    tituloImpostoPagar.ValorImposto = valorImposto;
+                            //    tituloImpostoPagar.Identificacao = 
+
+                            //}
+
+                        }
+                    }
+
+                    var medicaoGrupoApropriacao = listaItensMedicaoGrupoTitulos.GroupBy(l => new { l.MultiFornecedorId, l.TipoDocumentoId, l.NumeroDocumento, l.DataVencimento, l.DataEmissao, l.ContratoRetificacaoItem.CodigoClasse, l.Contrato.CodigoCentroCusto }).Select(o => o.First()).ToList();
+
+                    listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
+                    foreach (var medicaoItemApropriacao in medicaoGrupoApropriacao)
+                    {
+                        var listaItensMedicaoGrupoApropriacao = listaMedicaoSelecionadas.Where(l =>
+                                                                                    l.MultiFornecedorId == medicaoItemApropriacao.MultiFornecedorId &&
+                                                                                    l.TipoDocumentoId == medicaoItemApropriacao.TipoDocumentoId &&
+                                                                                    l.NumeroDocumento == medicaoItemApropriacao.NumeroDocumento &&
+                                                                                    l.DataVencimento == medicaoItemApropriacao.DataVencimento &&
+                                                                                    l.DataEmissao == medicaoItemApropriacao.DataEmissao &&
+                                                                                    l.ContratoRetificacaoItem.CodigoClasse == medicaoItemApropriacao.ContratoRetificacaoItem.CodigoClasse &&
+                                                                                    l.Contrato.CodigoCentroCusto == medicaoItemApropriacao.Contrato.CodigoCentroCusto
+                                                                                    ).ToList();
+
+                        decimal valorAgrupado = listaItensMedicaoGrupoApropriacao.Sum(o => o.Valor);
+                        decimal? valorDescontoAgrupado = listaItensMedicaoGrupoApropriacao.Where(o => o.Desconto.HasValue && o.Desconto.Value > 0).Sum(o => o.Desconto);
+                        decimal? valorRetidoAgrupado = listaItensMedicaoGrupoApropriacao.Where(o => o.ValorRetido.HasValue && o.ValorRetido.Value > 0).Sum(o => o.ValorRetido);
+
+                        decimal valorApropriacao = valorAgrupado;
+                        if (valorRetido.HasValue) valorApropriacao = valorApropriacao - valorRetidoAgrupado.Value;
+                        if (valorDesconto.HasValue) valorApropriacao = valorApropriacao - valorDescontoAgrupado.Value;
+
+                        foreach (ContratoRetificacaoItemMedicao medicao in listaItensMedicaoGrupoApropriacao)
+                        {
+                            listaImpostosMedicaoSelecionadas.AddRange(medicao.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto);
+                        }
+
+                        impostosGrupo = listaImpostosMedicaoSelecionadas.GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
+
+                        decimal valorImposto = 0;
+                        foreach (var impostoItem in impostosGrupo)
+                        {
+                            decimal baseCalculo = (valorAgrupado * impostoItem.PercentualBaseCalculo) / 100;
+
+                            if (baseCalculo > 0)
+                            {
+                                bool ehRetido = impostoItem.ImpostoFinanceiro.EhRetido.HasValue ? impostoItem.ImpostoFinanceiro.EhRetido.Value : false;
+                                bool ehIndireto = impostoItem.ImpostoFinanceiro.Indireto.HasValue ? impostoItem.ImpostoFinanceiro.Indireto.Value : false;
+                                if (ehRetido || ehIndireto) valorImposto = valorImposto + Math.Round(((baseCalculo * impostoItem.ImpostoFinanceiro.Aliquota) / 100), 2);
+                            }
+                        }
+
+                        decimal percentualApropriado = Math.Round((((valorApropriacao - valorImposto) / valorAgrupado) * 100), 5);
+                        decimal valorApropriado = valorApropriacao - valorImposto;
+
+                        Apropriacao apropriacao = new Apropriacao();
+                        PreencherApropriacaoTituloPagar(apropriacao,
+                                                        medicaoItemApropriacao.ContratoRetificacaoItem.CodigoClasse,
+                                                        medicaoItemApropriacao.Contrato.CodigoCentroCusto,
+                                                        medicaoItemApropriacao.TituloPagar,
+                                                        percentualApropriado,
+                                                        valorApropriado);
+
+                        tituloPagar.ListaApropriacao.Add(apropriacao);
+
+                    }
+                }
+            }
+        }
+
+
+        private string MontaIdentificacaoTitulo(Domain.Entity.Contrato.Contrato contrato)
+        {
+            string numeroContrato10Caracteres = contrato.Id.Value.ToString();
+            if (contrato.Id.Value.ToString().Length > 10)
+            {
+                numeroContrato10Caracteres = contrato.Id.Value.ToString().Substring(0, 10);
+            }
+            string descricaoContrato40Caracteres = contrato.ContratoDescricao.Descricao;
+            if (contrato.ContratoDescricao.Descricao.Length > 40)
+            {
+                descricaoContrato40Caracteres = contrato.ContratoDescricao.Descricao.Substring(0, 40);
+            }
+
+            string identificacao = "Contrato : " + numeroContrato10Caracteres + " - " + descricaoContrato40Caracteres;
+
+            return identificacao;
+        }
+
+        private void PreencherApropriacaoTituloPagar(Apropriacao apropriacao,string codigoClasse, string codigoCentroCusto,TituloPagar tituloPagar, decimal percentual, decimal valor)
+        {
+            apropriacao.CodigoClasse = codigoClasse;
+            apropriacao.CodigoCentroCusto = codigoCentroCusto;
+            apropriacao.TituloPagar = tituloPagar;
+            apropriacao.Percentual = percentual;
+            apropriacao.Valor = valor;
+        }
+
+        private void PreencherImpostoPagar(ImpostoPagar impostoPagar,int impostoFinanceiroId, TituloPagar tituloPagar,decimal baseCalculo,decimal valorImposto ){
+            impostoPagar.ImpostoFinanceiroId = impostoFinanceiroId;
+            impostoPagar.TituloPagar = tituloPagar;
+            impostoPagar.BaseCalculo = baseCalculo;
+            impostoPagar.ValorImposto = valorImposto;
+        }
+
+        private void PreencherTituloPagarMedicao(TituloPagar tituloPagar, 
+                                                 int? clienteId, 
+                                                 string identificacao,
+                                                 SituacaoTituloPagar situacao, 
+                                                 int? tipoDocumentoId, 
+                                                 string numeroDocumento,
+                                                 Nullable<DateTime> dataVencimento,
+                                                 Nullable<DateTime> dataEmissao,
+                                                 decimal totalValorMedido,
+                                                 decimal? totalValorDesconto,
+                                                 string motivoDesconto,
+                                                 decimal? totalValorRetido){
+            tituloPagar.ClienteId =  clienteId.Value;
+            tituloPagar.TipoCompromissoId = null;
+            tituloPagar.Identificacao = identificacao;
+            tituloPagar.Situacao = situacao;
+            tituloPagar.TipoDocumentoId = tipoDocumentoId;
+            tituloPagar.Documento = numeroDocumento;
+            tituloPagar.DataVencimento = dataVencimento.Value;
+            tituloPagar.DataEmissaoDocumento = dataEmissao.Value;
+            tituloPagar.TipoTitulo = 0;
+            tituloPagar.TituloPaiId = 0;
+            tituloPagar.Parcela = 0;
+            tituloPagar.ValorTitulo = totalValorMedido;
+            tituloPagar.ValorImposto = 0;                      
+            tituloPagar.Desconto = totalValorDesconto;
+            tituloPagar.DataLimiteDesconto = dataVencimento.Value;
+            tituloPagar.Multa = 0;
+            tituloPagar.EhMultaPercentual = false;
+            tituloPagar.TaxaPermanencia = 0;
+            tituloPagar.EhTaxaPermanenciaPercentual = false;
+            tituloPagar.MotivoDesconto = motivoDesconto;
+            tituloPagar.LoginUsuarioCadastro = UsuarioLogado.Login;
+            tituloPagar.DataCadastro = DateTime.Now;
+            tituloPagar.LoginUsuarioSituacao = UsuarioLogado.Login;
+            tituloPagar.DataSituacao = DateTime.Now;
+            tituloPagar.Retencao = totalValorRetido;
+            tituloPagar.SistemaOrigem = "CTR";
+        }
+
+        private void CriarListaDeMedicaoSelecionadas(List<ItemLiberacaoDTO> listaItemLiberacaoDTO, Domain.Entity.Contrato.Contrato contrato, List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas){
+            foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao < (int)SituacaoMedicao.Liberado))
+            {
+                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
+                listaMedicaoSelecionadas.Add(contratoRetificacaoItemMedicao);
+            }
+        }
+
+        private int ObtemClienteFornecedor(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao)
+        {
+            int clienteFornecedorId = 0;
+            if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
+            {
+                clienteFornecedorId = contrato.ContratadoId;
+            }
+            else
+            {
+                clienteFornecedorId = contrato.ContratanteId;
+            }
+            if (contratoRetificacaoItemMedicao.MultiFornecedorId.HasValue)
+            {
+                clienteFornecedorId = contratoRetificacaoItemMedicao.MultiFornecedorId.Value;
+            }
+
+            return clienteFornecedorId;
+        }
+
+        private void AtualizarContratoRetencao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato)
+        {
+            foreach (ContratoRetificacaoItemMedicao item in listaMedicaoSelecionadas)
+            {
+                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.Id).FirstOrDefault();
+
+                if (contratoRetificacaoItemMedicao.ValorRetido > 0)
+                {
+                    ContratoRetencao contratoRetencao = new ContratoRetencao();
+                    contratoRetencao.ContratoId = contratoRetificacaoItemMedicao.ContratoId;
+                    contratoRetencao.ContratoRetificacaoId = contratoRetificacaoItemMedicao.ContratoRetificacaoId;
+                    contratoRetencao.ContratoRetificacaoItemId = contratoRetificacaoItemMedicao.ContratoRetificacaoItemId;
+                    contratoRetencao.ContratoRetificacaoItemMedicaoId = contratoRetificacaoItemMedicao.Id.Value;
+                    contratoRetencao.ValorRetencao = contratoRetificacaoItemMedicao.ValorRetido;
+                    contrato.ListaContratoRetencao.Add(contratoRetencao);
+                }
+            }
+        }
+
+        private void ReprovisionarContratoProvisao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato)
+        {
+            if (contrato == null) return;
+
+            ContratoRetificacao ultimoContratoRetificacao = contrato.ListaContratoRetificacao.Last();
+
+            foreach (ContratoRetificacaoItemMedicao item in listaMedicaoSelecionadas)
+            {
+                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.Id).FirstOrDefault();
+
+                ContratoRetificacaoProvisao contratoRetificacaoProvisao = contrato.ListaContratoRetificacaoProvisao.Where(l => l.SequencialItem == contratoRetificacaoItemMedicao.SequencialItem && l.SequencialCronograma == contratoRetificacaoItemMedicao.SequencialCronograma).FirstOrDefault();
+
+                bool ehProvisionamentoParcial = ReCalcularProvisao(contratoRetificacaoProvisao, contratoRetificacaoItemMedicao);
+
+                int clienteId = ObtemClienteFornecedor(contrato, contratoRetificacaoItemMedicao);
+
+                decimal valorRetencao = 0;
+
+                if (ehProvisionamentoParcial)
+                {
+                    ContratoRetificacaoItem contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemMedicao.ContratoRetificacaoItemId).FirstOrDefault();
+
+                    valorRetencao = CalcularValorRetencao(ultimoContratoRetificacao, contratoRetificacaoProvisao, contratoRetificacaoItem);
+
+                    if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
+                    {
+                        ReApropriarContratoProvisaoParcialAPagar(contratoRetificacaoProvisao,valorRetencao);
+                        ReCalcularImpostoProvisaoParcialAPagar(contrato, contratoRetificacaoProvisao);
+                    }
+                    else
+                    {
+                        ReApropriarContratoProvisaoParcialAReceber(contratoRetificacaoProvisao, valorRetencao);
+                        ReCalcularImpostoProvisaoParcialAReceber(contrato, contratoRetificacaoProvisao);
+                    }
+                }
+                else
+                {
+                    if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
+                    {
+                        if (contratoRetificacaoProvisao.TituloPagar.Situacao < SituacaoTituloPagar.Emitido)
+                        {
+                            contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Clear();
+                            contratoRetificacaoProvisao.TituloPagar.ListaApropriacao.Clear();
+                            contratoRetificacaoProvisao.TituloPagar.Id = null;
+                            contratoRetificacaoProvisao.TituloPagar = null;
+                        }
+                    }
+                    else
+                    {
+                        if (contratoRetificacaoProvisao.TituloReceber.Situacao < SituacaoTituloReceber.Predatado)
+                        {
+                            contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Clear();
+                            contratoRetificacaoProvisao.TituloReceber.ListaApropriacao.Clear();
+                            contratoRetificacaoProvisao.TituloReceber.Id = null;
+                            contratoRetificacaoProvisao.TituloReceber = null;
+                        }
+                    }
+
+                    contrato.ListaContratoRetificacaoProvisao.Remove(contratoRetificacaoProvisao);
+                }
+            }
+        }
+
+        void ReCalcularImpostoProvisaoParcialAReceber(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoProvisao contratoRetificacaoProvisao)
+        {
+            if (contrato.ListaContratoRetificacaoItemImposto.Any(l => l.ContratoRetificacaoItemId == contratoRetificacaoProvisao.ContratoRetificacaoItemId))
+            {
+                decimal valorImpostoRetidoTotal = 0;
+
+                foreach (ContratoRetificacaoItemImposto contratoRetificacaoItemImposto in contrato.ListaContratoRetificacaoItemImposto.Where(l => l.ContratoRetificacaoItemId == contratoRetificacaoProvisao.ContratoRetificacaoItemId))
+                {
+                    ImpostoFinanceiro impostoFinanceiro = impostoFinanceiroRepository.ObterPeloId(contratoRetificacaoItemImposto.ImpostoFinanceiroId);
+
+                    decimal valorBaseCalculo = ((contratoRetificacaoProvisao.Valor * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100);
+                    decimal valorImposto = Math.Round(((valorBaseCalculo * impostoFinanceiro.Aliquota) / 100), 2);
+                    bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
+                    if (!ehRetido)
+                    {
+                        valorImpostoRetidoTotal = valorImpostoRetidoTotal + valorImposto;
+                    }
+                    ImpostoReceber impostoReceber = new ImpostoReceber();
+                    impostoReceber.TituloReceberId = contratoRetificacaoProvisao.TituloReceberId.Value;
+                    impostoReceber.ImpostoFinanceiroId = impostoFinanceiro.Id.Value;
+                    impostoReceber.BaseCalculo = valorBaseCalculo;
+                    impostoReceber.ValorImposto = valorImposto;
+                    contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
+                }
+                if (valorImpostoRetidoTotal > 0)
+                {
+                    contratoRetificacaoProvisao.TituloReceber.ValorImposto = valorImpostoRetidoTotal;
+                }
+            }
+        }
+
+        void ReCalcularImpostoProvisaoParcialAPagar(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoProvisao contratoRetificacaoProvisao)
+        {
+            if (contrato.ListaContratoRetificacaoItemImposto.Any(l => l.ContratoRetificacaoItemId == contratoRetificacaoProvisao.ContratoRetificacaoItemId))
+            {
+                decimal valorImpostoRetidoTotal = 0;
+
+                foreach (ContratoRetificacaoItemImposto contratoRetificacaoItemImposto in contrato.ListaContratoRetificacaoItemImposto.Where(l => l.ContratoRetificacaoItemId == contratoRetificacaoProvisao.ContratoRetificacaoItemId))
+                {
+                    ImpostoFinanceiro impostoFinanceiro = impostoFinanceiroRepository.ObterPeloId(contratoRetificacaoItemImposto.ImpostoFinanceiroId);
+
+                    decimal valorBaseCalculo = ((contratoRetificacaoProvisao.Valor * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100);
+                    decimal valorImposto = Math.Round(((valorBaseCalculo * impostoFinanceiro.Aliquota) / 100), 2);
+                    bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
+                    if (!ehRetido)
+                    {
+                        valorImpostoRetidoTotal = valorImpostoRetidoTotal + valorImposto;
+                    }
+                    ImpostoPagar impostoPagar = new ImpostoPagar();
+                    impostoPagar.TituloPagarId = contratoRetificacaoProvisao.TituloPagarId.Value;
+                    impostoPagar.ImpostoFinanceiroId = impostoFinanceiro.Id.Value;
+                    impostoPagar.BaseCalculo = valorBaseCalculo;
+                    impostoPagar.ValorImposto = valorImposto;
+                    contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
+                }
+                if (valorImpostoRetidoTotal > 0)
+                {
+                    contratoRetificacaoProvisao.TituloPagar.ValorImposto = valorImpostoRetidoTotal;
+                }
+            }
+        }
+
+        void ReApropriarContratoProvisaoParcialAReceber(ContratoRetificacaoProvisao contratoRetificacaoProvisao, decimal valorRetencao){
+            decimal valorApropriacao = contratoRetificacaoProvisao.Valor - valorRetencao;
+            decimal percentualApropriacao = Math.Round(((valorApropriacao / contratoRetificacaoProvisao.Valor) * 100), 5);
+
+            if (contratoRetificacaoProvisao.TituloReceber.Situacao < SituacaoTituloReceber.Predatado)
+            {
+                contratoRetificacaoProvisao.TituloReceber.ValorTitulo = contratoRetificacaoProvisao.Valor;
+                contratoRetificacaoProvisao.TituloReceber.Retencao = valorRetencao;
+            }
+
+            foreach (Apropriacao apropriacao in contratoRetificacaoProvisao.TituloReceber.ListaApropriacao)
+            {
+                apropriacao.Valor = valorApropriacao;
+                apropriacao.Percentual = percentualApropriacao;
+            }
+
+            if (contratoRetificacaoProvisao.TituloReceber.Situacao < SituacaoTituloReceber.Predatado)
+            {
+                contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Clear();
+            }
+        }
+
+        void ReApropriarContratoProvisaoParcialAPagar(ContratoRetificacaoProvisao contratoRetificacaoProvisao, decimal valorRetencao)
+        {
+            decimal valorApropriacao = contratoRetificacaoProvisao.Valor - valorRetencao;
+            decimal percentualApropriacao = Math.Round(((valorApropriacao / contratoRetificacaoProvisao.Valor) * 100), 5);
+
+            if (contratoRetificacaoProvisao.TituloPagar.Situacao < SituacaoTituloPagar.Emitido)
+            {
+                contratoRetificacaoProvisao.TituloPagar.ValorTitulo = contratoRetificacaoProvisao.Valor;
+                contratoRetificacaoProvisao.TituloPagar.Retencao = valorRetencao;
+            }
+
+            foreach (Apropriacao apropriacao in contratoRetificacaoProvisao.TituloPagar.ListaApropriacao)
+            {
+                apropriacao.Valor = valorApropriacao;
+                apropriacao.Percentual = percentualApropriacao;
+            }
+
+            if (contratoRetificacaoProvisao.TituloPagar.Situacao < SituacaoTituloPagar.Emitido)
+            {
+                contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Clear();
+            }
+        }
+
+        private decimal CalcularValorRetencao(ContratoRetificacao ultimoContratoRetificacao, ContratoRetificacaoProvisao contratoRetificacaoProvisao, ContratoRetificacaoItem contratoRetificacaoItem)
+        {
+            decimal retencaoContratual = ultimoContratoRetificacao.RetencaoContratual.HasValue ? ultimoContratoRetificacao.RetencaoContratual.Value : 0;
+            decimal retencaoItem = 0;
+            decimal baseRetencaoItem = 0;
+            decimal retencaoPrazoItem = 0;
+            decimal valorRetencao = 0;
+            if (retencaoContratual > 0)
+            {
+                valorRetencao = Math.Round(((contratoRetificacaoProvisao.Valor * retencaoContratual) / 100), 2);
+
+                retencaoItem = contratoRetificacaoItem.RetencaoItem.HasValue ? contratoRetificacaoItem.RetencaoItem.Value : 0;
+                baseRetencaoItem = contratoRetificacaoItem.BaseRetencaoItem.HasValue ? contratoRetificacaoItem.BaseRetencaoItem.Value : 0;
+                retencaoPrazoItem = contratoRetificacaoItem.RetencaoPrazoResgate.HasValue ? contratoRetificacaoItem.RetencaoPrazoResgate.Value : 0;
+
+                if (retencaoItem > 0)
+                {
+                    decimal valorTituloRetencao = (contratoRetificacaoProvisao.Valor * baseRetencaoItem) / 100;
+                    valorRetencao = Math.Round(((valorTituloRetencao * retencaoItem) / 100), 2);
+                }
+            }
+            return valorRetencao;
+        }
+
+        private bool ReCalcularProvisao(ContratoRetificacaoProvisao contratoRetificacaoProvisao, ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao)
+        {
+
+            decimal valorProvisaoNova = contratoRetificacaoProvisao.Valor - contratoRetificacaoItemMedicao.Valor;
+            decimal quantidadeNovaProvisao = contratoRetificacaoProvisao.Quantidade - contratoRetificacaoItemMedicao.Quantidade;
+
+            bool ehProvisionamentoParcial = valorProvisaoNova > 0 ? true : false;
+
+            if (ehProvisionamentoParcial)
+            {
+                contratoRetificacaoProvisao.Valor = valorProvisaoNova;
+                contratoRetificacaoProvisao.Quantidade = quantidadeNovaProvisao;
+            }
+            
+            return ehProvisionamentoParcial; 
+        }
 
         private ContratoRetificacaoItemMedicao InseriuMedicao(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoItemMedicaoDTO dto)
         {
@@ -2281,6 +2957,44 @@ namespace GIR.Sigim.Application.Service.Contrato
             return documentoAntecipacao;
         }
 
+        private bool ValidacaoAssociacaoNotaFiscalListaItemLiberacao(int? contratoRetificacaoItemMedicaoId,int? tipoDocumentoId,string numeroDocumento,Nullable<DateTime> dataEmissao,Nullable<DateTime> dataVencimento){
+            bool retorno = false;
+
+            if (!contratoRetificacaoItemMedicaoId.HasValue)
+            {
+                messageQueue.Add("Nenhum item foi selecionado.", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (!tipoDocumentoId.HasValue)
+            {
+                messageQueue.Add("Informe o campo tipo da nota.", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (string.IsNullOrEmpty(numeroDocumento))
+            {
+                messageQueue.Add("Informe o campo número do documento.", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (!dataEmissao.HasValue)
+            {
+                messageQueue.Add("Informe o campo data de emissão.", TypeMessage.Error);
+                return retorno;
+            }
+
+            if (!dataVencimento.HasValue)
+            {
+                messageQueue.Add("Informe o campo data de vencimento.", TypeMessage.Error);
+                return retorno;
+            }
+
+            retorno = true;
+            return retorno;
+        }
+
         #endregion
     }
+
 }

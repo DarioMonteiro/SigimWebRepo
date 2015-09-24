@@ -14,15 +14,22 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public SituacaoTituloReceber Situacao { get; set; }
         public TipoCompromisso TipoCompromisso { get; set; }
         public TipoDocumento TipoDocumento { get; set; }
-        public ContratoRetificacaoProvisao ContratoRetificacaoProvisao { get; set; }
+        public decimal? ValorImposto { get; set; }
+        public decimal? Retencao { get; set; }
 
+        public virtual ICollection<ImpostoReceber> ListaImpostoReceber { get; set; }
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }
         public ICollection<ContratoRetencaoLiberada> ListaContratoRetencaoLiberada { get; set; }
+        public ICollection<Apropriacao> ListaApropriacao { get; set; }
+        public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
 
         public TituloReceber()
         {
             this.ListaContratoRetificacaoItemMedicao = new HashSet<ContratoRetificacaoItemMedicao>();
             this.ListaContratoRetencaoLiberada = new HashSet<ContratoRetencaoLiberada>();
+            this.ListaApropriacao = new HashSet<Apropriacao>();
+            this.ListaImpostoReceber = new HashSet<ImpostoReceber>();
+            this.ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisao>();
         }
     }
 }

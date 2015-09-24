@@ -148,6 +148,20 @@ Date.prototype.toFormatDDMMYYYY = function () {
     return "";
 };
 
+Date.prototype.toFormatDDMMYYYYHHMISS = function () {
+    if (!isNaN(this)) {
+        var yyyy = this.getUTCFullYear().toString();
+        var mm = (this.getUTCMonth() + 1).toString(); // getMonth() is zero-based
+        var dd = this.getUTCDate().toString();
+        var hh = this.getUTCHours().toString();
+        var mi = this.getUTCMinutes().toString();
+        var ss = this.getUTCSeconds().toString();
+        return (dd[1] ? dd : "0" + dd[0]) + '/' + (mm[1] ? mm : "0" + mm[0]) + '/' + yyyy + ' ' + hh + ':' + mi + ':' + ss;
+    }
+    return "";
+};
+
+
 function highlight(data, search) {
     return data.replace(new RegExp("(" + stringToRegExp(search) + ")", 'gi'), "<strong>$1</strong>");
 }

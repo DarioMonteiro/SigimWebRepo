@@ -31,10 +31,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .WithMany(c => c.ListaTituloPagar)
                 .HasForeignKey(l => l.TipoDocumentoId);
 
-            HasMany<ContratoRetificacaoItemMedicao>(l => l.ListaContratoRetificacaoItemMedicao)
-                .WithOptional(c => c.TituloPagar)
-                .HasForeignKey(c => c.TituloPagarId);
-
             Property(l => l.TituloPaiId)
                 .HasColumnName("tituloPai");
 
@@ -182,6 +178,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             Property(l => l.TituloPrincipalAgrupamentoId)
                 .HasColumnName("tituloPrincipalAgrupamento");
+
+            HasMany<ContratoRetificacaoItemMedicao>(l => l.ListaContratoRetificacaoItemMedicao)
+                .WithOptional(c => c.TituloPagar)
+                .HasForeignKey(c => c.TituloPagarId);
 
             HasMany<ContratoRetencaoLiberada>(l => l.ListaContratoRetencaoLiberada)
                 .WithOptional(c => c.TituloPagar)

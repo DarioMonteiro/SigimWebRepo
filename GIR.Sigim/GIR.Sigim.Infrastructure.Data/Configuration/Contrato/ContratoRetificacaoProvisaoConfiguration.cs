@@ -72,14 +72,16 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasColumnOrder(8);
 
             HasOptional<TituloPagar>(l => l.TituloPagar)
-                .WithRequired(c => c.ContratoRetificacaoProvisao);
+                .WithMany(c => c.ListaContratoRetificacaoProvisao)
+                .HasForeignKey(l => l.TituloPagarId); 
 
             Property(l => l.TituloReceberId)
                 .HasColumnName("tituloReceber")
                 .HasColumnOrder(9);
 
             HasOptional<TituloReceber>(l => l.TituloReceber)
-                .WithRequired(c => c.ContratoRetificacaoProvisao);
+                .WithMany(c => c.ListaContratoRetificacaoProvisao)
+                .HasForeignKey(l => l.TituloReceberId); 
 
             Property(l => l.Valor)
                 .HasColumnName("valor")
@@ -106,7 +108,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
             Property(l => l.DataAntecipacao)
                 .HasColumnName("dataAntecipacao")
                 .HasColumnOrder(14);
-
 
             Property(l => l.UsuarioAntecipacao)
                 .HasColumnName("usuarioAntecipacao")

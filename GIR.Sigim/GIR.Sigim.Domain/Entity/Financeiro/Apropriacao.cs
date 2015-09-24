@@ -15,7 +15,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public CentroCusto CentroCusto { get; set; }
         public int? TituloPagarId { get; set; }
         public TituloPagar TituloPagar { get; set; }
-        //TituloReceber
+        public int? TituloReceberId { get; set; }
+        public TituloReceber TituloReceber { get; set; }
         public int? MovimentoId { get; set; }
         public Movimento Movimento { get; set; }
         public decimal Valor { get; set; }
