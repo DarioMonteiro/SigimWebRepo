@@ -178,7 +178,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.ListaComplementoNaturezaOperacao = new SelectList(complementoNaturezaOperacaoAppService.ListarPorNaturezaOperacao(codigoNaturezaOperacao), "Codigo", "Descricao");
             model.ListaComplementoCST = new SelectList(complementoCSTAppService.ListarTodos(), "Codigo", "Descricao");
             model.ListaNaturezaReceita = new SelectList(naturezaReceitaAppService.ListarTodos(), "Codigo", "Descricao");
-            model.ListaImpostoFinanceiro = new SelectList(impostoFinanceiroAppService.ListarTodos(), "Id", "Sigla");
+            model.ListaImpostoFinanceiro = new SelectList(impostoFinanceiroAppService.ListarTodos(), "Id", "Descricao");
         }
 
         [HttpPost]

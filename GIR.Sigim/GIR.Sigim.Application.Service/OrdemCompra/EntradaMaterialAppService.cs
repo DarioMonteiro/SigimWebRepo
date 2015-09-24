@@ -361,7 +361,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             ReprovisionarApropriacoesDasFormasPagamentoNaoUtilizadas(entradaMaterial);
             RemoverImpostoPagar(entradaMaterial);
-            AjustarEstoque(entradaMaterial);
+            DecrementarEstoque(entradaMaterial);
             RemoverEntradaMaterialItem(entradaMaterial);
             RemoverEntradaMaterialImposto(entradaMaterial);
             RemoverEntradaMaterialFormaPagamento(entradaMaterial);
@@ -435,11 +435,62 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             entradaMaterial.DataLiberacao = DateTime.Now;
             entradaMaterial.LoginUsuarioLiberacao = UsuarioLogado.Login;
 
+            IncrementarEstoque(entradaMaterial);
+
             entradaMaterialRepository.Alterar(entradaMaterial);
             entradaMaterialRepository.UnitOfWork.Commit();
             //GravarLogOperacaoCancelamento(entradaMaterial, listaTitulosAlterados);
             messageQueue.Add(Resource.OrdemCompra.SuccessMessages.LiberacaoRealizadaComSucesso, TypeMessage.Success);
             return true;
+        }
+
+        private void IncrementarEstoque(EntradaMaterial entradaMaterial)
+        {
+            var estoque = estoqueRepository.ObterEstoqueAtivoPeloCentroCusto(entradaMaterial.CodigoCentroCusto);
+            if (estoque != null)
+            {
+                Movimento movimento = new Movimento();
+
+                movimento.EstoqueId = estoque.Id;
+                movimento.ClienteFornecedorId = entradaMaterial.ClienteFornecedorId;
+                movimento.TipoMovimento = TipoMovimentoEstoque.EntradaEM;
+                movimento.Data = entradaMaterial.DataEntregaNota;
+                movimento.Observacao = entradaMaterial.Observacao;
+                movimento.TipoDocumentoId = entradaMaterial.TipoNotaFiscalId;
+                movimento.Documento = entradaMaterial.NumeroNotaFiscal;
+                movimento.DataEmissao = entradaMaterial.DataEmissaoNota;
+                movimento.DataEntrega = entradaMaterial.DataEntregaNota;
+                movimento.EntradaMaterialId = entradaMaterial.Id;
+                movimento.DataOperacao = DateTime.Now;
+                movimento.LoginUsuarioOperacao = UsuarioLogado.Login;
+                movimento.EhMovimentoTemporario = false;
+
+                foreach (var entradaMaterialItem in entradaMaterial.ListaItens.Where(l => l.OrdemCompraItem.Material.EhControladoPorEstoque.Value))
+                {
+                    var movimentoItem = new MovimentoItem();
+                    movimentoItem.MaterialId = entradaMaterialItem.OrdemCompraItem.MaterialId;
+                    movimentoItem.CodigoClasse = entradaMaterialItem.CodigoClasse;
+                    movimentoItem.Quantidade = entradaMaterialItem.Quantidade;
+                    movimentoItem.Valor = entradaMaterialItem.ValorUnitario;
+                    movimentoItem.Observacao = entradaMaterialItem.OrdemCompraItem.Complemento;
+                    movimento.ListaMovimentoItem.Add(movimentoItem);
+
+                    var estoqueMaterial = estoque.ListaEstoqueMaterial.Where(l => l.MaterialId == entradaMaterialItem.OrdemCompraItem.MaterialId).SingleOrDefault();
+
+                    if (estoqueMaterial == null)
+                    {
+                        estoqueMaterial = new EstoqueMaterial();
+                        estoqueMaterial.QuantidadeTemporaria = 0;
+                        estoque.ListaEstoqueMaterial.Add(estoqueMaterial);
+                    }
+
+                    estoqueMaterial.Valor = movimentoItem.Valor;
+                    estoqueMaterial.Quantidade += movimentoItem.Quantidade;
+                }
+
+                entradaMaterial.ListaMovimentoEstoque.Add(movimento);
+                estoqueRepository.Alterar(estoque);
+            }
         }
 
         private void RemoverApropriacoesDoTitulo(TituloPagar titulo)
@@ -1082,7 +1133,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
         }
 
-        private void AjustarEstoque(EntradaMaterial entradaMaterial)
+        private void DecrementarEstoque(EntradaMaterial entradaMaterial)
         {
             if (entradaMaterial.ListaMovimentoEstoque.Any())
             {

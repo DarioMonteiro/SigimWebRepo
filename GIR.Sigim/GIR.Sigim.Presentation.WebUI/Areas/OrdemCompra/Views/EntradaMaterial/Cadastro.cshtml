@@ -1540,41 +1540,6 @@
                                                         }
                                                     }
                                                 });
-
-                                                $('#formCadastro').validate({
-                                                    rules: {
-                                                        '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': 'required',
-                                                        '@Html.NameFor(m => m.BaseCalculoImposto)': 'required',
-                                                        '@Html.NameFor(m => m.DataVencimentoImposto)': {
-                                                            date: true
-                                                        }
-                                                    },
-                                                    messages: {
-                                                        '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': {
-                                                            required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Imposto")'
-                                                        },
-                                                        '@Html.NameFor(m => m.BaseCalculoImposto)': {
-                                                            required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Base de cálculo")'
-                                                        },
-                                                        '@Html.NameFor(m => m.DataVencimentoImposto)': {
-                                                            date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
-                                                        },
-                                                    },
-                                                    errorPlacement: function (error, element) {
-                                                        var span = getErrorMessageContainer(element.attr("name"));
-                                                        span.html(error.append());
-                                                    },
-                                                    highlight: function (element, errorClass) {
-                                                        var span = getErrorMessageContainer($(element).attr("name"));
-                                                        span.removeClass("field-validation-valid");
-                                                        span.addClass("field-validation-error");
-                                                    },
-                                                    unhighlight: function (element, errorClass) {
-                                                        var span = getErrorMessageContainer($(element).attr("name"));
-                                                        span.removeClass("field-validation-error");
-                                                        span.addClass("field-validation-valid");
-                                                    }
-                                                });
                                             });
 
                                             function fillTableImpostos() {
@@ -1605,7 +1570,7 @@
                                                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonImpostos[i].ImpostoFinanceiro.Aliquota), 5) + '</td>'));
                                                     row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonImpostos[i].Valor), 5) + '</td>'));
                                                     if (jsonImpostos[i].DataVencimento != null)
-                                                        row.append($('<td class="text-right">' + new Date(jsonImpostos[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
+                                                        row.append($('<td class="text-center">' + new Date(jsonImpostos[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
                                                     else
                                                         row.append($('<td>&nbsp;</td>'));
                                                 }
@@ -1868,6 +1833,43 @@
                     })
                 }
             });
+        });
+
+        $('#formCadastro').validate({
+            rules: {
+                '@Html.NameFor(m => m.Quantidade)': 'decimalGreaterThanZero',
+                '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': 'required',
+                '@Html.NameFor(m => m.BaseCalculoImposto)': 'required',
+                '@Html.NameFor(m => m.DataVencimentoImposto)': 'date'
+            },
+            messages: {
+                '@Html.NameFor(m => m.Quantidade)': {
+                    decimalGreaterThanZero: "A Quantidade deve ser maior que zero."
+                },
+                '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Imposto")'
+                },
+                '@Html.NameFor(m => m.BaseCalculoImposto)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Base de cálculo")'
+                },
+                '@Html.NameFor(m => m.DataVencimentoImposto)': {
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                },
+            },
+            errorPlacement: function (error, element) {
+                var span = getErrorMessageContainer(element.attr("name"));
+                span.html(error.append());
+            },
+            highlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-valid");
+                span.addClass("field-validation-error");
+            },
+            unhighlight: function (element, errorClass) {
+                var span = getErrorMessageContainer($(element).attr("name"));
+                span.removeClass("field-validation-error");
+                span.addClass("field-validation-valid");
+            }
         });
     });
 
