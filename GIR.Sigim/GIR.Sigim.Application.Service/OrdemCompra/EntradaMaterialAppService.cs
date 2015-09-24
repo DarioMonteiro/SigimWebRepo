@@ -439,7 +439,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
             entradaMaterialRepository.Alterar(entradaMaterial);
             entradaMaterialRepository.UnitOfWork.Commit();
-            //GravarLogOperacaoCancelamento(entradaMaterial, listaTitulosAlterados);
+            GravarLogOperacaoLiberacao(entradaMaterial);
             messageQueue.Add(Resource.OrdemCompra.SuccessMessages.LiberacaoRealizadaComSucesso, TypeMessage.Success);
             return true;
         }
@@ -752,6 +752,15 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private bool DeveGerarTituloImposto(EntradaMaterialImposto imposto)
         {
             return ParametrosFinanceiro.GeraTituloImposto && imposto.ImpostoFinanceiro.ClienteId.HasValue && imposto.ImpostoFinanceiro.EhRetido.Value;
+        }
+
+        private void GravarLogOperacaoLiberacao(EntradaMaterial entradaMaterial)
+        {
+            logOperacaoAppService.Gravar("Liberação da entrada de material",
+                "OrdemCompra.entradaMaterial_Libera",
+                "OrdemCompra.entradaMaterial",
+                "UPDATE",
+                EntradaMaterialToXML(entradaMaterial));
         }
 
         public FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato)
