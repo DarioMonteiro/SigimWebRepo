@@ -58,6 +58,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasColumnName("percentualDesconto")
                 .HasColumnOrder(14);
 
+            Property(l => l.TituloFreteId)
+                .HasColumnName("tituloFrete");
+
             Property(l => l.EntradaMaterialFreteId)
                 .HasColumnName("entradaMaterialFrete");
 

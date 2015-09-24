@@ -25,6 +25,8 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
             set { percentualDesconto = value; }
         }
 
+        public int? TituloFreteId { get; set; }
+        public TituloPagar TituloFrete { get; set; }
         public int? EntradaMaterialFreteId { get; set; }
         public EntradaMaterial EntradaMaterialFrete { get; set; }
 

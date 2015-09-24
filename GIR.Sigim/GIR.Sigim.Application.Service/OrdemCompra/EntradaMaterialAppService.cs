@@ -331,6 +331,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var entradaMaterial = ObterPeloIdEUsuario(id, UsuarioLogado.Id,
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.ListaOrdemCompraFormaPagamento.Select(s => s.TituloPagar.ListaApropriacao)),
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.TituloFrete.ListaApropriacao),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar.Select(s => s.TituloPagarImposto)),
                 l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TituloPagar.ListaImpostoPagar),
                 l => l.ListaFormaPagamento.Select(o => o.ListaTituloPagarAdiantamento.Select(s => s.ListaApropriacaoAdiantamento)),
@@ -398,6 +399,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             var entradaMaterial = ObterPeloIdEUsuario(id, UsuarioLogado.Id,
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.ListaOrdemCompraFormaPagamento.Select(s => s.TituloPagar.ListaApropriacao)),
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.TituloFrete.ListaApropriacao),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar.Cliente),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar.Select(s => s.TituloPagarImposto)),
                 l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TituloPagar.ListaImpostoPagar),
@@ -1085,8 +1087,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 var listaFormaPagamentoNaoUtulizada = ordemCompra.ListaOrdemCompraFormaPagamento.Where(l => l.EhUtilizada == false);
                 List<Apropriacao> listaApropriacao = listaFormaPagamentoNaoUtulizada.SelectMany(o => o.TituloPagar.ListaApropriacao).ToList();
-                if (entradaMaterial.TituloFreteId.HasValue && entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado && entradaMaterial.OrdemCompraFreteId == ordemCompra.Id)
-                    listaApropriacao.AddRange(entradaMaterial.TituloFrete.ListaApropriacao);
+                if (ordemCompra.TituloFreteId.HasValue && !ordemCompra.EntradaMaterialFreteId.HasValue)
+                    listaApropriacao.AddRange(ordemCompra.TituloFrete.ListaApropriacao);
 
                 for (int i = listaApropriacao.Count() - 1; i >= 0; i--)
                 {
@@ -1117,16 +1119,16 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                                 formaPagamento.TituloPagar.ListaApropriacao.Add(apropriacao);
                             }
 
-                            if (entradaMaterial.TituloFreteId.HasValue && (entradaMaterial.TituloFrete.Situacao == SituacaoTituloPagar.Provisionado) && entradaMaterial.OrdemCompraFreteId == ordemCompra.Id)
+                            if (ordemCompra.TituloFreteId.HasValue && !ordemCompra.EntradaMaterialFreteId.HasValue)
                             {
                                 Apropriacao apropriacaoTituloFrete = new Apropriacao();
                                 apropriacaoTituloFrete.CodigoClasse = codigoClasse;
                                 apropriacaoTituloFrete.CodigoCentroCusto = ordemCompra.CodigoCentroCusto;
-                                apropriacaoTituloFrete.TituloPagarId = entradaMaterial.TituloFreteId;
+                                apropriacaoTituloFrete.TituloPagarId = ordemCompra.TituloFreteId;
                                 apropriacaoTituloFrete.Percentual = percentualClasse;
-                                apropriacaoTituloFrete.Valor = entradaMaterial.TituloFrete.ValorTitulo * percentualClasse / 100;
+                                apropriacaoTituloFrete.Valor = ordemCompra.TituloFrete.ValorTitulo * percentualClasse / 100;
 
-                                entradaMaterial.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
+                                ordemCompra.TituloFrete.ListaApropriacao.Add(apropriacaoTituloFrete);
                             }
                         }
                     }
