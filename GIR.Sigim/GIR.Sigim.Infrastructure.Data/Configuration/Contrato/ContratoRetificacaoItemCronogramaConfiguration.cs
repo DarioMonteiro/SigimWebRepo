@@ -92,6 +92,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Contrato
                 .HasPrecision(18, 5)
                 .HasColumnOrder(12);
 
+            Property(l => l.EhPagamentoAntecipado)
+                .HasColumnName("pagamentoAntecipado")
+                .HasColumnType("bit")
+                .HasColumnOrder(13);
+
+
         HasMany<ContratoRetificacaoProvisao>(l => l.ListaContratoRetificacaoProvisao)
             .WithOptional(c => c.ContratoRetificacaoItemCronograma)
             .HasForeignKey(c => c.ContratoRetificacaoItemCronogramaId);

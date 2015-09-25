@@ -16,6 +16,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
         {
             Container.Current.RegisterType<IContratoRepository, ContratoRepository>();
             Container.Current.RegisterType<IContratoRetificacaoItemMedicaoRepository, ContratoRetificacaoItemMedicaoRepository>();
+            Container.Current.RegisterType<IContratoRetificacaoProvisaoRepository, ContratoRetificacaoProvisaoRepository>();
             Container.Current.RegisterType<IParametrosContratoRepository, ParametrosContratoRepository>();
         }
     }

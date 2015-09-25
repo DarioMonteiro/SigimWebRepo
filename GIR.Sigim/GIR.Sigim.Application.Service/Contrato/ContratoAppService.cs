@@ -47,6 +47,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         private IApropriacaoRepository apropriacaoRepository;
         private IImpostoPagarRepository impostoPagarRepository;
         private IImpostoReceberRepository impostoReceberRepository;
+        private IContratoRetificacaoProvisaoRepository contratoRetificacaoProvisaoRepository;
 
         #endregion
 
@@ -67,6 +68,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                   IApropriacaoRepository apropriacaoRepository,
                                   IImpostoPagarRepository impostoPagarRepository,
                                   IImpostoReceberRepository impostoReceberRepository,
+                                  IContratoRetificacaoProvisaoRepository contratoRetificacaoProvisaoRepository,
                                   MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -85,6 +87,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             this.apropriacaoRepository = apropriacaoRepository;
             this.impostoPagarRepository = impostoPagarRepository;
             this.impostoReceberRepository = impostoReceberRepository;
+            this.contratoRetificacaoProvisaoRepository = contratoRetificacaoProvisaoRepository;
         }
 
         #endregion
@@ -1654,7 +1657,8 @@ namespace GIR.Sigim.Application.Service.Contrato
             Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification, l => l.Contratado,
                                                                                                                  l => l.Contratante,
                                                                                                                  l => l.ContratoDescricao,
-                                                                                                                 l => l.ListaContratoRetificacaoItem, 
+                                                                                                                 l => l.ListaContratoRetificacaoItem,
+                                                                                                                 l => l.ListaContratoRetificacaoItemCronograma,
                                                                                                                  l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.MultiFornecedor), 
                                                                                                                  l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaApropriacao),
                                                                                                                  l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar),
@@ -1667,13 +1671,12 @@ namespace GIR.Sigim.Application.Service.Contrato
             ParametrosFinanceiro parametrosFinanceiro = parametrosFinanceiroRepository.Obter();
             bool geraTituloImposto = parametrosFinanceiro.GeraTituloImposto.HasValue ? parametrosFinanceiro.GeraTituloImposto.Value : false;
 
-
+            string msg = "";
             bool ehValido = true;
             foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao < (int)SituacaoMedicao.Liberado))
             {
                 ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
                 Nullable<DateTime> dataBloqueio;
-                string msg = "";
 
                 if (bloqueioContabilAppService.OcorreuBloqueioContabil(contrato.CodigoCentroCusto,
                                                                        contratoRetificacaoItemMedicao.DataEmissao,
@@ -1703,10 +1706,25 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas = new List<ContratoRetificacaoItemMedicao>();
 
-            CriarListaDeMedicaoSelecionadas(listaItemLiberacaoDTO, contrato, listaMedicaoSelecionadas);
-            AtualizarContratoRetencao(listaMedicaoSelecionadas, contrato);
-            ReprovisionarContratoProvisao(listaMedicaoSelecionadas, contrato);
-            GerarTitulosApropriadosLiberacao(listaMedicaoSelecionadas, contrato, geraTituloSituacaoAguardandoLiberacao, geraTituloImposto);
+            bool processou = false;
+            processou = CriarListaDeMedicaoSelecionadas(listaItemLiberacaoDTO, contrato, listaMedicaoSelecionadas);
+            if (processou)
+            {
+                AtualizarContratoRetencao(listaMedicaoSelecionadas, contrato);
+                processou = ReprovisionarContratoProvisao(listaMedicaoSelecionadas, contrato);
+            }
+            if (processou)
+            {
+                processou = GerarTitulosApropriadosLiberacao(listaMedicaoSelecionadas, contrato, geraTituloSituacaoAguardandoLiberacao, geraTituloImposto);
+            }
+
+            if (!processou)
+            {
+                msg = "Ocorreu erro na liberação da(s) medição(ões)";
+                messageQueue.Add(msg, TypeMessage.Error);
+                ehValido = false;
+                return retorno;
+            }
 
             try
             {
@@ -1739,12 +1757,408 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         #region Métodos Privados
 
-        private void GerarTitulosApropriadosLiberacao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato, bool geraTituloAguardandoLiberacao, bool geraTituloImposto )
+        //private void GerarTitulosApropriadosLiberacao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato, bool geraTituloAguardandoLiberacao, bool geraTituloImposto )
+        //{
+
+        //    string identificacaoTitulo = MontaIdentificacaoTitulo(contrato);
+
+        //    var medicaoGrupoTitulos = listaMedicaoSelecionadas.GroupBy(l => new { l.MultiFornecedorId, l.TipoDocumentoId, l.NumeroDocumento, l.DataVencimento, l.DataEmissao }).Select(o => o.First()).ToList();
+
+        //    List<ContratoRetificacaoItemImposto> listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
+
+        //    foreach (var medicaoItemTitulo in medicaoGrupoTitulos)
+        //    {
+        //        #region "Agrupa as medições a serem liberadas por documento"
+        //        var listaItensMedicaoGrupoTitulos = listaMedicaoSelecionadas.Where(l =>
+        //                                                                           l.MultiFornecedorId == medicaoItemTitulo.MultiFornecedorId &&
+        //                                                                           l.TipoDocumentoId == medicaoItemTitulo.TipoDocumentoId &&
+        //                                                                           l.NumeroDocumento == medicaoItemTitulo.NumeroDocumento &&
+        //                                                                           l.DataVencimento == medicaoItemTitulo.DataVencimento &&
+        //                                                                           l.DataEmissao == medicaoItemTitulo.DataEmissao).ToList();
+
+        //        decimal valorTitulo = listaItensMedicaoGrupoTitulos.Sum(o => o.Valor);
+        //        decimal? valorDesconto = listaItensMedicaoGrupoTitulos.Where(o => o.Desconto.HasValue && o.Desconto.Value > 0).Sum(o => o.Desconto);
+        //        decimal? valorRetido = listaItensMedicaoGrupoTitulos.Where(o => o.ValorRetido.HasValue && o.ValorRetido.Value > 0).Sum(o => o.ValorRetido);
+        //        string motivoDesconto = listaItensMedicaoGrupoTitulos.Where(o => o.MotivoDesconto != "").LastOrDefault() != null ? listaItensMedicaoGrupoTitulos.Where(o => o.MotivoDesconto != "").LastOrDefault().MotivoDesconto : null;
+
+        //        #endregion
+
+        //        ClienteFornecedor cliente = ObtemClienteFornecedor(contrato, medicaoItemTitulo);
+
+        //        if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
+        //        {
+        //            TituloPagar tituloPagarLiberacao = new TituloPagar();
+
+        //            #region "Cria Titulo Pagar"
+
+        //            PreencherTituloPagar(tituloPagarLiberacao,
+        //                                 cliente.Id,
+        //                                 identificacaoTitulo,
+        //                                 geraTituloAguardandoLiberacao ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado,
+        //                                 medicaoItemTitulo.TipoDocumentoId,
+        //                                 medicaoItemTitulo.NumeroDocumento,
+        //                                 medicaoItemTitulo.DataVencimento,
+        //                                 medicaoItemTitulo.DataEmissao,
+        //                                 valorTitulo,
+        //                                 valorDesconto,
+        //                                 motivoDesconto,
+        //                                 valorRetido,
+        //                                 null);
+        //            listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
+        //            foreach (ContratoRetificacaoItemMedicao medicao in listaItensMedicaoGrupoTitulos)
+        //            {
+        //                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == medicao.Id).FirstOrDefault();
+        //                contratoRetificacaoItemMedicao.TituloPagar = tituloPagarLiberacao;
+        //                contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.Liberado;
+        //                contratoRetificacaoItemMedicao.DataLiberacao = DateTime.Now;
+        //                contratoRetificacaoItemMedicao.UsuarioLiberacao = UsuarioLogado.Login;
+
+        //                listaImpostosMedicaoSelecionadas.AddRange(medicao.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto);
+        //            }
+        //            #endregion
+
+        //            var impostosGrupo = listaImpostosMedicaoSelecionadas.GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
+
+        //            #region "Cria Imposto Pagar e Titulo Pagar de Imposto"
+
+        //            foreach (var impostoItem in impostosGrupo)
+        //            {
+
+        //                decimal baseCalculo = (valorTitulo * impostoItem.PercentualBaseCalculo) / 100;
+        //                if (baseCalculo > 0 && impostoItem.ImpostoFinanceiro != null && impostoItem.ImpostoFinanceiro.Aliquota > 0)
+        //                {
+        //                    #region "Cria Imposto Pagar"
+
+        //                    decimal valorImposto = Math.Round(((baseCalculo * impostoItem.ImpostoFinanceiro.Aliquota) / 100), 2);
+
+        //                    bool ehRetido = impostoItem.ImpostoFinanceiro.EhRetido.HasValue ? impostoItem.ImpostoFinanceiro.EhRetido.Value : false;
+        //                    bool ehIndireto = impostoItem.ImpostoFinanceiro.Indireto.HasValue ? impostoItem.ImpostoFinanceiro.Indireto.Value : false;
+        //                    if (ehRetido || ehIndireto) tituloPagarLiberacao.ValorImposto = valorImposto;
+
+        //                    ImpostoPagar impostoPagarTituloLiberacao = new ImpostoPagar();
+        //                    PreencherImpostoPagar(impostoPagarTituloLiberacao,
+        //                                          impostoItem.ImpostoFinanceiroId,
+        //                                          tituloPagarLiberacao,
+        //                                          baseCalculo,
+        //                                          valorImposto,
+        //                                          null);
+
+        //                    tituloPagarLiberacao.ListaImpostoPagar.Add(impostoPagarTituloLiberacao);
+
+        //                    #endregion
+
+        //                    #region "Cria Titulo Pagar de Imposto"
+
+        //                    if (geraTituloImposto)
+        //                    {
+        //                        string ordem = (impostosGrupo.IndexOf(impostoItem) + 1).ToString();
+        //                        string identificacaoImposto = MontaIdentificacaoTituloImposto(impostoItem.ImpostoFinanceiro.Sigla, cliente.Nome);
+        //                        string documentoImposto = MontaDocumentoTituloImposto(medicaoItemTitulo.NumeroDocumento, ordem);
+
+        //                        Nullable<DateTime> dataVencimentoImposto = null;
+        //                        if ((ehRetido || ehIndireto) && impostoItem.ImpostoFinanceiro.ClienteId.HasValue && impostoItem.ImpostoFinanceiro.Periodicidade.HasValue)
+        //                        {
+        //                            dataVencimentoImposto = CalcularDataVencimentoImposto(impostoItem.ImpostoFinanceiro, tituloPagarLiberacao.DataEmissaoDocumento, tituloPagarLiberacao.DataVencimento);
+        //                        }
+
+        //                        if (dataVencimentoImposto.HasValue && impostoItem.ImpostoFinanceiro.ClienteId.HasValue)
+        //                        {
+        //                            TituloPagar tituloImpostoPagar = new TituloPagar();
+        //                            PreencherTituloPagar(tituloImpostoPagar,
+        //                                                 impostoItem.ImpostoFinanceiro.Cliente.Id,
+        //                                                 identificacaoImposto,
+        //                                                 geraTituloAguardandoLiberacao ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado,
+        //                                                 medicaoItemTitulo.TipoDocumentoId,
+        //                                                 documentoImposto,
+        //                                                 dataVencimentoImposto.Value,
+        //                                                 medicaoItemTitulo.DataEmissao,
+        //                                                 valorImposto,
+        //                                                 0,
+        //                                                 null,
+        //                                                 null,
+        //                                                 impostoItem.ImpostoFinanceiro.TipoCompromissoId);
+
+        //                            impostoPagarTituloLiberacao.TituloPagarImposto = tituloImpostoPagar;
+
+        //                            //impostoPagarTituloLiberacao.TituloPagarImposto.ListaImpostoPagarTituloImposto.Add(impostoPagarTituloLiberacao);
+        //                        }
+        //                    }
+        //                    #endregion
+
+        //                }
+        //            }
+        //            #endregion
+
+        //            var medicaoGrupoApropriacao = listaItensMedicaoGrupoTitulos.GroupBy(l => new { l.MultiFornecedorId,
+        //                                                                                           l.TipoDocumentoId,
+        //                                                                                           l.NumeroDocumento,
+        //                                                                                           l.DataVencimento,
+        //                                                                                           l.DataEmissao,
+        //                                                                                           l.ContratoRetificacaoItem.CodigoClasse,
+        //                                                                                           l.Contrato.CodigoCentroCusto
+        //                                                                                         }).Select(o => o.First()).ToList();
+
+        //            listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
+        //            foreach (var medicaoItemApropriacao in medicaoGrupoApropriacao)
+        //            {
+        //                #region "Cria Apropriação dos titulos a pagar "
+
+        //                var listaItensMedicaoGrupoApropriacao = listaMedicaoSelecionadas.Where(l =>
+        //                                                                                       l.MultiFornecedorId == medicaoItemApropriacao.MultiFornecedorId &&
+        //                                                                                       l.TipoDocumentoId == medicaoItemApropriacao.TipoDocumentoId &&
+        //                                                                                       l.NumeroDocumento == medicaoItemApropriacao.NumeroDocumento &&
+        //                                                                                       l.DataVencimento == medicaoItemApropriacao.DataVencimento &&
+        //                                                                                       l.DataEmissao == medicaoItemApropriacao.DataEmissao &&
+        //                                                                                       l.ContratoRetificacaoItem.CodigoClasse == medicaoItemApropriacao.ContratoRetificacaoItem.CodigoClasse &&
+        //                                                                                       l.Contrato.CodigoCentroCusto == medicaoItemApropriacao.Contrato.CodigoCentroCusto
+        //                                                                                      ).ToList();
+
+        //                decimal valorAgrupado = listaItensMedicaoGrupoApropriacao.Sum(o => o.Valor);
+        //                decimal? valorDescontoAgrupado = listaItensMedicaoGrupoApropriacao.Where(o => o.Desconto.HasValue && o.Desconto.Value > 0).Sum(o => o.Desconto);
+        //                decimal? valorRetidoAgrupado = listaItensMedicaoGrupoApropriacao.Where(o => o.ValorRetido.HasValue && o.ValorRetido.Value > 0).Sum(o => o.ValorRetido);
+
+        //                decimal valorApropriacao = valorAgrupado;
+        //                if (valorRetido.HasValue) valorApropriacao = valorApropriacao - valorRetidoAgrupado.Value;
+        //                if (valorDesconto.HasValue) valorApropriacao = valorApropriacao - valorDescontoAgrupado.Value;
+
+        //                foreach (ContratoRetificacaoItemMedicao medicao in listaItensMedicaoGrupoApropriacao)
+        //                {
+        //                    listaImpostosMedicaoSelecionadas.AddRange(medicao.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto);
+        //                }
+
+        //                impostosGrupo = listaImpostosMedicaoSelecionadas.GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
+
+        //                decimal valorImposto = 0;
+        //                foreach (var impostoItem in impostosGrupo)
+        //                {
+        //                    decimal baseCalculo = (valorAgrupado * impostoItem.PercentualBaseCalculo) / 100;
+
+        //                    if (baseCalculo > 0)
+        //                    {
+        //                        bool ehRetido = impostoItem.ImpostoFinanceiro.EhRetido.HasValue ? impostoItem.ImpostoFinanceiro.EhRetido.Value : false;
+        //                        bool ehIndireto = impostoItem.ImpostoFinanceiro.Indireto.HasValue ? impostoItem.ImpostoFinanceiro.Indireto.Value : false;
+        //                        if (ehRetido || ehIndireto) valorImposto = valorImposto + Math.Round(((baseCalculo * impostoItem.ImpostoFinanceiro.Aliquota) / 100), 2);
+        //                    }
+        //                }
+
+        //                decimal percentualApropriado = Math.Round((((valorApropriacao - valorImposto) / valorAgrupado) * 100), 5);
+        //                decimal valorApropriado = valorApropriacao - valorImposto;
+
+        //                Apropriacao apropriacaoTituloPagarLiberacao = new Apropriacao();
+        //                PreencherApropriacaoTitulo(apropriacaoTituloPagarLiberacao,
+        //                                           medicaoItemApropriacao.ContratoRetificacaoItem.CodigoClasse,
+        //                                           medicaoItemApropriacao.Contrato.CodigoCentroCusto,
+        //                                           tituloPagarLiberacao,
+        //                                           null,
+        //                                           percentualApropriado,
+        //                                           valorApropriado);
+
+
+        //                tituloPagarLiberacao.ListaApropriacao.Add(apropriacaoTituloPagarLiberacao);
+
+        //                #endregion
+        //            }
+
+        //            #region "Cria Apropriação dos titulos de impostos a pagar "
+
+        //            if (geraTituloImposto && (tituloPagarLiberacao.ListaApropriacao.Sum(l => l.Percentual) < 100) && tituloPagarLiberacao.ListaApropriacao.Count > 0)
+        //            {
+        //                decimal valorLiquido = tituloPagarLiberacao.ValorTitulo;
+        //                if (tituloPagarLiberacao.ValorImposto.HasValue) valorLiquido = valorLiquido - tituloPagarLiberacao.ValorImposto.Value;
+        //                if (tituloPagarLiberacao.Retencao.HasValue) valorLiquido = valorLiquido - tituloPagarLiberacao.Retencao.Value;
+
+        //                foreach (var apropriacaoTituloGerador in tituloPagarLiberacao.ListaApropriacao)
+        //                {
+        //                    decimal percentual = Math.Round(((apropriacaoTituloGerador.Valor / valorLiquido) * 100), 5);
+
+        //                    foreach (TituloPagar tituloImpostoPagar in tituloPagarLiberacao.ListaImpostoPagar.Select(t => t.TituloPagarImposto))
+        //                    {
+        //                        decimal valor = Math.Round(((tituloImpostoPagar.ValorTitulo * percentual) / 100), 2);
+
+        //                        Apropriacao apropriacaoTituloImpostoPagar = new Apropriacao();
+        //                        PreencherApropriacaoTitulo(apropriacaoTituloImpostoPagar,
+        //                                                   apropriacaoTituloGerador.CodigoClasse,
+        //                                                   apropriacaoTituloGerador.CodigoCentroCusto,
+        //                                                   tituloImpostoPagar,
+        //                                                   null,
+        //                                                   percentual,
+        //                                                   valor);
+
+        //                        tituloImpostoPagar.ListaApropriacao.Add(apropriacaoTituloImpostoPagar);
+        //                    }
+        //                }
+        //            }
+        //            #endregion
+
+        //        }
+        //        else
+        //        {
+        //            TituloReceber tituloReceberLiberacao = new TituloReceber();
+
+        //            #region "Cria Titulo Receber"
+
+        //            PreencherTituloReceber(tituloReceberLiberacao,
+        //                                   cliente.Id,
+        //                                   identificacaoTitulo,
+        //                                   geraTituloAguardandoLiberacao ? SituacaoTituloReceber.Afaturar : SituacaoTituloReceber.Faturado,
+        //                                   medicaoItemTitulo.TipoDocumentoId,
+        //                                   medicaoItemTitulo.NumeroDocumento,
+        //                                   medicaoItemTitulo.DataVencimento,
+        //                                   medicaoItemTitulo.DataEmissao,
+        //                                   valorTitulo,
+        //                                   valorDesconto,
+        //                                   null,
+        //                                   valorRetido,
+        //                                   null);
+
+        //            listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
+        //            foreach (ContratoRetificacaoItemMedicao medicao in listaItensMedicaoGrupoTitulos)
+        //            {
+        //                ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == medicao.Id).FirstOrDefault();
+        //                contratoRetificacaoItemMedicao.TituloReceber = tituloReceberLiberacao;
+        //                contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.Liberado;
+        //                contratoRetificacaoItemMedicao.DataLiberacao = DateTime.Now;
+        //                contratoRetificacaoItemMedicao.UsuarioLiberacao = UsuarioLogado.Login;
+
+        //                listaImpostosMedicaoSelecionadas.AddRange(medicao.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto);
+        //            }
+
+        //            #endregion
+
+        //            var impostosGrupo = listaImpostosMedicaoSelecionadas.GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
+
+        //            #region "Cria Imposto Receber"
+
+        //            foreach (var impostoItem in impostosGrupo)
+        //            {
+        //                decimal baseCalculo = (valorTitulo * impostoItem.PercentualBaseCalculo) / 100;
+        //                if (baseCalculo > 0 && impostoItem.ImpostoFinanceiro != null && impostoItem.ImpostoFinanceiro.Aliquota > 0)
+        //                {
+        //                    #region "Cria Imposto Receber"
+
+        //                    decimal valorImposto = Math.Round(((baseCalculo * impostoItem.ImpostoFinanceiro.Aliquota) / 100), 2);
+
+        //                    bool ehRetido = impostoItem.ImpostoFinanceiro.EhRetido.HasValue ? impostoItem.ImpostoFinanceiro.EhRetido.Value : false;
+        //                    if (ehRetido) tituloReceberLiberacao.ValorImposto = valorImposto;
+
+        //                    ImpostoReceber impostoReceberTituloLiberacao = new ImpostoReceber();
+        //                    PreencherImpostoReceber(impostoReceberTituloLiberacao,
+        //                                            impostoItem.ImpostoFinanceiroId,
+        //                                            tituloReceberLiberacao,
+        //                                            baseCalculo,
+        //                                            valorImposto);
+
+        //                    tituloReceberLiberacao.ListaImpostoReceber.Add(impostoReceberTituloLiberacao);
+
+        //                    #endregion
+        //                }
+        //            }
+
+        //            #endregion
+
+        //            var medicaoGrupoApropriacao = listaItensMedicaoGrupoTitulos.GroupBy(l => new { l.MultiFornecedorId,
+        //                                                                                           l.TipoDocumentoId,
+        //                                                                                           l.NumeroDocumento,
+        //                                                                                           l.DataVencimento,
+        //                                                                                           l.DataEmissao,
+        //                                                                                           l.ContratoRetificacaoItem.CodigoClasse,
+        //                                                                                           l.Contrato.CodigoCentroCusto
+        //                                                                                         }).Select(o => o.First()).ToList();
+
+        //            listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
+        //            foreach (var medicaoItemApropriacao in medicaoGrupoApropriacao)
+        //            {
+        //                #region "Cria Apropriação dos titulos a Receber"
+
+        //                var listaItensMedicaoGrupoApropriacao = listaMedicaoSelecionadas.Where(l =>
+        //                                                                                       l.MultiFornecedorId == medicaoItemApropriacao.MultiFornecedorId &&
+        //                                                                                       l.TipoDocumentoId == medicaoItemApropriacao.TipoDocumentoId &&
+        //                                                                                       l.NumeroDocumento == medicaoItemApropriacao.NumeroDocumento &&
+        //                                                                                       l.DataVencimento == medicaoItemApropriacao.DataVencimento &&
+        //                                                                                       l.DataEmissao == medicaoItemApropriacao.DataEmissao &&
+        //                                                                                       l.ContratoRetificacaoItem.CodigoClasse == medicaoItemApropriacao.ContratoRetificacaoItem.CodigoClasse &&
+        //                                                                                       l.Contrato.CodigoCentroCusto == medicaoItemApropriacao.Contrato.CodigoCentroCusto
+        //                                                                                       ).ToList();
+
+        //                decimal valorAgrupado = listaItensMedicaoGrupoApropriacao.Sum(o => o.Valor);
+        //                decimal? valorDescontoAgrupado = listaItensMedicaoGrupoApropriacao.Where(o => o.Desconto.HasValue && o.Desconto.Value > 0).Sum(o => o.Desconto);
+        //                decimal? valorRetidoAgrupado = listaItensMedicaoGrupoApropriacao.Where(o => o.ValorRetido.HasValue && o.ValorRetido.Value > 0).Sum(o => o.ValorRetido);
+
+        //                decimal valorApropriacao = valorAgrupado;
+        //                if (valorRetido.HasValue) valorApropriacao = valorApropriacao - valorRetidoAgrupado.Value;
+        //                if (valorDesconto.HasValue) valorApropriacao = valorApropriacao - valorDescontoAgrupado.Value;
+
+        //                foreach (ContratoRetificacaoItemMedicao medicao in listaItensMedicaoGrupoApropriacao)
+        //                {
+        //                    listaImpostosMedicaoSelecionadas.AddRange(medicao.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto);
+        //                }
+
+        //                impostosGrupo = listaImpostosMedicaoSelecionadas.GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
+
+        //                decimal valorImposto = 0;
+        //                foreach (var impostoItem in impostosGrupo)
+        //                {
+        //                    decimal baseCalculo = (valorAgrupado * impostoItem.PercentualBaseCalculo) / 100;
+
+        //                    if (baseCalculo > 0)
+        //                    {
+        //                        bool ehRetido = impostoItem.ImpostoFinanceiro.EhRetido.HasValue ? impostoItem.ImpostoFinanceiro.EhRetido.Value : false;
+        //                        if (ehRetido) valorImposto = valorImposto + Math.Round(((baseCalculo * impostoItem.ImpostoFinanceiro.Aliquota) / 100), 2);
+        //                    }
+        //                }
+
+        //                decimal percentualApropriado = Math.Round((((valorApropriacao - valorImposto) / valorAgrupado) * 100), 5);
+        //                decimal valorApropriado = valorApropriacao - valorImposto;
+
+        //                Apropriacao apropriacaoTituloReceberLiberacao = new Apropriacao();
+        //                PreencherApropriacaoTitulo(apropriacaoTituloReceberLiberacao,
+        //                                           medicaoItemApropriacao.ContratoRetificacaoItem.CodigoClasse,
+        //                                           medicaoItemApropriacao.Contrato.CodigoCentroCusto,
+        //                                           null,
+        //                                           medicaoItemApropriacao.TituloReceber,
+        //                                           percentualApropriado,
+        //                                           valorApropriado);
+
+
+        //                tituloReceberLiberacao.ListaApropriacao.Add(apropriacaoTituloReceberLiberacao);
+
+        //                #endregion
+        //            }
+
+        //        }
+        //    }
+        //}
+
+        private bool GerarTitulosApropriadosLiberacao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato, bool geraTituloAguardandoLiberacao, bool geraTituloImposto)
         {
+            bool processou = false;
 
             string identificacaoTitulo = MontaIdentificacaoTitulo(contrato);
 
-            var medicaoGrupoTitulos = listaMedicaoSelecionadas.GroupBy(l => new { l.MultiFornecedorId, l.TipoDocumentoId, l.NumeroDocumento, l.DataVencimento, l.DataEmissao }).Select(o => o.First()).ToList();
+            List<ContratoRetificacaoItemMedicao> medicaoGrupoTitulos = new List<ContratoRetificacaoItemMedicao>();
+
+            #region "Agrupa as medições a serem liberadas por documento distinguindo os que possuem adiantamento ou não"
+
+            bool temPagamentoAntecipado = !listaMedicaoSelecionadas.All(l => (l.ContratoRetificacaoItemCronograma.EhPagamentoAntecipado.HasValue && l.ContratoRetificacaoItemCronograma.EhPagamentoAntecipado.Value == false) || (!l.ContratoRetificacaoItemCronograma.EhPagamentoAntecipado.HasValue));
+
+            if (!temPagamentoAntecipado)
+            {
+                medicaoGrupoTitulos = listaMedicaoSelecionadas.GroupBy(l => new { l.MultiFornecedorId, l.TipoDocumentoId, l.NumeroDocumento, l.DataVencimento, l.DataEmissao}).Select(o => o.First()).ToList();
+            }
+            else 
+            {
+                medicaoGrupoTitulos = listaMedicaoSelecionadas.Where(l => (l.ContratoRetificacaoItemCronograma.EhPagamentoAntecipado.HasValue && l.ContratoRetificacaoItemCronograma.EhPagamentoAntecipado.Value == false) || (!l.ContratoRetificacaoItemCronograma.EhPagamentoAntecipado.HasValue)).GroupBy(l => new { l.MultiFornecedorId, l.TipoDocumentoId, l.NumeroDocumento, l.DataVencimento, l.DataEmissao }).Select(o => o.First()).ToList();
+            }
+
+            //Na lista de medições selecionada existem medições com pagamento antecipado, 
+            //mas não existe nenhuma medição para ser liberada sem pagamento antecipado
+            if (temPagamentoAntecipado && medicaoGrupoTitulos.Count == 0)
+            {
+                processou = true;
+                return processou;
+            }
+
+            #endregion
 
             List<ContratoRetificacaoItemImposto> listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
 
@@ -1805,7 +2219,6 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                     foreach (var impostoItem in impostosGrupo)
                     {
-
                         decimal baseCalculo = (valorTitulo * impostoItem.PercentualBaseCalculo) / 100;
                         if (baseCalculo > 0 && impostoItem.ImpostoFinanceiro != null && impostoItem.ImpostoFinanceiro.Aliquota > 0)
                         {
@@ -1972,6 +2385,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                     }
                     #endregion
 
+                    processou = true;
+
                 }
                 else
                 {
@@ -2038,14 +2453,16 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                     #endregion
 
-                    var medicaoGrupoApropriacao = listaItensMedicaoGrupoTitulos.GroupBy(l => new { l.MultiFornecedorId,
-                                                                                                   l.TipoDocumentoId,
-                                                                                                   l.NumeroDocumento,
-                                                                                                   l.DataVencimento,
-                                                                                                   l.DataEmissao,
-                                                                                                   l.ContratoRetificacaoItem.CodigoClasse,
-                                                                                                   l.Contrato.CodigoCentroCusto
-                                                                                                 }).Select(o => o.First()).ToList();
+                    var medicaoGrupoApropriacao = listaItensMedicaoGrupoTitulos.GroupBy(l => new
+                    {
+                        l.MultiFornecedorId,
+                        l.TipoDocumentoId,
+                        l.NumeroDocumento,
+                        l.DataVencimento,
+                        l.DataEmissao,
+                        l.ContratoRetificacaoItem.CodigoClasse,
+                        l.Contrato.CodigoCentroCusto
+                    }).Select(o => o.First()).ToList();
 
                     listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
                     foreach (var medicaoItemApropriacao in medicaoGrupoApropriacao)
@@ -2107,9 +2524,15 @@ namespace GIR.Sigim.Application.Service.Contrato
                         #endregion
                     }
 
+                    processou = true;
                 }
             }
+
+            return processou;
         }
+
+
+
 
         private Nullable<DateTime> CalcularDataVencimentoImposto(ImpostoFinanceiro impostoFinanceiro, Nullable<DateTime> dataEmissaoDocumento, Nullable<DateTime> dataVencimento)
         {
@@ -2197,6 +2620,15 @@ namespace GIR.Sigim.Application.Service.Contrato
             return identificacao;
         }
 
+        private void PreencherApropriacaoTituloAdiantamento(ApropriacaoAdiantamento apropriacaoAdiantamento, TituloPagarAdiantamento tituloPagarAdiantamento, Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao)
+        {
+            apropriacaoAdiantamento.CodigoClasse = contratoRetificacaoItemMedicao.ContratoRetificacaoItem.CodigoClasse;
+            apropriacaoAdiantamento.CodigoCentroCusto = contrato.CodigoCentroCusto;
+            apropriacaoAdiantamento.TituloPagarAdiantamento = tituloPagarAdiantamento;
+            apropriacaoAdiantamento.Valor = contratoRetificacaoItemMedicao.Valor;
+            apropriacaoAdiantamento.Percentual = 100m;
+        }
+
         private void PreencherApropriacaoTitulo(Apropriacao apropriacao, string codigoClasse, string codigoCentroCusto, TituloPagar tituloPagar, TituloReceber tituloReceber, decimal percentual, decimal valor)
         {
             apropriacao.Id = null;
@@ -2231,6 +2663,23 @@ namespace GIR.Sigim.Application.Service.Contrato
             impostoPagar.TituloPagarImpostoId = null;
             impostoPagar.TituloPagarImposto = tituloPagarImposto;
         }
+
+        private void PreencherTituloPagarAdiantamento(TituloPagarAdiantamento tituloPagarAdiantamento, Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao, ContratoRetificacaoProvisao contratoRetificacaoProvisao)
+        {
+            ClienteFornecedor cliente = ObtemClienteFornecedor(contrato, contratoRetificacaoItemMedicao);
+            string identificacao = MontaIdentificacaoTitulo(contrato);
+
+            tituloPagarAdiantamento.ClienteId = cliente.Id;
+            tituloPagarAdiantamento.Identificacao = identificacao;
+            tituloPagarAdiantamento.TipoDocumentoId = contratoRetificacaoItemMedicao.TipoDocumentoId;
+            tituloPagarAdiantamento.Documento = contratoRetificacaoItemMedicao.NumeroDocumento;
+            tituloPagarAdiantamento.DataEmissaoDocumento = contratoRetificacaoItemMedicao.DataEmissao;
+            tituloPagarAdiantamento.ValorAdiantamento = contratoRetificacaoItemMedicao.Valor;
+            tituloPagarAdiantamento.LoginUsuarioCadastro = UsuarioLogado.Login;
+            tituloPagarAdiantamento.DataCadastro = DateTime.Now;
+            tituloPagarAdiantamento.TituloPagarId = contratoRetificacaoProvisao.TituloPagarId;
+        }
+
 
         private void PreencherTituloPagar(TituloPagar tituloPagar, 
                                           int? clienteId, 
@@ -2317,12 +2766,14 @@ namespace GIR.Sigim.Application.Service.Contrato
             tituloReceber.SistemaOrigem = "CTR";
         }
 
-        private void CriarListaDeMedicaoSelecionadas(List<ItemLiberacaoDTO> listaItemLiberacaoDTO, Domain.Entity.Contrato.Contrato contrato, List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas){
+        private bool CriarListaDeMedicaoSelecionadas(List<ItemLiberacaoDTO> listaItemLiberacaoDTO, Domain.Entity.Contrato.Contrato contrato, List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas){
             foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao < (int)SituacaoMedicao.Liberado))
             {
                 ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
                 listaMedicaoSelecionadas.Add(contratoRetificacaoItemMedicao);
             }
+
+            return listaMedicaoSelecionadas.Count > 0 ? true : false;
         }
 
         private ClienteFornecedor ObtemClienteFornecedor(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao)
@@ -2363,9 +2814,70 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
         }
 
-        private void ReprovisionarContratoProvisao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato)
+        //private void ReprovisionarContratoProvisao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato)
+        //{
+        //    if (contrato == null) return;
+
+        //    ContratoRetificacao ultimoContratoRetificacao = contrato.ListaContratoRetificacao.Last();
+
+        //    foreach (ContratoRetificacaoItemMedicao item in listaMedicaoSelecionadas)
+        //    {
+        //        ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.Id).FirstOrDefault();
+
+        //        ContratoRetificacaoProvisao contratoRetificacaoProvisao = contrato.ListaContratoRetificacaoProvisao.Where(l => l.SequencialItem == contratoRetificacaoItemMedicao.SequencialItem && l.SequencialCronograma == contratoRetificacaoItemMedicao.SequencialCronograma).FirstOrDefault();
+
+        //        bool ehProvisionamentoParcial = ReCalcularProvisao(contratoRetificacaoProvisao, contratoRetificacaoItemMedicao);
+
+        //        decimal valorRetencao = 0;
+
+        //        if (ehProvisionamentoParcial)
+        //        {
+        //            ContratoRetificacaoItem contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemMedicao.ContratoRetificacaoItemId).FirstOrDefault();
+
+        //            valorRetencao = CalcularValorRetencao(ultimoContratoRetificacao, contratoRetificacaoProvisao, contratoRetificacaoItem);
+
+        //            if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
+        //            {
+        //                ReApropriarContratoProvisaoParcialAPagar(contratoRetificacaoProvisao,valorRetencao);
+        //                ReCalcularImpostoProvisaoParcialAPagar(contrato, contratoRetificacaoProvisao);
+        //            }
+        //            else
+        //            {
+        //                ReApropriarContratoProvisaoParcialAReceber(contratoRetificacaoProvisao, valorRetencao);
+        //                ReCalcularImpostoProvisaoParcialAReceber(contrato, contratoRetificacaoProvisao);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
+        //            {
+        //                if (contratoRetificacaoProvisao.TituloPagar.Situacao < SituacaoTituloPagar.Emitido)
+        //                {
+        //                    RemoverImpostosDoTituloAPagar(contratoRetificacaoProvisao.TituloPagar);
+        //                    RemoverApropriacoesDoTituloAPagar(contratoRetificacaoProvisao.TituloPagar);
+        //                    contratoRetificacaoProvisao.TituloPagarId = null;
+        //                    contratoRetificacaoProvisao.TituloPagar = null;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                if (contratoRetificacaoProvisao.TituloReceber.Situacao < SituacaoTituloReceber.Predatado)
+        //                {
+        //                    RemoverImpostosDoTituloAReceber(contratoRetificacaoProvisao.TituloReceber);
+        //                    RemoverApropriacoesDoTituloAReceber(contratoRetificacaoProvisao.TituloReceber);
+        //                    contratoRetificacaoProvisao.TituloReceberId = null;
+        //                    contratoRetificacaoProvisao.TituloReceber = null;
+        //                }
+        //            }
+        //
+        //            RemoverContratoProvisao(contrato, contratoRetificacaoProvisao);
+        //        }
+        //    }
+        //}
+
+        private bool ReprovisionarContratoProvisao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato)
         {
-            if (contrato == null) return;
+            bool processou = false;
 
             ContratoRetificacao ultimoContratoRetificacao = contrato.ListaContratoRetificacao.Last();
 
@@ -2375,52 +2887,102 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                 ContratoRetificacaoProvisao contratoRetificacaoProvisao = contrato.ListaContratoRetificacaoProvisao.Where(l => l.SequencialItem == contratoRetificacaoItemMedicao.SequencialItem && l.SequencialCronograma == contratoRetificacaoItemMedicao.SequencialCronograma).FirstOrDefault();
 
-                bool ehProvisionamentoParcial = ReCalcularProvisao(contratoRetificacaoProvisao, contratoRetificacaoItemMedicao);
-
-                decimal valorRetencao = 0;
-
-                if (ehProvisionamentoParcial)
+                bool ehAntecipado = contratoRetificacaoProvisao.PagamentoAntecipado.HasValue ? contratoRetificacaoProvisao.PagamentoAntecipado.Value : false;
+                if (ehAntecipado)
                 {
-                    ContratoRetificacaoItem contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemMedicao.ContratoRetificacaoItemId).FirstOrDefault();
-
-                    valorRetencao = CalcularValorRetencao(ultimoContratoRetificacao, contratoRetificacaoProvisao, contratoRetificacaoItem);
+                    #region "Antecipação - Trata titulo, apropriação e armazena o valor adiantado no contrato provisao"
 
                     if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
                     {
-                        ReApropriarContratoProvisaoParcialAPagar(contratoRetificacaoProvisao,valorRetencao);
-                        ReCalcularImpostoProvisaoParcialAPagar(contrato, contratoRetificacaoProvisao);
+                        TituloPagarAdiantamento tituloPagarAdiantamento = new TituloPagarAdiantamento();
+                        PreencherTituloPagarAdiantamento(tituloPagarAdiantamento, contrato, contratoRetificacaoItemMedicao, contratoRetificacaoProvisao);
+                        contratoRetificacaoProvisao.TituloPagar.ListaTituloPagarAdiantamento.Add(tituloPagarAdiantamento);
+
+                        ApropriacaoAdiantamento apropriacaoAdiantamento = new ApropriacaoAdiantamento();
+                        PreencherApropriacaoTituloAdiantamento(apropriacaoAdiantamento, tituloPagarAdiantamento, contrato, contratoRetificacaoItemMedicao);
+                        contratoRetificacaoItemMedicao.DataLiberacao = DateTime.Now;
+                        contratoRetificacaoItemMedicao.UsuarioLiberacao = UsuarioLogado.Login;
+                        contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.Liberado;
+                        tituloPagarAdiantamento.ListaApropriacaoAdiantamento.Add(apropriacaoAdiantamento);
+
+                        decimal valorDescontado = contratoRetificacaoProvisao.ValorAdiantadoDescontado.HasValue ? contratoRetificacaoProvisao.ValorAdiantadoDescontado.Value : 0;
+                        valorDescontado = valorDescontado + contratoRetificacaoItemMedicao.Valor;
+
+                        contratoRetificacaoProvisao.ValorAdiantadoDescontado = valorDescontado;
+
+                        processou = true;
                     }
-                    else
-                    {
-                        ReApropriarContratoProvisaoParcialAReceber(contratoRetificacaoProvisao, valorRetencao);
-                        ReCalcularImpostoProvisaoParcialAReceber(contrato, contratoRetificacaoProvisao);
-                    }
+
+                    #endregion
                 }
                 else
                 {
-                    if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
+                    #region "Sem antecipação - Trata título, apropriação, imposto  do contrato provisao"
+
+                    bool ehProvisionamentoParcial = ReCalcularProvisao(contratoRetificacaoProvisao, contratoRetificacaoItemMedicao);
+
+                    decimal valorRetencao = 0;
+
+                    if (ehProvisionamentoParcial)
                     {
-                        if (contratoRetificacaoProvisao.TituloPagar.Situacao < SituacaoTituloPagar.Emitido)
+                        //ContratoRetificacaoItem contratoRetificacaoItem = contrato.ListaContratoRetificacaoItem.Where(l => l.Id == contratoRetificacaoItemMedicao.ContratoRetificacaoItemId).FirstOrDefault();
+                        ContratoRetificacaoItem contratoRetificacaoItem = contratoRetificacaoItemMedicao.ContratoRetificacaoItem;
+
+                        valorRetencao = CalcularValorRetencao(ultimoContratoRetificacao, contratoRetificacaoProvisao, contratoRetificacaoItem);
+
+                        if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
                         {
-                            RemoverImpostosDoTituloAPagar(contratoRetificacaoProvisao.TituloPagar);
-                            RemoverApropriacoesDoTituloAPagar(contratoRetificacaoProvisao.TituloPagar);
-                            contratoRetificacaoProvisao.TituloPagarId = null;
-                            contratoRetificacaoProvisao.TituloPagar = null;
+                            ReApropriarContratoProvisaoParcialAPagar(contratoRetificacaoProvisao, valorRetencao);
+                            ReCalcularImpostoProvisaoParcialAPagar(contrato, contratoRetificacaoProvisao);
                         }
+                        else
+                        {
+                            ReApropriarContratoProvisaoParcialAReceber(contratoRetificacaoProvisao, valorRetencao);
+                            ReCalcularImpostoProvisaoParcialAReceber(contrato, contratoRetificacaoProvisao);
+                        }
+
+                        processou = true;
                     }
                     else
                     {
-                        if (contratoRetificacaoProvisao.TituloReceber.Situacao < SituacaoTituloReceber.Predatado)
+                        if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
                         {
-                            RemoverImpostosDoTituloAReceber(contratoRetificacaoProvisao.TituloReceber);
-                            RemoverApropriacoesDoTituloAReceber(contratoRetificacaoProvisao.TituloReceber);
-                            contratoRetificacaoProvisao.TituloReceberId = null;
-                            contratoRetificacaoProvisao.TituloReceber = null;
+                            if (contratoRetificacaoProvisao.TituloPagar.Situacao < SituacaoTituloPagar.Emitido)
+                            {
+                                RemoverImpostosDoTituloAPagar(contratoRetificacaoProvisao.TituloPagar);
+                                RemoverApropriacoesDoTituloAPagar(contratoRetificacaoProvisao.TituloPagar);
+                                contratoRetificacaoProvisao.TituloPagarId = null;
+                                contratoRetificacaoProvisao.TituloPagar = null;
+                            }
                         }
+                        else
+                        {
+                            if (contratoRetificacaoProvisao.TituloReceber.Situacao < SituacaoTituloReceber.Predatado)
+                            {
+                                RemoverImpostosDoTituloAReceber(contratoRetificacaoProvisao.TituloReceber);
+                                RemoverApropriacoesDoTituloAReceber(contratoRetificacaoProvisao.TituloReceber);
+                                contratoRetificacaoProvisao.TituloReceberId = null;
+                                contratoRetificacaoProvisao.TituloReceber = null;
+                            }
+                        }
+
+                        RemoverContratoProvisao(contrato, contratoRetificacaoProvisao);
+
+                        processou = true;
                     }
 
-                    contrato.ListaContratoRetificacaoProvisao.Remove(contratoRetificacaoProvisao);
-                }
+                    #endregion
+                }               
+            }
+
+            return processou;
+        }
+
+        private void RemoverContratoProvisao(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoProvisao contratoRetificacaoProvisao)
+        {
+            if (contrato.ListaContratoRetificacaoProvisao.Any(l => l.Id == contratoRetificacaoProvisao.Id))
+            {
+                contratoRetificacaoProvisaoRepository.Remover(contratoRetificacaoProvisao);
             }
         }
 
@@ -2600,7 +3162,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             decimal baseRetencaoItem = 0;
             decimal retencaoPrazoItem = 0;
             decimal valorRetencao = 0;
-            if (retencaoContratual > 0)
+            if ((retencaoContratual > 0) || (retencaoItem > 0))
             {
                 valorRetencao = Math.Round(((contratoRetificacaoProvisao.Valor * retencaoContratual) / 100), 2);
 

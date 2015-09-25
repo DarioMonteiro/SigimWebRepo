@@ -23,6 +23,7 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public decimal Quantidade { get; set; }
         public decimal PercentualExecucao { get; set; }
         public decimal Valor { get; set; }
+        public bool? EhPagamentoAntecipado { get; set; }
 
         public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
         public ICollection<ContratoRetificacaoItemMedicao> ListaContratoRetificacaoItemMedicao { get; set; }

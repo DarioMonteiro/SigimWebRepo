@@ -27,7 +27,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasMaxLength(50);
 
             Property(l => l.Ativo)
-                .HasColumnName("situacao")
+                .HasColumnName("ativo")
                 .HasColumnType("bit");
         }
     }
