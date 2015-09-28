@@ -68,6 +68,7 @@
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemCronogramaConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemImpostoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemMedicaoConfiguration.cs" />
+    <Compile Include="Configuration\Contrato\ContratoRetificacaoItemMedicaoNFConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoProvisaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\LicitacaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\LicitacaoDescricaoConfiguration.cs" />

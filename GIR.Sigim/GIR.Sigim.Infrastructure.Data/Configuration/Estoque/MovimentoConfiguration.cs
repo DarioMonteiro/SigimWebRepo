@@ -87,7 +87,12 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
             Property(l => l.EhMovimentoTemporario)
                 .HasColumnName("movimentoTemporario");
 
-            //Contrato
+            Property(l => l.ContratoId)
+                .HasColumnName("contrato");
+
+            HasOptional<Domain.Entity.Contrato.Contrato>(l => l.Contrato)
+                .WithMany(c => c.ListaMovimento)
+                .HasForeignKey(l => l.ContratoId);
         }
     }
 }

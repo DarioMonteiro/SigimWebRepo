@@ -7,6 +7,7 @@ using GIR.Sigim.Domain.Entity.Admin;
 using GIR.Sigim.Domain.Entity.Estoque;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
@@ -57,6 +58,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<OrcamentoComposicaoItem> ListaOrcamentoComposicaoItem { get; set; }
         public ICollection<EstoqueMaterial> ListaEstoqueMaterial { get; set; }
         public ICollection<MovimentoItem> ListaMovimentoItem { get; set; }
+        public ICollection<ContratoRetificacaoItemMedicaoNF> ListaContratoRetificacaoItemMedicaoNF { get; set; }
 
         public Material()
         {
@@ -67,6 +69,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaOrcamentoComposicaoItem = new HashSet<OrcamentoComposicaoItem>();
             this.ListaEstoqueMaterial = new HashSet<EstoqueMaterial>();
             this.ListaMovimentoItem = new HashSet<MovimentoItem>();
+            this.ListaContratoRetificacaoItemMedicaoNF = new HashSet<ContratoRetificacaoItemMedicaoNF>();
         }
     }
 }
