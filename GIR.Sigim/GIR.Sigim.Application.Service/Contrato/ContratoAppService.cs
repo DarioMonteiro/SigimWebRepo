@@ -1846,6 +1846,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                         if (estoqueMaterial == null)
                         {
                             estoqueMaterial = new EstoqueMaterial();
+                            estoqueMaterial.MaterialId = medicaoNFItemEstoque.MaterialId;
+                            estoqueMaterial.EstoqueId = estoque.Id;
                             estoqueMaterial.Quantidade = 0;
                             estoqueMaterial.QuantidadeTemporaria = 0;
                             estoqueMaterial.Valor = 0;
@@ -1884,6 +1886,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                         if (estoqueMaterial == null)
                         {
                             estoqueMaterial = new EstoqueMaterial();
+                            estoqueMaterial.MaterialId = medicaoNFItemEstoque.MaterialId;
+                            estoqueMaterial.EstoqueId = estoque.Id;
                             estoqueMaterial.Quantidade = 0;
                             estoqueMaterial.QuantidadeTemporaria = 0;
                             estoqueMaterial.Valor = 0;
