@@ -1636,7 +1636,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             return retorno;
         }
 
-        public bool AprovarLiberarListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        public bool AprovarLiberarListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO , OperacaoAprovarLiberar operacao)
         {
             bool retorno = false;
             if (listaItemLiberacaoDTO == null)
@@ -1651,10 +1651,24 @@ namespace GIR.Sigim.Application.Service.Contrato
                 return retorno;
             }
 
-            if (listaItemLiberacaoDTO.Any(l => l.Selecionado == true && l.CodigoSituacao > (int)SituacaoMedicao.AguardandoLiberacao))
+            if (operacao == OperacaoAprovarLiberar.AprovarLiberar)
             {
-                messageQueue.Add("Existe(m) medição(ões) com situação diferente de Aguardando aprovação ou Aguardando liberação!", TypeMessage.Info);
-                return retorno;
+                if (listaItemLiberacaoDTO.Any(l => l.Selecionado == true && l.CodigoSituacao > (int)SituacaoMedicao.AguardandoLiberacao))
+                {
+                    messageQueue.Add("Existe(m) medição(ões) com situação diferente de Aguardando aprovação ou Aguardando liberação!", TypeMessage.Info);
+                    return retorno;
+                }
+            }
+            else
+            {
+                if (operacao == OperacaoAprovarLiberar.Liberar)
+                {
+                    if (listaItemLiberacaoDTO.Any(l => l.Selecionado == true && l.CodigoSituacao != (int)SituacaoMedicao.AguardandoLiberacao))
+                    {
+                        messageQueue.Add("Existe(m) medição(ões) com situação diferente de Aguardando liberação!", TypeMessage.Info);
+                        return retorno;
+                    }
+                }
             }
 
             var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
@@ -1713,26 +1727,10 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas = new List<ContratoRetificacaoItemMedicao>();
 
-            bool processou = false;
-            processou = CriarListaDeMedicaoSelecionadas(listaItemLiberacaoDTO, contrato, listaMedicaoSelecionadas);
-            if (processou)
-            {
-                AtualizarContratoRetencao(listaMedicaoSelecionadas, contrato);
-                processou = ReprovisionarContratoProvisao(listaMedicaoSelecionadas, contrato);
-            }
-            if (processou)
-            {
-                processou = GerarTitulosApropriadosLiberacao(listaMedicaoSelecionadas, contrato, geraTituloSituacaoAguardandoLiberacao, geraTituloImposto);
-            }
-
-            if (!processou)
-            {
-                msg = "Ocorreu erro na liberação da(s) medição(ões)";
-                messageQueue.Add(msg, TypeMessage.Error);
-                ehValido = false;
-                return retorno;
-            }
-
+            CriarListaDeMedicaoSelecionadas(listaItemLiberacaoDTO, contrato, listaMedicaoSelecionadas);
+            AtualizarContratoRetencao(listaMedicaoSelecionadas, contrato);
+            ReprovisionarContratoProvisao(listaMedicaoSelecionadas, contrato);
+            GerarTitulosApropriadosLiberacao(listaMedicaoSelecionadas, contrato, geraTituloSituacaoAguardandoLiberacao, geraTituloImposto);
             GerarEntradaDeEstoque(listaMedicaoSelecionadas, contrato);
 
             try
@@ -1920,10 +1918,8 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
         }
 
-        private bool GerarTitulosApropriadosLiberacao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato, bool geraTituloAguardandoLiberacao, bool geraTituloImposto)
+        private void GerarTitulosApropriadosLiberacao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato, bool geraTituloAguardandoLiberacao, bool geraTituloImposto)
         {
-            bool processou = false;
-
             string identificacaoTitulo = MontaIdentificacaoTitulo(contrato);
 
             List<ContratoRetificacaoItemMedicao> medicaoGrupoTitulos = new List<ContratoRetificacaoItemMedicao>();
@@ -1941,15 +1937,14 @@ namespace GIR.Sigim.Application.Service.Contrato
                 medicaoGrupoTitulos = listaMedicaoSelecionadas.Where(l => (l.ContratoRetificacaoItemCronograma.EhPagamentoAntecipado.HasValue && l.ContratoRetificacaoItemCronograma.EhPagamentoAntecipado.Value == false) || (!l.ContratoRetificacaoItemCronograma.EhPagamentoAntecipado.HasValue)).GroupBy(l => new { l.MultiFornecedorId, l.TipoDocumentoId, l.NumeroDocumento, l.DataVencimento, l.DataEmissao }).Select(o => o.First()).ToList();
             }
 
-            //Na lista de medições selecionada existem medições com pagamento antecipado, 
-            //mas não existe nenhuma medição para ser liberada sem pagamento antecipado
-            if (temPagamentoAntecipado && medicaoGrupoTitulos.Count == 0)
-            {
-                processou = true;
-                return processou;
-            }
-
             #endregion
+
+            //Na lista de medições selecionada podem existir medições com pagamento antecipado, 
+            //mas não possuir nenhuma medição para ser liberada sem pagamento antecipado,
+            //então essa condição (temPagamentoAntecipado == true and medicaoGrupoTitulos.Count == 0)
+            //não processará o foreach abaixo 
+
+            #region "Processamento das medições selecionadas que não possuem pagamento antecipado"
 
             List<ContratoRetificacaoItemImposto> listaImpostosMedicaoSelecionadas = new List<ContratoRetificacaoItemImposto>();
 
@@ -2176,8 +2171,6 @@ namespace GIR.Sigim.Application.Service.Contrato
                     }
                     #endregion
 
-                    processou = true;
-
                 }
                 else
                 {
@@ -2314,12 +2307,10 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                         #endregion
                     }
-
-                    processou = true;
                 }
             }
 
-            return processou;
+            #endregion
         }
 
         private Nullable<DateTime> CalcularDataVencimentoImposto(ImpostoFinanceiro impostoFinanceiro, Nullable<DateTime> dataEmissaoDocumento, Nullable<DateTime> dataVencimento)
@@ -2597,14 +2588,12 @@ namespace GIR.Sigim.Application.Service.Contrato
             tituloReceber.SistemaOrigem = "CTR";
         }
 
-        private bool CriarListaDeMedicaoSelecionadas(List<ItemLiberacaoDTO> listaItemLiberacaoDTO, Domain.Entity.Contrato.Contrato contrato, List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas){
+        private void CriarListaDeMedicaoSelecionadas(List<ItemLiberacaoDTO> listaItemLiberacaoDTO, Domain.Entity.Contrato.Contrato contrato, List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas){
             foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao < (int)SituacaoMedicao.Liberado))
             {
                 ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
                 listaMedicaoSelecionadas.Add(contratoRetificacaoItemMedicao);
             }
-
-            return listaMedicaoSelecionadas.Count > 0 ? true : false;
         }
 
         private ClienteFornecedor ObtemClienteFornecedor(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao)
@@ -2645,10 +2634,8 @@ namespace GIR.Sigim.Application.Service.Contrato
             }
         }
 
-        private bool ReprovisionarContratoProvisao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato)
+        private void ReprovisionarContratoProvisao(List<ContratoRetificacaoItemMedicao> listaMedicaoSelecionadas, Domain.Entity.Contrato.Contrato contrato)
         {
-            bool processou = false;
-
             ContratoRetificacao ultimoContratoRetificacao = contrato.ListaContratoRetificacao.Last();
 
             foreach (ContratoRetificacaoItemMedicao item in listaMedicaoSelecionadas)
@@ -2680,7 +2667,6 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                         contratoRetificacaoProvisao.ValorAdiantadoDescontado = valorDescontado;
 
-                        processou = true;
                     }
 
                     #endregion
@@ -2709,8 +2695,6 @@ namespace GIR.Sigim.Application.Service.Contrato
                             ReApropriarContratoProvisaoParcialAReceber(contratoRetificacaoProvisao, valorRetencao);
                             ReCalcularImpostoProvisaoParcialAReceber(contrato, contratoRetificacaoProvisao);
                         }
-
-                        processou = true;
                     }
                     else
                     {
@@ -2736,15 +2720,11 @@ namespace GIR.Sigim.Application.Service.Contrato
                         }
 
                         RemoverContratoProvisao(contrato, contratoRetificacaoProvisao);
-
-                        processou = true;
                     }
 
                     #endregion
                 }               
             }
-
-            return processou;
         }
 
         private void RemoverContratoProvisao(Domain.Entity.Contrato.Contrato contrato, ContratoRetificacaoProvisao contratoRetificacaoProvisao)

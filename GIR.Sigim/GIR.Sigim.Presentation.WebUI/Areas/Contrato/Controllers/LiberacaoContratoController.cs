@@ -13,6 +13,7 @@ using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Service.Financeiro;
 using Newtonsoft.Json;
+using GIR.Sigim.Application.Enums;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -537,14 +538,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         [HttpPost]
         public ActionResult TratarAprovarLiberar(int? contratoId, int? contratoRetificacaoId, string listaItemLiberacao)
         {
-            bool ehAprovado = false;
+            bool ehAprovadoLiberado = false;
             string msg = "";
 
             if (contratoId.HasValue && contratoRetificacaoId.HasValue)
             {
                 if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
                 {
-                    ehAprovado = false;
+                    ehAprovadoLiberado = false;
                     msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
                 }
                 else
@@ -553,7 +554,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
 
-                        ehAprovado = contratoAppService.AprovarLiberarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO);
+                        ehAprovadoLiberado = contratoAppService.AprovarLiberarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO, OperacaoAprovarLiberar.AprovarLiberar);
                         if (messageQueue.GetAll().Count > 0)
                         {
                             msg = messageQueue.GetAll()[0].Text;
@@ -562,14 +563,56 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     }
                     else
                     {
-                        ehAprovado = false;
+                        ehAprovadoLiberado = false;
                         msg = "Nenhum item da lista foi selecionado";
                     }
                 }
             }
             return Json(new
             {
-                ehAprovado = ehAprovado,
+                ehAprovadoLiberado = ehAprovadoLiberado,
+                message = msg,
+                redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
+            });
+        }
+
+
+        [HttpPost]
+        public ActionResult TratarLiberar(int? contratoId, int? contratoRetificacaoId, string listaItemLiberacao)
+        {
+            bool ehLiberado = false;
+            string msg = "";
+
+            if (contratoId.HasValue && contratoRetificacaoId.HasValue)
+            {
+                if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
+                {
+                    ehLiberado = false;
+                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(listaItemLiberacao))
+                    {
+                        List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
+
+                        ehLiberado = contratoAppService.AprovarLiberarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO, OperacaoAprovarLiberar.Liberar);
+                        if (messageQueue.GetAll().Count > 0)
+                        {
+                            msg = messageQueue.GetAll()[0].Text;
+                            messageQueue.Clear();
+                        }
+                    }
+                    else
+                    {
+                        ehLiberado = false;
+                        msg = "Nenhum item da lista foi selecionado";
+                    }
+                }
+            }
+            return Json(new
+            {
+                ehLiberado = ehLiberado,
                 message = msg,
                 redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
             });
