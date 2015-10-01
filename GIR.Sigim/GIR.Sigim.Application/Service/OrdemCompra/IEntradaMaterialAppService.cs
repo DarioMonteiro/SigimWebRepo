@@ -36,5 +36,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         bool ExisteEstoqueParaCentroCusto(string codigoCentroCusto);
         bool ExisteMovimentoNoEstoque(EntradaMaterialDTO dto);
         bool HaPossibilidadeCancelamentoEntradaMaterial(int? entradaMaterialId);
+        bool HaPossibilidadeLiberacaoTitulos(int? entradaMaterialId);
     }
 }

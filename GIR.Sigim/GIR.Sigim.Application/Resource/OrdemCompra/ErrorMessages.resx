@@ -162,4 +162,34 @@
   <data name="ExisteFormaPagamentoParaItemSelecionado" xml:space="preserve">
     <value>Existe(m) forma(s) de pagamento(s) para a ordem de compra do item selecionado.</value>
   </data>
+  <data name="DefinaFormasPagamento" xml:space="preserve">
+    <value>Antes de liberar título(s) para o financeiro, defina a(s) forma(s) de pagamento da EM.</value>
+  </data>
+  <data name="InformeDadosFreteParaLiberacao" xml:space="preserve">
+    <value>Antes de liberar títulos, informe os dados da nota fiscal do frete.</value>
+  </data>
+  <data name="OcorreuBloqueioContabil" xml:space="preserve">
+    <value>Operações anteriores a data de '{0}' não poderão ser realizadas, pois foi cadastrado um bloqueio contábil  para o centro de custo '{1}'.</value>
+  </data>
+  <data name="ParaLiberacaoTitulosDevemEstarProvisionados" xml:space="preserve">
+    <value>Só é possível liberar no financeiro títulos com situação provisionado.</value>
+  </data>
+  <data name="ValoresFormaPagamentoDiferenteValoresTituloPagar" xml:space="preserve">
+    <value>Valores das formas de pagamento da OC diferentes dos valores dos títulos.</value>
+  </data>
+  <data name="ValorTotalDiferenteValorNotaFiscal" xml:space="preserve">
+    <value>Valores a liberar para o financeiro diferentes do valor da nota fiscal.</value>
+  </data>
+  <data name="VencimentoFormaPagamentoMenorDataEmissaoNF" xml:space="preserve">
+    <value>A data de vencimento não pode ser menor que a data de emissão da NF.</value>
+  </data>
+  <data name="VencimentoFormaPagamentoMenorDataEntradaMaterial" xml:space="preserve">
+    <value>A data de vencimento não pode ser menor que a data da EM.</value>
+  </data>
+  <data name="VencimentoImpostoMenorDataEmissaoNF" xml:space="preserve">
+    <value>A data de vencimento do imposto não pode ser menor que a data de emissão da NF.</value>
+  </data>
+  <data name="VencimentoImpostoMenorDataEntradaMaterial" xml:space="preserve">
+    <value>A data de vencimento do imposto não pode ser menor que a data da EM.</value>
+  </data>
 </root>

@@ -203,7 +203,6 @@
     <Compile Include="Areas\Orcamento\OrcamentoAreaRegistration.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\EntradaMaterialController.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\OrdemCompraController.cs" />
-    <Compile Include="Areas\OrdemCompra\ViewModel\PossibilidadeCancelamentoEntradaMaterialViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialCadastroViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\ViewModel\EntradaMaterialListaViewModel.cs" />
     <Compile Include="Areas\OrdemCompra\Controllers\RelOCItensOrdemCompraController.cs" />
@@ -238,6 +237,7 @@
     <Compile Include="ViewModel\FormaRecebimentoViewModel.cs" />
     <Compile Include="ViewModel\AgenciaListaViewModel.cs" />
     <Compile Include="ViewModel\AgenciaCadastroViewModel.cs" />
+    <Compile Include="ViewModel\PossibilidadeAcaoViewModel.cs" />
     <Compile Include="ViewModel\UnidadeMedidaViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
