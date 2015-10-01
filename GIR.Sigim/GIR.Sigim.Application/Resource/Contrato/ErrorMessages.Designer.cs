@@ -160,6 +160,33 @@ namespace GIR.Sigim.Application.Resource.Contrato {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O título {0}, já está pago..
+        /// </summary>
+        public static string TituloEstaPago {
+            get {
+                return ResourceManager.GetString("TituloEstaPago", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O título {0}, já foi recebido..
+        /// </summary>
+        public static string TituloEstaRecebido {
+            get {
+                return ResourceManager.GetString("TituloEstaRecebido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O título de imposto {0}, já está pago..
+        /// </summary>
+        public static string TituloImpostoEstaPago {
+            get {
+                return ResourceManager.GetString("TituloImpostoEstaPago", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O valor do campo &quot;{0}&quot; está maior que o valor do campo &quot;{1}&quot;.  .
         /// </summary>
         public static string ValorMaiorQue {

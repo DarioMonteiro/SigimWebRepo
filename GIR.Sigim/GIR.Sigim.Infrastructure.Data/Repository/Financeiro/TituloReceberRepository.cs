@@ -21,6 +21,25 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Financeiro
         #endregion
 
         #region ITituloReceberRepository Members
+
+        public void RemoverTituloReceber(TituloReceber titulo)
+        {
+            if (titulo != (TituloReceber)null)
+            {
+                QueryableUnitOfWork.Attach(titulo);
+                QueryableUnitOfWork.CreateSet<TituloReceber>().Remove(titulo);
+            }
+        }
+
+        public void RemoverApropriacao(Apropriacao apropriacao)
+        {
+            if (apropriacao != (Apropriacao)null)
+            {
+                QueryableUnitOfWork.Attach(apropriacao);
+                QueryableUnitOfWork.CreateSet<Apropriacao>().Remove(apropriacao);
+            }
+        }
+
         #endregion
 
     }

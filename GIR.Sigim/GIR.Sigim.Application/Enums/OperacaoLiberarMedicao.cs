@@ -7,13 +7,15 @@ using System.ComponentModel;
 
 namespace GIR.Sigim.Application.Enums
 {
-    public enum OperacaoAprovarLiberar
+    public enum OperacaoLiberarMedicao
     {
         [Description("AprovarLiberar")]
         AprovarLiberar = 0,
 
         [Description("Liberar")]
-        Liberar = 1
+        Liberar = 1,
 
+        [Description("Cancelar")]
+        Cancelar = 2
     }
 }

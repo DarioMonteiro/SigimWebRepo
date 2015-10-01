@@ -554,7 +554,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
 
-                        ehAprovadoLiberado = contratoAppService.AprovarLiberarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO, OperacaoAprovarLiberar.AprovarLiberar);
+                        ehAprovadoLiberado = contratoAppService.AprovarLiberarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO, OperacaoLiberarMedicao.AprovarLiberar);
                         if (messageQueue.GetAll().Count > 0)
                         {
                             msg = messageQueue.GetAll()[0].Text;
@@ -576,7 +576,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             });
         }
 
-
         [HttpPost]
         public ActionResult TratarLiberar(int? contratoId, int? contratoRetificacaoId, string listaItemLiberacao)
         {
@@ -596,7 +595,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                     {
                         List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
 
-                        ehLiberado = contratoAppService.AprovarLiberarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO, OperacaoAprovarLiberar.Liberar);
+                        ehLiberado = contratoAppService.AprovarLiberarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO, OperacaoLiberarMedicao.Liberar);
                         if (messageQueue.GetAll().Count > 0)
                         {
                             msg = messageQueue.GetAll()[0].Text;
@@ -613,6 +612,48 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return Json(new
             {
                 ehLiberado = ehLiberado,
+                message = msg,
+                redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
+            });
+        }
+
+
+        [HttpPost]
+        public ActionResult TratarCancelar(int? contratoId, int? contratoRetificacaoId, string listaItemLiberacao)
+        {
+            bool ehCancelado = false;
+            string msg = "";
+
+            if (contratoId.HasValue && contratoRetificacaoId.HasValue)
+            {
+                if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
+                {
+                    ehCancelado = false;
+                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(listaItemLiberacao))
+                    {
+                        List<ItemLiberacaoDTO> listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
+
+                        ehCancelado = contratoAppService.CancelarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO);
+                        if (messageQueue.GetAll().Count > 0)
+                        {
+                            msg = messageQueue.GetAll()[0].Text;
+                            messageQueue.Clear();
+                        }
+                    }
+                    else
+                    {
+                        ehCancelado = false;
+                        msg = "Nenhum item da lista foi selecionado";
+                    }
+                }
+            }
+            return Json(new
+            {
+                ehCancelado = ehCancelado,
                 message = msg,
                 redirectToUrl = Url.Action("Liberacao", "LiberacaoContrato", new { area = "Contrato", id = contratoId })
             });

@@ -15,6 +15,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
         public static void Initialise()
         {
             Container.Current.RegisterType<IContratoRepository, ContratoRepository>();
+            Container.Current.RegisterType<IContratoRetencaoRepository, ContratoRetencaoRepository>();
             Container.Current.RegisterType<IContratoRetificacaoItemMedicaoRepository, ContratoRetificacaoItemMedicaoRepository>();
             Container.Current.RegisterType<IContratoRetificacaoProvisaoRepository, ContratoRetificacaoProvisaoRepository>();
             Container.Current.RegisterType<IParametrosContratoRepository, ParametrosContratoRepository>();
