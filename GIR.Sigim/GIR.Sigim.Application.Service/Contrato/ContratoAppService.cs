@@ -3930,13 +3930,17 @@ namespace GIR.Sigim.Application.Service.Contrato
             decimal baseRetencaoItem = 0;
             decimal retencaoPrazoItem = 0;
             decimal valorRetencao = 0;
-            if ((retencaoContratual > 0) || (retencaoItem > 0))
-            {
-                valorRetencao = Math.Round(((contratoRetificacaoProvisao.Valor * retencaoContratual) / 100), 2);
 
+            if (retencaoContratual == 0)
+            {
                 retencaoItem = contratoRetificacaoItem.RetencaoItem.HasValue ? contratoRetificacaoItem.RetencaoItem.Value : 0;
                 baseRetencaoItem = contratoRetificacaoItem.BaseRetencaoItem.HasValue ? contratoRetificacaoItem.BaseRetencaoItem.Value : 0;
                 retencaoPrazoItem = contratoRetificacaoItem.RetencaoPrazoResgate.HasValue ? contratoRetificacaoItem.RetencaoPrazoResgate.Value : 0;
+            }
+
+            if ((retencaoContratual > 0) || (retencaoItem > 0))
+            {
+                valorRetencao = Math.Round(((contratoRetificacaoProvisao.Valor * retencaoContratual) / 100), 2);
 
                 if (retencaoItem > 0)
                 {
