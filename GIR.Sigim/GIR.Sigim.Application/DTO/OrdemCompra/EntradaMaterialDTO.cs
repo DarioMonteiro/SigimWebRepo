@@ -78,6 +78,8 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
 
         public decimal? PercentualISS { get; set; }
         public decimal? ISS { get; set; }
+
+        [Display(Name = "Valor frete")]
         public decimal? FreteIncluso { get; set; }
 
         [Display(Name = "Data cadastro")]
@@ -95,14 +97,30 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public Nullable<DateTime> DataCancelamento { get; set; }
         public string LoginUsuarioCancelamento { get; set; }
         public string MotivoCancelamento { get; set; }
-        public int? TransportadoraId { get; set; }
+        private ClienteFornecedorDTO transportadora;
+        public ClienteFornecedorDTO Transportadora
+        {
+            get { return transportadora ?? new ClienteFornecedorDTO(); }
+            set { transportadora = value; }
+        }
+
+        [Display(Name = "Data")]
         public Nullable<DateTime> DataFrete { get; set; }
+
+        [Display(Name = "Valor")]
         public decimal? ValorFrete { get; set; }
+
+        [Display(Name = "Tipo")]
         public int? TipoNotaFreteId { get; set; }
-        //public TipoDocumento TipoNotaFrete { get; set; }
+
+        [Display(Name = "Número")]
         public string NumeroNotaFrete { get; set; }
-        public int? OrdemCompraFrete { get; set; }
-        public int? TituloFrete { get; set; }
+
+        [Display(Name = "OC")]
+        public int? OrdemCompraFreteId { get; set; }
+
+        [Display(Name = "Título")]
+        public int? TituloFreteId { get; set; }
 
         [Display(Name = "Tipo de compra")]
         public string CodigoTipoCompra { get; set; }

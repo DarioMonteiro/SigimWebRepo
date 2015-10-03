@@ -323,6 +323,18 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return entradaMaterial.ListaItens.To<List<EntradaMaterialItemDTO>>();
         }
 
+        public List<FreteDTO> ListarFretePendente(int? entradaMaterialId)
+        {
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId, UsuarioLogado.Id,
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.Transportadora.PessoaJuridica));
+
+            return entradaMaterial.ListaItens
+                .Select(l => l.OrdemCompraItem.OrdemCompra)
+                .Distinct()
+                .Where(o => o.TransportadoraId.HasValue && o.Situacao == SituacaoOrdemCompra.Liberada && !o.EntradaMaterialFreteId.HasValue)
+                .To<List<FreteDTO>>();
+        }
+
         public bool CancelarEntrada(int? id, string motivo)
         {
             if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialCancelar))

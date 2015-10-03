@@ -19,6 +19,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
     {
         public EntradaMaterialDTO EntradaMaterial { get; set; }
         public SelectList ListaTipoNotaFiscal { get; set; }
+        public SelectList ListaTipoNotaFrete { get; set; }
         public SelectList ListaTipoCompra { get; set; }
         public SelectList ListaCifFob { get; set; }
         public SelectList ListaNaturezaOperacao { get; set; }

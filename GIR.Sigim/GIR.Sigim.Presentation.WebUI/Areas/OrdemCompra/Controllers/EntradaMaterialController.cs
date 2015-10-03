@@ -150,6 +150,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         private void CarregarCombos(EntradaMaterialCadastroViewModel model)
         {
             int? tipoNotaFiscalId = null;
+            int? tipoNotaFreteId = null;
             string CodigoTipoCompra = null;
             int? CifFobId = null;
             string codigoNaturezaOperacao = null;
@@ -160,6 +161,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             if (model.EntradaMaterial != null)
             {
                 tipoNotaFiscalId = model.EntradaMaterial.TipoNotaFiscalId;
+                tipoNotaFreteId = model.EntradaMaterial.TipoNotaFreteId;
                 CodigoTipoCompra = model.EntradaMaterial.CodigoTipoCompra;
                 CifFobId = model.EntradaMaterial.CifFobId;
                 codigoNaturezaOperacao = model.EntradaMaterial.CodigoNaturezaOperacao;
@@ -168,7 +170,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 CodigoContribuicaoId = model.EntradaMaterial.CodigoContribuicaoId;
             }
 
-            model.ListaTipoNotaFiscal = new SelectList(tipoDocumentoAppService.ListarTodos(), "Id", "Sigla", tipoNotaFiscalId);
+            var listaTipoDocumento = tipoDocumentoAppService.ListarTodos();
+            model.ListaTipoNotaFiscal = new SelectList(listaTipoDocumento, "Id", "Sigla", tipoNotaFiscalId);
+            model.ListaTipoNotaFrete = new SelectList(listaTipoDocumento, "Id", "Sigla", tipoNotaFreteId);
             model.ListaTipoCompra = new SelectList(tipoCompraAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
             model.ListaCifFob = new SelectList(cifFobAppService.ListarTodos(), "Id", "Descricao", tipoNotaFiscalId);
             model.ListaNaturezaOperacao = new SelectList(naturezaOperacaoAppService.ListarTodos(), "Codigo", "CodigoComDescricao", tipoNotaFiscalId);
@@ -271,6 +275,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             var messages = messageQueue.GetAll();
             messageQueue.Clear();
             return Json(new { Messages = messages, Itens = jsonItens });
+        }
+
+        [HttpPost]
+        public ActionResult ListarFretePendente(int? entradaMaterialId)
+        {
+            return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFretePendente(entradaMaterialId)));
         }
     }
 }
