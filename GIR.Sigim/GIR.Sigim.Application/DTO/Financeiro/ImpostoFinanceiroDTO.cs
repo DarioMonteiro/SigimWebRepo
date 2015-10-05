@@ -12,12 +12,12 @@ namespace GIR.Sigim.Application.DTO.Financeiro
 {
     public class ImpostoFinanceiroDTO : BaseDTO 
     {
-        [Required]
+        //[Required]
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Sigla")]
         public string Sigla { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Descrição")]
         public string Descricao { get; set; }

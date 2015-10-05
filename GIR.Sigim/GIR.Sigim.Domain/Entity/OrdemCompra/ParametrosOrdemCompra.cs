@@ -52,7 +52,13 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
             set { diasPagamento = value; }
         }
 
-        public bool? EhObrigatorioDadosSPED { get; set; }
+        private bool? ehObrigatorioDadosSPED;
+        public bool? EhObrigatorioDadosSPED
+        {
+            get { return ehObrigatorioDadosSPED.HasValue ? ehObrigatorioDadosSPED : false; }
+            set { ehObrigatorioDadosSPED = value; }
+        }
+
         public bool? EhGeraRequisicaoMaterialRequisitada { get; set; }
 
         public ParametrosOrdemCompra()

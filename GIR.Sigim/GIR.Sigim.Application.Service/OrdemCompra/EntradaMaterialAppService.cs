@@ -195,6 +195,249 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
         }
 
+        public bool Salvar(EntradaMaterialDTO dto)
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            if (dto == null)
+                throw new ArgumentNullException("dto");
+
+            bool novoItem = false;
+
+            var entradaMaterial = ObterPeloIdEUsuario(dto.Id, UsuarioLogado.Id,
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.ListaOrdemCompraFormaPagamento.Select(s => s.TituloPagar.ListaApropriacao)),
+                l => l.ListaItens.Select(o => o.OrdemCompraItem.OrdemCompra.TituloFrete.ListaApropriacao),
+                l => l.ListaFormaPagamento.Select(o => o.TituloPagar.ListaImpostoPagar.Select(s => s.TituloPagarImposto)),
+                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TituloPagar.ListaImpostoPagar),
+                l => l.ListaFormaPagamento.Select(o => o.ListaTituloPagarAdiantamento.Select(s => s.ListaApropriacaoAdiantamento)),
+                l => l.ListaImposto,
+                l => l.ListaMovimentoEstoque,
+                l => l.OrdemCompraFrete,
+                l => l.TituloFrete.ListaApropriacao);
+
+            if (entradaMaterial == null)
+            {
+                entradaMaterial = new EntradaMaterial();
+                entradaMaterial.Situacao = SituacaoEntradaMaterial.Pendente;
+                entradaMaterial.DataCadastro = DateTime.Now;
+                entradaMaterial.LoginUsuarioCadastro = UsuarioLogado.Login;
+                novoItem = true;
+            }
+
+            if (!PodeSerSalvaNaSituacaoAtual(entradaMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            entradaMaterial.Data = dto.Data;
+            entradaMaterial.Observacao = dto.Observacao;
+            entradaMaterial.CodigoCentroCusto = dto.CentroCusto.Codigo;
+            entradaMaterial.ClienteFornecedorId = dto.ClienteFornecedor.Id;
+            entradaMaterial.FornecedorNotaId = dto.FornecedorNota.Id.HasValue ? dto.FornecedorNota.Id : null;
+            entradaMaterial.TipoNotaFiscalId = dto.TipoNotaFiscalId;
+            entradaMaterial.NumeroNotaFiscal = dto.NumeroNotaFiscal;
+            entradaMaterial.DataEmissaoNota = dto.DataEmissaoNota;
+            entradaMaterial.DataEntregaNota = dto.DataEntregaNota;
+            entradaMaterial.TransportadoraId = dto.Transportadora.Id;
+            entradaMaterial.DataFrete = dto.DataFrete;
+            entradaMaterial.ValorFrete = dto.ValorFrete;
+            entradaMaterial.TipoNotaFreteId = dto.TipoNotaFreteId;
+            entradaMaterial.NumeroNotaFrete = dto.NumeroNotaFrete;
+            entradaMaterial.OrdemCompraFreteId = dto.OrdemCompraFreteId;
+            entradaMaterial.TituloFreteId = dto.TituloFreteId;
+            entradaMaterial.Desconto = dto.Desconto;
+            entradaMaterial.PercentualDesconto = dto.EhDescontoPercentual ? -1 : (decimal?)null;
+            entradaMaterial.FreteIncluso = dto.FreteIncluso;
+            entradaMaterial.CodigoTipoCompra = dto.CodigoTipoCompra;
+            entradaMaterial.CifFobId = dto.CifFobId;
+            entradaMaterial.CodigoNaturezaOperacao = dto.CodigoNaturezaOperacao;
+            entradaMaterial.SerieNFId = dto.SerieNFId;
+            entradaMaterial.CodigoCST = dto.CodigoCST;
+            entradaMaterial.CodigoContribuicaoId = dto.CodigoContribuicaoId;
+            entradaMaterial.CodigoBarras = dto.CodigoBarras;
+            ProcessarItens(dto, entradaMaterial);
+            ProcessarImpostos(dto, entradaMaterial);
+
+            if (!EhGravacaoPossivel(entradaMaterial))
+                return false;
+
+            if (Validator.IsValid(entradaMaterial, out validationErrors))
+            {
+                try
+                {
+                    if (novoItem)
+                        entradaMaterialRepository.Inserir(entradaMaterial);
+                    else
+                        entradaMaterialRepository.Alterar(entradaMaterial);
+
+                    entradaMaterialRepository.UnitOfWork.Commit();
+                    //GravarLogOperacao(entradaMaterial, novoItem ? "INSERT" : "UPDATE");
+
+                    dto.Id = entradaMaterial.Id;
+                    messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    QueueExeptionMessages(exception);
+                }
+            }
+            else
+                messageQueue.AddRange(validationErrors, TypeMessage.Error);
+
+            return false;
+        }
+
+        private bool EhGravacaoPossivel(EntradaMaterial entradaMaterial)
+        {
+            if (this.ParametrosOrdemCompra.EhObrigatorioDadosSPED.Value)
+            {
+                if (string.IsNullOrEmpty(entradaMaterial.CodigoTipoCompra))
+                {
+                    var msg = string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo de compra");
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return false;
+                }
+
+                if (!entradaMaterial.CifFobId.HasValue)
+                {
+                    var msg = string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "CIF-FOB");
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(entradaMaterial.CodigoNaturezaOperacao))
+                {
+                    var msg = string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Natureza da operação");
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return false;
+                }
+
+                if (!entradaMaterial.SerieNFId.HasValue)
+                {
+                    var msg = string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Série");
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(entradaMaterial.CodigoCST))
+                {
+                    var msg = string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "CST");
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(entradaMaterial.CodigoContribuicaoId))
+                {
+                    var msg = string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Contribuição");
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    return false;
+                }
+            }
+
+
+            if (!EhDataEntradaMaterialValida(entradaMaterial.Id, entradaMaterial.Data))
+                return false;
+
+            if (!EhNumeroNotaFiscalValido(entradaMaterial.To<EntradaMaterialDTO>()))
+                return false;
+
+            if (entradaMaterial.ListaFormaPagamento.Any(l => l.Data.Date < entradaMaterial.DataEmissaoNota.Value.Date))
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.VencimentoFormaPagamentoMenorDataEmissaoNF, TypeMessage.Error);
+                return false;
+            }
+
+            if (entradaMaterial.ListaFormaPagamento.Any(l => l.Data.Date < entradaMaterial.Data.Date))
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.VencimentoFormaPagamentoMenorDataEntradaMaterial, TypeMessage.Error);
+                return false;
+            }
+
+            Nullable<DateTime> dataBloqueio;
+            if (bloqueioContabilAppService.OcorreuBloqueioContabil(entradaMaterial.CodigoCentroCusto, entradaMaterial.DataEmissaoNota.Value, out dataBloqueio))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.OcorreuBloqueioContabil, dataBloqueio.Value.ToString("dd/MM/yyyy"), entradaMaterial.CodigoCentroCusto + " - " + entradaMaterial.CentroCusto.Descricao);
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ProcessarItens(EntradaMaterialDTO dto, EntradaMaterial entradaMaterial)
+        {
+            foreach (var item in entradaMaterial.ListaItens)
+            {
+                var itemDTO = dto.ListaItens.Where(l => l.Id == item.Id).SingleOrDefault();
+
+                item.Quantidade = itemDTO.Quantidade;
+                item.OrdemCompraItem.QuantidadeEntregue += itemDTO.Quantidade;
+                item.BaseICMS = itemDTO.BaseICMS;
+                item.PercentualICMS = itemDTO.PercentualICMS;
+                item.BaseICMSST = itemDTO.BaseICMSST;
+                item.PercentualICMSST = itemDTO.PercentualICMSST;
+                item.ValorTotal = itemDTO.Quantidade * item.ValorUnitario;
+                item.CodigoComplementoCST = itemDTO.CodigoComplementoCST;
+                item.CodigoComplementoNaturezaOperacao = itemDTO.CodigoComplementoNaturezaOperacao;
+                item.CodigoNaturezaReceita = itemDTO.CodigoNaturezaReceita;
+            }
+        }
+
+        private void ProcessarImpostos(EntradaMaterialDTO dto, EntradaMaterial entradaMaterial)
+        {
+            RemoverImpostos(dto, entradaMaterial);
+            AlterarImpostos(dto, entradaMaterial);
+            AdicionarImpostos(dto, entradaMaterial);
+        }
+
+        private void RemoverImpostos(EntradaMaterialDTO dto, EntradaMaterial entradaMaterial)
+        {
+            for (int i = entradaMaterial.ListaImposto.Count - 1; i >= 0; i--)
+            {
+                var imposto = entradaMaterial.ListaImposto.ToList()[i];
+                if (!dto.ListaImposto.Any(l => l.Id == imposto.Id))
+                {
+                    entradaMaterial.ListaImposto.Remove(imposto);
+                    entradaMaterialRepository.RemoverEntradaMaterialImposto(imposto);
+                }
+            }
+        }
+
+        private void AlterarImpostos(EntradaMaterialDTO dto, EntradaMaterial entradaMaterial)
+        {
+            foreach (var imposto in entradaMaterial.ListaImposto)
+            {
+                var impostoDTO = dto.ListaImposto.Where(l => l.Id == imposto.Id).SingleOrDefault();
+                imposto.ImpostoFinanceiroId = impostoDTO.ImpostoFinanceiro.Id;
+                imposto.BaseCalculo = impostoDTO.BaseCalculo;
+                imposto.Valor = decimal.Round((impostoDTO.BaseCalculo * impostoDTO.ImpostoFinanceiro.Aliquota / 100), 5);
+                imposto.DataVencimento = impostoDTO.DataVencimento;
+            }
+        }
+
+        private void AdicionarImpostos(EntradaMaterialDTO dto, EntradaMaterial entradaMaterial)
+        {
+            foreach (var impostoDTO in dto.ListaImposto.Where(l => !l.Id.HasValue))
+            {
+                var imposto = new EntradaMaterialImposto();
+                imposto.EntradaMaterial = entradaMaterial;
+                imposto.ImpostoFinanceiroId = impostoDTO.ImpostoFinanceiro.Id;
+                imposto.BaseCalculo = impostoDTO.BaseCalculo;
+                imposto.Valor = impostoDTO.Valor;
+                imposto.DataVencimento = impostoDTO.DataVencimento;
+
+                entradaMaterial.ListaImposto.Add(imposto);
+            }
+        }
+
         public bool AdicionarItens(int? entradaMaterialId, int?[] itens)
         {
             if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
@@ -1065,40 +1308,6 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return true;
         }
 
-        private bool EhNotaFiscalExistente(EntradaMaterialDTO dto)
-        {
-            if ((dto.ClienteFornecedor.Id.HasValue || dto.FornecedorNota.Id.HasValue)
-                && !string.IsNullOrEmpty(dto.NumeroNotaFiscal.TrimStart('0'))
-                && dto.DataEmissaoNota.HasValue)
-            {
-                var specification = (Specification<EntradaMaterial>)new TrueSpecification<EntradaMaterial>();
-
-                if (dto.Id.HasValue)
-                    specification &= !EntradaMaterialSpecification.MatchingId(dto.Id);
-
-                specification &= EntradaMaterialSpecification.NumeroNotaFiscalTerminaCom(dto.NumeroNotaFiscal.TrimStart('0'));
-                specification &= !EntradaMaterialSpecification.EhCancelada();
-                specification &= EntradaMaterialSpecification.MatchingAnoEmissaoNota(dto.DataEmissaoNota.Value.Year);
-
-                if (dto.FornecedorNota.Id.HasValue)
-                    specification &= (EntradaMaterialSpecification.MatchingFornecedor(dto.FornecedorNota.Id)
-                        || EntradaMaterialSpecification.MatchingFornecedorNota(dto.FornecedorNota.Id));
-                else
-                    specification &= EntradaMaterialSpecification.MatchingFornecedor(dto.ClienteFornecedor.Id);
-
-                var listaEntradaMaterial = entradaMaterialRepository.ListarPeloFiltro(specification);
-
-                foreach (var entradaMaterial in listaEntradaMaterial)
-                {
-                    var prefixo = entradaMaterial.NumeroNotaFiscal.Replace(dto.NumeroNotaFiscal, string.Empty).TrimStart('0');
-                    if (string.IsNullOrEmpty(prefixo))
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
         #endregion
 
         #region Métodos Privados
@@ -1630,6 +1839,40 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
 
             return true;
+        }
+
+        private bool EhNotaFiscalExistente(EntradaMaterialDTO dto)
+        {
+            if ((dto.ClienteFornecedor.Id.HasValue || dto.FornecedorNota.Id.HasValue)
+                && !string.IsNullOrEmpty(dto.NumeroNotaFiscal.TrimStart('0'))
+                && dto.DataEmissaoNota.HasValue)
+            {
+                var specification = (Specification<EntradaMaterial>)new TrueSpecification<EntradaMaterial>();
+
+                if (dto.Id.HasValue)
+                    specification &= !EntradaMaterialSpecification.MatchingId(dto.Id);
+
+                specification &= EntradaMaterialSpecification.NumeroNotaFiscalTerminaCom(dto.NumeroNotaFiscal.TrimStart('0'));
+                specification &= !EntradaMaterialSpecification.EhCancelada();
+                specification &= EntradaMaterialSpecification.MatchingAnoEmissaoNota(dto.DataEmissaoNota.Value.Year);
+
+                if (dto.FornecedorNota.Id.HasValue)
+                    specification &= (EntradaMaterialSpecification.MatchingFornecedor(dto.FornecedorNota.Id)
+                        || EntradaMaterialSpecification.MatchingFornecedorNota(dto.FornecedorNota.Id));
+                else
+                    specification &= EntradaMaterialSpecification.MatchingFornecedor(dto.ClienteFornecedor.Id);
+
+                var listaEntradaMaterial = entradaMaterialRepository.ListarPeloFiltro(specification);
+
+                foreach (var entradaMaterial in listaEntradaMaterial)
+                {
+                    var prefixo = entradaMaterial.NumeroNotaFiscal.Replace(dto.NumeroNotaFiscal, string.Empty).TrimStart('0');
+                    if (string.IsNullOrEmpty(prefixo))
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         private bool TodosOsTitulosEstaoProvisionados(EntradaMaterial entradaMaterial)

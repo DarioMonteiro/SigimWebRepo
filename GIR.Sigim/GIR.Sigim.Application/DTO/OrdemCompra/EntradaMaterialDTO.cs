@@ -164,6 +164,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
             this.CentroCusto = new CentroCustoDTO();
             this.ClienteFornecedor = new ClienteFornecedorDTO();
             this.FornecedorNota = new ClienteFornecedorDTO();
+            this.Transportadora = new ClienteFornecedorDTO();
             this.ListaItens = new List<EntradaMaterialItemDTO>();
             this.ListaFormaPagamento = new List<EntradaMaterialFormaPagamentoDTO>();
             this.ListaImposto = new List<EntradaMaterialImpostoDTO>();

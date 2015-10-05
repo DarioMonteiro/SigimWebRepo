@@ -120,14 +120,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 model.EntradaMaterial.CentroCusto = parametrosUsuario.CentroCusto;
             }
 
-            //var parametros = parametrosOrdemCompraAppService.Obter();
-            //if (parametros != null)
-            //{
-            //    model.DataMinima = parametros.DiasDataMinima.HasValue ? DateTime.Now.AddDays(parametros.DiasDataMinima.Value) : DateTime.Now;
-            //    model.DataMaxima = parametros.DiasPrazo.HasValue ? model.DataMinima.Value.AddDays(parametros.DiasPrazo.Value) : DateTime.Now;
-            //    model.Prazo = parametros.DiasPrazo.HasValue ? parametros.DiasPrazo.Value : 0;
-            //}
-
             model.PodeSalvar = entradaMaterialAppService.EhPermitidoSalvar(entradaMaterial);
             model.PodeCancelarEntrada = entradaMaterialAppService.EhPermitidoCancelar(entradaMaterial);
             model.ExisteEstoqueParaCentroCusto = entradaMaterialAppService.ExisteEstoqueParaCentroCusto(entradaMaterial.CentroCusto.Codigo);
@@ -145,6 +137,20 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             CarregarCombos(model);
 
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Cadastro(EntradaMaterialCadastroViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.EntradaMaterial.ListaItens = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EntradaMaterialItemDTO>>(model.JsonItens);
+                model.EntradaMaterial.ListaImposto = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EntradaMaterialImpostoDTO>>(model.JsonImpostos);
+                if (entradaMaterialAppService.Salvar(model.EntradaMaterial))
+                    return PartialView("Redirect", Url.Action("Cadastro", "EntradaMaterial", new { id = model.EntradaMaterial.Id }));
+            }
+            return PartialView("_NotificationMessagesPartial");
         }
 
         private void CarregarCombos(EntradaMaterialCadastroViewModel model)

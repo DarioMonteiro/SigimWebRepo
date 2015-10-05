@@ -1218,7 +1218,7 @@
                                                     @Html.LabelFor(m => m.DataVencimentoLiberado, new { @class = "label" })
                                                     <label class="input">
                                                         <i class="icon-append fa fa-calendar"></i>
-                                                        @Html.TextBoxFor(m => m.DataVencimentoLiberado, "{0:dd/MM/yyyy}", new { @class = "required" })
+                                                        @Html.TextBoxFor(m => m.DataVencimentoLiberado, "{0:dd/MM/yyyy}", new { @class = "" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.DataVencimentoLiberado, "Informe uma data válida.", new { @class = "note note-error" })
                                                 </section>
@@ -2212,7 +2212,7 @@
                     required: true,
                     ehCentroCustoValido: true
                 },
-                '@Html.NameFor(m => m.EntradaMaterial.ClienteFornecedor.Id)': {
+                '@Html.NameFor(m => m.EntradaMaterial.ClienteFornecedor.Nome)': {
                     required: true
                 },
                 '@Html.NameFor(m => m.EntradaMaterial.TipoNotaFiscal.Id)': {
@@ -2244,7 +2244,7 @@
                 '@Html.NameFor(m => m.EntradaMaterial.CentroCusto.Codigo)': {
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo")'
                 },
-                '@Html.NameFor(m => m.EntradaMaterial.ClienteFornecedor.Id)': {
+                '@Html.NameFor(m => m.EntradaMaterial.ClienteFornecedor.Nome)': {
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Fornecedor")'
                 },
                 '@Html.NameFor(m => m.EntradaMaterial.TipoNotaFiscal.Id)': {
