@@ -45,6 +45,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private IOrdemCompraRepository ordemCompraRepository;
         private IFeriadoRepository feriadoRepository;
         private IBloqueioContabilAppService bloqueioContabilAppService;
+        private ITituloPagarAppService tituloPagarAppService;
 
         private ParametrosOrdemCompra parametrosOrdemCompra;
         public ParametrosOrdemCompra ParametrosOrdemCompra
@@ -83,6 +84,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             IOrdemCompraRepository ordemCompraRepository,
             IFeriadoRepository feriadoRepository,
             IBloqueioContabilAppService bloqueioContabilAppService,
+            ITituloPagarAppService tituloPagarAppService,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -98,6 +100,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             this.ordemCompraRepository = ordemCompraRepository;
             this.feriadoRepository = feriadoRepository;
             this.bloqueioContabilAppService = bloqueioContabilAppService;
+            this.tituloPagarAppService = tituloPagarAppService;
         }
 
         #region IEntradaMaterialAppService Members
@@ -974,6 +977,126 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.FornecedorNota);
 
             return EhLiberacaoPossivel(entradaMaterial);
+        }
+
+        public bool EhDataEntradaMaterialValida(int? id, Nullable<DateTime> data)
+        {
+            if (data.HasValue)
+            {
+                var dataLimite = DateTime.Now.AddDays(this.ParametrosOrdemCompra.DiasEntradaMaterial.Value * -1).Date;
+                if (data < dataLimite)
+                {
+                    messageQueue.Add("Data de medição menor que data limite", TypeMessage.Error);
+                    return false;
+                }
+
+                if (id.HasValue && this.ParametrosOrdemCompra.DiasPagamento.Value > 0)
+                {
+                    var entradaMaterial = ObterPeloIdEUsuario(id,
+                        UsuarioLogado.Id,
+                        l => l.ListaFormaPagamento);
+
+                    if (entradaMaterial != null)
+                    {
+                        foreach (var formaPagamento in entradaMaterial.ListaFormaPagamento)
+                        {
+                            var numeroDias = (formaPagamento.Data - data.Value).TotalDays;
+                            if (numeroDias < this.ParametrosOrdemCompra.DiasPagamento)
+                            {
+                                messageQueue.Add("Data de vencimento menor que limite de pagamento.", TypeMessage.Error);
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool EhNumeroNotaFiscalValido(EntradaMaterialDTO dto)
+        {
+            if (EhNotaFiscalExistente(dto))
+            {
+                messageQueue.Add("Nota fiscal já cadastrada.", TypeMessage.Error);
+                return false;
+            }
+
+            if (dto.Id.HasValue)
+            {
+                var entradaMaterial = ObterPeloIdEUsuario(dto.Id,
+                    UsuarioLogado.Id,
+                    l => l.ListaFormaPagamento);
+
+                int? fornecedorId = dto.FornecedorNota.Id.HasValue ? dto.FornecedorNota.Id : dto.ClienteFornecedor.Id;
+
+                foreach (var formaPagamento in entradaMaterial.ListaFormaPagamento)
+                {
+                    if (tituloPagarAppService.ExisteNumeroDocumento(dto.DataEmissaoNota, formaPagamento.Data, dto.NumeroNotaFiscal.TrimStart('0'), fornecedorId))
+                    {
+                        messageQueue.Add("Documento existente no Financeiro.", TypeMessage.Error);
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool EhDataEmissaoNotaValida(EntradaMaterialDTO entradaMaterial)
+        {
+            if (entradaMaterial.DataEmissaoNota.HasValue)
+            {
+                if (entradaMaterial.DataEmissaoNota.Value.Date > entradaMaterial.Data.Date)
+                {
+                    messageQueue.Add("Data de emissão da nota maior que data da Entrada de Material.", TypeMessage.Error);
+                    return false;
+                }
+
+                if (entradaMaterial.DataEntregaNota.HasValue)
+                {
+                    if (entradaMaterial.DataEmissaoNota.Value.Date > entradaMaterial.DataEntregaNota.Value.Date)
+                    {
+                        messageQueue.Add("Data de emissão da nota maior que data de entrega da nota.", TypeMessage.Error);
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool EhNotaFiscalExistente(EntradaMaterialDTO dto)
+        {
+            if ((dto.ClienteFornecedor.Id.HasValue || dto.FornecedorNota.Id.HasValue)
+                && !string.IsNullOrEmpty(dto.NumeroNotaFiscal.TrimStart('0'))
+                && dto.DataEmissaoNota.HasValue)
+            {
+                var specification = (Specification<EntradaMaterial>)new TrueSpecification<EntradaMaterial>();
+
+                if (dto.Id.HasValue)
+                    specification &= !EntradaMaterialSpecification.MatchingId(dto.Id);
+
+                specification &= EntradaMaterialSpecification.NumeroNotaFiscalTerminaCom(dto.NumeroNotaFiscal.TrimStart('0'));
+                specification &= !EntradaMaterialSpecification.EhCancelada();
+                specification &= EntradaMaterialSpecification.MatchingAnoEmissaoNota(dto.DataEmissaoNota.Value.Year);
+
+                if (dto.FornecedorNota.Id.HasValue)
+                    specification &= (EntradaMaterialSpecification.MatchingFornecedor(dto.FornecedorNota.Id)
+                        || EntradaMaterialSpecification.MatchingFornecedorNota(dto.FornecedorNota.Id));
+                else
+                    specification &= EntradaMaterialSpecification.MatchingFornecedor(dto.ClienteFornecedor.Id);
+
+                var listaEntradaMaterial = entradaMaterialRepository.ListarPeloFiltro(specification);
+
+                foreach (var entradaMaterial in listaEntradaMaterial)
+                {
+                    var prefixo = entradaMaterial.NumeroNotaFiscal.Replace(dto.NumeroNotaFiscal, string.Empty).TrimStart('0');
+                    if (string.IsNullOrEmpty(prefixo))
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion

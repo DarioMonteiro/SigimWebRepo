@@ -282,5 +282,32 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         {
             return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFretePendente(entradaMaterialId)));
         }
+
+        [HttpPost]
+        public ActionResult ValidaDataEntradaMaterial(int? id, Nullable<DateTime> data)
+        {
+            var ehValido = entradaMaterialAppService.EhDataEntradaMaterialValida(id, data);
+            var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll()[0].Text : string.Empty;
+            messageQueue.Clear();
+            return Json(new { ehValido = ehValido, errorMessage = msg });
+        }
+
+        [HttpPost]
+        public ActionResult ValidaNumeroNotaFiscal(EntradaMaterialDTO entradaMaterial)
+        {
+            var ehValido = entradaMaterialAppService.EhNumeroNotaFiscalValido(entradaMaterial);
+            var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll()[0].Text : string.Empty;
+            messageQueue.Clear();
+            return Json(new { ehValido = ehValido, errorMessage = msg });
+        }
+
+        [HttpPost]
+        public ActionResult ValidaDataEmissaoNota(EntradaMaterialDTO entradaMaterial)
+        {
+            var ehValido = entradaMaterialAppService.EhDataEmissaoNotaValida(entradaMaterial);
+            var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll()[0].Text : string.Empty;
+            messageQueue.Clear();
+            return Json(new { ehValido = ehValido, errorMessage = msg });
+        }
     }
 }

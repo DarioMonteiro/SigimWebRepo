@@ -38,5 +38,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         bool ExisteMovimentoNoEstoque(EntradaMaterialDTO dto);
         bool HaPossibilidadeCancelamentoEntradaMaterial(int? entradaMaterialId);
         bool HaPossibilidadeLiberacaoTitulos(int? entradaMaterialId);
+
+        bool EhDataEntradaMaterialValida(int? id, Nullable<DateTime> data);
+        bool EhNumeroNotaFiscalValido(EntradaMaterialDTO dto);
+        bool EhDataEmissaoNotaValida(EntradaMaterialDTO entradaMaterial);
     }
 }
