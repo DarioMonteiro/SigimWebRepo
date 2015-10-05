@@ -16,7 +16,15 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public ClienteFornecedor ClienteFornecedor { get; set; }
         public DateTime Data { get; set; }
         public SituacaoOrdemCompra Situacao { get; set; }
-        public int? PrazoEntrega { get; set;}
+        public int? TransportadoraId { get; set; }
+        public ClienteFornecedor Transportadora { get; set; }
+        public Nullable<DateTime> DataFrete { get; set; }
+        public decimal? ValorFrete { get; set; }
+        public int? TituloFreteId { get; set; }
+        public TituloPagar TituloFrete { get; set; }
+        public int? EntradaMaterialFreteId { get; set; }
+        public EntradaMaterial EntradaMaterialFrete { get; set; }
+        public int? PrazoEntrega { get; set; }
 
         private decimal? percentualDesconto;
         public decimal? PercentualDesconto
@@ -24,11 +32,6 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
             get { return percentualDesconto.HasValue ? percentualDesconto : 0; }
             set { percentualDesconto = value; }
         }
-
-        public int? TituloFreteId { get; set; }
-        public TituloPagar TituloFrete { get; set; }
-        public int? EntradaMaterialFreteId { get; set; }
-        public EntradaMaterial EntradaMaterialFrete { get; set; }
 
         public virtual ICollection<OrdemCompraItem> ListaItens { get; set; }
         public ICollection<OrdemCompraFormaPagamento> ListaOrdemCompraFormaPagamento { get; set; }

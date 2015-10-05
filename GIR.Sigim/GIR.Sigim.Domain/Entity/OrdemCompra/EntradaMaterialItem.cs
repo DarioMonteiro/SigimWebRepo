@@ -20,10 +20,22 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public decimal? Quantidade { get; set; }
         public decimal? ValorUnitario { get; set; }
         public decimal? PercentualIPI { get; set; }
+        public decimal? ValorIPI
+        {
+            get { return this.ValorTotal * this.PercentualIPI / 100; }
+        }
         public decimal? PercentualDesconto { get; set; }
+        public decimal? ValorDesconto
+        {
+            get { return this.ValorTotal * this.PercentualDesconto / 100; }
+        }
         public decimal? ValorTotal { get; set; }
         public decimal? BaseICMS { get; set; }
         public decimal? PercentualICMS { get; set; }
+        public decimal? ValorICMS
+        {
+            get { return this.BaseICMS * this.PercentualICMS/ 100; }
+        }
         public decimal? BaseIPI { get; set; }
         public decimal? BaseICMSST { get; set; }
         public decimal? PercentualICMSST { get; set; }
@@ -33,5 +45,10 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public ComplementoCST ComplementoCST { get; set; }
         public string CodigoNaturezaReceita { get; set; }
         public NaturezaReceita NaturezaReceita { get; set; }
+
+        public decimal? ValorDescontoOrdemCompra
+        {
+            get { return this.ValorTotal * this.OrdemCompraItem.PercentualDesconto / 100; }
+        }
     }
 }

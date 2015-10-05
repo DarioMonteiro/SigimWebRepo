@@ -61,6 +61,15 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Antes de liberar título(s) para o financeiro, defina a(s) forma(s) de pagamento da EM..
+        /// </summary>
+        public static string DefinaFormasPagamento {
+            get {
+                return ResourceManager.GetString("DefinaFormasPagamento", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entrada de Material \&quot;{0}\&quot;..
         /// </summary>
         public static string EntradaMaterialSituacaoInvalida {
@@ -75,6 +84,15 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         public static string ExisteFormaPagamentoParaItemSelecionado {
             get {
                 return ResourceManager.GetString("ExisteFormaPagamentoParaItemSelecionado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Antes de liberar títulos, informe os dados da nota fiscal do frete..
+        /// </summary>
+        public static string InformeDadosFreteParaLiberacao {
+            get {
+                return ResourceManager.GetString("InformeDadosFreteParaLiberacao", resourceCulture);
             }
         }
         
@@ -111,6 +129,24 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         public static string ItemJaAprovado {
             get {
                 return ResourceManager.GetString("ItemJaAprovado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operações anteriores a data de &apos;{0}&apos; não poderão ser realizadas, pois foi cadastrado um bloqueio contábil  para o centro de custo &apos;{1}&apos;..
+        /// </summary>
+        public static string OcorreuBloqueioContabil {
+            get {
+                return ResourceManager.GetString("OcorreuBloqueioContabil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Só é possível liberar no financeiro títulos com situação provisionado..
+        /// </summary>
+        public static string ParaLiberacaoTitulosDevemEstarProvisionados {
+            get {
+                return ResourceManager.GetString("ParaLiberacaoTitulosDevemEstarProvisionados", resourceCulture);
             }
         }
         
@@ -192,6 +228,60 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         public static string TituloImpostoEstaPago {
             get {
                 return ResourceManager.GetString("TituloImpostoEstaPago", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valores das formas de pagamento da OC diferentes dos valores dos títulos..
+        /// </summary>
+        public static string ValoresFormaPagamentoDiferenteValoresTituloPagar {
+            get {
+                return ResourceManager.GetString("ValoresFormaPagamentoDiferenteValoresTituloPagar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valores a liberar para o financeiro diferentes do valor da nota fiscal..
+        /// </summary>
+        public static string ValorTotalDiferenteValorNotaFiscal {
+            get {
+                return ResourceManager.GetString("ValorTotalDiferenteValorNotaFiscal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A data de vencimento não pode ser menor que a data de emissão da NF..
+        /// </summary>
+        public static string VencimentoFormaPagamentoMenorDataEmissaoNF {
+            get {
+                return ResourceManager.GetString("VencimentoFormaPagamentoMenorDataEmissaoNF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A data de vencimento não pode ser menor que a data da EM..
+        /// </summary>
+        public static string VencimentoFormaPagamentoMenorDataEntradaMaterial {
+            get {
+                return ResourceManager.GetString("VencimentoFormaPagamentoMenorDataEntradaMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A data de vencimento do imposto não pode ser menor que a data de emissão da NF..
+        /// </summary>
+        public static string VencimentoImpostoMenorDataEmissaoNF {
+            get {
+                return ResourceManager.GetString("VencimentoImpostoMenorDataEmissaoNF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A data de vencimento do imposto não pode ser menor que a data da EM..
+        /// </summary>
+        public static string VencimentoImpostoMenorDataEntradaMaterial {
+            get {
+                return ResourceManager.GetString("VencimentoImpostoMenorDataEntradaMaterial", resourceCulture);
             }
         }
     }

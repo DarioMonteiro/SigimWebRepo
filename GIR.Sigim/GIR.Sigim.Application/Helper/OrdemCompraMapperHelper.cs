@@ -40,6 +40,11 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.QuantidadeInicial, m => m.MapFrom(s => s.Quantidade));
             Mapper.CreateMap<EntradaMaterialItemDTO, EntradaMaterialItem>();
 
+            Mapper.CreateMap<OrdemCompra, FreteDTO>()
+                .ForMember(d => d.Data, m => m.MapFrom(s => s.DataFrete))
+                .ForMember(d => d.Valor, m => m.MapFrom(s => s.ValorFrete))
+                .ForMember(d => d.TituloPagarId, m => m.MapFrom(s => s.TituloFreteId));
+
             Mapper.CreateMap<InterfaceCotacao, InterfaceCotacaoDTO>();
             Mapper.CreateMap<InterfaceCotacaoDTO, InterfaceCotacao>();
 

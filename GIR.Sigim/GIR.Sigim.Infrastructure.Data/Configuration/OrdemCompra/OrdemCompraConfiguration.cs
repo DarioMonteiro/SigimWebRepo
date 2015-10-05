@@ -49,6 +49,18 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra
                 .HasColumnType("smallint")
                 .HasColumnOrder(5);
 
+            Property(l => l.TransportadoraId)
+                .HasColumnName("transportadora")
+                .HasColumnOrder(6);
+
+            Property(l => l.DataFrete)
+                .HasColumnName("dataFrete")
+                .HasColumnOrder(7);
+
+            Property(l => l.ValorFrete)
+                .HasColumnName("valorFrete")
+                .HasColumnOrder(8);
+
             Property(l => l.PrazoEntrega)
                 .HasColumnName("prazoEntrega")
                 .HasColumnOrder(13);

@@ -14,9 +14,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         List<EntradaMaterialDTO> ListarPeloFiltro(EntradaMaterialFiltro filtro, out int totalRegistros);
         EntradaMaterialDTO ObterPeloId(int? id);
         List<OrdemCompraItemDTO> ListarItensDeOrdemCompraLiberadaComSaldo(int? entradaMaterialId);
+        bool Salvar(EntradaMaterialDTO dto);
         bool AdicionarItens(int? entradaMaterialId, int?[] itens);
         bool RemoverItens(int? entradaMaterialId, int?[] itens);
         List<EntradaMaterialItemDTO> ListarItens(int? entradaMaterialId);
+        List<FreteDTO> ListarFretePendente(int? entradaMaterialId);
         bool CancelarEntrada(int? id, string motivo);
         bool LiberarTitulos(int? id);
         FileDownloadDTO Exportar(int? id, FormatoExportacaoArquivo formato);
@@ -36,5 +38,10 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         bool ExisteEstoqueParaCentroCusto(string codigoCentroCusto);
         bool ExisteMovimentoNoEstoque(EntradaMaterialDTO dto);
         bool HaPossibilidadeCancelamentoEntradaMaterial(int? entradaMaterialId);
+        bool HaPossibilidadeLiberacaoTitulos(int? entradaMaterialId);
+
+        bool EhDataEntradaMaterialValida(int? id, Nullable<DateTime> data);
+        bool EhNumeroNotaFiscalValido(EntradaMaterialDTO dto);
+        bool EhDataEmissaoNotaValida(EntradaMaterialDTO entradaMaterial);
     }
 }

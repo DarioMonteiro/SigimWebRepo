@@ -61,6 +61,19 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
             return specification;
         }
 
+        public static Specification<EntradaMaterial> NumeroNotaFiscalTerminaCom(string numeroNotaFiscal)
+        {
+            Specification<EntradaMaterial> specification = new TrueSpecification<EntradaMaterial>();
+
+            if (!string.IsNullOrEmpty(numeroNotaFiscal))
+            {
+                var idSpecification = new DirectSpecification<EntradaMaterial>(l => l.NumeroNotaFiscal.EndsWith(numeroNotaFiscal));
+                specification &= idSpecification;
+            }
+
+            return specification;
+        }
+
         public static Specification<EntradaMaterial> UsuarioPossuiAcessoAoCentroCusto(int? idUsuario, string modulo)
         {
             Specification<EntradaMaterial> specification = new TrueSpecification<EntradaMaterial>();
@@ -82,6 +95,42 @@ namespace GIR.Sigim.Domain.Specification.OrdemCompra
 
             var directSpecification = new DirectSpecification<EntradaMaterial>(l => l.CentroCusto.Situacao == "A");
             specification &= directSpecification;
+
+            return specification;
+        }
+
+
+        public static Specification<EntradaMaterial> MatchingFornecedor(int? fornecedorId)
+        {
+            Specification<EntradaMaterial> specification = new TrueSpecification<EntradaMaterial>();
+
+            if (fornecedorId.HasValue)
+            {
+                var idSpecification = new DirectSpecification<EntradaMaterial>(l => l.ClienteFornecedorId == fornecedorId);
+                specification &= idSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<EntradaMaterial> MatchingFornecedorNota(int? fornecedorId)
+        {
+            Specification<EntradaMaterial> specification = new TrueSpecification<EntradaMaterial>();
+
+            if (fornecedorId.HasValue)
+            {
+                var idSpecification = new DirectSpecification<EntradaMaterial>(l => l.FornecedorNotaId == fornecedorId);
+                specification &= idSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<EntradaMaterial> MatchingAnoEmissaoNota(int ano)
+        {
+            Specification<EntradaMaterial> specification = new TrueSpecification<EntradaMaterial>();
+            var idSpecification = new DirectSpecification<EntradaMaterial>(l => l.DataEmissaoNota.Value.Year == ano);
+            specification &= idSpecification;
 
             return specification;
         }

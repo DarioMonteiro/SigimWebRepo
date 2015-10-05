@@ -93,6 +93,7 @@
     <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />
     <Compile Include="DTO\Financeiro\RateioAutomaticoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoFinanceiroDTO.cs" />
+    <Compile Include="DTO\OrdemCompra\FreteDTO.cs" />
     <Compile Include="DTO\Sigim\AvaliacaoFornecedorDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoNaturezaOperacaoDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoCSTDTO.cs" />

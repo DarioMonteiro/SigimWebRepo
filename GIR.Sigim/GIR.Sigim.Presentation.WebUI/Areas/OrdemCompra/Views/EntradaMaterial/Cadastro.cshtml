@@ -60,7 +60,7 @@
                                                     @Html.LabelFor(m => m.EntradaMaterial.Data, new { @class = "label" })
                                                     <label class="input">
                                                         <i class="icon-append fa fa-calendar"></i>
-                                                        @Html.TextBoxFor(m => m.EntradaMaterial.Data, "{0:dd/MM/yyyy}", new { @class = "required" })
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.Data, "{0:dd/MM/yyyy}", new { @class = "required exigeGravacao" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.Data, "Informe uma data válida.", new { @class = "note note-error" })
                                                 </section>
@@ -87,6 +87,13 @@
                                             <div class="row">
                                                 @Html.EditorFor(m => m.EntradaMaterial.CentroCusto, "CentroCusto", new { @sectionClass = "col col-3", @labelText = "Centro de Custo", @somenteNivelFolha = true, @required = true, @podeEdidar = Model.PodeEditarCentroCusto })
                                                 <input type="hidden" id="orcamentoId" value="0" />
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $(document).on("centroCustoValidado", function (e) {
+                                                            ehFormularioAlterado = true;
+                                                        });
+                                                    });
+                                                </script>
                                             </div>
                                             <div class="row">
                                                 @Html.EditorFor(m => m.EntradaMaterial.ClienteFornecedor, "ClienteFornecedorPesquisaGenerica", 
@@ -107,6 +114,18 @@
                                                             @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
                                                             @exibirBotaoPesquisa = true
                                                     })
+
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $(document).on("clienteFornecedorAlterado@(Model.EntradaMaterial.ClienteFornecedor.Id)", function (e) {
+                                                            ehFormularioAlterado = true;
+                                                        });
+
+                                                        $(document).on("clienteFornecedorAlterado@(Model.EntradaMaterial.FornecedorNota.Id)", function (e) {
+                                                            ehFormularioAlterado = true;
+                                                        });
+                                                    });
+                                                </script>
                                             </div>
                                             <div class="row">
                                                 <section class="col col-12" style="margin-top:15px;">
@@ -128,7 +147,7 @@
                                                                 <section class="col col-3">
                                                                     @Html.LabelFor(m => m.EntradaMaterial.TipoNotaFiscalId, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.TipoNotaFiscalId, Model.ListaTipoNotaFiscal, string.Empty, new { @class = "required" })
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.TipoNotaFiscalId, Model.ListaTipoNotaFiscal, string.Empty, new { @class = "required exigeGravacao" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.TipoNotaFiscalId, "", new { @class = "note note-error" })
@@ -136,7 +155,7 @@
                                                                 <section class="col col-3">
                                                                     @Html.LabelFor(m => m.EntradaMaterial.NumeroNotaFiscal, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.NumeroNotaFiscal, new { @class = "required" })
+                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.NumeroNotaFiscal, new { @class = "required exigeGravacao" })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.NumeroNotaFiscal, "", new { @class = "note note-error" })
                                                                 </section>
@@ -144,7 +163,7 @@
                                                                     @Html.LabelFor(m => m.EntradaMaterial.DataEmissaoNota, new { @class = "label" })
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataEmissaoNota, "{0:dd/MM/yyyy}", new { @class = "required" })
+                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataEmissaoNota, "{0:dd/MM/yyyy}", new { @class = "required exigeGravacao" })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.DataEmissaoNota, "Informe uma data válida.", new { @class = "note note-error" })
                                                                 </section>
@@ -165,7 +184,7 @@
                                                                     @Html.LabelFor(m => m.EntradaMaterial.DataEntregaNota, new { @class = "label" })
                                                                     <label class="input">
                                                                         <i class="icon-append fa fa-calendar"></i>
-                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataEntregaNota, "{0:dd/MM/yyyy}", new { @class = "required" })
+                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataEntregaNota, "{0:dd/MM/yyyy}", new { @class = "required exigeGravacao" })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.DataEntregaNota, "Informe uma data válida.", new { @class = "note note-error" })
                                                                 </section>
@@ -189,7 +208,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.EntradaMaterial.CodigoTipoCompra, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoTipoCompra, Model.ListaTipoCompra, string.Empty)
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoTipoCompra, Model.ListaTipoCompra, string.Empty, new { @class = "exigeGravacao" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoTipoCompra, "", new { @class = "note note-error" })
@@ -197,7 +216,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.EntradaMaterial.CifFobId, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CifFobId, Model.ListaCifFob, string.Empty)
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CifFobId, Model.ListaCifFob, string.Empty, new { @class = "exigeGravacao" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.CifFobId, "", new { @class = "note note-error" })
@@ -205,7 +224,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.EntradaMaterial.CodigoNaturezaOperacao, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoNaturezaOperacao, Model.ListaNaturezaOperacao, string.Empty)
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoNaturezaOperacao, Model.ListaNaturezaOperacao, string.Empty, new { @class = "exigeGravacao" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoNaturezaOperacao, "", new { @class = "note note-error" })
@@ -215,7 +234,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.EntradaMaterial.SerieNFId, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.SerieNFId, Model.ListaSerieNF, string.Empty)
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.SerieNFId, Model.ListaSerieNF, string.Empty, new { @class = "exigeGravacao" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.SerieNFId, "", new { @class = "note note-error" })
@@ -223,7 +242,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.EntradaMaterial.CodigoCST, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoCST, Model.ListaCST, string.Empty)
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoCST, Model.ListaCST, string.Empty, new { @class = "exigeGravacao" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoCST, "", new { @class = "note note-error" })
@@ -231,7 +250,7 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.EntradaMaterial.CodigoContribuicaoId, new { @class = "label" })
                                                                     <label class="select">
-                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoContribuicaoId, Model.ListaCodigoContribuicao, string.Empty)
+                                                                        @Html.DropDownListFor(m => m.EntradaMaterial.CodigoContribuicaoId, Model.ListaCodigoContribuicao, string.Empty, new { @class = "exigeGravacao" })
                                                                         <i></i>
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoContribuicaoId, "", new { @class = "note note-error" })
@@ -243,7 +262,7 @@
                                                                 <section class="col col-12">
                                                                     @Html.LabelFor(m => m.EntradaMaterial.CodigoBarras, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.CodigoBarras, new { @class = "text-right numeric", @maxlength = 50 })
+                                                                        @Html.TextBoxFor(m => m.EntradaMaterial.CodigoBarras, new { @class = "text-right numeric exigeGravacao", @maxlength = 50 })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.CodigoBarras, "", new { @class = "note note-error" })
                                                                 </section>
@@ -256,7 +275,7 @@
                                                 <section class="col col-12">
                                                     @Html.LabelFor(m => m.EntradaMaterial.Observacao, new { @class = "label" })
                                                     <label class="textarea">
-                                                        @Html.TextAreaFor(m => m.EntradaMaterial.Observacao, new { rows = 4 })
+                                                        @Html.TextAreaFor(m => m.EntradaMaterial.Observacao, new { rows = 4, @class = "exigeGravacao" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.EntradaMaterial.Observacao, "", new { @class = "note note-error" })
                                                 </section>
@@ -341,10 +360,7 @@
                                                     $('#btnItensOrdemCompra').on('click', function () {
                                                         $("#tableItensOrdemCompra tbody").empty();
                                                         if (!$('#collapseItensOrdemCompra').is(":visible")) {
-                                                            if (houveAlteracao) {
-                                                                smartAlert("Erro", "A Entrada de Material foi alterada.<br />Salve os dados antes de incluir novos itens.", "error");
-                                                            }
-                                                            else {
+                                                            if (!houveAlteracaoNoFormulario()) {
                                                                 $.ajax({
                                                                     type: 'POST',
                                                                     url: '@Url.Action("ListarItensDeOrdemCompraLiberadaComSaldo", "EntradaMaterial")',
@@ -493,6 +509,7 @@
                                                         <label class="input">
                                                             @Html.TextBoxFor(m => m.Material.Descricao, new { @readonly = "", @class = "readonly" })
                                                         </label>
+                                                        @Html.ValidationMessageFor(m => m.Material.Id, "", new { @id = Html.IdFor(m => m.Material.Id) + "_ValidationMessage", @class = "note note-error" })
                                                     </section>
                                                     <section class="col col-2" style="padding-right: 0;">
                                                         @Html.LabelFor(m => m.Material.SiglaUnidadeMedida, "UN", new { @class = "label" })
@@ -500,7 +517,6 @@
                                                             @Html.TextBoxFor(m => m.Material.SiglaUnidadeMedida, new { @readonly = "", @class = "readonly" })
                                                         </label>
                                                     </section>
-                                                    @Html.ValidationMessageFor(m => m.Material.Id, "", new { @id = Html.IdFor(m => m.Material.Id) + "_ValidationMessage", @class = "note note-error" })
                                                 </section>
                                                 <section class="col col-6">
                                                     @Html.LabelFor(m => m.Complemento, new { @class = "label" })
@@ -743,13 +759,13 @@
                                                     <section class="col col-12" style="padding: 0;">
                                                         @Html.LabelFor(m => m.EntradaMaterial.Desconto, new { @class = "label" })
                                                         <label class="input">
-                                                            @Html.TextBoxFor(m => m.EntradaMaterial.Desconto, "{0:F2}", new { @class = "text-right decimal-2-casas" })
+                                                            @Html.TextBoxFor(m => m.EntradaMaterial.Desconto, "{0:F2}", new { @class = "text-right decimal-2-casas exigeGravacao" })
                                                         </label>
                                                         @Html.ValidationMessageFor(m => m.EntradaMaterial.Desconto, "", new { @class = "note note-error" })
                                                     </section>
                                                     <section class="col col-12" style="padding: 0;">
                                                         <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.EntradaMaterial.EhDescontoPercentual)
+                                                            @Html.CheckBoxFor(m => m.EntradaMaterial.EhDescontoPercentual, new { @class = "exigeGravacao" })
                                                             <i></i>@Html.DisplayNameFor(m => m.EntradaMaterial.EhDescontoPercentual)
                                                         </label>
                                                     </section>
@@ -808,10 +824,6 @@
                                             $(document).ready(function () {
                                                 fillTableItens();
 
-                                                jQuery.validator.setDefaults({
-                                                    ignore: '#formItem *'
-                                                });
-
                                                 $(document).on('change', '#@Html.IdFor(m => m.EntradaMaterial.CodigoNaturezaOperacao)', function () {
                                                     $('#@Html.IdFor(m => m.ComplementoNaturezaOperacao.Codigo)').html('').append($('<option>').text('').attr('value', ''));
                                                     $.ajax({
@@ -838,10 +850,7 @@
                                                 });
 
                                                 $('#btnRemoverItem').on('click', function () {
-                                                    if (houveAlteracao) {
-                                                        smartAlert("Erro", "A Entrada de Material foi alterada.<br />Salve os dados antes de remover algum item.", "error");
-                                                    }
-                                                    else {
+                                                    if (!houveAlteracaoNoFormulario()) {
                                                         var arrItemEM = [];
                                                         $('#tableItens tbody input[type=checkbox]:checked').each(function () {
                                                             arrItemEM.push(parseInt($(this).val()));
@@ -906,6 +915,14 @@
 
                                                 $(document).on('change', '#@Html.IdFor(m => m.PercentualICMSST)', function () {
                                                     atualizarValorICMSST();
+                                                });
+
+                                                $(document).on('change', '#@Html.IdFor(m => m.EntradaMaterial.Desconto)', function () {
+                                                    atualizarTotais();
+                                                });
+
+                                                $(document).on('change', '#@Html.IdFor(m => m.EntradaMaterial.EhDescontoPercentual)', function () {
+                                                    atualizarTotais();
                                                 });
                                             });
 
@@ -1005,13 +1022,13 @@
                                                         $("#@Html.IdFor(m => m.NaturezaReceita.Codigo)").val(item.NaturezaReceita.Codigo);
 
                                                     if (item.BaseICMS == 0)
-                                                        $("#@Html.IdFor(m => m.BaseICMS)").val(roundDecimal(floatToString(item.ValorItem), 4));
+                                                        $("#@Html.IdFor(m => m.BaseICMS)").val(roundDecimal(floatToString(item.ValorTotal), 4));
 
                                                     if (item.BaseICMSST == 0)
-                                                        $("#@Html.IdFor(m => m.BaseICMSST)").val(roundDecimal(floatToString(item.ValorItem), 4));
+                                                        $("#@Html.IdFor(m => m.BaseICMSST)").val(roundDecimal(floatToString(item.ValorTotal), 4));
 
                                                     if (item.BaseIPI == 0)
-                                                        $("#@Html.IdFor(m => m.BaseIPI)").val(roundDecimal(floatToString(item.ValorItem), 4));
+                                                        $("#@Html.IdFor(m => m.BaseIPI)").val(roundDecimal(floatToString(item.ValorTotal), 4));
                                                 }
                                             }
 
@@ -1093,6 +1110,7 @@
                                                     clearFormItem();
                                                     fillTableItens();
                                                     atualizarTotais();
+                                                    ehFormularioAlterado = true;
                                                 }
                                             }
 
@@ -1200,7 +1218,7 @@
                                                     @Html.LabelFor(m => m.DataVencimentoLiberado, new { @class = "label" })
                                                     <label class="input">
                                                         <i class="icon-append fa fa-calendar"></i>
-                                                        @Html.TextBoxFor(m => m.DataVencimentoLiberado, "{0:dd/MM/yyyy}", new { @class = "required" })
+                                                        @Html.TextBoxFor(m => m.DataVencimentoLiberado, "{0:dd/MM/yyyy}", new { @class = "" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.DataVencimentoLiberado, "Informe uma data válida.", new { @class = "note note-error" })
                                                 </section>
@@ -1362,7 +1380,204 @@
                                 <div id="collapseFrete" class="panel-collapse collapse">
                                     <div class="panel-body no-padding">
                                         <fieldset>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <header>Seleção e cadastro de empresa transportadora</header>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.HiddenFor(m => m.EntradaMaterial.Transportadora.Id)
+                                                    @Html.LabelFor(m => m.EntradaMaterial.Transportadora.Nome, "Transportadora", new { @class = "label" })
+                                                    <div class="input-group">
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.EntradaMaterial.Transportadora.Nome, new { @readonly = "", @class = "readonly" })
+                                                            <i></i>
+                                                        </label>
+                                                        <a id="BtnShowTransportadoraModalPanel" href="javascript:abrirTransportadoraModalPanel();" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.Transportadora.Nome, "", new { @class = "note note-error" })
+                                                    <div class="modal fade" id="TransportadoraModalPanel" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                                        &times;
+                                                                    </button>
+                                                                    <h4 class="modal-title">Seleção de frete de Ordem de Compra</h4>
+                                                                </div>
+                                                                <div id="TransportadoraModalBody" class="modal-body no-padding sigimModalBody">
+                                                                    <div class="table-responsive col col-12" style="min-height: 115px; border: 1px solid #ddd; padding:0; margin-bottom: 13px; overflow-x: auto;">
+                                                                        <table id="tableFretePendente" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th>OC</th>
+                                                                                    <th>Transportadora</th>
+                                                                                    <th class="text-center">Data</th>
+                                                                                    <th class="text-right">Valor</th>
+                                                                                    <th>Título</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        var jsonFretePendente;
+                                                        $(document).ready(function () {
+                                                            $(document).on("show.bs.modal", "#TransportadoraModalPanel", function () {
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: '@Url.Action("ListarFretePendente", "EntradaMaterial")',
+                                                                    cache: false,
+                                                                    contentType: 'application/json; charset=utf-8',
+                                                                    data: JSON.stringify({
+                                                                        entradaMaterialId: '@Html.DisplayFor(m => m.EntradaMaterial.Id)'
+                                                                    })
+                                                                })
+                                                                .success(function (result) {
+                                                                    jsonFretePendente = JSON.parse(result);
+                                                                    fillTableFretePendente();
+                                                                });
+                                                            });
 
+                                                            $(document).on('input', '#@(Html.IdFor(m => m.EntradaMaterial.FreteIncluso))', function () {
+                                                                atualizarTotais();
+                                                            });
+                                                        });
+
+                                                        function abrirTransportadoraModalPanel() {
+                                                            if (!houveAlteracaoNoFormulario()) {
+                                                                $('#TransportadoraModalPanel').modal('show');
+                                                            }
+                                                        }
+
+                                                        function fillTableFretePendente() {
+                                                            $("#tableFretePendente tbody").empty();
+
+                                                            for (var i = 0; i < jsonFretePendente.length; i++) {
+                                                                var row = $('<tr />')
+                                                                $("#tableFretePendente tbody").append(row);
+                                                                row.append($('<td>' + jsonFretePendente[i].Id + '</td>'));
+                                                                row.append($('<td class="text-nowrap" onclick="loadFretePendente(' + jsonFretePendente[i].Id + ');">' + jsonFretePendente[i].Transportadora.Nome + '</td>'));
+                                                                if (jsonFretePendente[i].Data != null)
+                                                                    row.append($('<td class="text-center">' + new Date(jsonFretePendente[i].Data).toFormatDDMMYYYY() + '</td>'));
+                                                                else
+                                                                    row.append($('<td>&nbsp;</td>'));
+                                                                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonFretePendente[i].Valor), 2) + '</td>'));
+                                                                row.append($('<td>' + jsonFretePendente[i].TituloPagarId + '</td>'));
+                                                            }
+                                                        }
+
+                                                        function loadFretePendente(ordemCompraFreteId) {
+                                                            $.SmartMessageBox({
+                                                                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a inclusão do frete selecionado na Entrada de Material?",
+                                                                buttons: '[Não][Sim]'
+                                                            }, function (ButtonPressed) {
+                                                                if (ButtonPressed === "Sim") {
+                                                                    var arr = jQuery.map(jsonFretePendente, function (frete, i) {
+                                                                        if (frete.Id == ordemCompraFreteId) {
+                                                                            return frete;
+                                                                        }
+                                                                    });
+
+                                                                    if (arr.length > 0) {
+                                                                        var frete = arr[0];
+
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.Transportadora.Id)').val(frete.Transportadora.Id);
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.Transportadora.Nome)').val(frete.Transportadora.Nome);
+                                                                        if (frete.Data != null)
+                                                                            $('#@Html.IdFor(m => m.EntradaMaterial.DataFrete)').val(new Date(frete.Data).toFormatDDMMYYYY());
+                                                                        $("#@Html.IdFor(m => m.EntradaMaterial.ValorFrete)").val(roundDecimal(floatToString(frete.Valor), 2));
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.OrdemCompraFreteId)').val(frete.Id);
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.TituloFreteId)').val(frete.TituloPagarId);
+                                                                        $('#TransportadoraModalPanel').modal('hide');
+                                                                        ehFormularioAlterado = true;
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    </script>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.DataFrete, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataFrete, "{0:dd/MM/yyyy}", new { @class = "exigeGravacao" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.DataFrete, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $('#@Html.IdFor(m => m.EntradaMaterial.DataFrete)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            onClose: function (selectedDate) {
+                                                                $(this).valid();
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.ValorFrete, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.ValorFrete, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.ValorFrete, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.OrdemCompraFreteId, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.OrdemCompraFreteId, new { @readonly = "", @class = "readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.OrdemCompraFreteId, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.TituloFreteId, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.TituloFreteId, new { @readonly = "", @class = "readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.TituloFreteId, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.TipoNotaFreteId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.EntradaMaterial.TipoNotaFreteId, Model.ListaTipoNotaFrete, string.Empty, new { @class = "exigeGravacao" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.TipoNotaFreteId, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.NumeroNotaFrete, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.NumeroNotaFrete, new { @class = "exigeGravacao" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.NumeroNotaFrete, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <header>Frete incluso</header>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.FreteIncluso, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.FreteIncluso, "{0:F2}", new { @class = "text-right decimal-2-casas exigeGravacao" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.FreteIncluso, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
                                         </fieldset>
                                     </div>
                                 </div>
@@ -1526,8 +1741,28 @@
                                             $(document).ready(function () {
                                                 fillTableImpostos();
 
-                                                jQuery.validator.setDefaults({
-                                                    ignore: '#formImposto *'
+                                                $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').on('change', function () {
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        url: '@Url.Action("CarregarItem", "ImpostoFinanceiro", new { @area = "Financeiro" })',
+                                                        cache: false,
+                                                        async: false,
+                                                        contentType: 'application/json; charset=utf-8',
+                                                        data: JSON.stringify({
+                                                            id: $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').val()
+                                                        })
+                                                    })
+                                                    .success(function (result) {
+                                                        if (!result.EhRetido) {
+                                                            $('#@Html.IdFor(m => m.DataVencimentoImposto)').val('');
+                                                            $("#@Html.IdFor(m => m.DataVencimentoImposto)").attr("readonly", true);
+                                                            $("#@Html.IdFor(m => m.DataVencimentoImposto)").addClass("readonly");
+                                                        }
+                                                        else {
+                                                            $("#@Html.IdFor(m => m.DataVencimentoImposto)").attr("readonly", false);
+                                                            $("#@Html.IdFor(m => m.DataVencimentoImposto)").removeClass("readonly");
+                                                        }
+                                                    });
                                                 });
 
                                                 $('#btnAddImposto').on("click", function () {
@@ -1540,7 +1775,35 @@
                                                         }
                                                     }
                                                 });
+
+                                                $('#btnRemoverImposto').on("click", function () {
+                                                    var arrImpostoFinanceiroId = [];
+                                                    $('#tableImpostos input[type=checkbox]:checked').each(function () {
+                                                        arrImpostoFinanceiroId.push(parseInt($(this).val()));
+                                                    });
+
+                                                    if (arrImpostoFinanceiroId.length > 0)
+                                                        removerImposto(arrImpostoFinanceiroId);
+                                                    else
+                                                        smartAlert("Erro", "Selecione pelo menos 1 item para cancelamento.", "error");
+                                                });
                                             });
+
+                                            function removerImposto(arrImpostoFinanceiroId) {
+                                                var jsonImpostos = JSON.parse($("#@Html.IdFor(m => m.JsonImpostos)").val());
+
+                                                for (i = jsonImpostos.length - 1; i >= 0; i--) {
+                                                    if (jQuery.inArray(jsonImpostos[i].ImpostoFinanceiro.Id, arrImpostoFinanceiroId) > -1) {
+                                                        jsonImpostos.splice(i, 1);
+                                                    }
+                                                }
+
+                                                $("#@Html.IdFor(m => m.JsonImpostos)").val(JSON.stringify(jsonImpostos));
+                                                clearFormImposto();
+                                                fillTableImpostos();
+                                                atualizarTotais();
+                                                ehFormularioAlterado = true;
+                                            }
 
                                             function fillTableImpostos() {
                                                 var jsonImpostos = JSON.parse($("#@Html.IdFor(m => m.JsonImpostos)").val());
@@ -1655,6 +1918,7 @@
                                                 clearFormImposto();
                                                 fillTableImpostos();
                                                 atualizarTotais();
+                                                ehFormularioAlterado = true;
                                             }
 
                                             function processDataImposto(node) {
@@ -1747,7 +2011,7 @@
                                                 })
                                             })
                                             .success(function (result) {
-                                                if (result.HaPossibilidadeCancelamentoEntradaMaterial)
+                                                if (result.HaPossibilidadeAcao)
                                                     $('#MotivoCancelamento_ModalPanel').modal('show');
                                                 else {
                                                     var errorMessages = result.ErrorMessages;
@@ -1807,44 +2071,199 @@
     </article>
 </div>
 <script type="text/javascript">
-    var houveAlteracao = false;
+    var ehFormularioAlterado = false;
+
+    function houveAlteracaoNoFormulario() {
+        if (ehFormularioAlterado)
+            smartAlert("Erro", "A Entrada de Material foi alterada.<br />Salve os dados antes de executar esta ação.", "error");
+
+        return ehFormularioAlterado;
+    }
+
     $(document).ready(function () {
         atualizarTotais();
 
+        $(document).on('input change', '.exigeGravacao', function () {
+            ehFormularioAlterado = true;
+        });
+
         $('#btnLiberarTitulos').on("click", function () {
-            $.SmartMessageBox({
-                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a liberação dos títulos para o Financeiro?",
-                content: "Esta ação não poderá ser revertida.",
-                buttons: '[Não][Sim]'
-            }, function (ButtonPressed) {
-                if (ButtonPressed === "Sim") {
+            if (!houveAlteracaoNoFormulario()) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("HaPossibilidadeLiberacaoTitulos", "EntradaMaterial")',
+                    cache: false,
+                    //async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        entradaMaterialId: '@Html.DisplayFor(m => m.EntradaMaterial.Id)'
+                    })
+                })
+                .success(function (result) {
+                    if (result.HaPossibilidadeAcao)
+                        liberarTitulos();
+                    else {
+                        var errorMessages = result.ErrorMessages;
+                        if (errorMessages.length !== 0) {
+                            for (var i = 0; i < errorMessages.length; i++)
+                                smartAlert("Erro", errorMessages[i].Text, "error");
+                        }
+                    }
+                });
+            }
+        });
+
+        jQuery.validator.addMethod(
+            "ehDataEntradaMaterialValida",
+            function (value, element, params) {
+                var isValid = false;
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ValidaDataEntradaMaterial")',
+                    cache: false,
+                    async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        id: '@Model.EntradaMaterial.Id',
+                        data: $("#@Html.IdFor(m => m.EntradaMaterial.Data)").val()
+                    })
+                })
+                .success(function (result) {
+                    showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.EntradaMaterial.Data)'), result.errorMessage);
+                    isValid = result.ehValido;
+                });
+                $.validator.messages.ehDataEntradaMaterialValida = getErrorMessageContainer('@Html.NameFor(m => m.EntradaMaterial.Data)').html();
+                return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
+            "ehCentroCustoValido",
+            function (value, element, params) {
+                var isValid = validaCentroCusto();
+                $.validator.messages.ehCentroCustoValido = $('#@Html.IdFor(m => m.EntradaMaterial.CentroCusto.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
+            "ehNumeroNotaFiscalValido",
+            function (value, element, params) {
+                var isValid = true;
+                if (($("#@Html.IdFor(m => m.EntradaMaterial.ClienteFornecedor.Id)").val() != '' || $("#@Html.IdFor(m => m.EntradaMaterial.FornecedorNota.Id)").val() != '')
+                    && $("#@Html.IdFor(m => m.EntradaMaterial.NumeroNotaFiscal)").val() != ''
+                    && $("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").val() != '') {
+                    isValid = false;
                     $.ajax({
                         type: 'POST',
-                        url: '@Url.Action("LiberarTitulos", "EntradaMaterial")',
+                        url: '@Url.Action("ValidaNumeroNotaFiscal")',
                         cache: false,
-                        //async: false,
+                        async: false,
                         contentType: 'application/json; charset=utf-8',
                         data: JSON.stringify({
-                            id: '@Model.EntradaMaterial.Id'
+                            '@Html.NameFor(m => m.EntradaMaterial.Id)': '@Model.EntradaMaterial.Id',
+                            '@Html.NameFor(m => m.EntradaMaterial.ClienteFornecedor.Id)': $("#@Html.IdFor(m => m.EntradaMaterial.ClienteFornecedor.Id)").val(),
+                            '@Html.NameFor(m => m.EntradaMaterial.FornecedorNota.Id)': $("#@Html.IdFor(m => m.EntradaMaterial.FornecedorNota.Id)").val(),
+                            '@Html.NameFor(m => m.EntradaMaterial.NumeroNotaFiscal)': $("#@Html.IdFor(m => m.EntradaMaterial.NumeroNotaFiscal)").val(),
+                            '@Html.NameFor(m => m.EntradaMaterial.DataEmissaoNota)': $("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").val()
                         })
                     })
                     .success(function (result) {
-                        $('#notificationMessages').html(result);
-                    })
+                        showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.EntradaMaterial.NumeroNotaFiscal)'), result.errorMessage);
+                        isValid = result.ehValido;
+                    });
+                    $.validator.messages.ehNumeroNotaFiscalValido = getErrorMessageContainer('@Html.NameFor(m => m.EntradaMaterial.NumeroNotaFiscal)').html();
                 }
-            });
+
+                return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
+            "ehDataEmissaoNotaValida",
+            function (value, element, params) {
+                var isValid = validaDataNota();
+                $.validator.messages.ehDataEmissaoNotaValida = getErrorMessageContainer('@Html.NameFor(m => m.EntradaMaterial.DataEmissaoNota)').html();
+                return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
+            "ehDataEntregaValida",
+            function (value, element, params) {
+                var isValid = validaDataNota();
+                $.validator.messages.ehDataEntregaValida = getErrorMessageContainer('@Html.NameFor(m => m.EntradaMaterial.DataEntregaNota)').html();
+                return isValid;
+            }, ''
+        );
+
+        jQuery.validator.setDefaults({
+            ignore: '#formItem *, #formImposto *'
         });
 
         $('#formCadastro').validate({
             rules: {
+                '@Html.NameFor(m => m.EntradaMaterial.Data)': {
+                    required: true,
+                    date: true,
+                    ehDataEntradaMaterialValida: true
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.CentroCusto.Codigo)': {
+                    required: true,
+                    ehCentroCustoValido: true
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.ClienteFornecedor.Nome)': {
+                    required: true
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.TipoNotaFiscal.Id)': {
+                    required: true
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.NumeroNotaFiscal)': {
+                    required: true,
+                    ehNumeroNotaFiscalValido: true
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.DataEmissaoNota)': {
+                    required: true,
+                    ehDataEmissaoNotaValida: true
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.DataEntregaNota)': {
+                    required: true,
+                    ehDataEntregaValida: true
+                },
                 '@Html.NameFor(m => m.Quantidade)': 'decimalGreaterThanZero',
+                '@Html.NameFor(m => m.Material.Id)': 'required',
                 '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': 'required',
                 '@Html.NameFor(m => m.BaseCalculoImposto)': 'required',
                 '@Html.NameFor(m => m.DataVencimentoImposto)': 'date'
             },
             messages: {
+                '@Html.NameFor(m => m.EntradaMaterial.Data)': {
+                    required: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida',
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida'
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.CentroCusto.Codigo)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo")'
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.ClienteFornecedor.Nome)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Fornecedor")'
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.TipoNotaFiscal.Id)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Tipo")'
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.NumeroNotaFiscal)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Número")'
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.DataEmissaoNota)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data da emissão")'
+                },
+                '@Html.NameFor(m => m.EntradaMaterial.DataEntregaNota)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data da entrega")'
+                },
                 '@Html.NameFor(m => m.Quantidade)': {
                     decimalGreaterThanZero: "A Quantidade deve ser maior que zero."
+                },
+                '@Html.NameFor(m => m.Material.Id)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Material")'
                 },
                 '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': {
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Imposto")'
@@ -1872,6 +2291,57 @@
             }
         });
     });
+
+
+    function validaDataNota() {
+        var isValid = true;
+        if ($("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").val() != '') {
+            isValid = false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ValidaDataEmissaoNota")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    '@Html.NameFor(m => m.EntradaMaterial.Data)': $("#@Html.IdFor(m => m.EntradaMaterial.Data)").val(),
+                    '@Html.NameFor(m => m.EntradaMaterial.DataEmissaoNota)': $("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").val(),
+                    '@Html.NameFor(m => m.EntradaMaterial.DataEntregaNota)': $("#@Html.IdFor(m => m.EntradaMaterial.DataEntregaNota)").val()
+                })
+            })
+            .success(function (result) {
+                showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.EntradaMaterial.DataEmissaoNota)'), result.errorMessage);
+                isValid = result.ehValido;
+            });
+        }
+
+        return isValid;
+    }
+
+
+    function liberarTitulos() {
+        $.SmartMessageBox({
+            title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a liberação dos títulos para o Financeiro?",
+            content: "Esta ação não poderá ser revertida.",
+            buttons: '[Não][Sim]'
+        }, function (ButtonPressed) {
+            if (ButtonPressed === "Sim") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("LiberarTitulos", "EntradaMaterial")',
+                    cache: false,
+                    //async: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        id: '@Model.EntradaMaterial.Id'
+                    })
+                })
+                .success(function (result) {
+                    $('#notificationMessages').html(result);
+                })
+            }
+        });
+    }
 
     function showMessages(messages) {
         $(messages).each(function () {
@@ -1947,7 +2417,7 @@
         var valorDedutivel = valorTotalICMS + valorTotalRetido;
         valorTotalDesconto = valorDesconto + valorDedutivel;
 
-        var valorFreteIncluso = 0;
+        var valorFreteIncluso = parseFloat($("#@Html.IdFor(m => m.EntradaMaterial.FreteIncluso)").val().replace(".", "").replace(",", "."));
         valorTotalAcrescimo = valorFreteIncluso;
 
         valorTotal = valorTotalItens - valorTotalDesconto + valorTotalAcrescimo;

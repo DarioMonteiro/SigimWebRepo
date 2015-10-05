@@ -120,14 +120,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 model.EntradaMaterial.CentroCusto = parametrosUsuario.CentroCusto;
             }
 
-            //var parametros = parametrosOrdemCompraAppService.Obter();
-            //if (parametros != null)
-            //{
-            //    model.DataMinima = parametros.DiasDataMinima.HasValue ? DateTime.Now.AddDays(parametros.DiasDataMinima.Value) : DateTime.Now;
-            //    model.DataMaxima = parametros.DiasPrazo.HasValue ? model.DataMinima.Value.AddDays(parametros.DiasPrazo.Value) : DateTime.Now;
-            //    model.Prazo = parametros.DiasPrazo.HasValue ? parametros.DiasPrazo.Value : 0;
-            //}
-
             model.PodeSalvar = entradaMaterialAppService.EhPermitidoSalvar(entradaMaterial);
             model.PodeCancelarEntrada = entradaMaterialAppService.EhPermitidoCancelar(entradaMaterial);
             model.ExisteEstoqueParaCentroCusto = entradaMaterialAppService.ExisteEstoqueParaCentroCusto(entradaMaterial.CentroCusto.Codigo);
@@ -147,9 +139,24 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Cadastro(EntradaMaterialCadastroViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.EntradaMaterial.ListaItens = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EntradaMaterialItemDTO>>(model.JsonItens);
+                model.EntradaMaterial.ListaImposto = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EntradaMaterialImpostoDTO>>(model.JsonImpostos);
+                if (entradaMaterialAppService.Salvar(model.EntradaMaterial))
+                    return PartialView("Redirect", Url.Action("Cadastro", "EntradaMaterial", new { id = model.EntradaMaterial.Id }));
+            }
+            return PartialView("_NotificationMessagesPartial");
+        }
+
         private void CarregarCombos(EntradaMaterialCadastroViewModel model)
         {
             int? tipoNotaFiscalId = null;
+            int? tipoNotaFreteId = null;
             string CodigoTipoCompra = null;
             int? CifFobId = null;
             string codigoNaturezaOperacao = null;
@@ -160,6 +167,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             if (model.EntradaMaterial != null)
             {
                 tipoNotaFiscalId = model.EntradaMaterial.TipoNotaFiscalId;
+                tipoNotaFreteId = model.EntradaMaterial.TipoNotaFreteId;
                 CodigoTipoCompra = model.EntradaMaterial.CodigoTipoCompra;
                 CifFobId = model.EntradaMaterial.CifFobId;
                 codigoNaturezaOperacao = model.EntradaMaterial.CodigoNaturezaOperacao;
@@ -168,7 +176,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 CodigoContribuicaoId = model.EntradaMaterial.CodigoContribuicaoId;
             }
 
-            model.ListaTipoNotaFiscal = new SelectList(tipoDocumentoAppService.ListarTodos(), "Id", "Sigla", tipoNotaFiscalId);
+            var listaTipoDocumento = tipoDocumentoAppService.ListarTodos();
+            model.ListaTipoNotaFiscal = new SelectList(listaTipoDocumento, "Id", "Sigla", tipoNotaFiscalId);
+            model.ListaTipoNotaFrete = new SelectList(listaTipoDocumento, "Id", "Sigla", tipoNotaFreteId);
             model.ListaTipoCompra = new SelectList(tipoCompraAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
             model.ListaCifFob = new SelectList(cifFobAppService.ListarTodos(), "Id", "Descricao", tipoNotaFiscalId);
             model.ListaNaturezaOperacao = new SelectList(naturezaOperacaoAppService.ListarTodos(), "Codigo", "CodigoComDescricao", tipoNotaFiscalId);
@@ -191,8 +201,18 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         [HttpPost]
         public ActionResult HaPossibilidadeCancelamentoEntradaMaterial(int? entradaMaterialId)
         {
-            PossibilidadeCancelamentoEntradaMaterialViewModel model = new PossibilidadeCancelamentoEntradaMaterialViewModel();
-            model.HaPossibilidadeCancelamentoEntradaMaterial = entradaMaterialAppService.HaPossibilidadeCancelamentoEntradaMaterial(entradaMaterialId);
+            PossibilidadeAcaoViewModel model = new PossibilidadeAcaoViewModel();
+            model.HaPossibilidadeAcao = entradaMaterialAppService.HaPossibilidadeCancelamentoEntradaMaterial(entradaMaterialId);
+            model.ErrorMessages = messageQueue.GetAll().Where(l => l.Type == TypeMessage.Error).ToList();
+            messageQueue.Clear();
+            return Json(model);
+        }
+
+        [HttpPost]
+        public ActionResult HaPossibilidadeLiberacaoTitulos(int? entradaMaterialId)
+        {
+            PossibilidadeAcaoViewModel model = new PossibilidadeAcaoViewModel();
+            model.HaPossibilidadeAcao = entradaMaterialAppService.HaPossibilidadeLiberacaoTitulos(entradaMaterialId);
             model.ErrorMessages = messageQueue.GetAll().Where(l => l.Type == TypeMessage.Error).ToList();
             messageQueue.Clear();
             return Json(model);
@@ -261,6 +281,39 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             var messages = messageQueue.GetAll();
             messageQueue.Clear();
             return Json(new { Messages = messages, Itens = jsonItens });
+        }
+
+        [HttpPost]
+        public ActionResult ListarFretePendente(int? entradaMaterialId)
+        {
+            return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFretePendente(entradaMaterialId)));
+        }
+
+        [HttpPost]
+        public ActionResult ValidaDataEntradaMaterial(int? id, Nullable<DateTime> data)
+        {
+            var ehValido = entradaMaterialAppService.EhDataEntradaMaterialValida(id, data);
+            var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll()[0].Text : string.Empty;
+            messageQueue.Clear();
+            return Json(new { ehValido = ehValido, errorMessage = msg });
+        }
+
+        [HttpPost]
+        public ActionResult ValidaNumeroNotaFiscal(EntradaMaterialDTO entradaMaterial)
+        {
+            var ehValido = entradaMaterialAppService.EhNumeroNotaFiscalValido(entradaMaterial);
+            var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll()[0].Text : string.Empty;
+            messageQueue.Clear();
+            return Json(new { ehValido = ehValido, errorMessage = msg });
+        }
+
+        [HttpPost]
+        public ActionResult ValidaDataEmissaoNota(EntradaMaterialDTO entradaMaterial)
+        {
+            var ehValido = entradaMaterialAppService.EhDataEmissaoNotaValida(entradaMaterial);
+            var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll()[0].Text : string.Empty;
+            messageQueue.Clear();
+            return Json(new { ehValido = ehValido, errorMessage = msg });
         }
     }
 }

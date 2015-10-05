@@ -32,13 +32,33 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public bool? InibeFormaPagamento { get; set; }
         public bool? EhInterfaceContabil { get; set; }
         public InterfaceCotacao InterfaceCotacao { get; set; }
-        public int? DiasEntradaMaterial { get; set; }
+        
+        private int? diasEntradaMaterial;
+        public int? DiasEntradaMaterial
+        {
+            get { return diasEntradaMaterial.HasValue ? diasEntradaMaterial : 0; }
+            set { diasEntradaMaterial = value; }
+        }
+
         public bool? ConfereNF { get; set; }
         public bool? GravaCotacaoWeb { get; set; }
         public int? LayoutSPEDId { get; set; }
         public BancoLayout LayoutSPED { get; set; }
-        public int? DiasPagamento { get; set; }
-        public bool? EhObrigatorioDadosSPED { get; set; }
+
+        private int? diasPagamento;
+        public int? DiasPagamento
+        {
+            get { return diasPagamento.HasValue ? diasPagamento : 0; }
+            set { diasPagamento = value; }
+        }
+
+        private bool? ehObrigatorioDadosSPED;
+        public bool? EhObrigatorioDadosSPED
+        {
+            get { return ehObrigatorioDadosSPED.HasValue ? ehObrigatorioDadosSPED : false; }
+            set { ehObrigatorioDadosSPED = value; }
+        }
+
         public bool? EhGeraRequisicaoMaterialRequisitada { get; set; }
 
         public ParametrosOrdemCompra()

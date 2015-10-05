@@ -26,7 +26,7 @@
             </label>
         }
     }
-    @Html.ValidationMessageFor(m => m.Id, "", new { @id = Html.IdFor(m => m.Id) + "_ValidationMessage", @class = "note note-error" })
+    @Html.ValidationMessageFor(m => m.Nome, "", new { @id = Html.IdFor(m => m.Nome) + "_ValidationMessage", @class = "note note-error" })
 </section>
 
 <div class="modal fade" id="@(uniqueIdentifier)_Pesquisa_ModalPanel" tabindex="-1" role="dialog">
@@ -286,12 +286,18 @@
         $('#@(uniqueIdentifier)').val(id);
         $('#@Html.IdFor(m => m.Nome)').val(nome);
         $('#@(uniqueIdentifier)_Pesquisa_ModalPanel').modal('hide');
+        dispararEventoAlteracao();
     }
 
     function LimpaSelecaoClienteFornecedor@(uniqueIdentifier)() {
         $('#@(uniqueIdentifier)').val(null);
         $('#@Html.IdFor(m => m.Nome)').val("");
+        dispararEventoAlteracao();
     }
 
-
+    function dispararEventoAlteracao() {
+        $.event.trigger({
+            type: "clienteFornecedorAlterado@(Model.Id)"
+        });
+    }
 </script>

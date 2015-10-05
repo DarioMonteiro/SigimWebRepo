@@ -36,7 +36,13 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
 
         public decimal? PercentualISS { get; set; }
         public decimal? ISS { get; set; }
-        public decimal? FreteIncluso { get; set; }
+        
+        private decimal? freteIncluso;
+        public decimal? FreteIncluso
+        {
+            get { return freteIncluso.HasValue ? freteIncluso : 0; }
+            set { freteIncluso = value; }
+        }
         public DateTime DataCadastro { get; set; }
         public string LoginUsuarioCadastro { get; set; }
         public Nullable<DateTime> DataLiberacao { get; set; }
@@ -71,6 +77,56 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public bool? EhConferido { get; set; }
         public Nullable<DateTime> DataConferencia { get; set; }
         public string LoginUsuarioConferencia { get; set; }
+
+        public decimal? ValorTotalFormasPagamento
+        {
+            get { return this.ListaFormaPagamento.Sum(l => l.Valor); }
+        }
+
+        public decimal? ValorTotalItens {
+            get { return this.ListaItens.Sum(l => l.ValorTotal + l.ValorIPI - l.ValorDesconto); }
+        }
+
+        public decimal? ValorTotalDescontoOrdemCompra
+        {
+            get { return this.ListaItens.Sum(l => l.ValorDescontoOrdemCompra); }
+        }
+
+        public decimal? ValorSubTotal
+        {
+            get { return this.ValorTotalItens - this.ValorTotalDescontoOrdemCompra; }
+        }
+
+        public decimal? ValorDesconto
+        {
+            get { return this.PercentualDesconto.HasValue ? this.ValorSubTotal * this.Desconto / 100 : this.Desconto; }
+        }
+
+        public decimal? ValorTotalICMS
+        {
+            get { return this.ListaItens.Sum(l => l.ValorICMS); }
+        }
+
+        public decimal? ValorTotalRetido
+        {
+            get { return this.ListaImposto.Where(l => l.ImpostoFinanceiro.EhRetido.Value).Sum(o => o.Valor); }
+        }
+
+        public decimal? ValorDedutivel
+        {
+            get { return this.ValorTotalICMS + this.ValorTotalRetido; }
+        }
+
+        public decimal? ValorTotalDesconto
+        {
+            get { return this.ValorDesconto + this.ValorDedutivel; }
+        }
+
+        public decimal? ValorTotal
+        {
+            get { return this.ValorTotalItens - this.ValorTotalDesconto + this.FreteIncluso; }
+        }
+
         public ICollection<EntradaMaterialItem> ListaItens { get; set; }
         public ICollection<EntradaMaterialFormaPagamento> ListaFormaPagamento { get; set; }
         public ICollection<EntradaMaterialImposto> ListaImposto { get; set; }
