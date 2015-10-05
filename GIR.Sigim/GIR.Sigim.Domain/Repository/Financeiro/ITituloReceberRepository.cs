@@ -9,5 +9,7 @@ namespace GIR.Sigim.Domain.Repository.Financeiro
 {
     public interface ITituloReceberRepository : IRepository<TituloReceber>
     {
+        void RemoverTituloReceber(TituloReceber titulo);
+        void RemoverApropriacao(Apropriacao apropriacao);
     }
 }

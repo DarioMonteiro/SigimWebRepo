@@ -175,8 +175,8 @@
                                         <div class="btn-toolbar">
                                             <a class="btn btn-default btn-xs disabled" id="btnAprovarLiberar" href="javascript:tratarAprovarLiberar();">Aprovar e Liberar</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnAprovar" href="javascript:tratarAprovar();">Aprovar</a>
-                                            <a class="btn btn-default btn-xs disabled" id="btnLiberar" href="javascript:void(0);">Liberar</a>
-                                            <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:void(0);">Cancelar Liberação</a>
+                                            <a class="btn btn-default btn-xs disabled" id="btnLiberar" href="javascript:tratarLiberar();">Liberar</a>
+                                            <a class="btn btn-default btn-xs disabled" id="btnCancelarLiberacao" href="javascript:tratarCancelar();">Cancelar Liberação</a>
                                             <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnAssociarNF" href="#associarNotaFiscal_ModalPanel">Associar NF</a>
                                             <a class="btn btn-default btn-xs disabled" id="btnAlterarVencimento" href="javascript:validarTrocarDataVencimento();">Alterar Vencimento</a>
                                             <a data-toggle="modal" class="btn btn-default btn-xs disabled" id="btnImprimirMedicao" href="#formatoImpressaoMedicao_ModalPanel">Imprimir Medição</a>
@@ -1340,7 +1340,7 @@
                 listaItemLiberacao: JSON.stringify(arr)
             }),
             success: function (result) {
-                if (result.ehAprovado) {
+                if (result.ehAprovadoLiberado) {
                     window.location.href = result.redirectToUrl;
                     smartAlert("Sucesso", result.message, "success");
                 }
@@ -1354,5 +1354,66 @@
         });
     }
 
+    function tratarLiberar() {
+        var jsonListaArraySelecionados = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
+        var arr = jQuery.grep(jsonListaArraySelecionados, function (item, i) {
+            return (item.Selecionado == true)
+        });
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("TratarLiberar", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
+                contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
+                listaItemLiberacao: JSON.stringify(arr)
+            }),
+            success: function (result) {
+                if (result.ehLiberado) {
+                    window.location.href = result.redirectToUrl;
+                    smartAlert("Sucesso", result.message, "success");
+                }
+                else {
+                    smartAlert("Ocorreu erro ao liberar !", result.message, "error");
+                }
+            },
+            error: function (result) {
+                smartAlert("Ocorreu erro ao liberar !", result.message, "error");
+            }
+        });
+    }
+
+    function tratarCancelar() {
+        var jsonListaArraySelecionados = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
+        var arr = jQuery.grep(jsonListaArraySelecionados, function (item, i) {
+            return (item.Selecionado == true)
+        });
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("TratarCancelar", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
+                contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
+                listaItemLiberacao: JSON.stringify(arr)
+            }),
+            success: function (result) {
+                if (result.ehCancelado) {
+                    window.location.href = result.redirectToUrl;
+                    smartAlert("Sucesso", result.message, "success");
+                }
+                else {
+                    smartAlert("Ocorreu erro ao cancelar !", result.message, "error");
+                }
+            },
+            error: function (result) {
+                smartAlert("Ocorreu erro ao cancelar !", result.message, "error");
+            }
+        });
+    }
 
 </script>

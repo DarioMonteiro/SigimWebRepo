@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Contrato;
 
 namespace GIR.Sigim.Domain.Entity.Estoque
 {
@@ -35,7 +36,8 @@ namespace GIR.Sigim.Domain.Entity.Estoque
         public DateTime DataOperacao { get; set; }
         public string LoginUsuarioOperacao { get; set; }
         public bool? EhMovimentoTemporario { get; set; }
-        //Contrato
+        public int? ContratoId { get; set; }
+        public Domain.Entity.Contrato.Contrato Contrato { get; set; }
 
         public ICollection<Movimento> ListaFilhos { get; set; }
         public ICollection<MovimentoItem> ListaMovimentoItem { get; set; }

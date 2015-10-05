@@ -218,7 +218,7 @@ function smartAlert(title, message, type) {
         title: title,
         content: message.replace("\n", "<br />"),
         color: color,
-        timeout: 4000,
+        timeout: 8000,
         icon: icon
     });
     $('.SmallBox:has(i.fa-times)').addClass('text-color-error');

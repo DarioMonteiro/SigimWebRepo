@@ -120,6 +120,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ContratoRetificacaoProvisaoConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemCronogramaConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoNFConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemImpostoConfiguration());
 
             #endregion

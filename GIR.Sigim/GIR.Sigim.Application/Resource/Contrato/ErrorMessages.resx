@@ -150,6 +150,15 @@
   <data name="SituacaoNaoPermitida" xml:space="preserve">
     <value>A situação da medição não permite a gravação.</value>
   </data>
+  <data name="TituloEstaPago" xml:space="preserve">
+    <value>O título {0}, já está pago.</value>
+  </data>
+  <data name="TituloEstaRecebido" xml:space="preserve">
+    <value>O título {0}, já foi recebido.</value>
+  </data>
+  <data name="TituloImpostoEstaPago" xml:space="preserve">
+    <value>O título de imposto {0}, já está pago.</value>
+  </data>
   <data name="ValorMaiorQue" xml:space="preserve">
     <value>O valor do campo "{0}" está maior que o valor do campo "{1}".  </value>
   </data>

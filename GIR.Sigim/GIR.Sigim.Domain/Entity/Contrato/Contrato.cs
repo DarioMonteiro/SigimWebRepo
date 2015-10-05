@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro; 
-using GIR.Sigim.Domain.Entity.Sigim;   
+using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.Estoque;   
 
 namespace GIR.Sigim.Domain.Entity.Contrato
 {
@@ -41,6 +42,8 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         public ICollection<ContratoRetificacaoProvisao> ListaContratoRetificacaoProvisao { get; set; }
         public ICollection<ContratoRetencao> ListaContratoRetencao { get; set; }
         public ICollection<AvaliacaoFornecedor> ListaAvaliacaoFornecedor { get; set; }
+        public ICollection<ContratoRetificacaoItemMedicaoNF> ListaContratoRetificacaoItemMedicaoNF { get; set; }
+        public ICollection<Movimento> ListaMovimento { get; set; }
 
         public Contrato()
         {
@@ -53,6 +56,8 @@ namespace GIR.Sigim.Domain.Entity.Contrato
             this.ListaContratoRetificacaoProvisao = new HashSet<ContratoRetificacaoProvisao>();
             this.ListaContratoRetencao = new HashSet<ContratoRetencao>();
             this.ListaAvaliacaoFornecedor = new HashSet<AvaliacaoFornecedor>();
+            this.ListaContratoRetificacaoItemMedicaoNF = new HashSet<ContratoRetificacaoItemMedicaoNF>();
+            this.ListaMovimento = new HashSet<Movimento>();
         }
 
 

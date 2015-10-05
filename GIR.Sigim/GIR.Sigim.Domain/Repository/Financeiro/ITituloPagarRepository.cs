@@ -12,5 +12,7 @@ namespace GIR.Sigim.Domain.Repository.Financeiro
         void RemoverTituloPagarAdiantamento(TituloPagarAdiantamento titulo);
         void RemoverApropriacaoAdiantamento(ApropriacaoAdiantamento apropriacao);
         void RemoverImpostoPagar(ImpostoPagar impostoPagar);
+        void RemoverTituloPagar(TituloPagar titulo);
+        void RemoverApropriacao(Apropriacao apropriacao);
     }
 }

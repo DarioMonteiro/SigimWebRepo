@@ -68,6 +68,7 @@
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemCronogramaConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemImpostoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoItemMedicaoConfiguration.cs" />
+    <Compile Include="Configuration\Contrato\ContratoRetificacaoItemMedicaoNFConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetificacaoProvisaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\LicitacaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\LicitacaoDescricaoConfiguration.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Repository\Admin\ModuloRepository.cs" />
     <Compile Include="Repository\Admin\PerfilRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
+    <Compile Include="Repository\Contrato\ContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />

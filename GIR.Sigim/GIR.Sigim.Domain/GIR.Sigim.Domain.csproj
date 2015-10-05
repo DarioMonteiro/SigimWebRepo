@@ -55,7 +55,9 @@
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemCronograma.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemImposto.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicao.cs" />
+    <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicaoNF.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
+    <Compile Include="Repository\Contrato\IContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />
     <Compile Include="Entity\Contrato\LicitacaoCronograma.cs" />

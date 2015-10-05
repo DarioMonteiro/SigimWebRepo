@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.Filtros.Contrato;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.Enums;
 
 namespace GIR.Sigim.Application.Service.Contrato
 {
@@ -44,6 +45,7 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool TrocarDataVencimentoListaItemLiberacao(int contratoId, Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO);
         bool ValidarAssociacaoNotaFiscalListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO, out ItemLiberacaoDTO itemLiberacao);
         bool AssociarNotaFiscalListaItemLiberacao(int? contratoId, int? contratoRetificacaoItemMedicaoId, int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao, Nullable<DateTime> dataVencimento);
-        bool AprovarLiberarListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO);
+        bool AprovarLiberarListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO, OperacaoLiberarMedicao operacao);
+        bool CancelarListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO);
     }
 }

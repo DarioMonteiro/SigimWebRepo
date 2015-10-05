@@ -49,6 +49,24 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Financeiro
             }
         }
 
+        public void RemoverTituloPagar(TituloPagar titulo)
+        {
+            if (titulo != (TituloPagar)null)
+            {
+                QueryableUnitOfWork.Attach(titulo);
+                QueryableUnitOfWork.CreateSet<TituloPagar>().Remove(titulo);
+            }
+        }
+
+        public void RemoverApropriacao(Apropriacao apropriacao)
+        {
+            if (apropriacao != (Apropriacao)null)
+            {
+                QueryableUnitOfWork.Attach(apropriacao);
+                QueryableUnitOfWork.CreateSet<Apropriacao>().Remove(apropriacao);
+            }
+        }
+
         #endregion
     }
 }
