@@ -135,6 +135,9 @@
   <data name="ClasseUltimoNivel" xml:space="preserve">
     <value>Selecione uma classe insumo do último nível.</value>
   </data>
+  <data name="DataMaiorQue" xml:space="preserve">
+    <value>A data do campo "{0}" está maior que a data do campo "{1}".</value>
+  </data>
   <data name="DataMaximaMenorQueMinima" xml:space="preserve">
     <value>A data máxima não pode ser menor que a data mínima.</value>
   </data>
@@ -194,5 +197,8 @@
   </data>
   <data name="ValorDeveSerNumericoEOuEspaco" xml:space="preserve">
     <value>Preencha o campo {0} com um valor numérico e ou espaço.</value>
+  </data>
+  <data name="ValorMaiorQue" xml:space="preserve">
+    <value>O valor do campo "{0}" está maior que o valor do campo "{1}".</value>
   </data>
 </root>

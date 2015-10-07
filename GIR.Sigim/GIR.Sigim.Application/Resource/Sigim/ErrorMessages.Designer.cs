@@ -115,6 +115,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A data do campo &quot;{0}&quot; está maior que a data do campo &quot;{1}&quot;..
+        /// </summary>
+        public static string DataMaiorQue {
+            get {
+                return ResourceManager.GetString("DataMaiorQue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A data máxima não pode ser menor que a data mínima..
         /// </summary>
         public static string DataMaximaMenorQueMinima {
@@ -291,6 +300,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         public static string ValorDeveSerNumericoEOuEspaco {
             get {
                 return ResourceManager.GetString("ValorDeveSerNumericoEOuEspaco", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O valor do campo &quot;{0}&quot; está maior que o valor do campo &quot;{1}&quot;..
+        /// </summary>
+        public static string ValorMaiorQue {
+            get {
+                return ResourceManager.GetString("ValorMaiorQue", resourceCulture);
             }
         }
     }
