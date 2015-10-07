@@ -111,11 +111,6 @@ namespace GIR.Sigim.Domain.Entity.Contrato
         {
             bool condicao = false;
 
-            //if (Situacao > SituacaoMedicao.AguardandoLiberacao)
-            //{
-            //    yield return new ValidationResult(string.Format(Resource.Contrato.ErrorMessages.SituacaoNaoPermitida, "Situação da medição"));
-            //}
-
             condicao = ((DataMedicao == null) || (DataMedicao == DateTime.MinValue));
             if (condicao)
             {
@@ -185,42 +180,6 @@ namespace GIR.Sigim.Domain.Entity.Contrato
             {
                 yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Quantidade medição atual"));
             }
-
-            //if (ContratoRetificacaoItem != null)
-            //{
-            //    if (ContratoRetificacaoItem.NaturezaItem == NaturezaItem.PrecoGlobal)
-            //    {
-            //        if (Valor == 0)
-            //        {
-            //            yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Valor medição atual"));
-            //        }
-
-            //        decimal valorTotalMedido = Contrato.ObterValorTotalMedido(SequencialItem, SequencialCronograma);
-            //        decimal valorItem = 0;
-            //        if (ContratoRetificacaoItem.ValorItem.HasValue)
-            //        {
-            //            valorItem = ContratoRetificacaoItem.ValorItem.Value;
-            //        }
-
-            //        decimal valorPendente = valorItem - valorTotalMedido;
-
-            //        if (Valor > valorPendente)
-            //        {
-            //            yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.ValorMaiorQue, "Valor medição atual", "Valor pendente"));
-            //        }
-            //    }
-            //    else if (ContratoRetificacaoItem.NaturezaItem == NaturezaItem.PrecoUnitario)
-            //    {
-
-            //        decimal quantidadeTotalMedida = Contrato.ObterQuantidadeTotalMedida(SequencialItem, SequencialCronograma);
-            //        decimal quantidadePendente = ContratoRetificacaoItem.Quantidade - quantidadeTotalMedida;
-
-            //        if (Quantidade > quantidadePendente)
-            //        {
-            //            yield return new ValidationResult(string.Format(Resource.Sigim.ErrorMessages.ValorMaiorQue, "Quantidade medição atual", "Quantidade pendente"));
-            //        }
-            //    }
-            //}
 
             if (Desconto > 0)
             {
