@@ -32,7 +32,7 @@
                         @Html.HiddenFor(m => m.PodeAprovar)
                         @Html.HiddenFor(m => m.PodeLiberar)
                         @Html.HiddenFor(m => m.PodeCancelarLiberacao)
-                        @Html.HiddenFor(m => m.PodeAssociarNF)
+                        @Html.HiddenFor(m => m.PodeAssociarNotaFiscal)
                         @Html.HiddenFor(m => m.PodeAlterarDataVencimento)
                         @Html.HiddenFor(m => m.PodeImprimirMedicao)
                         @Html.HiddenFor(m => m.ContratoRetificacao.Id)
@@ -331,121 +331,124 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal fade in" id="associarNotaFiscal_ModalPanel" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false" style="display: none;">  
-				            <div class="modal-dialog">  
-					            <div class="modal-content">
-                                    <div class="modal-header">
-	                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-		                                    ×
-	                                    </button>
-	                                    <h4 class="modal-title" id="myModalLabel">Associa nota fiscal</h4>
-                                    </div>
-                                    <div class="modal-body" style="margin: 5px 10px 0px 0px;">
-	                                    <div class="row">
-                                            <section class="col col-3">
-                                                <label class="label">Tipo</label>
-                                                <label class="input">
-                                                    @Html.TextBoxFor(m => m.TipoDocumentoAntigo, new { @class="readonly", @readonly = "" })  
-                                                </label>
-                                            </section>
-                                            <section class="col col-3">
-                                                <label class="label">Nº</label>
-                                                <label class="input">
-                                                    @Html.TextBoxFor(m => m.NumeroDocumentoAntigo, new { @class="readonly", @readonly = "" })  
-                                                </label>
-                                            </section>
-                                            <section class="col col-3">
-                                                <label class="label">Data emissão</label>
-                                                <label class="input">
-                                                    @Html.TextBoxFor(m => m.DataEmissaoAntigo, new { @class="readonly", @readonly = "" })  
-                                                </label>
-                                            </section>
-                                            <section class="col col-3">
-                                                <label class="label">Data vencimento</label>
-                                                <label class="input">
-                                                    @Html.TextBoxFor(m => m.DataVencimentoAntigo, new { @class="readonly", @readonly = "" })  
-                                                </label>
-                                            </section>
-	                                    </div>
-	                                    <div class="row">
-                                            <section class="col col-3">
-                                                <label class="label">Tipo</label>
-                                                <label class="select">
-                                                    @Html.DropDownListFor(m => m.TipoDocumentoNovoId, Model.ListaTipoDocumentoNovo, "" ,new {@class="required",@required = true, @novalidate = "novalidate" })
-                                                    <i></i>
-                                                </label>
-                                                @Html.ValidationMessageFor(m => m.TipoDocumentoNovoId, "Informe o tipo do documento.", new { @id = Html.IdFor(m => m.TipoDocumentoNovoId) + "_ValidationMessage", @class = "note note-error" })
-                                            </section>
+                        if (Model.PodeAssociarNotaFiscal)
+                        {
+                            <div class="modal fade in" id="associarNotaFiscal_ModalPanel" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="false" style="display: none;">  
+				                <div class="modal-dialog">  
+					                <div class="modal-content">
+                                        <div class="modal-header">
+	                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+		                                        ×
+	                                        </button>
+	                                        <h4 class="modal-title" id="myModalLabel">Associa nota fiscal</h4>
+                                        </div>
+                                        <div class="modal-body" style="margin: 5px 10px 0px 0px;">
+	                                        <div class="row">
+                                                <section class="col col-3">
+                                                    <label class="label">Tipo</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.TipoDocumentoAntigo, new { @class = "readonly", @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    <label class="label">Nº</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.NumeroDocumentoAntigo, new { @class = "readonly", @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    <label class="label">Data emissão</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.DataEmissaoAntigo, new { @class = "readonly", @readonly = "" })  
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    <label class="label">Data vencimento</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.DataVencimentoAntigo, new { @class = "readonly", @readonly = "" })  
+                                                    </label>
+                                                </section>
+	                                        </div>
+	                                        <div class="row">
+                                                <section class="col col-3">
+                                                    <label class="label">Tipo</label>
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.TipoDocumentoNovoId, Model.ListaTipoDocumentoNovo, "", new { @class = "required", @required = true, @novalidate = "novalidate" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.TipoDocumentoNovoId, "Informe o tipo do documento.", new { @id = Html.IdFor(m => m.TipoDocumentoNovoId) + "_ValidationMessage", @class = "note note-error" })
+                                                </section>
 
-                                            <section class="col col-3">
-                                                <label class="label">Nº</label>
-                                                <label class="input">
-                                                    @Html.TextBoxFor(m => m.NumeroDocumentoNovo, new { @class = "required", @maxlength = "10", @required = true })  
-                                                </label>
-                                                @Html.ValidationMessageFor(m => m.NumeroDocumentoNovo, "Informe o número do documento.", new { @class = "note note-error" })
-                                            </section>
-                                            <section class="col col-3">
-                                                <label class="label">Data emissão</label>
-                                                <label class="input">
-                                                    <i class="icon-append fa fa-calendar"></i>
-                                                    @Html.TextBoxFor(m => m.DataEmissaoNovo, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
-                                                </label>
-                                                @Html.ValidationMessageFor(m => m.DataEmissaoNovo, "Informe uma data válida.", new { @class = "note note-error" })
-                                            </section>
-                                            <section class="col col-3">
-                                                <label class="label">Data vencimento</label>
-                                                <label class="input">
-                                                    <i class="icon-append fa fa-calendar"></i>
-                                                    @Html.TextBoxFor(m => m.DataVencimentoNovo, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
-                                                </label>
-                                                @Html.ValidationMessageFor(m => m.DataVencimentoNovo, "Informe uma data válida.", new { @class = "note note-error" })
-                                            </section>
-                                            <script type="text/javascript">
-                                                $(document).ready(function () {
-                                                    $('#@Html.IdFor(m => m.DataEmissaoNovo)').datepicker({
-                                                        prevText: '<i class="fa fa-chevron-left"></i>',
-                                                        nextText: '<i class="fa fa-chevron-right"></i>',
-                                                        changeMonth: true,
-                                                        changeYear: true,
-                                                        onClose: function (selectedDate) {
-                                                            if ($(this).valid()) {
-                                                                $('#@Html.IdFor(m => m.DataVencimentoNovo)').datepicker('option', 'minDate', selectedDate);
+                                                <section class="col col-3">
+                                                    <label class="label">Nº</label>
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.NumeroDocumentoNovo, new { @class = "required", @maxlength = "10", @required = true })  
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.NumeroDocumentoNovo, "Informe o número do documento.", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    <label class="label">Data emissão</label>
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.DataEmissaoNovo, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.DataEmissaoNovo, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    <label class="label">Data vencimento</label>
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.DataVencimentoNovo, "{0:dd/MM/yyyy}", new { @class = "required", @required = true })  
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.DataVencimentoNovo, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $('#@Html.IdFor(m => m.DataEmissaoNovo)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            onClose: function (selectedDate) {
+                                                                if ($(this).valid()) {
+                                                                    $('#@Html.IdFor(m => m.DataVencimentoNovo)').datepicker('option', 'minDate', selectedDate);
+                                                                }
+                                                                else {
+                                                                    $(this).val("");
+                                                                }
                                                             }
-                                                            else {
-                                                                $(this).val("");
+                                                        });
+                                                        $('#@Html.IdFor(m => m.DataVencimentoNovo)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            minDate: '#@Html.IdFor(m => m.DataEmissaoNovo)',
+                                                            onClose: function (selectedDate) {
+                                                                if ($(this).valid()) {
+                                                                    $('#@Html.IdFor(m => m.DataEmissaoNovo)').datepicker('option', 'maxDate', selectedDate);
+                                                                }
+                                                                else {
+                                                                    $(this).val("");
+                                                                }
                                                             }
-                                                        }
+                                                        });
                                                     });
-                                                    $('#@Html.IdFor(m => m.DataVencimentoNovo)').datepicker({
-                                                        prevText: '<i class="fa fa-chevron-left"></i>',
-                                                        nextText: '<i class="fa fa-chevron-right"></i>',
-                                                        changeMonth: true,
-                                                        changeYear: true,
-                                                        minDate: '#@Html.IdFor(m => m.DataEmissaoNovo)',
-                                                        onClose: function (selectedDate) {
-                                                            if ($(this).valid()) {
-                                                                $('#@Html.IdFor(m => m.DataEmissaoNovo)').datepicker('option', 'maxDate', selectedDate);
-                                                            }
-                                                            else {
-                                                                $(this).val("");
-                                                            }
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-	                                    </div>
-                                    </div>
-                                    <div class="modal-footer">
-	                                    <button id="btnAssociarNotaFiscal" type="button" class="btn btn-primary">
-		                                    Associar
-	                                    </button>
-	                                    <button id="btnCancelarAssociarNotaFiscal" type="button" class="btn btn-default" data-dismiss="modal">
-		                                    Cancelar
-	                                    </button>
-                                    </div>
-					            </div>  
-				            </div>  
-			            </div>
+                                                </script>
+	                                        </div>
+                                        </div>
+                                        <div class="modal-footer">
+	                                        <button id="btnAssociarNotaFiscal" type="button" class="btn btn-primary">
+		                                        Associar
+	                                        </button>
+	                                        <button id="btnCancelarAssociarNotaFiscal" type="button" class="btn btn-default" data-dismiss="modal">
+		                                        Cancelar
+	                                        </button>
+                                        </div>
+					                </div>  
+				                </div>  
+			                </div>
+                        }
                         <footer>
                             @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
                         </footer>                        
@@ -514,7 +517,7 @@
 
         $("#btnConfirmarImpressaoMedicao").on("click", function () {
             @{
-                var url = Url.Action("ImprimirMedicao","LiberacaoContrato");
+                var url = Url.Action("ImprimirMedicao", "LiberacaoContrato");
             }
             window.open('@url?formato=' + $("input:radio[name=formatoExportacaoArquivo]:checked").val() + parametrosUrlImpressaoMedicao);
         });
@@ -965,20 +968,6 @@
             });
 
             var ultimoDataSelecionado = -1;
-            //for (var i = 0; i < jsonListaItemLiberacaoArray.length; i++) {
-            //    if (jsonListaItemLiberacaoArray[i].Selecionado) {
-            //        if (jsonListaItemLiberacaoArray[i].CodigoSituacao == 0) {
-            //            qtdAguardandoAprovacao = qtdAguardandoAprovacao + 1;
-            //        }
-            //        if (jsonListaItemLiberacaoArray[i].CodigoSituacao == 1) {
-            //            qtdAguardandoLiberacao = qtdAguardandoLiberacao + 1;
-            //        }
-            //        if (jsonListaItemLiberacaoArray[i].DataSelecionado > ultimoDataSelecionado){
-            //            codigoSituacaoSelecionadoUltimoDaLista = jsonListaItemLiberacaoArray[i].CodigoSituacao;
-            //            ultimoDataSelecionado = jsonListaItemLiberacaoArray[i].DataSelecionado;
-            //        }
-            //    }
-            //}
 
             for (var i = 0; i < arr.length; i++) {
                 if (arr[i].CodigoSituacao == 0) {
@@ -1034,7 +1023,7 @@
         var podeAprovar = $('#@Html.IdFor(m => m.PodeAprovar)').val();
         var podeLiberar = $('#@Html.IdFor(m => m.PodeLiberar)').val();
         var podeCancelarLiberacao = $('#@Html.IdFor(m => m.PodeCancelarLiberacao)').val();
-        var podeAssociarNF = $('#@Html.IdFor(m => m.PodeAssociarNF)').val();
+        var podeAssociarNF = $('#@Html.IdFor(m => m.PodeAssociarNotaFiscal)').val();
         var podeAlterarVencimento = $('#@Html.IdFor(m => m.PodeAlterarDataVencimento)').val();
         var podeImprimirMedicao = $('#@Html.IdFor(m => m.PodeImprimirMedicao)').val();
 
@@ -1104,12 +1093,11 @@
                 contratoId: $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val(),
                 contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
                 listaItemLiberacao:JSON.stringify(arr)
-                @*listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()*@
             }),
             success: function (result) {
                 if (result.ehAprovado) {
                     window.location.href = result.redirectToUrl;
-                    smartAlert("Sucesso", result.message, "success");
+                    smartAlert("Sucesso", result.message, "success");                   
                 }
                 else {
                     smartAlert("Ocorreu erro ao aprovar !", result.message, "error");
@@ -1119,6 +1107,7 @@
                 smartAlert("Ocorreu erro ao aprovar !", result.message, "error");
             }
         });
+
     }
 
     function validarTrocarDataVencimento() {
@@ -1137,7 +1126,6 @@
                 contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
                 dataVencimento: $("#@Html.IdFor(m => m.DataVencimento)").val(),
                 listaItemLiberacao: JSON.stringify(arr)
-                @*listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()*@
             }),
             success: function (result) {
                 if (result.ehValidouTrocaDataVencimento) {
@@ -1170,7 +1158,6 @@
                 contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
                 dataVencimento: $("#@Html.IdFor(m => m.DataVencimento)").val(),
                 listaItemLiberacao:JSON.stringify(arr)
-                @*listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()*@
             }),
             success: function (result) {
                 if (result.trocouDataVencimento) {

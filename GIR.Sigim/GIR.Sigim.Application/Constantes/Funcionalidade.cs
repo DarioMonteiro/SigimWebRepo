@@ -38,6 +38,13 @@ namespace GIR.Sigim.Application.Constantes
 
         public const string LiberacaoAcessar = "LIBERACAO_ACESSAR";
 
+        public const string LiberacaoAprovarLiberar = "LIBERACAO_APROVARLIBERAR";
+        public const string LiberacaoAprovar = "LIBERACAO_APROVAR";
+        public const string LiberacaoLiberar = "LIBERACAO_LIBERAR";
+        public const string LiberacaoCancelar = "LIBERACAO_CANCELAR";
+        public const string LiberacaoAssociarNF = "LIBERACAO_ASSOCIARNF";
+        public const string LiberacaoAlterarVencimento = "LIBERACAO_ALTERARVENCIMENTO";
+        public const string LiberacaoImprimirMedicao = "LIBERACAO_IMPRIMIRMEDICAO";
 
         public const string MedicaoAcessar = "MEDICAO_ACESSAR";
         public const string MedicaoGravar = "MEDICAO_GRAVAR";
@@ -212,6 +219,13 @@ namespace GIR.Sigim.Application.Constantes
             MenuContrato = new System.Collections.Hashtable();
 
             MenuContrato.Add(LiberacaoAcessar, "Liberação - acessar");
+            MenuContrato.Add(LiberacaoAprovarLiberar, "Liberação - aprovar e liberar");
+            MenuContrato.Add(LiberacaoAprovar, "Liberação - aprovar");
+            MenuContrato.Add(LiberacaoLiberar, "Liberação - liberar");
+            MenuContrato.Add(LiberacaoCancelar, "Liberação - cancelar liberação");
+            MenuContrato.Add(LiberacaoAssociarNF, "Liberação - associar nota fiscal");
+            MenuContrato.Add(LiberacaoAlterarVencimento, "Liberação - alterar data de vencimento");
+            MenuContrato.Add(LiberacaoImprimirMedicao, "Liberação - imprimir dados da medição");
 
             MenuContrato.Add(MedicaoAcessar, "Medição - acessar");
             MenuContrato.Add(MedicaoGravar, "Medição - gravar");

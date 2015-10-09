@@ -91,10 +91,6 @@ $(document).ready(function () {
 }));
 
 function showErrorMessage(tag, msg) {
-    if (typeof msg === 'undefined') {
-        msg = '';
-    }
-
     if (msg.length > 0)
         tag.removeClass("field-validation-valid").addClass("field-validation-error");
     else

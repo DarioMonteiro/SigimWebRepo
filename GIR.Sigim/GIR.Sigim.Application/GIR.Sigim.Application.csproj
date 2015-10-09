@@ -176,6 +176,7 @@
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
     <Compile Include="Enums\ClienteFornecedorModuloAutoComplete.cs" />
     <Compile Include="Enums\OperacaoLiberarMedicao.cs" />
+    <Compile Include="Enums\OrigemChamada.cs" />
     <Compile Include="Enums\SimNaoAmbos.cs" />
     <Compile Include="Enums\SituacaoAutoComplete.cs" />
     <Compile Include="Enums\TipoClienteAutoComplete.cs" />
