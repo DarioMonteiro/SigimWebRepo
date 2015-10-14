@@ -57,7 +57,7 @@
                                     </div>
 								</section>
                                 <section class="col col-6"> 
-                                    <div style="border:1px solid lightgray; width:200px;">
+                                    <div id="divOperacao"; style="border:1px solid lightgray; background-color:white; width:200px;">
                                         <label class="label">Operação</label>
 									    <div class="inline-group" style="padding-left:15px;">
 										    <label class="radio"> @Html.RadioButtonFor(m => m.TipoMovimento.Operacao, "C", new { id = "OperacaoCredito" }) <i></i>Crédito</label>
@@ -138,6 +138,9 @@
         $('#@Html.IdFor(m => m.TipoMovimento.HistoricoContabilId)').val(null);
         $('#TipoBancario').val("B").prop('checked', true);
         $('#OperacaoCredito').val("C").prop('checked', true);
+        $('#OperacaoCredito').attr('disabled', false);
+        $('#OperacaoDebito').attr('disabled', false);
+        $('#divOperacao').attr('style', 'border:1px solid lightgray; background-color:white; width:200px;');
     }
 
     function novo() {
@@ -181,6 +184,17 @@
                 $('#OperacaoCredito').val(result.Operacao).prop('checked', true);
             }
             $('#@Html.IdFor(m => m.TipoMovimento.Operacao)').val(result.Operacao);
+
+            if (result.ListaMovimentoFinanceiro.length > 0) {
+                $('#OperacaoCredito').attr('disabled', true);
+                $('#OperacaoDebito').attr('disabled', true);
+                $('#divOperacao').attr('style', 'border:1px solid lightgray; background-color:#d5d5d5; width:200px;');
+            }
+            else {
+                $('#OperacaoCredito').attr('disabled', false);
+                $('#OperacaoDebito').attr('disabled', false);
+                $('#divOperacao').attr('style', 'border:1px solid lightgray; background-color:white; width:200px;');
+            }
             goToTop();
         });
     }

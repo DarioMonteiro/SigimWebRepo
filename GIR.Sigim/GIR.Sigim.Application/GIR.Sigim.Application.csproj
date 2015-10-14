@@ -88,6 +88,7 @@
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
     <Compile Include="DTO\Financeiro\HistoricoContabilDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoReceberDTO.cs" />
+    <Compile Include="DTO\Financeiro\MovimentoFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoMovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoPagarDTO.cs" />
     <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />

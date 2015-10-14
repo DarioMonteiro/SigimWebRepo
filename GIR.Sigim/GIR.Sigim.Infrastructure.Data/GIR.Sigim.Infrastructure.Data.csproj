@@ -86,6 +86,7 @@
     <Compile Include="Configuration\Financeiro\ApropriacaoAdiantamentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\HistoricoContabilConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ImpostoReceberConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\MovimentoFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoMovimentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ImpostoPagarConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TaxaAdministracaoConfiguration.cs" />
