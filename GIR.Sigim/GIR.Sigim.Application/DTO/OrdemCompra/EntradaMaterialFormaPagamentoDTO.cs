@@ -13,11 +13,13 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
 {
     public class EntradaMaterialFormaPagamentoDTO : BaseDTO
     {
+        public int? OrdemCompraFormaPagamentoId { get; set; }
         public OrdemCompraFormaPagamentoDTO OrdemCompraFormaPagamento { get; set; }
         public Nullable<DateTime> Data { get; set; }
         public decimal Valor { get; set; }
         public TipoCompromissoDTO TipoCompromisso { get; set; }
         public TituloPagarDTO TituloPagar { get; set; }
+        public string EhLiberadoDescricao { get; set; }
 
         public EntradaMaterialFormaPagamentoDTO()
         {

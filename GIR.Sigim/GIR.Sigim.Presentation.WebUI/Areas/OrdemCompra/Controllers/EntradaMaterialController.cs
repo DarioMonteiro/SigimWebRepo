@@ -112,6 +112,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 
             model.EntradaMaterial = entradaMaterial;
             model.JsonItens = JsonConvert.SerializeObject(entradaMaterial.ListaItens);
+            model.JsonFormasPagamento = JsonConvert.SerializeObject(entradaMaterial.ListaFormaPagamento);
             model.JsonImpostos = JsonConvert.SerializeObject(entradaMaterial.ListaImposto);
 
             if ((entradaMaterial.CentroCusto == null) || (string.IsNullOrEmpty(entradaMaterial.CentroCusto.Codigo)))
@@ -131,6 +132,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             model.PodeAdicionarItem = entradaMaterialAppService.EhPermitidoAdicionarItem(entradaMaterial);
             model.PodeRemoverItem = entradaMaterialAppService.EhPermitidoRemoverItem(entradaMaterial);
             model.PodeEditarItem = entradaMaterialAppService.EhPermitidoEditarItem(entradaMaterial);
+            model.PodeAdicionarFormaPagamento = entradaMaterialAppService.EhPermitidoAdicionarFormaPagamento(entradaMaterial);
+            model.PodeRemoverFormaPagamento = entradaMaterialAppService.EhPermitidoRemoverFormaPagamento(entradaMaterial);
             model.PodeAdicionarImposto = entradaMaterialAppService.EhPermitidoAdicionarImposto(entradaMaterial);
             model.PodeRemoverImposto = entradaMaterialAppService.EhPermitidoRemoverImposto(entradaMaterial);
             model.PodeEditarImposto = entradaMaterialAppService.EhPermitidoEditarImposto(entradaMaterial);
@@ -284,6 +287,18 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         }
 
         [HttpPost]
+        public ActionResult RemoverFormasPagamento(int? entradaMaterialId, int?[] formasPagamento)
+        {
+            string jsonFormasPagamento = "[]";
+            if (entradaMaterialAppService.RemoverFormasPagamento(entradaMaterialId, formasPagamento))
+                jsonFormasPagamento = JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamento(entradaMaterialId));
+
+            var messages = messageQueue.GetAll();
+            messageQueue.Clear();
+            return Json(new { Messages = messages, FormasPagamento = jsonFormasPagamento });
+        }
+
+        [HttpPost]
         public ActionResult ListarFretePendente(int? entradaMaterialId)
         {
             return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFretePendente(entradaMaterialId)));
@@ -314,6 +329,25 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll()[0].Text : string.Empty;
             messageQueue.Clear();
             return Json(new { ehValido = ehValido, errorMessage = msg });
+        }
+
+        [HttpPost]
+        public ActionResult ListarFormasPagamentoOrdemCompraPendentes(int?[] ordemCompraIds)
+        {
+            return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamentoOrdemCompraPendentes(ordemCompraIds)));
+        }
+
+        [HttpPost]
+        public ActionResult AdicionarFormasPagamento(int? entradaMaterialId, string formasPagamento)
+        {
+            List<EntradaMaterialFormaPagamentoDTO> listaEntradaMaterialFormaPagamento = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EntradaMaterialFormaPagamentoDTO>>(formasPagamento);
+            string jsonFormasPagamento = "[]";
+            if (entradaMaterialAppService.AdicionarFormasPagamento(entradaMaterialId, listaEntradaMaterialFormaPagamento))
+                jsonFormasPagamento = JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamento(entradaMaterialId));
+
+            var messages = messageQueue.GetAll();
+            messageQueue.Clear();
+            return Json(new { Messages = messages, FormasPagamento = jsonFormasPagamento });
         }
     }
 }

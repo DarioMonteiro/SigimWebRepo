@@ -14,10 +14,14 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         List<EntradaMaterialDTO> ListarPeloFiltro(EntradaMaterialFiltro filtro, out int totalRegistros);
         EntradaMaterialDTO ObterPeloId(int? id);
         List<OrdemCompraItemDTO> ListarItensDeOrdemCompraLiberadaComSaldo(int? entradaMaterialId);
+        List<OrdemCompraFormaPagamentoDTO> ListarFormasPagamentoOrdemCompraPendentes(int?[] ordemCompraIds);
         bool Salvar(EntradaMaterialDTO dto);
         bool AdicionarItens(int? entradaMaterialId, int?[] itens);
+        bool AdicionarFormasPagamento(int? entradaMaterialId, List<EntradaMaterialFormaPagamentoDTO> listaEntradaMaterialFormaPagamento);
         bool RemoverItens(int? entradaMaterialId, int?[] itens);
         List<EntradaMaterialItemDTO> ListarItens(int? entradaMaterialId);
+        bool RemoverFormasPagamento(int? entradaMaterialId, int?[] formasPagamento);
+        List<EntradaMaterialFormaPagamentoDTO> ListarFormasPagamento(int? entradaMaterialId);
         List<FreteDTO> ListarFretePendente(int? entradaMaterialId);
         bool CancelarEntrada(int? id, string motivo);
         bool LiberarTitulos(int? id);
@@ -29,6 +33,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         bool EhPermitidoAdicionarItem(EntradaMaterialDTO dto);
         bool EhPermitidoRemoverItem(EntradaMaterialDTO dto);
         bool EhPermitidoEditarItem(EntradaMaterialDTO dto);
+        bool EhPermitidoAdicionarFormaPagamento(EntradaMaterialDTO dto);
+        bool EhPermitidoRemoverFormaPagamento(EntradaMaterialDTO dto);
         bool EhPermitidoAdicionarImposto(EntradaMaterialDTO entradaMaterial);
         bool EhPermitidoRemoverImposto(EntradaMaterialDTO entradaMaterial);
         bool EhPermitidoEditarImposto(EntradaMaterialDTO entradaMaterial);

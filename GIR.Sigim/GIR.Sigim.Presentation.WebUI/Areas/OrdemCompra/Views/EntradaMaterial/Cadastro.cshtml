@@ -1180,149 +1180,478 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFormasPagamentoOrdemCompra" class="collapsed">
-                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                            Seleção de formas de pagamento da ordem de compra
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapseFormasPagamentoOrdemCompra" class="panel-collapse collapse">
-                                    <div class="panel-body no-padding">
-                                        <fieldset>
-                                            <div class="row">
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.OrdemCompraId, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.OrdemCompraId, new { @readonly = "", @class = "readonly" })
-                                                    </label>
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.DataVencimento, new { @class = "label" })
-                                                    <label class="input">
-                                                        <i class="icon-append fa fa-calendar"></i>
-                                                        @Html.TextBoxFor(m => m.DataVencimento, "{0:dd/MM/yyyy}", new { @readonly = "", @class = "readonly" })
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.DataVencimento, "Informe uma data válida.", new { @class = "note note-error" })
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.QuantidadeDiasAposEmissao, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.QuantidadeDiasAposEmissao)
-                                                    </label>
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.DataVencimentoLiberado, new { @class = "label" })
-                                                    <label class="input">
-                                                        <i class="icon-append fa fa-calendar"></i>
-                                                        @Html.TextBoxFor(m => m.DataVencimentoLiberado, "{0:dd/MM/yyyy}", new { @class = "" })
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.DataVencimentoLiberado, "Informe uma data válida.", new { @class = "note note-error" })
-                                                </section>
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $('#@Html.IdFor(m => m.DataVencimentoLiberado)').datepicker({
-                                                            prevText: '<i class="fa fa-chevron-left"></i>',
-                                                            nextText: '<i class="fa fa-chevron-right"></i>',
-                                                            changeMonth: true,
-                                                            changeYear: true,
-                                                            onClose: function (selectedDate) {
-                                                                $(this).valid();
+                            @if (Model.PodeAdicionarFormaPagamento) {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFormasPagamentoOrdemCompra" class="collapsed" id="btnFormasPagamentoOrdemCompra">
+                                                <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                                <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                                Seleção de formas de pagamento da ordem de compra
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFormasPagamentoOrdemCompra" class="panel-collapse collapse">
+                                        <div class="panel-body no-padding">
+                                            <fieldset id="formSelecaoFormaPagamento">
+                                                <div class="row">
+                                                    @Html.HiddenFor(m => m.FormaPagamentoId)
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.OrdemCompraId, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.OrdemCompraId, new { @readonly = "", @class = "readonly" })
+                                                        </label>
+                                                        @Html.ValidationMessageFor(m => m.OrdemCompraId, "", new { @class = "note note-error" })
+                                                    </section>
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.DataVencimento, new { @class = "label" })
+                                                        <label class="input">
+                                                            <i class="icon-append fa fa-calendar"></i>
+                                                            @Html.TextBoxFor(m => m.DataVencimento, "{0:dd/MM/yyyy}", new { @readonly = "", @class = "readonly" })
+                                                        </label>
+                                                        @Html.ValidationMessageFor(m => m.DataVencimento, "Informe uma data válida.", new { @class = "note note-error" })
+                                                    </section>
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.QuantidadeDiasAposEmissao, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.QuantidadeDiasAposEmissao, new { @class = "text-right numeric" })
+                                                        </label>
+                                                        @Html.ValidationMessageFor(m => m.QuantidadeDiasAposEmissao, "", new { @class = "note note-error" })
+                                                    </section>
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.DataVencimentoLiberado, new { @class = "label" })
+                                                        <label class="input">
+                                                            <i class="icon-append fa fa-calendar"></i>
+                                                            @Html.TextBoxFor(m => m.DataVencimentoLiberado, "{0:dd/MM/yyyy}", new { @class = "" })
+                                                        </label>
+                                                        @Html.ValidationMessageFor(m => m.DataVencimentoLiberado, "Informe uma data válida.", new { @class = "note note-error" })
+                                                    </section>
+                                                    <script type="text/javascript">
+                                                        $(document).ready(function () {
+                                                            $('#@Html.IdFor(m => m.DataVencimentoLiberado)').datepicker({
+                                                                prevText: '<i class="fa fa-chevron-left"></i>',
+                                                                nextText: '<i class="fa fa-chevron-right"></i>',
+                                                                changeMonth: true,
+                                                                changeYear: true,
+                                                                onClose: function (selectedDate) {
+                                                                    $(this).valid();
+                                                                    ajustarQuantidadeDiasAposEmissao();
+                                                                }
+                                                            });
+
+                                                            $(document).on("change", "#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)", function () {
+                                                                ajustarDataVencimentoLiberado();
+                                                            });
+                                                        });
+
+                                                        function ajustarQuantidadeDiasAposEmissao() {
+                                                            if ($("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").val() != "" && $("#@Html.IdFor(m => m.DataVencimentoLiberado)").val() != "") {
+                                                                if (isValidDate("dd/mm/yy", $("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").val()) && isValidDate("dd/mm/yy", $("#@Html.IdFor(m => m.DataVencimentoLiberado)").val())) {
+                                                                    var start = $("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").datepicker('getDate');
+                                                                    var end = $("#@Html.IdFor(m => m.DataVencimentoLiberado)").datepicker('getDate');
+                                                                    var days = dateDiffInDays(start, end);
+                                                                    $("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)").val(roundDecimal(floatToString(days), 0));
+                                                                }
+                                                            }
+                                                        }
+
+                                                        function ajustarDataVencimentoLiberado() {
+                                                            var format = "dd/mm/yy";
+                                                            var dataEmissaoNota = $("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)");
+                                                            var dataVencimentoLiberado = $("#@Html.IdFor(m => m.DataVencimentoLiberado)");
+                                                            var quantidadeDiasAposEmissao = $("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)");
+
+                                                            if (dataEmissaoNota.val() != "" && quantidadeDiasAposEmissao.val() != "") {
+                                                                if (isValidDate(format, $("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").val()) && $.isNumeric($("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)").val())) {
+                                                                    var data = jQuery.datepicker.parseDate(format, dataEmissaoNota.val());
+                                                                    data.setDate(data.getDate(format) + parseInt(quantidadeDiasAposEmissao.val()));
+                                                                    dataVencimentoLiberado.datepicker('setDate', data);
+                                                                }
+                                                            }
+                                                        }
+                                                    </script>
+                                                </div>
+                                                <div class="row">
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.ValorParcela, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.ValorParcela, "{0:F2}", new { @readonly = "", @class = "readonly" })
+                                                        </label>
+                                                        @Html.ValidationMessageFor(m => m.ValorParcela, "", new { @class = "note note-error" })
+                                                    </section>
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.ValorParcelaLiberado, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.ValorParcelaLiberado, "{0:F2}", new { @class = "text-right decimal-2-casas" })
+                                                        </label>
+                                                        @Html.ValidationMessageFor(m => m.ValorParcelaLiberado, "", new { @class = "note note-error" })
+                                                    </section>
+                                                    <section class="col col-3">
+                                                        <button id="btnAddFormaPagamento" type="button" class="btn btn-primary right" style="margin-top:25px;">
+                                                            Adicionar
+                                                        </button>
+                                                    </section>
+                                                </div>
+                                                <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                    <table id="tableOrdemCompraFormaPagamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <th class="text-right">OC</th>
+                                                                <th class="text-center">Data vencimento</th>
+                                                                <th class="text-right">Valor parcela</th>
+                                                                <th>Compromisso</th>
+                                                                <th class="text-right">Título pagar</th>
+                                                                <th class="text-center">Data vencimento lib.</th>
+                                                                <th class="text-right">Valor liberado</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="row">
+                                                    <section class="col col-12">
+                                                        <button id="btnIncluirFormaPagamentoEntradaMaterial" type="button" class="btn btn-primary right">
+                                                            Incluir na Entrada de Material
+                                                        </button>
+                                                    </section>
+                                                </div>
+                                                <div class="row">
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.ValorTotalEMSelecaoFormaPagamento, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.ValorTotalEMSelecaoFormaPagamento, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        </label>
+                                                    </section>
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.ValorTotalDistribuidoSelecaoFormaPagamento, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.ValorTotalDistribuidoSelecaoFormaPagamento, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        </label>
+                                                    </section>
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.ValorTotalPendenteSelecaoFormaPagamento, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.ValorTotalPendenteSelecaoFormaPagamento, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        </label>
+                                                    </section>
+                                                    <section class="col col-3">
+                                                        @Html.LabelFor(m => m.ValorTotalLiberadoSelecaoFormaPagamento, new { @class = "label" })
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.ValorTotalLiberadoSelecaoFormaPagamento, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        </label>
+                                                    </section>
+                                                </div>
+                                                <div class="table-responsive" style="min-height: 85px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+                                                    <table id="tableOrdemCompraValor" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <th>OC</th>
+                                                                <th class="text-right">Valor da OC</th>
+                                                                <th class="text-right">Valor distribuído</th>
+                                                                <th class="text-right">Valor pendente</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </fieldset>
+                                            <script type="text/javascript">
+                                                var jsonFormasPagamentoPendentes = [];
+                                                var jsonResumoValoresOC = [];
+                                                var ordemCompraIds = [];
+
+                                                $(document).ready(function () {
+                                                    $('#btnFormasPagamentoOrdemCompra').on('click', function () {
+                                                        if (!$('#collapseFormasPagamentoOrdemCompra').is(":visible")) {
+                                                            jsonFormasPagamentoPendentes = [];
+                                                            jsonResumoValoresOC = [];
+                                                            ordemCompraIds = obterIdsOrdensCompraUtilizadasNaEntradaMaterial();
+
+                                                            if (!houveAlteracaoNoFormulario()) {
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: '@Url.Action("ListarFormasPagamentoOrdemCompraPendentes", "EntradaMaterial")',
+                                                                    cache: false,
+                                                                    async: false,
+                                                                    contentType: 'application/json; charset=utf-8',
+                                                                    data: JSON.stringify({
+                                                                        ordemCompraIds: ordemCompraIds
+                                                                    })
+                                                                })
+                                                                .success(function (result) {
+                                                                    jsonFormasPagamentoPendentes = JSON.parse(result);
+                                                                });
+                                                            }
+                                                            loadPainelFormaPagamento();
+                                                        }
+                                                    });
+
+                                                    $('#btnAddFormaPagamento').on('click', function () {
+                                                        if ($('#formSelecaoFormaPagamento input').valid()) {
+                                                            addFormaPagamento();
+                                                        }
+                                                    });
+
+                                                    $('#btnIncluirFormaPagamentoEntradaMaterial').on('click', function () {
+                                                        if ($('#ValorTotalEMSelecaoFormaPagamento').val() != $('#ValorTotalDistribuidoSelecaoFormaPagamento').val()) {
+                                                            smartAlert("Erro", "Valor distribuído diferente do valor da Entrada de Material.", "error");
+                                                        }
+                                                        else {
+                                                            var arr = jQuery.grep(jsonFormasPagamentoPendentes, function (formaPagamento, i) {
+                                                                return (formaPagamento.DataVencimentoLiberado != null);
+                                                            });
+
+                                                            if (arr.length == 0) {
+                                                                smartAlert("Erro", "Adicione pelo menos 1 forma de pagamento.", "error");
+                                                            }
+                                                            else {
+                                                                var arrFormasPagamentoAdicionadas = [];
+                                                                $.each(arr, function (i, formaPagamento) {
+                                                                    var jsonFormaPagamento = {};
+                                                                    jsonFormaPagamento.OrdemCompraFormaPagamentoId = formaPagamento.Id;
+                                                                    jsonFormaPagamento.Data = formaPagamento.DataVencimentoLiberado;
+                                                                    jsonFormaPagamento.Valor = parseFloat(formaPagamento.ValorParcelaLiberado.toFixed(2));
+                                                                    arrFormasPagamentoAdicionadas.push(jsonFormaPagamento);
+                                                                });
+
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: '@Url.Action("AdicionarFormasPagamento", "EntradaMaterial")',
+                                                                    cache: false,
+                                                                    async: false,
+                                                                    contentType: 'application/json; charset=utf-8',
+                                                                    data: JSON.stringify({
+                                                                        entradaMaterialId: '@Model.EntradaMaterial.Id',
+                                                                        formasPagamento: JSON.stringify(arrFormasPagamentoAdicionadas)
+                                                                    })
+                                                                })
+                                                                .success(function (result) {
+                                                                    var houveErro = false;
+                                                                    $(result.Messages).each(function () {
+                                                                        if (this.Type.toString() == '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Error)') {
+                                                                            houveErro = true;
+                                                                        }
+                                                                    });
+
+                                                                    if (!houveErro) {
+                                                                        $('#@Html.IdFor(m => m.JsonFormasPagamento)').val(result.FormasPagamento);
+                                                                        fillTableFormasPagamento();
+                                                                        atualizarTotaisFormaPagamento();
+                                                                        $('#btnFormasPagamento').click();
+                                                                        setTimeout(function () {
+                                                                            $('html, body').animate({
+                                                                                scrollTop: $("#headerPanelFormasPagamento").offset().top
+                                                                            }, 500);
+                                                                        }, 500);
+                                                                    }
+
+                                                                    showMessages(result.Messages);
+                                                                });
+                                                            }
+                                                        }
+                                                    });
+                                                });
+
+                                                function loadPainelFormaPagamento() {
+                                                    fillTableOrdemCompraFormaPagamento();
+                                                    atualizarTotaisSelecaoFormaPagamento();
+                                                    jsonResumoValoresOC = obterResumoValoresOC(ordemCompraIds);
+                                                    fillTableOrdemCompraValor(jsonResumoValoresOC);
+                                                }
+
+                                                function addFormaPagamento() {
+                                                    var jsonObj = $("#formSelecaoFormaPagamento").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processDataFormaPagamento })
+
+                                                    $.each(jsonFormasPagamentoPendentes, function (i, formaPagamento) {
+                                                        if ($('#@Html.IdFor(m => m.FormaPagamentoId)').val() == formaPagamento.Id) {
+                                                            formaPagamento.DataVencimentoLiberado = jsonObj.DataVencimentoLiberado;
+                                                            formaPagamento.ValorParcelaLiberado = jsonObj.ValorParcelaLiberado;
+                                                            return false;
+                                                        }
+                                                    });
+
+                                                    clearFormFormaPagamento();
+                                                    loadPainelFormaPagamento();
+                                                }
+
+                                                function processDataFormaPagamento(node) {
+                                                    var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+                                                    var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+                                                    if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.DataVencimentoLiberado)")) {
+                                                        var date = $("#" + fieldId).datepicker("getDate");
+                                                        var jsonDate = "";
+                                                        if (date != null) {
+                                                            date.setHours(0, -date.getTimezoneOffset(), 0, 0); //removing the timezone offset.
+                                                            jsonDate = date.toJSON();
+                                                        }
+                                                        return { name: fieldName, value: jsonDate };
+                                                    }
+
+                                                    if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.ValorParcelaLiberado)")) {
+                                                        var value = $("#" + fieldId).val();
+                                                        return { name: fieldName, value: parseFloat(value.toString().replace(".", "").replace(",", ".")) };
+                                                    }
+
+                                                    return false;
+                                                }
+
+                                                function fillTableOrdemCompraFormaPagamento() {
+                                                    $("#tableOrdemCompraFormaPagamento tbody").empty();
+                                                    for (var i = 0; i < jsonFormasPagamentoPendentes.length; i++) {
+                                                        var row = $('<tr />')
+                                                        $("#tableOrdemCompraFormaPagamento tbody").append(row);
+                                                        row.append($('<td class="text-right" onclick="loadFormaPagamento(' + jsonFormasPagamentoPendentes[i].Id + ');">' + jsonFormasPagamentoPendentes[i].OrdemCompraId + '</td>'));
+                                                        row.append($('<td class="text-center">' + new Date(jsonFormasPagamentoPendentes[i].Data).toFormatDDMMYYYY() + '</td>'));
+                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonFormasPagamentoPendentes[i].Valor), 2) + '</td>'));
+                                                        if (jsonFormasPagamentoPendentes[i].TipoCompromisso != null)
+                                                            row.append($('<td class="text-center">' + jsonFormasPagamentoPendentes[i].TipoCompromisso.Descricao + '</td>'));
+                                                        else
+                                                            row.append($('<td>&nbsp;</td>'));
+
+                                                        if (jsonFormasPagamentoPendentes[i].TituloPagar != null)
+                                                            row.append($('<td class="text-center">' + jsonFormasPagamentoPendentes[i].TituloPagar.Id+ '</td>'));
+                                                        else
+                                                            row.append($('<td>&nbsp;</td>'));
+
+                                                        if (jsonFormasPagamentoPendentes[i].DataVencimentoLiberado != null)
+                                                            row.append($('<td class="text-center">' + new Date(jsonFormasPagamentoPendentes[i].DataVencimentoLiberado).toFormatDDMMYYYY() + '</td>'));
+                                                        else
+                                                            row.append($('<td>&nbsp;</td>'));
+                                                    
+                                                        if (jsonFormasPagamentoPendentes[i].ValorParcelaLiberado != null)
+                                                            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonFormasPagamentoPendentes[i].ValorParcelaLiberado), 2) + '</td>'));
+                                                        else
+                                                            row.append($('<td>&nbsp;</td>'));
+                                                    }
+                                                }
+
+                                                function loadFormaPagamento(id) {
+                                                    clearFormFormaPagamento();
+                                                    var arr = jQuery.grep(jsonFormasPagamentoPendentes, function (formaPagamento, i) {
+                                                        return (formaPagamento.Id == id);
+                                                    });
+
+                                                    if (arr.length > 0) {
+                                                        var formaPagamento = arr[0];
+                                                        $("#@Html.IdFor(m => m.FormaPagamentoId)").val(formaPagamento.Id);
+                                                        $("#@Html.IdFor(m => m.OrdemCompraId)").val(formaPagamento.OrdemCompraId);
+                                                        $("#@Html.IdFor(m => m.DataVencimento)").val(new Date(formaPagamento.Data).toFormatDDMMYYYY());
+
+                                                        var dataVencimentoLiberado = formaPagamento.DataVencimentoLiberado == null ? formaPagamento.Data : formaPagamento.DataVencimentoLiberado;
+                                                        $("#@Html.IdFor(m => m.DataVencimentoLiberado)").val(new Date(dataVencimentoLiberado).toFormatDDMMYYYY());
+                                                        $("#@Html.IdFor(m => m.ValorParcela)").val(roundDecimal(floatToString(formaPagamento.Valor), 2));
+
+                                                        var valorParcelaLiberado = formaPagamento.ValorParcelaLiberado == null ? formaPagamento.Valor : formaPagamento.ValorParcelaLiberado;
+                                                        $("#@Html.IdFor(m => m.ValorParcelaLiberado)").val(roundDecimal(floatToString(valorParcelaLiberado), 2));
+                                                        ajustarQuantidadeDiasAposEmissao();
+                                                    }
+                                                }
+
+                                                function clearFormFormaPagamento() {
+                                                    $("#@Html.IdFor(m => m.FormaPagamentoId)").val('');
+                                                    $("#@Html.IdFor(m => m.OrdemCompraId)").val('');
+                                                    $("#@Html.IdFor(m => m.DataVencimento)").val('');
+                                                    $("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)").val('');
+                                                    $("#@Html.IdFor(m => m.DataVencimentoLiberado)").val('');
+                                                    $("#@Html.IdFor(m => m.ValorParcela)").val(roundDecimal('0', 2));
+                                                    $("#@Html.IdFor(m => m.ValorParcelaLiberado)").val(roundDecimal('0', 2));
+                                                }
+
+                                                function atualizarTotaisSelecaoFormaPagamento() {
+                                                    var valorTotalEM = parseFloat($("#@Html.IdFor(m => m.ValorTotalEMSelecaoFormaPagamento)").val().replace(".", "").replace(",", "."));
+                                                    var valorTotalDistribuido = parseFloat($("#@Html.IdFor(m => m.ValorTotalDistribuido)").val().replace(".", "").replace(",", "."));
+                                                    var valorTotalLiberado = parseFloat($("#@Html.IdFor(m => m.ValorTotalLiberado)").val().replace(".", "").replace(",", "."));
+
+                                                    $.each(jsonFormasPagamentoPendentes, function (i, formaPagamento) {
+                                                        if (formaPagamento.ValorParcelaLiberado != null) {
+                                                            valorTotalDistribuido += formaPagamento.ValorParcelaLiberado;
+                                                        }
+                                                    });
+
+                                                    $("#@Html.IdFor(m => m.ValorTotalDistribuidoSelecaoFormaPagamento)").val(roundDecimal(floatToString(valorTotalDistribuido), 2));
+                                                    $("#@Html.IdFor(m => m.ValorTotalLiberadoSelecaoFormaPagamento)").val(roundDecimal(floatToString(valorTotalLiberado), 2));
+                                                    $("#@Html.IdFor(m => m.ValorTotalPendenteSelecaoFormaPagamento)").val(roundDecimal(floatToString(valorTotalEM - valorTotalDistribuido), 2));
+                                                }
+
+                                                function obterIdsOrdensCompraUtilizadasNaEntradaMaterial() {
+                                                    var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+                                                    var ids = [];
+
+                                                    $.each(jsonItens, function (index, item) {
+                                                        if ($.inArray(item.OrdemCompraItem.OrdemCompraId, ids) === -1) {
+                                                            ids.push(item.OrdemCompraItem.OrdemCompraId);
+                                                        }
+                                                    });
+
+                                                    return ids;
+                                                }
+
+                                                function obterResumoValoresOC(ordemCompraIds) {
+                                                    var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
+                                                    var resumoOC = [];
+
+                                                    $.each(ordemCompraIds, function (index, ordenCompraId) {
+                                                        var valorTotalItens = 0;
+                                                        $.each(jsonItens, function (i, item) {
+                                                            if (item.OrdemCompraItem.OrdemCompraId == ordenCompraId) {
+                                                                var valorIPI = item.ValorTotal * item.PercentualIPI / 100;
+                                                                valorTotalItens += item.ValorTotal + valorIPI - (item.ValorTotal * item.PercentualDesconto / 100);
                                                             }
                                                         });
+
+                                                        var jsonFormasPagamento = JSON.parse($("#@Html.IdFor(m => m.JsonFormasPagamento)").val());
+                                                        var valorTotalDistribuido = 0;
+                                                        $.each(jsonFormasPagamento, function (i, formaPagamento) {
+                                                            if (formaPagamento.OrdemCompraFormaPagamento.OrdemCompraId == ordenCompraId) {
+                                                                valorTotalDistribuido += formaPagamento.Valor;
+                                                            }
+                                                        });
+
+                                                        var valorTotalDistribuidoProvisorio = valorTotalDistribuido
+                                                        $.each(jsonFormasPagamentoPendentes, function (i, formaPagamento) {
+                                                            if ((formaPagamento.OrdemCompraId == ordenCompraId) && (formaPagamento.ValorParcelaLiberado != null)) {
+                                                                valorTotalDistribuidoProvisorio += formaPagamento.ValorParcelaLiberado;
+                                                            }
+                                                        });
+
+                                                        var jsonOC = {};
+                                                        jsonOC.Id = ordenCompraId;
+                                                        jsonOC.ValorTotalItens = parseFloat(valorTotalItens.toFixed(2));
+                                                        jsonOC.ValorTotalDistribuido = parseFloat(valorTotalDistribuido.toFixed(2));
+                                                        jsonOC.ValorTotalDistribuidoProvisorio = parseFloat(valorTotalDistribuidoProvisorio.toFixed(2));
+                                                        jsonOC.ValorPendente = parseFloat(valorTotalItens - valorTotalDistribuido).toFixed(2);
+                                                        jsonOC.ValorPendenteProvisorio = parseFloat(valorTotalItens - valorTotalDistribuidoProvisorio).toFixed(2);
+                                                        resumoOC.push(jsonOC);
                                                     });
-                                                </script>
-                                                
-                                            </div>
-                                            <div class="row">
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.ValorParcela, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.ValorParcela, new { @readonly = "", @class = "readonly" })
-                                                    </label>
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.ValorParcelaLiberado, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.ValorParcelaLiberado, new { @readonly = "", @class = "readonly" })
-                                                    </label>
-                                                </section>
-                                            </div>
-                                            <div class="row">
-                                                <section class="col col-12">
-                                                    <button id="btnAddFormaPagamento" type="button" class="btn btn-primary right">
-                                                        Adicionar
-                                                    </button>
-                                                </section>
-                                            </div>
-                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                <table id="tableOrdemCompraFormaPagamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                    <thead>
-                                                        <tr role="row">
-                                                            <th class="text-right">OC</th>
-                                                            <th>Data vencimento</th>
-                                                            <th>Valor parcela</th>
-                                                            <th class="text-center">Compromisso</th>
-                                                            <th class="text-right">Título pagar</th>
-                                                            <th class="text-right">Data vencimento lib.</th>
-                                                            <th>Valor liberado</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="row">
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.ValorTotalEM, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.ValorTotalEM, new { @readonly = "", @class = "readonly" })
-                                                    </label>
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.ValorTotalDistribuido, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.ValorTotalDistribuido, new { @readonly = "", @class = "readonly" })
-                                                    </label>
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.ValorTotalPendente, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.ValorTotalPendente, new { @readonly = "", @class = "readonly" })
-                                                    </label>
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.ValorTotalLiberado, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.ValorTotalLiberado, new { @readonly = "", @class = "readonly" })
-                                                    </label>
-                                                </section>
-                                            </div>
-                                            <div class="table-responsive" style="min-height: 85px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
-                                                <table id="tableOrdemCompraValor" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                    <thead>
-                                                        <tr role="row">
-                                                            <th class="text-right">OC</th>
-                                                            <th>Valor da OC</th>
-                                                            <th>Valor distribuído</th>
-                                                            <th>Valor pendente</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </fieldset>
+
+                                                    return resumoOC;
+                                                }
+
+                                                function fillTableOrdemCompraValor(resumoValoresOC) {
+                                                    $("#tableOrdemCompraValor tbody").empty();
+                                                    for (var i = 0; i < resumoValoresOC.length; i++) {
+                                                        var row = $('<tr />')
+                                                        $("#tableOrdemCompraValor tbody").append(row);
+                                                        row.append($('<td>' + resumoValoresOC[i].Id + '</td>'));
+                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(resumoValoresOC[i].ValorTotalItens), 2) + '</td>'));
+                                                        var valorTotalDistribuido = resumoValoresOC[i].ValorTotalDistribuidoProvisorio == null ? resumoValoresOC[i].ValorTotalDistribuido : resumoValoresOC[i].ValorTotalDistribuidoProvisorio;
+                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(valorTotalDistribuido), 2) + '</td>'));
+                                                        var valorPendente = resumoValoresOC[i].ValorPendenteProvisorio == null ? resumoValoresOC[i].ValorPendente : resumoValoresOC[i].ValorPendenteProvisorio;
+                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(valorPendente), 2) + '</td>'));
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                             <div class="panel panel-default">
-                                <div class="panel-heading">
+                                <div id="headerPanelFormasPagamento" class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFormasPagamento" class="collapsed">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFormasPagamento" class="collapsed" id="btnFormasPagamento">
                                             <i class="fa fa-lg fa-angle-down pull-right"></i>
                                             <i class="fa fa-lg fa-angle-up pull-right"></i>
                                             Formas de pagamento
@@ -1336,7 +1665,7 @@
                                                 <section class="col col-6">
                                                     @{
                                                     string disableBtnRemoverFormaPagamento = string.Empty;
-                                                    if (!Model.PodeRemoverItem)
+                                                    if (!Model.PodeRemoverFormaPagamento)
                                                     {
                                                         disableBtnRemoverFormaPagamento = "disabled";
                                                     }
@@ -1346,24 +1675,148 @@
                                                     </button>
                                                 </section>
                                             </div>
+                                            @Html.HiddenFor(m => m.JsonFormasPagamento)
                                             <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow-x: auto;">
-                                                <table id="tableFormaPagamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                <table id="tableFormasPagamento" class="table table-bordered table-striped table-condensed table-hover dataTable">
                                                     <thead>
                                                         <tr role="row">
                                                             <th>OC</th>
-                                                            <th>Data vencimento</th>
+                                                            <th class="text-center">Data vencimento</th>
                                                             <th class="text-right">Valor</th>
-                                                            <th>Tipo de compromisso</th>
-                                                            <th>Liberado</th>
-                                                            <th>Título</th>
-                                                            <th>Antecipação</th>
+                                                            <th class="text-center">Tipo de compromisso</th>
+                                                            <th class="text-center">Liberado</th>
+                                                            <th class="text-center">Título</th>
+                                                            <th class="text-center">Antecipação</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalEM, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalEM, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalDistribuido, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalDistribuido, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.ValorTotalLiberado, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.ValorTotalLiberado, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                    </label>
+                                                </section>
+                                            </div>
                                         </fieldset>
+                                        <script type="text/javascript">
+                                            $(document).ready(function () {
+                                                fillTableFormasPagamento();
+                                                atualizarTotaisFormaPagamento();
+
+                                                $('#btnRemoverFormaPagamento').on('click', function () {
+                                                    if (!houveAlteracaoNoFormulario()) {
+                                                        var arrFormasPagamento = [];
+                                                        $('#tableFormasPagamento tbody input[type=checkbox]:checked').each(function () {
+                                                            arrFormasPagamento.push(parseInt($(this).val()));
+                                                        });
+
+                                                        if (arrFormasPagamento.length > 0) {
+                                                            $.SmartMessageBox({
+                                                                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a exclusão da(s) formas(s) de pagamento selecionada(s)?",
+                                                                buttons: '[Não][Sim]'
+                                                            }, function (ButtonPressed) {
+                                                                if (ButtonPressed === "Sim") {
+                                                                    $.ajax({
+                                                                        type: 'POST',
+                                                                        url: '@Url.Action("RemoverFormasPagamento", "EntradaMaterial")',
+                                                                        cache: false,
+                                                                        async: false,
+                                                                        contentType: 'application/json; charset=utf-8',
+                                                                        data: JSON.stringify({
+                                                                            entradaMaterialId: '@Model.EntradaMaterial.Id',
+                                                                            formasPagamento: arrFormasPagamento
+                                                                        })
+                                                                    })
+                                                                    .success(function (result) {
+                                                                        var houveErro = false;
+                                                                        $(result.Messages).each(function () {
+                                                                            if (this.Type.toString() == '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Error)') {
+                                                                                houveErro = true;
+                                                                            }
+                                                                        });
+
+                                                                        if (!houveErro) {
+                                                                            $('#@Html.IdFor(m => m.JsonFormasPagamento)').val(result.FormasPagamento);
+                                                                            fillTableFormasPagamento();
+                                                                            atualizarTotaisFormaPagamento();
+                                                                        }
+
+                                                                        showMessages(result.Messages);
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                        else
+                                                            smartAlert("Erro", "Selecione pelo menos 1 forma de pagamento.", "error");
+                                                    }
+                                                });
+                                            });
+
+                                            function fillTableFormasPagamento() {
+                                                var jsonFormasPagamento = JSON.parse($("#@Html.IdFor(m => m.JsonFormasPagamento)").val());
+                                                $("#tableFormasPagamento tbody").empty();
+
+                                                var chkDisabled = '';
+                                                var labelClass = 'checkbox';
+                                                @if (!Model.PodeRemoverFormaPagamento)
+                                                {
+                                                    @:chkDisabled = 'disabled';
+                                                    @:labelClass += ' state-disabled';
+                                                }
+
+                                                for (var i = 0; i < jsonFormasPagamento.length; i++) {
+                                                    var row = $('<tr />')
+                                                    $("#tableFormasPagamento tbody").append(row);
+                                                    row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + jsonFormasPagamento[i].Id + '" ' + chkDisabled + '><i></i>' + jsonFormasPagamento[i].OrdemCompraFormaPagamento.Id + '</label></td>'));
+                                                    if (jsonFormasPagamento[i].Data != null)
+                                                        row.append($('<td class="text-center">' + new Date(jsonFormasPagamento[i].Data).toFormatDDMMYYYY() + '</td>'));
+                                                    else
+                                                        row.append($('<td>&nbsp;</td>'));
+                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonFormasPagamento[i].Valor), 2) + '</td>'));
+                                                    if (jsonFormasPagamento[i].OrdemCompraFormaPagamento.TipoCompromisso != null)
+                                                        row.append($('<td class="text-center">' + jsonFormasPagamento[i].OrdemCompraFormaPagamento.TipoCompromisso.Descricao + '</td>'));
+                                                    else
+                                                        row.append($('<td>&nbsp;</td>'));
+                                                    row.append($('<td class="text-center">' + jsonFormasPagamento[i].EhLiberadoDescricao + '</td>'));
+                                                    if (jsonFormasPagamento[i].TituloPagar != null)
+                                                        row.append($('<td class="text-center">' + jsonFormasPagamento[i].TituloPagar.Id + '</td>'));
+                                                    else
+                                                        row.append($('<td>&nbsp;</td>'));
+                                                    row.append($('<td class="text-center">' + jsonFormasPagamento[i].OrdemCompraFormaPagamento.EhPagamentoAntecipadoDescricao + '</td>'));
+                                                }
+                                            }
+
+                                            function atualizarTotaisFormaPagamento() {
+                                                var jsonFormasPagamento = JSON.parse($("#@Html.IdFor(m => m.JsonFormasPagamento)").val());
+                                                var valorTotalDistribuido = 0;
+                                                var valorTotalLiberado = 0;
+
+                                                $.each(jsonFormasPagamento, function (i, formaPagamento) {
+                                                    valorTotalDistribuido += formaPagamento.Valor;
+                                                    if ((formaPagamento.TituloPagar != null) && (formaPagamento.TituloPagar.Situacao != 0)) //0 == Provisionado
+                                                        valorTotalLiberado += formaPagamento.Valor;
+                                                });
+
+                                                $("#@Html.IdFor(m => m.ValorTotalDistribuido)").val(roundDecimal(floatToString(valorTotalDistribuido), 2));
+                                                $("#@Html.IdFor(m => m.ValorTotalLiberado)").val(roundDecimal(floatToString(valorTotalLiberado), 2));
+                                            }
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -2197,8 +2650,51 @@
             }, ''
         );
 
+        jQuery.validator.addMethod(
+            "ehDataVencimentoNoLimitePagamento",
+            function (value, element, params) {
+                var diasParaPagamento = obterQuantidadeDiasMinimoParaPagamento();
+                if (diasParaPagamento > 0) {
+                    if ($("#@Html.IdFor(m => m.DataVencimentoLiberado)").val() != "" && isValidDate("dd/mm/yy", $("#@Html.IdFor(m => m.DataVencimentoLiberado)").val())) {
+                        var start = $("#@Html.IdFor(m => m.EntradaMaterial.Data)").datepicker('getDate');
+                        var end = $("#@Html.IdFor(m => m.DataVencimentoLiberado)").datepicker('getDate');
+                        var days = dateDiffInDays(start, end);
+                        return days >= diasParaPagamento;
+                    }
+                    return false;
+                }
+                return true;
+            }, 'Data de vencimento fora do limite de pagamento.'
+        );
+
+        jQuery.validator.addMethod(
+            "ehValorLiberadoMenorIgualPendente",
+            function (value, element, params) {
+                var ordemCompraId = parseInt($("#@Html.IdFor(m => m.OrdemCompraId)").val());
+                var arr = jQuery.grep(jsonResumoValoresOC, function (ordemCompra, i) {
+                    return (ordemCompra.Id == ordemCompraId);
+                });
+
+                if (arr.length > 0) {
+                    var ordemCompra = arr[0];
+                    return parseFloat(value.replace(".", "").replace(",", ".")) <= ordemCompra.ValorPendente;
+                }
+
+                return true;
+            }, 'Valor inválido para ordem de compra.'
+        );
+
+        jQuery.validator.addMethod(
+            "ehValorLiberadoMenorIgualParcela",
+            function (value, element, params) {
+                var valorParcela = parseFloat($('#@Html.IdFor(m => m.ValorParcela)').val().replace(".", "").replace(",", "."));
+                var valorParcelaLiberado = parseFloat(value.replace(".", "").replace(",", "."));
+                return valorParcelaLiberado <= valorParcela;
+            }, 'Valor liberado maior que valor da parcela.'
+        );
+
         jQuery.validator.setDefaults({
-            ignore: '#formItem *, #formImposto *'
+            ignore: '#formItem *, #formImposto *, #formSelecaoFormaPagamento *'
         });
 
         $('#formCadastro').validate({
@@ -2232,6 +2728,17 @@
                 },
                 '@Html.NameFor(m => m.Quantidade)': 'decimalGreaterThanZero',
                 '@Html.NameFor(m => m.Material.Id)': 'required',
+                '@Html.NameFor(m => m.OrdemCompraId)': 'required',
+                '@Html.NameFor(m => m.DataVencimentoLiberado)': {
+                    required: true,
+                    date: true,
+                    ehDataVencimentoNoLimitePagamento: true
+                },
+                '@Html.NameFor(m => m.ValorParcelaLiberado)': {
+                    decimalGreaterThanZero: true,
+                    ehValorLiberadoMenorIgualPendente: true,
+                    ehValorLiberadoMenorIgualParcela: true
+                },
                 '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': 'required',
                 '@Html.NameFor(m => m.BaseCalculoImposto)': 'required',
                 '@Html.NameFor(m => m.DataVencimentoImposto)': 'date'
@@ -2265,6 +2772,19 @@
                 '@Html.NameFor(m => m.Material.Id)': {
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Material")'
                 },
+                '@Html.NameFor(m => m.OrdemCompraId)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "OC")'
+                },
+                '@Html.NameFor(m => m.DataVencimentoLiberado)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data vencimento lib.")',
+                    date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida',
+                    ehDataVencimentoNoLimitePagamento: "Data de vencimento fora do limite de pagamento"
+                },
+                '@Html.NameFor(m => m.ValorParcelaLiberado)': {
+                    decimalGreaterThanZero: "O valor deve ser maior que zero.",
+                    ehValorLiberadoMenorIgualPendente: "Valor inválido para ordem de compra",
+                    ehValorLiberadoMenorIgualParcela: "Valor liberado maior que valor da parcela."
+                },
                 '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': {
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Imposto")'
                 },
@@ -2292,7 +2812,6 @@
         });
     });
 
-
     function validaDataNota() {
         var isValid = true;
         if ($("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").val() != '') {
@@ -2318,6 +2837,21 @@
         return isValid;
     }
 
+    function obterQuantidadeDiasMinimoParaPagamento() {
+        var diasParaPagamento = 0;
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ObterParametros", "Parametros")',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8'
+        })
+        .success(function (result) {
+            diasParaPagamento = result.DiasPagamento;
+        });
+
+        return diasParaPagamento;
+    }
 
     function liberarTitulos() {
         $.SmartMessageBox({
@@ -2437,5 +2971,8 @@
         $("#@Html.IdFor(m => m.PercentualTotalAliquota)").val(roundDecimal(floatToString(percentualTotalAliquota), 5));
         $("#@Html.IdFor(m => m.ValorTotalImposto)").val(roundDecimal(floatToString(valorTotalImposto), 2));
         $("#@Html.IdFor(m => m.ValorTotalRetido)").val(roundDecimal(floatToString(valorTotalRetido), 2));
+
+        $("#@Html.IdFor(m => m.ValorTotalEMSelecaoFormaPagamento)").val(roundDecimal(floatToString(valorTotal + valorTotalDesconto), 2));
+        $("#@Html.IdFor(m => m.ValorTotalEM)").val(roundDecimal(floatToString(valorTotal + valorTotalDesconto), 2));
     }
 </script>

@@ -77,6 +77,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
+        [HttpPost]
+        public ActionResult ObterParametros()
+        {
+            var parametros = parametrosAppService.Obter() ?? new ParametrosOrdemCompraDTO();
+            return Json(parametros);
+        }
+
         private void CarregarCombos(ParametrosViewModel model)
         {
             int? assuntoContatoId = null;

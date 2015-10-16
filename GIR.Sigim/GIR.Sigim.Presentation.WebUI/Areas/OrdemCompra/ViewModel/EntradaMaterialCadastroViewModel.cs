@@ -124,6 +124,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
 
         #region Accordion Seleção de Formas de Pagamento
 
+        public int? FormaPagamentoId { get; set; }
+
         [Display(Name = "OC")]
         public int? OrdemCompraId { get; set; }
 
@@ -137,26 +139,42 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public Nullable<DateTime> DataVencimentoLiberado { get; set; }
 
         [Display(Name = "Valor da parcela")]
-        public decimal? ValorParcela { get; set; }
+        public decimal ValorParcela { get; set; }
 
         [Display(Name = "Valor da parcela lib.")]
-        public decimal? ValorParcelaLiberado { get; set; }
+        public decimal ValorParcelaLiberado { get; set; }
 
         [Display(Name = "Total EM")]
-        public decimal? ValorTotalEM { get; set; }
+        public decimal ValorTotalEMSelecaoFormaPagamento { get; set; }
 
         [Display(Name = "Total distribuído")]
-        public decimal? ValorTotalDistribuido { get; set; }
+        public decimal ValorTotalDistribuidoSelecaoFormaPagamento { get; set; }
 
         [Display(Name = "Total pendente")]
-        public decimal? ValorTotalPendente { get; set; }
+        public decimal ValorTotalPendenteSelecaoFormaPagamento { get; set; }
 
         [Display(Name = "Total liberado")]
-        public decimal? ValorTotalLiberado { get; set; }
+        public decimal ValorTotalLiberadoSelecaoFormaPagamento { get; set; }
+
+        #endregion
+
+        #region Accordion Formas de Pagamento
+
+        public string JsonFormasPagamento { get; set; }
+
+        [Display(Name = "Total EM")]
+        public decimal ValorTotalEM { get; set; }
+
+        [Display(Name = "Total distribuído")]
+        public decimal ValorTotalDistribuido { get; set; }
+
+        [Display(Name = "Total liberado")]
+        public decimal ValorTotalLiberado { get; set; }
 
         #endregion
 
         #region Accordion Impostos
+
         public string JsonImpostos { get; set; }
 
         public ImpostoFinanceiroDTO ImpostoFinanceiro { get; set; }
@@ -196,6 +214,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         public bool PodeAdicionarItem { get; set; }
         public bool PodeRemoverItem { get; set; }
         public bool PodeEditarItem { get; set; }
+        public bool PodeAdicionarFormaPagamento { get; set; }
+        public bool PodeRemoverFormaPagamento { get; set; }
         public bool PodeAdicionarImposto { get; set; }
         public bool PodeRemoverImposto { get; set; }
         public bool PodeEditarImposto { get; set; }

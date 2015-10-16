@@ -23,7 +23,14 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
             get { return ehPagamentoAntecipado.HasValue ? ehPagamentoAntecipado : false; }
             set { ehPagamentoAntecipado = value; }
         }
-        public bool? EhUtilizada { get; set; }
+
+        private bool? ehUtilizada;
+        public bool? EhUtilizada
+        {
+            get { return ehUtilizada; }
+            set { ehUtilizada = value; }
+        }
+
         public bool? EhAssociada { get; set; }
         public ICollection<EntradaMaterialFormaPagamento> ListaEntradaMaterialFormaPagamento { get; set; }
 

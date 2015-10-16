@@ -21,5 +21,14 @@ namespace GIR.Sigim.Domain.Specification
 
             return specification;
         }
+
+        public static Specification<TEntity> MatchingIds(int?[] ids)
+        {
+            Specification<TEntity> specification = new TrueSpecification<TEntity>();
+            var idSpecification = new DirectSpecification<TEntity>(l => ids.Any(o => o.Value == l.Id));
+            specification &= idSpecification;
+
+            return specification;
+        }
     }
 }

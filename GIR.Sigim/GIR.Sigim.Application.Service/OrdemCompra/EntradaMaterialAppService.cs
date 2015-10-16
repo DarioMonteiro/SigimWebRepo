@@ -160,6 +160,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaItens.Select(o => o.ComplementoCST),
                 l => l.ListaItens.Select(o => o.ComplementoNaturezaOperacao),
                 l => l.ListaItens.Select(o => o.NaturezaReceita),
+                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TipoCompromisso),
                 l => l.ListaFormaPagamento.Select(o => o.TituloPagar),
                 l => l.ListaImposto.Select(o => o.ImpostoFinanceiro),
                 l => l.ListaMovimentoEstoque).To<EntradaMaterialDTO>();
@@ -193,6 +194,20 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
                 return null;
             }
+        }
+
+        public List<OrdemCompraFormaPagamentoDTO> ListarFormasPagamentoOrdemCompraPendentes(int?[] ordemCompraIds)
+        {
+            var specification = (Specification<Domain.Entity.OrdemCompra.OrdemCompra>)new TrueSpecification<Domain.Entity.OrdemCompra.OrdemCompra>();
+
+            specification &= OrdemCompraSpecification.MatchingIds(ordemCompraIds);
+            specification &= OrdemCompraSpecification.EhLiberada();
+
+            var listaOrdemCompra = ordemCompraRepository.ListarPeloFiltro(specification,
+                l => l.ListaOrdemCompraFormaPagamento.Select(o => o.TipoCompromisso),
+                l => l.ListaOrdemCompraFormaPagamento.Select(o => o.TituloPagar));
+
+            return listaOrdemCompra.SelectMany(l => l.ListaOrdemCompraFormaPagamento.Where(o => !o.EhUtilizada.Value)).To<List<OrdemCompraFormaPagamentoDTO>>();
         }
 
         public bool Salvar(EntradaMaterialDTO dto)
@@ -495,6 +510,119 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             return false;
         }
 
+        public bool AdicionarFormasPagamento(int? entradaMaterialId, List<EntradaMaterialFormaPagamentoDTO> listaEntradaMaterialFormaPagamento)
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId,
+                UsuarioLogado.Id,
+                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TituloPagar));
+
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return false;
+            }
+
+            if (!PodeSerSalvaNaSituacaoAtual(entradaMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            var listaOrdemCompraIds = listaEntradaMaterialFormaPagamento.Select(l => l.OrdemCompraFormaPagamentoId).Distinct().ToArray();
+            var listaOrdemCompraFormaPagamento = ordemCompraRepository.ListarFormasPagamentoPeloId(
+                listaOrdemCompraIds,
+                l => l.OrdemCompra,
+                l => l.TituloPagar);
+
+            foreach (var ordemCompraFormaPagamento in listaOrdemCompraFormaPagamento)
+            {
+                var dto = listaEntradaMaterialFormaPagamento.Where(l => l.OrdemCompraFormaPagamentoId == ordemCompraFormaPagamento.Id).SingleOrDefault();
+                var entradaMaterialFormaPagamento = new EntradaMaterialFormaPagamento();
+                
+                entradaMaterialFormaPagamento.Data = dto.Data.Value;
+                entradaMaterialFormaPagamento.Valor = dto.Valor;
+                entradaMaterialFormaPagamento.TipoCompromissoId = ordemCompraFormaPagamento.TipoCompromissoId;
+                if (entradaMaterialFormaPagamento.Valor == ordemCompraFormaPagamento.Valor)
+                {
+                    ordemCompraFormaPagamento.Valor = entradaMaterialFormaPagamento.Valor;
+
+                    if (ordemCompraFormaPagamento.EhPagamentoAntecipado.Value)
+                    {
+                        ordemCompraFormaPagamento.EhAssociada = true;
+                    }
+                    else
+                    {
+                        ordemCompraFormaPagamento.EhUtilizada = true;
+                        ordemCompraFormaPagamento.TituloPagar.ValorTitulo = entradaMaterialFormaPagamento.Valor;
+                    }
+                    entradaMaterialFormaPagamento.OrdemCompraFormaPagamento = ordemCompraFormaPagamento;
+                    entradaMaterialFormaPagamento.TituloPagarId = ordemCompraFormaPagamento.TituloPagarId;
+                }
+                else
+                {
+                    decimal valorParcial = ordemCompraFormaPagamento.Valor - entradaMaterialFormaPagamento.Valor;
+                    ordemCompraFormaPagamento.Valor = valorParcial;
+
+                    OrdemCompraFormaPagamento novaOrdemCompraFormaPagamento = new OrdemCompraFormaPagamento()
+                    {
+                        OrdemCompraId = ordemCompraFormaPagamento.OrdemCompraId,
+                        Data = entradaMaterialFormaPagamento.Data,
+                        Valor = entradaMaterialFormaPagamento.Valor,
+                        TipoCompromissoId = entradaMaterialFormaPagamento.TipoCompromissoId,
+                        EhUtilizada = true
+                    };
+
+                    if (ordemCompraFormaPagamento.EhPagamentoAntecipado.Value)
+                    {
+                        novaOrdemCompraFormaPagamento.TituloPagar.Id = ordemCompraFormaPagamento.TituloPagarId;
+                        novaOrdemCompraFormaPagamento.EhPagamentoAntecipado = true;
+                        novaOrdemCompraFormaPagamento.EhUtilizada = true;
+                        novaOrdemCompraFormaPagamento.EhAssociada = true;
+                    }
+                    else
+                    {
+                        ordemCompraFormaPagamento.TituloPagar.ValorTitulo = valorParcial;
+                        ordemCompraRepository.Alterar(ordemCompraFormaPagamento.OrdemCompra);
+                    }
+                    entradaMaterialFormaPagamento.OrdemCompraFormaPagamento = novaOrdemCompraFormaPagamento;
+                }
+                
+                entradaMaterial.ListaFormaPagamento.Add(entradaMaterialFormaPagamento);
+            }
+
+            int? fornecedorId = entradaMaterial.FornecedorNotaId.HasValue ? entradaMaterial.FornecedorNotaId : entradaMaterial.ClienteFornecedorId;
+
+            foreach (var formaPagamento in entradaMaterial.ListaFormaPagamento)
+            {
+                if (tituloPagarAppService.ExisteNumeroDocumento(entradaMaterial.DataEmissaoNota, formaPagamento.Data, entradaMaterial.NumeroNotaFiscal.TrimStart('0'), fornecedorId))
+                {
+                    messageQueue.Add(string.Format("Documento existente no Financeiro para {0}.", formaPagamento.Data.ToString("dd/MM/yyyy")), TypeMessage.Error);
+                    return false;
+                }
+            }
+
+            try
+            {
+                entradaMaterialRepository.Alterar(entradaMaterial);
+                entradaMaterialRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return false;
+        }
+
         public bool RemoverItens(int? entradaMaterialId, int?[] itens)
         {
             if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
@@ -567,6 +695,75 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             }
 
             return entradaMaterial.ListaItens.To<List<EntradaMaterialItemDTO>>();
+        }
+
+        public bool RemoverFormasPagamento(int? entradaMaterialId, int?[] formasPagamento)
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.EntradaMaterialGravar))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId,
+                UsuarioLogado.Id,
+                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento));
+
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return false;
+            }
+
+            if (!PodeSerSalvaNaSituacaoAtual(entradaMaterial.Situacao))
+            {
+                var msg = string.Format(Resource.OrdemCompra.ErrorMessages.EntradaMaterialSituacaoInvalida, entradaMaterial.Situacao.ObterDescricao());
+                messageQueue.Add(msg, TypeMessage.Error);
+                return false;
+            }
+
+            var listaFormasPagamento = entradaMaterial.ListaFormaPagamento.Where(l => formasPagamento.Contains(l.Id)).ToList();
+
+            for (int i = listaFormasPagamento.Count() - 1; i >= 0; i--)
+            {
+                var formaPagamento = listaFormasPagamento[i];
+                if (formaPagamento.OrdemCompraFormaPagamento.EhPagamentoAntecipado.Value)
+                    formaPagamento.OrdemCompraFormaPagamento.EhAssociada = false;
+                else
+                    formaPagamento.OrdemCompraFormaPagamento.EhUtilizada = false;
+
+                entradaMaterialRepository.RemoverEntradaMaterialFormaPagamento(formaPagamento);
+            }
+
+            try
+            {
+                entradaMaterialRepository.Alterar(entradaMaterial);
+                entradaMaterialRepository.UnitOfWork.Commit();
+                messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                QueueExeptionMessages(exception);
+            }
+
+            return false;
+        }
+
+        public List<EntradaMaterialFormaPagamentoDTO> ListarFormasPagamento(int? entradaMaterialId)
+        {
+            var entradaMaterial = ObterPeloIdEUsuario(entradaMaterialId,
+                UsuarioLogado.Id,
+                l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento.TipoCompromisso),
+                l => l.ListaFormaPagamento.Select(o => o.TituloPagar));
+
+            if (entradaMaterial == null)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.SelecioneUmaEntradaMaterial, TypeMessage.Error);
+                return null;
+            }
+
+            return entradaMaterial.ListaFormaPagamento.To<List<EntradaMaterialFormaPagamentoDTO>>();
         }
 
         public List<FreteDTO> ListarFretePendente(int? entradaMaterialId)
@@ -1131,6 +1328,19 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         }
 
         public bool EhPermitidoEditarItem(EntradaMaterialDTO dto)
+        {
+            return EhPermitidoSalvar(dto);
+        }
+
+        public bool EhPermitidoAdicionarFormaPagamento(EntradaMaterialDTO dto)
+        {
+            if (!dto.Id.HasValue)
+                return false;
+
+            return EhPermitidoSalvar(dto);
+        }
+
+        public bool EhPermitidoRemoverFormaPagamento(EntradaMaterialDTO dto)
         {
             return EhPermitidoSalvar(dto);
         }

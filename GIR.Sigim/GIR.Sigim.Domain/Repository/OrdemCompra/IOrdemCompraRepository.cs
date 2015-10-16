@@ -21,6 +21,6 @@ namespace GIR.Sigim.Domain.Repository.OrdemCompra
                                                                        params Expression<Func<Domain.Entity.OrdemCompra.OrdemCompra, object>>[] includes);
 
         IEnumerable<OrdemCompraItem> ListarItensPeloId(int?[] itensId, params Expression<Func<OrdemCompraItem, object>>[] includes);
-
+        IEnumerable<OrdemCompraFormaPagamento> ListarFormasPagamentoPeloId(int?[] formasPagamentoId, params Expression<Func<OrdemCompraFormaPagamento, object>>[] includes);
     }
 }

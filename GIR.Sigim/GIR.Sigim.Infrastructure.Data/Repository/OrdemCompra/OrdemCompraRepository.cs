@@ -54,6 +54,17 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.OrdemCompra
             return set.ToList();
         }
 
+        public IEnumerable<OrdemCompraFormaPagamento> ListarFormasPagamentoPeloId(int?[] formasPagamentoId, params Expression<Func<OrdemCompraFormaPagamento, object>>[] includes)
+        {
+            var set = QueryableUnitOfWork.CreateSet<OrdemCompraFormaPagamento>().AsQueryable<OrdemCompraFormaPagamento>();
+
+            if (includes.Any())
+                set = includes.Aggregate(set, (current, expression) => current.Include(expression).DefaultIfEmpty());
+
+            set = set.Where(l => formasPagamentoId.Contains(l.Id));
+            return set.ToList();
+        }
+
         #endregion
 
         #region Métodos Privados

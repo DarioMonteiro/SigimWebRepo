@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 
 namespace GIR.Sigim.Application.Helper
@@ -25,7 +26,8 @@ namespace GIR.Sigim.Application.Helper
                 .ForMember(d => d.EhDescontoPercentual, m => m.MapFrom(s => s.PercentualDesconto.HasValue));
             Mapper.CreateMap<EntradaMaterialDTO, EntradaMaterial>();
 
-            Mapper.CreateMap<EntradaMaterialFormaPagamento, EntradaMaterialFormaPagamentoDTO>();
+            Mapper.CreateMap<EntradaMaterialFormaPagamento, EntradaMaterialFormaPagamentoDTO>()
+                .ForMember(d => d.EhLiberadoDescricao, m => m.MapFrom(s => (s.TituloPagarId.HasValue && s.TituloPagar.Situacao != SituacaoTituloPagar.Provisionado) ? "Sim" : "Não"));
             Mapper.CreateMap<EntradaMaterialFormaPagamentoDTO, EntradaMaterialFormaPagamento>();
 
             Mapper.CreateMap<EntradaMaterialImposto, EntradaMaterialImpostoDTO>()
@@ -50,6 +52,10 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<OrdemCompra, OrdemCompraDTO>();
             Mapper.CreateMap<OrdemCompraDTO, OrdemCompra>();
+
+            Mapper.CreateMap<OrdemCompraFormaPagamento, OrdemCompraFormaPagamentoDTO>()
+                .ForMember(d => d.EhPagamentoAntecipadoDescricao, m => m.MapFrom(s => s.EhPagamentoAntecipado.Value ? "Sim" : "Não"));
+            Mapper.CreateMap<OrdemCompraFormaPagamentoDTO, OrdemCompraFormaPagamento>();
 
             Mapper.CreateMap<OrdemCompraItem, OrdemCompraItemDTO>()
                 .ForMember(d => d.DataOrdemCompra, m => m.MapFrom(s => s.OrdemCompra.Data))
