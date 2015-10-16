@@ -88,6 +88,7 @@
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
     <Compile Include="DTO\Financeiro\HistoricoContabilDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoReceberDTO.cs" />
+    <Compile Include="DTO\Financeiro\MovimentoFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoMovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoPagarDTO.cs" />
     <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="DTO\Sigim\TreeNodeDTO.cs" />
     <Compile Include="Enums\ClienteFornecedorModuloAutoComplete.cs" />
     <Compile Include="Enums\OperacaoLiberarMedicao.cs" />
+    <Compile Include="Enums\OrigemChamada.cs" />
     <Compile Include="Enums\SimNaoAmbos.cs" />
     <Compile Include="Enums\SituacaoAutoComplete.cs" />
     <Compile Include="Enums\TipoClienteAutoComplete.cs" />

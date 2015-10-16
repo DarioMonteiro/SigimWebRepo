@@ -43,6 +43,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<MotivoCancelamento, MotivoCancelamentoDTO>();
             Mapper.CreateMap<MotivoCancelamentoDTO, MotivoCancelamento>();
 
+            Mapper.CreateMap<MovimentoFinanceiro, MovimentoFinanceiroDTO>();
+            Mapper.CreateMap<MovimentoFinanceiroDTO, MovimentoFinanceiro>();
+
             Mapper.CreateMap<ParametrosFinanceiro, ParametrosFinanceiroDTO>();
             Mapper.CreateMap<ParametrosFinanceiroDTO, ParametrosFinanceiro>()
                 .ForMember(d => d.IconeRelatorio, m => m.ResolveUsing(s => s.IconeRelatorio == null ? null : s.IconeRelatorio));

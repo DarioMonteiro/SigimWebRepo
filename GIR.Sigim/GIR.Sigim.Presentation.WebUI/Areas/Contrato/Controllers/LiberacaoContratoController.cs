@@ -151,13 +151,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             model.PodeHabilitarBotoes = contratoAppService.EhPermitidoHabilitarBotoes(contrato);
 
-            model.PodeAprovarLiberar = true;
-            model.PodeAprovar = true;
-            model.PodeLiberar = true;
-            model.PodeCancelarLiberacao = true;
-            model.PodeAssociarNF = true;
-            model.PodeAlterarDataVencimento = true;
-            model.PodeImprimirMedicao = true;
+            model.PodeAprovarLiberar = contratoAppService.EhPermitidoAprovarLiberarLiberacao();
+            model.PodeAprovar = contratoAppService.EhPermitidoAprovarLiberacao();
+            model.PodeLiberar = contratoAppService.EhPermitidoLiberarLiberacao();
+            model.PodeCancelarLiberacao = contratoAppService.EhPermitidoCancelarLiberacao();
+            model.PodeAssociarNotaFiscal = contratoAppService.EhPermitidoAssociarNFLiberacao();
+            model.PodeAlterarDataVencimento = contratoAppService.EhPermitidoAlterarvencimentoLiberacao();
+            model.PodeImprimirMedicao = contratoAppService.EhPermitidoImprimirMedicaoLiberacao();
+
             model.DataVencimento = DateTime.Now;
 
             CarregarCombos(model);

@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Application.DTO.Financeiro;
 
 namespace GIR.Sigim.Application.DTO.Financeiro
 {
     public class TipoMovimentoDTO : BaseDTO
     {
-
         [Required]
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Descrição")]
@@ -24,7 +24,6 @@ namespace GIR.Sigim.Application.DTO.Financeiro
             get { return Operacao == "D" ? "Débito" : Operacao == "C" ? "Crédito" : ""; }
         }
 
-
         [Display(Name = "Automático")]
         public bool? Automatico { get; set; }
 
@@ -36,8 +35,7 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         {
             get { return HistoricoContabil != null ? HistoricoContabil.Descricao : ""; }
         }
-
-        
+       
         [Required]
         [StringLength(1, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Tipo")]
@@ -48,8 +46,16 @@ namespace GIR.Sigim.Application.DTO.Financeiro
             get { return Tipo == "B" ? "Bancário" : Tipo == "C" ? "Caixa" : ""; }
         }
 
-
         public Byte? FormaPagamento { get; set; }
+
+        public List<MovimentoFinanceiroDTO> ListaMovimentoFinanceiro { get; set; }
+
+        public TipoMovimentoDTO()
+        {
+            this.ListaMovimentoFinanceiro = new List<MovimentoFinanceiroDTO>(); 
+        }
+
+
     }
 
 }

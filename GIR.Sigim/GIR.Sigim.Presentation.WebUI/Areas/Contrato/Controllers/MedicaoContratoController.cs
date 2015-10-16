@@ -15,6 +15,7 @@ using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Application.Enums;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -442,7 +443,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
             DateTime dtEmissao = DateTime.Parse(dataEmissao);
 
-            var arquivo = contratoAppService.ExportarMedicao(contratoId, contratadoId, tipoDocumentoId, numeroDocumento, dtEmissao, valorContratadoItem, formato);
+            var arquivo = contratoAppService.ExportarMedicao(contratoId, contratadoId, tipoDocumentoId, numeroDocumento, dtEmissao, valorContratadoItem, formato, OrigemChamada.MedicaoContrato);
 
             if (arquivo != null)
             {

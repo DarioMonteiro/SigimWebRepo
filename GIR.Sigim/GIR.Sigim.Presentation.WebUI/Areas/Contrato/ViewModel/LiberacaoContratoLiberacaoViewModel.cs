@@ -28,7 +28,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel
         public bool PodeAprovar { get; set; }
         public bool PodeLiberar { get; set; }
         public bool PodeCancelarLiberacao { get; set; }
-        public bool PodeAssociarNF { get; set; }
         public bool PodeAssociarNotaFiscal { get; set; }
         public bool PodeAlterarDataVencimento { get; set; }
         public bool PodeImprimirMedicao { get; set; }

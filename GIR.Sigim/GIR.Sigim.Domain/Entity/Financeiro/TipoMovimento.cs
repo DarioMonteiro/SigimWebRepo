@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
-using GIR.Sigim.Domain.Entity.Contrato; 
+using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.Financeiro;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -18,6 +19,13 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public HistoricoContabil HistoricoContabil { get; set; }
         public string Tipo { get; set; }
         public Byte? FormaPagamento { get; set; }
+
+        public ICollection<MovimentoFinanceiro> ListaMovimentoFinanceiro { get; set; }
+
+        public TipoMovimento()
+        {
+            this.ListaMovimentoFinanceiro = new HashSet<MovimentoFinanceiro>();
+        }
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

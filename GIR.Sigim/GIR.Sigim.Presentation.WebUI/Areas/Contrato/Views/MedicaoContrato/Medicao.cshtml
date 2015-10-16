@@ -976,7 +976,11 @@
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Valor), 2) + '</td>'));
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorTotalMedido), 2) + '</td>'));
                 row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorPendente), 2) + '</td>'));
-                row.append($('<td class="text-center">' + jsonRetificaoProvisaoArray[i].DescricaoPagamentoAntecipado + '</td>'));
+                var styleCor = "color:gray";
+                if (jsonRetificaoProvisaoArray[i].DescricaoPagamentoAntecipado.toUpperCase() == "SIM") {
+                    styleCor = "color:red";
+                }
+                row.append($('<td class="text-center" style="' + styleCor + '">' + jsonRetificaoProvisaoArray[i].DescricaoPagamentoAntecipado + '</td>'));
             }
 
             var row = $('<tr />')

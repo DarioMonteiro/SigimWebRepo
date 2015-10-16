@@ -53,7 +53,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public TipoMovimentoDTO ObterPeloId(int? id)
         {
-            return tipoMovimentoRepository.ObterPeloId(id).To<TipoMovimentoDTO>();
+            return tipoMovimentoRepository.ObterPeloId(id,l => l.ListaMovimentoFinanceiro).To<TipoMovimentoDTO>();
         }
 
         public bool Salvar(TipoMovimentoDTO dto)
@@ -68,6 +68,14 @@ namespace GIR.Sigim.Application.Service.Financeiro
             {
                 tipoMovimento = new TipoMovimento();
                 novoItem = true;
+            }
+            else
+            {
+                if (tipoMovimento.Automatico)
+                {
+                    messageQueue.Add(Resource.Sigim.ErrorMessages.RegistroProtegido, TypeMessage.Error);
+                    return false;
+                }
             }
 
             tipoMovimento.Descricao = dto.Descricao;
@@ -111,6 +119,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
 
             var tipoMovimento = tipoMovimentoRepository.ObterPeloId(id);
+
+            if (tipoMovimento.Automatico)
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.RegistroProtegido, TypeMessage.Error);
+                return false;
+            }
 
             try
             {
