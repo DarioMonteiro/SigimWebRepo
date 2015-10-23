@@ -385,7 +385,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
                         Nullable<DateTime> dtVencimento = DateTime.Parse(dataVencimento);
 
-                        ehValidouTrocaDataVencimento = contratoAppService.ValidarTrocaDataVencimentoListaItemLiberacao(dtVencimento, listaItemLiberacaoDTO);
+                        ehValidouTrocaDataVencimento = contratoAppService.ValidarTrocaDataVencimentoListaItemLiberacao(contratoId.Value, dtVencimento, listaItemLiberacaoDTO);
                         if (messageQueue.GetAll().Count > 0)
                         {
                             msg = messageQueue.GetAll()[0].Text;

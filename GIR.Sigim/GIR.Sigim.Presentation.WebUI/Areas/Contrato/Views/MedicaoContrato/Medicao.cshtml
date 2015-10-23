@@ -1,7 +1,7 @@
 ﻿@model GIR.Sigim.Presentation.WebUI.Areas.Contrato.ViewModel.MedicaoContratoMedicaoViewModel
 
 @{
-    ViewBag.Title = "Medição";
+    ViewBag.Title = "Medição de Contrato";
 }
 
 @Html.Partial("_NotificationMessagesPartial")
@@ -11,6 +11,9 @@
             <header>
                 <span class="widget-icon"><i class="fa fa-cog"></i></span>
                 <h2>@ViewBag.Title</h2>
+            </header>
+            <header>
+                <h2 id="cabMedicao"></h2>
             </header>
             <div>
                 <div class="widget-body no-padding">
@@ -52,7 +55,7 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a data-toggle="collapse" id="aHrefContrato" data-parent="#accordion" href="#collapseContrato" class="">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseContrato" class="">
                                             <i class="fa fa-lg fa-angle-down pull-right"></i>
                                             <i class="fa fa-lg fa-angle-up pull-right"></i>
                                             Contrato
@@ -493,10 +496,10 @@
                                                                 <section class="col col-4">
                                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.Valor, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Valor, "{0:F2}", new { @class = "text-right decimal-2-casas required", @required = true })
+                                                                        @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Valor, "", new { @class = "text-right decimal-2-casas required", @required = true })
                                                                         <script type="text/javascript">
                                                                             $(document).ready(function () {
-                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").on("change", function () {
+                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").on("focusout", function () {
                                                                                     validaValorMedicaoAtual();
                                                                                 });
                                                                             });
@@ -518,7 +521,7 @@
                                                                         @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Quantidade, "{0:F7}", new { @class = "text-right decimal-7-casas required", @required = true })
                                                                         <script type="text/javascript">
                                                                             $(document).ready(function () {
-                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").on("change", function () {
+                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").on("focusout", function () {
                                                                                     validaQuantidadeMedicaoAtual();
                                                                                 });
                                                                             });
@@ -532,7 +535,7 @@
                                                                         @Html.TextBoxFor(m => m.ContratoRetificacaoItemMedicao.Desconto, "{0:F2}", new { @class = "text-right decimal-2-casas" })
                                                                         <script type="text/javascript">
                                                                             $(document).ready(function () {
-                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").on("change", function () {
+                                                                                $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").on("focusout", function () {
                                                                                     validaDesconto();
                                                                                 });
                                                                             });
@@ -603,7 +606,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
+        
         exibeInfoContrato();
         tratarBotoes(false, false, false);
 
@@ -822,7 +825,7 @@
             infoContrato = infoContrato + " - Item : " + itemSelecionado;
         }
 
-        document.getElementById("aHrefContrato").innerText = infoContrato;
+        $("#cabMedicao").text(infoContrato);
     }
 
     function refresh(mensagem) {
@@ -969,13 +972,15 @@
                 row.append($('<td class="text-nowrap" onclick="carregaAbaDadosMedicao(' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Sequencial + ');">' + jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.Descricao + '</td>'));
                 row.append($('<td class="text-center">' + new Date(parseInt(jsonRetificaoProvisaoArray[i].ContratoRetificacaoItemCronograma.DataVencimento.substr(6))).toFormatDDMMYYYY() + '</td>'));
                 if (!ehNaturezaItemPorPrecoGlobal) {
-                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Quantidade), 7) + '</td>'));
-                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadeTotalMedida), 7) + '</td>'));
-                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadePendente), 7) + '</td>'));
+                    row.append($('<td class="text-right decimal-7-casas">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Quantidade), 7) + '</td>'));
+                    row.append($('<td class="text-right decimal-7-casas">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadeTotalMedida), 7) + '</td>'));
+                    row.append($('<td class="text-right decimal-7-casas">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].QuantidadePendente), 7) + '</td>'));
                 }
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Valor), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorTotalMedido), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorPendente), 2) + '</td>'));
+
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].Valor), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorTotalMedido), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonRetificaoProvisaoArray[i].ValorPendente), 2) + '</td>'));
+
                 var styleCor = "color:gray";
                 if (jsonRetificaoProvisaoArray[i].DescricaoPagamentoAntecipado.toUpperCase() == "SIM") {
                     styleCor = "color:red";
@@ -990,13 +995,14 @@
             row.append($('<td></td>'));
             row.append($('<td></td>'));
             if (!ehNaturezaItemPorPrecoGlobal) {
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(totalQuantidade), 7) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(totalQuantidadeMedida), 7) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(totalQuantidadePendente), 7) + '</td>'));
+                row.append($('<td class="text-right decimal-7-casas">' + roundDecimal(floatToString(totalQuantidade), 7) + '</td>'));
+                row.append($('<td class="text-right decimal-7-casas">' + roundDecimal(floatToString(totalQuantidadeMedida), 7) + '</td>'));
+                row.append($('<td class="text-right decimal-7-casas">' + roundDecimal(floatToString(totalQuantidadePendente), 7) + '</td>'));
             }
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorMedido), 2) + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorPendente), 2) + '</td>'));
+            row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
+            row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(totalValorMedido), 2) + '</td>'));
+            row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(totalValorPendente), 2) + '</td>'));
+
             row.append($('<td></td>'));
             var row = $('<tr />')
             $("#tableItens tbody").append(row);
@@ -1005,6 +1011,7 @@
         setarAbaProvisionamento();
 
         jsonRetificaoProvisaoArray = null;
+        initializeDecimalBehaviour();
     }
 
     function carregaAbaDadosMedicao(sequencial) {
@@ -1042,8 +1049,9 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', true);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', false);
 
-                    document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').className = "text-right decimal-2-casas required";
-                    document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').className = "text-right decimal-7-casas readonly";
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').attr('class','text-right decimal-2-casas required');
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').attr('class', 'text-right decimal-7-casas readonly');
+
                 }
                 else {
                     $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Quantidade)").val(roundDecimal(floatToString(item.ContratoRetificacaoItemCronograma.Quantidade), 7));
@@ -1051,10 +1059,12 @@
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', false);
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', true);
 
-                    document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').className = "text-right decimal-2-casas readonly";
-                    document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').className = "text-right decimal-7-casas required";
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').attr('class', 'text-right decimal-2-casas readonly');
+                    $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').attr('class', 'text-right decimal-7-casas required');
+
                 }
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemCronograma.Valor)").val(roundDecimal(floatToString(item.ContratoRetificacaoItemCronograma.Valor), 2));
+
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(item.ValorPendente), 2));
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(floatToString(0), 2));
                 $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Observacao)").val("");
@@ -1069,6 +1079,7 @@
                 setarAbaMedicao();
             }
         }
+        initializeDecimalBehaviour();
     }
 
     function tratarBotoes(condicaoSalvar, condicaoDeletar, condicaoImprimir) {
@@ -1094,24 +1105,25 @@
 
         
         if (condicaoSalvar) {
-            document.getElementById('btnSalvar').className = "btn btn-primary right";
+            $('#btnSalvar').attr('class', 'btn btn-primary right');
         }
         else {
-            document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
+            $('#btnSalvar').attr('class', 'btn btn-primary right disabled');
+
         }
 
         if (condicaoDeletar) {
-            document.getElementById('btnDeletar').className = "btn btn-danger";
+            $('#btnDeletar').attr('class', 'btn btn-danger');
         }
         else {
-            document.getElementById('btnDeletar').className = "btn btn-danger disabled";
+            $('#btnDeletar').attr('class', 'btn btn-danger disabled');
         }
 
         if (condicaoImprimir) {
-            document.getElementById('btnImprimir').className = "btn btn-primary";
+            $('#btnImprimir').attr('class', 'btn btn-primary');
         }
         else {
-            document.getElementById('btnImprimir').className = "btn btn-primary disabled";
+            $('#btnImprimir').attr('class', 'btn btn-primary disabled');
         }
     }
 
@@ -1277,6 +1289,9 @@
     }
 
     function validaValorMedicaoAtual() {
+        var ehNaturezaItemGenericoPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
+        if (!ehNaturezaItemGenericoPorPrecoGlobal) return;
+
         var valorMedido = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val());
         var valorPendente = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)").val());
         var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val()); 
@@ -1318,11 +1333,17 @@
     }
 
     function validaQuantidadeMedicaoAtual() {
+
+        var ehNaturezaItemGenericoPorPrecoGlobal = ($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.EhNaturezaItemGenericoPorPrecoGlobal)").val() === "true");
+        if (ehNaturezaItemGenericoPorPrecoGlobal) return;
+
+        var valorPendente = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ValorPendente)").val());
+
         var quantidadeMedida = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val());
         var quantidadePendente = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.QuantidadePendente)").val());
         var precoUnitario = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.PrecoUnitario)").val());
         var desconto = stringToFloat($("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val());
-        var valorMedido = 0;
+        var novoValorMedido = 0;
 
         if (isNaN(quantidadeMedida)) quantidadeMedida = 0;
         if (isNaN(quantidadePendente)) quantidadePendente = 0;
@@ -1331,23 +1352,38 @@
 
         if (quantidadeMedida == 0) {
             smartAlert("Atenção", "A quantidade medida não pode ser zero!", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(quantidadePendente), 7));
+            initializeDecimalBehaviour();
             return false;
         }
 
         if (quantidadeMedida > quantidadePendente) {
             smartAlert("Atenção", "Quantidade medida maior que quantidade pendente !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente), 2));
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(quantidadePendente), 7));
+            initializeDecimalBehaviour();
             return false;
         }
 
-        valorMedido = quantidadeMedida * precoUnitario;
+        novoValorMedido = quantidadeMedida * precoUnitario;
 
-        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorMedido), 2));
+        novoValorMedido = novoValorMedido.toFixed(2);
 
-        if (valorMedido <= desconto) {
+        $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(floatToString(novoValorMedido));
+
+        if (novoValorMedido <= 0) {
+            smartAlert("Atenção", "O valor medido não pode ser zero !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(roundDecimal(floatToString(valorPendente),2));
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)").val(roundDecimal(floatToString(quantidadePendente), 7));
+            initializeDecimalBehaviour();
+            return false;
+        }
+
+        if (novoValorMedido <= desconto) {
             smartAlert("Atenção", "Valor medido menor que o valor do desconto !", "warning");
             $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Desconto)").val(roundDecimal(0, 2));
+            initializeDecimalBehaviour();
             return false;
         }
 
@@ -1363,6 +1399,7 @@
 
         if (valorMedido == 0) {
             smartAlert("Atenção", "O valor medido não pode ser zero !", "warning");
+            $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)").val(valorMedido);
             return false;
         }
 
@@ -1397,14 +1434,16 @@
                 row.append($('<td class="text-center text-nowrap" data-dismiss="modal" onclick="recuperaDadosMedicao(' + jsonContratoRetificaoItemMedicaoArray[i].Id + ');">' + new Date(parseInt(jsonContratoRetificaoItemMedicaoArray[i].DataMedicao.substr(6))).toFormatDDMMYYYY() + '</td>'));
                 row.append($('<td class="text-left text-nowrap">' + jsonContratoRetificaoItemMedicaoArray[i].TipoDocumento.Sigla + '</td>'));
                 row.append($('<td class="text-left">' + jsonContratoRetificaoItemMedicaoArray[i].NumeroDocumento + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].Valor), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].ValorRetido), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].Valor), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].ValorRetido), 2) + '</td>'));
             }
 
             var row = $('<tr />')
 
             setarAbaMedicao();
         }
+
+        initializeDecimalBehaviour();
     }
 
     function recuperaDadosMedicao(ContratoRetificacaoItemMedicaoId) {
@@ -1521,15 +1560,15 @@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', true);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', false);
 
-                document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').className = "text-right decimal-2-casas required";
-                document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').className = "text-right decimal-7-casas readonly";
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').attr('class', 'text-right decimal-2-casas required');
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').attr('class', 'text-right decimal-7-casas readonly');
             }
             else {
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').prop('readonly', false);
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').prop('readonly', true);
 
-                document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').className = "text-right decimal-2-casas readonly";
-                document.getElementById('@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').className = "text-right decimal-7-casas required";
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Valor)').attr('class', 'text-right decimal-2-casas readonly');
+                $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.Quantidade)').attr('class', 'text-right decimal-7-casas required');
             }
 
             var valorItemCronograma = roundDecimal(floatToString(jsonMedicao.ContratoRetificacaoItemCronograma.Valor), 2);
@@ -1541,6 +1580,8 @@
             setarAbaMedicao();
 
         }
+
+        initializeDecimalBehaviour();
     }
 
     function preencheLstVisualizacaoMedicao() {
@@ -1641,14 +1682,14 @@
                 row.append($('<td class="text-left">' + jsonContratoRetificaoItemMedicaoArray[i].SequencialItem + '</td>'));
                 row.append($('<td class="text-left text-nowrap">' + descricaoItem + '</td>'));
                 row.append($('<td class="text-center">' + dataMedicao + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].Quantidade), 7) + '</td>'));               
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorUnitario), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(valor), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorLiberado), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorRetido), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorImposto), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorDesconto), 2) + '</td>'));
-                row.append($('<td class="text-right">' + roundDecimal(floatToString(valorLiquido), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-7-casas">' + roundDecimal(floatToString(jsonContratoRetificaoItemMedicaoArray[i].Quantidade), 7) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(valorUnitario), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(valor), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(valorLiberado), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(valorRetido), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(valorImposto), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(valorDesconto), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(valorLiquido), 2) + '</td>'));
                 row.append($('<td class="text-right">' + titulo + '</td>'));
             }
 
@@ -1660,17 +1701,19 @@
             row.append($('<td></td>'));
             row.append($('<td></td>'));
             row.append($('<td></td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorLiberado), 2) + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorRetido), 2) + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorImposto), 2) + '</td>'));
+            row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(totalValor), 2) + '</td>'));
+            row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(totalValorLiberado), 2) + '</td>'));
+            row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(totalValorRetido), 2) + '</td>'));
+            row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(totalValorImposto), 2) + '</td>'));
             row.append($('<td></td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(totalValorLiquido), 2) + '</td>'));
+            row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(totalValorLiquido), 2) + '</td>'));
             row.append($('<td></td>'));
 
             var row = $('<tr />')
             $("#tableLstVisMedicao tbody").append(row);
         }
+
+        initializeDecimalBehaviour();
     }
 
 </script>

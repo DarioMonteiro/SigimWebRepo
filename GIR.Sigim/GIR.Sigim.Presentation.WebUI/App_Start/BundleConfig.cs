@@ -17,6 +17,11 @@ namespace GIR.Sigim.Presentation.WebUI
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                         //"~/Scripts/libs/jquery-2.0.2.min.js",
                         "~/Scripts/libs/jquery-ui-1.10.3.min.js",
+
+                        //jquerypriceformat.com/
+                        "~/Scripts/jquery.price_format.2.0.js",
+
+
                         //"~/Scripts/libs/jquery.unobtrusive-ajax.min.js",
                         //"~/Scripts/plugin/jquery-form/jquery-form.min.js",
                         //JS TOUCH : include this plugin for mobile drag / drop touch events

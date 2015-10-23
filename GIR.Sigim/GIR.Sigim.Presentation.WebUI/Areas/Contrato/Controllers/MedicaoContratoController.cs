@@ -262,7 +262,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                         ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
                         ehNaturezaItemPorPrecoUnitario = EhNaturezaItemPorPrecoUnitario,
                         contratoRetificacaoItem = contratoRetificacaoItem,
-                        listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao
+                        listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao.
+                                                            OrderBy(l => l.ContratoRetificacaoItemCronograma.DataVencimento).
+                                                            ThenByDescending(l => l.ContratoRetificacaoItemCronograma.Sequencial)
                     });
                 }
             }

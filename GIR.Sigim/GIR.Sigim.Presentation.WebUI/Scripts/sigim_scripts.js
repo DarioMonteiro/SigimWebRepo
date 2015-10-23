@@ -111,28 +111,54 @@ $(document).ready(function () {
 });
 
 function initializeDecimalBehaviour() {
-    $("input.decimal-2-casas").on("focusout", function () {
-        $(this).val(roundDecimal($(this).val(), 2));
-    });
+    //$("input.decimal-2-casas").on("focusout", function () {
+    //    $(this).val(roundDecimal($(this).val(), 2));
+    //});
 
-    $("input.decimal-4-casas").on("focusout", function () {
-        $(this).val(roundDecimal($(this).val(), 4));
-    });
+    //$("input.decimal-4-casas").on("focusout", function () {
+    //    $(this).val(roundDecimal($(this).val(), 4));
+    //});
 
-    $("input.decimal-5-casas").on("focusout", function () {
-        $(this).val(roundDecimal($(this).val(), 5));
-    });
+    //$("input.decimal-5-casas").on("focusout", function () {
+    //    $(this).val(roundDecimal($(this).val(), 5));
+    //});
 
-    $("input.decimal-7-casas").on("focusout", function () {
-        $(this).val(roundDecimal($(this).val(), 7));
+    //$("input.decimal-7-casas").on("focusout", function () {
+    //    $(this).val(roundDecimal($(this).val(), 7));
+    //});
+
+    formataValorComCasasDecimais('.decimal-2-casas',14,2);
+    formataValorComCasasDecimais('.decimal-4-casas', 14, 4);
+    formataValorComCasasDecimais('.decimal-5-casas', 14, 5);
+    formataValorComCasasDecimais('.decimal-7-casas', 14, 7);
+
+}
+
+function formataValorComCasasDecimais(elemento, tamanho, casasDecimais) {
+    if (tamanho === 'undefined') {
+        tamanho = 14;
+    }
+    if (casasDecimais === 'undefined') {
+        casasDecimais = 2;
+    }
+
+    $(elemento).priceFormat({
+        limit: tamanho,
+        prefix: '',
+        centsSeparator: ',',
+        thousandsSeparator: '.',
+        centsLimit: casasDecimais,
+        allowNegative: true
     });
 }
 
 function roundDecimal(value, precision) {
     var originalValue = 0 + value;
     if (value != null) {
-        var sinal = value.substring(0, 1);
-        if (sinal == "-") { originalValue = sinal + 0 + value.substring(1, value.length) }
+        var sinal = value.toString().substring(0, 1);
+        if (sinal == "-") {
+            originalValue = sinal + 0 + value.toString().substring(1, value.length);
+        }
     }
     var roundedValue = parseFloat(stringToFloat(originalValue.toString())).toFixed(precision);
     return roundedValue.replace(".", ",");
@@ -161,7 +187,6 @@ Date.prototype.toFormatDDMMYYYYHHMISS = function () {
     return "";
 };
 
-
 function highlight(data, search) {
     return data.replace(new RegExp("(" + stringToRegExp(search) + ")", 'gi'), "<strong>$1</strong>");
 }
@@ -188,7 +213,8 @@ function floatToString(value) {
 }
 
 function stringToFloat(value) {
-    return parseFloat(value.toString().replace(".", "").replace(",", "."));
+    //return parseFloat(value.toString().replace(".", "").replace(",", "."));
+    return parseFloat(value.toString().replace(/\./g, "").replace(",", "."));;
 }
 
 function smartAlert(title, message, type) {

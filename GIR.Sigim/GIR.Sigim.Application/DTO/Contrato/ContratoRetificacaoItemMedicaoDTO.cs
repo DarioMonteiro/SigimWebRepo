@@ -40,11 +40,13 @@ namespace GIR.Sigim.Application.DTO.Contrato
         [Display(Name = "Data vencimento")]
         public DateTime DataVencimento { get; set; }
         [Required]
-        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        //[RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [RegularExpression(@"^-?(?:\d+|\d{1,3}(?:[\s\.]\d{3})+)(?:[,]\d+)?$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Quantidade medição Atual")]
         public decimal Quantidade { get; set; }
         [Required]
-        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        //[RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [RegularExpression(@"^-?(?:\d+|\d{1,3}(?:[\s\.]\d{3})+)(?:[,]\d+)?$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Valor medição atual")]
         public decimal Valor { get; set; }
         [Required]
@@ -90,7 +92,8 @@ namespace GIR.Sigim.Application.DTO.Contrato
         public Nullable<DateTime> DataConferencia { get; set; }
         public Nullable<DateTime> DataCadastro { get; set; }
 
-        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        //[RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [RegularExpression(@"^-?(?:\d+|\d{1,3}(?:[\s\.]\d{3})+)(?:[,]\d+)?$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Desconto")]
         public decimal? Desconto { get; set; }
 

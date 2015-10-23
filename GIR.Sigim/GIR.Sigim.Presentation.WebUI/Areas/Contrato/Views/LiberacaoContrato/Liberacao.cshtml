@@ -15,6 +15,9 @@
                 <span class="widget-icon"><i class="fa fa-cog"></i></span>
                 <h2>@ViewBag.Title</h2>
             </header>
+            <header>
+                <h2 id="cabLiberacao"></h2>
+            </header>
             <div>
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
@@ -43,7 +46,7 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a data-toggle="collapse" id="aHrefContrato" data-parent="#accordion" href="#collapseContrato" class="">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseContrato" class="">
                                             <i class="fa fa-lg fa-angle-down pull-right"></i>
                                             <i class="fa fa-lg fa-angle-up pull-right"></i>
                                             Contrato
@@ -721,7 +724,10 @@
             infoContrato = infoContrato + " - Item : " + itemSelecionado;
         }
 
-        document.getElementById("aHrefContrato").innerText = infoContrato;
+        //document.getElementById("aHrefContrato").innerText = infoContrato;
+
+        $("#cabLiberacao").text(infoContrato);
+
     }
 
     function executarConcluirContrato() {
@@ -901,8 +907,8 @@
                     row.append($('<td class="text-center" style="' + cor + '"></td>'));
                 }
                 row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].DescricaoSituacao + '</td>'));
-                row.append($('<td class="text-right" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].Valor), 2) + '</td>'));
-                row.append($('<td class="text-right" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].ValorRetido), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].Valor), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].ValorRetido), 2) + '</td>'));
                 row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].ResponsavelMedicao + '</td>'));
                 row.append($('<td class="text-right" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].TituloId + '</td>'));
                 if (jsonListaItemLiberacaoArray[i].DataLiberacao != null) {
@@ -930,6 +936,7 @@
         $('#@Html.IdFor(m => m.Resumo.TotalValorSelecionado)').val(roundDecimal(floatToString(totalValor), 2));
         $('#@Html.IdFor(m => m.Resumo.TotalRetidoSelecionado)').val(roundDecimal(floatToString(totalValorRetido), 2));
 
+        initializeDecimalBehaviour();
     }
 
     function trataItemLiberacaoSelecionado(posicaoLista) {

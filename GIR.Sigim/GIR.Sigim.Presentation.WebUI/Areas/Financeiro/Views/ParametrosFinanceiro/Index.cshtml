@@ -38,16 +38,6 @@
                                 <div id="collapseCliente" class="panel-collapse collapse in">
                                     <div class="panel-body no-padding">
                                         <fieldset>
-@*                                            <div class="row">
-                                                <section class="col col-12">
-                                                    @Html.LabelFor(m => m.Parametros.ClienteId, new { @class = "label" })
-                                                    <label class="select">
-                                                        @Html.DropDownListFor(m => m.Parametros.ClienteId, Model.ListaEmpresa, string.Empty)
-                                                        <i></i>
-                                                    </label>
-                                                </section>
-                                            </div>*@
-
                                             @Html.EditorFor(m => m.Parametros.Cliente, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-12", 
                                                                                                                                   @required = false, 
                                                                                                                                   @label = "Empresa",
@@ -340,17 +330,10 @@
                                     <div class="panel-body no-padding">
                                         <fieldset>
                                              <div class="row">
-                                                 <section class="col col-2">
+                                                 <section class="col col-4">
                                                     @Html.LabelFor(m => m.Parametros.ToleranciaRecebimento, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Parametros.ToleranciaRecebimento, "{0:F2}", new { @class = "text-right decimal-2-casas required" })
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                $("#@Html.IdFor(m => m.Parametros.ToleranciaRecebimento)").on("focusout", function () {
-                                                                    $("#@Html.IdFor(m => m.Parametros.ToleranciaRecebimento)").val(roundDecimal($(this).val(), 2));
-                                                                });
-                                                            });
-                                                        </script>
+                                                        @Html.TextBoxFor(m => m.Parametros.ToleranciaRecebimento, "", new { @class = "text-right decimal-2-casas required" })
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Parametros.ToleranciaRecebimento, "", new { @class = "note note-error" })
                                                 </section>

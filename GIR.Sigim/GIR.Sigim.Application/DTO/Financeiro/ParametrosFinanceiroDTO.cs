@@ -49,7 +49,8 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         [Display(Name = "Leitora de código de barras")]
         public bool LeitoraCodigoBarras { get; set; }
 
-        [RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        //[RegularExpression(@"^\d+(.\d+){0,1}$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        [RegularExpression(@"^-?(?:\d+|\d{1,3}(?:[\s\.]\d{3})+)(?:[,]\d+)?$", ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Tolerância para recebimento")]
         public decimal? ToleranciaRecebimento { get; set; }
 

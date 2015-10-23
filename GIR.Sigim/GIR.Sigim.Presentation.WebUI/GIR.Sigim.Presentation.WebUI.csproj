@@ -231,6 +231,7 @@
     <Compile Include="Areas\Sac\ViewModel\SetorViewModel.cs" />
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
     <Compile Include="CustomAttributes\PreRequisicaoMaterialAuthorizeAttribute.cs" />
+    <Compile Include="ModelBinder\DecimalModelBinder.cs" />
     <Compile Include="ViewModel\BancoViewModel.cs" />
     <Compile Include="ViewModel\ContaCorrenteListaViewModel.cs" />
     <Compile Include="ViewModel\ContaCorrenteCadastroViewModel.cs" />
@@ -311,6 +312,7 @@
     <Content Include="Areas\OrdemCompra\Views\Home\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\Web.config" />
     <Content Include="Areas\Financeiro\Views\_ViewStart.cshtml" />
+    <Content Include="Scripts\jquery.price_format.2.0.js" />
     <Content Include="Scripts\libs\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\plugin\form-to-json\form2js.js" />
     <Content Include="Scripts\plugin\form-to-json\jquery.toObject.js" />

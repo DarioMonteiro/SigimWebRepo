@@ -11,6 +11,7 @@ using System.Web.Routing;
 using GIR.Sigim.Application.Helper;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using GIR.Sigim.Presentation.WebUI.IoC;
+using GIR.Sigim.Presentation.WebUI.ModelBinder;
 
 namespace GIR.Sigim.Presentation.WebUI
 {
@@ -22,6 +23,9 @@ namespace GIR.Sigim.Presentation.WebUI
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+
+            ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
+            ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

@@ -1409,16 +1409,16 @@ namespace GIR.Sigim.Application.Service.Contrato
             foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao == (int)SituacaoMedicao.AguardandoAprovacao))
             {
                 ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
-                if (contratoRetificacaoItemMedicao.Situacao == SituacaoMedicao.AguardandoAprovacao)
+                if (contratoRetificacaoItemMedicao.Situacao != SituacaoMedicao.AguardandoAprovacao)
                 {
+                    messageQueue.Add("Existe um ou mais itens da lista desatualizados recupere o contrato novamente !", TypeMessage.Info);
                     modificou = true;
-                    contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoLiberacao;
+                    break;
                 }
             }
 
             if (!modificou)
             {
-                messageQueue.Add("A(s) medição(ões) escolhidas estão desatualizadas recupere o contrato novamente !", TypeMessage.Info);
                 return retorno;
             }
 
@@ -1524,7 +1524,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             return arquivo;
         }
 
-        public bool ValidarTrocaDataVencimentoListaItemLiberacao(Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        public bool ValidarTrocaDataVencimentoListaItemLiberacao(int contratoId, Nullable<DateTime> dataVencimento, List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
         {
             bool retorno = false;
 
@@ -1566,6 +1566,27 @@ namespace GIR.Sigim.Application.Service.Contrato
                 return retorno;
             }
 
+            var specificationContrato = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
+
+            Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specificationContrato, l => l.ListaContratoRetificacaoProvisao, l => l.ListaContratoRetificacaoItemCronograma);
+
+            bool falhouTeste = false;
+            foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao == (int)SituacaoMedicao.Provisionado))
+            {
+                ContratoRetificacaoProvisao contratoRetificacaoProvisao = contrato.ListaContratoRetificacaoProvisao.Where(l => l.Id == item.ContratoRetificacaoProvisaoId).FirstOrDefault();
+                if (contratoRetificacaoProvisao == null)
+                {
+                    messageQueue.Add("Existe um ou mais itens da lista desatualizados recupere o contrato novamente !", TypeMessage.Info);
+                    falhouTeste = true;
+                    break;
+                }
+            }
+
+            if (falhouTeste)
+            {
+                return retorno;
+            }
+
             retorno = true;
 
             return retorno;
@@ -1581,7 +1602,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 return false;
             }
 
-            if (!ValidarTrocaDataVencimentoListaItemLiberacao(dataVencimento, listaItemLiberacaoDTO))
+            if (!ValidarTrocaDataVencimentoListaItemLiberacao(contratoId,dataVencimento, listaItemLiberacaoDTO))
             {
                 return retorno;
             }
@@ -1594,27 +1615,34 @@ namespace GIR.Sigim.Application.Service.Contrato
             foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao == (int)SituacaoMedicao.Provisionado))
             {
                 ContratoRetificacaoProvisao contratoRetificacaoProvisao = contrato.ListaContratoRetificacaoProvisao.Where(l => l.Id == item.ContratoRetificacaoProvisaoId).FirstOrDefault();
-                ContratoRetificacaoItemCronograma contratoRetificacaoItemCronograma = contrato.ListaContratoRetificacaoItemCronograma.Where(l => l.Id == contratoRetificacaoProvisao.ContratoRetificacaoItemCronogramaId).FirstOrDefault();
-                contratoRetificacaoItemCronograma.DataVencimento = dataVencimento.Value;
-                if (contrato.TipoContrato == TipoContrato.ContratoAPagar && contratoRetificacaoProvisao.TituloPagarId.HasValue)
+                if (contratoRetificacaoProvisao != null)
                 {
-                    TituloPagar tituloPagar = tituloPagarRepository.ListarPeloFiltro(l => l.Situacao < SituacaoTituloPagar.Emitido && l.Id == contratoRetificacaoProvisao.TituloPagarId.Value).FirstOrDefault();
-                    tituloPagar.DataVencimento = dataVencimento.Value;
+                    ContratoRetificacaoItemCronograma contratoRetificacaoItemCronograma = contrato.ListaContratoRetificacaoItemCronograma.Where(l => l.Id == contratoRetificacaoProvisao.ContratoRetificacaoItemCronogramaId).FirstOrDefault();
+                    contratoRetificacaoItemCronograma.DataVencimento = dataVencimento.Value;
+                    if (contrato.TipoContrato == TipoContrato.ContratoAPagar && contratoRetificacaoProvisao.TituloPagarId.HasValue)
+                    {
+                        TituloPagar tituloPagar = tituloPagarRepository.ListarPeloFiltro(l => l.Situacao < SituacaoTituloPagar.Emitido && l.Id == contratoRetificacaoProvisao.TituloPagarId.Value).FirstOrDefault();
+                        tituloPagar.DataVencimento = dataVencimento.Value;
+                    }
+                    else
+                    {
+                        if (contrato.TipoContrato == TipoContrato.contratoAReceber && contratoRetificacaoProvisao.TituloReceberId.HasValue)
+                        {
+                            TituloReceber tituloReceber = tituloReceberRepository.ListarPeloFiltro(l => l.Situacao < SituacaoTituloReceber.Predatado && l.Id == contratoRetificacaoProvisao.TituloReceberId.Value).FirstOrDefault();
+                            tituloReceber.DataVencimento = dataVencimento.Value;
+                        }
+                    }
+                    trocou = true;
                 }
                 else
                 {
-                    if (contrato.TipoContrato == TipoContrato.contratoAReceber && contratoRetificacaoProvisao.TituloReceberId.HasValue)
-                    {
-                        TituloReceber tituloReceber = tituloReceberRepository.ListarPeloFiltro(l => l.Situacao < SituacaoTituloReceber.Predatado && l.Id == contratoRetificacaoProvisao.TituloReceberId.Value).FirstOrDefault();
-                        tituloReceber.DataVencimento = dataVencimento.Value;
-                    }
+                    break;
                 }
-                trocou = true;
             }
 
             if (!trocou)
             {
-                messageQueue.Add("A(s) medição(ões) escolhidas estão desatualizadas recupere o contrato novamente !", TypeMessage.Info);
+                messageQueue.Add("Existe um ou mais itens da lista desatualizados recupere o contrato novamente !", TypeMessage.Info);
                 return retorno;
             }
 
@@ -1679,6 +1707,13 @@ namespace GIR.Sigim.Application.Service.Contrato
                 return retorno;
             }
 
+            ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicaoSelecionado = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
+            if (contratoRetificacaoItemMedicaoSelecionado.Situacao > SituacaoMedicao.AguardandoLiberacao)
+            {
+                messageQueue.Add("Existe um ou mais itens da lista desatualizados recupere o contrato novamente !", TypeMessage.Info);
+                return retorno;
+            }
+
             itemLiberacao = item;
             retorno = true;
 
@@ -1721,7 +1756,7 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             if (!associou)
             {
-                messageQueue.Add("A(s) medição(ões) escolhidas estão desatualizadas recupere o contrato novamente !", TypeMessage.Info);
+                messageQueue.Add("Existe um ou mais itens da lista desatualizados recupere o contrato novamente !", TypeMessage.Info);
                 return retorno;
             }
 
@@ -1833,6 +1868,15 @@ namespace GIR.Sigim.Application.Service.Contrato
             {
                 ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
                 Nullable<DateTime> dataBloqueio;
+
+                if (contratoRetificacaoItemMedicao.Situacao > SituacaoMedicao.AguardandoLiberacao)
+                {
+                    msg = "Existe um ou mais itens da lista desatualizados recupere o contrato novamente !";
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    ehValido = false;
+                    break;
+                }
+
 
                 if (bloqueioContabilAppService.OcorreuBloqueioContabil(contrato.CodigoCentroCusto,
                                                                        contratoRetificacaoItemMedicao.DataEmissao,
@@ -1954,6 +1998,14 @@ namespace GIR.Sigim.Application.Service.Contrato
             {
                 ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
                 Nullable<DateTime> dataBloqueio;
+
+                if (contratoRetificacaoItemMedicao.Situacao != SituacaoMedicao.Liberado)
+                {
+                    msg = "Existe um ou mais itens da lista desatualizados recupere o contrato novamente !";
+                    messageQueue.Add(msg, TypeMessage.Error);
+                    ehValido = false;
+                    break;
+                }
 
                 if (bloqueioContabilAppService.OcorreuBloqueioContabil(contrato.CodigoCentroCusto,
                                                                        contratoRetificacaoItemMedicao.DataEmissao,

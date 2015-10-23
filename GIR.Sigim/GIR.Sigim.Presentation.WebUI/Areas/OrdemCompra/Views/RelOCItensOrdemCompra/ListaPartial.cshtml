@@ -124,6 +124,7 @@
                         decimal percentualIPI = 0;
                         decimal valorTotalComImposto = 0;
                         decimal quantidadeEntregue = 0;
+                        decimal saldo = 0;
                         string dataOrdemCompra = item.OrdemCompra.Data.ToString().Remove((item.OrdemCompra.Data.ToString().Length - 3),3);
                         if (item.OrdemCompra.Data.ToString().Contains("00:00:00"))
                         {
@@ -150,6 +151,11 @@
                         {
                             quantidadeEntregue = item.OrdemCompraItem.QuantidadeEntregue.Value;
                         }
+
+                        if (item.OrdemCompraItem.Saldo.HasValue)
+                        {
+                            saldo = item.OrdemCompraItem.Saldo.Value;
+                        }
                                                        
                         <tr>
                             <td class="text-right text-nowrap">@item.OrdemCompra.Id</td>
@@ -167,7 +173,7 @@
                             <td class="text-right text-nowrap">@percentualIPI.ToString("N2")</td>
                             <td class="text-right text-nowrap">@valorTotalComImposto.ToString("N2")</td>
                             <td class="text-right text-nowrap">@quantidadeEntregue.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@item.OrdemCompraItem.Saldo.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@saldo.ToString("N2")</td>
                         </tr>
                     }
                 </tbody>
