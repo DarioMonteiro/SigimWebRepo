@@ -819,9 +819,11 @@
     function exibeInfoContrato() {
         var infoContrato = "Contrato : " + $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
         infoContrato = infoContrato + " " + $("#@Html.IdFor(m => m.Contrato.ContratoDescricao.Descricao)").val();
-        var e = document.getElementById("@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)");
-        var itemSelecionado = e.options[e.selectedIndex].text;
-        if (itemSelecionado.length > 0)  {
+
+        var e = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)");
+        var itemSelecionado = e[0].options[e[0].selectedIndex].text;
+
+        if (itemSelecionado.length > 0) {
             infoContrato = infoContrato + " - Item : " + itemSelecionado;
         }
 
@@ -860,7 +862,6 @@
                 if (result.contratoRetificacaoItem.ValorItem != null) {
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.ValorItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.ValorItem), 2));
                     }
-                @*$('#@Html.IdFor(m => m.RetencaoContratual)').val(roundDecimal(floatToString(0), 5));*@
                 $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val("");
                 if (result.contratoRetificacaoItem.RetencaoItem != null) {
                     $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItem.RetencaoItem)').val(roundDecimal(floatToString(result.contratoRetificacaoItem.RetencaoItem), 5));

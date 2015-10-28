@@ -660,6 +660,32 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             });
         }
 
+        [HttpPost]
+        public ActionResult OrdenarListaLiberacao(string colunaSelecao, bool ordenacaoAscendente, string listaItemLiberacao)
+        {
+            bool estaOrdenado = false;
+            string msg = "";
+            List<ItemLiberacaoDTO> listaItemLiberacaoDTO = null;
+
+            if (!string.IsNullOrEmpty(listaItemLiberacao))
+            {
+                listaItemLiberacaoDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemLiberacaoDTO>>(listaItemLiberacao);
+
+                estaOrdenado = contratoAppService.OrdenarListaLiberacao(colunaSelecao, ordenacaoAscendente, ref listaItemLiberacaoDTO);
+            }
+            else
+            {
+                estaOrdenado = false;
+                msg = "Nenhum item da lista foi ordenado";
+            }
+            return Json(new
+            {
+                estaOrdenado = estaOrdenado,
+                message = msg,
+                listaItemLiberacao = JsonConvert.SerializeObject(listaItemLiberacaoDTO)
+            });
+        }
+
         #endregion
 
         #region Métodos Privados"

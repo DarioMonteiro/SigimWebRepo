@@ -226,23 +226,23 @@
 
 
         if (condicaoSalvar) {
-            document.getElementById('btnSalvar').className = "btn btn-primary right";
+            $('#btnSalvar').attr("class","btn btn-primary right");
         }
         else {
-            document.getElementById('btnSalvar').className = "btn btn-primary right disabled";
+            $('#btnSalvar').attr("class","btn btn-primary right disabled");
         }
         if (condicaoDeletar) {
-            document.getElementById('btnDeletar').className = "btn btn-primary";
+            $('#btnDeletar').attr("class","btn btn-primary");
         }
         else {
-            document.getElementById('btnDeletar').className = "btn btn-primary disabled";
+            $('#btnDeletar').attr("class","btn btn-primary disabled");
         }
 
         //if (condicaoImprimir) {
-        //    document.getElementById('btnImprimir').className = "btn btn-primary";
+        //    $('#btnImprimir').attr("class","btn btn-primary");
         //}
         //else {
-        //    document.getElementById('btnImprimir').className = "btn btn-primary disabled";
+        //    $('#btnImprimir').attr("class", "btn btn-primary disabled");
         //}
 
     }
@@ -255,12 +255,12 @@
         var tipoRecementoId = $("#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)").val();       
         if (tipoRecementoId == "1") {
             $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', false);
-            document.getElementById('@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').className = "numeric text-right";
+            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').attr("class","numeric text-right");
             $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val(0);
         }
         else {
             $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', true);
-            document.getElementById('@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').className = "numeric text-right readonly";
+            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').attr("class","numeric text-right readonly");
             $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val("");
         }
         

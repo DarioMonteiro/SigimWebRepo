@@ -54,5 +54,6 @@ namespace GIR.Sigim.Application.Service.Contrato
         bool AssociarNotaFiscalListaItemLiberacao(int? contratoId, int? contratoRetificacaoItemMedicaoId, int? tipoDocumentoId, string numeroDocumento, Nullable<DateTime> dataEmissao, Nullable<DateTime> dataVencimento);
         bool AprovarLiberarListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO, OperacaoLiberarMedicao operacao);
         bool CancelarListaItemLiberacao(int contratoId, List<ItemLiberacaoDTO> listaItemLiberacaoDTO);
+        bool OrdenarListaLiberacao(string colunaSelecao, bool ordenacaoAscendente, ref List<ItemLiberacaoDTO> listaItemLiberacaoDTO);
     }
 }

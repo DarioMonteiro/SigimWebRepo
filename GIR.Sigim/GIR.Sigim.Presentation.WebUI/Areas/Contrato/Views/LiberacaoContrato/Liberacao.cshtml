@@ -229,7 +229,7 @@
                                         <div class="widget-body">
                                             <hr class="simple">
                                             <div id="divTableItens" class="table-responsive" style="min-height: 115px; height:320px; width: auto;  border: 1px solid #ddd; margin-bottom: 13px; overflow: auto;">
-                                                <table id="tableItens" class="table table-bordered table-condensed table-hover dataTable" style="font-size:11px;">
+                                                <table id="tableItens" class="table table-bordered table-condensed table-hover datatable" style="font-size:11px;">
                                                     <thead>
                                                         <tr role="row">
                                                             <th class="text-left">Item</th>
@@ -248,6 +248,7 @@
                                                             <th class="text-left" style="min-width: 250px;">Evento</th>
                                                             <th class="text-left">Data cadastro</th>
                                                             <th class="text-left">Avaliação</th>
+                                                            <th class="text-left" style="display:none;">Posição na lista</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -465,6 +466,7 @@
 <script type="text/javascript">
     var parametrosUrlImpressaoMedicao = '';
     jsonListaItemLiberacaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
+    var campoSelecionadoAsc = true;
 
     $(document).ready(function () {
 
@@ -498,7 +500,6 @@
                 data: JSON.stringify({
                     contratoId: contratoId,
                     listaItemLiberacao: JSON.stringify(arr)
-                    //listaItemLiberacao: listaItemLiberacao
                 }),
                 success: function (result) {
                     msgValidacaoImpressao = result.message;
@@ -627,7 +628,6 @@
                     contratoRetificacaoId: $("#@Html.IdFor(m => m.ContratoRetificacao.Id)").val(),
                     dataVencimento: $("#@Html.IdFor(m => m.DataVencimento)").val(),
                     listaItemLiberacao: JSON.stringify(arr)
-                    @*listaItemLiberacao: $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val()*@
                 }),
                 success: function (result) {
                     if (result.ehValidouAssociacaoNF) {
@@ -682,6 +682,20 @@
             $('#@Html.IdFor(m => m.ContratoRetificacaoItemMedicaoIdSelecionado)').val(null);
         });
 
+        $(document).on('click', 'table#tableItens th', function (e) {
+            var row_index = $(this).parent().index();
+            var col_index = $(this).index();
+
+            ordenarListaItemLiberacao(row_index, col_index);
+        });
+
+        $(document).on('click','table#tableItens td',function (e) {
+            var row_index = $(this).parent().index();
+            var col_index = $(this).index();
+
+            tratarSelecaoItemLiberacao(row_index, col_index);
+        });
+
     });
 
     function validarData(valor) {
@@ -718,13 +732,13 @@
     function exibeInfoContrato() {
         var infoContrato = "Contrato : " + $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
         infoContrato = infoContrato + " " + $("#@Html.IdFor(m => m.Contrato.ContratoDescricao.Descricao)").val();
-        var e = document.getElementById("@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)");
-        var itemSelecionado = e.options[e.selectedIndex].text;
+
+        var e = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId)");
+        var itemSelecionado = e[0].options[e[0].selectedIndex].text;
+
         if (itemSelecionado.length > 0) {
             infoContrato = infoContrato + " - Item : " + itemSelecionado;
         }
-
-        //document.getElementById("aHrefContrato").innerText = infoContrato;
 
         $("#cabLiberacao").text(infoContrato);
 
@@ -787,10 +801,10 @@
                         $('#@Html.IdFor(m => m.Resumo.ValorMedido)').val(roundDecimal(floatToString(result.resumo.ValorMedido), 2));
                         $('#@Html.IdFor(m => m.Resumo.Diferenca)').val(roundDecimal(floatToString(result.resumo.Diferenca), 2));
                         if (result.resumo.Diferenca < 0) {
-                            document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "red";
+                            $('#@Html.IdFor(m => m.Resumo.Diferenca)').css("color","red");
                         }
                         else {
-                            document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "black";
+                            $('#@Html.IdFor(m => m.Resumo.Diferenca)').css("color", "black");
                         }
                         $('#@Html.IdFor(m => m.Resumo.AguardandoLiberacao)').val(roundDecimal(floatToString(result.resumo.AguardandoLiberacao), 2));
                         $('#@Html.IdFor(m => m.Resumo.Retido)').val(roundDecimal(floatToString(result.resumo.Retido), 2));
@@ -836,7 +850,7 @@
         $('#@Html.IdFor(m => m.Resumo.ValorProvisionado)').val(roundDecimal(floatToString(0), 2));
         $('#@Html.IdFor(m => m.Resumo.ValorMedido)').val(roundDecimal(floatToString(0), 2));
         $('#@Html.IdFor(m => m.Resumo.Diferenca)').val(roundDecimal(floatToString(0), 2));
-        document.getElementById('@Html.IdFor(m => m.Resumo.Diferenca)').style.color = "black";
+        $('#@Html.IdFor(m => m.Resumo.Diferenca)').css("color","black");
         $('#@Html.IdFor(m => m.Resumo.AguardandoLiberacao)').val(roundDecimal(floatToString(0), 2));
         $('#@Html.IdFor(m => m.Resumo.Retido)').val(roundDecimal(floatToString(0), 2));
         $('#@Html.IdFor(m => m.Resumo.Liberado)').val(roundDecimal(floatToString(0), 2));
@@ -845,28 +859,6 @@
     }
 
     function preencheListaLiberacao() {
-
-        $("#tableItens thead").empty();
-        var row = $('<tr role="row">');
-        $("#tableItens thead").append(row);
-        row.append($('<th class="text-left">Item</th>'));
-        row.append($('<th class="text-left">Medição</th>'));
-        row.append($('<th class="text-left">Vencimento</th>'));
-        row.append($('<th class="text-left">Tipo documento</th>'));
-        row.append($('<th class="text-left">Nº documento</th>'));
-        row.append($('<th class="text-left">Emissão</th>'));
-        row.append($('<th class="text-left" style="min-width: 150px;">Situação</th>'));
-        row.append($('<th class="text-left">Valor</th>'));
-        row.append($('<th class="text-left">Valor retido</th>'));
-        row.append($('<th class="text-left">Resp. medição</th>'));
-        row.append($('<th class="text-left">Título</th>'));
-        row.append($('<th class="text-left">Liberação</th>'));
-        row.append($('<th class="text-left">Resp. liberação</th>'));
-        row.append($('<th class="text-left" style="min-width: 250px;">Evento</th>'));
-        row.append($('<th class="text-left">Data cadastro</th>'));
-        row.append($('<th class="text-left">Avaliação</th>'));
-        row.append($('<tr />'));
-
         var totalValor = 0;
         var totalValorRetido = 0;
 
@@ -875,57 +867,61 @@
         if (jsonListaItemLiberacaoArray != null) {
             for (var i = 0; i < jsonListaItemLiberacaoArray.length; i++) {
 
-                var cor = jsonListaItemLiberacaoArray[i].CorTexto;
+                var cor = jsonListaItemLiberacaoArray[i].CorTexto + ";";
                 if (jsonListaItemLiberacaoArray[i].Selecionado) {
-                    cor = cor + ";" + jsonListaItemLiberacaoArray[i].CorLinhaSelecionada + ";";
+                    cor = cor + jsonListaItemLiberacaoArray[i].CorLinhaSelecionada + ";";
                     totalValor = totalValor + jsonListaItemLiberacaoArray[i].Valor;
                     totalValorRetido = totalValorRetido + jsonListaItemLiberacaoArray[i].ValorRetido;
                 }
 
-                var row = $('<tr />')
+                var row = $('<tr style="' + cor + '">')
 
                 $("#tableItens tbody").append(row);
-                row.append($('<td class="text-left" style="' + cor + '" onclick="trataItemLiberacaoSelecionado(' + jsonListaItemLiberacaoArray[i].PosicaoLista + ');">' + jsonListaItemLiberacaoArray[i].SequencialItem + '</td>'));
+                //row.append($('<td class="text-left" style="' + cor + '" onclick="trataItemLiberacaoSelecionado(' + jsonListaItemLiberacaoArray[i].PosicaoLista + ');">' + jsonListaItemLiberacaoArray[i].SequencialItem + '</td>'));
+                row.append($('<td class="text-left">' + jsonListaItemLiberacaoArray[i].SequencialItem + '</td>'));
                 if (jsonListaItemLiberacaoArray[i].DataMedicao != null) {
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataMedicao).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center">' + new Date(jsonListaItemLiberacaoArray[i].DataMedicao).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
-                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
+                    row.append($('<td class="text-center"></td>'));
                 }
                 if (jsonListaItemLiberacaoArray[i].DataVencimento != null) {
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center">' + new Date(jsonListaItemLiberacaoArray[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
-                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
+                    row.append($('<td class="text-center"></td>'));
                 }
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].TipoDocumento + '</td>'));
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].NumeroDocumento + '</td>'));
+                row.append($('<td class="text-left">' + jsonListaItemLiberacaoArray[i].TipoDocumento + '</td>'));
+
+                row.append($('<td class="text-left">' + jsonListaItemLiberacaoArray[i].NumeroDocumento + '</td>'));
                 if (jsonListaItemLiberacaoArray[i].DataEmissao != null) {
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataEmissao).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center">' + new Date(jsonListaItemLiberacaoArray[i].DataEmissao).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
-                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
+                    row.append($('<td class="text-center"></td>'));
                 }
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].DescricaoSituacao + '</td>'));
-                row.append($('<td class="text-right decimal-2-casas" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].Valor), 2) + '</td>'));
-                row.append($('<td class="text-right decimal-2-casas" style="' + cor + '">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].ValorRetido), 2) + '</td>'));
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].ResponsavelMedicao + '</td>'));
-                row.append($('<td class="text-right" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].TituloId + '</td>'));
+                row.append($('<td class="text-left">' + jsonListaItemLiberacaoArray[i].DescricaoSituacao + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].Valor), 2) + '</td>'));
+                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonListaItemLiberacaoArray[i].ValorRetido), 2) + '</td>'));
+                row.append($('<td class="text-left">' + jsonListaItemLiberacaoArray[i].ResponsavelMedicao + '</td>'));
+                row.append($('<td class="text-right">' + jsonListaItemLiberacaoArray[i].TituloId + '</td>'));
                 if (jsonListaItemLiberacaoArray[i].DataLiberacao != null) {
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataLiberacao).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center">' + new Date(jsonListaItemLiberacaoArray[i].DataLiberacao).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
-                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
+                    row.append($('<td class="text-center"></td>'));
                 }
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].ResponsavelLiberacao + '</td>'));
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].DescricaoEvento + '</td>'));
+                row.append($('<td class="text-left">' + jsonListaItemLiberacaoArray[i].ResponsavelLiberacao + '</td>'));
+                row.append($('<td class="text-left">' + jsonListaItemLiberacaoArray[i].DescricaoEvento + '</td>'));
                 if (jsonListaItemLiberacaoArray[i].DataCadastro != null) {
-                    row.append($('<td class="text-center" style="' + cor + '">' + new Date(jsonListaItemLiberacaoArray[i].DataCadastro).toFormatDDMMYYYY() + '</td>'));
+                    row.append($('<td class="text-center">' + new Date(jsonListaItemLiberacaoArray[i].DataCadastro).toFormatDDMMYYYY() + '</td>'));
                 }
                 else {
-                    row.append($('<td class="text-center" style="' + cor + '"></td>'));
+                    row.append($('<td class="text-center"></td>'));
                 }
-                row.append($('<td class="text-left" style="' + cor + '">' + jsonListaItemLiberacaoArray[i].Avaliacao + '</td>'));
+                row.append($('<td class="text-left">' + jsonListaItemLiberacaoArray[i].Avaliacao + '</td>'));
+                row.append($('<td class="text-left" style="display:none;">' + jsonListaItemLiberacaoArray[i].PosicaoLista + '</td>'));
+                row.append($('</tr>'));
             }
 
             var row = $('<tr />')
@@ -935,6 +931,8 @@
 
         $('#@Html.IdFor(m => m.Resumo.TotalValorSelecionado)').val(roundDecimal(floatToString(totalValor), 2));
         $('#@Html.IdFor(m => m.Resumo.TotalRetidoSelecionado)').val(roundDecimal(floatToString(totalValorRetido), 2));
+
+        //$('table#tableItens td:nth-child(17),th:nth-child(17)').hide();
 
         initializeDecimalBehaviour();
     }
@@ -1015,14 +1013,204 @@
         }
     }
 
+    function tratarSelecaoItemLiberacao(row_index, col_index) {
+
+        var totalValor = stringToFloat($('#@Html.IdFor(m => m.Resumo.TotalValorSelecionado)').val());
+        var totalValorRetido = stringToFloat($('#@Html.IdFor(m => m.Resumo.TotalRetidoSelecionado)').val());
+
+        jsonListaItemLiberacaoArray = JSON.parse($('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val());
+
+        var podeHabilitarBotoes = $('#@Html.IdFor(m => m.PodeHabilitarBotoes)').val();
+
+        if (podeHabilitarBotoes === '@false') {
+            return;
+        }
+
+        desabilitarBotoes();
+
+        var qtdAguardandoAprovacao = 0;
+        var qtdAguardandoLiberacao = 0;
+        var foiSelecionado = false;
+        var codigoSituacaoEscolhido = -1;
+        var codigoSituacaoSelecionadoUltimoDaLista = -1;
+
+        var posicaoLista = $('table#tableItens tr:eq(' + (row_index + 1) + ') td:last').text();
+
+        if ((jsonListaItemLiberacaoArray != null) && (posicaoLista != null)) {
+
+            posicaoLista = +posicaoLista;
+
+            var cor = jsonListaItemLiberacaoArray[posicaoLista].CorTexto + ";";
+
+            if (jsonListaItemLiberacaoArray[posicaoLista].Selecionado === false) {
+                jsonListaItemLiberacaoArray[posicaoLista].Selecionado = true;
+                jsonListaItemLiberacaoArray[posicaoLista].DataSelecionado = new Date().valueOf();
+                foiSelecionado = true;
+                codigoSituacaoEscolhido = jsonListaItemLiberacaoArray[posicaoLista].CodigoSituacao;
+
+                cor = cor + jsonListaItemLiberacaoArray[posicaoLista].CorLinhaSelecionada + ";";
+                totalValor = totalValor + jsonListaItemLiberacaoArray[posicaoLista].Valor;
+                totalValorRetido = totalValorRetido + jsonListaItemLiberacaoArray[posicaoLista].ValorRetido;
+
+            }
+            else {
+                jsonListaItemLiberacaoArray[posicaoLista].Selecionado = false;
+                jsonListaItemLiberacaoArray[posicaoLista].DataSelecionado = 0;
+                foiSelecionado = false;
+
+                totalValor = totalValor - jsonListaItemLiberacaoArray[posicaoLista].Valor;
+                totalValorRetido = totalValorRetido - jsonListaItemLiberacaoArray[posicaoLista].ValorRetido;
+
+            }
+
+            $('table#tableItens tr').eq(row_index + 1).attr('style', cor);
+
+            var arr = jQuery.grep(jsonListaItemLiberacaoArray, function (item, i) {
+                return (item.Selecionado == true)
+            });
+
+            var ultimoDataSelecionado = -1;
+
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].CodigoSituacao == 0) {
+                    qtdAguardandoAprovacao = qtdAguardandoAprovacao + 1;
+                }
+                if (arr[i].CodigoSituacao == 1) {
+                    qtdAguardandoLiberacao = qtdAguardandoLiberacao + 1;
+                }
+                if (arr[i].DataSelecionado > ultimoDataSelecionado) {
+                    codigoSituacaoSelecionadoUltimoDaLista = arr[i].CodigoSituacao;
+                    ultimoDataSelecionado = arr[i].DataSelecionado;
+                }
+            }
+
+            if (foiSelecionado === true) {
+                if ((codigoSituacaoEscolhido == 0) || (codigoSituacaoEscolhido == 1)) {
+                    if ((qtdAguardandoAprovacao > 0) && (qtdAguardandoLiberacao > 0)) {
+                        codigoSituacaoEscolhido = 0;
+                    }
+                    else {
+                        if (qtdAguardandoAprovacao == 0) {
+                            codigoSituacaoEscolhido = 1;
+                        }
+                        else {
+                            codigoSituacaoEscolhido = 0;
+                        }
+                    }
+                }
+                habilitarDesabilitarBotoes(codigoSituacaoEscolhido);
+            }
+            else {
+                habilitarDesabilitarBotoes(codigoSituacaoSelecionadoUltimoDaLista);
+            }
+        }
+
+        $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val(JSON.stringify(jsonListaItemLiberacaoArray));
+        jsonListaItemLiberacaoArray = null;
+
+        $('#@Html.IdFor(m => m.Resumo.TotalValorSelecionado)').val(roundDecimal(floatToString(totalValor), 2));
+        $('#@Html.IdFor(m => m.Resumo.TotalRetidoSelecionado)').val(roundDecimal(floatToString(totalValorRetido), 2));
+
+        initializeDecimalBehaviour();
+
+    }
+
+    function ordenarListaItemLiberacao(row_index, col_index) {
+
+        var nomeColuna = $('table#tableItens tr:eq(' + row_index + ') th:eq(' + col_index + ')').text();
+        var colunaSelecionada = "item";
+        campoSelecionadoAsc = !campoSelecionadoAsc;
+
+        switch (nomeColuna.toUpperCase()) {
+            case "Item".toUpperCase():
+                colunaSelecionada = "item";
+                break;
+            case "Medição".toUpperCase():
+                colunaSelecionada = "medicao";
+                break;
+            case "Vencimento".toUpperCase():
+                colunaSelecionada = "vencimento";
+                break;
+            case "Tipo documento".toUpperCase():
+                colunaSelecionada = "tipodocumento";
+                break;
+            case "Nº documento".toUpperCase():
+                colunaSelecionada = "numerodocumento";
+                break;
+            case "Emissão".toUpperCase():
+                colunaSelecionada = "emissao";
+                break;
+            case "Situação".toUpperCase():
+                colunaSelecionada = "situacao";
+                break;
+            case "Valor".toUpperCase():
+                colunaSelecionada = "valor";
+                break;
+            case "Valor retido".toUpperCase():
+                colunaSelecionada = "valorretido";
+                break;
+            case "Resp. medição".toUpperCase():
+                colunaSelecionada = "responsavelmedicao";
+                break;
+            case "Título".toUpperCase():
+                colunaSelecionada = "titulo";
+                break;
+            case "Liberação".toUpperCase():
+                colunaSelecionada = "liberacao";
+                break;
+            case "Resp. liberação".toUpperCase():
+                colunaSelecionada = "responsavelliberacao";
+                break;
+            case "Evento".toUpperCase():
+                colunaSelecionada = "evento";
+                break;
+            case "Data cadastro".toUpperCase():
+                colunaSelecionada = "datacadastro";
+                break;
+            case "Avaliação".toUpperCase():
+                colunaSelecionada = "avaliacao";
+                break;
+            default:
+                colunaSelecionada = "item";
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("OrdenarListaLiberacao", "LiberacaoContrato", new { Area = "Contrato" })',
+            cache: false,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                colunaSelecao: colunaSelecionada,
+                ordenacaoAscendente: campoSelecionadoAsc,
+                listaItemLiberacao: JSON.stringify(JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val()))
+            }),
+            success: function (result) {
+                if (result.estaOrdenado) {
+                    $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val(result.listaItemLiberacao);
+                    jsonListaItemLiberacaoArray = JSON.parse(result.listaItemLiberacao);
+                }
+                else {
+                    smartAlert("Ocorreu erro na ordenação da lista", result.message, "error");
+                }
+            },
+            error: function (result) {
+                smartAlert("Ocorreu erro na ordenação da lista", result.message, "error");
+            }
+        });
+
+        preencheListaLiberacao();
+
+    }
+
     function desabilitarBotoes() {
-        document.getElementById('btnAprovarLiberar').className = "btn btn-default btn-xs disabled";
-        document.getElementById('btnAprovar').className = "btn btn-default btn-xs disabled";
-        document.getElementById('btnLiberar').className = "btn btn-default btn-xs disabled";
-        document.getElementById('btnCancelarLiberacao').className = "btn btn-default btn-xs disabled";
-        document.getElementById('btnAssociarNF').className = "btn btn-default btn-xs disabled";
-        document.getElementById('btnAlterarVencimento').className = "btn btn-default btn-xs disabled";
-        document.getElementById('btnImprimirMedicao').className = "btn btn-default btn-xs disabled";
+        $('#btnAprovarLiberar').attr("class","btn btn-default btn-xs disabled");
+        $('#btnAprovar').attr("class","btn btn-default btn-xs disabled");
+        $('#btnLiberar').attr("class", "btn btn-default btn-xs disabled");
+        $('#btnCancelarLiberacao').attr("class","btn btn-default btn-xs disabled");
+        $('#btnAssociarNF').attr("class","btn btn-default btn-xs disabled");
+        $('#btnAlterarVencimento').attr("class","btn btn-default btn-xs disabled");
+        $('#btnImprimirMedicao').attr("class","btn btn-default btn-xs disabled");
     }
 
     function habilitarDesabilitarBotoes(codigoSituacao) {
@@ -1037,45 +1225,45 @@
         switch (codigoSituacao) {
             case 0:
                 if (podeAprovarLiberar === '@true') {
-                    document.getElementById('btnAprovarLiberar').className = "btn bg-color-green txt-color-white btn-xs";
+                    $('#btnAprovarLiberar').attr("class","btn bg-color-green txt-color-white btn-xs");
                 }
                 if (podeAprovar === '@true') {
-                    document.getElementById('btnAprovar').className = "btn btn-primary btn-xs";
+                    $('#btnAprovar').attr("class","btn btn-primary btn-xs");
                 }
                 if (podeAssociarNF === '@true') {
-                    document.getElementById('btnAssociarNF').className = "btn bg-color-orange txt-color-white btn-xs";
+                    $('#btnAssociarNF').attr("class","btn bg-color-orange txt-color-white btn-xs");
                 }
                 if (podeImprimirMedicao === '@true') {
-                    document.getElementById('btnImprimirMedicao').className = "btn btn-primary btn-xs";
+                    $('#btnImprimirMedicao').attr("class","btn btn-primary btn-xs");
                 }
 
                 break;
             case 1:
                 if (podeAprovarLiberar === '@true') {
-                    document.getElementById('btnAprovarLiberar').className = "btn btn bg-color-green txt-color-white btn-xs";
+                    $('#btnAprovarLiberar').attr("class","btn btn bg-color-green txt-color-white btn-xs");
                 }
                 if (podeLiberar === '@true') {
-                    document.getElementById('btnLiberar').className = "btn btn bg-color-green txt-color-white btn-xs";
+                    $('#btnLiberar').attr("class","btn btn bg-color-green txt-color-white btn-xs");
                 }
                 if (podeAssociarNF === '@true') {
-                    document.getElementById('btnAssociarNF').className = "btn bg-color-orange txt-color-white btn-xs";
+                    $('#btnAssociarNF').attr("class","btn bg-color-orange txt-color-white btn-xs");
                 }
                 if (podeImprimirMedicao === '@true') {
-                    document.getElementById('btnImprimirMedicao').className = "btn btn-primary btn-xs";
+                    $('#btnImprimirMedicao').attr("class","btn btn-primary btn-xs");
                 }
 
                 break;
             case 2:
                 if (podeCancelarLiberacao === '@true') {
-                    document.getElementById('btnCancelarLiberacao').className = "btn bg-color-red txt-color-white btn-xs";
+                    $('#btnCancelarLiberacao').attr("class","btn bg-color-red txt-color-white btn-xs");
                 }
                 if (podeImprimirMedicao === '@true') {
-                    document.getElementById('btnImprimirMedicao').className = "btn btn-primary btn-xs";
+                    $('#btnImprimirMedicao').attr("class","btn btn-primary btn-xs");
                 }
                 break;
             case 9:
                 if (podeAlterarVencimento === '@true') {
-                    document.getElementById('btnAlterarVencimento').className = "btn bg-color-pink txt-color-white btn-xs";
+                    $('#btnAlterarVencimento').attr("class","btn bg-color-pink txt-color-white btn-xs");
                 }
                 break;
             default:

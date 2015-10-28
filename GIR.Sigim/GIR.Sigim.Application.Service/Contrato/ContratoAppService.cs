@@ -2084,6 +2084,227 @@ namespace GIR.Sigim.Application.Service.Contrato
             return retorno;
         }
 
+        public bool OrdenarListaLiberacao(string colunaSelecao, bool ordenacaoAscendente, ref List<ItemLiberacaoDTO> listaItemLiberacaoDTO)
+        {
+            bool estaOrdenado = false;
+
+            if (listaItemLiberacaoDTO != null){
+
+                switch (colunaSelecao)
+                {
+                    case "item":
+                        if (ordenacaoAscendente){
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.SequencialItem).ToList();
+                            estaOrdenado = true;
+                        }
+                        else{
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.SequencialItem).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "medicao":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.DataMedicao).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.DataMedicao).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "vencimento":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.DataVencimento).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.DataVencimento).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "tipodocumento":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.TipoDocumento).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.TipoDocumento).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "numerodocumento":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.NumeroDocumento).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.NumeroDocumento).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "emissao":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.DataEmissao).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.DataEmissao).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "situacao":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.DescricaoSituacao).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.DescricaoSituacao).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "valor":
+                        if (ordenacaoAscendente){
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.Valor).ToList();
+                            estaOrdenado = true;
+                        }
+                        else{
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.Valor).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "valorretido":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.ValorRetido).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.ValorRetido).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "responsavelmedicao":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.ResponsavelMedicao).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.ResponsavelMedicao).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "titulo":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.TituloId).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.TituloId).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "liberacao":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.DataLiberacao).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.DataLiberacao).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "responsavelliberacao":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.ResponsavelLiberacao).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.ResponsavelLiberacao).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "evento":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.DescricaoEvento).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.DescricaoEvento).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "datacadastro":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.DataCadastro).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.DataCadastro).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    case "avaliacao":
+                        if (ordenacaoAscendente)
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.Avaliacao).ToList();
+                            estaOrdenado = true;
+                        }
+                        else
+                        {
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.Avaliacao).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                    default:
+                        if (ordenacaoAscendente){
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderBy(l => l.SequencialItem).ToList();
+                            estaOrdenado = true;
+                        }
+                        else{
+                            listaItemLiberacaoDTO = listaItemLiberacaoDTO.OrderByDescending(l => l.SequencialItem).ToList();
+                            estaOrdenado = true;
+                        }
+                        break;
+                }
+
+                int posicaoLista = 0;
+                foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO)
+                {
+                    item.PosicaoLista = posicaoLista;
+                    posicaoLista = posicaoLista + 1;
+                    item.DataSelecionado = 0;
+                }
+
+            }
+
+            return estaOrdenado;
+        }
+
         #endregion
 
         #region Métodos Privados
