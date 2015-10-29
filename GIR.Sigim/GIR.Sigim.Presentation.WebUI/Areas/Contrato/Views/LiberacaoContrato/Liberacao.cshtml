@@ -232,22 +232,22 @@
                                                 <table id="tableItens" class="table table-bordered table-condensed table-hover datatable" style="font-size:11px;">
                                                     <thead>
                                                         <tr role="row">
-                                                            <th class="text-left">Item</th>
-                                                            <th class="text-left">Medição</th>
-                                                            <th class="text-left">Vencimento</th>
-                                                            <th class="text-left">Tipo documento</th>
-                                                            <th class="text-left">Nº documento</th>
-                                                            <th class="text-left">Emissão</th>
-                                                            <th class="text-left" style="min-width: 150px;">Situação</th>
-                                                            <th class="text-left">Valor</th>
-                                                            <th class="text-left">Valor retido</th>
-                                                            <th class="text-left">Resp. medição</th>
-                                                            <th class="text-left">Título</th>
-                                                            <th class="text-left">Liberação</th>
-                                                            <th class="text-left">Resp. liberação</th>
+                                                            <th class="text-left" style="min-width: 45px;">Item</th>
+                                                            <th class="text-left" style="min-width: 65px;">Medição</th>
+                                                            <th class="text-left" style="min-width: 83px;">Vencimento</th>
+                                                            <th class="text-left" style="min-width: 80px;">Tipo documento</th>
+                                                            <th class="text-left" style="min-width: 80px;">Nº documento</th>
+                                                            <th class="text-left" style="min-width: 70px;">Emissão</th>
+                                                            <th class="text-left" style="min-width: 120px;">Situação</th>
+                                                            <th class="text-left" style="min-width: 70px;">Valor</th>
+                                                            <th class="text-left" style="min-width: 85px;">Valor retido</th>
+                                                            <th class="text-left" style="min-width: 80px;">Resp. medição</th>
+                                                            <th class="text-left" style="min-width: 50px;">Título</th>
+                                                            <th class="text-left" style="min-width: 70px;">Liberação</th>
+                                                            <th class="text-left" style="min-width: 75px;">Resp. liberação</th>
                                                             <th class="text-left" style="min-width: 250px;">Evento</th>
-                                                            <th class="text-left">Data cadastro</th>
-                                                            <th class="text-left">Avaliação</th>
+                                                            <th class="text-left" style="min-width: 70px;">Data cadastro</th>
+                                                            <th class="text-left" style="min-width: 70px;">Avaliação</th>
                                                             <th class="text-left" style="display:none;">Posição na lista</th>
                                                         </tr>
                                                     </thead>
@@ -466,7 +466,9 @@
 <script type="text/javascript">
     var parametrosUrlImpressaoMedicao = '';
     jsonListaItemLiberacaoArray = JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val());
-    var campoSelecionadoAsc = true;
+    var colunaAnteriorSelecionada = "";
+    var indiceDaColunaAnteriorSelecionada = -1;
+    var ordenacaoAsc = true;
 
     $(document).ready(function () {
 
@@ -696,7 +698,11 @@
             tratarSelecaoItemLiberacao(row_index, col_index);
         });
 
+        //$(document).on('mouseover', 'table#tableItens td', function (e) {
+
+        //});
     });
+
 
     function validarData(valor) {
         var date=valor;
@@ -1116,63 +1122,36 @@
     }
 
     function ordenarListaItemLiberacao(row_index, col_index) {
+        var arrayColunas = ["Item","Medição","Vencimento","Tipo documento","Nº documento","Emissão",
+                            "Situação", "Valor", "Valor retido", "Resp. medição", "Título", "Liberação",
+                            "Resp. liberação", "Evento", "Data cadastro", "Avaliação", "Posição na lista"]
+        var arrayIdentificacaoColunas = ["item", "medicao", "vencimento", "tipodocumento", "numerodocumento", "emissao",
+                            "situacao", "valor", "valorretido", "responsavelmedicao", "titulo", "liberacao",
+                            "responsavelliberacao", "evento", "datacadastro", "avaliacao", "posicaolista"]
 
-        var nomeColuna = $('table#tableItens tr:eq(' + row_index + ') th:eq(' + col_index + ')').text();
         var colunaSelecionada = "item";
-        campoSelecionadoAsc = !campoSelecionadoAsc;
+        colunaSelecionada = arrayIdentificacaoColunas[col_index];
 
-        switch (nomeColuna.toUpperCase()) {
-            case "Item".toUpperCase():
-                colunaSelecionada = "item";
-                break;
-            case "Medição".toUpperCase():
-                colunaSelecionada = "medicao";
-                break;
-            case "Vencimento".toUpperCase():
-                colunaSelecionada = "vencimento";
-                break;
-            case "Tipo documento".toUpperCase():
-                colunaSelecionada = "tipodocumento";
-                break;
-            case "Nº documento".toUpperCase():
-                colunaSelecionada = "numerodocumento";
-                break;
-            case "Emissão".toUpperCase():
-                colunaSelecionada = "emissao";
-                break;
-            case "Situação".toUpperCase():
-                colunaSelecionada = "situacao";
-                break;
-            case "Valor".toUpperCase():
-                colunaSelecionada = "valor";
-                break;
-            case "Valor retido".toUpperCase():
-                colunaSelecionada = "valorretido";
-                break;
-            case "Resp. medição".toUpperCase():
-                colunaSelecionada = "responsavelmedicao";
-                break;
-            case "Título".toUpperCase():
-                colunaSelecionada = "titulo";
-                break;
-            case "Liberação".toUpperCase():
-                colunaSelecionada = "liberacao";
-                break;
-            case "Resp. liberação".toUpperCase():
-                colunaSelecionada = "responsavelliberacao";
-                break;
-            case "Evento".toUpperCase():
-                colunaSelecionada = "evento";
-                break;
-            case "Data cadastro".toUpperCase():
-                colunaSelecionada = "datacadastro";
-                break;
-            case "Avaliação".toUpperCase():
-                colunaSelecionada = "avaliacao";
-                break;
-            default:
-                colunaSelecionada = "item";
+        if (colunaAnteriorSelecionada != colunaSelecionada) {
+            ordenacaoAsc = true;
         }
+        else {
+            ordenacaoAsc = !ordenacaoAsc;
+        }
+
+        var campo = arrayColunas[col_index];
+        if (ordenacaoAsc) {
+            campo = campo + " <i class='fa fa-sort-asc'></i>"
+        }
+        else {
+            campo = campo + " <i class='fa fa-sort-desc'></i>"
+        }
+
+        $('table#tableItens tr:first th:eq(' + indiceDaColunaAnteriorSelecionada + ')').text(arrayColunas[indiceDaColunaAnteriorSelecionada]);
+        $('table#tableItens tr:first th:eq(' + col_index + ')').html(campo);
+
+        colunaAnteriorSelecionada = colunaSelecionada;
+        indiceDaColunaAnteriorSelecionada = col_index;
 
         $.ajax({
             type: 'POST',
@@ -1182,7 +1161,7 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 colunaSelecao: colunaSelecionada,
-                ordenacaoAscendente: campoSelecionadoAsc,
+                ordenacaoAscendente: ordenacaoAsc,
                 listaItemLiberacao: JSON.stringify(JSON.parse($("#@Html.IdFor(m => m.JsonListaItemLiberacao)").val()))
             }),
             success: function (result) {
@@ -1200,7 +1179,6 @@
         });
 
         preencheListaLiberacao();
-
     }
 
     function desabilitarBotoes() {
