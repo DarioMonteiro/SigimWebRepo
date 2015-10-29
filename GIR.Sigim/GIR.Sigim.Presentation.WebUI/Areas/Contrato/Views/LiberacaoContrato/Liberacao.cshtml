@@ -74,7 +74,7 @@
                                                 <section class="col col-12">
                                                     @Html.LabelFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, Model.ListaServicoContratoRetificacaoItem, "Selecione um ítem" ,new {@class="required", @novalidate = "novalidate" })
+                                                        @Html.DropDownListFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, Model.ListaServicoContratoRetificacaoItem, "" ,new {@class="required", @novalidate = "novalidate" })
                                                         <i></i>
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId, "", new { @id = Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoRetificacaoItemId) + "_ValidationMessage", @class = "note note-error" })
