@@ -1405,19 +1405,19 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification,l => l.ListaContratoRetificacaoItemMedicao);
 
-            bool modificou = false;
+            bool estaDesatualizado = false;
             foreach (ItemLiberacaoDTO item in listaItemLiberacaoDTO.Where(l => l.Selecionado == true && l.CodigoSituacao == (int)SituacaoMedicao.AguardandoAprovacao))
             {
                 ContratoRetificacaoItemMedicao contratoRetificacaoItemMedicao = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.Id == item.ContratoRetificacaoItemMedicaoId).FirstOrDefault();
                 if (contratoRetificacaoItemMedicao.Situacao != SituacaoMedicao.AguardandoAprovacao)
                 {
                     messageQueue.Add("Existe um ou mais itens da lista desatualizados recupere o contrato novamente !", TypeMessage.Info);
-                    modificou = true;
+                    estaDesatualizado = true;
                     break;
                 }
             }
 
-            if (!modificou)
+            if (estaDesatualizado)
             {
                 return retorno;
             }
