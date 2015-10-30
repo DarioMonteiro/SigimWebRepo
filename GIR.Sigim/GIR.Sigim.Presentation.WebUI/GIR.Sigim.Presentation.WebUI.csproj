@@ -271,11 +271,16 @@
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\img\48x48.png" />
+    <Content Include="Content\img\ADMINISTRADOR.ico" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\avatars\female.png" />
     <Content Include="Content\img\avatars\male.png" />
     <Content Include="Content\img\favicon\favicon.ico" />
+    <Content Include="Content\img\FINANCEIRO.ico" />
     <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\MODULO-CONTRATO.ico" />
+    <Content Include="Content\img\MODULO-SAC_48x48.ico" />
+    <Content Include="Content\img\MODULO_ORDEM-DE-COMPRA.ico" />
     <Content Include="Content\img\mybg.png" />
     <Content Include="Content\img\select2-spinner.gif" />
     <Content Include="Content\img\splash\ipad-landscape.png" />

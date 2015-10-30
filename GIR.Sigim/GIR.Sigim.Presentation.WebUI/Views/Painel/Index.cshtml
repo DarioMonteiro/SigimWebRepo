@@ -3,9 +3,38 @@
 }
 <h3>Painel</h3>
 <ul>
-    <li>@Html.ActionLink("Admin", "Index", "Home", new { area = "Admin" }, htmlAttributes: new { @class = "username", title = "Admin" })</li>
+@*    <li>@Html.ActionLink("Admin", "Index", "Home", new { area = "Admin" }, htmlAttributes: new { @class = "username", title = "Admin" })</li>
     <li>@Html.ActionLink("Contrato", "Index", "Home", new { area = "Contrato" }, htmlAttributes: new { @class = "username", title = "Contrato" })</li>
     <li>@Html.ActionLink("Financeiro", "Index", "Home", new { area = "Financeiro" }, htmlAttributes: new { @class = "username", title = "Financeiro" })</li>
     <li>@Html.ActionLink("Ordem de Compra", "Index", "Home", new { area = "OrdemCompra" }, htmlAttributes: new { @class = "username", title = "Ordem de Compra" })</li>
-    <li>@Html.ActionLink("Sac", "Index", "Home", new { area = "Sac" }, htmlAttributes: new { @class = "username", title = "Sac" })</li>
+    <li>@Html.ActionLink("Sac", "Index", "Home", new { area = "Sac" }, htmlAttributes: new { @class = "username", title = "Sac" })</li>*@
+
+
+    <li style="list-style-type:none">
+        <a href="@Url.Action("Index","Home",new { area = "Admin" })" class="">
+            <img src="@Url.Content("~/Content/img/ADMINISTRADOR.ico")" alt="Icon Image" />
+        </a> @Html.ActionLink("Administrador", "Index", "Home", new { area = "Admin" }, htmlAttributes: new { @class = "username", title = "Admin" })
+    </li>
+    <li style="list-style-type:none">
+        <a href="@Url.Action("Index","Home",new { area = "Contrato" })" class="">
+            <img src="@Url.Content("~/Content/img/MODULO-CONTRATO.ico")" alt="Icon Image" />
+        </a> @Html.ActionLink("Contrato", "Index", "Home", new { area = "Contrato" }, htmlAttributes: new { @class = "username", title = "Contrato" })
+    </li>
+    <li style="list-style-type:none">
+        <a href="@Url.Action("Index","Home",new { area = "Financeiro" })" class="">
+            <img src="@Url.Content("~/Content/img/FINANCEIRO.ico")" alt="Icon Image" />
+        </a> @Html.ActionLink("Financeiro", "Index", "Home", new { area = "Financeiro" }, htmlAttributes: new { @class = "username", title = "Financeiro" })
+    </li>
+    <li style="list-style-type:none">
+        <a href="@Url.Action("Index","Home",new { area = "OrdemCompra" })" class="">
+            <img src="@Url.Content("~/Content/img/MODULO_ORDEM-DE-COMPRA.ico")" alt="Icon Image" />
+        </a> @Html.ActionLink("Ordem de Compra", "Index", "Home", new { area = "OrdemCompra" }, htmlAttributes: new { @class = "username", title = "Ordem de Compra" })
+    </li>
+    <li style="list-style-type:none">
+        <a href="@Url.Action("Index","Home",new { area = "Sac" })" class="">
+            <img src="@Url.Content("~/Content/img/MODULO-SAC_48x48.ico")" alt="Icon Image" />
+        </a> @Html.ActionLink("Sac", "Index", "Home", new { area = "Sac" }, htmlAttributes: new { @class = "username", title = "Sac" })
+    </li>
+
+
 </ul>
