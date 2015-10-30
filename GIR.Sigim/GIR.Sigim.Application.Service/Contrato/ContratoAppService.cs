@@ -3666,15 +3666,12 @@ namespace GIR.Sigim.Application.Service.Contrato
                         decimal valorLiquido = tituloPagarLiberacao.ValorTitulo;
                         if (tituloPagarLiberacao.ValorImposto.HasValue) valorLiquido = valorLiquido - tituloPagarLiberacao.ValorImposto.Value;
                         if (tituloPagarLiberacao.Retencao.HasValue) valorLiquido = valorLiquido - tituloPagarLiberacao.Retencao.Value;
-                        decimal desconto = 0;
-                        if (tituloPagarLiberacao.Desconto.HasValue)
-                        {
-                            desconto = tituloPagarLiberacao.Desconto.Value;
-                        }
+
+                        decimal totalPercentual = tituloPagarLiberacao.ListaApropriacao.Sum(l => l.Percentual);
 
                         foreach (var apropriacaoTitulo in tituloPagarLiberacao.ListaApropriacao.OrderBy(l => l.CodigoCentroCusto).ThenBy(l => l.CodigoClasse))
                         {
-                            decimal percentual = Math.Round((((apropriacaoTitulo.Valor + desconto) / valorLiquido) * 100), 5);
+                            decimal percentual = ((apropriacaoTitulo.Percentual * 100) / totalPercentual);
 
                             foreach (ImpostoPagar impostoPagar in tituloPagarLiberacao.ListaImpostoPagar.OrderBy(l => l.ImpostoFinanceiroId))
                             {
@@ -3689,7 +3686,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                apropriacaoTitulo.CodigoCentroCusto,
                                                                impostoPagar.TituloPagarImposto,
                                                                null,
-                                                               percentual,
+                                                               Math.Round(percentual,5),
                                                                valorApropriado);
 
                                     impostoPagar.TituloPagarImposto.ListaApropriacao.Add(apropriacaoTituloImpostoPagar);
