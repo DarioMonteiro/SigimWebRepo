@@ -2513,7 +2513,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                           valorImposto,
                                                           null);
 
-                                    //contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
+                                    contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
                                 }
                             }
                             else
@@ -2527,7 +2527,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                       valorImposto,
                                                       null);
 
-                                //contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
+                                contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
                             }
 
                             #endregion
@@ -2554,7 +2554,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                             contratoRetificacaoProvisao.TituloReceberId,
                                                             valorBaseCalculo,
                                                             valorImposto);
-                                    //contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
+                                    contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
                                 }
                             }
                             else
@@ -2566,7 +2566,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                         contratoRetificacaoProvisao.TituloReceberId,
                                                         valorBaseCalculo,
                                                         valorImposto);
-                                //contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
+                                contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
                             }
 
                             #endregion
@@ -2699,15 +2699,15 @@ namespace GIR.Sigim.Application.Service.Contrato
                                               contratoRetificacaoItemImposto.ImpostoFinanceiroId,
                                               tituloPagarProvisao,
                                               null,
-                                              valorBaseCalculo, 
-                                              valorImposto, 
+                                              valorBaseCalculo,
+                                              valorImposto,
                                               null);
                         if (valorImpostoRetidoTotal > 0)
                         {
                             tituloPagarProvisao.ValorImposto = valorImpostoRetidoTotal;
                         }
 
-                        //tituloPagarProvisao.ListaImpostoPagar.Add(impostoPagar);
+                        tituloPagarProvisao.ListaImpostoPagar.Add(impostoPagar);
 
                         #endregion
                     }
@@ -2799,7 +2799,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                             tituloReceberProvisao.ValorImposto = valorImpostoRetidoTotal;
                         }
 
-                        //tituloReceberProvisao.ListaImpostoReceber.Add(impostoReceber);
+                        tituloReceberProvisao.ListaImpostoReceber.Add(impostoReceber);
 
                         #endregion
                     }
@@ -3060,13 +3060,13 @@ namespace GIR.Sigim.Application.Service.Contrato
                     impostoPagarRepository.Remover(impostoPagar);
                 }
             }
-            else
-            {
-                if (titulo.ListaImpostoPagar != null)
-                {
-                    titulo.ListaImpostoPagar.Clear();
-                }
-            }
+            //else
+            //{
+            //    if (titulo.ListaImpostoPagar != null)
+            //    {
+            //        titulo.ListaImpostoPagar.Clear();
+            //    }
+            //}
         }
 
         private void RemoverImpostosDoTituloAReceber(TituloReceber titulo)
@@ -3079,6 +3079,13 @@ namespace GIR.Sigim.Application.Service.Contrato
                     impostoReceberRepository.Remover(impostoReceber);
                 }
             }
+            //else
+            //{
+            //    if (titulo.ListaImpostoReceber != null)
+            //    {
+            //        titulo.ListaImpostoReceber.Clear();
+            //    }
+            //}
         }
 
         private bool JaHouvePagamentoDeTitulo(TituloPagar tituloPagarMedicao)
@@ -3543,7 +3550,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                   valorImposto,
                                                   null);
 
-                            //tituloPagarLiberacao.ListaImpostoPagar.Add(impostoPagarTituloLiberacao);
+                            tituloPagarLiberacao.ListaImpostoPagar.Add(impostoPagarTituloLiberacao);
 
                             #endregion
 
@@ -3789,7 +3796,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                     baseCalculo,
                                                     valorImposto);
 
-                            //tituloReceberLiberacao.ListaImpostoReceber.Add(impostoReceberTituloLiberacao);
+                            tituloReceberLiberacao.ListaImpostoReceber.Add(impostoReceberTituloLiberacao);
 
                             #endregion
                         }
@@ -4424,7 +4431,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                         valorBaseCalculo,
                                                         valorImposto);
 
-                                //contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
+                                contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
                             }
                         }
                         else
@@ -4437,7 +4444,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                     valorBaseCalculo,
                                                     valorImposto);
 
-                            //contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
+                            contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
                         }
                     }
                 }
@@ -4489,23 +4496,22 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                       valorImposto,
                                                       null);
 
-                                //contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
+                                contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
                             }
                         }
                         else
                         {
                             impostoPagar = new ImpostoPagar();
 
-                            PreencherImpostoPagar(impostoPagar, 
+                            PreencherImpostoPagar(impostoPagar,
                                                     impostoFinanceiro.Id.Value,
                                                     null,
                                                     contratoRetificacaoProvisao.TituloPagarId,
                                                     valorBaseCalculo,
-                                                    valorImposto, 
+                                                    valorImposto,
                                                     null);
 
-                            //contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
-
+                            contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
                         }
                     }
                 }
