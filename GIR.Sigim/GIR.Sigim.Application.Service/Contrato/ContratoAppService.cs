@@ -1415,6 +1415,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                     estaDesatualizado = true;
                     break;
                 }
+
+                contratoRetificacaoItemMedicao.Situacao = SituacaoMedicao.AguardandoLiberacao;
             }
 
             if (estaDesatualizado)
@@ -2506,6 +2508,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                     PreencherImpostoPagar(impostoPagar,
                                                           contratoRetificacaoItemImposto.ImpostoFinanceiroId,
                                                           contratoRetificacaoProvisao.TituloPagar,
+                                                          contratoRetificacaoProvisao.TituloPagarId,
                                                           valorBaseCalculo,
                                                           valorImposto,
                                                           null);
@@ -2519,6 +2522,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                 PreencherImpostoPagar(impostoPagar,
                                                       contratoRetificacaoItemImposto.ImpostoFinanceiroId,
                                                       contratoRetificacaoProvisao.TituloPagar,
+                                                      contratoRetificacaoProvisao.TituloPagarId,
                                                       valorBaseCalculo,
                                                       valorImposto,
                                                       null);
@@ -2691,7 +2695,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                         ImpostoPagar impostoPagar = new ImpostoPagar();
                         PreencherImpostoPagar(impostoPagar,
                                               contratoRetificacaoItemImposto.ImpostoFinanceiroId,
-                                              tituloPagarProvisao, 
+                                              tituloPagarProvisao,
+                                              null,
                                               valorBaseCalculo, 
                                               valorImposto, 
                                               null);
@@ -3518,6 +3523,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                             PreencherImpostoPagar(impostoPagarTituloLiberacao,
                                                   impostoFinanceiro.Id.Value,
                                                   tituloPagarLiberacao,
+                                                  null,
                                                   baseCalculo,
                                                   valorImposto,
                                                   null);
@@ -4029,12 +4035,15 @@ namespace GIR.Sigim.Application.Service.Contrato
             impostoReceber.ValorImposto = valorImposto;
         }
 
-        private void PreencherImpostoPagar(ImpostoPagar impostoPagar, int impostoFinanceiroId, TituloPagar tituloPagar, decimal baseCalculo, decimal valorImposto, TituloPagar tituloPagarImposto)
+        private void PreencherImpostoPagar(ImpostoPagar impostoPagar, int impostoFinanceiroId, TituloPagar tituloPagar, int? tituloPagarId, decimal baseCalculo, decimal valorImposto, TituloPagar tituloPagarImposto)
         {
             impostoPagar.Id = null;
             impostoPagar.ImpostoFinanceiroId = impostoFinanceiroId;
-            impostoPagar.TituloPagarId = null;
-            impostoPagar.TituloPagar = tituloPagar;
+            impostoPagar.TituloPagarId = tituloPagarId;
+            if (tituloPagarId == null)
+            {
+                impostoPagar.TituloPagar = tituloPagar;
+            }
             impostoPagar.BaseCalculo = baseCalculo;
             impostoPagar.ValorImposto = valorImposto;
             impostoPagar.TituloPagarImpostoId = null;
@@ -4454,6 +4463,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                                 PreencherImpostoPagar(impostoPagar,
                                                       impostoFinanceiro.Id.Value,
                                                       contratoRetificacaoProvisao.TituloPagar,
+                                                      contratoRetificacaoProvisao.TituloPagarId,
                                                       valorBaseCalculo,
                                                       valorImposto,
                                                       null);
@@ -4468,6 +4478,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                             PreencherImpostoPagar(impostoPagar, 
                                                     impostoFinanceiro.Id.Value,
                                                     contratoRetificacaoProvisao.TituloPagar,
+                                                    contratoRetificacaoProvisao.TituloPagarId,
                                                     valorBaseCalculo,
                                                     valorImposto, 
                                                     null);

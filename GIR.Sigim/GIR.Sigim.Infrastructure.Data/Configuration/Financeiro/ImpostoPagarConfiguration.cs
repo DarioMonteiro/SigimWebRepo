@@ -42,7 +42,8 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnName("valorImposto");
 
             Property(l => l.TituloPagarImpostoId)
-                .HasColumnName("tituloPagarImposto");
+                .HasColumnName("tituloPagarImposto")
+                .IsOptional();
 
             //HasOptional(l => l.TituloPagarImposto)
             //    .WithMany(l => l.ListaImpostoPagarTituloImposto)
