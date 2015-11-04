@@ -9,5 +9,6 @@ namespace GIR.Sigim.Domain.Repository.Financeiro
 {
     public interface IImpostoReceberRepository : IRepository<ImpostoReceber>
     {
+        bool RemoverObjeto(ImpostoReceber impostoReceber);
     }
 }

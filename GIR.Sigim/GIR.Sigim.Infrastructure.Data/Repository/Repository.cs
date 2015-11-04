@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -51,6 +52,14 @@ namespace GIR.Sigim.Infrastructure.Data.Repository
             {
                 unitOfWork.Attach(item);
                 unitOfWork.CreateSet<TEntity>().Remove(item);
+            }
+        }
+
+        public void DeletarObjeto(TEntity item)
+        {
+            if (item != (TEntity)null)
+            {
+                ((IObjectContextAdapter)unitOfWork).ObjectContext.DeleteObject(item);
             }
         }
 

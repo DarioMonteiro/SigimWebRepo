@@ -14,6 +14,7 @@ namespace GIR.Sigim.Domain.Repository
         IUnitOfWork UnitOfWork { get; }
         void Inserir(TEntity item);
         void Remover(TEntity item);
+        void DeletarObjeto(TEntity item);
         void Alterar(TEntity item);
         TEntity ObterPeloId(int? id, params Expression<Func<TEntity, object>>[] includes);
         TEntity ObterPeloId(int? id, ISpecification<TEntity> specification, params Expression<Func<TEntity, object>>[] includes);

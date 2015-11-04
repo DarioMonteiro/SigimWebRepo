@@ -20,5 +20,22 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Financeiro
 
         #endregion
 
+        #region IImpostoPagarRepository
+
+        public bool RemoverObjeto(ImpostoPagar impostoPagar)
+        {
+            try
+            {
+                this.DeletarObjeto(impostoPagar);
+                return true;
+            }
+            catch (InvalidOperationException ex)
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
     }
 }
