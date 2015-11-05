@@ -1567,12 +1567,40 @@
                     smartAlert("Sucesso", result.message, "success");
                 }
                 else {
-                    smartAlert("Ocorreu erro ao cancelar !", result.message, "error");
+                    //smartAlert("Ocorreu erro ao cancelar !", result.message, "error");
+                    showMessages(result.message);
                 }
             },
             error: function (result) {
                 smartAlert("Ocorreu erro ao cancelar !", result.message, "error");
             }
+        });
+    }
+
+    function showMessages(messages) {
+        $(messages).each(function () {
+            var typeMessage = '';
+            var titleMessage = '';
+            switch (this.Type.toString()) {
+                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Info)':
+                    typeMessage = 'info';
+                    titleMessage = 'Informação';
+                    break;
+                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Success)':
+                    typeMessage = 'success';
+                    titleMessage = 'Sucesso';
+                    break;
+                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Warning)':
+                    typeMessage = 'warning';
+                    titleMessage = 'Alerta';
+                    break;
+                case '@((int)GIR.Sigim.Infrastructure.Crosscutting.Notification.TypeMessage.Error)':
+                default:
+                    typeMessage = 'error';
+                    titleMessage = 'Erro';
+                    break;
+            }
+            smartAlert(titleMessage, this.Text, typeMessage);
         });
     }
 

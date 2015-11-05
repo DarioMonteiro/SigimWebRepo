@@ -623,14 +623,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
         public ActionResult TratarCancelar(int? contratoId, int? contratoRetificacaoId, string listaItemLiberacao)
         {
             bool ehCancelado = false;
-            string msg = "";
+            //string msg = "";
+            var msg = new List<Message>();
 
             if (contratoId.HasValue && contratoRetificacaoId.HasValue)
             {
                 if (!contratoAppService.EhUltimoContratoRetificacao(contratoId, contratoRetificacaoId))
                 {
                     ehCancelado = false;
-                    msg = "As informações das liberações estão desatualizadas, carregue o contrato novamente";
+                    messageQueue.Add("As informações das liberações estão desatualizadas, carregue o contrato novamente", TypeMessage.Error);
+                    msg = messageQueue.GetAll();
+                    messageQueue.Clear();
                 }
                 else
                 {
@@ -641,14 +644,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                         ehCancelado = contratoAppService.CancelarListaItemLiberacao(contratoId.Value, listaItemLiberacaoDTO);
                         if (messageQueue.GetAll().Count > 0)
                         {
-                            msg = messageQueue.GetAll()[0].Text;
+                            //msg = messageQueue.GetAll()[0].Text;
+                            msg = messageQueue.GetAll();
                             messageQueue.Clear();
                         }
                     }
                     else
                     {
                         ehCancelado = false;
-                        msg = "Nenhum item da lista foi selecionado";
+                        messageQueue.Add("Nenhum item da lista foi selecionado", TypeMessage.Error);
+                        msg = messageQueue.GetAll();
+                        messageQueue.Clear();
                     }
                 }
             }

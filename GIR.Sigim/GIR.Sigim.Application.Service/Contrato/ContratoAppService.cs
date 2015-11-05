@@ -2023,7 +2023,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 if (existeRetencaoComLiberacao)
                 {
                     msg = "Existe(m) retenção(ões) já liberadas" ;
-                    messageQueue.Add(msg, TypeMessage.Error);
+                    messageQueue.Add(msg, TypeMessage.Warning);
                     ehValido = false;
                     break;
                 }
