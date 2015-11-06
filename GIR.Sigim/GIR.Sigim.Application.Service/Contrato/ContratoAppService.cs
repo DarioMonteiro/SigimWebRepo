@@ -3254,10 +3254,21 @@ namespace GIR.Sigim.Application.Service.Contrato
             bool existeRetencaoComLiberacao = contrato.ListaContratoRetencao.Where(l => l.ContratoRetificacaoItemMedicaoId == contratoRetificacaoItemMedicao.Id).Any(l => l.ListaContratoRetencaoLiberada.Any(rl => rl.ContratoRetencaoId == l.Id));
             if (!existeRetencaoComLiberacao)
             {
-                ContratoRetificacaoItemMedicao medicaoLiberadasComMesmoTitulo = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.TituloPagarId == contratoRetificacaoItemMedicao.TituloPagarId && l.Id != contratoRetificacaoItemMedicao.Id && l.Situacao == SituacaoMedicao.Liberado).FirstOrDefault();
-                if (medicaoLiberadasComMesmoTitulo != null)
+                if (contrato.TipoContrato == TipoContrato.ContratoAPagar)
                 {
-                    existeRetencaoComLiberacao = contrato.ListaContratoRetencao.Where(l => l.ContratoRetificacaoItemMedicaoId == medicaoLiberadasComMesmoTitulo.Id).Any(l => l.ListaContratoRetencaoLiberada.Any(rl => rl.ContratoRetencaoId == l.Id));
+                    ContratoRetificacaoItemMedicao medicaoLiberadasComMesmoTitulo = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.TituloPagarId.HasValue && l.TituloPagarId == contratoRetificacaoItemMedicao.TituloPagarId && l.Id != contratoRetificacaoItemMedicao.Id && l.Situacao == SituacaoMedicao.Liberado).FirstOrDefault();
+                    if (medicaoLiberadasComMesmoTitulo != null)
+                    {
+                        existeRetencaoComLiberacao = contrato.ListaContratoRetencao.Where(l => l.ContratoRetificacaoItemMedicaoId == medicaoLiberadasComMesmoTitulo.Id).Any(l => l.ListaContratoRetencaoLiberada.Any(rl => rl.ContratoRetencaoId == l.Id));
+                    }
+                }
+                else
+                {
+                    ContratoRetificacaoItemMedicao medicaoLiberadasComMesmoTitulo = contrato.ListaContratoRetificacaoItemMedicao.Where(l => l.TituloReceberId.HasValue && l.TituloReceberId == contratoRetificacaoItemMedicao.TituloReceberId && l.Id != contratoRetificacaoItemMedicao.Id && l.Situacao == SituacaoMedicao.Liberado).FirstOrDefault();
+                    if (medicaoLiberadasComMesmoTitulo != null)
+                    {
+                        existeRetencaoComLiberacao = contrato.ListaContratoRetencao.Where(l => l.ContratoRetificacaoItemMedicaoId == medicaoLiberadasComMesmoTitulo.Id).Any(l => l.ListaContratoRetencaoLiberada.Any(rl => rl.ContratoRetencaoId == l.Id));
+                    }
                 }
             }
 
