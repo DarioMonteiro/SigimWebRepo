@@ -2547,9 +2547,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                                 {
                                     impostoReceber = new ImpostoReceber();
                                     PreencherImpostoReceber(impostoReceber,
-                                                            contratoRetificacaoItemImposto.ImpostoFinanceiroId,
-                                                            null,
-                                                            contratoRetificacaoProvisao.TituloReceberId,
+                                                            contratoRetificacaoItemImposto.ImpostoFinanceiro,
+                                                            contratoRetificacaoProvisao.TituloReceber,
                                                             valorBaseCalculo,
                                                             valorImposto);
                                     contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
@@ -2559,9 +2558,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                             {
                                 impostoReceber = new ImpostoReceber();
                                 PreencherImpostoReceber(impostoReceber,
-                                                        contratoRetificacaoItemImposto.ImpostoFinanceiroId,
-                                                        null,
-                                                        contratoRetificacaoProvisao.TituloReceberId,
+                                                        contratoRetificacaoItemImposto.ImpostoFinanceiro,
+                                                        contratoRetificacaoProvisao.TituloReceber,
                                                         valorBaseCalculo,
                                                         valorImposto);
                                 contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
@@ -2784,10 +2782,8 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                         ImpostoReceber impostoReceber = new ImpostoReceber();
                         PreencherImpostoReceber(impostoReceber, 
-                                                contratoRetificacaoItemImposto.
-                                                ImpostoFinanceiroId, 
+                                                contratoRetificacaoItemImposto.ImpostoFinanceiro,
                                                 tituloReceberProvisao,
-                                                null,
                                                 valorBaseCalculo, 
                                                 valorImposto);
                         tituloReceberProvisao.ValorImposto = null;
@@ -3068,15 +3064,6 @@ namespace GIR.Sigim.Application.Service.Contrato
 
         private void RemoverImpostosDoTituloAReceber(TituloReceber titulo)
         {
-            //if (titulo.ListaImpostoReceber.All(l => l.Id.HasValue))
-            //{
-            //    for (int i = titulo.ListaImpostoReceber.Count() - 1; i >= 0; i--)
-            //    {
-            //        var impostoReceber = titulo.ListaImpostoReceber.ToList()[i];
-            //        impostoReceberRepository.Remover(impostoReceber);
-            //    }
-            //}
-
             for (int i = titulo.ListaImpostoReceber.Count() - 1; i >= 0; i--)
             {
                 var impostoReceber = titulo.ListaImpostoReceber.ToList()[i];
@@ -3092,7 +3079,6 @@ namespace GIR.Sigim.Application.Service.Contrato
                     }
                 }
             }
-
         }
 
         private bool JaHouvePagamentoDeTitulo(TituloPagar tituloPagarMedicao)
@@ -3514,90 +3500,97 @@ namespace GIR.Sigim.Application.Service.Contrato
                     }
                     #endregion
 
-                    List<ContratoRetificacaoItemImposto> impostosGrupo = listaItensMedicaoGrupoTitulos.SelectMany(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto).OrderBy(ii => ii.ImpostoFinanceiroId).GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
 
                     #region "Cria Imposto Pagar e Titulo Pagar de Imposto"
+
+                    List<ContratoRetificacaoItemImposto> impostosGrupo = listaItensMedicaoGrupoTitulos.SelectMany(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto).OrderBy(ii => ii.ImpostoFinanceiroId).GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
 
                     decimal totalImposto = 0;
                     foreach (var impostoFinanceiroItem in impostosGrupo)
                     {
-                        List<ContratoRetificacaoItemMedicao> listaMedicaoAgrupadaPorImposto = listaItensMedicaoGrupoTitulos.Where(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto.Any(i => i.ImpostoFinanceiroId == impostoFinanceiroItem.ImpostoFinanceiroId)).ToList();
+                        #region "Cria Imposto Pagar"
 
-                        decimal valor = listaMedicaoAgrupadaPorImposto.Sum(l => l.Valor);
+                        List<ContratoRetificacaoItemMedicao> listaMedicaoAgrupadaPorImposto = listaItensMedicaoGrupoTitulos.Where(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto.Any(i => i.ImpostoFinanceiroId == impostoFinanceiroItem.ImpostoFinanceiroId)).ToList();
 
                         ContratoRetificacaoItemImposto contratoRetificacaoItemImposto = listaMedicaoAgrupadaPorImposto.Select(l => l.ContratoRetificacaoItem).FirstOrDefault().ListaContratoRetificacaoItemImposto.Where(ii => ii.ImpostoFinanceiroId == impostoFinanceiroItem.ImpostoFinanceiroId).FirstOrDefault();
 
                         ImpostoFinanceiro impostoFinanceiro = contratoRetificacaoItemImposto.ImpostoFinanceiro;
+                        bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
+                        bool ehIndireto = impostoFinanceiro.Indireto.HasValue ? impostoFinanceiro.Indireto.Value : false;
 
-                        decimal baseCalculo = (valor * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100;
-
-                        if (baseCalculo > 0 && impostoFinanceiro != null && impostoFinanceiro.Aliquota > 0)
+                        decimal totalImpostoPorGrupoImposto = 0;
+                        decimal totalBaseCalculoGrupoImposto = 0;
+                        foreach (var medicaoPorGrupoImposto in listaMedicaoAgrupadaPorImposto)
                         {
-                            #region "Cria Imposto Pagar"
+                            decimal valor = medicaoPorGrupoImposto.Valor;
+                            decimal baseCalculo = (valor * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100;
+                            totalBaseCalculoGrupoImposto = totalBaseCalculoGrupoImposto + baseCalculo;
 
-                            decimal valorImposto = Math.Round(((baseCalculo * impostoFinanceiro.Aliquota) / 100), 2);
-
-                            bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
-                            bool ehIndireto = impostoFinanceiro.Indireto.HasValue ? impostoFinanceiro.Indireto.Value : false;
-                            if (ehRetido || ehIndireto)
+                            if (baseCalculo > 0 && impostoFinanceiro != null && impostoFinanceiro.Aliquota > 0)
                             {
-                                if (valorImposto > 0)
+                                decimal valorImposto = ((baseCalculo * impostoFinanceiro.Aliquota) / 100);
+
+                                if (ehRetido || ehIndireto)
                                 {
-                                    totalImposto = totalImposto + valorImposto;
-                                    tituloPagarLiberacao.ValorImposto = totalImposto;
+                                    if (valorImposto > 0)
+                                    {
+                                        totalImposto = totalImposto + Math.Round(valorImposto,2);
+                                        totalImpostoPorGrupoImposto = totalImpostoPorGrupoImposto + Math.Round(valorImposto,2);
+                                    }
                                 }
                             }
-
-                            ImpostoPagar impostoPagarTituloLiberacao = new ImpostoPagar();
-                            PreencherImpostoPagar(impostoPagarTituloLiberacao,
-                                                  impostoFinanceiro,
-                                                  tituloPagarLiberacao,
-                                                  baseCalculo,
-                                                  valorImposto,
-                                                  null);
-
-                            tituloPagarLiberacao.ListaImpostoPagar.Add(impostoPagarTituloLiberacao);
-
-                            #endregion
-
-                            #region "Cria Titulo Pagar de Imposto"
-
-                            if (geraTituloImposto)
-                            {
-                                string ordem = (impostosGrupo.IndexOf(impostoFinanceiroItem) + 1).ToString();
-                                string identificacaoImposto = MontaIdentificacaoTituloImposto(impostoFinanceiro.Sigla, cliente.Nome);
-                                string documentoImposto = MontaDocumentoTituloImposto(medicaoItemTitulo.NumeroDocumento, ordem);
-
-                                Nullable<DateTime> dataVencimentoImposto = null;
-                                if ((ehRetido || ehIndireto) && impostoFinanceiro.ClienteId.HasValue && impostoFinanceiro.Periodicidade.HasValue)
-                                {
-                                    dataVencimentoImposto = CalcularDataVencimentoImposto(impostoFinanceiro, tituloPagarLiberacao.DataEmissaoDocumento, tituloPagarLiberacao.DataVencimento);
-                                }
-
-                                if (dataVencimentoImposto.HasValue && impostoFinanceiro.ClienteId.HasValue)
-                                {
-                                    TituloPagar tituloImpostoPagar = new TituloPagar();
-                                    PreencherTituloPagar(tituloImpostoPagar,
-                                                         impostoFinanceiro.Cliente.Id,
-                                                         identificacaoImposto,
-                                                         geraTituloAguardandoLiberacao ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado,
-                                                         medicaoItemTitulo.TipoDocumentoId,
-                                                         documentoImposto,
-                                                         dataVencimentoImposto.Value,
-                                                         medicaoItemTitulo.DataEmissao,
-                                                         valorImposto,
-                                                         0,
-                                                         null,
-                                                         null,
-                                                         impostoFinanceiro.TipoCompromissoId);
-
-                                    impostoPagarTituloLiberacao.TituloPagarImposto = tituloImpostoPagar;
-                                }
-                            }
-                            #endregion
-
                         }
+
+                        ImpostoPagar impostoPagarTituloLiberacao = new ImpostoPagar();
+                        PreencherImpostoPagar(impostoPagarTituloLiberacao,
+                                              impostoFinanceiro,
+                                              tituloPagarLiberacao,
+                                              totalBaseCalculoGrupoImposto,
+                                              totalImpostoPorGrupoImposto,
+                                              null);
+
+                        tituloPagarLiberacao.ListaImpostoPagar.Add(impostoPagarTituloLiberacao);
+
+                        #endregion
+
+                        #region "Cria Titulo Pagar de Imposto"
+
+                        if (geraTituloImposto)
+                        {
+                            string ordem = (impostosGrupo.IndexOf(impostoFinanceiroItem) + 1).ToString();
+                            string identificacaoImposto = MontaIdentificacaoTituloImposto(impostoFinanceiro.Sigla, cliente.Nome);
+                            string documentoImposto = MontaDocumentoTituloImposto(medicaoItemTitulo.NumeroDocumento, ordem);
+
+                            Nullable<DateTime> dataVencimentoImposto = null;
+                            if ((ehRetido || ehIndireto) && impostoFinanceiro.ClienteId.HasValue && impostoFinanceiro.Periodicidade.HasValue)
+                            {
+                                dataVencimentoImposto = CalcularDataVencimentoImposto(impostoFinanceiro, tituloPagarLiberacao.DataEmissaoDocumento, tituloPagarLiberacao.DataVencimento);
+                            }
+
+                            if (dataVencimentoImposto.HasValue && impostoFinanceiro.ClienteId.HasValue)
+                            {
+                                TituloPagar tituloImpostoPagar = new TituloPagar();
+                                PreencherTituloPagar(tituloImpostoPagar,
+                                                     impostoFinanceiro.Cliente.Id,
+                                                     identificacaoImposto,
+                                                     geraTituloAguardandoLiberacao ? SituacaoTituloPagar.AguardandoLiberacao : SituacaoTituloPagar.Liberado,
+                                                     medicaoItemTitulo.TipoDocumentoId,
+                                                     documentoImposto,
+                                                     dataVencimentoImposto.Value,
+                                                     medicaoItemTitulo.DataEmissao,
+                                                     totalImpostoPorGrupoImposto,
+                                                     0,
+                                                     null,
+                                                     null,
+                                                     impostoFinanceiro.TipoCompromissoId);
+
+                                impostoPagarTituloLiberacao.TituloPagarImposto = tituloImpostoPagar;
+                            }
+                        }
+                        #endregion
                     }
+
+                    tituloPagarLiberacao.ValorImposto = totalImposto;
                     #endregion
 
                     var medicaoGrupoApropriacao = listaItensMedicaoGrupoTitulos.GroupBy(l => new { l.MultiFornecedorId,
@@ -3652,7 +3645,7 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                         impostosGrupo = listaItensMedicaoGrupoApropriacao.SelectMany(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto).OrderBy(ii => ii.ImpostoFinanceiroId).GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
 
-                        decimal valorImposto = 0;
+                        totalImposto = 0;
                         foreach (var impostoFinanceiroItem in impostosGrupo)
                         {
                             List<ContratoRetificacaoItemMedicao> listaMedicaoAgrupadaPorImposto = listaItensMedicaoGrupoApropriacao.Where(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto.Any(i => i.ImpostoFinanceiroId == impostoFinanceiroItem.ImpostoFinanceiroId)).ToList();
@@ -3661,22 +3654,25 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                             ImpostoFinanceiro impostoFinanceiro = contratoRetificacaoItemImposto.ImpostoFinanceiro;
 
-                            decimal baseCalculo = (valorAgrupado * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100;
+                            bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
+                            bool ehIndireto = impostoFinanceiro.Indireto.HasValue ? impostoFinanceiro.Indireto.Value : false;
 
-                            if (baseCalculo > 0)
+                            foreach (var medicaoPorGrupoImposto in listaMedicaoAgrupadaPorImposto)
                             {
-                                bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
-                                bool ehIndireto = impostoFinanceiro.Indireto.HasValue ? impostoFinanceiro.Indireto.Value : false;
-                                if (ehRetido || ehIndireto)
+                                decimal valor = medicaoPorGrupoImposto.Valor;
+
+                                decimal baseCalculoApropriado = (valor * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100;
+                                if ((baseCalculoApropriado > 0) && (impostoFinanceiro !=null && impostoFinanceiro.Aliquota > 0) && (ehRetido || ehIndireto))
                                 {
-                                    valorImposto = valorImposto + Math.Round(((baseCalculo * impostoFinanceiro.Aliquota) / 100), 2);
+                                    decimal valorImposto = ((baseCalculoApropriado * impostoFinanceiro.Aliquota) / 100);
+                                    totalImposto = totalImposto + Math.Round(valorImposto, 2);
                                 }
                             }
                         }
 
                         decimal valorAgrupadoTitulos = listaItensMedicaoGrupoTitulos.Sum(l => l.Valor);
-                        decimal percentualApropriado = Math.Round((((valorApropriacao - valorImposto) / valorAgrupadoTitulos) * 100), 5);
-                        decimal valorApropriado = valorApropriacao - valorImposto;
+                        decimal percentualApropriado = Math.Round((((valorApropriacao - totalImposto) / valorAgrupadoTitulos) * 100), 5);
+                        decimal valorApropriado = valorApropriacao - totalImposto;
 
                         Apropriacao apropriacaoTituloPagarLiberacao = new Apropriacao();
                         PreencherApropriacaoTitulo(apropriacaoTituloPagarLiberacao,
@@ -3768,46 +3764,50 @@ namespace GIR.Sigim.Application.Service.Contrato
                     decimal totalImposto = 0;
                     foreach (var impostoFinanceiroItem in impostosGrupo)
                     {
-                        List<ContratoRetificacaoItemMedicao> listaMedicaoAgrupadaPorImposto = listaItensMedicaoGrupoTitulos.Where(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto.Any(i => i.ImpostoFinanceiroId == impostoFinanceiroItem.ImpostoFinanceiroId)).ToList();
+                        #region "Cria Imposto Receber"
 
-                        decimal valor = listaMedicaoAgrupadaPorImposto.Sum(l => l.Valor);
+                        List<ContratoRetificacaoItemMedicao> listaMedicaoAgrupadaPorImposto = listaItensMedicaoGrupoTitulos.Where(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto.Any(i => i.ImpostoFinanceiroId == impostoFinanceiroItem.ImpostoFinanceiroId)).ToList();
 
                         ContratoRetificacaoItemImposto contratoRetificacaoItemImposto = listaMedicaoAgrupadaPorImposto.Select(l => l.ContratoRetificacaoItem).FirstOrDefault().ListaContratoRetificacaoItemImposto.Where(ii => ii.ImpostoFinanceiroId == impostoFinanceiroItem.ImpostoFinanceiroId).FirstOrDefault();
 
                         ImpostoFinanceiro impostoFinanceiro = contratoRetificacaoItemImposto.ImpostoFinanceiro;
+                        bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
 
-                        decimal baseCalculo = (valor * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100;
-
-                        if (baseCalculo > 0 && impostoFinanceiro != null && impostoFinanceiro.Aliquota > 0)
+                        decimal totalImpostoPorGrupoImposto = 0;
+                        decimal totalBaseCalculoGrupoImposto = 0;
+                        foreach (var medicaoPorGrupoImposto in listaMedicaoAgrupadaPorImposto)
                         {
-                            #region "Cria Imposto Receber"
+                            decimal valor = medicaoPorGrupoImposto.Valor;
+                            decimal baseCalculo = (valor * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100;
+                            totalBaseCalculoGrupoImposto = totalBaseCalculoGrupoImposto + baseCalculo;
 
-                            decimal valorImposto = Math.Round(((baseCalculo * impostoFinanceiro.Aliquota) / 100), 2);
-
-                            bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
-                            if (ehRetido)
+                            if (baseCalculo > 0 && impostoFinanceiro != null && impostoFinanceiro.Aliquota > 0)
                             {
-                                if (valorImposto > 0)
+                                decimal valorImposto =((baseCalculo * impostoFinanceiro.Aliquota) / 100);
+                                if (ehRetido)
                                 {
-                                    totalImposto = totalImposto + valorImposto;
-                                    tituloReceberLiberacao.ValorImposto = valorImposto;
+                                    if (valorImposto > 0)
+                                    {
+                                        totalImposto = totalImposto + valorImposto;
+                                        totalImpostoPorGrupoImposto = totalImpostoPorGrupoImposto + valorImposto;                                       
+                                    }
                                 }
                             }
-
-                            ImpostoReceber impostoReceberTituloLiberacao = new ImpostoReceber();
-                            PreencherImpostoReceber(impostoReceberTituloLiberacao,
-                                                    impostoFinanceiro.Id.Value,
-                                                    tituloReceberLiberacao,
-                                                    null,
-                                                    baseCalculo,
-                                                    valorImposto);
-
-                            tituloReceberLiberacao.ListaImpostoReceber.Add(impostoReceberTituloLiberacao);
-
-                            #endregion
                         }
+
+                        ImpostoReceber impostoReceberTituloLiberacao = new ImpostoReceber();
+                        PreencherImpostoReceber(impostoReceberTituloLiberacao,
+                                                impostoFinanceiro,
+                                                tituloReceberLiberacao,
+                                                totalBaseCalculoGrupoImposto,
+                                                totalImpostoPorGrupoImposto);
+
+                        tituloReceberLiberacao.ListaImpostoReceber.Add(impostoReceberTituloLiberacao);
+
+                        #endregion
                     }
 
+                    tituloReceberLiberacao.ValorImposto = totalImposto;
                     #endregion
 
                     var medicaoGrupoApropriacao = listaItensMedicaoGrupoTitulos.GroupBy(l => new { l.MultiFornecedorId,
@@ -3843,7 +3843,7 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                         impostosGrupo = listaItensMedicaoGrupoApropriacao.SelectMany(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto).OrderBy(ii => ii.ImpostoFinanceiroId).GroupBy(l => l.ImpostoFinanceiroId).Select(o => o.First()).ToList();
 
-                        decimal valorImposto = 0;
+                        totalImposto = 0;
                         foreach (var impostoFinanceiroItem in impostosGrupo)
                         {
                             List<ContratoRetificacaoItemMedicao> listaMedicaoAgrupadaPorImposto = listaItensMedicaoGrupoApropriacao.Where(l => l.ContratoRetificacaoItem.ListaContratoRetificacaoItemImposto.Any(i => i.ImpostoFinanceiroId == impostoFinanceiroItem.ImpostoFinanceiroId)).ToList();
@@ -3852,21 +3852,25 @@ namespace GIR.Sigim.Application.Service.Contrato
 
                             ImpostoFinanceiro impostoFinanceiro = contratoRetificacaoItemImposto.ImpostoFinanceiro;
 
-                            decimal baseCalculo = (valorAgrupado * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100;
+                            bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
 
-                            if (baseCalculo > 0)
+                            foreach (var medicaoPorGrupoImposto in listaMedicaoAgrupadaPorImposto)
                             {
-                                bool ehRetido = impostoFinanceiro.EhRetido.HasValue ? impostoFinanceiro.EhRetido.Value : false;
-                                if (ehRetido)
+                                decimal valor = medicaoPorGrupoImposto.Valor;
+
+                                decimal baseCalculoApropriado = (valor * contratoRetificacaoItemImposto.PercentualBaseCalculo) / 100;
+                                if ((baseCalculoApropriado > 0) && (impostoFinanceiro != null && impostoFinanceiro.Aliquota > 0) && (ehRetido))
                                 {
-                                    valorImposto = valorImposto + Math.Round(((baseCalculo * impostoFinanceiro.Aliquota) / 100), 2);
+                                    decimal valorImposto = ((baseCalculoApropriado * impostoFinanceiro.Aliquota) / 100);
+                                    totalImposto = totalImposto + valorImposto;
                                 }
                             }
                         }
 
                         decimal valorAgrupadoTitulos = listaItensMedicaoGrupoTitulos.Sum(l => l.Valor);
-                        decimal percentualApropriado = Math.Round((((valorApropriacao - valorImposto) / valorAgrupadoTitulos) * 100), 5);
-                        decimal valorApropriado = valorApropriacao - valorImposto;
+                        decimal percentualApropriado = Math.Round((((valorApropriacao - totalImposto) / valorAgrupadoTitulos) * 100), 5);
+                        //decimal percentualApropriado = (((valorApropriacao - totalImposto) / valorAgrupadoTitulos) * 100);
+                        decimal valorApropriado = valorApropriacao - totalImposto;
 
                         Apropriacao apropriacaoTituloReceberLiberacao = new Apropriacao();
                         PreencherApropriacaoTitulo(apropriacaoTituloReceberLiberacao,
@@ -4054,12 +4058,13 @@ namespace GIR.Sigim.Application.Service.Contrato
             apropriacao.Valor = valor;
         }
 
-        private void PreencherImpostoReceber(ImpostoReceber impostoReceber, int impostoFinanceiroId, TituloReceber tituloReceber, int? tituloReceberId, decimal baseCalculo, decimal valorImposto)
+        private void PreencherImpostoReceber(ImpostoReceber impostoReceber, ImpostoFinanceiro impostoFinanceiro, TituloReceber tituloReceber, decimal baseCalculo, decimal valorImposto)
         {
             impostoReceber.Id = null;
-            impostoReceber.ImpostoFinanceiroId = impostoFinanceiroId;
-            impostoReceber.TituloReceberId = tituloReceberId;
-            if (tituloReceberId == null)
+            impostoReceber.ImpostoFinanceiroId = impostoFinanceiro.Id;
+            impostoReceber.ImpostoFinanceiro = impostoFinanceiro;
+            impostoReceber.TituloReceberId = tituloReceber.Id;
+            if (tituloReceber.Id == null)
             {
                 impostoReceber.TituloReceber = tituloReceber;
             }
@@ -4433,9 +4438,8 @@ namespace GIR.Sigim.Application.Service.Contrato
                             {
                                 impostoReceber = new ImpostoReceber();
                                 PreencherImpostoReceber(impostoReceber,
-                                                        impostoFinanceiro.Id.Value,
-                                                        null,
-                                                        contratoRetificacaoProvisao.TituloReceberId,
+                                                        impostoFinanceiro,
+                                                        contratoRetificacaoProvisao.TituloReceber,
                                                         valorBaseCalculo,
                                                         valorImposto);
 
@@ -4446,12 +4450,10 @@ namespace GIR.Sigim.Application.Service.Contrato
                         {
                             impostoReceber = new ImpostoReceber();
                             PreencherImpostoReceber(impostoReceber,
-                                                    impostoFinanceiro.Id.Value,
-                                                    null,
-                                                    contratoRetificacaoProvisao.TituloReceberId,
+                                                    impostoFinanceiro,
+                                                    contratoRetificacaoProvisao.TituloReceber,
                                                     valorBaseCalculo,
                                                     valorImposto);
-
                             contratoRetificacaoProvisao.TituloReceber.ListaImpostoReceber.Add(impostoReceber);
                         }
                     }
@@ -4495,28 +4497,24 @@ namespace GIR.Sigim.Application.Service.Contrato
                             else
                             {
                                 impostoPagar = new ImpostoPagar();
-
                                 PreencherImpostoPagar(impostoPagar,
                                                       impostoFinanceiro,
                                                       contratoRetificacaoProvisao.TituloPagar,
                                                       valorBaseCalculo,
                                                       valorImposto,
                                                       null);
-
                                 contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
                             }
                         }
                         else
                         {
                             impostoPagar = new ImpostoPagar();
-
                             PreencherImpostoPagar(impostoPagar,
                                                   impostoFinanceiro,
                                                   contratoRetificacaoProvisao.TituloPagar,
                                                   valorBaseCalculo,
                                                   valorImposto,
                                                   null);
-
                             contratoRetificacaoProvisao.TituloPagar.ListaImpostoPagar.Add(impostoPagar);
                         }
                     }

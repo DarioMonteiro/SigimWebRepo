@@ -169,5 +169,15 @@ namespace GIR.Sigim.Application.Service
                     return ObterIconeRelatorio(centroCusto.CentroCustoPai);
             }
         }
+
+        protected decimal TruncateDecimal(decimal value, int precision)
+        {
+            if (precision <= 0)
+            {
+                return Math.Truncate(value);
+            }
+            decimal potenciaDeDez = (decimal)Math.Pow(10, precision);
+            return Math.Truncate(potenciaDeDez * value) / potenciaDeDez;
+        }
     }
 }
