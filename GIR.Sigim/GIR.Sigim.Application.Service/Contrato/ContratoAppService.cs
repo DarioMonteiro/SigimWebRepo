@@ -1842,23 +1842,65 @@ namespace GIR.Sigim.Application.Service.Contrato
 
             var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
 
+            //Domain.Entity.Contrato.Contrato contratoAux = contratoRepository.ObterPeloIdComMaisPerformance(contratoId, specification, 
+            //                                                                                            l => l.Contratado,
+            //                                                                                            l => l.Contratante,
+            //                                                                                            l => l.ContratoDescricao,
+            //                                                                                            l => l.ListaContratoRetificacaoItem,
+            //                                                                                            l => l.ListaContratoRetificacaoItemCronograma,
+            //                                                                                            l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.MultiFornecedor),
+            //                                                                                            l => l.ListaContratoRetificacaoItemMedicaoNF.Select(m => m.Material),
+            //                                                                                            l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaApropriacao),
+            //                                                                                            l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto)),
+            //                                                                                            l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaApropriacao)),
+            //                                                                                            l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)),
+            //                                                                                            l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaTituloPagarAdiantamento.Select(i => i.ListaApropriacaoAdiantamento)),
+            //                                                                                            l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaApropriacao),
+            //                                                                                            l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaImpostoReceber),
+            //                                                                                            l => l.ListaContratoRetificacaoItemImposto.Select(i => i.ImpostoFinanceiro).Select(c => c.Cliente),
+            //                                                                                            l => l.ListaContratoRetencao,
+            //                                                                                            l => l.ListaMovimento);
+
+
+            //Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification, l => l.Contratado,
+            //                                                                                                     l => l.Contratante,
+            //                                                                                                     l => l.ContratoDescricao,
+            //                                                                                                     l => l.ListaContratoRetificacaoItem,
+            //                                                                                                     l => l.ListaContratoRetificacaoItemCronograma,
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.MultiFornecedor), 
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicaoNF.Select(m => m.Material),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaApropriacao),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto)),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaApropriacao)),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaTituloPagarAdiantamento.Select(i => i.ListaApropriacaoAdiantamento)),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaApropriacao),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaImpostoReceber), 
+            //                                                                                                     l => l.ListaContratoRetificacaoItemImposto.Select(i => i.ImpostoFinanceiro).Select(c => c.Cliente),
+            //                                                                                                     l => l.ListaContratoRetencao,
+            //                                                                                                     l => l.ListaMovimento);
+
             Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification, l => l.Contratado,
                                                                                                                  l => l.Contratante,
                                                                                                                  l => l.ContratoDescricao,
                                                                                                                  l => l.ListaContratoRetificacaoItem,
                                                                                                                  l => l.ListaContratoRetificacaoItemCronograma,
-                                                                                                                 l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.MultiFornecedor), 
-                                                                                                                 l => l.ListaContratoRetificacaoItemMedicaoNF.Select(m => m.Material),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaApropriacao),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto)),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaApropriacao)),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaTituloPagarAdiantamento.Select(i => i.ListaApropriacaoAdiantamento)),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaApropriacao),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaImpostoReceber), 
-                                                                                                                 l => l.ListaContratoRetificacaoItemImposto.Select(i => i.ImpostoFinanceiro).Select(c => c.Cliente),
-                                                                                                                 l => l.ListaContratoRetencao,
-                                                                                                                 l => l.ListaMovimento);
+                                                                                                                 l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.MultiFornecedor),
+                                                                                                                 l => l.ListaContratoRetificacaoItemMedicaoNF.Select(m => m.Material));
+
+            contrato = contratoRepository.ObterPeloId(contratoId, specification, 
+                                                      l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaApropriacao),
+                                                      l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto)),
+                                                      l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaApropriacao)),
+                                                      l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)),
+                                                      l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaTituloPagarAdiantamento.Select(i => i.ListaApropriacaoAdiantamento)),
+                                                      l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaApropriacao),
+                                                      l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaImpostoReceber),
+                                                      l => l.ListaContratoRetificacaoItemImposto.Select(i => i.ImpostoFinanceiro).Select(c => c.Cliente),
+                                                      l => l.ListaContratoRetencao,
+                                                      l => l.ListaMovimento);
+
+
             ParametrosContrato parametros = parametrosContratoRepository.Obter();
             bool geraTituloSituacaoAguardandoLiberacao = parametros.GeraTituloAguardando.HasValue ? parametros.GeraTituloAguardando.Value : false;
             ParametrosFinanceiro parametrosFinanceiro = parametrosFinanceiroRepository.Obter();
@@ -1971,6 +2013,29 @@ namespace GIR.Sigim.Application.Service.Contrato
             var specification = (Specification<Domain.Entity.Contrato.Contrato>)new TrueSpecification<Domain.Entity.Contrato.Contrato>();
 
 
+            //Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification, l => l.Contratado,
+            //                                                                                                     l => l.Contratante,
+            //                                                                                                     l => l.ContratoDescricao,
+            //                                                                                                     l => l.ListaContratoRetificacaoItem,
+            //                                                                                                     l => l.ListaContratoRetificacaoItemCronograma,
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaFilhos),
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaApropriacao),
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaImpostoPagar.Select(i => i.TituloPagarImposto)),
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaApropriacao)),
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)),
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloReceber.ListaFilhos),
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloReceber.ListaApropriacao),
+            //                                                                                                     l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloReceber.ListaImpostoReceber),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaApropriacao),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto)),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaApropriacao)),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaTituloPagarAdiantamento.Select(pa => pa.ListaApropriacaoAdiantamento)),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaApropriacao),
+            //                                                                                                     l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaImpostoReceber),
+            //                                                                                                     l => l.ListaContratoRetificacaoItemImposto.Select(i => i.ImpostoFinanceiro),
+            //                                                                                                     l => l.ListaContratoRetencao.Select(rl => rl.ListaContratoRetencaoLiberada));
+
             Domain.Entity.Contrato.Contrato contrato = contratoRepository.ObterPeloId(contratoId, specification, l => l.Contratado,
                                                                                                                  l => l.Contratante,
                                                                                                                  l => l.ContratoDescricao,
@@ -1980,19 +2045,21 @@ namespace GIR.Sigim.Application.Service.Contrato
                                                                                                                  l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaApropriacao),
                                                                                                                  l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaImpostoPagar.Select(i => i.TituloPagarImposto)),
                                                                                                                  l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaApropriacao)),
-                                                                                                                 l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)),
-                                                                                                                 l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloReceber.ListaFilhos),
-                                                                                                                 l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloReceber.ListaApropriacao),
-                                                                                                                 l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloReceber.ListaImpostoReceber),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaApropriacao),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto)),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaApropriacao)),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaTituloPagarAdiantamento.Select(pa => pa.ListaApropriacaoAdiantamento)),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaApropriacao),
-                                                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaImpostoReceber),
-                                                                                                                 l => l.ListaContratoRetificacaoItemImposto.Select(i => i.ImpostoFinanceiro),
-                                                                                                                 l => l.ListaContratoRetencao.Select(rl => rl.ListaContratoRetencaoLiberada));
+                                                                                                                 l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloPagar.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)));
+                                                                                                                 
+
+            contrato = contratoRepository.ObterPeloId(contratoId, specification, l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloReceber.ListaFilhos),
+                                                                                 l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloReceber.ListaApropriacao),
+                                                                                 l => l.ListaContratoRetificacaoItemMedicao.Select(m => m.TituloReceber.ListaImpostoReceber),
+                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaApropriacao),
+                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto)),
+                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaApropriacao)),
+                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaImpostoPagar.Select(i => i.TituloPagarImposto.ListaFilhos)),
+                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(p => p.TituloPagar).Select(a => a.ListaTituloPagarAdiantamento.Select(pa => pa.ListaApropriacaoAdiantamento)),
+                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaApropriacao),
+                                                                                 l => l.ListaContratoRetificacaoProvisao.Select(r => r.TituloReceber).Select(a => a.ListaImpostoReceber),
+                                                                                 l => l.ListaContratoRetificacaoItemImposto.Select(i => i.ImpostoFinanceiro),
+                                                                                 l => l.ListaContratoRetencao.Select(rl => rl.ListaContratoRetencaoLiberada));
 
             string msg = "";
             bool ehValido = true;
