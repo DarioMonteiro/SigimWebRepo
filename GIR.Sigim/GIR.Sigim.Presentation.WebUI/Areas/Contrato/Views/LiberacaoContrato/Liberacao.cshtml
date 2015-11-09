@@ -1564,7 +1564,8 @@
             success: function (result) {
                 if (result.ehCancelado) {
                     window.location.href = result.redirectToUrl;
-                    smartAlert("Sucesso", result.message, "success");
+                    //smartAlert("Sucesso", result.message, "success");
+                    showMessages(result.message);
                 }
                 else {
                     //smartAlert("Ocorreu erro ao cancelar !", result.message, "error");
@@ -1572,7 +1573,8 @@
                 }
             },
             error: function (result) {
-                smartAlert("Ocorreu erro ao cancelar !", result.message, "error");
+                //smartAlert("Ocorreu erro ao cancelar !", result.message, "error");
+                showMessages(result.message);
             }
         });
     }
