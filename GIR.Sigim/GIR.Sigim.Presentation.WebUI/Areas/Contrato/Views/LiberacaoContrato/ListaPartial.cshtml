@@ -38,7 +38,7 @@
                             string dataAssinaturaSortingSuffix = "sorting";
                             string situacaoSortingSuffix = "sorting";
                             string valorContratoSortingSuffix = "sorting";
-                            //string descricaoMedicaoLiberarSortingSuffix = "sorting";
+                            string descricaoMedicaoLiberarSortingSuffix = "sorting";
                             
                             switch (Model.OrderBy)
                             {
@@ -63,9 +63,9 @@
                                 case "valorContrato":
                                     valorContratoSortingSuffix += sortingSuffix;
                                     break;
-                                //case "descricaoMedicaoLiberar":
-                                //    descricaoMedicaoLiberarSortingSuffix += sortingSuffix;
-                                //    break;
+                                case "descricaoMedicaoLiberar":
+                                    descricaoMedicaoLiberarSortingSuffix += sortingSuffix;
+                                    break;
                                 default:
                                     idSortingSuffix += sortingSuffix;
                                     break;
@@ -80,8 +80,8 @@
                         <th class="sorting @dataAssinaturaSortingSuffix text-left" data-order="dataAssinatura" style="min-width:65px;">Data assinatura</th>
                         <th class="sorting @situacaoSortingSuffix text-center" data-order="situacao" style="min-width:75px;">Situação</th>
                         <th class="sorting @valorContratoSortingSuffix text-left" data-order="valorContrato" style="min-width:75px;">Valor do Contrato</th>
-                        @*<th class="sorting @descricaoMedicaoLiberarSortingSuffix text-left" data-order="descricaoMedicaoLiberar" style="min-width:75px;">Medição a liberar</th>*@
-                        <th class="text-left" style="min-width:75px;">Medição a liberar</th>
+                        <th class="sorting @descricaoMedicaoLiberarSortingSuffix text-left" data-order="descricaoMedicaoLiberar" style="min-width:75px;">Medição a liberar</th>
+                        @*<th class="text-left" style="min-width:75px;">Medição a liberar</th>*@
                     </tr>
                 </thead>
                 <tbody>

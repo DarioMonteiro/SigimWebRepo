@@ -62,9 +62,14 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Contrato
                 case "valorContrato":
                     set = ascending ? set.OrderBy(l => l.ValorContrato) : set.OrderByDescending(l => l.ValorContrato);
                     break;
-                //case "descricaoMedicaoLiberar":
-                //    set = ascending ? set.OrderBy(l => l.TemMedicaoALiberar(l.Id)) : set.OrderByDescending(l => l.TemMedicaoALiberar(l.Id));
-                //    break;
+                case "descricaoMedicaoLiberar":
+                    set = ascending ? set.OrderBy(l => l.ListaContratoRetificacaoItemMedicao.
+                                                        Any(i => i.Situacao == SituacaoMedicao.AguardandoAprovacao || 
+                                                                 i.Situacao == SituacaoMedicao.AguardandoLiberacao)).ThenBy(l => l.Id)
+                                    : set.OrderByDescending(l => l.ListaContratoRetificacaoItemMedicao.
+                                                        Any(i => i.Situacao == SituacaoMedicao.AguardandoAprovacao ||
+                                                                 i.Situacao == SituacaoMedicao.AguardandoLiberacao)).ThenBy(l => l.Id);
+                    break;
                 case "id":
                 default:
                     set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
