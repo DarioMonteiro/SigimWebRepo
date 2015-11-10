@@ -410,6 +410,8 @@
     jsonItemArray = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
 
     $(document).ready(function () {
+        $('body').addClass("hidden-menu");
+
         fillTable();
 
         jQuery.validator.setDefaults({

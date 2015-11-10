@@ -445,6 +445,9 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $('body').addClass("hidden-menu");
+
             $('#formParametros').ajaxForm({
                 success: function (d) {
                     $('#IconeRelatorio').val('');

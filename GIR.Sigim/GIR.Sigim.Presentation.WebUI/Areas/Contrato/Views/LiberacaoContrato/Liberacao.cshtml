@@ -472,6 +472,8 @@
 
     $(document).ready(function () {
 
+        $('body').addClass("hidden-menu");
+
         $(document).on("show.bs.modal", "#formatoImpressaoMedicao_ModalPanel", function (e) {
             var contratoId = $("#@Html.IdFor(m => m.ContratoRetificacaoItemMedicao.ContratoId)").val();
             var listaItemLiberacao = $('#@Html.IdFor(m => m.JsonListaItemLiberacao)').val();
