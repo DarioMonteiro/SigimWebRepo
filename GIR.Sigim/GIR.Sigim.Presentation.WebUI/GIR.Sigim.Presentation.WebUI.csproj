@@ -283,6 +283,8 @@
     <Content Include="Content\img\MODULO_ORDEM-DE-COMPRA.ico" />
     <Content Include="Content\img\mybg.png" />
     <Content Include="Content\img\select2-spinner.gif" />
+    <Content Include="Content\img\sigim_azul.png" />
+    <Content Include="Content\img\sigim_preto.png" />
     <Content Include="Content\img\splash\ipad-landscape.png" />
     <Content Include="Content\img\splash\ipad-portrait.png" />
     <Content Include="Content\img\splash\iphone.png" />
