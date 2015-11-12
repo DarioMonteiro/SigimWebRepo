@@ -329,14 +329,17 @@
                                 <div id="collapseInterfaceBanco" class="panel-collapse collapse" style="height: 0px;">
                                     <div class="panel-body no-padding">
                                         <fieldset>
-                                             <div class="row">
-                                                 <section class="col col-4">
-                                                    @Html.LabelFor(m => m.Parametros.ToleranciaRecebimento, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.Parametros.ToleranciaRecebimento, "", new { @class = "text-right decimal-2-casas required" })
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.Parametros.ToleranciaRecebimento, "", new { @class = "note note-error" })
-                                                </section>
+                                            <label class="label">contas a receber</label>
+                                            <div style="border:1px solid lightgray; width:200px; padding-left:15px;">
+                                                <div class="row">
+                                                    <section class="col col-8">
+                                                        @Html.LabelFor(m => m.Parametros.ToleranciaRecebimento, new { @class = "label"})
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.Parametros.ToleranciaRecebimento, "", new { @class = "text-right decimal-2-casas" })
+                                                        </label>
+                                                        @Html.ValidationMessageFor(m => m.Parametros.ToleranciaRecebimento, "", new { @class = "note note-error" })
+                                                    </section>
+                                                </div>
                                             </div>
                                         </fieldset>
                                     </div>

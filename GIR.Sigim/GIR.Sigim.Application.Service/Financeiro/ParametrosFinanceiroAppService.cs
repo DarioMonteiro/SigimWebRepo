@@ -92,7 +92,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
         private void PreencherCheckBoxBloqueioSituacaoLiberado(ParametrosFinanceiroDTO parametros)
         {
             string[] delimitador = new string[] { delimitadorBloqueioSituacaoLiberado };
-            string[] bloqueioSituacaoLiberado = parametros.BloqueioSituacaoLiberado.Split(delimitador, StringSplitOptions.None);
+            string[] bloqueioSituacaoLiberado = new string[]{};
+            if (!string.IsNullOrEmpty(parametros.BloqueioSituacaoLiberado)){
+                bloqueioSituacaoLiberado = parametros.BloqueioSituacaoLiberado.Split(delimitador, StringSplitOptions.None);
+            }
 
             parametros.BloqueioCorrentista = false;
             parametros.BloqueioIdentificacao = false;
