@@ -40,7 +40,7 @@
                                                                          RATEIOAUTOMATICO_ACESSAR,
                                                                          TABELABASICA_FINANCEIRO_ACESSAR,
                                                                          TAXAADMINISTRACAO_ACESSAR,
-                                                                         TIPOMOVIMENTO_ACESSAR
+                                                                         TIPOMOVIMENTO_ACESSAR,
                                                                          TIPOCOMPROMISSO_ACESSAR,
                                                                          TIPODOCUMENTO_ACESSAR,
                                                                          TIPORATEIO_ACESSAR,

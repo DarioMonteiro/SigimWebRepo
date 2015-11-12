@@ -8,7 +8,7 @@ using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
-   public class ParametrosFinanceiro : BaseEntity
+   public class ParametrosFinanceiro : BaseEntity, IParametros
    {
        public int? ClienteId { get; set; }
        public ClienteFornecedor Cliente { get; set; }

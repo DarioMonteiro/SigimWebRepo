@@ -50,6 +50,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             model.TipoMovimento.Tipo = "B";
             model.TipoMovimento.Operacao = "C";
 
+            model.PodeSalvar = tipoMovimentoAppService.EhPermitidoSalvar();
+            model.PodeDeletar = tipoMovimentoAppService.EhPermitidoDeletar();
+            model.PodeImprimir = tipoMovimentoAppService.EhPermitidoImprimir();
+
+
             CarregarCombos(model);
 
             return View(model);
@@ -93,6 +98,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             tipoMovimentoAppService.Deletar(id);
             return PartialView("_NotificationMessagesPartial");
         }
+
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var arquivo = tipoMovimentoAppService.ExportarRelTipoMovimento(formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
 
         private void CarregarCombos(TipoMovimentoViewModel model)
         {

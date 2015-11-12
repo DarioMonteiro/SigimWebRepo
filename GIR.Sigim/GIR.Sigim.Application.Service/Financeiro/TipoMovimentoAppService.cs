@@ -14,17 +14,25 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros;
 using GIR.Sigim.Domain.Specification.Financeiro;
+using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Application.Reports.Financeiro;
+using CrystalDecisions.Shared;
+using System.Data;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
     public class TipoMovimentoAppService : BaseAppService, ITipoMovimentoAppService
     {
         private ITipoMovimentoRepository tipoMovimentoRepository;
+        private IParametrosFinanceiroRepository parametrosFinanceiroRepository;
 
-        public TipoMovimentoAppService(ITipoMovimentoRepository tipoMovimentoRepository, MessageQueue messageQueue) 
+        public TipoMovimentoAppService(ITipoMovimentoRepository tipoMovimentoRepository, 
+                                       IParametrosFinanceiroRepository parametrosFinanceiroRepository, 
+                                       MessageQueue messageQueue) 
             : base (messageQueue)
         {
             this.tipoMovimentoRepository = tipoMovimentoRepository;
+            this.parametrosFinanceiroRepository = parametrosFinanceiroRepository;
         }
 
         #region métodos de ITipoMovimentoAppService
@@ -140,9 +148,103 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
         }
 
+        public bool EhPermitidoSalvar()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.TipoMovimentoGravar))
+                return false;
+
+            return true;
+        }
+
+        public bool EhPermitidoDeletar()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.TipoMovimentoDeletar))
+                return false;
+
+            return true;
+        }
+
+        public bool EhPermitidoImprimir()
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.TipoMovimentoImprimir))
+                return false;
+
+            return true;
+        }
+
+        public FileDownloadDTO ExportarRelTipoMovimento(FormatoExportacaoArquivo formato)
+        {
+            if (!UsuarioLogado.IsInRole(Funcionalidade.TipoMovimentoImprimir))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
+            var specification = (Specification<TipoMovimento>)new TrueSpecification<TipoMovimento>();
+
+            specification &= TipoMovimentoSpecification.EhNaoAutomatico();
+
+            var listaTipoMovimento = tipoMovimentoRepository.ListarPeloFiltro(specification,
+                                                                              l => l.HistoricoContabil).To<List<TipoMovimento>>();
+            relTipoMovimento objRel = new relTipoMovimento();
+
+            objRel.SetDataSource(RelTipoMovimentoToDataTable(listaTipoMovimento));
+
+            var parametros = parametrosFinanceiroRepository.Obter();
+            CentroCusto centroCusto = null;
+
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
+
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
+            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Tipo Movimento",
+                                                          objRel.ExportToStream((ExportFormatType)formato),
+                                                          formato);
+            if (System.IO.File.Exists(caminhoImagem))
+                System.IO.File.Delete(caminhoImagem);
+            return arquivo;
+        }
+
+
         #endregion
 
         #region métodos privados de ITipoMovimentoAppService
+
+        private DataTable RelTipoMovimentoToDataTable(List<TipoMovimento> listaTipoMovimento)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo");
+            DataColumn descricao = new DataColumn("descricao");
+            DataColumn descricaoHistoricoContabil = new DataColumn("descricaoHistoricoContabil");
+            DataColumn descricaoTipo = new DataColumn("descricaoTipo");
+            DataColumn descricaoOperacao = new DataColumn("descricaoOperacao");
+            DataColumn girErro = new DataColumn("girErro");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(descricao);
+            dta.Columns.Add(descricaoHistoricoContabil);
+            dta.Columns.Add(descricaoTipo);
+            dta.Columns.Add(descricaoOperacao);
+            dta.Columns.Add(girErro);
+
+            foreach (var registro in listaTipoMovimento)
+            {
+                TipoMovimentoDTO tipoMovimento = registro.To<TipoMovimentoDTO>();
+                DataRow row = dta.NewRow();
+
+                row[codigo] = tipoMovimento.Id;
+                row[descricao] = tipoMovimento.Descricao ;
+                row[descricaoHistoricoContabil] = tipoMovimento.HistoricoContabilDescricao;
+                row[descricaoTipo] = tipoMovimento.TipoDescricao;
+                row[descricaoOperacao] = tipoMovimento.OperacaoDescricao;
+                row[girErro] = "";
+                dta.Rows.Add(row);
+            }
+
+            return dta;
+        }
 
         private bool EhValidoSalvarTipoMovimento(TipoMovimento tipoMovimento)
         {

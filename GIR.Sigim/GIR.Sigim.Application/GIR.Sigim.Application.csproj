@@ -233,6 +233,12 @@
       <DependentUpon>relNotaFiscalLiberada.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Financeiro\relTipoMovimento.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relTipoMovimento.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\OrdemCompra\relEntradaMaterial.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -406,6 +412,10 @@
     <EmbeddedResource Include="Reports\Contrato\relNotaFiscalLiberada.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relNotaFiscalLiberada.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relTipoMovimento.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relTipoMovimento.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\OrdemCompra\relEntradaMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

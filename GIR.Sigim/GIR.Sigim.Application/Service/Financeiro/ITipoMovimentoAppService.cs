@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO;
 using GIR.Sigim.Application.Filtros;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -16,5 +17,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
         TipoMovimentoDTO ObterPeloId(int? id);
         bool Salvar(TipoMovimentoDTO dto);
         bool Deletar(int? id);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
+        FileDownloadDTO ExportarRelTipoMovimento(FormatoExportacaoArquivo formato);
     }
 }
