@@ -24,60 +24,80 @@
                             new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "notificationMessages" },
                             new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
-                    @Html.AntiForgeryToken()
-                    <div class="panel-body no-padding">
-                        <fieldset>                                           
-                            <div class="row">
-                                <section class="col col-6">
-                                    @Html.HiddenFor(m => m.Caixa.Id)
-                                    @Html.LabelFor(m => m.Caixa.Descricao, new { @class = "label" })
-                                    <label class="input">
-                                     @Html.TextBoxFor(m => m.Caixa.Descricao, new { @maxlength = "50",  @class = "required" })
-                                    </label>
-                                    @Html.ValidationMessageFor(m => m.Caixa.Descricao, "", new { @class = "note note-error" })
+                        @Html.AntiForgeryToken()
+                        <div class="panel-body no-padding">
+                            <fieldset>                                           
+                                <div class="row">
+                                    <section class="col col-6">
+                                        @Html.HiddenFor(m => m.Caixa.Id)
+                                        @Html.LabelFor(m => m.Caixa.Descricao, new { @class = "label" })
+                                        <label class="input">
+                                            @Html.TextBoxFor(m => m.Caixa.Descricao, new { @maxlength = "50",  @class = "required" })
+                                        </label>
+                                        @Html.ValidationMessageFor(m => m.Caixa.Descricao, "", new { @class = "note note-error" })
+                                    </section>
+                                    <section class="col col-2" style="padding-top:30px">                                  
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(m => m.Caixa.Ativa)<i></i>@Html.DisplayNameFor(m => m.Caixa.Ativa)
+                                        </label>                                                 
+                                    </section>
+                                    <section class="col col-4">
+                                        @Html.LabelFor(m => m.Caixa.CentroContabil, new { @class = "label" })
+                                        <label class="input">
+                                            @Html.TextBoxFor(m => m.Caixa.CentroContabil , new { @maxlength = "20" })
+                                        </label>
+                                     @Html.ValidationMessageFor(m => m.Caixa.CentroContabil, "", new { @class = "note note-error" })
                                 </section>
-                                <section class="col col-2" style="padding-top:30px">                                  
-                                    <label class="checkbox">
-                                        @Html.CheckBoxFor(m => m.Caixa.Ativa)<i></i>@Html.DisplayNameFor(m => m.Caixa.Ativa)
-                                    </label>                                                 
-                                </section>
-                                <section class="col col-4">
-                                    @Html.LabelFor(m => m.Caixa.CentroContabil, new { @class = "label" })
-                                    <label class="input">
-                                        @Html.TextBoxFor(m => m.Caixa.CentroContabil , new { @maxlength = "20" })
-                                    </label>
-                                 @Html.ValidationMessageFor(m => m.Caixa.CentroContabil, "", new { @class = "note note-error" })
-                            </section>
+                                </div>
+                                <div class="row">
+                                    @Html.EditorFor(m => m.Caixa.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de Custo" })                                
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                            tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluirRegistro" aria-labelledby="ui-id-1" 
+                                style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                <span id="ui-id-1" class="ui-dialog-title">
+                                </span>
                             </div>
-                            <div class="row">
-                                @Html.EditorFor(m => m.Caixa.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de Custo" })                                
+                            <div id="dlgSimpleExcluirRegistro" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+	                            <p>
+		                            Deseja excluir o registro selecionado ?
+	                            </p>
                             </div>
-                        </fieldset>
-                    </div>
-                    <footer>
-                        @{
-                        string disableBtnDeletar = string.Empty;
-                            if (!Model.PodeDeletar)
-                            {
-                                disableBtnDeletar = "disabled";
+                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                <div class="ui-dialog-buttonset">
+                                </div>
+                            </div>
+                        </div>
+                        <footer>
+                            @{
+                                string disableBtnDeletar = string.Empty;
+                                if (!Model.PodeDeletar)
+                                {
+                                    disableBtnDeletar = "disabled";
+                                }
                             }
-                        }
-                        <button type="button" id="btnDeletar" class="btn btn-primary @disableBtnDeletar">
-                            Deletar
-                        </button>
-                        @{
-                            string disableBtnSalvar = string.Empty;
-                            if (!Model.PodeSalvar)
-                            {
-                                disableBtnSalvar = "disabled";
+                            <button type="button" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">
+                                Deletar
+                            </button>
+                            @{
+                                var url = Url.Action("Imprimir","Caixa");
                             }
-                        }
-                        <button type="submit" class="btn btn-primary @disableBtnSalvar">
-                            Gravar
-                        </button>
-                    </footer>
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
+                            @{
+                                string disableBtnSalvar = string.Empty;
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
+                            }
+                            <button type="submit" class="btn btn-primary @disableBtnSalvar">
+                                Gravar
+                            </button>
+                        </footer>
                     }
-
                     @using (Ajax.BeginForm(
                             "Lista",
                             "Caixa",
@@ -104,6 +124,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $('body').addClass("hidden-menu");
+
         listarFiltro();
 
         jQuery.validator.addMethod(
@@ -119,6 +142,14 @@
             rules: {
                 '@Html.NameFor(m => m.Caixa.CentroCusto.Codigo)': {
                     centroCustoValido: true
+                },
+                '@Html.NameFor(m => m.Caixa.Descricao)': {
+                    required: true
+                }
+            },
+            messages: {
+                '@Html.NameFor(m => m.Caixa.Descricao)': {
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Descrição")'
                 }
             },
             errorPlacement: function (error, element) {
@@ -142,9 +173,56 @@
                 listarFiltro();
             }
         );
+
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimpleExcluirRegistro').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Excluir",
+                "class": "btn btn-primary",
+                click: function () {
+                    $(this).dialog("close");
+                    excluirRegistro();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        $("#btnDeletar").on("click", function () {
+            var id = $('#@Html.IdFor(m => m.Caixa.Id)').val();
+            if (id !== "") {
+                $('#dlgSimpleExcluirRegistro').dialog('open');
+            }
+            else {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "warning");
+            }
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            parametrosUrlImpressao = '';
+        });
+
     });
 
-    $("#btnDeletar").on("click", function() {
+    function excluirRegistro() {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Deletar", "Caixa")',
@@ -161,7 +239,7 @@
             clearForm();
             listarFiltro();
         });
-    });
+    }
 
     function clearForm() {
         $('#@Html.IdFor(m => m.Caixa.Id)').val('');
@@ -176,6 +254,7 @@
         clearForm();
         $('#notificationMessages').html('');
         $('#Caixa_Descricao-error').remove();
+        $('#Caixa_CentroCusto_Codigo-error').remove();
     }
 
     function refresh() {
@@ -206,7 +285,6 @@
             goToTop();
         });
     }
-
 
     function limpaPaginacao() {
         $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);

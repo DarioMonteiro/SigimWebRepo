@@ -66,6 +66,18 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Salvar(TipoMovimentoDTO dto)
         {
+            if (!EhPermitidoSalvar())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(dto.Descricao))
+            {
+                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Descrição"), TypeMessage.Error);
+                return false;
+            }
+
             if (dto == null)
                 throw new ArgumentNullException("dto");
 
@@ -100,9 +112,13 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 if (Validator.IsValid(tipoMovimento, out validationErrors))
                 {
                     if (novoItem)
+                    {
                         tipoMovimentoRepository.Inserir(tipoMovimento);
+                    }
                     else
+                    {
                         tipoMovimentoRepository.Alterar(tipoMovimento);
+                    }
 
                     tipoMovimentoRepository.UnitOfWork.Commit();
                     messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
@@ -120,6 +136,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Deletar(int? id)
         {
+            if (!EhPermitidoDeletar())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (id == null)
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
@@ -174,7 +196,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public FileDownloadDTO ExportarRelTipoMovimento(FormatoExportacaoArquivo formato)
         {
-            if (!UsuarioLogado.IsInRole(Funcionalidade.TipoMovimentoImprimir))
+            if (!EhPermitidoImprimir())
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
                 return null;

@@ -14,17 +14,24 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Financeiro;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Application.Reports.Financeiro;
+using CrystalDecisions.Shared;
+using System.Data;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
     public class CaixaAppService : BaseAppService, ICaixaAppService
     {
         private ICaixaRepository caixaRepository;
+        private IParametrosFinanceiroRepository parametrosFinanceiroRepository;
 
-        public CaixaAppService(ICaixaRepository caixaRepository, MessageQueue messageQueue)
+        public CaixaAppService(ICaixaRepository caixaRepository, 
+                               IParametrosFinanceiroRepository parametrosFinanceiroRepository, 
+                               MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.caixaRepository = caixaRepository;
+            this.parametrosFinanceiroRepository = parametrosFinanceiroRepository;
         }
 
         #region ICaixaAppService Members
@@ -51,9 +58,15 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Salvar(CaixaDTO dto)
         {
-            if (!UsuarioLogado.IsInRole(Funcionalidade.CaixaGravar))
+            if (!EhPermitidoSalvar())
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(dto.Descricao))
+            {
+                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Descrição"), TypeMessage.Error);
                 return false;
             }
 
@@ -77,9 +90,13 @@ namespace GIR.Sigim.Application.Service.Financeiro
             if (Validator.IsValid(caixa, out validationErrors))
             {
                 if (novoItem)
+                {
                     caixaRepository.Inserir(caixa);
+                }
                 else
+                {
                     caixaRepository.Alterar(caixa);
+                }
 
                 caixaRepository.UnitOfWork.Commit();
                 messageQueue.Add(Resource.Sigim.SuccessMessages.SalvoComSucesso, TypeMessage.Success);
@@ -93,7 +110,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Deletar(int? id)
         {
-            if (!UsuarioLogado.IsInRole(Funcionalidade.CaixaDeletar))
+            if (!EhPermitidoDeletar())
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
                 return false;
@@ -131,10 +148,81 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return UsuarioLogado.IsInRole(Funcionalidade.CaixaDeletar);
         }
 
-        //public bool EhPermitidoImprimir()
-        //{
-        //    return UsuarioLogado.IsInRole(Funcionalidade.CaixaImprimir);
-        //}
+        public bool EhPermitidoImprimir()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.CaixaImprimir);
+        }
+
+        public FileDownloadDTO ExportarRelCaixa(FormatoExportacaoArquivo formato)
+        {
+            if (!EhPermitidoImprimir())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
+            var specification = (Specification<Caixa>)new TrueSpecification<Caixa>();
+
+            var listaCaixa = caixaRepository.ListarPeloFiltro(specification,
+                                                              l => l.CentroCusto).To<List<Caixa>>();
+            relCaixa objRel = new relCaixa();
+
+            objRel.SetDataSource(RelCaixaToDataTable(listaCaixa));
+
+            var parametros = parametrosFinanceiroRepository.Obter();
+            CentroCusto centroCusto = null;
+
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
+
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
+            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Caixa",
+                                                          objRel.ExportToStream((ExportFormatType)formato),
+                                                          formato);
+            if (System.IO.File.Exists(caminhoImagem))
+                System.IO.File.Delete(caminhoImagem);
+            return arquivo;
+        }
+
+        #endregion
+
+        #region métodos privados de ICaixaAppService
+
+        private DataTable RelCaixaToDataTable(List<Caixa> listaCaixa)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo");
+            DataColumn descricao = new DataColumn("descricao");
+            DataColumn descricaoSituacao = new DataColumn("descricaoSituacao");
+            DataColumn centroContabil = new DataColumn("centroContabil");
+            DataColumn codigoDescricaoCentroCusto = new DataColumn("codigoDescricaoCentroCusto");
+            DataColumn girErro = new DataColumn("girErro");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(descricao);
+            dta.Columns.Add(descricaoSituacao);
+            dta.Columns.Add(centroContabil);
+            dta.Columns.Add(codigoDescricaoCentroCusto);
+            dta.Columns.Add(girErro);
+
+            foreach (var registro in listaCaixa)
+            {
+                CaixaDTO caixa = registro.To<CaixaDTO>();
+                DataRow row = dta.NewRow();
+
+                row[codigo] = caixa.Id;
+                row[descricao] = caixa.Descricao;
+                row[descricaoSituacao] = caixa.DescricaoSituacao;
+                row[centroContabil] = caixa.CentroContabil ;
+                row[codigoDescricaoCentroCusto] = caixa.CentroCustoDescricao;
+                row[girErro] = "";
+                dta.Rows.Add(row);
+            }
+
+            return dta;
+        }
 
         #endregion
     }

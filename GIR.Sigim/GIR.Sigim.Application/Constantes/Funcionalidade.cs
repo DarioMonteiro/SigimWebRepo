@@ -67,7 +67,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string CaixaAcessar = "CAIXA_ACESSAR";
         public const string CaixaGravar = "CAIXA_GRAVAR";
         public const string CaixaDeletar = "CAIXA_DELETAR";
-        //public const string CaixaImprimir = "CAIXA_IMPRIMIR";
+        public const string CaixaImprimir = "CAIXA_IMPRIMIR";
 
         public const string ImpostoFinanceiroAcessar = "IMPOSTOFINANCEIRO_ACESSAR";
         public const string ImpostoFinanceiroGravar = "IMPOSTOFINANCEIRO_GRAVAR";
@@ -249,7 +249,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(CaixaAcessar, "Caixa - acessar");
             MenuFinanceiro.Add(CaixaGravar, "Caixa - gravar");
             MenuFinanceiro.Add(CaixaDeletar, "Caixa - deletar");
-            //MenuFinanceiro.Add(CaixaImprimir, "Caixa - imprimir");
+            MenuFinanceiro.Add(CaixaImprimir, "Caixa - imprimir");
 
             MenuFinanceiro.Add(ImpostoFinanceiroAcessar, "Imposto financeiro - acessar");
             MenuFinanceiro.Add(ImpostoFinanceiroGravar, "Imposto financeiro - gravar");

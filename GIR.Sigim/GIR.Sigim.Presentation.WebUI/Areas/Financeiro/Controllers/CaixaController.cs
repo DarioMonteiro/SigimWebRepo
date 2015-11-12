@@ -40,7 +40,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             model.PodeSalvar = caixaAppService.EhPermitidoSalvar();
             model.PodeDeletar = caixaAppService.EhPermitidoDeletar();
-            //model.PodeImprimir = caixaAppService.EhPermitidoImprimir();
+            model.PodeImprimir = caixaAppService.EhPermitidoImprimir();
 
             var caixa = caixaAppService.ObterPeloId(id) ?? new CaixaDTO();
 
@@ -88,6 +88,20 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         public ActionResult Deletar(int? id)
         {
             caixaAppService.Deletar(id);
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var arquivo = caixaAppService.ExportarRelCaixa(formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
             return PartialView("_NotificationMessagesPartial");
         }
 
