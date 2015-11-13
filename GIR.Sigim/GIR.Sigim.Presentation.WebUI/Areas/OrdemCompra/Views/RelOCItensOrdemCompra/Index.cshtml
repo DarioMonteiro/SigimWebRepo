@@ -114,8 +114,48 @@
                                                         });
                                                     });
                                                 </script>
-                                                <section class="col col-3">
-                                                    <div class="inline-group" style="padding-top:28px;">
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-8">
+                                                    <div class="inline-group">
+                                                        <label class="label">Situação OC</label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.EhLiberada)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhLiberada)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.EhLiberada)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.EhPendente)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhPendente)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.EhPendente)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.EhFechada)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.EhFechada)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                    </div>
+                                                </section>
+                                                <section class="col col-4">
+                                                    <div class="inline-group" style="margin-top:25px;">
                                                         <label class="checkbox">
                                                             @Html.CheckBoxFor(m => m.Filtro.EhExibirSomentecomSaldo)
                                                             <i></i>@Html.DisplayNameFor(m => m.Filtro.EhExibirSomentecomSaldo)
@@ -127,48 +167,6 @@
                                                                 });
                                                             </script>
                                                         </label>
-                                                    </div>
-                                                </section>
-                                            </div>
-                                            <div class="row">
-                                                <section class="col col-12">
-                                                    <div style="border:1px solid lightgray; width:400px;">
-                                                        <label class="label">Situação OC</label>
-                                                        <div class="inline-group" style="padding-left:25px;">
-                                                            <label class="checkbox">
-                                                                @Html.CheckBoxFor(m => m.Filtro.EhLiberada)
-                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhLiberada)
-                                                                <script type="text/javascript">
-                                                                    $(document).ready(function () {
-                                                                        $("#@Html.IdFor(m => m.Filtro.EhLiberada)").on("change", function () {
-                                                                            limpaLista();
-                                                                        });
-                                                                    });
-                                                                </script>
-                                                            </label>
-                                                            <label class="checkbox">
-                                                                @Html.CheckBoxFor(m => m.Filtro.EhPendente)
-                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhPendente)
-                                                                <script type="text/javascript">
-                                                                    $(document).ready(function () {
-                                                                        $("#@Html.IdFor(m => m.Filtro.EhPendente)").on("change", function () {
-                                                                            limpaLista();
-                                                                        });
-                                                                    });
-                                                                </script>
-                                                            </label>
-                                                            <label class="checkbox">
-                                                                @Html.CheckBoxFor(m => m.Filtro.EhFechada)
-                                                                <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
-                                                                <script type="text/javascript">
-                                                                    $(document).ready(function () {
-                                                                        $("#@Html.IdFor(m => m.Filtro.EhFechada)").on("change", function () {
-                                                                            limpaLista();
-                                                                        });
-                                                                    });
-                                                                </script>
-                                                            </label>
-                                                        </div>
                                                     </div>
                                                 </section>
                                             </div>

@@ -85,10 +85,19 @@ namespace GIR.Sigim.Application.Service.Financeiro
             impostoFinanceiro.EhRetido = dto.EhRetido;
             impostoFinanceiro.Indireto = dto.Indireto;
             impostoFinanceiro.PagamentoEletronico = dto.PagamentoEletronico;
-            impostoFinanceiro.Periodicidade = (PeriodicidadeImpostoFinanceiro)dto.Periodicidade;
-            impostoFinanceiro.FimDeSemana = (FimDeSemanaImpostoFinanceiro)dto.FimDeSemana;
+            if (dto.Periodicidade != null)
+            {
+                impostoFinanceiro.Periodicidade = (PeriodicidadeImpostoFinanceiro)dto.Periodicidade;
+            }
+            if (dto.FimDeSemana != null)
+            {
+                impostoFinanceiro.FimDeSemana = (FimDeSemanaImpostoFinanceiro)dto.FimDeSemana;
+            }
             impostoFinanceiro.DiaVencimento = dto.DiaVencimento;
-            impostoFinanceiro.FatoGerador = (FatoGeradorImpostoFinanceiro)dto.FatoGerador;
+            if (dto.FatoGerador != null)
+            {
+                impostoFinanceiro.FatoGerador = (FatoGeradorImpostoFinanceiro)dto.FatoGerador;
+            }
             
             if (Validator.IsValid(impostoFinanceiro, out validationErrors))
             {
@@ -177,19 +186,19 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 throw new ArgumentNullException("dto");
             }
 
-            if (dto.DiaVencimento == null) { return true; }
-
-            if (dto.DiaVencimento < 0)
+            if (dto.DiaVencimento != null)
             {
-                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.ValorDeveSerMaiorQue, "Dia do vencimento", "0"), TypeMessage.Error);
-                retorno = false;
+                if (dto.DiaVencimento < 0)
+                {
+                    messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.ValorDeveSerMaiorQue, "Dia do vencimento", "0"), TypeMessage.Error);
+                    retorno = false;
+                }
+                if (dto.DiaVencimento > 31)
+                {
+                    messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.ValorDeveSerMenorQue, "Dia do vencimento", "31"), TypeMessage.Error);
+                    retorno = false;
+                }
             }
-            if (dto.DiaVencimento > 31)
-            {
-                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.ValorDeveSerMenorQue, "Dia do vencimento", "31"), TypeMessage.Error);
-                retorno = false;
-            }
-
 
             return retorno;
         }

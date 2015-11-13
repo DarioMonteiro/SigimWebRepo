@@ -12,12 +12,12 @@ namespace GIR.Sigim.Application.DTO.Financeiro
 {
     public class ImpostoFinanceiroDTO : BaseDTO 
     {
-        //[Required]
-        [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        [Required]
+        [StringLength(10, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Sigla")]
         public string Sigla { get; set; }
 
-        //[Required]
+        [Required]
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Descrição")]
         public string Descricao { get; set; }
@@ -31,19 +31,31 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public bool EhRetido { get; set; }
 
         public string EhRetidoDescricao
-        { get { return EhRetido == true ? "Sim" : "Não"; } }
+        { 
+            get { 
+                    return EhRetido == true ? "Sim" : "Não"; 
+                } 
+        }
 
         [Display(Name = "Indireto")]
         public bool Indireto { get; set; }
 
         public string IndiretoDescricao
-        { get { return Indireto == true ? "Sim" : "Não"; } }
+        {   
+            get { 
+                    return Indireto == true ? "Sim" : "Não"; 
+                } 
+        }
 
         [Display(Name = "Pagamento Eletrônico")]
         public bool PagamentoEletronico { get; set; }
 
         public string PagamentoEletronicoDescricao
-        { get { return PagamentoEletronico == true ? "Sim" : "Não"; } }
+        {   
+            get {
+                return PagamentoEletronico == true ? "Sim" : "Não"; 
+                } 
+        }
 
         [Display(Name = "Correntista")]
         public int? ClienteId { get; set; }

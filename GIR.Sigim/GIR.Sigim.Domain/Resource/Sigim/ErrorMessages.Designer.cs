@@ -88,6 +88,15 @@ namespace GIR.Sigim.Domain.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preencha o campo [{0}] com um valor maior que [{1}]..
+        /// </summary>
+        public static string ValorDeveSerMaiorQue {
+            get {
+                return ResourceManager.GetString("ValorDeveSerMaiorQue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O valor do campo &quot;{0}&quot; está maior que o valor do campo &quot;{1}&quot;..
         /// </summary>
         public static string ValorMaiorQue {

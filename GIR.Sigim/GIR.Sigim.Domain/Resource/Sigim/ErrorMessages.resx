@@ -126,6 +126,9 @@
   <data name="DataMaiorQue" xml:space="preserve">
     <value>A data do campo "{0}" está maior que a data do campo "{1}".</value>
   </data>
+  <data name="ValorDeveSerMaiorQue" xml:space="preserve">
+    <value>Preencha o campo [{0}] com um valor maior que [{1}].</value>
+  </data>
   <data name="ValorMaiorQue" xml:space="preserve">
     <value>O valor do campo "{0}" está maior que o valor do campo "{1}".</value>
   </data>

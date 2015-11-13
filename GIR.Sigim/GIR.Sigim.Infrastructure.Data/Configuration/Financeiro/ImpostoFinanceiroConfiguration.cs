@@ -40,18 +40,25 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                .HasColumnOrder(4);
 
             Property(l => l.EhRetido)
-               .HasColumnName("retido")
-               .HasColumnOrder(5);
+                .IsOptional()
+                .HasColumnName("retido")
+                .HasColumnType("bit")
+                .HasColumnOrder(5);
 
             Property(l => l.Indireto )
-               .HasColumnName("indireto")
-               .HasColumnOrder(6);
+                .IsOptional()
+                .HasColumnName("indireto")
+                .HasColumnType("bit")
+                .HasColumnOrder(6);
 
             Property(l => l.PagamentoEletronico)
-               .HasColumnName("pagamentoEletronico")
-               .HasColumnOrder(7);
+                .IsOptional()
+                .HasColumnName("pagamentoEletronico")
+                .HasColumnType("bit")
+                .HasColumnOrder(7);
             
             Property(l => l.TipoCompromissoId)
+                .IsOptional()
                 .HasColumnName("tipoCompromisso")
                 .HasColumnOrder(8);
 
@@ -60,6 +67,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasForeignKey(l => l.TipoCompromissoId);
 
             Property(l => l.ClienteId)
+                .IsOptional()
                 .HasColumnName("cliente")
                 .HasColumnOrder(9);
 
@@ -68,9 +76,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasForeignKey(l => l.ClienteId);
 
             Property(l => l.ContaContabil)
-               .HasColumnName("contaContabil")
-               .HasMaxLength(20)
-               .HasColumnOrder(10);
+                .IsOptional()
+                .HasColumnName("contaContabil")
+                .HasMaxLength(20)
+                .HasColumnOrder(10);
 
             Property(l => l.Periodicidade)
                 .IsOptional()
