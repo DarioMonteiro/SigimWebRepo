@@ -15,17 +15,24 @@ using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Financeiro;
 using GIR.Sigim.Application.Filtros;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Application.Reports.Financeiro;
+using CrystalDecisions.Shared;
+using System.Data;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
     public class ImpostoFinanceiroAppService : BaseAppService, IImpostoFinanceiroAppService
     {
         private IImpostoFinanceiroRepository impostoFinanceiroRepository;
+        private IParametrosFinanceiroRepository parametrosFinanceiroRepository;
 
-        public ImpostoFinanceiroAppService(IImpostoFinanceiroRepository impostoFinanceiroRepository, MessageQueue messageQueue)
+        public ImpostoFinanceiroAppService(IImpostoFinanceiroRepository impostoFinanceiroRepository, 
+                                           IParametrosFinanceiroRepository parametrosFinanceiroRepository,
+                                           MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.impostoFinanceiroRepository = impostoFinanceiroRepository;
+            this.parametrosFinanceiroRepository = parametrosFinanceiroRepository;
         }
 
         #region IImpostoFinanceiroAppService Members
@@ -166,15 +173,49 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return UsuarioLogado.IsInRole(Funcionalidade.ImpostoFinanceiroDeletar);
         }
 
-        //public bool EhPermitidoImprimir()
-        //{
-        //    return UsuarioLogado.IsInRole(Funcionalidade.ImpostoFinanceiroImprimir);
-        //}
+        public bool EhPermitidoImprimir()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.ImpostoFinanceiroImprimir);
+        }
+
+        public FileDownloadDTO ExportarRelImpostoFinanceiro(FormatoExportacaoArquivo formato)
+        {
+            if (!EhPermitidoImprimir())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
+            var specification = (Specification<ImpostoFinanceiro>)new TrueSpecification<ImpostoFinanceiro>();
+
+            var listaImpostoFinanceiro = impostoFinanceiroRepository.ListarPeloFiltro(specification,
+                                                                                      l => l.TipoCompromisso,
+                                                                                      l => l.Cliente).To<List<ImpostoFinanceiro>>();
+            relImpostoFinanceiro objRel = new relImpostoFinanceiro();
+
+            objRel.SetDataSource(RelImpostoFinanceiroToDataTable(listaImpostoFinanceiro));
+
+            var parametros = parametrosFinanceiroRepository.Obter();
+            CentroCusto centroCusto = null;
+
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
+
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
+            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Imposto Financeiro",
+                                                          objRel.ExportToStream((ExportFormatType)formato),
+                                                          formato);
+            if (System.IO.File.Exists(caminhoImagem))
+                System.IO.File.Delete(caminhoImagem);
+            return arquivo;
+        }
 
         #endregion
 
 
-        #region Métodos Privados
+        #region métodos privados de IImpostoFinanceiroAppService
 
         public bool ValidaSalvar(ImpostoFinanceiroDTO dto)
         {
@@ -202,6 +243,81 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             return retorno;
         }
+
+        private DataTable RelImpostoFinanceiroToDataTable(List<ImpostoFinanceiro> listaImpostoFinanceiro)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo");
+            DataColumn sigla = new DataColumn("sigla");
+            DataColumn descricao = new DataColumn("descricao");
+            DataColumn aliquota = new DataColumn("aliquota");
+            DataColumn contaContabil = new DataColumn("contaContabil");
+            DataColumn descricaoRetido = new DataColumn("descricaoRetido");
+            DataColumn descricaoIndireto = new DataColumn("descricaoIndireto");
+            DataColumn descricaoPagamentoEletronico = new DataColumn("descricaoPagamentoEletronico");
+            DataColumn descricaoTipoCompromisso = new DataColumn("descricaoTipoCompromisso");
+            DataColumn nomeCliente = new DataColumn("nomeCliente");
+            DataColumn descricaoPeriodicidade = new DataColumn("descricaoPeriodicidade");
+            DataColumn diaVencimento = new DataColumn("diaVencimento");
+            DataColumn descricaoFimDeSemana = new DataColumn("descricaoFimDeSemana");
+            DataColumn descricaoFatoGerador = new DataColumn("descricaoFatoGerador");
+            DataColumn girErro = new DataColumn("girErro");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(sigla);
+            dta.Columns.Add(descricao);
+            dta.Columns.Add(aliquota);
+            dta.Columns.Add(contaContabil);
+            dta.Columns.Add(descricaoRetido);
+            dta.Columns.Add(descricaoIndireto);
+            dta.Columns.Add(descricaoPagamentoEletronico);
+            dta.Columns.Add(descricaoTipoCompromisso);
+            dta.Columns.Add(nomeCliente);
+            dta.Columns.Add(descricaoPeriodicidade);
+            dta.Columns.Add(diaVencimento);
+            dta.Columns.Add(descricaoFimDeSemana);
+            dta.Columns.Add(descricaoFatoGerador);
+            dta.Columns.Add(girErro);
+
+            foreach (var registro in listaImpostoFinanceiro)
+            {
+                ImpostoFinanceiroDTO impostoFinanceiro = registro.To<ImpostoFinanceiroDTO>();
+                DataRow row = dta.NewRow();
+
+                row[codigo] = impostoFinanceiro.Id;
+                row[sigla] = impostoFinanceiro.Sigla;
+                row[descricao] = impostoFinanceiro.Descricao;
+                row[aliquota] = impostoFinanceiro.Aliquota;
+                row[contaContabil] = impostoFinanceiro.ContaContabil;
+
+                row[descricaoRetido] = impostoFinanceiro.EhRetidoDescricao;
+                row[descricaoIndireto] = impostoFinanceiro.IndiretoDescricao;
+                row[descricaoPagamentoEletronico] = impostoFinanceiro.PagamentoEletronicoDescricao;
+                row[descricaoTipoCompromisso] = "";
+                if (impostoFinanceiro.TipoCompromisso != null)
+                {
+                    row[descricaoTipoCompromisso] = impostoFinanceiro.TipoCompromisso.Descricao;
+                }
+                row[nomeCliente] = "";
+                if (impostoFinanceiro.Cliente != null)
+                {
+                    row[nomeCliente] = impostoFinanceiro.Cliente.Nome;
+                }
+                row[descricaoPeriodicidade] = impostoFinanceiro.PeriodicidadeDescricao;
+                row[diaVencimento] = DBNull.Value;
+                if (impostoFinanceiro.DiaVencimento != null)
+                {
+                    row[diaVencimento] = impostoFinanceiro.DiaVencimento.Value;
+                }
+                row[descricaoFimDeSemana] = impostoFinanceiro.FimDeSemanaDescricao;
+                row[descricaoFatoGerador] = impostoFinanceiro.FatoGeradorDescricao;
+                row[girErro] = "";
+                dta.Rows.Add(row);
+            }
+
+            return dta;
+        }
+
 
         #endregion
 

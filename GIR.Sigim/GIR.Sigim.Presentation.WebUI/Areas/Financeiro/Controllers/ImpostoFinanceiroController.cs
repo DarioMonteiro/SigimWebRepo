@@ -46,7 +46,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             model.PodeSalvar = impostoFinanceiroAppService.EhPermitidoSalvar();
             model.PodeDeletar = impostoFinanceiroAppService.EhPermitidoDeletar();
-            //model.PodeImprimir = impostoFinanceiroAppService.EhPermitidoImprimir();
+            model.PodeImprimir = impostoFinanceiroAppService.EhPermitidoImprimir();
 
             var impostoFinanceiro = impostoFinanceiroAppService.ObterPeloId(id) ?? new ImpostoFinanceiroDTO();
 
@@ -105,6 +105,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             model.ListarOpcoesFimDeSemana = new SelectList(impostoFinanceiroAppService.ListarOpcoesFimDeSemana(), "Id", "Descricao", model.ImpostoFinanceiro.FimDeSemana);
             model.ListarOpcoesFatoGerador = new SelectList(impostoFinanceiroAppService.ListarOpcoesFatoGerador(), "Id", "Descricao", model.ImpostoFinanceiro.FatoGerador);
         }
+
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var arquivo = impostoFinanceiroAppService.ExportarRelImpostoFinanceiro(formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
 
     }
 }

@@ -72,7 +72,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string ImpostoFinanceiroAcessar = "IMPOSTOFINANCEIRO_ACESSAR";
         public const string ImpostoFinanceiroGravar = "IMPOSTOFINANCEIRO_GRAVAR";
         public const string ImpostoFinanceiroDeletar = "IMPOSTOFINANCEIRO_DELETAR";
-        //public const string ImpostoFinanceiroImprimir = "IMPOSTOFINANCEIRO_IMPRIMIR";
+        public const string ImpostoFinanceiroImprimir = "IMPOSTOFINANCEIRO_IMPRIMIR";
 
         public const string FormaRecebimentoAcessar = "FORMARECEBIMENTO_ACESSAR";
         public const string FormaRecebimentoGravar = "FORMARECEBIMENTO_GRAVAR";
@@ -254,7 +254,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(ImpostoFinanceiroAcessar, "Imposto financeiro - acessar");
             MenuFinanceiro.Add(ImpostoFinanceiroGravar, "Imposto financeiro - gravar");
             MenuFinanceiro.Add(ImpostoFinanceiroDeletar, "Imposto financeiro - deletar");
-            //MenuFinanceiro.Add(ImpostoFinanceiroImprimir, "Imposto financeiro - imprimir");
+            MenuFinanceiro.Add(ImpostoFinanceiroImprimir, "Imposto financeiro - imprimir");
 
             MenuFinanceiro.Add(FormaRecebimentoAcessar, "Forma de recebimento - acessar");
             MenuFinanceiro.Add(FormaRecebimentoGravar, "Forma de recebimento - gravar");

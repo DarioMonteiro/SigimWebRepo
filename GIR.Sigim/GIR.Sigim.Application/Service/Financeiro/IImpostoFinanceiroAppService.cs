@@ -21,6 +21,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
         List<ItemListaDTO> ListarOpcoesFatoGerador();
         bool EhPermitidoSalvar();
         bool EhPermitidoDeletar();
-        //bool EhPermitidoImprimir();
+        bool EhPermitidoImprimir();
+        FileDownloadDTO ExportarRelImpostoFinanceiro(FormatoExportacaoArquivo formato);
     }
 }

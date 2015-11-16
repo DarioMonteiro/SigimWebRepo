@@ -151,9 +151,13 @@
                                     disableBtnDeletar = "disabled";
                                 }
                             }
-                            <button type="button" id="btnDeletar" class="btn btn-primary @disableBtnDeletar">
+                            <button type="button" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">
                                 Deletar
                             </button>
+                            @{
+                                var url = Url.Action("Imprimir","ImpostoFinanceiro");
+                            }
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
                             @{
                                 string disableBtnSalvar = string.Empty;
                                 if (!Model.PodeSalvar)
@@ -166,7 +170,6 @@
                             </button>
                         </footer>
                     }
-
                     @using (Ajax.BeginForm(
                             "Lista",
                             "ImpostoFinanceiro",
@@ -245,25 +248,6 @@
             }
         });
 
-
-@*        $("#btnDeletar").on("click", function () {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Deletar", "ImpostoFinanceiro")',
-            cache: false,
-            async: false,
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({id: $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').val()})
-            })
-            .success(function (result) {
-                $('#notificationMessages').html(result);
-                limpaPaginacao();
-                clearForm();
-                listarFiltro();
-            });
-        });*@
-
-
         $("#@Html.IdFor(m => m.ImpostoFinanceiro.EhRetido)").on("change", function () {
             tratarRetido();
         });
@@ -278,6 +262,10 @@
 
         $("#rbtPeriodicidade2").on("click", function () {
             habilitarDiaVencimento();
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            parametrosUrlImpressao = '';
         });
     });
 
