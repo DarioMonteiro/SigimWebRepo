@@ -14,7 +14,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
     {
         public ImpostoFinanceiroDTO ImpostoFinanceiro { get; set; }
         public BaseFiltro Filtro { get; set; }
-        public SelectList ListaCorrentista { get; set; }
+        //public SelectList ListaCorrentista { get; set; }
         public SelectList ListaTipoCompromisso { get; set; }
         public SelectList ListaOpcoesPeriodicidade { get; set; }
         public SelectList ListarOpcoesFimDeSemana { get; set; }

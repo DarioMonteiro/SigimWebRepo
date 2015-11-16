@@ -99,7 +99,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
         private void CarregarListas(ImpostoFinanceiroViewModel model)
         {
-            model.ListaCorrentista = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.ImpostoFinanceiro.ClienteId);
+            //model.ListaCorrentista = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.ImpostoFinanceiro.Cliente.Id);
             model.ListaTipoCompromisso = new SelectList(tipoCompromissoAppService.ListarTipoPagar(), "Id", "Descricao", model.ImpostoFinanceiro.TipoCompromissoId );
             model.ListaOpcoesPeriodicidade = new SelectList(impostoFinanceiroAppService.ListarOpcoesPeriodicidade(), "Id", "Descricao", model.ImpostoFinanceiro.Periodicidade);
             model.ListarOpcoesFimDeSemana = new SelectList(impostoFinanceiroAppService.ListarOpcoesFimDeSemana(), "Id", "Descricao", model.ImpostoFinanceiro.FimDeSemana);

@@ -89,6 +89,11 @@ namespace GIR.Sigim.Domain.Specification.Sigim
             return new DirectSpecification<ClienteFornecedor>(l => l.ClienteOrdemCompra == "S");
         }
 
+        public static Specification<ClienteFornecedor> EhClienteAPagar()
+        {
+            return new DirectSpecification<ClienteFornecedor>(l => l.ClienteAPagar == "S");
+        }
+
         public static Specification<ClienteFornecedor> NomeNoIntervalo(string inicio, string fim)
         {
             Specification<ClienteFornecedor> specification = new TrueSpecification<ClienteFornecedor>();

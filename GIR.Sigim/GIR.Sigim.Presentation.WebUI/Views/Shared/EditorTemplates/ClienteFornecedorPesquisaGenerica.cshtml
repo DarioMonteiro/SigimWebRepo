@@ -14,7 +14,7 @@
         {
             <div class="input-group">
                 <label class="input">
-                    @Html.TextBoxFor(m => m.Nome, new { @placeholder = "Digite o nome do " + @ViewBag.label, @class = cssClass })
+                    @Html.TextBoxFor(m => m.Nome, new { @placeholder = "Digite o nome do(a) " + @ViewBag.label, @class = cssClass })
                 </label>
                 <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
             </div>
@@ -126,7 +126,7 @@
 
 <script type="text/javascript">
     @{
-        bool? podeEdidar = ViewBag.podeEdidar as bool? ?? true;
+        bool? podeEditar = ViewBag.podeEditar as bool? ?? true;
     }
 
     var clienteFornecedorModulo_@(uniqueIdentifier);
@@ -142,7 +142,7 @@
     }
    
     $(document).ready(function () {
-        @if (!podeEdidar.Value)
+        @if (!podeEditar.Value)
         {
             @:$("#@Html.IdFor(m => m.Nome)").attr("readonly", true);
             @:$("#@Html.IdFor(m => m.Nome)").addClass("readonly");

@@ -41,6 +41,15 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                     return Json(model);
                 }
             }
+            if (clienteFornecedorModulo == ClienteFornecedorModuloAutoComplete.APagar)
+            {
+                if (situacao == SituacaoAutoComplete.Ativo)
+                {
+                    var model = clienteFornecedorAppService.ListarClienteAPagarAtivosPorNome(nome);
+                    return Json(model);
+                }
+            }
+
             if (clienteFornecedorModulo == ClienteFornecedorModuloAutoComplete.Todos)
             {
                 if (situacao == SituacaoAutoComplete.Ativo)
@@ -74,6 +83,14 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                     result = clienteFornecedorAppService.PesquisarClientesDeOrdemCompraAtivosPeloFiltro(filtro, out totalRegistros);
                 }
             }
+            if (clienteFornecedorModulo == ClienteFornecedorModuloAutoComplete.APagar)
+            {
+                if (situacao == SituacaoAutoComplete.Ativo)
+                {
+                    result = clienteFornecedorAppService.PesquisarClientesAPagarAtivosPeloFiltro(filtro, out totalRegistros);
+                }
+            }
+
             if (clienteFornecedorModulo == ClienteFornecedorModuloAutoComplete.Todos)
             {
                 if (situacao == SituacaoAutoComplete.Ativo)

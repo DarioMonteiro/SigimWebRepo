@@ -59,7 +59,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public ImpostoFinanceiroDTO ObterPeloId(int? id)
         {
-            return impostoFinanceiroRepository.ObterPeloId(id).To<ImpostoFinanceiroDTO>();
+            return impostoFinanceiroRepository.ObterPeloId(id,l => l.Cliente, 
+                                                                   l => l.TipoCompromisso).To<ImpostoFinanceiroDTO>();
         }
 
         public bool Salvar(ImpostoFinanceiroDTO dto)
@@ -87,7 +88,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
             impostoFinanceiro.Descricao = dto.Descricao;
             impostoFinanceiro.Aliquota = dto.Aliquota;
             impostoFinanceiro.ContaContabil = dto.ContaContabil;
-            impostoFinanceiro.ClienteId = dto.ClienteId;
+            //impostoFinanceiro.ClienteId = dto.ClienteId;
+            impostoFinanceiro.ClienteId = dto.Cliente.Id;
             impostoFinanceiro.TipoCompromissoId = dto.TipoCompromissoId;
             impostoFinanceiro.EhRetido = dto.EhRetido;
             impostoFinanceiro.Indireto = dto.Indireto;

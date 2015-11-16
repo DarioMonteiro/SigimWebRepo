@@ -60,6 +60,16 @@ namespace GIR.Sigim.Application.Service.Sigim
             return clienteFornecedorRepository.ListarPeloFiltro(specification).To<List<ClienteFornecedorDTO>>();
         }
 
+        public List<ClienteFornecedorDTO> ListarClienteAPagarAtivosPorNome(string nome)
+        {
+            var specification = (Specification<ClienteFornecedor>)new TrueSpecification<ClienteFornecedor>();
+            specification &= ClienteFornecedorSpecification.NomeContem(nome);
+            specification &= ClienteFornecedorSpecification.EhAtivo();
+            specification &= ClienteFornecedorSpecification.EhClienteAPagar();
+
+            return clienteFornecedorRepository.ListarPeloFiltro(specification).To<List<ClienteFornecedorDTO>>();
+        }
+
         public List<ClienteFornecedorDTO> ListarClienteTodosModulosAtivosPorNome(string nome)
         {
             var specification = (Specification<ClienteFornecedor>)new TrueSpecification<ClienteFornecedor>();
@@ -152,6 +162,49 @@ namespace GIR.Sigim.Application.Service.Sigim
                                                          l => l.PessoaFisica,
                                                          l => l.PessoaJuridica).To<List<ClienteFornecedorDTO>>();
         }
+
+        public List<ClienteFornecedorDTO> PesquisarClientesAPagarAtivosPeloFiltro(ClienteFornecedorPesquisaFiltro filtro, out int totalRegistros)
+        {
+            var specification = (Specification<ClienteFornecedor>)new TrueSpecification<ClienteFornecedor>();
+            specification &= ClienteFornecedorSpecification.EhAtivo();
+            specification &= ClienteFornecedorSpecification.EhClienteAPagar();
+
+            bool EhTipoSelecaoContem = filtro.TipoSelecao == TipoPesquisa.Contem;
+            switch (filtro.Campo)
+            {
+                case "rg":
+                    specification &= EhTipoSelecaoContem ? ClienteFornecedorSpecification.RgContem(filtro.TextoInicio)
+                        : ClienteFornecedorSpecification.RgNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "razaoSocial":
+                    specification &= EhTipoSelecaoContem ? ClienteFornecedorSpecification.RazaoSocialContem(filtro.TextoInicio)
+                        : ClienteFornecedorSpecification.RazaoSocialNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "cnpj":
+                    specification &= EhTipoSelecaoContem ? ClienteFornecedorSpecification.CnpjContem(filtro.TextoInicio)
+                        : ClienteFornecedorSpecification.CnpjNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "cpf":
+                    specification &= EhTipoSelecaoContem ? ClienteFornecedorSpecification.CpfContem(filtro.TextoInicio)
+                        : ClienteFornecedorSpecification.CpfNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+                case "nomeFantasia":
+                default:
+                    specification &= EhTipoSelecaoContem ? ClienteFornecedorSpecification.NomeContem(filtro.TextoInicio)
+                        : ClienteFornecedorSpecification.NomeNoIntervalo(filtro.TextoInicio, filtro.TextoFim);
+                    break;
+            }
+
+            return clienteFornecedorRepository.Pesquisar(specification,
+                                                         filtro.PageIndex,
+                                                         filtro.PageSize,
+                                                         filtro.OrderBy,
+                                                         filtro.Ascending,
+                                                         out totalRegistros,
+                                                         l => l.PessoaFisica,
+                                                         l => l.PessoaJuridica).To<List<ClienteFornecedorDTO>>();
+        }
+
 
         public List<ClienteFornecedorDTO> PesquisarClientesDeTodosOsModulosAtivosPeloFiltro(ClienteFornecedorPesquisaFiltro filtro, out int totalRegistros)
         {

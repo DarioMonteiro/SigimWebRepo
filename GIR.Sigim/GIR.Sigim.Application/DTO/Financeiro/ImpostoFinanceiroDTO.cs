@@ -58,7 +58,7 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         }
 
         [Display(Name = "Correntista")]
-        public int? ClienteId { get; set; }
+        //public int? ClienteId { get; set; }
         public ClienteFornecedorDTO Cliente { get; set; }
 
         [Display(Name = "Compromisso")]
@@ -87,5 +87,11 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         [Display(Name = "Dia do vencimento")]
         public Int16? DiaVencimento { get; set; }
+
+        public ImpostoFinanceiroDTO()
+        {
+            Cliente = new ClienteFornecedorDTO();
+        }
+
     }
 }

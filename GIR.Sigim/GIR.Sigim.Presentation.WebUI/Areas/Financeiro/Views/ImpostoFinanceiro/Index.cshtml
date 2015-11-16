@@ -55,7 +55,7 @@
                                     <section class="col col-8">
                                         @Html.LabelFor(m => m.ImpostoFinanceiro.TipoCompromissoId, new { @class = "label" })
                                         <label class="select">
-                                            @Html.DropDownListFor(m => m.ImpostoFinanceiro.TipoCompromissoId, Model.ListaTipoCompromisso, string.Empty)<i></i>
+                                            @Html.DropDownListFor(m => m.ImpostoFinanceiro.TipoCompromissoId, Model.ListaTipoCompromisso, string.Empty, new { @class="readonly", @readonly="readonly" })<i></i>
                                         </label>
                                     </section>
                                 </div>
@@ -63,15 +63,21 @@
                                     <section class="col col-3">
                                         @Html.LabelFor(m => m.ImpostoFinanceiro.ContaContabil, new { @class = "label" })
                                         <label class="input">
-                                            @Html.TextBoxFor(m => m.ImpostoFinanceiro.ContaContabil, new { @class = "label" })
+                                            @Html.TextBoxFor(m => m.ImpostoFinanceiro.ContaContabil, new { @class = "label", @maxlength = "20" })
                                         </label>
                                         @Html.ValidationMessageFor(m => m.ImpostoFinanceiro.ContaContabil, "", new { @class = "note note-error" })
                                     </section>
+
                                     <section class="col col-8">
-                                        @Html.LabelFor(m => m.ImpostoFinanceiro.ClienteId, new { @class = "label" })
-                                        <label class="select">
-                                            @Html.DropDownListFor(m => m.ImpostoFinanceiro.ClienteId, Model.ListaCorrentista, string.Empty)<i></i>
-                                        </label>
+                                    @Html.EditorFor(m => m.ImpostoFinanceiro.Cliente, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-12", 
+                                                                                                                                 @required = false, 
+                                                                                                                                 @label = "Correntista",
+                                                                                                                                 @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.APagar),
+                                                                                                                                 @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                                                                                 @exibirBotaoPesquisa = true,
+                                                                                                                                 @sectionStyle = "margin-bottom: 10px; margin-left: -15px;",
+                                                                                                                                 @podeEditar = false 
+                                                                                                                                })
                                     </section>
                                 </div>
                                 <div class="row">
@@ -92,11 +98,11 @@
                                             }
 									    </div>
 								    </section>
-                                    <section class="col col-4" style="margin-top:10px;"> 
+                                    <section class="col col-4" style="margin-top:20px;"> 
                                             <label class="col-md-3">Dia vencto</label>
                                             <div class="col-md-2">
                                                 <label class="input">
-                                                    @Html.TextBoxFor(m => m.ImpostoFinanceiro.DiaVencimento, new { @maxlength = "2", @class = "form-control numeric", @disabled="disabled",@style="background-color:#d5d5d5;" })
+                                                    @Html.TextBoxFor(m => m.ImpostoFinanceiro.DiaVencimento, new { @maxlength = "2", @class = "form-control numeric readonly", @readonly="readonly" })
                                                 </label>
                                                 @Html.ValidationMessageFor(m => m.ImpostoFinanceiro.DiaVencimento, "", new { @class = "note note-error" })
                                             </div>
@@ -295,7 +301,7 @@
             habilitarPeriodicidade();
             habilitarFimDeSemana();
             habilitarFatoGerador();
-
+            habilitarTipoCompromissoEhCliente();
         }
         else {
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)').prop('disabled', '');
@@ -304,6 +310,7 @@
             desabilitarPeriodicidade();
             desabilitarFimDeSemana();
             desabilitarFatoGerador();
+            desabilitarTipoCompromissoEhCliente();
         }
     }
 
@@ -319,9 +326,10 @@
             habilitarPeriodicidade();
             habilitarFimDeSemana();
             habilitarFatoGerador();
-
+            habilitarTipoCompromissoEhCliente();
         }
-        else {
+        else
+        {
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.EhRetido)').prop('disabled', '');
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.PagamentoEletronico)').prop('disabled', '');
             $('#labelRetido').removeClass("state-disabled");
@@ -330,6 +338,7 @@
             desabilitarPeriodicidade();
             desabilitarFimDeSemana();
             desabilitarFatoGerador();
+            desabilitarTipoCompromissoEhCliente();
         }
     }
 
@@ -344,14 +353,14 @@
     }
 
     function desabilitarDiaVencimento() {
-        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').prop('disabled', 'disabled');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').prop('readonly', true);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').addClass('readonly');
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').val("");
-        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').attr('style', 'background-color:#d5d5d5;');
     }
 
     function habilitarDiaVencimento() {
-        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').prop('disabled', '');
-        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').attr('style', 'background-color:white;');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').prop('readonly', false);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').removeClass('readonly');
     }
 
     function habilitarFimDeSemana() {
@@ -407,6 +416,28 @@
         }
     }
 
+    function habilitarTipoCompromissoEhCliente() {
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').prop('disabled', '');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').removeClass('readonly');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Nome)').prop('readonly', false);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Nome)').removeClass('readonly');
+        $('#BtnShowModalPanel_ImpostoFinanceiro_Cliente_Id').removeAttr('href');
+        $('#BtnShowModalPanel_ImpostoFinanceiro_Cliente_Id').attr('href', '#ImpostoFinanceiro_Cliente_Id_Pesquisa_ModalPanel');
+        $('#BtnShowModalPanel_ImpostoFinanceiro_Cliente_Id').attr('data-toggle','modal');
+    }
+
+    function desabilitarTipoCompromissoEhCliente() {
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(0);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Id)').val(null);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Nome)').val(null);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').prop('disabled', 'disabled');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').addClass('readonly');
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Nome)').prop('readonly', true);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Nome)').addClass('readonly');
+        $('#BtnShowModalPanel_ImpostoFinanceiro_Cliente_Id').attr('href', 'javascript:void(0);');
+        $('#BtnShowModalPanel_ImpostoFinanceiro_Cliente_Id').removeAttr('data-toggle');
+    }
+
     function clearForm()
     {
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').val('');
@@ -414,8 +445,9 @@
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.Sigla)').val('');
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.Aliquota)').val(roundDecimal(floatToString(0), 5));
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.ContaContabil)').val('');
-        $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(0);
-        $('#@Html.IdFor(m => m.ImpostoFinanceiro.ClienteId)').val(0);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(null);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Id)').val(null);
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Nome)').val(null);
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.EhRetido)').prop('checked', false);
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)').prop('checked', false);
         $('#@Html.IdFor(m => m.ImpostoFinanceiro.PagamentoEletronico)').prop('checked', false);
@@ -426,22 +458,23 @@
         $('#labelIndireto').removeClass("state-disabled");
         $('#labelPageletr').removeClass("state-disabled");
 
+        desabilitarTipoCompromissoEhCliente();
         desabilitarPeriodicidade();
         desabilitarFimDeSemana();
         desabilitarFatoGerador();
         desabilitarDiaVencimento();
+        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').val('');
 
 
 @*        $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.Periodicidade)']").each(function (i) {
             this.checked = false;
             this.disabled = 'disabled';
-        });*@
-@*        $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FimDeSemana)']").each(function (i) {
+        });
+         $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FimDeSemana)']").each(function (i) {
             this.checked = false;
             this.disabled = 'disabled';
-        });*@
-        $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').val('');
-@*        $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FatoGerador)']").each(function (i) {
+        });
+         $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FatoGerador)']").each(function (i) {
             this.checked = false;
             this.disabled = 'disabled';
         });*@
@@ -458,8 +491,10 @@
     function refresh()
     {
         onSuccess();
-        clearForm();
-        listarFiltro();
+        if ($('#notificationMessages').html().search('alert-danger') == -1) {
+            clearForm();
+            listarFiltro();
+        }
     }
 
     function loadItem(id) 
@@ -481,24 +516,72 @@
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.Sigla)').val(result.Sigla);
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.Aliquota)').val(roundDecimal(floatToString(result.Aliquota), 5));
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.ContaContabil)').val(result.ContaContabil);
-            $('#@Html.IdFor(m => m.ImpostoFinanceiro.ClienteId)').val(result.ClienteId);
-            $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(result.TipoCompromissoId);
-            $('#@Html.IdFor(m => m.ImpostoFinanceiro.EhRetido)').prop('checked', result.EhRetido);
-            $('#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)').prop('checked', result.Indireto);
-            $('#@Html.IdFor(m => m.ImpostoFinanceiro.PagamentoEletronico)').prop('checked', result.PagamentoEletronico);
+            if (result.Cliente != null) {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Id)').val(result.Cliente.Id);
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Nome)').val(result.Cliente.Nome);
+            }
+            else {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Id)').val(null);
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.Cliente.Nome)').val(null);
+            }
+            if (result.TipoCompromissoId != null) {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(result.TipoCompromissoId);
+            }
+            else {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.TipoCompromissoId)').val(null);
+            }
+            if (result.EhRetido === true) {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.EhRetido)').prop('checked', true);
+            }
+            else {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.EhRetido)').prop('checked', false);
+            }
+            if (result.Indireto === true) {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)').prop('checked', true);
+            }
+            else {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)').prop('checked', false);
+            }
+            if (result.Indireto === true) {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.PagamentoEletronico)').prop('checked', true);
+            }
+            else {
+                $('#@Html.IdFor(m => m.ImpostoFinanceiro.PagamentoEletronico)').prop('checked', false);
+            }
+
+            var ehRetido = ($("#@Html.IdFor(m => m.ImpostoFinanceiro.EhRetido)").prop('checked') === true);
+            if (ehRetido) {
+                tratarRetido();
+            }
+            var ehIndireto = ($("#@Html.IdFor(m => m.ImpostoFinanceiro.Indireto)").prop('checked') === true);
+            if (ehIndireto) {
+                tratarIndireto();
+            }
+
             $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.Periodicidade)']").each(function (i)
             {
-                if ($(this).val() == result.Periodicidade)
+                if ($(this).val() == result.Periodicidade) {
                     $(this).prop('checked', true);
-            });
-            $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FimDeSemana)']").each(function (i) {
-                if ($(this).val() == result.FimDeSemana)
-                    $(this).prop('checked', true);
+                    if (result.PeriodicidadeDescricao == "Mensal") {
+                        habilitarDiaVencimento();
+                    }
+                    else {
+                        desabilitarDiaVencimento();
+                    }
+                }
             });
             $('#@Html.IdFor(m => m.ImpostoFinanceiro.DiaVencimento)').val(result.DiaVencimento);
-            $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FatoGerador)']").each(function (i) {
-                if ($(this).val() == result.FatoGerador)
+
+            $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FimDeSemana)']").each(function (i) {
+                if ($(this).val() == result.FimDeSemana) {
                     $(this).prop('checked', true);
+                }
+            });
+
+            $("input:radio[name='@Html.NameFor(m => m.ImpostoFinanceiro.FatoGerador)']").each(function (i) {
+                if ($(this).val() == result.FatoGerador) {
+                    $(this).prop('checked', true);
+                }
             });
                     
             goToTop();
