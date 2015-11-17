@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GIR.Sigim.Application.DTO.Financeiro;
+using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Service.Financeiro;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
@@ -34,6 +35,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
+
+            model.PodeSalvar = motivoCancelamentoAppService.EhPermitidoSalvar();
+            model.PodeDeletar = motivoCancelamentoAppService.EhPermitidoDeletar();
+            model.PodeImprimir = motivoCancelamentoAppService.EhPermitidoImprimir();
+
             var motivoCancelamento = motivoCancelamentoAppService.ObterPeloId(id) ?? new MotivoCancelamentoDTO();
 
             if (id.HasValue && !motivoCancelamento.Id.HasValue)
@@ -71,7 +77,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         public ActionResult Salvar(MotivoCancelamentoViewModel model)
         {
             if (ModelState.IsValid)
+            {
                 motivoCancelamentoAppService.Salvar(model.MotivoCancelamento);
+            }
 
             return PartialView("_NotificationMessagesPartial");
         }
@@ -81,7 +89,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         {
             motivoCancelamentoAppService.Deletar(id);
             return PartialView("_NotificationMessagesPartial");
-        }      
+        }
+
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var arquivo = motivoCancelamentoAppService.ExportarRelMotivoCancelamento(formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
 
     }
 }

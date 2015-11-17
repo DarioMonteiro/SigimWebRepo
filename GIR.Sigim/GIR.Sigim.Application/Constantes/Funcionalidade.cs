@@ -82,7 +82,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string MotivoCancelamentoAcessar = "MOTIVOCANCELAMENTO_ACESSAR";
         public const string MotivoCancelamentoGravar = "MOTIVOCANCELAMENTO_GRAVAR";
         public const string MotivoCancelamentoDeletar = "MOTIVOCANCELAMENTO_DELETAR";
-        //public const string MotivoCancelamentoImprimir = "MOTIVOCANCELAMENTO_IMPRIMIR";
+        public const string MotivoCancelamentoImprimir = "MOTIVOCANCELAMENTO_IMPRIMIR";
 
         public const string RateioAutomaticoAcessar = "RATEIOAUTOMATICO_ACESSAR";
         public const string RateioAutomaticoGravar = "RATEIOAUTOMATICO_GRAVAR";
@@ -264,7 +264,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(MotivoCancelamentoAcessar, "Motivo de cancelamento - acessar");
             MenuFinanceiro.Add(MotivoCancelamentoGravar, "Motivo de cancelamento - gravar");
             MenuFinanceiro.Add(MotivoCancelamentoDeletar, "Motivo de cancelamento - deletar");
-            //MenuFinanceiro.Add(MotivoCancelamentoImprimir, "Motivo de cancelamento - imprimir");
+            MenuFinanceiro.Add(MotivoCancelamentoImprimir, "Motivo de cancelamento - imprimir");
 
             MenuFinanceiro.Add(RateioAutomaticoAcessar, "Rateio automático - acessar");
             MenuFinanceiro.Add(RateioAutomaticoGravar, "Rateio automático - gravar");

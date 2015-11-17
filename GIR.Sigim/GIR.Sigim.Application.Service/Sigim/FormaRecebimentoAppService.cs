@@ -181,7 +181,7 @@ namespace GIR.Sigim.Application.Service.Sigim
 
             var specification = (Specification<FormaRecebimento>)new TrueSpecification<FormaRecebimento>();
 
-            var listaFormaRecebimento = formaRecebimentoRepository.ListarPeloFiltro(specification).To<List<FormaRecebimento>>();
+            var listaFormaRecebimento = formaRecebimentoRepository.ListarPeloFiltro(specification).OrderBy(l => l.Descricao).To<List<FormaRecebimento>>();
 
             relFormaRecebimento objRel = new relFormaRecebimento();
 
