@@ -77,7 +77,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string FormaRecebimentoAcessar = "FORMARECEBIMENTO_ACESSAR";
         public const string FormaRecebimentoGravar = "FORMARECEBIMENTO_GRAVAR";
         public const string FormaRecebimentoDeletar = "FORMARECEBIMENTO_DELETAR";
-        //public const string FormaRecebimentoImprimir = "FORMARECEBIMENTO_IMPRIMIR";
+        public const string FormaRecebimentoImprimir = "FORMARECEBIMENTO_IMPRIMIR";
 
         public const string MotivoCancelamentoAcessar = "MOTIVOCANCELAMENTO_ACESSAR";
         public const string MotivoCancelamentoGravar = "MOTIVOCANCELAMENTO_GRAVAR";
@@ -259,7 +259,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(FormaRecebimentoAcessar, "Forma de recebimento - acessar");
             MenuFinanceiro.Add(FormaRecebimentoGravar, "Forma de recebimento - gravar");
             MenuFinanceiro.Add(FormaRecebimentoDeletar, "Forma de recebimento - deletar");
-            //MenuFinanceiro.Add(FormaRecebimentoImprimir, "Forma de recebimento - imprimir");
+            MenuFinanceiro.Add(FormaRecebimentoImprimir, "Forma de recebimento - imprimir");
 
             MenuFinanceiro.Add(MotivoCancelamentoAcessar, "Motivo de cancelamento - acessar");
             MenuFinanceiro.Add(MotivoCancelamentoGravar, "Motivo de cancelamento - gravar");

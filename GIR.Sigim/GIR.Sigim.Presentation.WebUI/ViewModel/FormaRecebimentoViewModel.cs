@@ -19,7 +19,7 @@ namespace GIR.Sigim.Presentation.WebUI.ViewModel
         public bool PodeSalvar { get; set; }
         public bool PodeDeletar { get; set; }
         public bool PodeImprimir { get; set; }
-        public bool PodeHabilitarNumeroDias { get; set; }
+        //public bool PodeHabilitarNumeroDias { get; set; }
 
         public FormaRecebimentoViewModel()
         {

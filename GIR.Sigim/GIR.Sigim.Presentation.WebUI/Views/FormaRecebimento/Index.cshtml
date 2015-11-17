@@ -26,68 +26,94 @@
                             new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))                                            
                     {
                         @Html.AntiForgeryToken()
-                    <div class="panel-body no-padding">
-                        <fieldset>
-                            <div class="row">
-                                <section class="col col-12">
-                                    @Html.HiddenFor(m => m.FormaRecebimento.Id)
-                                    @Html.LabelFor(m => m.FormaRecebimento.Descricao, new { @class = "label" })
-                                    <label class="input">
-                                        @Html.TextBoxFor(m => m.FormaRecebimento.Descricao, new { @maxlength = "50",  @class = "required" })
-                                    </label>
-                                    @Html.ValidationMessageFor(m => m.FormaRecebimento.Descricao, "", new { @class = "note note-error" })
-                                </section>
+                        <div class="panel-body no-padding">
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-12">
+                                        @Html.HiddenFor(m => m.FormaRecebimento.Id)
+                                        @Html.LabelFor(m => m.FormaRecebimento.Descricao, new { @class = "label" })
+                                        <label class="input">
+                                            @Html.TextBoxFor(m => m.FormaRecebimento.Descricao, new { @maxlength = "50",  @class = "required" })
+                                        </label>
+                                        @Html.ValidationMessageFor(m => m.FormaRecebimento.Descricao, "", new { @class = "note note-error" })
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        @Html.LabelFor(m => m.FormaRecebimento.TipoRecebimento, new { @class = "label" })                                
+                                        <label class="select">
+                                            @Html.DropDownListFor(m => m.FormaRecebimento.TipoRecebimento, Model.ListaTipoRecebimento, string.Empty, new { @class="required" })<i></i>
+                                        </label>
+                                        @Html.ValidationMessageFor(m => m.FormaRecebimento.TipoRecebimento, "", new { @class = "note note-error" })
+                                    </section>
+                                    <section class="col col-3">
+                                        @Html.LabelFor(m => m.FormaRecebimento.NumeroDias, new { @class = "label" })                                
+                                        <label class="input">
+                                            @Html.TextBoxFor(m => m.FormaRecebimento.NumeroDias, new { @maxlength = "3" , @class = "numeric text-right readonly" , @readonly="readonly" })
+                                        </label>
+                                        @Html.ValidationMessageFor(m => m.FormaRecebimento.NumeroDias, "", new { @class = "note note-error" })
+@*                                        @{
+                                            if (!Model.PodeHabilitarNumeroDias)
+                                            {
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.FormaRecebimento.NumeroDias, new { @maxlength = "3" , @class = "numeric text-right readonly" , @readonly="readonly" })
+                                                </label>
+                                            }
+                                            else{
+                                                <label class="input">
+                                                    @Html.TextBoxFor(m => m.FormaRecebimento.NumeroDias, new { @maxlength = "3" , @class = "numeric text-right"})
+                                                </label>
+                                            }
+                                        }
+                                        @Html.ValidationMessageFor(m => m.FormaRecebimento.NumeroDias, "", new { @class = "note note-error" })*@
+                                    </section>
+                                </div>                           
+                            </fieldset>
+                        </div>
+                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                            tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluirRegistro" aria-labelledby="ui-id-1" 
+                                style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                <span id="ui-id-1" class="ui-dialog-title">
+                                </span>
                             </div>
-                            <div class="row">
-                                <section class="col col-6">
-                                    @Html.LabelFor(m => m.FormaRecebimento.TipoRecebimento, new { @class = "label" })                                
-                                    <label class="select">
-                                        @Html.DropDownListFor(m => m.FormaRecebimento.TipoRecebimento, Model.ListaTipoRecebimento, string.Empty, new { @class="required" })<i></i>
-                                    </label>
-                                    @Html.ValidationMessageFor(m => m.FormaRecebimento.TipoRecebimento, "", new { @class = "note note-error" })
-                                </section>
-                                <section class="col col-3">
-                                    @Html.LabelFor(m => m.FormaRecebimento.NumeroDias, new { @class = "label" })                                
-                                    @{
-                                        if (!Model.PodeHabilitarNumeroDias)
-                                        {
-                                            <label class="input">
-                                                @Html.TextBoxFor(m => m.FormaRecebimento.NumeroDias, new { @maxlength = "10" , @class = "numeric text-right readonly" , @readonly="readonly" })
-                                            </label>
-                                        }
-                                        else{
-                                            <label class="input">
-                                                @Html.TextBoxFor(m => m.FormaRecebimento.NumeroDias, new { @maxlength = "10" , @class = "numeric text-right"})
-                                            </label>
-                                        }
-                                    }
-                                    @Html.ValidationMessageFor(m => m.FormaRecebimento.NumeroDias, "", new { @class = "note note-error" })
-                                </section>
-                            </div>                           
-                        </fieldset>
-                    </div>
-                    <footer>                       
-                        @{
-                        string disableBtnDeletar = string.Empty;
-                            if (!Model.PodeDeletar)
-                            {
-                                disableBtnDeletar = "disabled";
+                            <div id="dlgSimpleExcluirRegistro" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+	                            <p>
+		                            Deseja excluir o registro selecionado ?
+	                            </p>
+                            </div>
+                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                <div class="ui-dialog-buttonset">
+                                </div>
+                            </div>
+                        </div>                       
+                        <footer>                       
+                            @{
+                                string disableBtnDeletar = string.Empty;
+                                if (!Model.PodeDeletar)
+                                {
+                                    disableBtnDeletar = "disabled";
+                                }
                             }
-                        }
-                        <button type="button" id="btnDeletar" class="btn btn-primary @disableBtnDeletar">
-                            Deletar
-                        </button>
-                        @{
-                            string disableBtnSalvar = string.Empty;
-                            if (!Model.PodeSalvar)
-                            {
-                                disableBtnSalvar = "disabled";
+                            <button type="button" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">
+                                Deletar
+                            </button>
+                            @{
+                                var url = Url.Action("Imprimir","FormaRecebimento");
                             }
-                        }
-                        <button type="submit" id="btnSalvar" class="btn btn-primary @disableBtnSalvar">
-                            Gravar
-                        </button>
-                    </footer>
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
+
+                            @{
+                                string disableBtnSalvar = string.Empty;
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
+                            }
+                            <button type="submit" id="btnSalvar" class="btn btn-primary @disableBtnSalvar">
+                                Gravar
+                            </button>
+                        </footer>
                     }                        
                     @using (Ajax.BeginForm(
                             "Lista",
@@ -115,6 +141,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('body').addClass("hidden-menu");
+
         listarFiltro();
 
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
@@ -128,9 +156,55 @@
         });
 
 
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimpleExcluirRegistro').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Excluir",
+                "class": "btn btn-primary",
+                click: function () {
+                    $(this).dialog("close");
+                    excluirRegistro();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        $("#btnDeletar").on("click", function () {
+            var id = $('#@Html.IdFor(m => m.FormaRecebimento.Id)').val();
+            if (id !== "") {
+                $('#dlgSimpleExcluirRegistro').dialog('open');
+            }
+            else {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "warning");
+            }
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            parametrosUrlImpressao = '';
+        });
+
     });
 
-    $("#btnDeletar").on("click", function () {
+    function excluirRegistro() {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Deletar", "FormaRecebimento")',
@@ -147,7 +221,7 @@
             clearForm();
             listarFiltro();
         });
-    });
+    }
 
     function clearForm() {
         $('#@Html.IdFor(m => m.FormaRecebimento.Id)').val('');
@@ -161,7 +235,7 @@
         $('#notificationMessages').html('');
         $('#FormaRecebimento_Descricao-error').remove();
         $('#FormaRecebimento_TipoRecebimento-error').remove();
-        tratarBotoes(true, true);
+        tratarBotoes(true, true, true);
     }
 
     function refresh() {
@@ -188,7 +262,7 @@
             $('#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)').val(result.TipoRecebimento);
             $('#@Html.IdFor(m => m.FormaRecebimento.Automatico)').val(result.Automatico);
             $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').val(result.NumeroDias);
-            tratarBotoes(!result.Automatico, !result.Automatico);
+            tratarBotoes(!result.Automatico, !result.Automatico, true);
             habilitaDesabilitaNumeroDeDias();
             goToTop();
 
@@ -199,7 +273,7 @@
         $('#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)').val(0);
     }
 
-    function tratarBotoes(condicaoSalvar, condicaoDeletar) {
+    function tratarBotoes(condicaoSalvar, condicaoDeletar,condicaoImprimir) {
         @{
             bool? podeSalvar = Model.PodeSalvar as bool? ?? false;
         }
@@ -208,21 +282,23 @@
             bool? podeDeletar = Model.PodeDeletar as bool? ?? false;
         }
 
-@*        @{
+        @{
             bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
-        }*@
+        }
 
-        @if(podeSalvar.ToString().ToLower() == "false"){
+        @if (podeSalvar.ToString().ToLower() == "false")
+        {
             @:condicaoSalvar = false;
         }
 
-        @if(podeDeletar.ToString().ToLower() == "false"){
+        @if (podeDeletar.ToString().ToLower() == "false")
+        {
             @:condicaoDeletar = false;
         }
 
-@*        @if(podeImprimir.ToString().ToLower() == "false"){
+        @if(podeImprimir.ToString().ToLower() == "false"){
             @:condicaoImprimir = false;
-        }*@
+        }
 
 
         if (condicaoSalvar) {
@@ -232,18 +308,18 @@
             $('#btnSalvar').attr("class","btn btn-primary right disabled");
         }
         if (condicaoDeletar) {
-            $('#btnDeletar').attr("class","btn btn-primary");
+            $('#btnDeletar').attr("class","btn btn-danger");
         }
         else {
-            $('#btnDeletar').attr("class","btn btn-primary disabled");
+            $('#btnDeletar').attr("class","btn btn-danger disabled");
         }
 
-        //if (condicaoImprimir) {
-        //    $('#btnImprimir').attr("class","btn btn-primary");
-        //}
-        //else {
-        //    $('#btnImprimir').attr("class", "btn btn-primary disabled");
-        //}
+        if (condicaoImprimir) {
+            $('#btnImprimir').attr("class","btn btn-primary");
+        }
+        else {
+            $('#btnImprimir').attr("class", "btn btn-primary disabled");
+        }
 
     }
 
@@ -254,12 +330,12 @@
     function habilitaDesabilitaNumeroDeDias() {
         var tipoRecementoId = $("#@Html.IdFor(m => m.FormaRecebimento.TipoRecebimento)").val();       
         if (tipoRecementoId == "1") {
-            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', false);
+            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', '');
             $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').attr("class","numeric text-right");
             $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val(0);
         }
         else {
-            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', true);
+            $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').prop('readonly', 'readonly');
             $('#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)').attr("class","numeric text-right readonly");
             $("#@Html.IdFor(m => m.FormaRecebimento.NumeroDias)").val("");
         }

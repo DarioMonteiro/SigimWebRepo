@@ -18,6 +18,7 @@ namespace GIR.Sigim.Application.Service.Sigim
         bool Deletar(int? id);
         bool EhPermitidoSalvar();
         bool EhPermitidoDeletar();
-        //bool EhPermitidoImprimir();
+        bool EhPermitidoImprimir();
+        FileDownloadDTO ExportarRelFormaRecebimento(FormatoExportacaoArquivo formato);
     }
 }
