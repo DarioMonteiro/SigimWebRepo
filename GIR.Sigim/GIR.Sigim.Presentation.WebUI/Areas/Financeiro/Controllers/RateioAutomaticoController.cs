@@ -36,7 +36,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             var model = Session["RateioAutomatico"] as RateioAutomaticoViewModel;
 
             if (model == null)
-            {model = new RateioAutomaticoViewModel();}
+            {
+                model = new RateioAutomaticoViewModel();
+            }
+
+            model.PodeSalvar = rateioAutomaticoAppService.EhPermitidoSalvar();
+            model.PodeDeletar = rateioAutomaticoAppService.EhPermitidoDeletar();
+            model.PodeImprimir = rateioAutomaticoAppService.EhPermitidoImprimir();
 
             CarregarCombos(model);
 
@@ -69,6 +75,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             rateioAutomaticoAppService.Deletar(tipoRateio);
             return PartialView("_NotificationMessagesPartial");
         }
+
+        public ActionResult Imprimir(int? tipoRateioId, FormatoExportacaoArquivo formato)
+        {
+            var arquivo = rateioAutomaticoAppService.ExportarRelRateioAutomatico(tipoRateioId, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
 
         private void CarregarCombos(RateioAutomaticoViewModel model)
         {

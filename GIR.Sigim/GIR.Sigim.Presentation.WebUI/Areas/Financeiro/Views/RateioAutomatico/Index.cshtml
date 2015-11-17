@@ -1,9 +1,7 @@
 ﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.RateioAutomaticoViewModel
-
 @{
     ViewBag.Title = "Rateio automático";
 }
-
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
     <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>
@@ -31,8 +29,9 @@
                                 <section class="col col-12">
                                     @Html.LabelFor(m => m.TipoRateioId, new { @class = "label" })
                                     <label class="select">
-                                        @Html.DropDownListFor(m => m.TipoRateioId, Model.ListaTipoRateio, string.Empty)<i></i>
+                                        @Html.DropDownListFor(m => m.TipoRateioId, Model.ListaTipoRateio, string.Empty, new { @class="required", @novalidate = "novalidate" })<i></i>
                                     </label>
+                                    @Html.ValidationMessageFor(m => m.TipoRateioId, "", new { @id = Html.IdFor(m => m.TipoRateioId) + "_ValidationMessage", @class = "note note-error" })
                                 </section>
                             </div>
                         </fieldset>
@@ -44,8 +43,6 @@
                             </div>
                             <div class="row">
                                 @Html.EditorFor(m => m.CentroCusto, "CentroCusto", new { @sectionClass = "col col-4", @labelText = "Centro de Custo", @somenteNivelFolha = true })
-                            @*</div>
-                            <div class="row">*@
                                 <section class="col col-2">
                                     @Html.LabelFor(m => m.Percentual, new { @class = "label" })
                                     <label class="input">
@@ -74,14 +71,48 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </fieldset>
                     </div>
+                    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                        tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluirRegistro" aria-labelledby="ui-id-1" 
+                            style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                            <span id="ui-id-1" class="ui-dialog-title">
+                            </span>
+                        </div>
+                        <div id="dlgSimpleExcluirRegistro" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+	                        <p>
+		                        Deseja excluir o registro selecionado ?
+	                        </p>
+                        </div>
+                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                            <div class="ui-dialog-buttonset">
+                            </div>
+                        </div>
+                    </div>
                     <footer>
-                        <button type="button" id="btnDeletar" class="btn btn-danger">
+                        @{
+                            string disableBtnDeletar = string.Empty;
+                            if (!Model.PodeDeletar)
+                            {
+                                disableBtnDeletar = "disabled";
+                            }
+                        }
+                        <button type="button" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">
                             Deletar
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        @{
+                            var url = Url.Action("Imprimir", "RateioAutomatico");
+                        }
+                        @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
+                        @{
+                            string disableBtnSalvar = string.Empty;
+                            if (!Model.PodeSalvar)
+                            {
+                                disableBtnSalvar = "disabled";
+                            }
+                        }
+                        <button type="submit" class="btn btn-primary @disableBtnSalvar">
                             Gravar
                         </button>
                     </footer>
@@ -101,7 +132,11 @@
     $(document).ready(function ()
     {
 
+        $('body').addClass("hidden-menu");
+
         $("#@Html.IdFor(m => m.TipoRateioId)").on("change", function () {
+            limpaItem();
+            limpaLista();
             CarregaRegistros();
         });
 
@@ -109,10 +144,79 @@
             ignore: '#formItem *'
         });
 
+        $('#btnAddItem').on("click", function ()
+        {
+            if ($('#formItem input').valid())
+            {
+                if (validaAdicionar() == true)
+                {
+                    addItem();
+                }
+            }
+        });
+
+        $('#btnRemoverItem').on("click", function ()
+        {
+            removerItem();
+        });
+
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimpleExcluirRegistro').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Excluir",
+                "class": "btn btn-primary",
+                click: function () {
+                    $(this).dialog("close");
+                    excluirRegistro();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        $("#btnDeletar").on("click", function () {
+            var id = $('#@Html.IdFor(m => m.TipoRateioId)').val();
+            if (id !== "") {
+                $('#dlgSimpleExcluirRegistro').dialog('open');
+            }
+            else {
+                smartAlert("Atenção", "Selecione um tipo rateio para excluir !", "warning");
+            }
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            var tipoRateioId = $("#@Html.IdFor(m => m.TipoRateioId)").val();
+
+            if (tipoRateioId == "") {
+                smartAlert("Atenção", "Informe o tipo rateio", "warning");
+                e.event.preventDefault();
+            }
+
+            parametrosUrlImpressao = '&tipoRateioId=' + tipoRateioId;
+        });
+
+
     });
 
-    $("#btnDeletar").on("click", function ()
-    {
+    function excluirRegistro() {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Deletar", "RateioAutomatico")',
@@ -120,37 +224,20 @@
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                tipoRateio: $('#@Html.IdFor(m => m.TipoRateioId )').val()
+                tipoRateio: $('#@Html.IdFor(m => m.TipoRateioId)').val()
             })
         })
-        .success(function (result)
-        {
+        .success(function (result) {
             $('#notificationMessages').html(result);
             clearForm();
         });
-    });
-
-    $('#btnAddItem').on("click", function ()
-    {
-        if ($('#formItem input').valid())
-        {
-            if (validaAdicionar() == true)
-            {
-                addItem();
-            }
-        }
-    });
-
-    $('#btnRemoverItem').on("click", function ()
-    {
-        removerItem();
-    });
+    }
 
     function clearForm()
     {
         $('#@Html.IdFor(m => m.TipoRateioId)').val(0);
         limpaItem();
-        $("#tableItens tbody").empty();
+        limpaLista();
     }
 
     function limpaItem()
@@ -163,16 +250,21 @@
         $('#@Html.IdFor(m => m.IndexSelecionado)').val(-1);
     }
 
+    function limpaLista() {
+        $("#tableItens tbody").empty();
+    }
+
     function novo()
     {
         clearForm();
         limpaMsg();
-   }
+    }
 
     function limpaMsg() {
         $('#notificationMessages').html('');
         $('#Classe_Codigo-error').remove();
         $('#CentroCusto_Codigo-error').remove();
+        $('#TipoRateioId-error').remove();
     }
 
     function refresh()
@@ -193,24 +285,27 @@
 
     function CarregaRegistros()
     {
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("CarregarItem", "RateioAutomatico")',
-            cache: false,
-            async: false,
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({
-                tipoRateio: $('#@Html.IdFor(m => m.TipoRateioId )').val()
+        var tipoRateioId = $('#@Html.IdFor(m => m.TipoRateioId)').val();
+        if (tipoRateioId !== "") {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CarregarItem", "RateioAutomatico")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    tipoRateio: $('#@Html.IdFor(m => m.TipoRateioId)').val()
+                })
             })
-        })
-        .success(function (result) {
-            limpaMsg();
-            limpaItem();
-            jsonItemArray = result;
-            $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(result));
-            fillTable();
-            goToTop();
-        });
+            .success(function (result) {
+                limpaMsg();
+                limpaItem();
+                jsonItemArray = result;
+                $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(result));
+                fillTable();
+                goToTop();
+            });
+        }
     };
 
     function fillTable()

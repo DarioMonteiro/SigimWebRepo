@@ -87,7 +87,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string RateioAutomaticoAcessar = "RATEIOAUTOMATICO_ACESSAR";
         public const string RateioAutomaticoGravar = "RATEIOAUTOMATICO_GRAVAR";
         public const string RateioAutomaticoDeletar = "RATEIOAUTOMATICO_DELETAR";
-        //public const string RateioAutomaticoImprimir = "RATEIOAUTOMATICO_IMPRIMIR";
+        public const string RateioAutomaticoImprimir = "RATEIOAUTOMATICO_IMPRIMIR";
             
         public const string TabelaBasicaFinanceiroAcessar = "TABELABASICA_FINANCEIRO_ACESSAR";
         public const string TabelaBasicaFinanceiroGravar = "TABELABASICA_FINANCEIRO_GRAVAR";
@@ -269,7 +269,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(RateioAutomaticoAcessar, "Rateio automático - acessar");
             MenuFinanceiro.Add(RateioAutomaticoGravar, "Rateio automático - gravar");
             MenuFinanceiro.Add(RateioAutomaticoDeletar, "Rateio automático - deletar");
-            //MenuFinanceiro.Add(RateioAutomaticoImprimir, "Rateio automático - imprimir");
+            MenuFinanceiro.Add(RateioAutomaticoImprimir, "Rateio automático - imprimir");
 
             MenuFinanceiro.Add(TabelaBasicaFinanceiroAcessar, "Tabelas básicas - acessar");
             MenuFinanceiro.Add(TabelaBasicaFinanceiroGravar, "Tabelas básicas - gravar");

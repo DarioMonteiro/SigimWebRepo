@@ -14,17 +14,25 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Financeiro;
 using GIR.Sigim.Application.Filtros;
+using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Application.Reports.Financeiro;
+using CrystalDecisions.Shared;
+using System.Data;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
     public class RateioAutomaticoAppService : BaseAppService, IRateioAutomaticoAppService
     {
         private IRateioAutomaticoRepository rateioAutomaticoRepository;
+        private IParametrosFinanceiroRepository parametrosFinanceiroRepository;
 
-        public RateioAutomaticoAppService(IRateioAutomaticoRepository rateioAutomaticoRepository, MessageQueue messageQueue)
+        public RateioAutomaticoAppService(IRateioAutomaticoRepository rateioAutomaticoRepository,
+                                          IParametrosFinanceiroRepository parametrosFinanceiroRepository,
+                                          MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.rateioAutomaticoRepository = rateioAutomaticoRepository;
+            this.parametrosFinanceiroRepository = parametrosFinanceiroRepository;
         }
 
         #region IRateioAutomaticoRepository Members
@@ -36,6 +44,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Salvar(int TipoRateioId, List<RateioAutomaticoDTO> listaDto)
         {
+            if (!EhPermitidoSalvar())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (listaDto == null) throw new ArgumentNullException("dto");
 
             if (ValidaSalvar(listaDto) == false) { return false; }
@@ -49,7 +63,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 rateioAutomatico = rateioAutomaticoRepository.ObterPeloId(item.Id);
                 rateioAutomaticoRepository.Remover(rateioAutomatico);
             }
-
 
             bool bolOK = true;
             foreach (var item in listaDto)
@@ -90,6 +103,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Deletar(int TipoRateioId)
         {
+            if (!EhPermitidoDeletar())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (TipoRateioId == 0)
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
@@ -130,10 +149,67 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return bolOK;
         }
 
+        public bool EhPermitidoSalvar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.RateioAutomaticoGravar);
+        }
+
+        public bool EhPermitidoDeletar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.RateioAutomaticoDeletar);
+        }
+
+        public bool EhPermitidoImprimir()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.RateioAutomaticoImprimir);
+        }
+
+        public FileDownloadDTO ExportarRelRateioAutomatico(int? tipoRateioId, FormatoExportacaoArquivo formato)
+        {
+            if (!EhPermitidoImprimir())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
+            List<RateioAutomatico> listaRateioAutomatico = new List<RateioAutomatico>();
+            if (tipoRateioId.HasValue)
+            {
+
+                var specification = (Specification<RateioAutomatico>)new TrueSpecification<RateioAutomatico>();
+
+                listaRateioAutomatico = rateioAutomaticoRepository.ListarPeloFiltro(l => l.TipoRateioId == tipoRateioId,
+                                                                                    l => l.TipoRateio,
+                                                                                    l => l.Classe,
+                                                                                    l => l.CentroCusto.ListaCentroCustoEmpresa).To<List<RateioAutomatico>>();
+            }
+
+            relRateioAutomatico objRel = new relRateioAutomatico();
+
+            objRel.SetDataSource(RelRateioAutomaticoToDataTable(listaRateioAutomatico));
+
+            var parametros = parametrosFinanceiroRepository.Obter();
+            CentroCusto centroCusto = listaRateioAutomatico.Last().CentroCusto;
+
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
+
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
+            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Rateio automático",
+                                                          objRel.ExportToStream((ExportFormatType)formato),
+                                                          formato);
+            if (System.IO.File.Exists(caminhoImagem))
+                System.IO.File.Delete(caminhoImagem);
+            return arquivo;
+        }
+
+
         #endregion
 
 
-        #region Métodos Privados
+        #region Métodos Privados IRateioAutomaticoAppService
 
         public bool ValidaSalvar(List<RateioAutomaticoDTO> listaDto)
         {
@@ -153,6 +229,51 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             return retorno;
         }
+
+        private DataTable RelRateioAutomaticoToDataTable(List<RateioAutomatico> listaRateioAutomatico)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo");
+            DataColumn tipoRateio = new DataColumn("tipoRateio");
+            DataColumn classe = new DataColumn("classe");
+            DataColumn centroCusto = new DataColumn("centroCusto");
+            DataColumn percentual = new DataColumn("percentual", System.Type.GetType("System.Decimal"));
+            DataColumn descricaoTipoRateio = new DataColumn("descricaoTipoRateio");
+            DataColumn descricaoClasse = new DataColumn("descricaoClasse");
+            DataColumn descricaoCentroCusto = new DataColumn("descricaoCentroCusto");
+            DataColumn girErro = new DataColumn("girErro");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(tipoRateio);
+            dta.Columns.Add(classe);
+            dta.Columns.Add(centroCusto);
+            dta.Columns.Add(percentual);
+            dta.Columns.Add(descricaoTipoRateio);
+            dta.Columns.Add(descricaoClasse);
+            dta.Columns.Add(descricaoCentroCusto);
+            dta.Columns.Add(girErro);
+
+            foreach (var registro in listaRateioAutomatico)
+            {
+                RateioAutomaticoDTO rateioAutomatico = registro.To<RateioAutomaticoDTO>();
+                DataRow row = dta.NewRow();
+
+                row[codigo] = rateioAutomatico.Id;
+                row[tipoRateio] = rateioAutomatico.TipoRateioId;
+                row[classe] = rateioAutomatico.ClasseId;
+                row[centroCusto] = rateioAutomatico.CentroCusto;
+                row[percentual] = rateioAutomatico.Percentual;
+                row[descricaoTipoRateio] = rateioAutomatico.TipoRateio.Descricao;
+                row[descricaoClasse] = rateioAutomatico.Classe.ClasseDescricao;
+                row[descricaoCentroCusto] = rateioAutomatico.CentroCusto.CentroCustoDescricao;
+
+                row[girErro] = "";
+                dta.Rows.Add(row);
+            }
+
+            return dta;
+        }
+
 
         #endregion
 

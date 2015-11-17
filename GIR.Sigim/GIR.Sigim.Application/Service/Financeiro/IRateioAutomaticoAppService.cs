@@ -14,5 +14,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
         List<RateioAutomaticoDTO> ListarPeloTipoRateio(int TipoRateioId);
         bool Salvar(int TipoRateioId, List<RateioAutomaticoDTO> listaDto);
         bool Deletar(int TipoRateioId);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
+        FileDownloadDTO ExportarRelRateioAutomatico(int? id, FormatoExportacaoArquivo formato);
     }
 }
