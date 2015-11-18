@@ -18,6 +18,7 @@ using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.Reports.Financeiro;
 using CrystalDecisions.Shared;
 using System.Data;
+using GIR.Sigim.Domain.Specification.Financeiro;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -178,7 +179,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
                 var specification = (Specification<RateioAutomatico>)new TrueSpecification<RateioAutomatico>();
 
-                listaRateioAutomatico = rateioAutomaticoRepository.ListarPeloFiltro(l => l.TipoRateioId == tipoRateioId,
+                specification &= RateioAutomaticoSpecification.PertenceAoTipoRateio(tipoRateioId);
+
+                listaRateioAutomatico = rateioAutomaticoRepository.ListarPeloFiltro(specification,
                                                                                     l => l.TipoRateio,
                                                                                     l => l.Classe,
                                                                                     l => l.CentroCusto.ListaCentroCustoEmpresa).To<List<RateioAutomatico>>();
@@ -216,10 +219,44 @@ namespace GIR.Sigim.Application.Service.Financeiro
             bool retorno = true;
             decimal decPercentualTotal = 0;
 
-            foreach (var item in listaDto)
+            //bool ok = true;
+            //foreach (var item in listaDto)
+            //{
+            //    if ((string.IsNullOrEmpty(item.CentroCustoId)) || (string.IsNullOrEmpty(item.ClasseId))){
+            //        messageQueue.Add("Preencher o campo classe ou centro de custo !", TypeMessage.Error);
+            //        ok = false;
+            //    }
+            //    if (item.Percentual <= 0)
+            //    {
+            //        messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.ValorDeveSerMaiorQue, "Percentual","0"), TypeMessage.Error);
+            //        ok = false;
+            //    }
+            //    decPercentualTotal += item.Percentual;
+            //}
+            //if (!ok)
+            //{
+            //    return false;
+            //}
+
+            if (listaDto.Any(l => l.CentroCustoId == "" || l.ClasseId == ""))
             {
-                decPercentualTotal += item.Percentual;
+                messageQueue.Add("Preencher o campo classe ou centro de custo !", TypeMessage.Error);
+                retorno = false;
             }
+
+            if (listaDto.Any(l => l.Percentual <=0))
+            {
+                messageQueue.Add(string.Format(Application.Resource.Sigim.ErrorMessages.ValorDeveSerMaiorQue, "Percentual", "0"), TypeMessage.Error); 
+                retorno = false;
+            }
+
+            if (listaDto.GroupBy(l => l.CentroCustoId, l => l.ClasseId).Count() > 1)
+            {
+                messageQueue.Add("Existem classe e centro de custo repetidos !", TypeMessage.Error);
+                retorno = false;
+            }
+
+            decPercentualTotal = listaDto.Sum(l => l.Percentual);
 
             if (decPercentualTotal > 100)
             {

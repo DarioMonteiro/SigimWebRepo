@@ -16,5 +16,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
         TabelaBasicaDTO ObterPeloId(int? id, int? tipoTabela);
         bool Salvar(TabelaBasicaDTO dto);
         bool Deletar(int? id, int tipoTabela);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
+        FileDownloadDTO ExportarRelTabelaBasica(int? tipoTabelaId, FormatoExportacaoArquivo formato);
     }
 }

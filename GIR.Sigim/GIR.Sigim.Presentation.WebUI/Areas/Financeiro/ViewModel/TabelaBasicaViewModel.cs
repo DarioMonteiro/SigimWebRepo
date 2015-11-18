@@ -15,8 +15,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
         public TabelaBasicaDTO TabelaBasica { get; set; }
         public SelectList ListaTipoTabela { get; set; }
         public int? TipoTabelaId { get; set; }
-
         public BaseFiltro Filtro { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
+        public bool PodeImprimir { get; set; }
 
         public TabelaBasicaViewModel()
         {

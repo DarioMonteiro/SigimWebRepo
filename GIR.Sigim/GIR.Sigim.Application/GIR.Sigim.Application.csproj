@@ -243,6 +243,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relImpostoFinanceiro.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Financeiro\relMotivoCancelamento.cs">
       <AutoGen>True</AutoGen>
@@ -254,6 +255,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relRateioAutomatico.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Financeiro\relTipoMovimento.cs">
       <AutoGen>True</AutoGen>
@@ -295,6 +297,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relFormaRecebimento.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Sigim\relTabelaBasica.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relTabelaBasica.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Resource\Admin\ErrorMessages.Designer.cs">
@@ -484,6 +492,10 @@
     <EmbeddedResource Include="Reports\Sigim\relFormaRecebimento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relFormaRecebimento.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Sigim\relTabelaBasica.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relTabelaBasica.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource\Admin\ErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -20,7 +20,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<AgenciaDTO, Agencia>();
 
             Mapper.CreateMap<AssuntoContato, AssuntoContatoDTO>();
+            Mapper.CreateMap<AssuntoContato, TabelaBasicaDTO>();
             Mapper.CreateMap<AssuntoContatoDTO, AssuntoContato>();
+
 
             Mapper.CreateMap<AssuntoContatoDTO, TabelaBasicaDTO>()
                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.AssuntoContato));
@@ -63,6 +65,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<CSTDTO, CST>();
 
             Mapper.CreateMap<InteresseBairro, InteresseBairroDTO>();
+            Mapper.CreateMap<InteresseBairro, TabelaBasicaDTO>();
             Mapper.CreateMap<InteresseBairroDTO, InteresseBairro>();
 
             Mapper.CreateMap<InteresseBairroDTO, TabelaBasicaDTO>()
@@ -112,6 +115,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<UnidadeMedidaDTO, UnidadeMedida>();
 
             Mapper.CreateMap<EstadoCivil, EstadoCivilDTO>();
+            Mapper.CreateMap<EstadoCivil, TabelaBasicaDTO>();
             Mapper.CreateMap<EstadoCivilDTO, EstadoCivil>();
 
             Mapper.CreateMap<EstadoCivilDTO, TabelaBasicaDTO>()
@@ -119,6 +123,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, EstadoCivilDTO>();
 
             Mapper.CreateMap<FonteNegocio, FonteNegocioDTO>();
+            Mapper.CreateMap<FonteNegocio, TabelaBasicaDTO>();
             Mapper.CreateMap<FonteNegocioDTO, FonteNegocio>();
 
             Mapper.CreateMap<FonteNegocioDTO, TabelaBasicaDTO>()
@@ -129,6 +134,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<FormaRecebimentoDTO, FormaRecebimento>();
 
             Mapper.CreateMap<Grupo, GrupoDTO>();
+            Mapper.CreateMap<Grupo, TabelaBasicaDTO>();
             Mapper.CreateMap<GrupoDTO, Grupo>();
 
             Mapper.CreateMap<GrupoDTO, TabelaBasicaDTO>()
@@ -136,6 +142,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, GrupoDTO>();
 
             Mapper.CreateMap<Nacionalidade, NacionalidadeDTO>();
+            Mapper.CreateMap<Nacionalidade, TabelaBasicaDTO>();
             Mapper.CreateMap<NacionalidadeDTO, Nacionalidade>();
 
             Mapper.CreateMap<NacionalidadeDTO, TabelaBasicaDTO>()
@@ -143,6 +150,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, NacionalidadeDTO>();
 
             Mapper.CreateMap<Parentesco, ParentescoDTO>();
+            Mapper.CreateMap<Parentesco, TabelaBasicaDTO>();
             Mapper.CreateMap<ParentescoDTO, Parentesco>();
 
             Mapper.CreateMap<ParentescoDTO, TabelaBasicaDTO>()
@@ -150,6 +158,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, ParentescoDTO>();
 
             Mapper.CreateMap<Profissao, ProfissaoDTO>();
+            Mapper.CreateMap<Profissao, TabelaBasicaDTO>();
             Mapper.CreateMap<ProfissaoDTO, Profissao>();
 
             Mapper.CreateMap<ProfissaoDTO, TabelaBasicaDTO>()
@@ -157,6 +166,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, ProfissaoDTO>();
 
             Mapper.CreateMap<RamoAtividade, RamoAtividadeDTO>();
+            Mapper.CreateMap<RamoAtividade, TabelaBasicaDTO>();
             Mapper.CreateMap<RamoAtividadeDTO, RamoAtividade>();
 
             Mapper.CreateMap<RamoAtividadeDTO, TabelaBasicaDTO>()
@@ -164,6 +174,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, RamoAtividadeDTO>();
 
             Mapper.CreateMap<Relacionamento, RelacionamentoDTO>();
+            Mapper.CreateMap<Relacionamento, TabelaBasicaDTO>();
             Mapper.CreateMap<RelacionamentoDTO, Relacionamento>();
 
             Mapper.CreateMap<RelacionamentoDTO, TabelaBasicaDTO>()
@@ -171,6 +182,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, RelacionamentoDTO>();
 
             Mapper.CreateMap<Tipologia, TipologiaDTO>();
+            Mapper.CreateMap<Tipologia, TabelaBasicaDTO>();
             Mapper.CreateMap<TipologiaDTO, Tipologia>();
 
             Mapper.CreateMap<TipologiaDTO, TabelaBasicaDTO>()
@@ -178,6 +190,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, TipologiaDTO>();
 
             Mapper.CreateMap<Tratamento, TratamentoDTO>();
+            Mapper.CreateMap<Tratamento, TabelaBasicaDTO>();
             Mapper.CreateMap<TratamentoDTO, Tratamento>();
 
             Mapper.CreateMap<TratamentoDTO, TabelaBasicaDTO>()
@@ -185,6 +198,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, TratamentoDTO>();
 
             Mapper.CreateMap<TipoArea, TipoAreaDTO>();
+            Mapper.CreateMap<TipoArea, TabelaBasicaDTO>();
             Mapper.CreateMap<TipoAreaDTO, TipoArea>();
 
             Mapper.CreateMap<TipoAreaDTO, TabelaBasicaDTO>()
@@ -192,6 +206,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, TipoAreaDTO>();
 
             Mapper.CreateMap<TipoCaracteristica, TipoCaracteristicaDTO>();
+            Mapper.CreateMap<TipoCaracteristica, TabelaBasicaDTO>();
             Mapper.CreateMap<TipoCaracteristicaDTO, TipoCaracteristica>();
 
             Mapper.CreateMap<TipoCaracteristicaDTO, TabelaBasicaDTO>()
@@ -199,6 +214,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TabelaBasicaDTO, TipoCaracteristicaDTO>();
 
             Mapper.CreateMap<TipoEspecificacao, TipoEspecificacaoDTO>();
+            Mapper.CreateMap<TipoEspecificacao, TabelaBasicaDTO>();
             Mapper.CreateMap<TipoEspecificacaoDTO, TipoEspecificacao>();
 
             Mapper.CreateMap<TipoEspecificacaoDTO, TabelaBasicaDTO>()

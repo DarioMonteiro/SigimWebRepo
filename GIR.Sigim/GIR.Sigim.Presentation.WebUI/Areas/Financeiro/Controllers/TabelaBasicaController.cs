@@ -46,7 +46,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
 
-            if (model.TipoTabelaId != null) { tipoTabela = (int)model.TipoTabelaId; }
+            model.PodeSalvar = tabelaBasicaAppService.EhPermitidoSalvar();
+            model.PodeDeletar = tabelaBasicaAppService.EhPermitidoDeletar();
+            model.PodeImprimir = tabelaBasicaAppService.EhPermitidoImprimir();
+
+            if (model.TipoTabelaId != null) { 
+                tipoTabela = (int)model.TipoTabelaId; 
+            }
                                     
             tabelaBasica = tabelaBasicaAppService.ObterPeloId(id, tipoTabela) ?? new TabelaBasicaDTO();
 
@@ -115,6 +121,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         {
             model.ListaTipoTabela = new SelectList(typeof(TabelaBasicaFinanceiro).ToItemListaDTO(), "Id", "Descricao");
         }
+
+        public ActionResult Imprimir(int? tipoTabelaId, FormatoExportacaoArquivo formato)
+        {
+            var arquivo = tabelaBasicaAppService.ExportarRelTabelaBasica(tipoTabelaId, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
 
     }
 }

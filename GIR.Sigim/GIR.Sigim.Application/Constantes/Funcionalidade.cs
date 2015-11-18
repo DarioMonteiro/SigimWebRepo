@@ -92,7 +92,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string TabelaBasicaFinanceiroAcessar = "TABELABASICA_FINANCEIRO_ACESSAR";
         public const string TabelaBasicaFinanceiroGravar = "TABELABASICA_FINANCEIRO_GRAVAR";
         public const string TabelaBasicaFinanceiroDeletar = "TABELABASICA_FINANCEIRO_DELETAR";
-        //public const string TabelaBasicaFinanceiroImprimir = "TABELABASICA_FINANCEIRO_IMPRIMIR";
+        public const string TabelaBasicaFinanceiroImprimir = "TABELABASICA_FINANCEIRO_IMPRIMIR";
    
         public const string TaxaAdministracaoAcessar = "TAXAADMINISTRACAO_ACESSAR";
         public const string TaxaAdministracaoGravar = "TAXAADMINISTRACAO_GRAVAR";
@@ -274,7 +274,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(TabelaBasicaFinanceiroAcessar, "Tabelas básicas - acessar");
             MenuFinanceiro.Add(TabelaBasicaFinanceiroGravar, "Tabelas básicas - gravar");
             MenuFinanceiro.Add(TabelaBasicaFinanceiroDeletar, "Tabelas básicas - deletar");
-           // MenuFinanceiro.Add(TabelaBasicaFinanceiroImprimir, "Tabelas básicas - imprimir");
+            MenuFinanceiro.Add(TabelaBasicaFinanceiroImprimir, "Tabelas básicas - imprimir");
 
             MenuFinanceiro.Add(TaxaAdministracaoAcessar, "Taxa de administração - acessar");
             MenuFinanceiro.Add(TaxaAdministracaoGravar, "Taxa de administração - gravar");

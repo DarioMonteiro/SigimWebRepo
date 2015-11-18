@@ -275,9 +275,24 @@
     function loadItem(index)
     {
         $('#@Html.IdFor(m => m.Classe.Codigo)').val(jsonItemArray[index].Classe.Codigo);
-        $('#@Html.IdFor(m => m.Classe.Descricao)').val(jsonItemArray[index].Classe.Descricao);
+        var ehValidoClasse = validaClasse();
+        if (ehValidoClasse) {
+            $('#@Html.IdFor(m => m.Classe.Descricao)').val(jsonItemArray[index].Classe.Descricao);
+        }
+        else {
+            $('#@Html.IdFor(m => m.Classe.Codigo)').val("");
+            $('#@Html.IdFor(m => m.Classe.Descricao)').val("");
+        }
         $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val(jsonItemArray[index].CentroCusto.Codigo);
-        $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val(jsonItemArray[index].CentroCusto.Descricao);
+        var ehValidoCentroCusto = validaCentroCusto();
+        if (ehValidoCentroCusto) {
+            $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val(jsonItemArray[index].CentroCusto.Descricao);
+        }
+        else {
+            $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val("");
+            $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val("");
+        }
+
         $('#@Html.IdFor(m => m.Percentual)').val(roundDecimal(floatToString(jsonItemArray[index].Percentual), 5));
         $('#@Html.IdFor(m => m.IndexSelecionado)').val(index);
         goToTop();
@@ -382,6 +397,19 @@
             smartAlert("Erro", "Informe o campo classe ou centro de custo.", "error");
             return false;
         }
+        var ehValidoClasse = validaClasse();
+        if (!ehValidoClasse) {
+            result = false;
+            smartAlert("Erro", "Selecione uma classe do último nivel.", "error");
+            return false;
+        }
+        var ehValidoCentroCusto = validaCentroCusto();
+        if (!ehValidoCentroCusto) {
+            result = false;
+            smartAlert("Erro", "Selecione um centro de custo do último nivel.", "error");
+            return false;
+        }
+
         if ((parseFloat($('#@Html.IdFor(m => m.Percentual)').val()) <= 0)) {
             result = false;
             smartAlert("Erro", "Informe um percentual maior que zero.", "error");
@@ -395,7 +423,7 @@
             var ehMesmoCentroCusto = (obj.CentroCusto.Codigo == $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val());
             var ehMesmoIndex = (index == $('#@Html.IdFor(m => m.IndexSelecionado)').val());
             var percentual = parseFloat(obj.Percentual);
-            var percentualModel = parseFloat($('#@Html.IdFor(m => m.Percentual)').val());
+            var percentualModel = stringToFloat($('#@Html.IdFor(m => m.Percentual)').val());
 
             if (ehMesmaClasse && ehMesmoCentroCusto && !ehMesmoIndex)
             {
@@ -406,7 +434,7 @@
 
             if (!ehMesmoIndex)
             {
-                percentualTotal = parseFloat(percentualTotal) + parseFloat(percentual);
+                percentualTotal = percentualTotal + percentual;
                 if ((percentualTotal + percentualModel) > 100)
                 {
                     result = false;

@@ -9,51 +9,91 @@ using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Enums;
 using GIR.Sigim.Application.Resource;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Repository.Admin;
 using GIR.Sigim.Domain.Repository.Financeiro;
+using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros;
 using GIR.Sigim.Application.Service.Sigim ;
+using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Application.Reports.Sigim;
+using CrystalDecisions.Shared;
+using System.Data;
+
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
     public class TabelaBasicaAppService : BaseAppService, ITabelaBasicaAppService
     {
+        private IParametrosFinanceiroRepository parametrosFinanceiroRepository;
         private IAssuntoContatoAppService assuntoContatoAppService;
+        private IAssuntoContatoRepository assuntoContatoRepository;
         private IInteresseBairroAppService interesseBairroAppService;
+        private IInteresseBairroRepository interesseBairroRepository;
         private IEstadoCivilAppService estadoCivilAppService;
+        private IEstadoCivilRepository estadoCivilRepository;
         private IFonteNegocioAppService fonteNegocioAppService;
+        private IFonteNegocioRepository fonteNegocioRepository;
         private IGrupoAppService grupoAppService;
+        private IGrupoRepository grupoRepository;
         private INacionalidadeAppService nacionalidadeAppService;
+        private INacionalidadeRepository nacionalidadeRepository;
         private IParentescoAppService parentescoAppService;
+        private IParentescoRepository parentescoRepository;
         private IProfissaoAppService profissaoAppService;
+        private IProfissaoRepository profissaoRepository;
         private IRamoAtividadeAppService ramoAtividadeAppService;
+        private IRamoAtividadeRepository ramoAtividadeRepository;
         private IRelacionamentoAppService relacionamentoAppService;
+        private IRelacionamentoRepository relacionamentoRepository;
         private ITipologiaAppService tipologiaAppService;
+        private ITipologiaRepository tipologiaRepository;
         private ITratamentoAppService tratamentoAppService;
+        private ITratamentoRepository tratamentoRepository;
         private ITipoAreaAppService tipoAreaAppService;
+        private ITipoAreaRepository tipoAreaRepository;
         private ITipoCaracteristicaAppService tipoCaracteristicaAppService;
+        private ITipoCaracteristicaRepository tipoCaracteristicaRepository;
         private ITipoEspecificacaoAppService tipoEspecificacaoAppService;
+        private ITipoEspecificacaoRepository tipoEspecificacaoRepository;
 
-        public TabelaBasicaAppService(IAssuntoContatoAppService assuntoContatoAppService, 
-                                      IInteresseBairroAppService interesseBairroAppService, 
-                                      IEstadoCivilAppService estadoCivilAppService, 
-                                      IFonteNegocioAppService fonteNegocioAppService, 
-                                      IGrupoAppService grupoAppService, 
-                                      INacionalidadeAppService nacionalidadeAppService, 
-                                      IParentescoAppService parentescoAppService, 
-                                      IProfissaoAppService profissaoAppService, 
-                                      IRamoAtividadeAppService ramoAtividadeAppService, 
+        public TabelaBasicaAppService(IParametrosFinanceiroRepository parametrosFinanceiroRepository,
+                                      IAssuntoContatoAppService assuntoContatoAppService,
+                                      IAssuntoContatoRepository assuntoContatoRepository,
+                                      IInteresseBairroAppService interesseBairroAppService,
+                                      IInteresseBairroRepository interesseBairroRepository,
+                                      IEstadoCivilAppService estadoCivilAppService,
+                                      IEstadoCivilRepository estadoCivilRepository, 
+                                      IFonteNegocioAppService fonteNegocioAppService,
+                                      IFonteNegocioRepository fonteNegocioRepository, 
+                                      IGrupoAppService grupoAppService,
+                                      IGrupoRepository grupoRepository,
+                                      INacionalidadeAppService nacionalidadeAppService,
+                                      INacionalidadeRepository nacionalidadeRepository,
+                                      IParentescoAppService parentescoAppService,
+                                      IParentescoRepository parentescoRepository,
+                                      IProfissaoAppService profissaoAppService,
+                                      IProfissaoRepository profissaoRepository,
+                                      IRamoAtividadeAppService ramoAtividadeAppService,
+                                      IRamoAtividadeRepository ramoAtividadeRepository,
                                       IRelacionamentoAppService relacionamentoAppService,
+                                      IRelacionamentoRepository relacionamentoRepository,
                                       ITipologiaAppService tipologiaAppService,
+                                      ITipologiaRepository tipologiaRepository,
                                       ITratamentoAppService tratamentoAppService,
+                                      ITratamentoRepository tratamentoRepository,
                                       ITipoAreaAppService tipoAreaAppService,
+                                      ITipoAreaRepository tipoAreaRepository,
                                       ITipoCaracteristicaAppService tipoCaracteristicaAppService,
+                                      ITipoCaracteristicaRepository tipoCaracteristicaRepository,
                                       ITipoEspecificacaoAppService tipoEspecificacaoAppService,
+                                      ITipoEspecificacaoRepository tipoEspecificacaoRepository,
                                       MessageQueue messageQueue)
             : base(messageQueue)
         {
+            this.parametrosFinanceiroRepository = parametrosFinanceiroRepository;
             this.assuntoContatoAppService = assuntoContatoAppService;
             this.interesseBairroAppService = interesseBairroAppService;
             this.estadoCivilAppService = estadoCivilAppService;
@@ -69,6 +109,23 @@ namespace GIR.Sigim.Application.Service.Financeiro
             this.tipoAreaAppService = tipoAreaAppService;
             this.tipoCaracteristicaAppService = tipoCaracteristicaAppService;
             this.tipoEspecificacaoAppService = tipoEspecificacaoAppService;
+
+            this.assuntoContatoRepository = assuntoContatoRepository;
+            this.interesseBairroRepository = interesseBairroRepository;
+            this.estadoCivilRepository = estadoCivilRepository;
+            this.fonteNegocioRepository = fonteNegocioRepository;
+            this.grupoRepository = grupoRepository;
+            this.nacionalidadeRepository = nacionalidadeRepository;
+            this.parentescoRepository = parentescoRepository;
+            this.profissaoRepository = profissaoRepository;
+            this.ramoAtividadeRepository = ramoAtividadeRepository;
+            this.relacionamentoRepository = relacionamentoRepository;
+            this.tipologiaRepository = tipologiaRepository;
+            this.tratamentoRepository = tratamentoRepository;
+            this.tipoAreaRepository = tipoAreaRepository;
+            this.tipoCaracteristicaRepository = tipoCaracteristicaRepository;
+            this.tipoEspecificacaoRepository = tipoEspecificacaoRepository;
+
         }
 
         #region ITabelaBasicaAppService Members
@@ -130,6 +187,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 default:
                     break;
             }
+
+            if (ListaRetorno.Count > 0)
+            {
+                ListaRetorno = ListaRetorno.OrderBy(l => l.Descricao).ToList();
+            }
+
             return ListaRetorno;
         }
 
@@ -191,6 +254,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Salvar(TabelaBasicaDTO dto)
         {
+            if (!EhPermitidoSalvar())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (dto == null) throw new ArgumentNullException("dto");
 
             if (ValidaAutomatico(dto) == false ) {return false;} 
@@ -255,6 +324,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Deletar(int? id, int tipoTabela)
         {
+            if (!EhPermitidoDeletar())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (id == null)
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
@@ -342,6 +417,166 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return retorno;
         }
 
+        public bool EhPermitidoSalvar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.TabelaBasicaFinanceiroGravar);
+        }
+
+        public bool EhPermitidoDeletar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.TabelaBasicaFinanceiroDeletar);
+        }
+
+        public bool EhPermitidoImprimir()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.TabelaBasicaFinanceiroImprimir);
+        }
+
+        public FileDownloadDTO ExportarRelTabelaBasica(int? tipoTabelaId, FormatoExportacaoArquivo formato)
+        {
+            if (!EhPermitidoImprimir())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
+            List<TabelaBasicaDTO> listaTabelaBasica = new List<TabelaBasicaDTO>();
+            string nomeTabela = "";
+
+            switch (tipoTabelaId)
+            {
+                case (int)TabelaBasicaFinanceiro.AssuntoContato:
+                    var specificationAssuntoContato = (Specification<AssuntoContato>)new TrueSpecification<AssuntoContato>();
+                    listaTabelaBasica = assuntoContatoRepository.ListarPeloFiltro(specificationAssuntoContato).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.AssuntoContato.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.BairroInteresse:
+                    var specificationBairroInteresse = (Specification<InteresseBairro>)new TrueSpecification<InteresseBairro>();
+                    listaTabelaBasica = interesseBairroRepository.ListarPeloFiltro(specificationBairroInteresse).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.BairroInteresse.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.EstadoCivil:
+                    var specificationEstadoCivil = (Specification<EstadoCivil>)new TrueSpecification<EstadoCivil>();
+                    listaTabelaBasica = estadoCivilRepository.ListarPeloFiltro(specificationEstadoCivil).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.EstadoCivil.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.FonteNegocio:
+                    var specificationFonteNegocio = (Specification<FonteNegocio>)new TrueSpecification<FonteNegocio>();
+                    listaTabelaBasica = fonteNegocioRepository.ListarPeloFiltro(specificationFonteNegocio).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.FonteNegocio.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.Grupo:
+                    var specificationGrupo = (Specification<Grupo>)new TrueSpecification<Grupo>();
+                    listaTabelaBasica = grupoRepository.ListarPeloFiltro(specificationGrupo).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.Grupo.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.Nacionalidade:
+                    var specificationNacionalidade = (Specification<Nacionalidade>)new TrueSpecification<Nacionalidade>();
+                    listaTabelaBasica = nacionalidadeRepository.ListarPeloFiltro(specificationNacionalidade).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.Nacionalidade.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.Parentesco:
+                    var specificationParentesco = (Specification<Parentesco>)new TrueSpecification<Parentesco>();
+                    listaTabelaBasica = parentescoRepository.ListarPeloFiltro(specificationParentesco).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.Parentesco.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.Profissao:
+                    var specificationProfissao = (Specification<Profissao>)new TrueSpecification<Profissao>();
+                    listaTabelaBasica = profissaoRepository.ListarPeloFiltro(specificationProfissao).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.Profissao.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.RamoAtividade:
+                    var specificationRamoAtividade = (Specification<RamoAtividade>)new TrueSpecification<RamoAtividade>();
+                    listaTabelaBasica = ramoAtividadeRepository.ListarPeloFiltro(specificationRamoAtividade).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.RamoAtividade.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.Relacionamento:
+                    var specificationRelacionamento = (Specification<Relacionamento>)new TrueSpecification<Relacionamento>();
+                    listaTabelaBasica = relacionamentoRepository.ListarPeloFiltro(specificationRelacionamento).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.Relacionamento.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.Tipologia:
+                    var specificationTipologia = (Specification<Tipologia>)new TrueSpecification<Tipologia>();
+                    listaTabelaBasica = tipologiaRepository.ListarPeloFiltro(specificationTipologia).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.Tipologia.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.Tratamento:
+                    var specificationTratamento = (Specification<Tratamento>)new TrueSpecification<Tratamento>();
+                    listaTabelaBasica = tratamentoRepository.ListarPeloFiltro(specificationTratamento).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.Tratamento.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.TipoArea:
+                    var specificationTipoArea = (Specification<TipoArea>)new TrueSpecification<TipoArea>();
+                    listaTabelaBasica = tipoAreaRepository.ListarPeloFiltro(specificationTipoArea).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.TipoArea.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.TipoCaracteristica:
+                    var specificationTipoCaracteristica = (Specification<TipoCaracteristica>)new TrueSpecification<TipoCaracteristica>();
+                    listaTabelaBasica = tipoCaracteristicaRepository.ListarPeloFiltro(specificationTipoCaracteristica).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.TipoCaracteristica.ObterDescricao();
+                    break;
+                case (int)TabelaBasicaFinanceiro.TipoEspecificacao:
+                    var specificationTipoEspecificacao = (Specification<TipoEspecificacao>)new TrueSpecification<TipoEspecificacao>();
+                    listaTabelaBasica = tipoEspecificacaoRepository.ListarPeloFiltro(specificationTipoEspecificacao).To<List<TabelaBasicaDTO>>();
+                    nomeTabela = TabelaBasicaFinanceiro.TipoEspecificacao.ObterDescricao();
+                    break;
+                default:
+                    break;
+            }
+
+
+            relTabelaBasica objRel = new relTabelaBasica();
+
+            objRel.SetDataSource(RelRateioAutomaticoToDataTable(listaTabelaBasica));
+
+            var parametros = parametrosFinanceiroRepository.Obter();
+            CentroCusto centroCusto = null;
+
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
+
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeTabela", nomeTabela);
+            objRel.SetParameterValue("nomeSistema", "FINANCEIRO");
+            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Tabelas básicas",
+                                                          objRel.ExportToStream((ExportFormatType)formato),
+                                                          formato);
+            if (System.IO.File.Exists(caminhoImagem))
+                System.IO.File.Delete(caminhoImagem);
+            return arquivo;
+        }
+
+        #endregion
+
+        #region Métodos Privados ITabelaBasicaAppService
+
+        private DataTable RelRateioAutomaticoToDataTable(List<TabelaBasicaDTO> listaTabelaBasica)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo");
+            DataColumn descricao = new DataColumn("descricao");
+            DataColumn girErro = new DataColumn("girErro");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(descricao);
+            dta.Columns.Add(girErro);
+
+            foreach (var registro in listaTabelaBasica.OrderBy(l => l.Descricao))
+            {
+                DataRow row = dta.NewRow();
+
+                row[codigo] = registro.Id;
+                row[descricao] = registro.Descricao;
+                row[girErro] = "";
+                dta.Rows.Add(row);
+            }
+
+            return dta;
+        }
+
         #endregion
     }
+
+
 }

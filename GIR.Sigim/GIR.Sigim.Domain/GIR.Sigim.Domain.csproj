@@ -305,6 +305,7 @@
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />
     <Compile Include="Specification\ExpressionBuilder.cs" />
+    <Compile Include="Specification\Financeiro\RateioAutomaticoSpecification.cs" />
     <Compile Include="Specification\Financeiro\TipoMovimentoSpecification.cs" />
     <Compile Include="Specification\ISpecification.cs" />
     <Compile Include="Specification\NotSpecification.cs" />
