@@ -37,6 +37,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
+
+            model.PodeSalvar = tipoDocumentoAppService.EhPermitidoSalvar();
+            model.PodeDeletar = tipoDocumentoAppService.EhPermitidoDeletar();
+            model.PodeImprimir = tipoDocumentoAppService.EhPermitidoImprimir();
+
             var tipoDocumento = tipoDocumentoAppService.ObterPeloId(id) ?? new TipoDocumentoDTO();
 
             if (id.HasValue && !tipoDocumento.Id.HasValue)
@@ -67,6 +72,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             if (ModelState.IsValid)
             {
                 Session["Filtro"] = model;
+
+                if (string.IsNullOrEmpty(model.Filtro.PaginationParameters.OrderBy))
+                    model.Filtro.PaginationParameters.OrderBy = "sigla";
+
                 int totalRegistros;
                 var result = tipoDocumentoAppService.ListarPeloFiltro(model.Filtro, out totalRegistros);
                 if (result.Any())
@@ -85,6 +94,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             tipoDocumentoAppService.Deletar(id);
             return PartialView("_NotificationMessagesPartial");
         }
+
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var arquivo = tipoDocumentoAppService.ExportarRelTipoDocumento(formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
 
     }
 }

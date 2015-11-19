@@ -31,15 +31,11 @@
                     <tr role="row">
                         @{
                             string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
-                            string idSortingSuffix = "sorting";
                             string siglaSortingSuffix = "sorting";
                             string descricaoSortingSuffix = "sorting";
 
                             switch (Model.OrderBy)
                             {
-                                case "id":
-                                    idSortingSuffix += sortingSuffix;
-                                    break;
                                 case "sigla":
                                     siglaSortingSuffix += sortingSuffix;
                                     break;
@@ -50,7 +46,6 @@
                                     break;
                             }
                         }
-                        <th class="sorting @idSortingSuffix text-center" data-order="id" style="width:60px; ">Código</th>
                         <th class="sorting @siglaSortingSuffix text-center" data-order="sigla" style="width:100px;">Sigla</th>
                         <th class="sorting @descricaoSortingSuffix text-center" data-order="descricao" style="min-width:65px;">Descrição</th>
                     </tr>
@@ -59,8 +54,7 @@
                     @foreach (var item in Lista)
                     {
                         <tr>
-                            <td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString()</a></td>
-                            <td class="text-left">@item.Sigla</td>
+                            <td class="text-left"><a href="javascript:loadItem(@item.Id.ToString());">@item.Sigla</td>
                             <td class="text-left">@item.Descricao</td>
                         </tr>
                     }

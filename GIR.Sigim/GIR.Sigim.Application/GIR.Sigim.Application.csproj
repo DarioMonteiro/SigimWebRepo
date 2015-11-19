@@ -269,6 +269,11 @@
       <DependentUpon>relTipoCompromisso.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Financeiro\relTipoDocumento.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relTipoDocumento.rpt</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Financeiro\relTipoMovimento.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -484,6 +489,10 @@
     <EmbeddedResource Include="Reports\Financeiro\relTipoCompromisso.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relTipoCompromisso.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relTipoDocumento.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relTipoDocumento.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Financeiro\relTipoMovimento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
