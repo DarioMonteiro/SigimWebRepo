@@ -97,7 +97,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string TaxaAdministracaoAcessar = "TAXAADMINISTRACAO_ACESSAR";
         public const string TaxaAdministracaoGravar = "TAXAADMINISTRACAO_GRAVAR";
         public const string TaxaAdministracaoDeletar = "TAXAADMINISTRACAO_DELETAR";
-        //public const string TaxaAdministracaoImprimir = "TAXAADMINISTRACAO_IMPRIMIR";
+        public const string TaxaAdministracaoImprimir = "TAXAADMINISTRACAO_IMPRIMIR";
 
         public const string TipoCompromissoAcessar = "TIPOCOMPROMISSO_ACESSAR";
         public const string TipoCompromissoGravar = "TIPOCOMPROMISSO_GRAVAR";
@@ -279,7 +279,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(TaxaAdministracaoAcessar, "Taxa de administração - acessar");
             MenuFinanceiro.Add(TaxaAdministracaoGravar, "Taxa de administração - gravar");
             MenuFinanceiro.Add(TaxaAdministracaoDeletar, "Taxa de administração - deletar");
-            //MenuFinanceiro.Add(TaxaAdministracaoImprimir, "Taxa de administração - imprimir");
+            MenuFinanceiro.Add(TaxaAdministracaoImprimir, "Taxa de administração - imprimir");
 
             MenuFinanceiro.Add(TipoCompromissoAcessar, "Tipo de compromisso - acessar");
             MenuFinanceiro.Add(TipoCompromissoGravar, "Tipo de compromisso - gravar");

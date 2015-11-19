@@ -39,35 +39,42 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         public ActionResult Index()
         {
             var model = new TaxaAdministracaoViewModel();
-            //CarregarCombos(model);
             return View(model);
         }
 
-        public ActionResult Cadastro(string CentroCustoId, int? ClienteId)
+        public ActionResult Cadastro(string centroCustoId, int? clienteId)
         {
             TaxaAdministracaoViewModel model = new TaxaAdministracaoViewModel();
             List<TaxaAdministracaoDTO> lista = new List<TaxaAdministracaoDTO>();
 
-            int ClienteIdAux = 0;
-            if (ClienteId.HasValue == true) { ClienteIdAux = ClienteId.Value; }
+            model.CentroCusto = new CentroCustoDTO();
+            model.Cliente = new ClienteFornecedorDTO();
 
-            if ((CentroCustoId != null) && (ClienteIdAux != 0))
+            if (!string.IsNullOrEmpty(centroCustoId) && clienteId.HasValue)
             {
-                lista = taxaAdministracaoAppService.ListarPeloCentroCustoCliente(CentroCustoId, ClienteId.Value);
-                lista = LimpaClasseListaFilhos(lista);
-                
+                lista = taxaAdministracaoAppService.ListarPeloCentroCustoCliente(centroCustoId, clienteId.Value);
+
                 if (lista.Count == 0)
                 {
                     messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
                 }
+                else
+                {
+                    model.CentroCusto = lista.First().CentroCusto;
+                    model.Cliente = lista.First().Cliente;
 
-                var centroCusto = centroCustoAppService.ObterPeloCodigo(CentroCustoId);
-                
-                model.CentroCusto = centroCusto;
-                model.ClienteId = ClienteId.Value;
+                    model.JsonItens = Newtonsoft.Json.JsonConvert.SerializeObject(lista,
+                                                                                  Formatting.None,
+                                                                                  new JsonSerializerSettings()
+                                                                                  { 
+                                                                                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                                                                                  });
+                }
             }
 
-            CarregarCombos(model);
+            model.PodeSalvar = taxaAdministracaoAppService.EhPermitidoSalvar();
+            model.PodeDeletar = taxaAdministracaoAppService.EhPermitidoDeletar();
+            model.PodeImprimir = taxaAdministracaoAppService.EhPermitidoImprimir();
 
             return View(model);
         }
@@ -81,35 +88,43 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             if (ModelState.IsValid)
             {
                 lista = Newtonsoft.Json.JsonConvert.DeserializeObject<List<TaxaAdministracaoDTO>>(model.JsonItens);
-                taxaAdministracaoAppService.Salvar(model.CentroCusto.Codigo, model.ClienteId, lista);
+                taxaAdministracaoAppService.Salvar(model.CentroCusto.Codigo, model.Cliente.Id.Value, lista);
             }
             return PartialView("_NotificationMessagesPartial");
         }
 
 
-        public ActionResult CarregarItem(string CentroCustoId, int? ClienteId)
+        public ActionResult CarregarItem(string centroCustoCodigo, int? clienteId)
         {
-            int ClienteIdAux = 0;
-            if (ClienteId.HasValue == true) { ClienteIdAux = ClienteId.Value; }
-            var lista = taxaAdministracaoAppService.ListarPeloCentroCustoCliente(CentroCustoId, ClienteIdAux);
-            lista = LimpaClasseListaFilhos(lista);
-            return Json(lista);
+            string listaString;
+            if ((string.IsNullOrEmpty(centroCustoCodigo)) || (!clienteId.HasValue))
+            {
+                listaString = "[]";
+            }
+            else
+            {
+                var lista = taxaAdministracaoAppService.ListarPeloCentroCustoCliente(centroCustoCodigo, clienteId.Value);
+                listaString = Newtonsoft.Json.JsonConvert.SerializeObject(lista, Formatting.None,
+                                                                          new JsonSerializerSettings()
+                                                                          {
+                                                                              ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                                                                          });
+            }
+            return Json(new { lista = listaString });
         }
 
 
         [HttpPost]
-        public ActionResult Deletar(string CentroCustoId, int? ClienteId)
+        public ActionResult Deletar(string centroCustoCodigo, int? clienteId)
         {
-            int ClienteIdAux = 0;
-            if (ClienteId.HasValue == true) { ClienteIdAux = ClienteId.Value; }
 
-            if ((CentroCustoId == "") || (ClienteIdAux == 0))
+            if ((string.IsNullOrEmpty(centroCustoCodigo)) || (!clienteId.HasValue))
             {
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
             }
             else 
             {
-                taxaAdministracaoAppService.Deletar(CentroCustoId, ClienteIdAux);
+                taxaAdministracaoAppService.Deletar(centroCustoCodigo, clienteId.Value);
             }
             
             return PartialView("_NotificationMessagesPartial");
@@ -124,6 +139,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 var result = taxaAdministracaoAppService.ListarTodos();
                 if (result.Any())
                 {
+                    result = result.OrderBy(l => l.CentroCusto.Codigo).ThenByDescending(l => l.Cliente.Nome).ToList();
                     var listaViewModel = CreateListaViewModel(result);
                     return PartialView("ListaPartial", listaViewModel);
                 }
@@ -132,20 +148,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        private void CarregarCombos(TaxaAdministracaoViewModel model)
+        public ActionResult Imprimir(string centroCustoCodigo, int? clienteId, FormatoExportacaoArquivo formato)
         {
-            model.ListaCliente = new SelectList(clienteFornecedorAppService.ListarAtivos(), "Id", "Nome", model.ClienteId);
-        }
-
-        private List<TaxaAdministracaoDTO> LimpaClasseListaFilhos(List<TaxaAdministracaoDTO> lista)
-        {
-            foreach (var item in lista)
+            if ((!string.IsNullOrEmpty(centroCustoCodigo)) && (clienteId.HasValue))
             {
-                item.Classe.ListaFilhos = null;
+                var arquivo = taxaAdministracaoAppService.ExportarRelTaxaAdministracao(centroCustoCodigo, clienteId, formato);
+                if (arquivo != null)
+                {
+                    Response.Buffer = false;
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+                }
             }
-            return lista;
+            return PartialView("_NotificationMessagesPartial");
         }
-
 
     }
 }

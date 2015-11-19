@@ -28,24 +28,25 @@
                     <div class="panel-body no-padding">
                         <fieldset>
                             <div class="row">
-                                <section class="col col-12">
-                                    @Html.LabelFor(m => m.ClienteId, new { @class = "label" })
-                                    <label class="select">
-                                        @Html.DropDownListFor(m => m.ClienteId, Model.ListaCliente, string.Empty)<i></i>
-                                    </label>
-                                </section>
-                            </div>
-                            <div class="row">
-                                @Html.EditorFor(m => m.CentroCusto, "CentroCusto", new { @sectionClass = "col col-4", @labelText = "Centro de Custo", @somenteNivelFolha = true })
+                                @Html.EditorFor(m => m.CentroCusto, "CentroCusto", new { @sectionClass = "col col-4", @labelText = "Centro de Custo", @required = true, @somenteNivelFolha = true, @podeEditar = false })
+
+                                @Html.EditorFor(m => m.Cliente, "ClienteFornecedorPesquisaGenerica", new { @sectionClass = "col col-4", 
+                                                                                                           @required = true, 
+                                                                                                           @label = "Correntista",
+                                                                                                           @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.AReceber),
+                                                                                                           @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                                                                           @exibirBotaoPesquisa = true,
+                                                                                                           @sectionStyle = "margin-bottom: 10px; margin-left: -15px;",
+                                                                                                           @podeEditar = false 
+                                                                                                         })
+
                             </div>
                         </fieldset>
                         <fieldset id="formItem">
                             @Html.HiddenFor(m => m.JsonItens)
                             @Html.HiddenFor(m => m.IndexSelecionado)
                             <div class="row" style="padding-top:0px;">
-                                @Html.EditorFor(m => m.Classe, "Classe", new { @sectionClass = "col col-4", @somenteNivelFolha = false, @centroCustoRequerido = true})
-                            @*</div>
-                            <div class="row">*@
+                                @Html.EditorFor(m => m.Classe, "Classe", new { @sectionClass = "col col-5", @somenteNivelFolha = false, @centroCustoRequerido = false})
                                 <section class="col col-2">
                                     @Html.LabelFor(m => m.Percentual, new { @class = "label" })
                                     <label class="input">
@@ -76,12 +77,47 @@
 
                         </fieldset>
                     </div>
+                    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                        tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluirRegistro" aria-labelledby="ui-id-1" 
+                            style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                            <span id="ui-id-1" class="ui-dialog-title">
+                            </span>
+                        </div>
+                        <div id="dlgSimpleExcluirRegistro" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+	                        <p>
+		                        Deseja excluir o registro selecionado ?
+	                        </p>
+                        </div>
+                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                            <div class="ui-dialog-buttonset">
+                            </div>
+                        </div>
+                    </div>
                     <footer>
                         @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
-                        <button type="button" id="btnDeletar" class="btn btn-danger">
+                        @{
+                            string disableBtnDeletar = string.Empty;
+                            if (!Model.PodeDeletar)
+                            {
+                                disableBtnDeletar = "disabled";
+                            }
+                        }
+                        <button type="button" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">
                             Deletar
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        @{
+                            var url = Url.Action("Imprimir", "TaxaAdministracao");
+                        }
+                        @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
+                        @{
+                            string disableBtnSalvar = string.Empty;
+                            if (!Model.PodeSalvar)
+                            {
+                                disableBtnSalvar = "disabled";
+                            }
+                        }
+                        <button type="submit" class="btn btn-primary @disableBtnSalvar">
                             Gravar
                         </button>
                     </footer>
@@ -100,14 +136,18 @@
 
     $(document).ready(function ()
     {
-        CarregaRegistros(true);
+        $('body').addClass("hidden-menu");
 
-        $("#@Html.IdFor(m => m.ClienteId)").on("change", function ()
-        {
+        inicializar();
+
+        fillTable();
+
+        $("#@Html.IdFor(m => m.CentroCusto.Codigo)").on("change", function () {
             CarregaRegistros(true);
         });
 
-        $("#@Html.IdFor(m => m.CentroCusto.Codigo)").on("change", function () {
+        $("#@Html.IdFor(m => m.Cliente.Nome)").on("keydown", function ()
+        {
             CarregaRegistros(true);
         });
 
@@ -171,11 +211,80 @@
             }
 
 
-            });
+        });
+
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimpleExcluirRegistro').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Excluir",
+                "class": "btn btn-primary",
+                click: function () {
+                    $(this).dialog("close");
+                    excluirRegistro();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        $("#btnDeletar").on("click", function () {
+            var clienteId = $('#@Html.IdFor(m => m.Cliente.Id)').val();
+            var centroCustoCodigo = $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val();
+            var centroCustoDescricao = $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val();
+
+            if ((centroCustoDescricao == "") || (clienteId == "")) {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "warning");
+            }
+            else {
+                $('#dlgSimpleExcluirRegistro').dialog('open');
+            }
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            var centroCustoCodigo = $('#@Html.IdFor(m => m.CentroCusto.Codigo )').val();
+            var clienteId = $('#@Html.IdFor(m => m.Cliente.Id)').val();
+            var centroCustoDescricao = $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val();
+
+            if ((centroCustoCodigo == "" || centroCustoDescricao == "") || (clienteId == "")) {
+                smartAlert("Atenção", "Selecione um registro para imprimir !", "warning");
+                e.event.preventDefault();
+            }
+
+            parametrosUrlImpressao = '&centroCustoCodigo=' + centroCustoCodigo;
+            parametrosUrlImpressao += '&clienteId=' + clienteId;
+        });
+
     });
 
-    $("#btnDeletar").on("click", function ()
-    {
+    function inicializar() {
+        var centroCustoDescricao = $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val();
+        var clienteId = $('#@Html.IdFor(m => m.Cliente.Id)').val();
+
+        if ((centroCustoDescricao == "") && (clienteId == "")) {
+            novo();
+        }
+
+    }
+
+    function excluirRegistro() {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Deletar", "TaxaAdministracao")',
@@ -183,15 +292,15 @@
             async: false,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
-                centroCustoId: $('#@Html.IdFor(m => m.CentroCusto.Codigo )').val(),
-                clienteId: $('#@Html.IdFor(m => m.ClienteId)').val()
+                centroCustoCodigo: $('#@Html.IdFor(m => m.CentroCusto.Codigo )').val(),
+                clienteId: $('#@Html.IdFor(m => m.Cliente.Id)').val()
             })
         })
         .success(function (result) {
             $('#notificationMessages').html(result);
             clearForm();
         });
-    });
+    }
 
     $('#btnAddItem').on("click", function ()
     {
@@ -209,15 +318,51 @@
 
     function clearForm()
     {
-        $('#@Html.IdFor(m => m.ClienteId)').val(0);
+        $('#@Html.IdFor(m => m.Cliente.Id)').val(0);
+        $('#@Html.IdFor(m => m.Cliente.Nome)').val("");
         $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val('');
         $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val('');
-       @* $("#@Html.IdFor(m => m.ClienteId)").prop('disabled', false);
-        $("#@Html.IdFor(m => m.CentroCusto.Codigo)").prop('disabled', false);
-        $("#BtnShowModalPanel_CentroCusto_Codigo").prop('disabled', false);*@
+
+        habilitaCorrentistaEhCentroCusto();
+
         limpaItem();
+        limpaLista();
+
+        jsonItemArray = [];
+        $("#@Html.IdFor(m => m.JsonItens)").val(null);
+
+    }
+
+    function limpaLista() {
         $("#tableItens tbody").empty();
     }
+
+    function habilitaCorrentistaEhCentroCusto() {
+        $('#@Html.IdFor(m => m.Cliente.Nome)').prop('readonly', false);
+        $('#@Html.IdFor(m => m.Cliente.Nome)').removeClass('readonly');
+        $('#BtnShowModalPanel_Cliente_Id').removeAttr('href');
+        $('#BtnShowModalPanel_Cliente_Id').attr('href', '#Cliente_Id_Pesquisa_ModalPanel');
+        $('#BtnShowModalPanel_Cliente_Id').attr('data-toggle', 'modal');
+
+        $('#@Html.IdFor(m => m.CentroCusto.Codigo)').prop('readonly', false);
+        $('#@Html.IdFor(m => m.CentroCusto.Codigo)').removeClass('readonly');
+        $('#BtnShowModalPanel_CentroCusto_Codigo').removeAttr('href');
+        $('#BtnShowModalPanel_CentroCusto_Codigo').attr('href', '#CentroCusto_Codigo_ModalPanel');
+        $('#BtnShowModalPanel_CentroCusto_Codigo').attr('data-toggle', 'modal');
+    }
+
+    function desabilitaCorrentistaEhCentroCusto() {
+        $('#@Html.IdFor(m => m.Cliente.Nome)').prop('readonly', true);
+        $('#@Html.IdFor(m => m.Cliente.Nome)').addClass('readonly');
+        $('#BtnShowModalPanel_Cliente_Id').attr('href', 'javascript:void(0);');
+        $('#BtnShowModalPanel_Cliente_Id').removeAttr('data-toggle');
+
+        $('#@Html.IdFor(m => m.CentroCusto.Codigo)').prop('readonly', true);
+        $('#@Html.IdFor(m => m.CentroCusto.Codigo)').addClass('readonly');
+        $('#BtnShowModalPanel_CentroCusto_Codigo').attr('href', 'javascript:void(0);');
+        $('#BtnShowModalPanel_CentroCusto_Codigo').removeAttr('data-toggle');
+    }
+
 
     function limpaItem()
     {
@@ -231,7 +376,6 @@
     {
         clearForm();
         limpaMsg();
-        validaCentroCusto();
     }
 
     function limpaMsg()
@@ -251,8 +395,6 @@
     {
         $('#@Html.IdFor(m => m.Classe.Codigo)').val(jsonItemArray[index].Classe.Codigo);
         $('#@Html.IdFor(m => m.Classe.Descricao)').val(jsonItemArray[index].Classe.Descricao);
-        @*$('#@Html.IdFor(m => m.CentroCusto.Codigo)').val(jsonItemArray[index].CentroCusto.Codigo);
-        $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val(jsonItemArray[index].CentroCusto.Descricao);*@
         $('#@Html.IdFor(m => m.Percentual)').val(roundDecimal(floatToString(jsonItemArray[index].Percentual), 5));
         $('#@Html.IdFor(m => m.IndexSelecionado)').val(index);
         goToTop();
@@ -260,9 +402,10 @@
 
     function CarregaRegistros(bolLimpaMsg)
     {
-        var centroCustoId = $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val();
-        var clienteId = parseInt($('#@Html.IdFor(m => m.ClienteId)').val());
-        if ((centroCustoId != "") && (clienteId != 0))
+        var centroCustoCodigo = $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val();
+        var centroCustoDescricao = $('#@Html.IdFor(m => m.CentroCusto.Descricao)').val();
+        var clienteId = parseInt($('#@Html.IdFor(m => m.Cliente.Id)').val());
+        if ((centroCustoDescricao != "") && (clienteId != 0))
         {
             $.ajax({
                 type: 'POST',
@@ -271,17 +414,24 @@
                 async: false,
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
-                    centroCustoId: centroCustoId,
-                    clienteId: clienteId
-                })
-            })
-            .success(function (result) {
-                if (bolLimpaMsg == true) { limpaMsg(); }
-                limpaItem();
-                jsonItemArray = result;
-                $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(result));
-                fillTable();
-                goToTop();
+                                        CentroCustoCodigo: centroCustoCodigo,
+                                        ClienteId: clienteId
+                                     }),
+                success: function (result) {
+                    if (bolLimpaMsg == true) {
+                        limpaMsg();
+                    }
+                    limpaItem();
+                    desabilitaCorrentistaEhCentroCusto();
+                    if (result.lista != "[]") {
+                        jsonItemArray = JSON.parse(result.lista);
+                        $("#@Html.IdFor(m => m.JsonItens)").val(result.lista);
+                        fillTable();
+                    }
+                },
+                error: function (result) {
+                    smartAlert("erro");
+                }
             });
         }
     };
@@ -289,16 +439,17 @@
     function fillTable()
     {
         $("#tableItens tbody").empty();
-        for (var intIndex = 0; intIndex < jsonItemArray.length; intIndex++) {
-            var row = $('<tr />')
-            $("#tableItens tbody").append(row);
+        if (jsonItemArray.length > 0) {
+            for (var intIndex = 0; intIndex < jsonItemArray.length; intIndex++) {
+                var row = $('<tr />')
+                $("#tableItens tbody").append(row);
 
-            var chkDisabled = '';
-            var labelClass = 'checkbox';
-            row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + intIndex + '" ' + chkDisabled + '><i></i>' + '' + '</label></td>'));
-            row.append($('<td class="text-left">' + jsonItemArray[intIndex].Classe.Codigo + ' - ' + jsonItemArray[intIndex].Classe.Descricao + '</td>'));
-            //row.append($('<td class="text-left">' + jsonItemArray[intIndex].CentroCusto.Codigo + ' - ' + jsonItemArray[intIndex].CentroCusto.Descricao + '</td>'));
-            row.append($('<td class="text-right" onclick="loadItem(' + intIndex + ');">' + roundDecimal(floatToString(jsonItemArray[intIndex].Percentual), 5) + '</td>'));
+                var chkDisabled = '';
+                var labelClass = 'checkbox';
+                row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + intIndex + '" ' + chkDisabled + '><i></i>' + '' + '</label></td>'));
+                row.append($('<td class="text-left">' + jsonItemArray[intIndex].Classe.Codigo + ' - ' + jsonItemArray[intIndex].Classe.Descricao + '</td>'));
+                row.append($('<td class="text-right" onclick="loadItem(' + intIndex + ');">' + roundDecimal(floatToString(jsonItemArray[intIndex].Percentual), 5) + '</td>'));
+            }
         }
     }
 
@@ -307,12 +458,14 @@
         var item = $("#formItem").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
 
         var index = -1;
-        $.each(jsonItemArray, function (i, obj) {
-            if ($('#@Html.IdFor(m => m.IndexSelecionado)').val() == i) {
-                index = i;
-                return false;
-            }
-        });
+        if (jsonItemArray.length > 0) {
+            $.each(jsonItemArray, function (i, obj) {
+                if ($('#@Html.IdFor(m => m.IndexSelecionado)').val() == i) {
+                    index = i;
+                    return false;
+                }
+            });
+        }
 
         if (index >= 0) {
             jsonItemArray.splice(index, 1, item);
@@ -324,6 +477,7 @@
         $("#@Html.IdFor(m => m.JsonItens)").val(JSON.stringify(jsonItemArray));
         fillTable();
         limpaItem();
+        $("#@Html.IdFor(m => m.Classe.Codigo)").focus();
     }
 
     function processData(node)
@@ -334,7 +488,7 @@
 
         if (fieldName != '' && (fieldId == "@Html.IdFor(m => m.Percentual)")) {
             var value = $("#" + fieldId).val();
-            return { name: fieldName, value: parseFloat(value.toString().replace(".", "").replace(",", ".")) };
+            return { name: fieldName, value: stringToFloat(value) };
         }
 
         return false;
@@ -358,7 +512,7 @@
             return false;
         }
 
-        clienteId = $('#@Html.IdFor(m => m.ClienteId)').val();
+        clienteId = $('#@Html.IdFor(m => m.Cliente.Id)').val();
         if (clienteId == '')
         {
             result = false;
@@ -377,36 +531,43 @@
             smartAlert("Erro", "Informe o campo classe.", "error");
             return false;
         }
-@*        if ((parseFloat($('#@Html.IdFor(m => m.Percentual)').val()) <= 0))
+        if ((stringToFloat($('#@Html.IdFor(m => m.Percentual)').val()) <= 0))
         {
             result = false;
             smartAlert("Erro", "Informe um percentual maior que zero.", "error");
             return false;
-        }*@
+        }
 
-        var percentualTotal = parseFloat(0);
-        $.each(jsonItemArray, function (index, obj) {
-            var ehMesmaClasse = (obj.Classe.Codigo == $('#@Html.IdFor(m => m.Classe.Codigo)').val());
-            @*var ehMesmoCentroCusto = (obj.CentroCusto.Codigo == $('#@Html.IdFor(m => m.CentroCusto.Codigo)').val());*@
-            var ehMesmoIndex = (index == $('#@Html.IdFor(m => m.IndexSelecionado)').val());
-            var percentual = parseFloat(obj.Percentual);
-            var percentualModel = parseFloat($('#@Html.IdFor(m => m.Percentual)').val());
+        if ((stringToFloat($('#@Html.IdFor(m => m.Percentual)').val()) > 100)) {
+            result = false;
+            smartAlert("Erro", "O percentual não deve ultrapassar os 100 %", "error");
+            return false;
+        }
 
-            if (ehMesmaClasse /*&& ehMesmoCentroCusto*/ && !ehMesmoIndex) {
-                result = false;
-                smartAlert("Erro", "Item repetido.", "error");
-                return false;
-            }
+        var percentualTotal = 0;
+        if (jsonItemArray.length > 0) {
+            $.each(jsonItemArray, function (index, obj) {
+                var ehMesmaClasse = (obj.Classe.Codigo == $('#@Html.IdFor(m => m.Classe.Codigo)').val());
+                var ehMesmoIndex = (index == $('#@Html.IdFor(m => m.IndexSelecionado)').val());
+                var percentual = parseFloat(obj.Percentual);
+                var percentualModel = stringToFloat($('#@Html.IdFor(m => m.Percentual)').val());
 
-            if (!ehMesmoIndex) {
-                percentualTotal = parseFloat(percentualTotal) + parseFloat(percentual);
-                if ((percentualTotal + percentualModel) > 100) {
+                if (ehMesmaClasse && !ehMesmoIndex) {
                     result = false;
-                    smartAlert("Erro", "O percentual não deve ultrapassar os 100 % .", "error");
+                    smartAlert("Erro", "Item repetido.", "error");
                     return false;
                 }
-            }
-        });
+
+                if (!ehMesmoIndex) {
+                    percentualTotal = percentualTotal + percentual;
+                    if ((percentualTotal + percentualModel) > 100) {
+                        result = false;
+                        smartAlert("Erro", "O percentual não deve ultrapassar os 100 %", "error");
+                        return false;
+                    }
+                }
+            });
+        }
 
         return result;
     }

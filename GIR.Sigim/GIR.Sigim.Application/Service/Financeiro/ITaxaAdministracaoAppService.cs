@@ -15,5 +15,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
         List<TaxaAdministracaoDTO> ListarTodos();
         bool Salvar(string CentroCustoId, int ClienteId, List<TaxaAdministracaoDTO> listaDto);
         bool Deletar(string CentroCustoId, int ClienteId);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
+        FileDownloadDTO ExportarRelTaxaAdministracao(string centroCustoCodigo, int? clienteId, FormatoExportacaoArquivo formato);
     }
 }

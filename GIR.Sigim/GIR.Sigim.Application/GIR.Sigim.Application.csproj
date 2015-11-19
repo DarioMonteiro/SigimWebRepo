@@ -257,6 +257,12 @@
       <DependentUpon>relRateioAutomatico.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Financeiro\relTaxaAdministracao.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relTaxaAdministracao.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Financeiro\relTipoMovimento.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -464,6 +470,10 @@
     <EmbeddedResource Include="Reports\Financeiro\relRateioAutomatico.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relRateioAutomatico.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relTaxaAdministracao.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relTaxaAdministracao.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Financeiro\relTipoMovimento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

@@ -14,17 +14,27 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Financeiro;
 using GIR.Sigim.Application.Filtros;
+using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Domain.Specification.Financeiro;
+using GIR.Sigim.Application.Reports.Financeiro;
+using CrystalDecisions.Shared;
+using System.Data;
+
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
     public class TaxaAdministracaoAppService : BaseAppService, ITaxaAdministracaoAppService
     {
         private ITaxaAdministracaoRepository taxaAdministracaoRepository;
+        private IParametrosFinanceiroRepository parametrosFinanceiroRepository;
 
-        public TaxaAdministracaoAppService(ITaxaAdministracaoRepository taxaAdministracaoRepository, MessageQueue messageQueue)
+        public TaxaAdministracaoAppService(ITaxaAdministracaoRepository taxaAdministracaoRepository, 
+                                           IParametrosFinanceiroRepository parametrosFinanceiroRepository,
+                                           MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.taxaAdministracaoRepository = taxaAdministracaoRepository;
+            this.parametrosFinanceiroRepository = parametrosFinanceiroRepository;
         }
 
         #region ITaxaAdministracaoRepository Members
@@ -155,8 +165,64 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         }
 
-        #endregion
+        public bool EhPermitidoSalvar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.TaxaAdministracaoGravar);
+        }
 
+        public bool EhPermitidoDeletar()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.TaxaAdministracaoDeletar);
+        }
+
+        public bool EhPermitidoImprimir()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.TaxaAdministracaoImprimir);
+        }
+
+        public FileDownloadDTO ExportarRelTaxaAdministracao(string centroCustoCodigo, int? clienteId, FormatoExportacaoArquivo formato)
+        {
+            if (!EhPermitidoImprimir())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
+            List<TaxaAdministracao> listaTaxaAdministracao = new List<TaxaAdministracao>();
+            if ((!string.IsNullOrEmpty(centroCustoCodigo)) && (clienteId.HasValue))
+            {
+
+                var specification = (Specification<TaxaAdministracao>)new TrueSpecification<TaxaAdministracao>();
+
+
+                listaTaxaAdministracao = taxaAdministracaoRepository.ListarPeloFiltro(l => l.CentroCustoId == centroCustoCodigo && l.ClienteId == clienteId.Value, 
+                                                                                      l => l.CentroCusto.ListaCentroCustoEmpresa, 
+                                                                                      l => l.Cliente, 
+                                                                                      l => l.Classe).To<List<TaxaAdministracao>>();
+            }
+
+            relTaxaAdministracao objRel = new relTaxaAdministracao();
+
+            objRel.SetDataSource(RelTaxaAdministracaoToDataTable(listaTaxaAdministracao));
+
+            var parametros = parametrosFinanceiroRepository.Obter();
+            CentroCusto centroCusto = listaTaxaAdministracao.First().CentroCusto;
+
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
+
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
+            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Rateio automático",
+                                                          objRel.ExportToStream((ExportFormatType)formato),
+                                                          formato);
+            if (System.IO.File.Exists(caminhoImagem))
+                System.IO.File.Delete(caminhoImagem);
+            return arquivo;
+        }
+
+        #endregion
 
         #region Métodos Privados
 
@@ -179,6 +245,43 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return retorno;
         }
 
+        private DataTable RelTaxaAdministracaoToDataTable(List<TaxaAdministracao> listaTaxaAdministracao)
+        {
+            DataTable dta = new DataTable();
+            DataColumn centroCusto = new DataColumn("centroCusto");
+            DataColumn descricaoCentroCusto = new DataColumn("descricaoCentroCusto");
+            DataColumn nomeCliente = new DataColumn("nomeCliente");
+            DataColumn classe = new DataColumn("classe");
+            DataColumn descricaoClasse = new DataColumn("descricaoClasse");
+            DataColumn percentual = new DataColumn("percentual", System.Type.GetType("System.Decimal"));
+            DataColumn girErro = new DataColumn("girErro");
+
+            dta.Columns.Add(centroCusto);
+            dta.Columns.Add(descricaoCentroCusto);
+            dta.Columns.Add(nomeCliente);
+            dta.Columns.Add(classe);
+            dta.Columns.Add(descricaoClasse);
+            dta.Columns.Add(percentual);
+            dta.Columns.Add(girErro);
+
+            foreach (var taxaAdministracao in listaTaxaAdministracao)
+            {
+                DataRow row = dta.NewRow();
+
+                row[centroCusto] = taxaAdministracao.CentroCusto.Codigo;
+                row[descricaoCentroCusto] = taxaAdministracao.CentroCusto.Descricao;
+                row[nomeCliente] = taxaAdministracao.Cliente.Nome;
+                row[classe] = taxaAdministracao.Classe.Codigo;
+                row[descricaoClasse] = taxaAdministracao.Classe.Descricao;
+                row[percentual] = taxaAdministracao.Percentual;
+
+                row[girErro] = "";
+                dta.Rows.Add(row);
+            }
+
+            return dta;
+        }
+        
         #endregion
 
 

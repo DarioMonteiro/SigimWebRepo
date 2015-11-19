@@ -73,6 +73,7 @@
 
         $(document).on("show.bs.modal", "#@Html.IdFor(m => m.Codigo)_ModalPanel", function () {
             $('#filtro@(Html.IdFor(m => m.Descricao))').val('');
+
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("TreeView", "Classe", new { area = "Financeiro" })',
@@ -155,6 +156,9 @@
                     @:  blockClasseForm_@(Html.IdFor(m => m.Codigo))();
                     @:  limpaClasseForm_@(Html.IdFor(m => m.Codigo))();
                     @:}
+                }
+                else {
+                    @:$("#orcamentoClasseDespesaId").val(0);
                 }
             }
         );

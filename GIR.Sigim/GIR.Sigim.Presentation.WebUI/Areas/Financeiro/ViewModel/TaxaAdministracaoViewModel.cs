@@ -15,23 +15,22 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
     public class TaxaAdministracaoViewModel
     {
         public CentroCustoDTO CentroCusto { get; set; }
-
-        [Display(Name = "Cliente")]
-        public int ClienteId { get; set; }
+        //public int ClienteId { get; set; }
         public ClienteFornecedorDTO Cliente { get; set; }
-
         public ClasseDTO Classe { get; set; }
-
         public decimal Percentual { get; set; }
-
         public string JsonItens { get; set; }
-
         public int IndexSelecionado { get; set; }
         public SelectList ListaCliente { get; set; }
+
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
+        public bool PodeImprimir { get; set; }
 
         public TaxaAdministracaoViewModel()
         {
             JsonItens = "[]";
+            Cliente = new ClienteFornecedorDTO();
         }
 
     }
