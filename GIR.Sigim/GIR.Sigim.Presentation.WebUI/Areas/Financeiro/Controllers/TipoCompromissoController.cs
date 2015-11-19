@@ -37,6 +37,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
+
+            model.PodeSalvar = tipoCompromissoAppService.EhPermitidoSalvar();
+            model.PodeDeletar = tipoCompromissoAppService.EhPermitidoDeletar();
+            model.PodeImprimir = tipoCompromissoAppService.EhPermitidoImprimir();
+
             var tipoCompromisso = tipoCompromissoAppService.ObterPeloId(id) ?? new TipoCompromissoDTO();
 
             if (id.HasValue && !tipoCompromisso.Id.HasValue)
@@ -83,6 +88,20 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         public ActionResult Deletar(int? id)
         {
             tipoCompromissoAppService.Deletar(id);
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var arquivo = tipoCompromissoAppService.ExportarRelTipoCompromisso(formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
             return PartialView("_NotificationMessagesPartial");
         }
 

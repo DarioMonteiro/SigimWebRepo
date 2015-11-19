@@ -17,6 +17,11 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         [Display(Name = "Gera título")]
         public bool GeraTitulo { get; set; }
 
+        public string GeraTituloDescricao
+        {
+            get { return GeraTitulo == true ? "Sim" : "Não"; }
+        }
+
         [Display(Name = "Tipo a pagar")]
         public bool TipoPagar { get; set; }
 

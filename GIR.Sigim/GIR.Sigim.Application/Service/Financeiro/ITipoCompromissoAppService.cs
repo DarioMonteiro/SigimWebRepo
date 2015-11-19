@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.Filtros.Financeiro;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -15,5 +16,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
         TipoCompromissoDTO ObterPeloId(int? id);
         bool Salvar(TipoCompromissoDTO dto);
         bool Deletar(int? id);
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
+        FileDownloadDTO ExportarRelTipoCompromisso(FormatoExportacaoArquivo formato);
+
     }
 }

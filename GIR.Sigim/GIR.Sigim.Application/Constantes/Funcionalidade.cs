@@ -102,7 +102,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string TipoCompromissoAcessar = "TIPOCOMPROMISSO_ACESSAR";
         public const string TipoCompromissoGravar = "TIPOCOMPROMISSO_GRAVAR";
         public const string TipoCompromissoDeletar = "TIPOCOMPROMISSO_DELETAR";
-        //public const string TipoCompromissoImprimir = "TIPOCOMPROMISSO_IMPRIMIR";
+        public const string TipoCompromissoImprimir = "TIPOCOMPROMISSO_IMPRIMIR";
 
         public const string TipoDocumentoAcessar = "TIPODOCUMENTO_ACESSAR";
         public const string TipoDocumentoGravar = "TIPODOCUMENTO_GRAVAR";
@@ -284,7 +284,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(TipoCompromissoAcessar, "Tipo de compromisso - acessar");
             MenuFinanceiro.Add(TipoCompromissoGravar, "Tipo de compromisso - gravar");
             MenuFinanceiro.Add(TipoCompromissoDeletar, "Tipo de compromisso - deletar");
-            //MenuFinanceiro.Add(TipoCompromissoImprimir, "Tipo de compromisso - imprimir");
+            MenuFinanceiro.Add(TipoCompromissoImprimir, "Tipo de compromisso - imprimir");
 
             MenuFinanceiro.Add(TipoDocumentoAcessar, "Tipo de documento - acessar");
             MenuFinanceiro.Add(TipoDocumentoGravar, "Tipo de documento - gravar");

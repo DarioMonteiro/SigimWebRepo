@@ -46,6 +46,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Salvar(string CentroCustoId, int ClienteId, List<TaxaAdministracaoDTO> listaDto)
         {
+            if (!EhPermitidoSalvar())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if (listaDto == null) throw new ArgumentNullException("dto");
 
             if (ValidaSalvar(listaDto) == false) { return false; }
@@ -100,6 +106,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public bool Deletar(string CentroCustoId, int ClienteId)
         {
+            if (!EhPermitidoDeletar())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return false;
+            }
+
             if ((CentroCustoId == null) || (ClienteId == 0))
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
