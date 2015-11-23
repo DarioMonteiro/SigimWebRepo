@@ -31,9 +31,12 @@ namespace GIR.Sigim.Domain.Entity.Sigim
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (Id == 999)
+            if (Id.HasValue)
             {
-                yield return new ValidationResult(Resource.Financeiro.ErrorMessages.BancoCarteira);
+                if (Id.Value == CarteiraBanco.CodigoCarteiraBanco)
+                {
+                    yield return new ValidationResult(Resource.Financeiro.ErrorMessages.BancoCarteira);
+                }
             }
         }
     }

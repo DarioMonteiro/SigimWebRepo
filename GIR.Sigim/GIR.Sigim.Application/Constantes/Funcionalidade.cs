@@ -122,7 +122,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string BancoAcessar = "BANCO_ACESSAR";
         public const string BancoGravar = "BANCO_GRAVAR";
         public const string BancoDeletar = "BANCO_DELETAR";
-        //public const string BancoImprimir = "BANCO_IMPRIMIR";
+        public const string BancoImprimir = "BANCO_IMPRIMIR";
 
         public const string AgenciaAcessar = "AGENCIA_ACESSAR";
         public const string AgenciaGravar = "AGENCIA_GRAVAR";
@@ -304,7 +304,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(BancoAcessar, "Banco - acessar");
             MenuFinanceiro.Add(BancoGravar, "Banco - gravar");
             MenuFinanceiro.Add(BancoDeletar, "Banco - deletar");
-            //MenuFinanceiro.Add(BancoImprimir, "Banco - Imprimir");
+            MenuFinanceiro.Add(BancoImprimir, "Banco - Imprimir");
 
             MenuFinanceiro.Add(AgenciaAcessar, "Agência - acessar");
             MenuFinanceiro.Add(AgenciaGravar, "Agência - gravar");

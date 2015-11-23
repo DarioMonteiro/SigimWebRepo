@@ -14,8 +14,11 @@ namespace GIR.Sigim.Presentation.WebUI.ViewModel
     {
         public BancoDTO Banco { get; set; }
         public SelectList ListaBanco { get; set; }
-
         public BancoFiltro Filtro { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
+        public bool PodeImprimir { get; set; }
+        public bool PodeAcessarAgencia { get; set; }
 
         public BancoViewModel()
         {

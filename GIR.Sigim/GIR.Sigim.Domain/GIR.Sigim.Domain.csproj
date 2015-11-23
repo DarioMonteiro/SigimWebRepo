@@ -58,6 +58,7 @@
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicaoNF.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
     <Compile Include="Entity\Financeiro\MovimentoFinanceiro.cs" />
+    <Compile Include="Entity\Sigim\CarteiraBanco.cs" />
     <Compile Include="Repository\Contrato\IContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />

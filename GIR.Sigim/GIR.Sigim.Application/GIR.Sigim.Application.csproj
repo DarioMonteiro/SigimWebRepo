@@ -315,6 +315,12 @@
       <DependentUpon>relRequisicaoMaterialItem.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Sigim\relBanco.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relBanco.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Sigim\relFormaRecebimento.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -531,6 +537,10 @@
     <EmbeddedResource Include="Reports\OrdemCompra\relRequisicaoMaterialItem.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relRequisicaoMaterialItem.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Sigim\relBanco.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relBanco.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Sigim\relFormaRecebimento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

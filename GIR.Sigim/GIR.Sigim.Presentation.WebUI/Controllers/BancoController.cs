@@ -44,7 +44,13 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                 model = new BancoViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
+                model.Filtro.PaginationParameters.OrderBy = "descricao";
             }
+
+            model.PodeSalvar = bancoAppService.EhPermitidoSalvar();
+            model.PodeDeletar = bancoAppService.EhPermitidoDeletar();
+            model.PodeImprimir = bancoAppService.EhPermitidoImprimir();
+            model.PodeAcessarAgencia = bancoAppService.EhPermitidoAcessarAgencia();
 
             var banco = bancoAppService.ObterPeloId(id) ?? new BancoDTO(); ;
 
@@ -96,6 +102,19 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var arquivo = bancoAppService.ExportarRelBanco(formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
        
         #endregion
     }

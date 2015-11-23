@@ -61,7 +61,7 @@ namespace GIR.Sigim.Domain.Resource.Financeiro {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Banco usado para carteira !.
+        ///   Looks up a localized string similar to Código de banco inválido. Código já utilizado para cobrança em carteira !.
         /// </summary>
         internal static string BancoCarteira {
             get {

@@ -8,7 +8,20 @@
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
     <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>   
-    @Html.ActionLink("Agência", "Index", "Agencia", new { @id = Model.Banco.Id  }, new { @class = "btn btn-primary", @style = "float:right;" })       
+    @{
+        string disableBtnAgencia = string.Empty;
+        string classAgencia = string.Empty;
+        if (!Model.PodeAcessarAgencia)
+        {
+            classAgencia = "btn bg-color-green txt-color-white disabled";
+        }
+        else {
+            classAgencia = "btn bg-color-green txt-color-white";
+
+        }
+        @Html.ActionLink("Agência", "Index", "Agencia", new { @id = Model.Banco.Id  }, new { @class = classAgencia, @style = "float:right; margin-right:2px;" })       
+    }
+
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -27,53 +40,88 @@
                             new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))                                            
                     {
                         @Html.AntiForgeryToken()
-                    <div class="panel-body no-padding">
-                        <fieldset>
-                            <div class="row">
-                            <section class="col col-3">  
-                                @Html.LabelFor(m => m.Banco.Id, "Código do banco", new { @class = "label" })
-                                <label class="input">
-                                    @Html.TextBoxFor(m => m.Banco.Id, new { @maxlength = "3",  @class = "numeric required" })
-                                </label>
-                                @Html.ValidationMessageFor(m => m.Banco.Id, "", new { @class = "note note-error" })
-                            </section>
-                            <section class="col col-12">
-                                @Html.LabelFor(m => m.Banco.Nome, new { @class = "label" })
-                                <label class="input">
-                                    @Html.TextBoxFor(m => m.Banco.Nome, new { @maxlength = "50",  @class = "required" })
-                                </label>
-                                @Html.ValidationMessageFor(m => m.Banco.Nome, "", new { @class = "note note-error" })
-                            </section>
+                        <div class="panel-body no-padding">
+                            <fieldset>
+                                <div class="row">
+                                <section class="col col-3">  
+                                    @Html.LabelFor(m => m.Banco.Id, "Código", new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Banco.Id, new { @maxlength = "3",  @class = "numeric text-center required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Banco.Id, "", new { @class = "note note-error" })
+                                </section>
+                                <section class="col col-9">
+                                    @Html.LabelFor(m => m.Banco.Nome,"Descrição", new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.Banco.Nome, new { @maxlength = "50",  @class = "required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Banco.Nome, "", new { @class = "note note-error" })
+                                </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-4" style="padding-top:30px">                                                                      
+                                        <label class="checkbox">
+                                            @Html.CheckBoxFor(m => m.Banco.InterfaceEletronica)<i></i>@Html.DisplayNameFor(m => m.Banco.InterfaceEletronica)  
+                                        </label>                                                                                                      
+                                    </section>
+                                    <section class="col col-4">
+                                        @Html.LabelFor(m => m.Banco.NumeroRemessa, new { @class = "label" })
+                                        <label class="input">
+                                            @Html.TextBoxFor(m => m.Banco.NumeroRemessa, new { @class = "numeric text-right",@maxlength=7 })
+                                        </label>                              
+                                    </section>
+                                    <section class="col col-4">
+                                        @Html.LabelFor(m => m.Banco.NumeroRemessaPagamento , new { @class = "label" })
+                                        <label class="input">
+                                            @Html.TextBoxFor(m => m.Banco.NumeroRemessaPagamento, new { @class = "numeric text-right",@maxlength=7 })
+                                        </label>                                   
+                                    </section>                               
+                                </div>                                                       
+                            </fieldset>
+                        </div>
+                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                            tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluirRegistro" aria-labelledby="ui-id-1" 
+                                style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                <span id="ui-id-1" class="ui-dialog-title">
+                                </span>
                             </div>
-                            <div class="row">
-                                <section class="col col-4" style="padding-top:30px">                                                                      
-                                    <label class="checkbox">
-                                        @Html.CheckBoxFor(m => m.Banco.InterfaceEletronica)<i></i>@Html.DisplayNameFor(m => m.Banco.InterfaceEletronica)  
-                                    </label>                                                                                                      
-                                </section>
-                                <section class="col col-4">
-                                    @Html.LabelFor(m => m.Banco.NumeroRemessa, new { @class = "label" })
-                                    <label class="input">
-                                        @Html.TextBoxFor(m => m.Banco.NumeroRemessa)
-                                    </label>                              
-                                </section>
-                                <section class="col col-4">
-                                    @Html.LabelFor(m => m.Banco.NumeroRemessaPagamento , new { @class = "label" })
-                                    <label class="input">
-                                        @Html.TextBoxFor(m => m.Banco.NumeroRemessaPagamento)
-                                    </label>                                   
-                                </section>                               
-                            </div>                                                       
-                        </fieldset>
-                    </div>
-                    <footer>                       
-                        <button type="button" id="btnDeletar" class="btn btn-primary">
-                            Deletar
-                        </button>
-                        <button type="submit" id="btnSalvar" class="btn btn-primary">
-                            Gravar
-                        </button>
-                    </footer>
+                            <div id="dlgSimpleExcluirRegistro" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+	                            <p>
+		                            Deseja excluir o registro selecionado ?
+	                            </p>
+                            </div>
+                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                <div class="ui-dialog-buttonset">
+                                </div>
+                            </div>
+                        </div>                       
+                        <footer>
+                            @{
+                                string disableBtnDeletar = string.Empty;
+                                if (!Model.PodeDeletar)
+                                {
+                                    disableBtnDeletar = "disabled";
+                                }
+                            }
+                            <button type="button" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">
+                                Deletar
+                            </button>
+                            @{
+                                var url = Url.Action("Imprimir","Banco");
+                            }
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
+                            @{
+                                string disableBtnSalvar = string.Empty;
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
+                            }
+                            <button type="submit" class="btn btn-primary @disableBtnSalvar">
+                                Gravar
+                            </button>
+                        </footer>
                     }                        
                     @using (Ajax.BeginForm(
                             "Lista",
@@ -101,6 +149,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('body').addClass("hidden-menu");
+
         listarFiltro();
 
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
@@ -109,9 +159,55 @@
             }
         );
 
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimpleExcluirRegistro').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Excluir",
+                "class": "btn btn-primary",
+                click: function () {
+                    $(this).dialog("close");
+                    excluirRegistro();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        $("#btnDeletar").on("click", function () {
+            var id = $('#@Html.IdFor(m => m.Banco.Id)').val();
+            if (id !== "") {
+                $('#dlgSimpleExcluirRegistro').dialog('open');
+            }
+            else {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "warning");
+            }
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            parametrosUrlImpressao = '';
+        });
+
     });
 
-     $("#btnDeletar").on("click", function () {
+    function excluirRegistro() {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Deletar", "Banco")',
@@ -128,7 +224,7 @@
             clearForm();
             listarFiltro();
         });
-    });
+    }
 
     function clearForm() {
         $('#@Html.IdFor(m => m.Banco.Id)').val('');

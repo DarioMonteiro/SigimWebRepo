@@ -19,14 +19,19 @@ namespace GIR.Sigim.Application.DTO.Sigim
             get { return Situacao == "A"; }
             set { Situacao = value ? "A" : "I"; }
         }
-        public int? NumeroRemessa { get; set; }                
+        [Display(Name = "Rem. cobrança")]
+        [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
+        public int? NumeroRemessa { get; set; }
 
+        [Display(Name = "Interface eletrônica")]
         public bool InterfaceEletronica { get; set; }
         public string InterfaceEletronicaDescricao
         {
             get { return InterfaceEletronica == true ? "Sim" : "Não"; }
         }
 
+        [Display(Name = "Rem. pagamento")]
+        [RegularExpression(@"[0-9]*$", ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "ValorDeveSerNumerico")]
         public int? NumeroRemessaPagamento { get; set; }       
 
         
