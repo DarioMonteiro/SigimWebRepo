@@ -7,6 +7,7 @@ using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Service.Financeiro;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Application.DTO.Financeiro;
+using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Application.Constantes;
 
@@ -34,7 +35,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 model = new TipoRateioViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
+                model.Filtro.PaginationParameters.OrderBy = "descricao";
             }
+
+            model.PodeSalvar = tipoRateioAppService.EhPermitidoSalvar();
+            model.PodeDeletar = tipoRateioAppService.EhPermitidoDeletar();
+            model.PodeImprimir = tipoRateioAppService.EhPermitidoImprimir();
+
             var tipoRateio = tipoRateioAppService.ObterPeloId(id) ?? new TipoRateioDTO();
 
             if (id.HasValue && !tipoRateio.Id.HasValue)
@@ -83,5 +90,20 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             tipoRateioAppService.Deletar(id);
             return PartialView("_NotificationMessagesPartial");
         }
+
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var arquivo = tipoRateioAppService.ExportarRelTipoRateio(formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
+
     }
 }

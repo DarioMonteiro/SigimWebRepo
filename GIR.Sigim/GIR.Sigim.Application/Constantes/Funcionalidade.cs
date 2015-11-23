@@ -117,7 +117,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string TipoRateioAcessar = "TIPORATEIO_ACESSAR";
         public const string TipoRateioGravar = "TIPORATEIO_GRAVAR";
         public const string TipoRateioDeletar = "TIPORATEIO_DELETAR";
-        //public const string TipoRateioImprimir = "TIPORATEIO_IMPRIMIR";
+        public const string TipoRateioImprimir = "TIPORATEIO_IMPRIMIR";
             
         public const string BancoAcessar = "BANCO_ACESSAR";
         public const string BancoGravar = "BANCO_GRAVAR";
@@ -299,7 +299,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(TipoRateioAcessar, "Tipo rateio - acessar");
             MenuFinanceiro.Add(TipoRateioGravar, "Tipo rateio - gravar");
             MenuFinanceiro.Add(TipoRateioDeletar, "Tipo rateio - deletar");
-            //MenuFinanceiro.Add(TipoRateioImprimir, "Tipo rateio - Imprimir");
+            MenuFinanceiro.Add(TipoRateioImprimir, "Tipo rateio - Imprimir");
 
             MenuFinanceiro.Add(BancoAcessar, "Banco - acessar");
             MenuFinanceiro.Add(BancoGravar, "Banco - gravar");
