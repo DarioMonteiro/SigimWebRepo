@@ -26,50 +26,71 @@
                             new { @id = "formCadastro", @class = "smart-form client-form", @novalidate = "novalidate" }))                                            
                     {
                         @Html.AntiForgeryToken()
-                    <div class="panel-body no-padding">
-                        <fieldset>
-                            <div class="row">
-                            <section class="col col-6">                             
-                                @Html.LabelFor(m => m.UnidadeMedida.Sigla, new { @class = "label" })
-                                <label class="input">
-                                    @Html.TextBoxFor(m => m.UnidadeMedida.Sigla, new { @maxlength = "6", @class = "required" })
-                                </label>
-                                @Html.ValidationMessageFor(m => m.UnidadeMedida.Sigla, "", new { @class = "note note-error" })
-                            </section>
+                        <div class="panel-body no-padding">
+                            <fieldset>
+                                <div class="row">
+                                <section class="col col-6">                             
+                                    @Html.LabelFor(m => m.UnidadeMedida.Sigla, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.UnidadeMedida.Sigla, new { @maxlength = "6", @class = "required" })
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.UnidadeMedida.Sigla, "", new { @class = "note note-error" })
+                                </section>
+                                </div>
+                                <div class="row">
+                                <section class="col col-12">
+                                    @Html.LabelFor(m => m.UnidadeMedida.Descricao, new { @class = "label" })
+                                    <label class="input">
+                                        @Html.TextBoxFor(m => m.UnidadeMedida.Descricao, new { @maxlength = "50", @class = "required"})
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.UnidadeMedida.Descricao, "", new { @class = "note note-error" })
+                                </section>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                            tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluirRegistro" aria-labelledby="ui-id-1" 
+                                style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                <span id="ui-id-1" class="ui-dialog-title">
+                                </span>
                             </div>
-                            <div class="row">
-                            <section class="col col-12">
-                                @Html.LabelFor(m => m.UnidadeMedida.Descricao, new { @class = "label" })
-                                <label class="input">
-                                    @Html.TextBoxFor(m => m.UnidadeMedida.Descricao, new { @maxlength = "50", @class = "required"})
-                                </label>
-                                @Html.ValidationMessageFor(m => m.UnidadeMedida.Descricao, "", new { @class = "note note-error" })
-                            </section>
+                            <div id="dlgSimpleExcluirRegistro" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+	                            <p>
+		                            Deseja excluir o registro selecionado ?
+	                            </p>
                             </div>
-                        </fieldset>
-                    </div>
-                    <footer>                       
-                        @{
-                        string disableBtnDeletar = string.Empty;
+                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                <div class="ui-dialog-buttonset">
+                                </div>
+                            </div>
+                        </div>
+                        <footer>                       
+                            @{
+                            string disableBtnDeletar = string.Empty;
                             if (!Model.PodeDeletar)
                             {
                                 disableBtnDeletar = "disabled";
                             }
-                        }
-                        <button type="button" id="btnDeletar" class="btn btn-primary @disableBtnDeletar">
-                            Deletar
-                        </button>
-                        @{
+                            }
+                            <button type="button" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">
+                                Deletar
+                            </button>
+                            @{
+                            var url = Url.Action("Imprimir", "UnidadeMedida");
+                            }
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
+                            @{
                             string disableBtnSalvar = string.Empty;
                             if (!Model.PodeSalvar)
                             {
                                 disableBtnSalvar = "disabled";
                             }
-                        }
-                        <button type="submit" class="btn btn-primary @disableBtnSalvar">
-                            Gravar
-                        </button>
-                    </footer>
+                            }
+                            <button type="submit" class="btn btn-primary @disableBtnSalvar">
+                                Gravar
+                            </button>
+                        </footer>
                     }                        
                     @using (Ajax.BeginForm(
                             "Lista",
@@ -107,9 +128,55 @@
             }
         );
 
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimpleExcluirRegistro').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Excluir",
+                "class": "btn btn-primary",
+                click: function () {
+                    $(this).dialog("close");
+                    excluirRegistro();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        $("#btnDeletar").on("click", function () {
+            var sigla = $('#@Html.IdFor(m => m.UnidadeMedida.Sigla)').val();
+            if (sigla !== "") {
+                $('#dlgSimpleExcluirRegistro').dialog('open');
+            }
+            else {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "warning");
+            }
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            parametrosUrlImpressao = '';
+        });
+
     });
 
-    $("#btnDeletar").on("click", function () {
+    function excluirRegistro() {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Deletar", "UnidadeMedida")',
@@ -126,7 +193,8 @@
             clearForm();
             listarFiltro();
         });
-    });
+    }
+
 
     function clearForm() {
         $('#@Html.IdFor(m => m.UnidadeMedida.Sigla)').val('');

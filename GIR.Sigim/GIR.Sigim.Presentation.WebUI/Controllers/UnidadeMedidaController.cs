@@ -34,11 +34,12 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                 model = new UnidadeMedidaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
+                model.Filtro.PaginationParameters.OrderBy = "sigla";
             }
 
             model.PodeSalvar = unidadeMedidaAppService.EhPermitidoSalvar();
             model.PodeDeletar = unidadeMedidaAppService.EhPermitidoDeletar();
-            //model.PodeImprimir = unidadeMedidaAppService.EhPermitidoImprimir();
+            model.PodeImprimir = unidadeMedidaAppService.EhPermitidoImprimir();
 
             var unidadeMedida = unidadeMedidaAppService.ObterPeloCodigo(sigla);
 
@@ -86,6 +87,20 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         public ActionResult Deletar(string sigla)
         {
             unidadeMedidaAppService.Deletar(sigla);
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var arquivo = unidadeMedidaAppService.ExportarRelUnidadeMedida(formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
             return PartialView("_NotificationMessagesPartial");
         }
 

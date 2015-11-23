@@ -147,7 +147,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string OrdemCompraUnidadeMedidaAcessar = "ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR";
         public const string OrdemCompraUnidadeMedidaGravar = "ORDEMCOMPRA_UNIDADEMEDIDA_GRAVAR";
         public const string OrdemCompraUnidadeMedidaDeletar = "ORDEMCOMPRA_UNIDADEMEDIDA_DELETAR";
-        //public const string OrdemCompraUnidadeMedidaImprimir = "ORDEMCOMPRA_UNIDADEMEDIDA_IMPRIMIR";
+        public const string OrdemCompraUnidadeMedidaImprimir = "ORDEMCOMPRA_UNIDADEMEDIDA_IMPRIMIR";
 
         //public const string OrdemCompraMaterialAcessar = "ORDEMCOMPRA_MATERIAL_ACESSAR";
         //public const string OrdemCompraMaterialGravar = "ORDEMCOMPRA_MATERIAL_GRAVAR";
@@ -329,7 +329,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaAcessar, "Unidade de medida - acessar");
             MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaGravar, "Unidade de medida - gravar");
             MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaDeletar, "Unidade de medida - deletar");
-            //MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaImprimir, "Unidade de medida - imprimir");
+            MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaImprimir, "Unidade de medida - imprimir");
 
             MenuOrdemCompra.Add(ParametroOrdemCompraAcessar, "Parâmetros - acessar");
             MenuOrdemCompra.Add(ParametroOrdemCompraGravar, "Parâmetros - gravar");
