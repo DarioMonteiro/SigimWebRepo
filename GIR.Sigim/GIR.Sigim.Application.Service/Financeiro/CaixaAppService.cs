@@ -64,14 +64,14 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 return false;
             }
 
+            if (dto == null)
+                throw new ArgumentNullException("dto");
+
             if (string.IsNullOrEmpty(dto.Descricao))
             {
                 messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Descrição"), TypeMessage.Error);
                 return false;
             }
-
-            if (dto == null)
-                throw new ArgumentNullException("dto");
 
             bool novoItem = false;
 

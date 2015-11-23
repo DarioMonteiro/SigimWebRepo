@@ -73,6 +73,19 @@ namespace GIR.Sigim.Application.Service.Sigim
             if (dto == null)
                 throw new ArgumentNullException("dto");
 
+            if (string.IsNullOrEmpty(dto.Sigla))
+            {
+                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Sigla"), TypeMessage.Error);
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(dto.Descricao))
+            {
+                messageQueue.Add(string.Format(Resource.Sigim.ErrorMessages.CampoObrigatorio, "Descrição"), TypeMessage.Error);
+                return false;
+            }
+
+
             bool novoItem = false;
 
             var unidadeMedida = unidadeMedidaRepository.ObterPeloCodigo(dto.Sigla);
