@@ -8,7 +8,7 @@
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
     @Html.ActionLink("Novo", "Cadastro", new { @id = "" }, new { @class = "btn btn-primary", @style = "float:right;" })
-    @{
+@*    @{
         string disableBtnContaCorrente = string.Empty;
         string classContaCorrente = string.Empty;
         if (!Model.PodeAcessarContaCorrente)
@@ -19,7 +19,7 @@
             classContaCorrente = "btn bg-color-green txt-color-white";
         }
         @Html.ActionLink("Conta corrente", "Index", "ContaCorrente", new { @id = Model.Agencia.Id }, new { @class = classContaCorrente, @style = "float:right; margin-right:2px;" })       
-    }
+    }*@
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
