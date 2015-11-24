@@ -103,6 +103,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ModuloConfiguration());
             modelBuilder.Configurations.Add(new PerfilConfiguration());
             modelBuilder.Configurations.Add(new PerfilFuncionalidadeConfiguration());
+            modelBuilder.Configurations.Add(new UnidadeFederacaoConfiguration());
 
             #endregion
 

@@ -15,6 +15,10 @@ namespace GIR.Sigim.Application.Service.Sigim
         AgenciaDTO ObterPeloId(int? Id);
         bool Salvar(AgenciaDTO dto);
         bool Deletar(int? id);
-
+        bool EhPermitidoSalvar();
+        bool EhPermitidoDeletar();
+        bool EhPermitidoImprimir();
+        bool EhPermitidoAcessarContaCorrente();
+        FileDownloadDTO ExportarRelAgencia(int? bancoId, FormatoExportacaoArquivo formato);
     }
 }

@@ -48,6 +48,7 @@ namespace GIR.Sigim.Application.Service.IoC
             Container.Current.RegisterType<ITipologiaAppService, TipologiaAppService>();
             Container.Current.RegisterType<ITratamentoAppService, TratamentoAppService>();
             Container.Current.RegisterType<IUnidadeMedidaAppService, UnidadeMedidaAppService>();
+            Container.Current.RegisterType<IUnidadeFederacaoAppService, UnidadeFederacaoAppService>();
         }
     }
 }

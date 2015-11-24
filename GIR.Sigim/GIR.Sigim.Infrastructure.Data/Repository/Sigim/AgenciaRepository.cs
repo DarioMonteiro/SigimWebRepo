@@ -57,7 +57,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
                 case "DVAgencia":
                     set = ascending ? set.OrderBy(l => l.DVAgencia) : set.OrderByDescending(l => l.DVAgencia);
                     break;
-                case "nome":
+                case "nomeAgencia":
                     set = ascending ? set.OrderBy(l => l.Nome) : set.OrderByDescending(l => l.Nome);
                     break;
                 case "nomeContato":

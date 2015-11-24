@@ -78,11 +78,33 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("complemento")
                 .HasColumnOrder(12);
 
+            Property(l => l.UnidadeFederacaoSigla)
+                .HasColumnName("unidadeFederacao")
+                .HasMaxLength(2)
+                .HasColumnOrder(13);
+
+            HasOptional<UnidadeFederacao>(l => l.UnidadeFederacao)
+               .WithMany(c => c.ListaAgencia)
+               .HasForeignKey(l => l.UnidadeFederacaoSigla);
+
+            Property(l => l.CEP)
+                .HasColumnName("cep")
+                .HasMaxLength(10)
+                .HasColumnOrder(14);
+
+            Property(l => l.Bairro)
+                .HasColumnName("bairro")
+                .HasMaxLength(50)
+                .HasColumnOrder(15);
+
+            Property(l => l.Telefone)
+                .HasColumnName("telefone")
+                .HasMaxLength(50)
+                .HasColumnOrder(16);
+
             HasMany<ContaCorrente>(l => l.ListaContaCorrente)
                      .WithOptional(c => c.Agencia)
                      .HasForeignKey(c => c.AgenciaId); 
-
-
         }
     }
 }

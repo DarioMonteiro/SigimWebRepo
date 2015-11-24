@@ -51,6 +51,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<ITipologiaRepository, TipologiaRepository>();
             Container.Current.RegisterType<ITratamentoRepository, TratamentoRepository>();
             Container.Current.RegisterType<IUnidadeMedidaRepository, UnidadeMedidaRepository>();
+            Container.Current.RegisterType<IUnidadeFederacaoRepository, UnidadeFederacaoRepository>();
         }
     }
 }

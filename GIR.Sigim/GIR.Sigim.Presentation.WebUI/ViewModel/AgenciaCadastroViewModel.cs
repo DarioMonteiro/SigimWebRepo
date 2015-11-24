@@ -14,9 +14,15 @@ namespace GIR.Sigim.Presentation.WebUI.ViewModel
 {
     public class AgenciaCadastroViewModel
     {
-        public AgenciaDTO Agencia { get; set; }
-        
+        public int? BancoIdPesquisado { get; set; }
+        public AgenciaDTO Agencia { get; set; }       
         public SelectList ListaBanco { get; set; }
+        public SelectList ListaUnidadeFederacao { get; set; }
+        public bool PodeSalvar { get; set; }
+        public bool PodeDeletar { get; set; }
+        public bool PodeImprimir { get; set; }
+        public bool PodeAcessarContaCorrente { get; set; }
+        public bool EhValidoImprimir { get; set; }
 
         public AgenciaCadastroViewModel()
         {

@@ -16,6 +16,7 @@ namespace GIR.Sigim.Presentation.WebUI.ViewModel
         public AgenciaDTO Agencia { get; set; }        
         public AgenciaFiltro Filtro { get; set; }
         public SelectList ListaBanco { get; set; }
+        public bool EhValidoImprimir { get; set; }
 
         public AgenciaListaViewModel()
         {

@@ -77,7 +77,17 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        listarFiltro();
+        $('body').addClass("hidden-menu");
+
+        var bancoId = null;
+
+        bancoId = $("#@Html.IdFor(m => m.Filtro.BancoId)").val();
+
+        var condicao = (bancoId != "");
+
+        if (condicao) {
+            listarFiltro();
+        }
 
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {

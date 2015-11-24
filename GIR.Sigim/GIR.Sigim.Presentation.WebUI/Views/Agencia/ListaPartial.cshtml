@@ -36,7 +36,7 @@
                             string bancoNomeSortingSuffix = "sorting";          
                             string agenciaCodigoSortingSuffix = "sorting";
                             string DVAgenciaSortingSuffix = "sorting";
-                            string nomeSortingSuffix = "sorting";
+                            string nomeAgenciaSortingSuffix = "sorting";
                             string nomeContatoSortingSuffix = "sorting";
                             string telefoneContatoSortingSuffix = "sorting";
 
@@ -57,8 +57,8 @@
                                 case "DVAgencia":
                                     DVAgenciaSortingSuffix += sortingSuffix;
                                     break;
-                                case "nome":
-                                    nomeSortingSuffix += sortingSuffix;
+                                case "nomeAgencia":
+                                    nomeAgenciaSortingSuffix += sortingSuffix;
                                     break;
                                 case "nomeContato":
                                     nomeContatoSortingSuffix += sortingSuffix;
@@ -72,12 +72,12 @@
                         
                         }
                         <th class="sorting @bancoIdSortingSuffix text-center" data-order="bancoId" style="width:60px; ">Banco</th>  
-                        <th class="sorting @bancoNomeSortingSuffix text-left" data-order="bancoNome" style="min-width:65px;">Nome</th>                  
+                        <th class="sorting @bancoNomeSortingSuffix text-left" data-order="bancoNome" style="min-width:65px;">Nome banco</th>                  
                         <th class="sorting @agenciaCodigoSortingSuffix text-center" data-order="agenciaCodigo" style="min-width:65px;">Agência</th>
-                        <th class="sorting @DVAgenciaSortingSuffix text-center" data-order="DBAgencia" style="min-width:75px;">DV</th>
-                        <th class="sorting @nomeSortingSuffix text-left" data-order="nome" style="min-width:75px;">Nome</th>
-                        <th class="sorting @nomeContatoSortingSuffix text-left" data-order="nome" style="min-width:75px;">Nome contato</th>
-                        <th class="sorting @telefoneContatoSortingSuffix text-left" data-order="nome" style="min-width:75px;">Telefone contato</th>
+                        <th class="sorting @DVAgenciaSortingSuffix text-center" data-order="DVAgencia" style="min-width:75px;">D.V. Agência</th>
+                        <th class="sorting @nomeAgenciaSortingSuffix text-left" data-order="nomeAgencia" style="min-width:75px;">Nome</th>
+                        <th class="sorting @nomeContatoSortingSuffix text-left" data-order="nomeContato" style="min-width:75px;">Nome Contato</th>
+                        <th class="sorting @telefoneContatoSortingSuffix text-left" data-order="telefoneContato" style="min-width:75px;">Telefone Contato</th>
                     </tr>
                 </thead>
                 <tbody>

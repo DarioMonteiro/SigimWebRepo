@@ -59,6 +59,7 @@
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
     <Compile Include="Entity\Financeiro\MovimentoFinanceiro.cs" />
     <Compile Include="Entity\Sigim\CarteiraBanco.cs" />
+    <Compile Include="Entity\Sigim\UnidadeFederacao.cs" />
     <Compile Include="Repository\Contrato\IContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Repository\Sac\ISetorRepository.cs" />
     <Compile Include="Repository\Sigim\ILogOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\IMaterialClasseInsumoRepository.cs" />
+    <Compile Include="Repository\Sigim\IUnidadeFederacaoRepository.cs" />
     <Compile Include="Repository\Sigim\IUnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sac\IParametrosSacRepository.cs" />
     <Compile Include="Repository\Sigim\ITipoCaracteristicaRepository.cs" />

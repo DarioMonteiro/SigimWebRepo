@@ -166,6 +166,7 @@
     <Compile Include="Configuration\Sigim\ServicoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\TipoCompraConfiguration.cs" />
     <Compile Include="Configuration\Sigim\LogOperacaoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\UnidadeFederacaoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\UnidadeMedidaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\SituacaoMercadoriaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\NCMConfiguration.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Repository\Sigim\NaturezaOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\SerieNFRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCompraRepository.cs" />
+    <Compile Include="Repository\Sigim\UnidadeFederacaoRepository.cs" />
     <Compile Include="Repository\Sigim\UnidadeMedidaRepository.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>

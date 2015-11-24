@@ -19,19 +19,21 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
         private IBancoAppService bancoAppService;
         private IAgenciaAppService agenciaAppService;
+        private IUnidadeFederacaoAppService unidadeFederacaoAppService;
         
         #endregion
 
         #region Constructor
 
-        public AgenciaController(
-            IBancoAppService bancoAppService,
-            IAgenciaAppService agenciaAppService,  
-            MessageQueue messageQueue)
+        public AgenciaController(IBancoAppService bancoAppService,
+                                 IAgenciaAppService agenciaAppService,  
+                                 IUnidadeFederacaoAppService unidadeFederacaoAppService,
+                                 MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.bancoAppService = bancoAppService;
-            this.agenciaAppService = agenciaAppService;            
+            this.agenciaAppService = agenciaAppService;
+            this.unidadeFederacaoAppService = unidadeFederacaoAppService;
         }
 
         #endregion
@@ -48,7 +50,8 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             }
-            
+            model.EhValidoImprimir = false;
+
             if (id.HasValue)
             {
                 model.Filtro.BancoId = id.Value;
@@ -67,7 +70,7 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                 bancoId = model.Filtro.BancoId;
             }
 
-            model.ListaBanco = new SelectList(bancoAppService.ListarTodos(), "Id", "Nome", bancoId);
+            model.ListaBanco = new SelectList(bancoAppService.ListarTodos().OrderBy(l => l.Nome).ToList(), "Id", "Nome", bancoId);
         }
 
 
@@ -84,8 +87,10 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                     model.Filtro.PaginationParameters.OrderBy = "id";
 
                 var result = agenciaAppService.ListarPeloFiltro(model.Filtro, Usuario.Id, out totalRegistros);
+
                 if (result.Any())
                 {
+                    model.EhValidoImprimir = true;
                     var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
                     return PartialView("ListaPartial", listaViewModel);
                 }
@@ -98,6 +103,20 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         public ActionResult Cadastro(int? id)
         {
             AgenciaCadastroViewModel model = new AgenciaCadastroViewModel();
+            model.BancoIdPesquisado = null;
+
+            var modelLista = Session["Filtro"] as AgenciaListaViewModel;
+            if (modelLista != null && modelLista.Filtro != null)
+            {
+                model.BancoIdPesquisado = modelLista.Filtro.BancoId;
+                model.EhValidoImprimir = modelLista.EhValidoImprimir;
+            }
+
+            model.PodeSalvar = agenciaAppService.EhPermitidoSalvar();
+            model.PodeDeletar = agenciaAppService.EhPermitidoDeletar();
+            model.PodeImprimir = agenciaAppService.EhPermitidoImprimir();
+            model.PodeAcessarContaCorrente = agenciaAppService.EhPermitidoAcessarContaCorrente();
+
             var agencia = agenciaAppService.ObterPeloId(id) ?? new AgenciaDTO();
 
             if (id.HasValue && !agencia.Id.HasValue)
@@ -105,12 +124,12 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
 
             model.Agencia = agencia;
 
-            CarregarComboBanco(model);
+            CarregarCombosCadastro(model);
 
             return View(model);
         }
 
-        private void CarregarComboBanco(AgenciaCadastroViewModel model)
+        private void CarregarCombosCadastro(AgenciaCadastroViewModel model)
         {
             int? bancoId = null;
 
@@ -119,7 +138,9 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                 bancoId = model.Agencia.BancoId;
             }
 
-            model.ListaBanco = new SelectList(bancoAppService.ListarTodos(), "Id", "Nome", bancoId);
+            model.ListaBanco = new SelectList(bancoAppService.ListarTodos().OrderBy(l => l.Nome).ToList() , "Id", "Nome", bancoId);
+
+            model.ListaUnidadeFederacao = new SelectList(unidadeFederacaoAppService.ListarTodos(), "Sigla", "Sigla", "");
         }
 
         public ActionResult CadastroAgencia(int? idBanco)
@@ -145,6 +166,20 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         public ActionResult Deletar(int? id)
         {
             agenciaAppService.Deletar(id);
+            return PartialView("_NotificationMessagesPartial");
+        }
+
+        public ActionResult Imprimir(int? bancoId, FormatoExportacaoArquivo formato)
+        {
+            var arquivo = agenciaAppService.ExportarRelAgencia(bancoId, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
             return PartialView("_NotificationMessagesPartial");
         }
 

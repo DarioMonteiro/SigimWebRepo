@@ -219,7 +219,11 @@ namespace GIR.Sigim.Application.Helper
 
             Mapper.CreateMap<TipoEspecificacaoDTO, TabelaBasicaDTO>()
                 .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.TipoEspecificacao));
-            Mapper.CreateMap<TabelaBasicaDTO, TipoEspecificacaoDTO>();            
+            Mapper.CreateMap<TabelaBasicaDTO, TipoEspecificacaoDTO>();
+
+            Mapper.CreateMap<UnidadeFederacao, UnidadeFederacaoDTO>();
+            Mapper.CreateMap<UnidadeFederacaoDTO, UnidadeFederacao>();
+
         }
     }
 }

@@ -8,6 +8,18 @@
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
     @Html.ActionLink("Novo", "Cadastro", new { @id = "" }, new { @class = "btn btn-primary", @style = "float:right;" })
+    @{
+        string disableBtnContaCorrente = string.Empty;
+        string classContaCorrente = string.Empty;
+        if (!Model.PodeAcessarContaCorrente)
+        {
+            classContaCorrente = "btn bg-color-green txt-color-white disabled";
+        }
+        else {
+            classContaCorrente = "btn bg-color-green txt-color-white";
+        }
+        @Html.ActionLink("Conta corrente", "Index", "ContaCorrente", new { @id = Model.Agencia.Id }, new { @class = classContaCorrente, @style = "float:right; margin-right:2px;" })       
+    }
 </div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
@@ -30,7 +42,9 @@
                             <div class="row">
                                 <section class="col col-4">
                                     @Html.HiddenFor(m => m.Agencia.Id)
-                                    @Html.LabelFor(m => m.Agencia.Banco.Nome, new { @class = "label" })                                
+                                    @Html.HiddenFor(m => m.EhValidoImprimir)
+                                    @Html.HiddenFor(m => m.BancoIdPesquisado)
+                                    <label class="label">Banco</label>
                                     <label class="select">                                                      
                                         @Html.DropDownListFor(m => m.Agencia.BancoId, Model.ListaBanco, string.Empty, new {@class = "required" })
                                         <i></i> 
@@ -40,7 +54,7 @@
                                 <section class="col col-6">
                                     @Html.LabelFor(m => m.Agencia.AgenciaCodigo, new { @class = "label" })
                                     <label class="input">                                        
-                                        @Html.TextBoxFor(m => m.Agencia.AgenciaCodigo, new { @maxlength = "10", @class = "required" })
+                                        @Html.TextBoxFor(m => m.Agencia.AgenciaCodigo, new { @maxlength = "4", @class = "required" })
                                     </label>                                     
                                     @Html.ValidationMessageFor(m => m.Agencia.AgenciaCodigo, "", new { @class = "note note-error" })
                                 </section>
@@ -81,11 +95,13 @@
                             </div>
                         </fieldset>
                         <fieldset>
+                            <label class="label" style="font-size:medium" >Endereço</label>
+
                             <div class="row">   
                                 <section class="col col-3">
-                                    @Html.LabelFor(m => m.Agencia.TipoLogradouro, new { @class = "label" })
+                                    @Html.LabelFor(m => m.Agencia.TipoLogradouro, new { @class = "label"})
                                     <label class="input">
-                                        @Html.TextBoxFor(m => m.Agencia.TipoLogradouro, new { @maxlength = "10"  })
+                                        @Html.TextBoxFor(m => m.Agencia.TipoLogradouro, new { @maxlength = "20", @style = "background-color: #FFFFC0"  })
                                     </label>
                                     @Html.ValidationMessageFor(m => m.Agencia.TipoLogradouro, "", new { @class = "note note-error" })
                                 </section>
@@ -94,14 +110,14 @@
                                 <section class="col col-9">
                                     @Html.LabelFor(m => m.Agencia.Logradouro, new { @class = "label" })
                                     <label class="input">
-                                        @Html.TextBoxFor(m => m.Agencia.Logradouro, new { @maxlength = "50"  })
+                                        @Html.TextBoxFor(m => m.Agencia.Logradouro, new { @maxlength = "50", @style = "background-color: #FFFFC0"  })
                                     </label>
                                     @Html.ValidationMessageFor(m => m.Agencia.Logradouro, "", new { @class = "note note-error" })
                                 </section>
                                 <section class="col col-3">
                                     @Html.LabelFor(m => m.Agencia.Numero, new { @class = "label" })
                                     <label class="input">
-                                        @Html.TextBoxFor(m => m.Agencia.Numero, new { @maxlength = "50"  })
+                                        @Html.TextBoxFor(m => m.Agencia.Numero, new { @maxlength = "20", @style = "background-color: #FFFFC0"  })
                                     </label>
                                     @Html.ValidationMessageFor(m => m.Agencia.Numero, "", new { @class = "note note-error" })
                                 </section>
@@ -114,13 +130,13 @@
                                     </label>
                                     @Html.ValidationMessageFor(m => m.Agencia.Complemento, "", new { @class = "note note-error" })
                                 </section>
-@*                                <section class="col col-3">
+                                <section class="col col-3">
                                     @Html.LabelFor(m => m.Agencia.Bairro, new { @class = "label" })
                                     <label class="input">
                                         @Html.TextBoxFor(m => m.Agencia.Bairro, new { @maxlength = "50"  })
                                     </label>
                                     @Html.ValidationMessageFor(m => m.Agencia.Bairro, "", new { @class = "note note-error" })
-                                </section>*@
+                                </section>
                              </div>
                              <div class="row">
                                 <section class="col col-9">
@@ -130,34 +146,75 @@
                                     </label>
                                     @Html.ValidationMessageFor(m => m.Agencia.Cidade, "", new { @class = "note note-error" })
                                 </section>
-                            </div>
-                           @*  <div class="row">
-                                 <section class="col col-9">
-                                    @Html.LabelFor(m => m.Agencia.CEP, new { @class = "label" })
-                                    <label class="input">
-                                        @Html.TextBoxFor(m => m.Agencia.CEP, new { @maxlength = "50"  })
-                                    </label>
-                                    @Html.ValidationMessageFor(m => m.Agencia.CEP, "", new { @class = "note note-error" })
-                                </section>
                                 <section class="col col-3">
-                                    @Html.LabelFor(m => m.Agencia.Telefone, new { @class = "label" })
-                                    <label class="input">
-                                        @Html.TextBoxFor(m => m.Agencia.Telefone, new { @maxlength = "50"  })
-                                    </label>
-                                    @Html.ValidationMessageFor(m => m.Agencia.Telefone, "", new { @class = "note note-error" })
+                                    <label class="label">Estado</label>
+                                    <label class="select">                                                      
+                                        @Html.DropDownListFor(m => m.Agencia.UnidadeFederacaoSigla, Model.ListaUnidadeFederacao, string.Empty)
+                                        <i></i> 
+                                    </label>  
+                                    @Html.ValidationMessageFor(m => m.Agencia.UnidadeFederacaoSigla, "", new { @class = "note note-error" })
                                 </section>
-                             </div>*@
+                            </div>
+                            <div class="row">
+                                <section class="col col-9">
+                                @Html.LabelFor(m => m.Agencia.CEP, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.Agencia.CEP, new { @maxlength = "10"  })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.Agencia.CEP, "", new { @class = "note note-error" })
+                            </section>
+                            <section class="col col-3">
+                                @Html.LabelFor(m => m.Agencia.Telefone, new { @class = "label" })
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.Agencia.Telefone, new { @maxlength = "20"  })
+                                </label>
+                                @Html.ValidationMessageFor(m => m.Agencia.Telefone, "", new { @class = "note note-error" })
+                            </section>
+                            </div>
                         </fieldset>
+                        <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable" 
+                            tabindex="-1" role="dialog" aria-describedby="dlgSimpleExcluirRegistro" aria-labelledby="ui-id-1" 
+                                style="height: auto; width: 600px; top: 220px; left: 262px; display: none;">
+                            <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                                <span id="ui-id-1" class="ui-dialog-title">
+                                </span>
+                            </div>
+                            <div id="dlgSimpleExcluirRegistro" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 0px; max-height: none; height: auto;">
+	                            <p>
+		                            Deseja excluir o registro selecionado ?
+	                            </p>
+                            </div>
+                            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                                <div class="ui-dialog-buttonset">
+                                </div>
+                            </div>
+                        </div>                       
                         <footer>
-                            @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })
-                                                                             
-                            <button type="button" id="btnDeletar" class="btn btn-primary">
+                            @Html.ActionLink("Voltar", "Index", null, null, new { @class = "btn btn-primary" })                                                                           
+                            @{
+                                string disableBtnDeletar = string.Empty;
+                                if (!Model.PodeDeletar)
+                                {
+                                    disableBtnDeletar = "disabled";
+                                }
+                            }
+                            <button type="button" id="btnDeletar" class="btn btn-danger @disableBtnDeletar">
                                 Deletar
                             </button>
-                            <button id="btnSalvar" type="submit" class="btn btn-primary">
+                            @{
+                                var url = Url.Action("Imprimir","Agencia");
+                            }
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
+                            @{
+                                string disableBtnSalvar = string.Empty;
+                                if (!Model.PodeSalvar)
+                                {
+                                    disableBtnSalvar = "disabled";
+                                }
+                            }
+                            <button type="submit" class="btn btn-primary @disableBtnSalvar">
                                 Gravar
-                            </button> 
-                                                       
+                            </button>                                                      
                         </footer>
                     }
                 </div>
@@ -167,7 +224,71 @@
 </div>
 
 <script type="text/javascript">
-    $("#btnDeletar").on("click", function() {
+    $(document).ready(function () {
+
+        $('body').addClass("hidden-menu");
+
+        habilitaDesabilitaBanco();
+
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                if (!this.options.title) {
+                    title.html("&#160;");
+                } else {
+                    title.html(this.options.title);
+                }
+            }
+        }));
+
+        $('#dlgSimpleExcluirRegistro').dialog({
+            autoOpen: false,
+            width: 300,
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4><i class='fa fa-warning'></i> Atenção</h4></div>",
+            buttons: [{
+                html: "Excluir",
+                "class": "btn btn-primary",
+                click: function () {
+                    $(this).dialog("close");
+                    excluirRegistro();
+                }
+            }, {
+                html: "<i class='fa fa-times'></i>&nbsp; Cancelar",
+                "class": "btn btn-default",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+
+        $("#btnDeletar").on("click", function () {
+            var idAgencia = $('#@Html.IdFor(m => m.Agencia.Id)').val();
+            if (idAgencia !== "") {
+                $('#dlgSimpleExcluirRegistro').dialog('open');
+            }
+            else {
+                smartAlert("Atenção", "Selecione um registro para excluir !", "warning");
+            }
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            var bancoId = $("#@Html.IdFor(m => m.BancoIdPesquisado)").val();
+            var ehValidoImprimir = $('#@Html.IdFor(m => m.EhValidoImprimir)').val();
+
+            if (ehValidoImprimir == '@false') {
+                smartAlert("Atenção", "Pesquise as agências de um banco para fazer a impressão", "warning");
+                e.event.preventDefault();
+            }
+
+            parametrosUrlImpressao = '&bancoId=' + bancoId;
+
+        });
+
+
+    });
+
+    function excluirRegistro() {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Deletar", "Agencia")',
@@ -179,12 +300,11 @@
             })
         })
         .success(function (result) {
-            $('#notificationMessages').html(result);            
+            $('#notificationMessages').html(result);
             clearForm();
             doFilter();
         });
-    });
-
+    }
 
     function clearForm() {
         $('#@Html.IdFor(m => m.Agencia.Id)').val('');
@@ -202,6 +322,19 @@
         $('#@Html.IdFor(m => m.Agencia.Complemento)').val('');
     }
 
+    function habilitaDesabilitaBanco() {
+        var idAgencia = $('#@Html.IdFor(m => m.Agencia.Id)').val();
+        if (idAgencia !== "") {
+            $('#@Html.IdFor(m => m.Agencia.BancoId)').prop('disabled', 'disabled');
+            $('#@Html.IdFor(m => m.Agencia.BancoId)').removeClass('required');
+            $('#@Html.IdFor(m => m.Agencia.BancoId)').addClass('readonly');
+        }
+        else {
+            $('#@Html.IdFor(m => m.Agencia.BancoId)').prop('disabled', '');
+            $('#@Html.IdFor(m => m.Agencia.BancoId)').addClass('required');
+            $('#@Html.IdFor(m => m.Agencia.BancoId)').removeClass('readonly');
+        }
+    }
   
 </script>
 

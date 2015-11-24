@@ -144,6 +144,7 @@
     <Compile Include="Sigim\NaturezaOperacaoAppService.cs" />
     <Compile Include="Sigim\SerieNFAppService.cs" />
     <Compile Include="Sigim\TipoCompraAppService.cs" />
+    <Compile Include="Sigim\UnidadeFederacaoAppService.cs" />
     <Compile Include="Sigim\UnidadeMedidaAppService.cs" />
   </ItemGroup>
   <ItemGroup>

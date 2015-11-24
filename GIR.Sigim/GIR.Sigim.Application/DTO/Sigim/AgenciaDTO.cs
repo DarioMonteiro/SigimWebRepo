@@ -12,16 +12,17 @@ namespace GIR.Sigim.Application.DTO.Sigim
         public int? BancoId { get; set; }
         public BancoDTO Banco { get; set; }
        
-        [StringLength(10, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        [Required]
+        [StringLength(4, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Agência")]
         public string AgenciaCodigo { get; set; }
 
         [StringLength(10, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
-        [Display(Name = "DV")]
+        [Display(Name = "DV Agência")]
         public string DVAgencia { get; set; }
 
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
-        [Display(Name = "Nome")]
+        [Display(Name = "Nome agência")]
         public string Nome { get; set; }
 
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
@@ -32,7 +33,7 @@ namespace GIR.Sigim.Application.DTO.Sigim
         [Display(Name = "Telefone contato")]
         public string TelefoneContato { get; set; }
 
-        [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        [StringLength(20, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Tipo logradouro")]
         public string TipoLogradouro { get; set; }
 
@@ -40,17 +41,31 @@ namespace GIR.Sigim.Application.DTO.Sigim
         [Display(Name = "Logradouro")]
         public string Logradouro { get; set; }
 
-        [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
-        [Display(Name = "Cidade")]
-        public string Cidade { get; set; }
-
         [StringLength(20, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Número")]
         public string Numero { get; set; }
 
         [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
-        [Display(Name = "Complemento")]
         public string Complemento { get; set; }
-        
+
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        public string Cidade { get; set; }
+
+
+        [StringLength(2, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        public string UnidadeFederacaoSigla { get; set; }
+
+        public UnidadeFederacaoDTO UnidadeFederacao { get; set; }
+
+        [StringLength(10, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        public string CEP { get; set; }
+
+        [StringLength(50, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        public string Bairro { get; set; }
+
+        [StringLength(20, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        public string Telefone { get; set; }
+
+
     }
 }

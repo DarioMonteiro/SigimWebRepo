@@ -8,7 +8,7 @@
 @Html.Partial("_NotificationMessagesPartial")
 <div class="row" style="margin: 0 0 13px 0;">
     <a href="javascript:novo();" class="btn btn-primary" style="float:right;">Novo</a>   
-    @{
+@*    @{
         string disableBtnAgencia = string.Empty;
         string classAgencia = string.Empty;
         if (!Model.PodeAcessarAgencia)
@@ -20,7 +20,7 @@
 
         }
         @Html.ActionLink("Agência", "Index", "Agencia", new { @id = Model.Banco.Id  }, new { @class = classAgencia, @style = "float:right; margin-right:2px;" })       
-    }
+    }*@
 
 </div>
 <div class="row">
