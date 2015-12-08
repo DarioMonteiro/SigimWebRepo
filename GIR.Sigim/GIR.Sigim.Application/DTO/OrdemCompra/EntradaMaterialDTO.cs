@@ -39,7 +39,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
             get
             {
                 string nome = string.Empty;
-                if (FornecedorNota != null)
+                if ((FornecedorNota != null) && (!string.IsNullOrEmpty(FornecedorNota.Nome)))
                     nome = FornecedorNota.Nome;
                 else
                     nome = ClienteFornecedor.Nome;
@@ -47,6 +47,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
                 return nome;
             }
         }
+
         public DateTime Data { get; set; }
         public SituacaoEntradaMaterial Situacao { get; set; }
         [Display(Name = "Situação")]
