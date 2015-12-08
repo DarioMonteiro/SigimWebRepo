@@ -943,7 +943,7 @@
                                                     $("#tableItens tbody").append(row);
                                                     row.append($('<td><label class="' + labelClass + '"><input type="checkbox" class="chkItemOrdemCompra" name="checkbox" value="' + jsonItens[i].Id + '" ' + chkDisabled + '><i></i>' + jsonItens[i].Sequencial + '</label></td>'));
                                                     row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.OrdemCompraId + '</td>'));
-                                                    row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.Id + '</td>'));
+                                                    row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.Sequencial + '</td>'));
                                                     row.append($('<td class="text-right">' + jsonItens[i].OrdemCompraItem.Material.Id + '</td>'));
                                                     @if (Model.PodeEditarItem)
                                                     {
