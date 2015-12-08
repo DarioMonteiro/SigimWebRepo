@@ -177,7 +177,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
 
         public string JsonImpostos { get; set; }
 
-        public ImpostoFinanceiroDTO ImpostoFinanceiro { get; set; }
+        public int? ImpostoFinanceiroId { get; set; }
 
         [Display(Name = "Base de cálculo")]
         public decimal BaseCalculoImposto { get; set; }

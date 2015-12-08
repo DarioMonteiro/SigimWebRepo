@@ -2052,12 +2052,12 @@
                                                 <input type="hidden" id="indexImposto" />
                                                 <input type="hidden" id="impostoId" />
                                                 <section class="col col-4">
-                                                    @Html.LabelFor(m => m.ImpostoFinanceiro.Id, "Imposto", new { @class = "label" })
+                                                    @Html.LabelFor(m => m.ImpostoFinanceiroId, "Imposto", new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.ImpostoFinanceiro.Id, Model.ListaImpostoFinanceiro, string.Empty, new { @class = "required" })
+                                                        @Html.DropDownListFor(m => m.ImpostoFinanceiroId, Model.ListaImpostoFinanceiro, string.Empty, new { @class = "required" })
                                                         <i></i>
                                                     </label>
-                                                    @Html.ValidationMessageFor(m => m.ImpostoFinanceiro.Id, "", new { @class = "note note-error" })
+                                                    @Html.ValidationMessageFor(m => m.ImpostoFinanceiroId, "", new { @class = "note note-error" })
                                                 </section>
                                                 <section class="col col-4">
                                                     @Html.LabelFor(m => m.BaseCalculoImposto, new { @class = "label" })
@@ -2194,7 +2194,7 @@
                                             $(document).ready(function () {
                                                 fillTableImpostos();
 
-                                                $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').on('change', function () {
+                                                $('#@Html.IdFor(m => m.ImpostoFinanceiroId)').on('change', function () {
                                                     $.ajax({
                                                         type: 'POST',
                                                         url: '@Url.Action("CarregarItem", "ImpostoFinanceiro", new { @area = "Financeiro" })',
@@ -2202,7 +2202,7 @@
                                                         async: false,
                                                         contentType: 'application/json; charset=utf-8',
                                                         data: JSON.stringify({
-                                                            id: $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').val()
+                                                            id: $('#@Html.IdFor(m => m.ImpostoFinanceiroId)').val()
                                                         })
                                                     })
                                                     .success(function (result) {
@@ -2309,7 +2309,7 @@
                                                     $("#indexImposto").val(index);
                                                     $("#impostoId").val(imposto.Id);
                                                     if (imposto.ImpostoFinanceiro)
-                                                        $("#@Html.IdFor(m => m.ImpostoFinanceiro.Id)").val(imposto.ImpostoFinanceiro.Id);
+                                                        $("#@Html.IdFor(m => m.ImpostoFinanceiroId)").val(imposto.ImpostoFinanceiro.Id);
 
                                                     $("#@Html.IdFor(m => m.BaseCalculoImposto)").val(roundDecimal(floatToString(imposto.BaseCalculo), 5));
 
@@ -2321,7 +2321,7 @@
                                             function clearFormImposto() {
                                                 $("#indexImposto").val('');
                                                 $("#impostoId").val('');
-                                                $("#@Html.IdFor(m => m.ImpostoFinanceiro.Id)").val('');
+                                                $("#@Html.IdFor(m => m.ImpostoFinanceiroId)").val('');
                                                 var valorTotalITem = parseFloat($("#@Html.IdFor(m => m.ValorTotalItem)").val().replace(".", "").replace(",", "."));
                                                 $("#@Html.IdFor(m => m.BaseCalculoImposto)").val(roundDecimal(floatToString(valorTotalITem), 4));
                                                 $("#@Html.IdFor(m => m.DataVencimentoImposto)").val('');
@@ -2332,7 +2332,7 @@
                                                 var index = parseInt($("#indexImposto").val());
                                                 var result = false;
                                                 $.each(jsonImposto, function (i, obj) {
-                                                    if ((index != i) && (obj.ImpostoFinanceiro.Id == $('#@Html.IdFor(m => m.ImpostoFinanceiro.Id)').val())) {
+                                                    if ((index != i) && (obj.ImpostoFinanceiro.Id == $('#@Html.IdFor(m => m.ImpostoFinanceiroId)').val())) {
                                                         result = true;
                                                         return false;
                                                     }
@@ -2350,7 +2350,7 @@
                                                     async: false,
                                                     contentType: 'application/json; charset=utf-8',
                                                     data: JSON.stringify({
-                                                        id: imposto.ImpostoFinanceiro.Id
+                                                        id: imposto.ImpostoFinanceiroId
                                                     })
                                                 })
                                                 .success(function (result) {
@@ -2741,7 +2741,7 @@
                     ehValorLiberadoMenorIgualPendente: true,
                     ehValorLiberadoMenorIgualParcela: true
                 },
-                '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': 'required',
+                '@Html.NameFor(m => m.ImpostoFinanceiroId)': 'required',
                 '@Html.NameFor(m => m.BaseCalculoImposto)': 'required',
                 '@Html.NameFor(m => m.DataVencimentoImposto)': 'date'
             },
@@ -2787,7 +2787,7 @@
                     ehValorLiberadoMenorIgualPendente: "Valor inválido para ordem de compra",
                     ehValorLiberadoMenorIgualParcela: "Valor liberado maior que valor da parcela."
                 },
-                '@Html.NameFor(m => m.ImpostoFinanceiro.Id)': {
+                '@Html.NameFor(m => m.ImpostoFinanceiroId)': {
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Imposto")'
                 },
                 '@Html.NameFor(m => m.BaseCalculoImposto)': {
