@@ -114,8 +114,10 @@
                                         <script type="text/javascript">
                                             $(document).ready(function () {
                                                 $("#@Html.IdFor(m => m.Quantidade)").on("focusout", function () {
-                                                    if (!$(this).hasClass("readonly"))
+                                                    if (!$(this).hasClass("readonly")) {
                                                         $("#@Html.IdFor(m => m.QuantidadeAprovada)").val(roundDecimal($(this).val(), 4));
+                                                        initializeDecimalBehaviour();
+                                                    }
                                                 });
                                             });
                                         </script>
@@ -581,8 +583,8 @@
             }
             row.append($('<td>' + jsonItemArray[i].Complemento + '</td>'));
             row.append($('<td>' + jsonItemArray[i].Material.SiglaUnidadeMedida + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItemArray[i].Quantidade), 4) + '</td>'));
-            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItemArray[i].QuantidadeAprovada), 4) + '</td>'));
+            row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItemArray[i].Quantidade), 4) + '</td>'));
+            row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItemArray[i].QuantidadeAprovada), 4) + '</td>'));
             row.append($('<td class="text-nowrap">' + jsonItemArray[i].Classe.Codigo + " - " + jsonItemArray[i].Classe.Descricao + '</td>'));
 
             if (jsonItemArray[i].DataMinima != null)
@@ -607,6 +609,8 @@
                 row.append($('<td>&nbsp;</td>'));
             row.append($('<td class="text-center">' + jsonItemArray[i].TemInterfaceOrcamentoDescricao + '</td>'));
         }
+
+        initializeDecimalBehaviour();
     }
 
     function loadItem(sequencial) {
@@ -645,6 +649,8 @@
                 blockClasseForm_@(Html.IdFor(m => m.Classe.Codigo))();
             }
         }
+
+        initializeDecimalBehaviour();
     }
 
     function addItem() {
