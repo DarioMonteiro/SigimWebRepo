@@ -477,10 +477,12 @@
                                                         row.append($('<td class="text-nowrap">' + jsonItensOrdemCompra[i].Material.Descricao + '</td>'));
                                                         row.append($('<td class="text-nowrap">' + jsonItensOrdemCompra[i].Complemento + '</td>'));
                                                         row.append($('<td class="text-center">' + jsonItensOrdemCompra[i].Material.SiglaUnidadeMedida + '</td>'));
-                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItensOrdemCompra[i].Saldo), 5) + '</td>'));
-                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItensOrdemCompra[i].ValorUnitario), 5) + '</td>'));
+                                                        row.append($('<td class="text-right decimal-5-casas">' + roundDecimal(floatToString(jsonItensOrdemCompra[i].Saldo), 5) + '</td>'));
+                                                        row.append($('<td class="text-right decimal-5-casas">' + roundDecimal(floatToString(jsonItensOrdemCompra[i].ValorUnitario), 5) + '</td>'));
                                                         row.append($('<td class="text-nowrap">' + jsonItensOrdemCompra[i].Classe.ClasseDescricao + '</td>'));
                                                     }
+
+                                                    initializeDecimalBehaviour();
                                                 }
                                             </script>
                                         </div>
@@ -955,14 +957,14 @@
                                                     }
                                                     row.append($('<td class="text-nowrap">' + jsonItens[i].OrdemCompraItem.Complemento + '</td>'));
                                                     row.append($('<td class="text-center">' + jsonItens[i].OrdemCompraItem.Material.SiglaUnidadeMedida + '</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].Quantidade), 4) + '</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].ValorUnitario), 4) + '</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualIPI), 4) + '</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualDesconto), 4) + '</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].ValorTotal), 4) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].Quantidade), 4) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].ValorUnitario), 4) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].PercentualIPI), 4) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].PercentualDesconto), 4) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].ValorTotal), 4) + '</td>'));
                                                     row.append($('<td class="text-nowrap">' + jsonItens[i].Classe.ClasseDescricao + '</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualICMS), 4) + '</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonItens[i].PercentualICMSST), 4) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].PercentualICMS), 4) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].PercentualICMSST), 4) + '</td>'));
                                                     if (jsonItens[i].ComplementoNaturezaOperacao)
                                                         row.append($('<td  class="text-nowrap">' + jsonItens[i].ComplementoNaturezaOperacao.Descricao + '</td>'));
                                                     else
@@ -978,6 +980,8 @@
                                                     else
                                                         row.append($('<td>&nbsp;</td>'));
                                                 }
+
+                                                initializeDecimalBehaviour();
                                             }
 
                                             function loadItem(sequencial) {
@@ -1030,6 +1034,8 @@
                                                     if (item.BaseIPI == 0)
                                                         $("#@Html.IdFor(m => m.BaseIPI)").val(roundDecimal(floatToString(item.ValorTotal), 4));
                                                 }
+
+                                                initializeDecimalBehaviour();
                                             }
 
 
@@ -1066,18 +1072,24 @@
                                                 valorItem = valorItem - ((valorItem * percentualDesconto) / 100)
 
                                                 $("#@Html.IdFor(m => m.ValorItem)").val(roundDecimal(floatToString(valorItem), 2));
+
+                                                initializeDecimalBehaviour();
                                             }
 
                                             function atualizarValorICMS() {
                                                 var baseICMS = parseFloat($("#@Html.IdFor(m => m.BaseICMS)").val().replace(".", "").replace(",", "."));
                                                 var percentualICMS = parseFloat($("#@Html.IdFor(m => m.PercentualICMS)").val().replace(".", "").replace(",", "."));;
                                                 $("#@Html.IdFor(m => m.ValorICMS)").val(roundDecimal(floatToString(baseICMS * percentualICMS / 100), 4));
+
+                                                initializeDecimalBehaviour();
                                             }
 
                                             function atualizarValorICMSST() {
                                                 var baseICMSST = parseFloat($("#@Html.IdFor(m => m.BaseICMSST)").val().replace(".", "").replace(",", "."));
                                                 var percentualICMSST = parseFloat($("#@Html.IdFor(m => m.PercentualICMSST)").val().replace(".", "").replace(",", "."));;
                                                 $("#@Html.IdFor(m => m.ValorICMSST)").val(roundDecimal(floatToString(baseICMSST * percentualICMSST / 100), 4));
+
+                                                initializeDecimalBehaviour();
                                             }
 
                                             function addItem() {
@@ -1505,7 +1517,7 @@
                                                         $("#tableOrdemCompraFormaPagamento tbody").append(row);
                                                         row.append($('<td class="text-right" onclick="loadFormaPagamento(' + jsonFormasPagamentoPendentes[i].Id + ');">' + jsonFormasPagamentoPendentes[i].OrdemCompraId + '</td>'));
                                                         row.append($('<td class="text-center">' + new Date(jsonFormasPagamentoPendentes[i].Data).toFormatDDMMYYYY() + '</td>'));
-                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonFormasPagamentoPendentes[i].Valor), 2) + '</td>'));
+                                                        row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonFormasPagamentoPendentes[i].Valor), 2) + '</td>'));
                                                         if (jsonFormasPagamentoPendentes[i].TipoCompromisso != null)
                                                             row.append($('<td class="text-center">' + jsonFormasPagamentoPendentes[i].TipoCompromisso.Descricao + '</td>'));
                                                         else
@@ -1526,6 +1538,8 @@
                                                         else
                                                             row.append($('<td>&nbsp;</td>'));
                                                     }
+
+                                                    initializeDecimalBehaviour();
                                                 }
 
                                                 function loadFormaPagamento(id) {
@@ -1548,6 +1562,8 @@
                                                         $("#@Html.IdFor(m => m.ValorParcelaLiberado)").val(roundDecimal(floatToString(valorParcelaLiberado), 2));
                                                         ajustarQuantidadeDiasAposEmissao();
                                                     }
+
+                                                    initializeDecimalBehaviour();
                                                 }
 
                                                 function clearFormFormaPagamento() {
@@ -1574,6 +1590,8 @@
                                                     $("#@Html.IdFor(m => m.ValorTotalDistribuidoSelecaoFormaPagamento)").val(roundDecimal(floatToString(valorTotalDistribuido), 2));
                                                     $("#@Html.IdFor(m => m.ValorTotalLiberadoSelecaoFormaPagamento)").val(roundDecimal(floatToString(valorTotalLiberado), 2));
                                                     $("#@Html.IdFor(m => m.ValorTotalPendenteSelecaoFormaPagamento)").val(roundDecimal(floatToString(valorTotalEM - valorTotalDistribuido), 2));
+
+                                                    initializeDecimalBehaviour();
                                                 }
 
                                                 function obterIdsOrdensCompraUtilizadasNaEntradaMaterial() {
@@ -1636,12 +1654,14 @@
                                                         var row = $('<tr />')
                                                         $("#tableOrdemCompraValor tbody").append(row);
                                                         row.append($('<td>' + resumoValoresOC[i].Id + '</td>'));
-                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(resumoValoresOC[i].ValorTotalItens), 2) + '</td>'));
+                                                        row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(resumoValoresOC[i].ValorTotalItens), 2) + '</td>'));
                                                         var valorTotalDistribuido = resumoValoresOC[i].ValorTotalDistribuidoProvisorio == null ? resumoValoresOC[i].ValorTotalDistribuido : resumoValoresOC[i].ValorTotalDistribuidoProvisorio;
-                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(valorTotalDistribuido), 2) + '</td>'));
+                                                        row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(valorTotalDistribuido), 2) + '</td>'));
                                                         var valorPendente = resumoValoresOC[i].ValorPendenteProvisorio == null ? resumoValoresOC[i].ValorPendente : resumoValoresOC[i].ValorPendenteProvisorio;
-                                                        row.append($('<td class="text-right">' + roundDecimal(floatToString(valorPendente), 2) + '</td>'));
+                                                        row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(valorPendente), 2) + '</td>'));
                                                     }
+
+                                                    initializeDecimalBehaviour();
                                                 }
                                             </script>
                                         </div>
@@ -1788,7 +1808,7 @@
                                                         row.append($('<td class="text-center">' + new Date(jsonFormasPagamento[i].Data).toFormatDDMMYYYY() + '</td>'));
                                                     else
                                                         row.append($('<td>&nbsp;</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonFormasPagamento[i].Valor), 2) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonFormasPagamento[i].Valor), 2) + '</td>'));
                                                     if (jsonFormasPagamento[i].OrdemCompraFormaPagamento.TipoCompromisso != null)
                                                         row.append($('<td class="text-center">' + jsonFormasPagamento[i].OrdemCompraFormaPagamento.TipoCompromisso.Descricao + '</td>'));
                                                     else
@@ -1800,6 +1820,8 @@
                                                         row.append($('<td>&nbsp;</td>'));
                                                     row.append($('<td class="text-center">' + jsonFormasPagamento[i].OrdemCompraFormaPagamento.EhPagamentoAntecipadoDescricao + '</td>'));
                                                 }
+
+                                                initializeDecimalBehaviour();
                                             }
 
                                             function atualizarTotaisFormaPagamento() {
@@ -1815,6 +1837,8 @@
 
                                                 $("#@Html.IdFor(m => m.ValorTotalDistribuido)").val(roundDecimal(floatToString(valorTotalDistribuido), 2));
                                                 $("#@Html.IdFor(m => m.ValorTotalLiberado)").val(roundDecimal(floatToString(valorTotalLiberado), 2));
+
+                                                initializeDecimalBehaviour();
                                             }
                                         </script>
                                     </div>
@@ -1919,9 +1943,11 @@
                                                                     row.append($('<td class="text-center">' + new Date(jsonFretePendente[i].Data).toFormatDDMMYYYY() + '</td>'));
                                                                 else
                                                                     row.append($('<td>&nbsp;</td>'));
-                                                                row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonFretePendente[i].Valor), 2) + '</td>'));
+                                                                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonFretePendente[i].Valor), 2) + '</td>'));
                                                                 row.append($('<td>' + jsonFretePendente[i].TituloPagarId + '</td>'));
                                                             }
+
+                                                            initializeDecimalBehaviour();
                                                         }
 
                                                         function loadFretePendente(ordemCompraFreteId) {
@@ -1948,6 +1974,8 @@
                                                                         $('#@Html.IdFor(m => m.EntradaMaterial.TituloFreteId)').val(frete.TituloPagarId);
                                                                         $('#TransportadoraModalPanel').modal('hide');
                                                                         ehFormularioAlterado = true;
+
+                                                                        initializeDecimalBehaviour();
                                                                     }
                                                                 }
                                                             });
@@ -2282,14 +2310,16 @@
                                                     {
                                                         @:row.append($('<td class="text-nowrap">' + jsonImpostos[i].ImpostoFinanceiro.Descricao + '</td>'));
                                                     }
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonImpostos[i].BaseCalculo), 5) + '</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonImpostos[i].ImpostoFinanceiro.Aliquota), 5) + '</td>'));
-                                                    row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonImpostos[i].Valor), 5) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-5-casas">' + roundDecimal(floatToString(jsonImpostos[i].BaseCalculo), 5) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-5-casas">' + roundDecimal(floatToString(jsonImpostos[i].ImpostoFinanceiro.Aliquota), 5) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-5-casas">' + roundDecimal(floatToString(jsonImpostos[i].Valor), 5) + '</td>'));
                                                     if (jsonImpostos[i].DataVencimento != null)
                                                         row.append($('<td class="text-center">' + new Date(jsonImpostos[i].DataVencimento).toFormatDDMMYYYY() + '</td>'));
                                                     else
                                                         row.append($('<td>&nbsp;</td>'));
                                                 }
+
+                                                initializeDecimalBehaviour();
                                             }
 
                                             function loadImposto(impostoFinanceiroId) {
@@ -2316,6 +2346,8 @@
                                                     if (imposto.DataVencimento != null)
                                                         $("#@Html.IdFor(m => m.DataVencimentoImposto)").val(new Date(imposto.DataVencimento).toFormatDDMMYYYY());
                                                 }
+
+                                                initializeDecimalBehaviour();
                                             }
 
                                             function clearFormImposto() {
@@ -2976,5 +3008,7 @@
 
         $("#@Html.IdFor(m => m.ValorTotalEMSelecaoFormaPagamento)").val(roundDecimal(floatToString(valorTotal + valorTotalDesconto), 2));
         $("#@Html.IdFor(m => m.ValorTotalEM)").val(roundDecimal(floatToString(valorTotal + valorTotalDesconto), 2));
+
+        initializeDecimalBehaviour();
     }
 </script>
