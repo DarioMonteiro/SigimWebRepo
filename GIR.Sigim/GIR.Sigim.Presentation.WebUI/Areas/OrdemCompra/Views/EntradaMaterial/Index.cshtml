@@ -21,7 +21,7 @@
                         "Lista",
                         "EntradaMaterial",
                         null,
-                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "renderTela", UpdateTargetId = "resultadoBusca" },
                         new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
@@ -142,6 +142,7 @@
 }
 
 <script type="text/javascript">
+    var ListaScrollLeft = 0;
     $(document).ready(function () {
         jQuery.validator.addMethod(
             "ehCentroCustoValido",
@@ -193,8 +194,14 @@
 
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
+                ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
                 $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
             }
         );
     });
+
+    function renderTela() {
+        onSuccess();
+        $('#resultadoBusca div.table-responsive').scrollLeft(ListaScrollLeft);
+    }
 </script>
