@@ -400,6 +400,17 @@ function highlightNodes(treeView, descricao) {
     }
 }
 
+function highlightNode(treeView, codigo) {
+    codigo = $.trim(codigo);
+    if (codigo != '') {
+        treeView.find('li:not(.rootNode) > span[data-codigo-centro-custo="' + codigo + '"]').each(function () {
+            $(this).addClass('highlight');
+            openNode($(this).parent('li.parent_li'));
+            openUntilRootNode($(this).parent('li'));
+        });
+    }
+}
+
 function openNode(node) {
     node.find(' > ul > li').show();
     if (node.find(' > ul > li').length > 0)

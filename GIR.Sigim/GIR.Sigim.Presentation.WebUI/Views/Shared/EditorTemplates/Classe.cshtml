@@ -73,6 +73,7 @@
 
         $(document).on("show.bs.modal", "#@Html.IdFor(m => m.Codigo)_ModalPanel", function () {
             $('#filtro@(Html.IdFor(m => m.Descricao))').val('');
+            $('#@Html.IdFor(m => m.Codigo)_tree').html('');
 
             $.ajax({
                 type: 'POST',
@@ -111,6 +112,8 @@
                     @:  $('#@Html.IdFor(m => m.Codigo)_ModalPanel').modal('hide');
                     @:});
                 }
+
+                highlightNode($('#@Html.IdFor(m => m.Codigo)_tree.tree'), $('#@Html.IdFor(m => m.Codigo)').val());
             });
         });
 

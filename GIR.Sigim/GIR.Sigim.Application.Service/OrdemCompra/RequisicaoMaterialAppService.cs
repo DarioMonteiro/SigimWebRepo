@@ -501,13 +501,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                         item.Material = null;
                         item.MaterialId = itemDTO.Material.Id;
                         item.UnidadeMedida = itemDTO.Material.SiglaUnidadeMedida.Trim();
-                        item.Quantidade = itemDTO.Quantidade;
                         item.Classe = null;
                         item.CodigoClasse = itemDTO.Classe.Codigo;
                     }
 
                     item.Sequencial = itemDTO.Sequencial;
                     item.Complemento = itemDTO.Complemento.Trim();
+                    item.Quantidade = itemDTO.Quantidade;
                     item.QuantidadeAprovada = itemDTO.QuantidadeAprovada;
                     item.DataMaxima = itemDTO.DataMaxima;
                     item.DataMinima = itemDTO.DataMinima;
