@@ -192,4 +192,7 @@
   <data name="VencimentoImpostoMenorDataEntradaMaterial" xml:space="preserve">
     <value>A data de vencimento do imposto não pode ser menor que a data da EM.</value>
   </data>
+  <data name="DataEntregaMaiorQueDataEntradaMaterial" xml:space="preserve">
+    <value>Data da Entrega maior que a data da Entrada de Material.</value>
+  </data>
 </root>

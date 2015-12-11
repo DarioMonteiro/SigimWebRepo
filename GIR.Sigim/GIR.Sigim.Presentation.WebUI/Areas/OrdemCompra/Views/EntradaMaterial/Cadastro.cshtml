@@ -2685,6 +2685,16 @@
         );
 
         jQuery.validator.addMethod(
+            "ehDataEntregaMenorOuIgualDataEM",
+            function (value, element, params) {
+                var dataEntradaMaterial = $('#@Html.IdFor(m => m.EntradaMaterial.Data)').datepicker("getDate");
+                var dataEntrega = $('#@Html.IdFor(m => m.EntradaMaterial.DataEntregaNota)').datepicker("getDate");
+                var isValid = dataEntrega <= dataEntradaMaterial;
+                return isValid;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
             "ehDataVencimentoNoLimitePagamento",
             function (value, element, params) {
                 var diasParaPagamento = obterQuantidadeDiasMinimoParaPagamento();
@@ -2758,7 +2768,8 @@
                 },
                 '@Html.NameFor(m => m.EntradaMaterial.DataEntregaNota)': {
                     required: true,
-                    ehDataEntregaValida: true
+                    ehDataEntregaValida: true,
+                    ehDataEntregaMenorOuIgualDataEM: true
                 },
                 '@Html.NameFor(m => m.Quantidade)': 'decimalGreaterThanZero',
                 '@Html.NameFor(m => m.Material.Id)': 'required',
@@ -2798,7 +2809,8 @@
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data da emissão")'
                 },
                 '@Html.NameFor(m => m.EntradaMaterial.DataEntregaNota)': {
-                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data da entrega")'
+                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data da entrega")',
+                    ehDataEntregaMenorOuIgualDataEM: '@GIR.Sigim.Application.Resource.OrdemCompra.ErrorMessages.DataEntregaMaiorQueDataEntradaMaterial'
                 },
                 '@Html.NameFor(m => m.Quantidade)': {
                     decimalGreaterThanZero: "A Quantidade deve ser maior que zero."

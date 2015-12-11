@@ -366,6 +366,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             if (!EhDataEntradaMaterialValida(entradaMaterial.Id, entradaMaterial.Data))
                 return false;
 
+            if (entradaMaterial.DataEntregaNota.Value > entradaMaterial.Data)
+            {
+                messageQueue.Add(Resource.OrdemCompra.ErrorMessages.DataEntregaMaiorQueDataEntradaMaterial, TypeMessage.Error);
+                return false;
+            }
+
             if (!EhNumeroNotaFiscalValido(entradaMaterial.To<EntradaMaterialDTO>()))
                 return false;
 

@@ -61,6 +61,15 @@ namespace GIR.Sigim.Application.Resource.OrdemCompra {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data da Entrega maior que a data da Entrada de Material..
+        /// </summary>
+        public static string DataEntregaMaiorQueDataEntradaMaterial {
+            get {
+                return ResourceManager.GetString("DataEntregaMaiorQueDataEntradaMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Antes de liberar título(s) para o financeiro, defina a(s) forma(s) de pagamento da EM..
         /// </summary>
         public static string DefinaFormasPagamento {
