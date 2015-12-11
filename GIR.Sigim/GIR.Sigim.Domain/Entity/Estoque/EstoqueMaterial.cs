@@ -16,5 +16,12 @@ namespace GIR.Sigim.Domain.Entity.Estoque
         public decimal? Quantidade { get; set; }
         public decimal? Valor { get; set; }
         public decimal? QuantidadeTemporaria { get; set; }
+
+        public EstoqueMaterial()
+        {
+            this.Quantidade = 0;
+            this.Valor = 0;
+            this.QuantidadeTemporaria = 0;
+        }
     }
 }

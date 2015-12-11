@@ -265,7 +265,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             entradaMaterial.ValorFrete = dto.ValorFrete;
             entradaMaterial.TipoNotaFreteId = dto.TipoNotaFreteId;
             entradaMaterial.NumeroNotaFrete = dto.NumeroNotaFrete;
+
             entradaMaterial.OrdemCompraFreteId = dto.OrdemCompraFreteId;
+            entradaMaterial.OrdemCompraFrete = ordemCompraRepository.ObterPeloId(dto.OrdemCompraFreteId);
+            if (entradaMaterial.OrdemCompraFrete != null)
+                entradaMaterial.OrdemCompraFrete.EntradaMaterialFrete = entradaMaterial;
+
             entradaMaterial.TituloFreteId = dto.TituloFreteId;
             entradaMaterial.Desconto = dto.Desconto;
             entradaMaterial.PercentualDesconto = dto.EhDescontoPercentual ? -1 : (decimal?)null;
@@ -906,7 +911,10 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private void IncrementarEstoque(EntradaMaterial entradaMaterial)
         {
-            var estoque = estoqueRepository.ObterEstoqueAtivoPeloCentroCusto(entradaMaterial.CodigoCentroCusto);
+            var estoque = estoqueRepository.ObterEstoqueAtivoPeloCentroCusto(entradaMaterial.CodigoCentroCusto,
+                l => l.ListaEstoqueMaterial,
+                l => l.ListaMovimento);
+
             if (estoque != null)
             {
                 Movimento movimento = new Movimento();
@@ -1735,7 +1743,10 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         {
             if (entradaMaterial.ListaMovimentoEstoque.Any())
             {
-                var estoque = estoqueRepository.ObterEstoqueAtivoPeloCentroCusto(entradaMaterial.CodigoCentroCusto);
+                var estoque = estoqueRepository.ObterEstoqueAtivoPeloCentroCusto(entradaMaterial.CodigoCentroCusto,
+                    l => l.ListaEstoqueMaterial,
+                    l => l.ListaMovimento);
+
                 if (estoque != null)
                 {
                     Movimento movimento = new Movimento();
