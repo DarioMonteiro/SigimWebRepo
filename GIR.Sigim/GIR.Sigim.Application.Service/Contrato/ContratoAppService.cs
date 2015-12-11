@@ -3982,7 +3982,7 @@ namespace GIR.Sigim.Application.Service.Contrato
             string identificacaoImposto = sigla + " - " + nome;
             if (identificacaoImposto.Length > 50)
             {
-                identificacaoImposto = identificacaoImposto.Substring(1, 50);
+                identificacaoImposto = identificacaoImposto.Substring(0, 50);
             }
 
             return identificacaoImposto;
@@ -3996,7 +3996,7 @@ namespace GIR.Sigim.Application.Service.Contrato
                 documentoImposto = numeroDocumento + "/" + ordem;
                 if (documentoImposto.Length > 10)
                 {
-                    documentoImposto.Substring(1, 10);
+                    documentoImposto = documentoImposto.Substring(0, 10);
                 }
             }
 
