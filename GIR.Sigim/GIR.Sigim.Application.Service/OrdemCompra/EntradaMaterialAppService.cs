@@ -155,6 +155,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.CentroCusto,
                 l => l.ClienteFornecedor,
                 l => l.FornecedorNota,
+                l => l.Transportadora,
                 l => l.ListaItens.Select(o => o.Classe),
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaItens.Select(o => o.ComplementoCST),
