@@ -420,6 +420,7 @@
                                                                         if (!houveErro) {
                                                                             $('#@Html.IdFor(m => m.JsonItens)').val(result.Itens);
                                                                             fillTableItens();
+                                                                            atualizarTotais();
                                                                             $('#btnItens').click();
                                                                             setTimeout(function () {
                                                                                 $('html, body').animate({
@@ -886,6 +887,7 @@
                                                                         if (!houveErro) {
                                                                             $('#@Html.IdFor(m => m.JsonItens)').val(result.Itens);
                                                                             fillTableItens();
+                                                                            atualizarTotais();
                                                                         }
 
                                                                         showMessages(result.Messages);
