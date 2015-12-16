@@ -405,6 +405,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 var itemDTO = dto.ListaItens.Where(l => l.Id == item.Id).SingleOrDefault();
 
+                item.OrdemCompraItem.QuantidadeEntregue -= item.Quantidade;
                 item.Quantidade = itemDTO.Quantidade;
                 item.OrdemCompraItem.QuantidadeEntregue += itemDTO.Quantidade;
                 item.BaseICMS = itemDTO.BaseICMS;
