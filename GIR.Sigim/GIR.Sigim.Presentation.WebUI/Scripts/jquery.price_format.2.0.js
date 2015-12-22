@@ -108,6 +108,8 @@
                 if (!ignore && (str === '' || str == price_format('0', true)) && clearOnEmpty)
                     return '';
 
+                str = roundDecimal(str, centsLimit);
+
                 // formatting settings
                 var formatted = fill_with_zeroes(to_numbers(str));
                 var thousandsFormatted = '';
@@ -227,8 +229,8 @@
             }
 
             // bind the actions
-            obj.bind('keydown.price_format', key_check);
-            obj.bind('keyup.price_format', price_it);
+            //obj.bind('keydown.price_format', key_check);
+            //obj.bind('keyup.price_format', price_it);
             obj.bind('focusout.price_format', price_it);
 
             // Clear Prefix and Add Prefix
