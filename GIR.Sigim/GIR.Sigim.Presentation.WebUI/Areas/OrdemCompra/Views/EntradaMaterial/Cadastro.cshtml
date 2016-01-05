@@ -1536,7 +1536,7 @@
                                                             row.append($('<td>&nbsp;</td>'));
                                                     
                                                         if (jsonFormasPagamentoPendentes[i].ValorParcelaLiberado != null)
-                                                            row.append($('<td class="text-right">' + roundDecimal(floatToString(jsonFormasPagamentoPendentes[i].ValorParcelaLiberado), 2) + '</td>'));
+                                                            row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonFormasPagamentoPendentes[i].ValorParcelaLiberado), 2) + '</td>'));
                                                         else
                                                             row.append($('<td>&nbsp;</td>'));
                                                     }
