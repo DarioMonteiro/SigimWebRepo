@@ -144,6 +144,11 @@
 <script type="text/javascript">
     var ListaScrollLeft = 0;
     $(document).ready(function () {
+
+        if (EhFiltroPreenchido()) {
+            $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+        }
+
         jQuery.validator.addMethod(
             "ehCentroCustoValido",
             function (value, element, params) {
@@ -203,5 +208,15 @@
     function renderTela() {
         onSuccess();
         $('#resultadoBusca div.table-responsive').scrollLeft(ListaScrollLeft);
+    }
+
+    function EhFiltroPreenchido() {
+        return $('#@Html.IdFor(m => m.Filtro.DataInicial)').val() != ''
+            || $('#@Html.IdFor(m => m.Filtro.DataFinal)').val() != ''
+            || $('#@Html.IdFor(m => m.Filtro.Id)').val() != ''
+            || $('#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)').val() != ''
+            || $('#@Html.IdFor(m => m.Filtro.EhPendente)').prop('checked') == true
+            || $('#@Html.IdFor(m => m.Filtro.EhFechada)').prop('checked') == true
+            || $('#@Html.IdFor(m => m.Filtro.EhCancelada)').prop('checked') == true;
     }
 </script>
