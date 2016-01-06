@@ -2024,7 +2024,7 @@
                                                 for (var i = 0; i < jsonFormasPagamento.length; i++) {
                                                     var row = $('<tr />')
                                                     $("#tableFormasPagamento tbody").append(row);
-                                                    row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + jsonFormasPagamento[i].Id + '" ' + chkDisabled + '><i></i>' + jsonFormasPagamento[i].OrdemCompraFormaPagamento.Id + '</label></td>'));
+                                                    row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + jsonFormasPagamento[i].Id + '" ' + chkDisabled + '><i></i>' + jsonFormasPagamento[i].OrdemCompraFormaPagamento.OrdemCompraId + '</label></td>'));
                                                     if (jsonFormasPagamento[i].Data != null)
                                                         row.append($('<td class="text-center">' + new Date(jsonFormasPagamento[i].Data).toFormatDDMMYYYY() + '</td>'));
                                                     else
