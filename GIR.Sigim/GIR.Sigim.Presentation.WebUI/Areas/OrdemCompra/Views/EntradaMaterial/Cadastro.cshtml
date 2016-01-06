@@ -1194,6 +1194,225 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFrete" class="collapsed">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Frete
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFrete" class="panel-collapse collapse">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <header>Seleção e cadastro de empresa transportadora</header>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.HiddenFor(m => m.EntradaMaterial.Transportadora.Id)
+                                                    @Html.LabelFor(m => m.EntradaMaterial.Transportadora.Nome, "Transportadora", new { @class = "label" })
+                                                    <div class="input-group">
+                                                        <label class="input">
+                                                            @Html.TextBoxFor(m => m.EntradaMaterial.Transportadora.Nome, new { @readonly = "", @class = "readonly" })
+                                                            <i></i>
+                                                        </label>
+                                                        <a id="BtnShowTransportadoraModalPanel" href="javascript:abrirTransportadoraModalPanel();" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.Transportadora.Nome, "", new { @class = "note note-error" })
+                                                    <div class="modal fade" id="TransportadoraModalPanel" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                                        &times;
+                                                                    </button>
+                                                                    <h4 class="modal-title">Seleção de frete de Ordem de Compra</h4>
+                                                                </div>
+                                                                <div id="TransportadoraModalBody" class="modal-body no-padding sigimModalBody">
+                                                                    <div class="table-responsive col col-12" style="min-height: 115px; border: 1px solid #ddd; padding:0; margin-bottom: 13px; overflow-x: auto;">
+                                                                        <table id="tableFretePendente" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th>OC</th>
+                                                                                    <th>Transportadora</th>
+                                                                                    <th class="text-center">Data</th>
+                                                                                    <th class="text-right">Valor</th>
+                                                                                    <th>Título</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <script type="text/javascript">
+                                                        var jsonFretePendente;
+                                                        $(document).ready(function () {
+                                                            $(document).on("show.bs.modal", "#TransportadoraModalPanel", function () {
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: '@Url.Action("ListarFretePendente", "EntradaMaterial")',
+                                                                    cache: false,
+                                                                    contentType: 'application/json; charset=utf-8',
+                                                                    data: JSON.stringify({
+                                                                        entradaMaterialId: '@Html.DisplayFor(m => m.EntradaMaterial.Id)'
+                                                                    })
+                                                                })
+                                                                .success(function (result) {
+                                                                    jsonFretePendente = JSON.parse(result);
+                                                                    fillTableFretePendente();
+                                                                });
+                                                            });
+
+                                                            $(document).on('change', '#@(Html.IdFor(m => m.EntradaMaterial.FreteIncluso))', function () {
+                                                                atualizarTotais();
+                                                            });
+                                                        });
+
+                                                        function abrirTransportadoraModalPanel() {
+                                                            if (!houveAlteracaoNoFormulario()) {
+                                                                $('#TransportadoraModalPanel').modal('show');
+                                                            }
+                                                        }
+
+                                                        function fillTableFretePendente() {
+                                                            $("#tableFretePendente tbody").empty();
+
+                                                            for (var i = 0; i < jsonFretePendente.length; i++) {
+                                                                var row = $('<tr />')
+                                                                $("#tableFretePendente tbody").append(row);
+                                                                row.append($('<td>' + jsonFretePendente[i].Id + '</td>'));
+                                                                row.append($('<td class="text-nowrap" onclick="loadFretePendente(' + jsonFretePendente[i].Id + ');">' + jsonFretePendente[i].Transportadora.Nome + '</td>'));
+                                                                if (jsonFretePendente[i].Data != null)
+                                                                    row.append($('<td class="text-center">' + new Date(jsonFretePendente[i].Data).toFormatDDMMYYYY() + '</td>'));
+                                                                else
+                                                                    row.append($('<td>&nbsp;</td>'));
+                                                                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonFretePendente[i].Valor), 2) + '</td>'));
+                                                                row.append($('<td>' + jsonFretePendente[i].TituloPagarId + '</td>'));
+                                                            }
+
+                                                            initializeDecimalBehaviour();
+                                                        }
+
+                                                        function loadFretePendente(ordemCompraFreteId) {
+                                                            $.SmartMessageBox({
+                                                                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a inclusão do frete selecionado na Entrada de Material?",
+                                                                buttons: '[Não][Sim]'
+                                                            }, function (ButtonPressed) {
+                                                                if (ButtonPressed === "Sim") {
+                                                                    var arr = jQuery.map(jsonFretePendente, function (frete, i) {
+                                                                        if (frete.Id == ordemCompraFreteId) {
+                                                                            return frete;
+                                                                        }
+                                                                    });
+
+                                                                    if (arr.length > 0) {
+                                                                        var frete = arr[0];
+
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.Transportadora.Id)').val(frete.Transportadora.Id);
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.Transportadora.Nome)').val(frete.Transportadora.Nome);
+                                                                        if (frete.Data != null)
+                                                                            $('#@Html.IdFor(m => m.EntradaMaterial.DataFrete)').val(new Date(frete.Data).toFormatDDMMYYYY());
+                                                                        $("#@Html.IdFor(m => m.EntradaMaterial.ValorFrete)").val(roundDecimal(floatToString(frete.Valor), 2));
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.OrdemCompraFreteId)').val(frete.Id);
+                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.TituloFreteId)').val(frete.TituloPagarId);
+                                                                        $('#TransportadoraModalPanel').modal('hide');
+                                                                        ehFormularioAlterado = true;
+
+                                                                        initializeDecimalBehaviour();
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    </script>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.DataFrete, new { @class = "label" })
+                                                    <label class="input">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataFrete, "{0:dd/MM/yyyy}", new { @class = "exigeGravacao" })
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.DataFrete, "Informe uma data válida.", new { @class = "note note-error" })
+                                                </section>
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $('#@Html.IdFor(m => m.EntradaMaterial.DataFrete)').datepicker({
+                                                            prevText: '<i class="fa fa-chevron-left"></i>',
+                                                            nextText: '<i class="fa fa-chevron-right"></i>',
+                                                            changeMonth: true,
+                                                            changeYear: true,
+                                                            onClose: function (selectedDate) {
+                                                                $(this).valid();
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.ValorFrete, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.ValorFrete, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.ValorFrete, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.OrdemCompraFreteId, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.OrdemCompraFreteId, new { @readonly = "", @class = "readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.OrdemCompraFreteId, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.TituloFreteId, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.TituloFreteId, new { @readonly = "", @class = "readonly" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.TituloFreteId, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.TipoNotaFreteId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.EntradaMaterial.TipoNotaFreteId, Model.ListaTipoNotaFrete, string.Empty, new { @class = "exigeGravacao" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.TipoNotaFreteId, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-3">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.NumeroNotaFrete, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.NumeroNotaFrete, new { @class = "exigeGravacao" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.NumeroNotaFrete, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <header>Frete incluso</header>
+                                                </section>
+                                                <section class="col col-4">
+                                                    @Html.LabelFor(m => m.EntradaMaterial.FreteIncluso, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.EntradaMaterial.FreteIncluso, "{0:F2}", new { @class = "text-right decimal-2-casas exigeGravacao" })
+                                                        <i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.FreteIncluso, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
                             @if (Model.PodeAdicionarFormaPagamento) {
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -1843,225 +2062,6 @@
                                                 initializeDecimalBehaviour();
                                             }
                                         </script>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFrete" class="collapsed">
-                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
-                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                            Frete
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapseFrete" class="panel-collapse collapse">
-                                    <div class="panel-body no-padding">
-                                        <fieldset>
-                                            <div class="row">
-                                                <section class="col col-12">
-                                                    <header>Seleção e cadastro de empresa transportadora</header>
-                                                </section>
-                                                <section class="col col-4">
-                                                    @Html.HiddenFor(m => m.EntradaMaterial.Transportadora.Id)
-                                                    @Html.LabelFor(m => m.EntradaMaterial.Transportadora.Nome, "Transportadora", new { @class = "label" })
-                                                    <div class="input-group">
-                                                        <label class="input">
-                                                            @Html.TextBoxFor(m => m.EntradaMaterial.Transportadora.Nome, new { @readonly = "", @class = "readonly" })
-                                                            <i></i>
-                                                        </label>
-                                                        <a id="BtnShowTransportadoraModalPanel" href="javascript:abrirTransportadoraModalPanel();" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
-                                                    </div>
-                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.Transportadora.Nome, "", new { @class = "note note-error" })
-                                                    <div class="modal fade" id="TransportadoraModalPanel" tabindex="-1" role="dialog">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                                                        &times;
-                                                                    </button>
-                                                                    <h4 class="modal-title">Seleção de frete de Ordem de Compra</h4>
-                                                                </div>
-                                                                <div id="TransportadoraModalBody" class="modal-body no-padding sigimModalBody">
-                                                                    <div class="table-responsive col col-12" style="min-height: 115px; border: 1px solid #ddd; padding:0; margin-bottom: 13px; overflow-x: auto;">
-                                                                        <table id="tableFretePendente" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                                            <thead>
-                                                                                <tr role="row">
-                                                                                    <th>OC</th>
-                                                                                    <th>Transportadora</th>
-                                                                                    <th class="text-center">Data</th>
-                                                                                    <th class="text-right">Valor</th>
-                                                                                    <th>Título</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <script type="text/javascript">
-                                                        var jsonFretePendente;
-                                                        $(document).ready(function () {
-                                                            $(document).on("show.bs.modal", "#TransportadoraModalPanel", function () {
-                                                                $.ajax({
-                                                                    type: 'POST',
-                                                                    url: '@Url.Action("ListarFretePendente", "EntradaMaterial")',
-                                                                    cache: false,
-                                                                    contentType: 'application/json; charset=utf-8',
-                                                                    data: JSON.stringify({
-                                                                        entradaMaterialId: '@Html.DisplayFor(m => m.EntradaMaterial.Id)'
-                                                                    })
-                                                                })
-                                                                .success(function (result) {
-                                                                    jsonFretePendente = JSON.parse(result);
-                                                                    fillTableFretePendente();
-                                                                });
-                                                            });
-
-                                                            $(document).on('change', '#@(Html.IdFor(m => m.EntradaMaterial.FreteIncluso))', function () {
-                                                                atualizarTotais();
-                                                            });
-                                                        });
-
-                                                        function abrirTransportadoraModalPanel() {
-                                                            if (!houveAlteracaoNoFormulario()) {
-                                                                $('#TransportadoraModalPanel').modal('show');
-                                                            }
-                                                        }
-
-                                                        function fillTableFretePendente() {
-                                                            $("#tableFretePendente tbody").empty();
-
-                                                            for (var i = 0; i < jsonFretePendente.length; i++) {
-                                                                var row = $('<tr />')
-                                                                $("#tableFretePendente tbody").append(row);
-                                                                row.append($('<td>' + jsonFretePendente[i].Id + '</td>'));
-                                                                row.append($('<td class="text-nowrap" onclick="loadFretePendente(' + jsonFretePendente[i].Id + ');">' + jsonFretePendente[i].Transportadora.Nome + '</td>'));
-                                                                if (jsonFretePendente[i].Data != null)
-                                                                    row.append($('<td class="text-center">' + new Date(jsonFretePendente[i].Data).toFormatDDMMYYYY() + '</td>'));
-                                                                else
-                                                                    row.append($('<td>&nbsp;</td>'));
-                                                                row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonFretePendente[i].Valor), 2) + '</td>'));
-                                                                row.append($('<td>' + jsonFretePendente[i].TituloPagarId + '</td>'));
-                                                            }
-
-                                                            initializeDecimalBehaviour();
-                                                        }
-
-                                                        function loadFretePendente(ordemCompraFreteId) {
-                                                            $.SmartMessageBox({
-                                                                title: "<i class='fa fa-question-circle txt-color-blue'></i> Confirma a inclusão do frete selecionado na Entrada de Material?",
-                                                                buttons: '[Não][Sim]'
-                                                            }, function (ButtonPressed) {
-                                                                if (ButtonPressed === "Sim") {
-                                                                    var arr = jQuery.map(jsonFretePendente, function (frete, i) {
-                                                                        if (frete.Id == ordemCompraFreteId) {
-                                                                            return frete;
-                                                                        }
-                                                                    });
-
-                                                                    if (arr.length > 0) {
-                                                                        var frete = arr[0];
-
-                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.Transportadora.Id)').val(frete.Transportadora.Id);
-                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.Transportadora.Nome)').val(frete.Transportadora.Nome);
-                                                                        if (frete.Data != null)
-                                                                            $('#@Html.IdFor(m => m.EntradaMaterial.DataFrete)').val(new Date(frete.Data).toFormatDDMMYYYY());
-                                                                        $("#@Html.IdFor(m => m.EntradaMaterial.ValorFrete)").val(roundDecimal(floatToString(frete.Valor), 2));
-                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.OrdemCompraFreteId)').val(frete.Id);
-                                                                        $('#@Html.IdFor(m => m.EntradaMaterial.TituloFreteId)').val(frete.TituloPagarId);
-                                                                        $('#TransportadoraModalPanel').modal('hide');
-                                                                        ehFormularioAlterado = true;
-
-                                                                        initializeDecimalBehaviour();
-                                                                    }
-                                                                }
-                                                            });
-                                                        }
-                                                    </script>
-                                                </section>
-                                                <section class="col col-4">
-                                                    @Html.LabelFor(m => m.EntradaMaterial.DataFrete, new { @class = "label" })
-                                                    <label class="input">
-                                                        <i class="icon-append fa fa-calendar"></i>
-                                                        @Html.TextBoxFor(m => m.EntradaMaterial.DataFrete, "{0:dd/MM/yyyy}", new { @class = "exigeGravacao" })
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.DataFrete, "Informe uma data válida.", new { @class = "note note-error" })
-                                                </section>
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $('#@Html.IdFor(m => m.EntradaMaterial.DataFrete)').datepicker({
-                                                            prevText: '<i class="fa fa-chevron-left"></i>',
-                                                            nextText: '<i class="fa fa-chevron-right"></i>',
-                                                            changeMonth: true,
-                                                            changeYear: true,
-                                                            onClose: function (selectedDate) {
-                                                                $(this).valid();
-                                                            }
-                                                        });
-                                                    });
-                                                </script>
-                                                <section class="col col-4">
-                                                    @Html.LabelFor(m => m.EntradaMaterial.ValorFrete, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.EntradaMaterial.ValorFrete, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
-                                                        <i></i>
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.ValorFrete, "", new { @class = "note note-error" })
-                                                </section>
-                                            </div>
-                                            <div class="row">
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.EntradaMaterial.OrdemCompraFreteId, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.EntradaMaterial.OrdemCompraFreteId, new { @readonly = "", @class = "readonly" })
-                                                        <i></i>
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.OrdemCompraFreteId, "", new { @class = "note note-error" })
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.EntradaMaterial.TituloFreteId, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.EntradaMaterial.TituloFreteId, new { @readonly = "", @class = "readonly" })
-                                                        <i></i>
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.TituloFreteId, "", new { @class = "note note-error" })
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.EntradaMaterial.TipoNotaFreteId, new { @class = "label" })
-                                                    <label class="select">
-                                                        @Html.DropDownListFor(m => m.EntradaMaterial.TipoNotaFreteId, Model.ListaTipoNotaFrete, string.Empty, new { @class = "exigeGravacao" })
-                                                        <i></i>
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.TipoNotaFreteId, "", new { @class = "note note-error" })
-                                                </section>
-                                                <section class="col col-3">
-                                                    @Html.LabelFor(m => m.EntradaMaterial.NumeroNotaFrete, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.EntradaMaterial.NumeroNotaFrete, new { @class = "exigeGravacao" })
-                                                        <i></i>
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.NumeroNotaFrete, "", new { @class = "note note-error" })
-                                                </section>
-                                            </div>
-                                            <div class="row">
-                                                <section class="col col-12">
-                                                    <header>Frete incluso</header>
-                                                </section>
-                                                <section class="col col-4">
-                                                    @Html.LabelFor(m => m.EntradaMaterial.FreteIncluso, new { @class = "label" })
-                                                    <label class="input">
-                                                        @Html.TextBoxFor(m => m.EntradaMaterial.FreteIncluso, "{0:F2}", new { @class = "text-right decimal-2-casas exigeGravacao" })
-                                                        <i></i>
-                                                    </label>
-                                                    @Html.ValidationMessageFor(m => m.EntradaMaterial.FreteIncluso, "", new { @class = "note note-error" })
-                                                </section>
-                                            </div>
-                                        </fieldset>
                                     </div>
                                 </div>
                             </div>
