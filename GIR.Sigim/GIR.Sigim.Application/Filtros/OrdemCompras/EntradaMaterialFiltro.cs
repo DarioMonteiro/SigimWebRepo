@@ -40,5 +40,10 @@ namespace GIR.Sigim.Application.Filtros.OrdemCompras
 
         [Display(Name = "Cancelada")]
         public bool EhCancelada { get; set; }
+
+        public EntradaMaterialFiltro()
+        {
+            ClienteFornecedor = new ClienteFornecedorDTO();
+        }
     }
 }

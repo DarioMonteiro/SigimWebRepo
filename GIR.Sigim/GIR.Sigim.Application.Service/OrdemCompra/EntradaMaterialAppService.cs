@@ -126,6 +126,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 specification &= EntradaMaterialSpecification.DataMenorOuIgual(filtro.DataFinal);
                 specification &= EntradaMaterialSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
                 specification &= EntradaMaterialSpecification.MatchingNumeroNotaFiscal(filtro.NumeroNotaFiscal);
+                specification &= EntradaMaterialSpecification.MatchingFornecedor(filtro.ClienteFornecedor.Id);
 
                 if (filtro.EhPendente || filtro.EhCancelada || filtro.EhFechada)
                 {

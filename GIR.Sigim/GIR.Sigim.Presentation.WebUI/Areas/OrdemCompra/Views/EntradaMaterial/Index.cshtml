@@ -124,6 +124,14 @@
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.NumeroNotaFiscal, "", new { @class = "note note-error" })
                                                 </section>
+                                                @Html.EditorFor(m => m.Filtro.ClienteFornecedor, "ClienteFornecedorPesquisaGenerica", 
+                                                    new { @sectionClass = "col col-6", 
+                                                            @required = false, 
+                                                            @label = "Fornecedor", 
+                                                            @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.OrdemCompra),
+                                                            @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
+                                                            @exibirBotaoPesquisa = true
+                                                    })
                                             </div>
                                         </fieldset>
                                     </div>
@@ -217,6 +225,7 @@
             || $('#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)').val() != ''
             || $('#@Html.IdFor(m => m.Filtro.EhPendente)').prop('checked') == true
             || $('#@Html.IdFor(m => m.Filtro.EhFechada)').prop('checked') == true
-            || $('#@Html.IdFor(m => m.Filtro.EhCancelada)').prop('checked') == true;
+            || $('#@Html.IdFor(m => m.Filtro.EhCancelada)').prop('checked') == true
+            || $('#@Html.IdFor(m => m.Filtro.ClienteFornecedor.Id)').val() != '';
     }
 </script>
