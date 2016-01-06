@@ -8,6 +8,6 @@ namespace GIR.Sigim.Application.DTO.Financeiro
 {
     public class ImpostoPagarDTO : BaseDTO
     {
-        public TituloPagarDTO TituloPagar { get; set; }
+        
     }
 }
