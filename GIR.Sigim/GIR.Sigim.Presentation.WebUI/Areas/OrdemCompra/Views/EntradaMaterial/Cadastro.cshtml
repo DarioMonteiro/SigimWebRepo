@@ -2357,7 +2357,7 @@
                                                 $("#impostoId").val('');
                                                 $("#@Html.IdFor(m => m.ImpostoFinanceiroId)").val('');
                                                 var valorTotalITem = parseFloat($("#@Html.IdFor(m => m.ValorTotalItem)").val().replace(".", "").replace(",", "."));
-                                                $("#@Html.IdFor(m => m.BaseCalculoImposto)").val(roundDecimal(floatToString(valorTotalITem), 4));
+                                                $("#@Html.IdFor(m => m.BaseCalculoImposto)").val(roundDecimal(floatToString(valorTotalITem), 2));
                                                 $("#@Html.IdFor(m => m.DataVencimentoImposto)").val('');
                                             }
 
@@ -3010,7 +3010,7 @@
         $("#@Html.IdFor(m => m.ValorTotalDesconto)").val(roundDecimal(floatToString(valorTotalDesconto), 2));
         $("#@Html.IdFor(m => m.ValorTotalAcrescimo)").val(roundDecimal(floatToString(valorTotalAcrescimo), 2));
         $("#@Html.IdFor(m => m.ValorTotal)").val(roundDecimal(floatToString(valorTotal), 2));
-        $("#@Html.IdFor(m => m.BaseCalculoImposto)").val(roundDecimal(floatToString(valorTotalItens), 5));
+        $("#@Html.IdFor(m => m.BaseCalculoImposto)").val(roundDecimal(floatToString(valorTotalItens), 2));
 
         $("#@Html.IdFor(m => m.ValorTotalICMS)").val(roundDecimal(floatToString(valorTotalICMS), 2));
         $("#@Html.IdFor(m => m.ValorTotalIPI)").val(roundDecimal(floatToString(valorTotalIPI), 2));
