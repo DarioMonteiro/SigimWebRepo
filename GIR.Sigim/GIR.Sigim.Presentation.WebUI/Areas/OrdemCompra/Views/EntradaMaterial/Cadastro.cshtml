@@ -586,7 +586,7 @@
                                                                 <section class="col col-3">
                                                                     @Html.LabelFor(m => m.ValorItem, new { @class = "label" })
                                                                     <label class="input">
-                                                                        @Html.TextBoxFor(m => m.ValorItem, "{0:F2}", new { @readonly = "", @class = "text-right decimal-2-casas readonly" })
+                                                                        @Html.TextBoxFor(m => m.ValorItem, "{0:F4}", new { @readonly = "", @class = "text-right decimal-4-casas readonly" })
                                                                     </label>
                                                                     @Html.ValidationMessageFor(m => m.ValorItem, "", new { @class = "note note-error" })
                                                                 </section>
@@ -1007,7 +1007,7 @@
                                                     $("#@Html.IdFor(m => m.Quantidade)").val(roundDecimal(floatToString(item.Quantidade), 4));
                                                     $("#@Html.IdFor(m => m.ValorUnitario)").val(roundDecimal(floatToString(item.ValorUnitario), 4));
                                                     $("#@Html.IdFor(m => m.PercentualDesconto)").val(roundDecimal(floatToString(item.PercentualDesconto), 4));
-                                                    $("#@Html.IdFor(m => m.ValorItem)").val(roundDecimal(floatToString(item.ValorTotal), 2));
+                                                    $("#@Html.IdFor(m => m.ValorItem)").val(roundDecimal(floatToString(item.ValorTotal), 4));
                                                     $("#@Html.IdFor(m => m.BaseICMS)").val(roundDecimal(floatToString(item.BaseICMS), 4));
                                                     $("#@Html.IdFor(m => m.PercentualICMS)").val(roundDecimal(floatToString(item.PercentualICMS), 4));
                                                     $("#@Html.IdFor(m => m.ValorICMS)").val(roundDecimal(floatToString(item.BaseICMS * item.PercentualICMS / 100), 4));
@@ -1065,15 +1065,15 @@
                                             function atualizarValorTotalItem() {
                                                 var quantidade = parseFloat($("#@Html.IdFor(m => m.Quantidade)").val().replace(".", "").replace(",", "."));
                                                 var valorUnitario = parseFloat($("#@Html.IdFor(m => m.ValorUnitario)").val().replace(".", "").replace(",", "."));
-                                                var baseIPI = parseFloat($("#@Html.IdFor(m => m.BaseIPI)").val().replace(".", "").replace(",", "."));
+                                                //var baseIPI = parseFloat($("#@Html.IdFor(m => m.BaseIPI)").val().replace(".", "").replace(",", "."));
                                                 var percentualIPI = parseFloat($("#@Html.IdFor(m => m.PercentualIPI)").val().replace(".", "").replace(",", "."));
                                                 var percentualDesconto = parseFloat($("#@Html.IdFor(m => m.PercentualDesconto)").val().replace(".", "").replace(",", "."));
 
                                                 var valorItem = (quantidade * valorUnitario);
-                                                valorItem = valorItem + ((baseIPI * percentualIPI) / 100)
                                                 valorItem = valorItem - ((valorItem * percentualDesconto) / 100)
+                                                valorItem = valorItem + ((valorItem * percentualIPI) / 100)
 
-                                                $("#@Html.IdFor(m => m.ValorItem)").val(roundDecimal(floatToString(valorItem), 2));
+                                                $("#@Html.IdFor(m => m.ValorItem)").val(roundDecimal(floatToString(valorItem), 4));
 
                                                 initializeDecimalBehaviour();
                                             }
@@ -2971,7 +2971,7 @@
         $.each(jsonItens, function (i, item) {
             var valorIPI = item.ValorTotal * item.PercentualIPI / 100;
             valorTotalIPI += valorIPI;
-            valorTotalItens += item.ValorTotal + valorIPI - (item.ValorTotal * item.PercentualDesconto / 100);
+            valorTotalItens += item.ValorTotal;// + valorIPI - (item.ValorTotal * item.PercentualDesconto / 100);
 
             var valorDescontoOC = item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100;
             valorTotalDescontoOrdemCompra += valorDescontoOC;
@@ -2983,7 +2983,7 @@
             valorTotalICMSST += valorICMSST;
         });
 
-        valorSubTotal = valorTotalItens - valorTotalDescontoOrdemCompra;
+        valorSubTotal = valorTotalItens;// - valorTotalDescontoOrdemCompra;
 
         $.each(jsonImpostos, function (i, imposto) {
             percentualTotalAliquota += imposto.ImpostoFinanceiro.Aliquota;

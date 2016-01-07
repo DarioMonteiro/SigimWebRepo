@@ -413,7 +413,12 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 item.PercentualICMS = itemDTO.PercentualICMS;
                 item.BaseICMSST = itemDTO.BaseICMSST;
                 item.PercentualICMSST = itemDTO.PercentualICMSST;
-                item.ValorTotal = itemDTO.Quantidade * item.ValorUnitario;
+
+                var valorTotalItem = itemDTO.Quantidade * item.ValorUnitario;                
+                var valorTotalItemComDesconto = valorTotalItem - ((valorTotalItem * item.PercentualDesconto) / 100);
+                var valorTotalItemComIPI = valorTotalItemComDesconto + ((valorTotalItemComDesconto * item.PercentualIPI) / 100);
+                item.ValorTotal = valorTotalItemComIPI;
+
                 item.CodigoComplementoCST = itemDTO.CodigoComplementoCST;
                 item.CodigoComplementoNaturezaOperacao = itemDTO.CodigoComplementoNaturezaOperacao;
                 item.CodigoNaturezaReceita = itemDTO.CodigoNaturezaReceita;
@@ -502,7 +507,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 entradaMaterialItem.ValorUnitario = ordemCompraItem.ValorUnitario;
                 entradaMaterialItem.PercentualIPI = ordemCompraItem.PercentualIPI;
                 entradaMaterialItem.PercentualDesconto = ordemCompraItem.PercentualDesconto;
-                entradaMaterialItem.ValorTotal = ordemCompraItem.ValorTotalComImposto;
+                entradaMaterialItem.ValorTotal = ordemCompraItem.ValorTotalItem;
                 entradaMaterialItem.BaseIPI = ordemCompraItem.Quantidade * ordemCompraItem.ValorUnitario;
                 entradaMaterial.ListaItens.Add(entradaMaterialItem);
 
