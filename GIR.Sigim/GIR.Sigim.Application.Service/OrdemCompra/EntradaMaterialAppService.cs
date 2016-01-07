@@ -1260,7 +1260,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.CentroCusto,
                 l => l.ClienteFornecedor.PessoaFisica,
                 l => l.ClienteFornecedor.PessoaJuridica,
+                l => l.FornecedorNota.PessoaFisica,
+                l => l.FornecedorNota.PessoaJuridica,
                 l => l.TipoNotaFiscal,
+                l => l.Transportadora.PessoaFisica,
+                l => l.Transportadora.PessoaJuridica,
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Classe),
                 l => l.ListaItens.Select(o => o.OrdemCompraItem.Material),
                 l => l.ListaFormaPagamento.Select(o => o.OrdemCompraFormaPagamento),
@@ -2295,42 +2299,233 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
         private DataTable EntradaMaterialToDataTable(EntradaMaterial entradaMaterial)
         {
             DataTable dta = new DataTable();
+            //DataColumn codigo = new DataColumn("codigo");
+            //DataColumn dataEntradaMaterial = new DataColumn("dataEntradaMaterial");
+            //DataColumn observacao = new DataColumn("observacao");
+            //DataColumn siglaTipoNotaFiscal = new DataColumn("siglaTipoNotaFiscal");
+            //DataColumn numeroNotaFiscal = new DataColumn("numeroNotaFiscal");
+            //DataColumn dataEmissaoNota = new DataColumn("dataEmissaoNota");
+            //DataColumn dataEntregaNota = new DataColumn("dataEntregaNota");
+            //DataColumn codigoDescricaoCentroCusto = new DataColumn("codigoDescricaoCentroCusto");
+            //DataColumn descricaoSituacao = new DataColumn("descricaoSituacao");
+            //DataColumn nomeFornecedor = new DataColumn("nomeFornecedor");
+            //DataColumn nomeFornecedorNota = new DataColumn("nomeFornecedorNota");
+
             DataColumn codigo = new DataColumn("codigo");
             DataColumn dataEntradaMaterial = new DataColumn("dataEntradaMaterial");
             DataColumn observacao = new DataColumn("observacao");
+            //DataColumn tipoNotaFiscal = new DataColumn("tipoNotaFiscal");
             DataColumn siglaTipoNotaFiscal = new DataColumn("siglaTipoNotaFiscal");
             DataColumn numeroNotaFiscal = new DataColumn("numeroNotaFiscal");
             DataColumn dataEmissaoNota = new DataColumn("dataEmissaoNota");
             DataColumn dataEntregaNota = new DataColumn("dataEntregaNota");
+            //DataColumn dataCadastro = new DataColumn("dataCadastro");
+            //DataColumn usuarioCadastro = new DataColumn("usuarioCadastro");
+            //DataColumn dataCancela = new DataColumn("dataCancela");
+            //DataColumn usuarioCancela = new DataColumn("usuarioCancela");
+            //DataColumn motivoCancela = new DataColumn("motivoCancela");
+            //DataColumn dataLibera = new DataColumn("dataLibera");
+            //DataColumn usuarioLibera = new DataColumn("usuarioLibera");
+            //DataColumn centroCusto = new DataColumn("centroCusto");
+            //DataColumn descricaoCentroCusto = new DataColumn("descricaoCentroCusto");
             DataColumn codigoDescricaoCentroCusto = new DataColumn("codigoDescricaoCentroCusto");
+            //DataColumn situacaoCentroCusto = new DataColumn("situacaoCentroCusto");
+            //DataColumn conferido = new DataColumn("conferido");
+            //DataColumn usuarioConferencia = new DataColumn("usuarioConferencia");
+            //DataColumn dataConferencia = new DataColumn("dataConferencia");
+            //DataColumn situacao = new DataColumn("situacao");
             DataColumn descricaoSituacao = new DataColumn("descricaoSituacao");
+            //DataColumn codigoFornecedor = new DataColumn("codigoFornecedor");
             DataColumn nomeFornecedor = new DataColumn("nomeFornecedor");
+            //DataColumn nomeFantasiaFornecedor = new DataColumn("nomeFantasiaFornecedor");
+            //DataColumn cnpjFornecedor = new DataColumn("cnpjFornecedor");
+            //DataColumn enderecoFornecedor = new DataColumn("enderecoFornecedor");
+            //DataColumn inscricaoEstadualFornecedor = new DataColumn("inscricaoEstadualFornecedor");
+            //DataColumn cpfFornecedor = new DataColumn("cpfFornecedor");
+            //DataColumn tipoPessoa = new DataColumn("tipoPessoa");
+            //DataColumn codigoFornecedorNota = new DataColumn("codigoFornecedorNota");
             DataColumn nomeFornecedorNota = new DataColumn("nomeFornecedorNota");
+            //DataColumn nomeFantasiaFornecedorNota = new DataColumn("nomeFantasiaFornecedorNota");
+            //DataColumn cnpjFornecedorNota = new DataColumn("cnpjFornecedorNota");
+            //DataColumn enderecoFornecedorNota = new DataColumn("enderecoFornecedorNota");
+            //DataColumn inscricaoEstadualFornecedorNota = new DataColumn("inscricaoEstadualFornecedorNota");
+            //DataColumn cpfFornecedorNota = new DataColumn("cpfFornecedorNota");
+            //DataColumn tipoPessoaNota = new DataColumn("tipoPessoaNota");
+            //DataColumn codigoTransportadora = new DataColumn("codigoTransportadora");
+            DataColumn nomeTransportadora = new DataColumn("nomeTransportadora");
+            DataColumn nomeFantasiaTransportadora = new DataColumn("nomeFantasiaTransportadora");
+            //DataColumn tipoPessoaTransportadora = new DataColumn("tipoPessoaTransportadora");
+            //DataColumn cnpjTransportadora = new DataColumn("cnpjTransportadora");
+            //DataColumn cpfTransportadora = new DataColumn("cpfTransportadora");
+            DataColumn dataFrete = new DataColumn("dataFrete");
+            DataColumn valorFrete = new DataColumn("valorFrete", typeof(decimal));
+            DataColumn tituloFrete = new DataColumn("tituloFrete", typeof(int));
+            //DataColumn numeroNotaFrete = new DataColumn("numeroNotaFrete");
+            //DataColumn situacaoTituloFrete = new DataColumn("situacaoTituloFrete");
+            //DataColumn descricaoSituacaoTituloFrete = new DataColumn("descricaoSituacaoTituloFrete");
+            //DataColumn tipoCompromissoFrete = new DataColumn("tipoCompromissoFrete");
+            //DataColumn descricaoTipoCompromissoFrete = new DataColumn("descricaoTipoCompromissoFrete");
+            //DataColumn desconto = new DataColumn("desconto");
+            //DataColumn percentualDesconto = new DataColumn("percentualDesconto");
+            //DataColumn CIFFOB = new DataColumn("CIFFOB");
+            //DataColumn serieNF = new DataColumn("serieNF");
+            //DataColumn tipoCompra = new DataColumn("tipoCompra");
+            //DataColumn naturezaOperacao = new DataColumn("naturezaOperacao");
+            //DataColumn codigoBarras = new DataColumn("codigoBarras");
+
+            //dta.Columns.Add(codigo);
+            //dta.Columns.Add(dataEntradaMaterial);
+            //dta.Columns.Add(observacao);
+            //dta.Columns.Add(siglaTipoNotaFiscal);
+            //dta.Columns.Add(numeroNotaFiscal);
+            //dta.Columns.Add(dataEmissaoNota);
+            //dta.Columns.Add(dataEntregaNota);
+            //dta.Columns.Add(codigoDescricaoCentroCusto);
+            //dta.Columns.Add(descricaoSituacao);
+            //dta.Columns.Add(nomeFornecedor);
+            //dta.Columns.Add(nomeFornecedorNota);
 
             dta.Columns.Add(codigo);
             dta.Columns.Add(dataEntradaMaterial);
             dta.Columns.Add(observacao);
+            //dta.Columns.Add(tipoNotaFiscal);
             dta.Columns.Add(siglaTipoNotaFiscal);
             dta.Columns.Add(numeroNotaFiscal);
             dta.Columns.Add(dataEmissaoNota);
             dta.Columns.Add(dataEntregaNota);
+            //dta.Columns.Add(dataCadastro);
+            //dta.Columns.Add(usuarioCadastro);
+            //dta.Columns.Add(dataCancela);
+            //dta.Columns.Add(usuarioCancela);
+            //dta.Columns.Add(motivoCancela);
+            //dta.Columns.Add(dataLibera);
+            //dta.Columns.Add(usuarioLibera);
+            //dta.Columns.Add(centroCusto);
+            //dta.Columns.Add(descricaoCentroCusto);
             dta.Columns.Add(codigoDescricaoCentroCusto);
+            //dta.Columns.Add(situacaoCentroCusto);
+            //dta.Columns.Add(conferido);
+            //dta.Columns.Add(usuarioConferencia);
+            //dta.Columns.Add(dataConferencia);
+            //dta.Columns.Add(situacao);
             dta.Columns.Add(descricaoSituacao);
+            //dta.Columns.Add(codigoFornecedor);
             dta.Columns.Add(nomeFornecedor);
+            //dta.Columns.Add(nomeFantasiaFornecedor);
+            //dta.Columns.Add(cnpjFornecedor);
+            //dta.Columns.Add(enderecoFornecedor);
+            //dta.Columns.Add(inscricaoEstadualFornecedor);
+            //dta.Columns.Add(cpfFornecedor);
+            //dta.Columns.Add(tipoPessoa);
+            //dta.Columns.Add(codigoFornecedorNota);
             dta.Columns.Add(nomeFornecedorNota);
+            //dta.Columns.Add(nomeFantasiaFornecedorNota);
+            //dta.Columns.Add(cnpjFornecedorNota);
+            //dta.Columns.Add(enderecoFornecedorNota);
+            //dta.Columns.Add(inscricaoEstadualFornecedorNota);
+            //dta.Columns.Add(cpfFornecedorNota);
+            //dta.Columns.Add(tipoPessoaNota);
+            //dta.Columns.Add(codigoTransportadora);
+            dta.Columns.Add(nomeTransportadora);
+            dta.Columns.Add(nomeFantasiaTransportadora);
+            //dta.Columns.Add(tipoPessoaTransportadora);
+            //dta.Columns.Add(cnpjTransportadora);
+            //dta.Columns.Add(cpfTransportadora);
+            dta.Columns.Add(dataFrete);
+            dta.Columns.Add(valorFrete);
+            dta.Columns.Add(tituloFrete);
+            //dta.Columns.Add(numeroNotaFrete);
+            //dta.Columns.Add(situacaoTituloFrete);
+            //dta.Columns.Add(descricaoSituacaoTituloFrete);
+            //dta.Columns.Add(tipoCompromissoFrete);
+            //dta.Columns.Add(descricaoTipoCompromissoFrete);
+            //dta.Columns.Add(desconto);
+            //dta.Columns.Add(percentualDesconto);
+            //dta.Columns.Add(CIFFOB);
+            //dta.Columns.Add(serieNF);
+            //dta.Columns.Add(tipoCompra);
+            //dta.Columns.Add(naturezaOperacao);
+            //dta.Columns.Add(codigoBarras);
 
             DataRow row = dta.NewRow();
+            //row[codigo] = entradaMaterial.Id;
+            //row[dataEntradaMaterial] = entradaMaterial.Data.ToString("dd/MM/yyyy");
+            //row[observacao] = entradaMaterial.Observacao;
+            //row[siglaTipoNotaFiscal] = entradaMaterial.TipoNotaFiscalId.HasValue ? entradaMaterial.TipoNotaFiscal.Sigla : string.Empty;
+            //row[numeroNotaFiscal] = entradaMaterial.NumeroNotaFiscal;
+            //row[dataEmissaoNota] = entradaMaterial.DataEmissaoNota.HasValue ? entradaMaterial.DataEmissaoNota.Value.ToString("dd/MM/yyyy") : string.Empty;
+            //row[dataEntregaNota] = entradaMaterial.DataEntregaNota.HasValue ? entradaMaterial.DataEntregaNota.Value.ToString("dd/MM/yyyy") : string.Empty;
+            //row[codigoDescricaoCentroCusto] = !string.IsNullOrEmpty(entradaMaterial.CodigoCentroCusto) ? entradaMaterial.CodigoCentroCusto + " - " + entradaMaterial.CentroCusto.Descricao : string.Empty;
+            //row[descricaoSituacao] = entradaMaterial.Situacao.ObterDescricao();
+            //row[nomeFornecedor] = entradaMaterial.ClienteFornecedorId.HasValue ? entradaMaterial.ClienteFornecedor.Nome : string.Empty;
+            //row[nomeFornecedorNota] = entradaMaterial.FornecedorNotaId.HasValue ? entradaMaterial.FornecedorNota.Nome : string.Empty;
+
+
+
+
             row[codigo] = entradaMaterial.Id;
             row[dataEntradaMaterial] = entradaMaterial.Data.ToString("dd/MM/yyyy");
             row[observacao] = entradaMaterial.Observacao;
+            //row[tipoNotaFiscal] = entradaMaterial.TipoNotaFiscalId;
             row[siglaTipoNotaFiscal] = entradaMaterial.TipoNotaFiscalId.HasValue ? entradaMaterial.TipoNotaFiscal.Sigla : string.Empty;
             row[numeroNotaFiscal] = entradaMaterial.NumeroNotaFiscal;
             row[dataEmissaoNota] = entradaMaterial.DataEmissaoNota.HasValue ? entradaMaterial.DataEmissaoNota.Value.ToString("dd/MM/yyyy") : string.Empty;
             row[dataEntregaNota] = entradaMaterial.DataEntregaNota.HasValue ? entradaMaterial.DataEntregaNota.Value.ToString("dd/MM/yyyy") : string.Empty;
+            //row[dataCadastro] = entradaMaterial.DataCadastro.ToString("dd/MM/yyyy");
+            //row[usuarioCadastro] = entradaMaterial.LoginUsuarioCadastro;
+            //row[dataCancela] = entradaMaterial.DataCancelamento.HasValue ? entradaMaterial.DataCancelamento.Value.ToString("dd/MM/yyyy") : string.Empty;
+            //row[usuarioCancela] = entradaMaterial.LoginUsuarioCancelamento;
+            //row[motivoCancela] = entradaMaterial.MotivoCancelamento;
+            //row[dataLibera] = entradaMaterial.DataLiberacao.HasValue ? entradaMaterial.DataLiberacao.Value.ToString("dd/MM/yyyy") : string.Empty;
+            //row[usuarioLibera] = entradaMaterial.LoginUsuarioLiberacao;
+            //row[centroCusto] = entradaMaterial.CodigoCentroCusto;
+            //row[descricaoCentroCusto] = entradaMaterial.CentroCusto != null ? entradaMaterial.CentroCusto.Descricao : string.Empty;
             row[codigoDescricaoCentroCusto] = !string.IsNullOrEmpty(entradaMaterial.CodigoCentroCusto) ? entradaMaterial.CodigoCentroCusto + " - " + entradaMaterial.CentroCusto.Descricao : string.Empty;
+            //row[situacaoCentroCusto] = entradaMaterial.
+            //row[conferido] = entradaMaterial.
+            //row[usuarioConferencia] = entradaMaterial.
+            //row[dataConferencia] = entradaMaterial.
+            //row[situacao] = entradaMaterial.
             row[descricaoSituacao] = entradaMaterial.Situacao.ObterDescricao();
+            //row[codigoFornecedor] = entradaMaterial.
             row[nomeFornecedor] = entradaMaterial.ClienteFornecedorId.HasValue ? entradaMaterial.ClienteFornecedor.Nome : string.Empty;
+            //row[nomeFantasiaFornecedor] = entradaMaterial.
+            //row[cnpjFornecedor] = entradaMaterial.
+            //row[enderecoFornecedor] = entradaMaterial.
+            //row[inscricaoEstadualFornecedor] = entradaMaterial.
+            //row[cpfFornecedor] = entradaMaterial.
+            //row[tipoPessoa] = entradaMaterial.
+            //row[codigoFornecedorNota] = entradaMaterial.
             row[nomeFornecedorNota] = entradaMaterial.FornecedorNotaId.HasValue ? entradaMaterial.FornecedorNota.Nome : string.Empty;
+            //row[nomeFantasiaFornecedorNota] = entradaMaterial.
+            //row[cnpjFornecedorNota] = entradaMaterial.
+            //row[enderecoFornecedorNota] = entradaMaterial.
+            //row[inscricaoEstadualFornecedorNota] = entradaMaterial.
+            //row[cpfFornecedorNota] = entradaMaterial.
+            //row[tipoPessoaNota] = entradaMaterial.
+            //row[codigoTransportadora] = entradaMaterial.
+            row[nomeTransportadora] = entradaMaterial.TransportadoraId.HasValue ? entradaMaterial.Transportadora.Nome : string.Empty;
+            row[nomeFantasiaTransportadora] = entradaMaterial.TransportadoraId.HasValue && entradaMaterial.Transportadora.PessoaJuridica != null ? entradaMaterial.Transportadora.PessoaJuridica.NomeFantasia : string.Empty;
+
+            //row[tipoPessoaTransportadora] = entradaMaterial.
+            //row[cnpjTransportadora] = entradaMaterial.
+            //row[cpfTransportadora] = entradaMaterial.
+            row[dataFrete] = entradaMaterial.DataFrete.HasValue ? entradaMaterial.DataFrete.Value.ToString("dd/MM/yyyy") : string.Empty;
+            row[valorFrete] = entradaMaterial.ValorFrete;
+            row[tituloFrete] = entradaMaterial.TituloFreteId;
+            //row[numeroNotaFrete] = entradaMaterial.
+            //row[situacaoTituloFrete] = entradaMaterial.
+            //row[descricaoSituacaoTituloFrete] = entradaMaterial.
+            //row[tipoCompromissoFrete] = entradaMaterial.
+            //row[descricaoTipoCompromissoFrete] = entradaMaterial.
+            //row[desconto] = entradaMaterial.
+            //row[percentualDesconto] = entradaMaterial.
+            //row[CIFFOB] = entradaMaterial.
+            //row[serieNF] = entradaMaterial.
+            //row[tipoCompra] = entradaMaterial.
+            //row[naturezaOperacao] = entradaMaterial.
+            //row[codigoBarras] = entradaMaterial.
+
             dta.Rows.Add(row);
             return dta;
         }

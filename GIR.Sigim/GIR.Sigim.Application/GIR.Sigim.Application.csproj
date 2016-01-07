@@ -290,7 +290,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relEntradaMaterial.rpt</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\OrdemCompra\relOrdemCompraItem.cs">
       <AutoGen>True</AutoGen>
