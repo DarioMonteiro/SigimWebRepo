@@ -209,7 +209,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaOrdemCompraFormaPagamento.Select(o => o.TipoCompromisso),
                 l => l.ListaOrdemCompraFormaPagamento.Select(o => o.TituloPagar));
 
-            return listaOrdemCompra.SelectMany(l => l.ListaOrdemCompraFormaPagamento.Where(o => !o.EhUtilizada.Value)).To<List<OrdemCompraFormaPagamentoDTO>>();
+            return listaOrdemCompra.SelectMany(l => l.ListaOrdemCompraFormaPagamento.Where(o => (o.EhUtilizada.HasValue && !o.EhUtilizada.Value))).To<List<OrdemCompraFormaPagamentoDTO>>();
         }
 
         public bool Salvar(EntradaMaterialDTO dto)
