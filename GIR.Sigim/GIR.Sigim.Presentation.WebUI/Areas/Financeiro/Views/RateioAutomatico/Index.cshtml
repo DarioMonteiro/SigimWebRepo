@@ -275,7 +275,7 @@
     function loadItem(index)
     {
         $('#@Html.IdFor(m => m.Classe.Codigo)').val(jsonItemArray[index].Classe.Codigo);
-        var ehValidoClasse = validaClasse();
+        var ehValidoClasse = validaClasse_@(Html.IdFor(m => m.Classe.Codigo))();
         if (ehValidoClasse) {
             $('#@Html.IdFor(m => m.Classe.Descricao)').val(jsonItemArray[index].Classe.Descricao);
         }
@@ -397,7 +397,7 @@
             smartAlert("Erro", "Informe o campo classe ou centro de custo.", "error");
             return false;
         }
-        var ehValidoClasse = validaClasse();
+        var ehValidoClasse = validaClasse_@(Html.IdFor(m => m.Classe.Codigo))();
         if (!ehValidoClasse) {
             result = false;
             smartAlert("Erro", "Selecione uma classe do último nivel.", "error");

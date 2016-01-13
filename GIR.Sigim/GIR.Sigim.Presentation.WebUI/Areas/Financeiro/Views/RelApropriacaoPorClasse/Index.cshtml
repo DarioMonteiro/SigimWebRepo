@@ -1,6 +1,6 @@
-﻿@model GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel.RelOcItensOrdemCompraListaViewModel
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.RelApropriacaoPorClasseListaViewModel
 @{
-    ViewBag.Title = "Itens de ordem de compra";
+    ViewBag.Title = "Apropriação por classe";
 }
 
 @Html.Partial("_NotificationMessagesPartial")
@@ -15,9 +15,9 @@
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
                         "Lista",
-                        "RelOCItensOrdemCompra",
+                        "RelNotaFiscalLiberada",
                         null,
-                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "renderTela", UpdateTargetId = "resultadoBusca" },
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "resultadoBusca" },
                         new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
@@ -106,72 +106,9 @@
                                                         });
                                                     });
                                                 </script>
-                                                @Html.EditorFor(m => m.Filtro.OrdemCompra, "OrdemCompraPesquisaGenerica", new { @sectionClass = "col col-3", @label = "Ordem Compra", @exibirBotaoPesquisa = true })
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.OrdemCompra.Id)").on("change", function () {
-                                                            limpaLista();
-                                                        });
-                                                    });
-                                                </script>
                                             </div>
                                             <div class="row">
-                                                <section class="col col-8">
-                                                    <div class="inline-group">
-                                                        <label class="label">Situação OC</label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhLiberada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhLiberada)
-                                                            <script type="text/javascript">
-                                                                $(document).ready(function () {
-                                                                    $("#@Html.IdFor(m => m.Filtro.EhLiberada)").on("change", function () {
-                                                                        limpaLista();
-                                                                    });
-                                                                });
-                                                            </script>
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhPendente)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhPendente)
-                                                            <script type="text/javascript">
-                                                                $(document).ready(function () {
-                                                                    $("#@Html.IdFor(m => m.Filtro.EhPendente)").on("change", function () {
-                                                                        limpaLista();
-                                                                    });
-                                                                });
-                                                            </script>
-                                                        </label>
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhFechada)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhFechada)
-                                                            <script type="text/javascript">
-                                                                $(document).ready(function () {
-                                                                    $("#@Html.IdFor(m => m.Filtro.EhFechada)").on("change", function () {
-                                                                        limpaLista();
-                                                                    });
-                                                                });
-                                                            </script>
-                                                        </label>
-                                                    </div>
-                                                </section>
-                                                <section class="col col-4">
-                                                    <div class="inline-group" style="margin-top:25px;">
-                                                        <label class="checkbox">
-                                                            @Html.CheckBoxFor(m => m.Filtro.EhExibirSomentecomSaldo)
-                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.EhExibirSomentecomSaldo)
-                                                            <script type="text/javascript">
-                                                                $(document).ready(function () {
-                                                                    $("#@Html.IdFor(m => m.Filtro.EhExibirSomentecomSaldo)").on("change", function () {
-                                                                        limpaLista();
-                                                                    });
-                                                                });
-                                                            </script>
-                                                        </label>
-                                                    </div>
-                                                </section>
-                                            </div>
-                                            <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de Custo" })
+                                                @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de Custo", @required = true })
                                                 <script type="text/javascript">
                                                     $(document).ready(function () {
                                                         $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").on("change", function () {
@@ -181,59 +118,128 @@
                                                 </script>
                                             </div>
                                             <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.Classe, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
+                                                <section class="col col-12">
+                                                    <div class="inline-group">
+                                                        <label id="lblPorCompetencia" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhPorCompetencia)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhPorCompetencia) </label>
+                                                        <label id="lblPorEmissaoDocumento" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhPorEmissaoDocumento)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhPorEmissaoDocumento) </label>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <header>Contas a pagar</header>
+                                                </section>
+                                                @Html.EditorFor(m => m.Filtro.ClasseDespesa, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
                                                 <script type="text/javascript">
                                                     $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.Classe.Codigo)").on("change", function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.ClasseDespesa.Codigo)").on("change", function () {
                                                             limpaLista();
                                                         });
                                                     });
                                                 </script>
                                             </div>
                                             <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.ClasseInsumo, "ClasseInsumo", new { @sectionClass = "col col-6", @labelText = "Classe insumo" })
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.ClasseInsumo.Codigo)").on("change", function () {
-                                                            limpaLista();
-                                                        });
-                                                    });
-                                                </script>
-                                            </div>
-                                            <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.ClienteFornecedor, "ClienteFornecedorPesquisaGenerica", 
-                                                            new { @sectionClass = "col col-10", 
-                                                                  @required = false, 
-                                                                  @label = "Fornecedor", 
-                                                                  @clienteFornecedorModulo = ((int)GIR.Sigim.Application.Enums.ClienteFornecedorModuloAutoComplete.OrdemCompra),
-                                                                  @situacao = ((int)GIR.Sigim.Application.Enums.SituacaoAutoComplete.Ativo),
-                                                                  @exibirBotaoPesquisa = false
-                                                            })
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.ClienteFornecedor.Id)").on("change", function () {
-                                                            limpaLista();
-                                                        });
-                                                    });
-                                                </script>
-                                            </div>
-                                            <div class="row">
-                                                @Html.EditorFor(m => m.Filtro.Material, "MaterialPesquisaGenerica", new { @sectionClass = "col col-10", 
-                                                                                                                          @required = false, 
-                                                                                                                          @centroCustoRequerido = false,
-                                                                                                                          @exibirCampoUnidadeMedida = false,
-                                                                                                                          @exibirBotaoPesquisa = false })
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.Material.Id)").on("change", function () {
-                                                            limpaLista();
-                                                        });
-                                                    });
-                                                </script>
-                                                <section class="col col-1">
-                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
-                                                        <i class="fa fa-search fa-lg"></i>
+                                                <section class="col col-6">
+                                                    <button id="btnAddClasseDespesa" type="button" class="btn btn-primary">
+                                                        Adicionar
                                                     </button>
+                                                    <button id="btnRemoverClasseDespesa" type="button" class="btn btn-danger">
+                                                        Remover
+                                                    </button>
+                                                </section>
+                                            </div>
+                                            @Html.HiddenFor(m => m.Filtro.JsonItensClasseDespesa)
+                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow-x: auto;">
+                                                <table id="tableItensClasseDespesa" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th>Código</th>
+                                                            <th>Descrição</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <div class="inline-group">
+                                                        <label id="lblMovimentoDeDebito" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoDebito)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoDebito)</label>
+                                                        <label id="lblMovimentoDeDebitoCaixa" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoDebitoCaixa)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoDebitoCaixa)</label>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <h5>Situação</h5>
+                                                    <div class="inline-group">
+                                                        <label id="lblSituacaoTituloAPagarProvisionado" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAPagarProvisionado)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAPagarProvisionado)</label>
+                                                        <label id="lblSituacaoTituloAPagarAguardandoLiberacao" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAPagarAguardandoLiberacao)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAPagarAguardandoLiberacao)</label>
+                                                        <label id="lblSituacaoTituloAPagarLiberado" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAPagarLiberado)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAPagarLiberado)</label>
+                                                        <label id="lblSituacaoTituloAPagarEmitido" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAPagarEmitido)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAPagarEmitido)</label>
+                                                        <label id="lblSituacaoTituloAPagarPago" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAPagarPago)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAPagarPago)</label>
+                                                        <label id="lblSituacaoTituloAPagarBaixado" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAPagarBaixado)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAPagarBaixado)</label>
+                                                        <label id="lblSituacaoTituloAPagarCancelado" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAPagarCancelado)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAPagarCancelado)</label>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <header>Contas a receber</header>
+                                                </section>
+                                                @Html.EditorFor(m => m.Filtro.ClasseReceita, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
+                                                <script type="text/javascript">
+                                                    $(document).ready(function () {
+                                                        $("#@Html.IdFor(m => m.Filtro.ClasseReceita.Codigo)").on("change", function () {
+                                                            limpaLista();
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <button id="btnAddClasseReceita" type="button" class="btn btn-primary">
+                                                        Adicionar
+                                                    </button>
+                                                    <button id="btnRemoverClasseReceita" type="button" class="btn btn-danger">
+                                                        Remover
+                                                    </button>
+                                                </section>
+                                            </div>
+                                            @Html.HiddenFor(m => m.Filtro.JsonItensClasseReceita)
+                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow-x: auto;">
+                                                <table id="tableItensClasseReceita" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th>Código</th>
+                                                            <th>Descrição</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <div class="inline-group">
+                                                        <label id="lblMovimentoDeCredito" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCredito)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCredito)</label>
+                                                        <label id="lblMovimentoDeCreditoCaixa" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCreditoCaixa)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCreditoCaixa)</label>
+                                                        <label id="lblCreditoCobranca" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCreditoCobranca)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCreditoCobranca)</label>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12">
+                                                    <h5>Situação</h5>
+                                                    <div class="inline-group">
+                                                        <label id="lblSituacaoTituloAReceberProvisionado" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAReceberProvisionado)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAReceberProvisionado)</label>
+                                                        <label id="lblSituacaoTituloAReceberAFaturar" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAReceberAFatura)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAReceberAFatura)</label>
+                                                        <label id="lblSituacaoTituloAReceberFaturado" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAReceberFaturado)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAReceberFaturado)</label>
+                                                        <label id="lblSituacaoTituloAReceberPredatado" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAReceberPreDatado)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAReceberPreDatado)</label>
+                                                        <label id="lblSituacaoTituloAReceberRecebido" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAReceberRecebido)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAReceberRecebido)</label>
+                                                        <label id="lblSituacaoTituloAReceberQuitado" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAReceberQuitado)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAReceberQuitado)</label>
+                                                        <label id="lblSituacaoTituloAReceberCancelado" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSituacaoAReceberCancelado)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSituacaoAReceberCancelado)</label>
+                                                    </div>
                                                 </section>
                                             </div>
                                         </fieldset>
@@ -243,12 +249,13 @@
                         </div>
                         <footer>
                             @{
-                            var url = Url.Action("Imprimir", "RelOCItensOrdemCompra");
+                            var url = Url.Action("Imprimir", "RelApropriacaoPorClasse");
                             }
                             @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })                           
                         </footer>
+
                     }
-                    <div id="resultadoBusca"></div>
+                    @*<div id="resultadoBusca"></div>*@
                 </div>
             </div>
         </div>
@@ -259,11 +266,8 @@
 }
 
 <script type="text/javascript">
-    var ListaScrollLeft = 0;
-
     $(document).ready(function () {
-
-        tratarBotoes(false);
+        $('body').addClass("hidden-menu");
 
         jQuery.validator.addMethod(
             "ehCentroCustoValido",
@@ -275,23 +279,22 @@
         );
 
         jQuery.validator.addMethod(
-            "ehClasseValida",
+            "ehClasseDespesaValida",
             function (value, element, params) {
-                var isValid = validaClasse_@(Html.IdFor(m => m.Filtro.Classe.Codigo))();
-                $.validator.messages.ehClasseValida = $('#@Html.IdFor(m => m.Filtro.Classe.Codigo)_ValidationMessage').html();
+                var isValid = validaClasse_@(Html.IdFor(m => m.Filtro.ClasseDespesa.Codigo))();
+                $.validator.messages.ehClasseDespesaValida = $('#@Html.IdFor(m => m.Filtro.ClasseDespesa.Codigo)_ValidationMessage').html();
                 return isValid;
             }, ''
         );
 
         jQuery.validator.addMethod(
-            "ehClasseInsumoValida",
+            "ehClasseReceitaValida",
             function (value, element, params) {
-                var isValid = validaClasseInsumo();
-                $.validator.messages.ehClasseInsumoValida = $('#@Html.IdFor(m => m.Filtro.ClasseInsumo.Codigo)_ValidationMessage').html();
+                var isValid = validaClasse_@(Html.IdFor(m => m.Filtro.ClasseReceita.Codigo))();
+                $.validator.messages.ehClasseReceitaValida = $('#@Html.IdFor(m => m.Filtro.ClasseReceita.Codigo)_ValidationMessage').html();
                 return isValid;
             }, ''
         );
-
 
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').validate({
             rules: {
@@ -304,11 +307,11 @@
                 '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
                     ehCentroCustoValido: true
                 },
-                '@Html.NameFor(m => m.Filtro.Classe.Codigo)': {
-                    ehClasseValida: true
+                '@Html.NameFor(m => m.Filtro.ClasseDespesa.Codigo)': {
+                    ehClasseDespesaValida: true
                 },
-                '@Html.NameFor(m => m.Filtro.ClasseInsumo.Codigo)': {
-                    ehClasseInsumoValida: true
+                '@Html.NameFor(m => m.Filtro.ClasseReceita.Codigo)': {
+                    ehClasseReceitaValida: true
                 }
             },
             messages: {
@@ -320,12 +323,6 @@
                 },
                 '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Centro de Custo")'
-                },
-                '@Html.NameFor(m => m.Filtro.Classe.Codigo)': {
-                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Classe")'
-                },
-                '@Html.NameFor(m => m.Filtro.ClasseInsumo.Codigo)': {
-                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Classe Insumo")'
                 }
             },
             errorPlacement: function (error, element) {
@@ -343,49 +340,11 @@
                 span.addClass("field-validation-valid");
             }
         });
-
-        $(document).on("showFormatoImpressaoModalPanel", function (e) {
-            var dataInicial          = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
-            var dataFinal            = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
-
-            if ((dataInicial == "") || (dataFinal == "")) {
-                smartAlert("Atenção", "Informe o período !", "warning");
-                e.event.preventDefault();
-            }
-
-            if ((dataInicial != "") && (dataFinal != "")) {
-                if (compararDatas(dataInicial,dataFinal) > 0){
-                    smartAlert("Atenção", "Data inicial maior que data final !", "warning");
-                    e.event.preventDefault();
-                }
-            }
-        })
-
-        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
-            function (e) {
-                ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
-                listarFiltro();
-            }
-        );
-
     });
-
-    function renderTela() {
-        onSuccess();
-        $('#resultadoBusca div.table-responsive').scrollLeft(ListaScrollLeft);
-    }
-
-    function refresh(result) {
-        onSuccess();
-        // se a lista da pesquisa nao retornou , se não retornou desabilita o botão imprimir
-        if (result.search('tableSearchResult') == -1) {
-            tratarBotoes(false);
-        }
-    }
 
     function limpaLista() {
         tratarBotoes(false);
-        $("#resultadoBusca").empty();
+        //$("#resultadoBusca").empty();
     }
 
     function tratarBotoes(condicaoImprimir) {
@@ -404,23 +363,4 @@
             $('#btnImprimir').attr("class","btn btn-primary disabled");
         }
     }
-
-    function listarFiltro() {
-        var situacaoFiltroMarcado = false;
-
-        situacaoFiltroMarcado = $("#@Html.IdFor(m => m.Filtro.EhLiberada)")[0].checked;
-        situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.EhPendente)")[0].checked;
-        situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.EhFechada)")[0].checked;
-
-        if (!situacaoFiltroMarcado) {
-            smartAlert("Erro", "Situação da ordem de compra não selecionada.", "error");
-            tratarBotoes(false);
-            return;
-        }
-
-        tratarBotoes(true);
-
-        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
-    }
-
 </script>

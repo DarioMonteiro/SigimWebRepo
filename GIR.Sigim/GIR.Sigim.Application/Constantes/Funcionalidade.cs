@@ -133,6 +133,9 @@ namespace GIR.Sigim.Application.Constantes
         public const string ContaCorrenteGravar = "CONTACORRENTE_GRAVAR";
         public const string ContaCorrenteDeletar = "CONTACORRENTE_DELETAR";
         //public const string ContaCorrenteImprimir = "CONTACORRENTE_IMPRIMIR";
+
+        public const string RelApropriacaoPorClasseAcessar = "REL_APROPRIACAO_POR_CLASSE_ACESSAR";
+
            
         #endregion
 

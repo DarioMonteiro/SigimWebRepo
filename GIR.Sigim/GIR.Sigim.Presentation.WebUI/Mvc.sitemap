@@ -64,9 +64,14 @@
             <mvcSiteMapNode title="Agência" controller="Agencia" action="Index">
               <mvcSiteMapNode title="Cadastro" controller="Agencia" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
             </mvcSiteMapNode>
-            <!--<mvcSiteMapNode title="Conta corrente" controller="ContaCorrente" action="Index"/>-->
-          </mvcSiteMapNode>
+            <!--mvcSiteMapNode title="Conta corrente" controller="ContaCorrente" action="Index"/-->
+          </mvcSiteMapNode>       
       </mvcSiteMapNode>
+
+      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_APROPRIACAO_POR_CLASSE_ACESSAR">
+        <mvcSiteMapNode title="Apropriação por classe" controller="RelApropriacaoPorClasse" action="Index"/>
+      </mvcSiteMapNode>
+
     </mvcSiteMapNode>
     
     <mvcSiteMapNode title="Ordem de Compra" controller="Home" action="Index" area="OrdemCompra">

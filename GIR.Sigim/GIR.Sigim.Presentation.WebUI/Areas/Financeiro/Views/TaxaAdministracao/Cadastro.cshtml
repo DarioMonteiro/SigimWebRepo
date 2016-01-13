@@ -158,7 +158,7 @@
         jQuery.validator.addMethod(
             "ehClasseValida",
             function (value, element, params) {
-                var isValid = validaClasse();
+                var isValid = validaClasse_@(Html.IdFor(m => m.Classe.Codigo))();
                 $.validator.messages.ehClasseValida = $('#@Html.IdFor(m => m.Classe.Codigo)_ValidationMessage').html();
                 return isValid;
             }, ''
@@ -499,7 +499,7 @@
         var result = true;
         var clienteId = '';
 
-        if (validaClasse() == false)
+        if (validaClasse_@(Html.IdFor(m => m.Classe.Codigo))() == false)
         {
             result = false;
             smartAlert("Erro", "Informe uma classe válida.", "error");

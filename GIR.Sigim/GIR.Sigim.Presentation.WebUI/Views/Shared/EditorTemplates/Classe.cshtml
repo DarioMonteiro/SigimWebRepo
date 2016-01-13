@@ -58,7 +58,7 @@
 
     $(document).ready(function () {
         $(document).on("change", "#@Html.IdFor(m => m.Codigo)", function () {
-            validaClasse();
+            validaClasse_@(Html.IdFor(m => m.Codigo))();
         });
 
         var timeout = '';
@@ -188,7 +188,7 @@
         $("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").attr('href', '@linkModal');
     }
 
-    function validaClasse() {
+    function validaClasse_@(Html.IdFor(m => m.Codigo))() {
         var isValid = false;
         var codigoClasse = $("#@Html.IdFor(m => m.Codigo)").val();
         $.ajax({
