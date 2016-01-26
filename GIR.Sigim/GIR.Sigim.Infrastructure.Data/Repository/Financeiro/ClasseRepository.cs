@@ -43,6 +43,16 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Financeiro
                 .Where(l => l.ClassePai == null);
         }
 
+        public Classe ObterPeloCodigo(string codigo, params Expression<Func<Classe, object>>[] includes)
+        {
+            var set = QueryableUnitOfWork.CreateSet<Classe>().AsQueryable<Classe>();
+
+            if (includes.Any())
+                set = includes.Aggregate(set, (current, expression) => current.Include(expression));
+
+            return set.Where(l => l.Codigo == codigo).SingleOrDefault();
+        }
+
         #endregion
     }
 }

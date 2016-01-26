@@ -17,7 +17,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public string Descricao { get; set; }
         public string ContaContabil { get; set; }
         public string CodigoPai { get; set; }
-        public Classe ClassePai { get; set; }
+        public virtual Classe ClassePai { get; set; }
         public virtual ICollection<Classe> ListaFilhos { get; set; }
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterialItem> ListaRequisicaoMaterialItem { get; set; }

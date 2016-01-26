@@ -69,7 +69,9 @@
       </mvcSiteMapNode>
 
       <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_APROPRIACAO_POR_CLASSE_ACESSAR">
-        <mvcSiteMapNode title="Apropriação por classe" controller="RelApropriacaoPorClasse" action="Index"/>
+        <mvcSiteMapNode title="Apropriação" url="#" clickable="false" roles="REL_APROPRIACAO_POR_CLASSE_ACESSAR">
+          <mvcSiteMapNode title="por classe" controller="RelApropriacaoPorClasse" action="Index"/>
+        </mvcSiteMapNode>
       </mvcSiteMapNode>
 
     </mvcSiteMapNode>
@@ -97,8 +99,8 @@
         <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Index" visibility="MenuHelper,!*"/>
         <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
       </mvcSiteMapNode>
-      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="RELATORIOITENSORDEMCOMPRA_ACESSAR">
-        <mvcSiteMapNode title="Ordem de Compra" url="#" clickable="false" roles="RELATORIOITENSORDEMCOMPRA_ACESSAR">
+      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_ITENS_ORDEMCOMPRA_ACESSAR">
+        <mvcSiteMapNode title="Ordem de Compra" url="#" clickable="false" roles="REL_ITENS_ORDEMCOMPRA_ACESSAR">
           <mvcSiteMapNode title="Itens de ordem de compra" controller="RelOCItensOrdemCompra" action="Index"/>
         </mvcSiteMapNode>
       </mvcSiteMapNode>

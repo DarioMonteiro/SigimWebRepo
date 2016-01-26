@@ -1,4 +1,7 @@
-﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.RelApropriacaoPorClasseListaViewModel
+﻿@using GIR.Sigim.Application.Adapter;
+@using GIR.Sigim.Application.DTO.Sigim;
+
+@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.RelApropriacaoPorClasseListaViewModel
 @{
     ViewBag.Title = "Apropriação por classe";
 }
@@ -14,10 +17,10 @@
             <div>
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
-                        "Lista",
-                        "RelNotaFiscalLiberada",
+                        "Imprimir",
+                        "RelApropriacaoPorClasse",
                         null,
-                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "resultadoBusca" },
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
                         new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
@@ -46,13 +49,6 @@
                                                     <label class="input">
                                                         <i class="icon-append fa fa-calendar"></i>
                                                         @Html.TextBoxFor(m => m.Filtro.DataInicial, "{0:dd/MM/yyyy}")
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                $("#@Html.IdFor(m => m.Filtro.DataInicial)").on("change", function () {
-                                                                    limpaLista();
-                                                                });
-                                                            });
-                                                        </script>
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.DataInicial, "Informe uma data válida.", new { @class = "note note-error" })
                                                 </section>
@@ -61,13 +57,6 @@
                                                     <label class="input">
                                                         <i class="icon-append fa fa-calendar"></i>
                                                         @Html.TextBoxFor(m => m.Filtro.DataFinal, "{0:dd/MM/yyyy}")
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                $("#@Html.IdFor(m => m.Filtro.DataFinal)").on("change", function () {
-                                                                    limpaLista();
-                                                                });
-                                                            });
-                                                        </script>
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.DataFinal, "Informe uma data válida.", new { @class = "note note-error" })
                                                 </section>
@@ -109,58 +98,61 @@
                                             </div>
                                             <div class="row">
                                                 @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de Custo", @required = true })
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").on("change", function () {
-                                                            limpaLista();
-                                                        });
-                                                    });
-                                                </script>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-12"> 
+                                                    <div class="inline-group">
+                                                        @foreach (var item in Model.ListaOpcoesRelatorio)
+                                                        {
+                                                            string idOpcoesRelatorio = "rbtOpcoesRelatorio" + item.Value; 
+                                                            <label id="lblOpcoesRelatorio@(item.Value)" class="radio">@Html.RadioButtonFor(m => m.Filtro.OpcoesRelatorio, @item.Value, new { @id=@idOpcoesRelatorio})<i></i>@item.Text</label>
+                                                        }
+									                </div>
+								                </section>
                                             </div>
                                             <div class="row">
                                                 <section class="col col-12">
                                                     <div class="inline-group">
-                                                        <label id="lblPorCompetencia" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhPorCompetencia)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhPorCompetencia) </label>
-                                                        <label id="lblPorEmissaoDocumento" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhPorEmissaoDocumento)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhPorEmissaoDocumento) </label>
+                                                        @foreach (var item in Model.ListaTipoPesquisa)
+                                                        {
+                                                            string idTipoPesquisa = "rbtTipoPesquisa" + item.Value; 
+                                                            <label id="lblTipoPesquisa@(item.Value)" class="radio">@Html.RadioButtonFor(m => m.Filtro.TipoPesquisa, @item.Value, new { @id=@idTipoPesquisa }) <i></i>@item.Text</label>
+                                                        }
+
                                                     </div>
                                                 </section>
                                             </div>
-                                            <div class="row">
-                                                <section class="col col-12">
-                                                    <header>Contas a pagar</header>
-                                                </section>
-                                                @Html.EditorFor(m => m.Filtro.ClasseDespesa, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.ClasseDespesa.Codigo)").on("change", function () {
-                                                            limpaLista();
-                                                        });
-                                                    });
-                                                </script>
-                                            </div>
-                                            <div class="row">
-                                                <section class="col col-6">
-                                                    <button id="btnAddClasseDespesa" type="button" class="btn btn-primary">
-                                                        Adicionar
-                                                    </button>
-                                                    <button id="btnRemoverClasseDespesa" type="button" class="btn btn-danger">
-                                                        Remover
-                                                    </button>
-                                                </section>
-                                            </div>
-                                            @Html.HiddenFor(m => m.Filtro.JsonItensClasseDespesa)
-                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow-x: auto;">
-                                                <table id="tableItensClasseDespesa" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                    <thead>
-                                                        <tr role="row">
-                                                            <th>Código</th>
-                                                            <th>Descrição</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                            <fieldset id="formItensClasseDespesa">
+                                                <div class="row">
+                                                    <section class="col col-12">
+                                                        <header>Contas a pagar</header>
+                                                    </section>
+                                                    @Html.EditorFor(m => m.ClasseDespesa, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
+                                                </div>
+                                                <div class="row">
+                                                    <section class="col col-6">
+                                                        <button id="btnAddClasseDespesa" type="button" class="btn btn-primary">
+                                                            Adicionar
+                                                        </button>
+                                                        <button id="btnRemoverClasseDespesa" type="button" class="btn btn-danger">
+                                                            Remover
+                                                        </button>
+                                                    </section>
+                                                </div>
+                                                @Html.HiddenFor(m => m.JsonItensClasseDespesa)
+                                                <div class="table-responsive" style="min-height: 115px; height:135px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow: auto;">
+                                                    <table id="tableItensClasseDespesa" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <th>Código</th>
+                                                                <th>Descrição</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </fieldset>
                                             <div class="row">
                                                 <section class="col col-12">
                                                     <div class="inline-group">
@@ -183,48 +175,43 @@
                                                     </div>
                                                 </section>
                                             </div>
-                                            <div class="row">
-                                                <section class="col col-12">
-                                                    <header>Contas a receber</header>
-                                                </section>
-                                                @Html.EditorFor(m => m.Filtro.ClasseReceita, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.ClasseReceita.Codigo)").on("change", function () {
-                                                            limpaLista();
-                                                        });
-                                                    });
-                                                </script>
-                                            </div>
-                                            <div class="row">
-                                                <section class="col col-6">
-                                                    <button id="btnAddClasseReceita" type="button" class="btn btn-primary">
-                                                        Adicionar
-                                                    </button>
-                                                    <button id="btnRemoverClasseReceita" type="button" class="btn btn-danger">
-                                                        Remover
-                                                    </button>
-                                                </section>
-                                            </div>
-                                            @Html.HiddenFor(m => m.Filtro.JsonItensClasseReceita)
-                                            <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow-x: auto;">
-                                                <table id="tableItensClasseReceita" class="table table-bordered table-striped table-condensed table-hover dataTable">
-                                                    <thead>
-                                                        <tr role="row">
-                                                            <th>Código</th>
-                                                            <th>Descrição</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                            <fieldset id="formItensClasseReceita">
+                                                <div class="row">
+                                                    <section class="col col-12">
+                                                        <header>Contas a receber</header>
+                                                    </section>
+                                                    @Html.EditorFor(m => m.ClasseReceita, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
+                                                </div>
+                                                <div class="row">
+                                                    <section class="col col-6">
+                                                        <button id="btnAddClasseReceita" type="button" class="btn btn-primary">
+                                                            Adicionar
+                                                        </button>
+                                                        <button id="btnRemoverClasseReceita" type="button" class="btn btn-danger">
+                                                            Remover
+                                                        </button>
+                                                    </section>
+                                                </div>
+                                                @Html.HiddenFor(m => m.JsonItensClasseReceita)
+                                                <div class="table-responsive" style="min-height: 115px; height:135px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow: auto;">
+                                                    <table id="tableItensClasseReceita" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <th>Código</th>
+                                                                <th>Descrição</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </fieldset>
                                             <div class="row">
                                                 <section class="col col-12">
                                                     <div class="inline-group">
                                                         <label id="lblMovimentoDeCredito" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCredito)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCredito)</label>
                                                         <label id="lblMovimentoDeCreditoCaixa" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCreditoCaixa)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCreditoCaixa)</label>
-                                                        <label id="lblCreditoCobranca" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCreditoCobranca)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCreditoCobranca)</label>
+                                                        <label id="lblCreditoCobranca" class="checkbox state-disabled">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCreditoCobranca)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCreditoCobranca)</label>
                                                     </div>
                                                 </section>
                                             </div>
@@ -249,25 +236,123 @@
                         </div>
                         <footer>
                             @{
+                                string disableBtnImprimir = string.Empty;
+                                if (!Model.PodeImprimir)
+                                {
+                                    disableBtnImprimir = "disabled";
+                                }
+                            }
+                            <button id="btnImprimirFake" type="submit" class="btn btn-primary right @disableBtnImprimir">
+                                Imprimir
+                            </button>
+
+                            @{
                             var url = Url.Action("Imprimir", "RelApropriacaoPorClasse");
                             }
-                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })                           
-                        </footer>
 
+                            <a data-toggle="modal" href="#FormatoImpressao_ModalPanel" id="btnImprimir"></a>
+                            <div class="modal fade" id="FormatoImpressao_ModalPanel" tabindex="-1" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
+                                            <h4 class="modal-title">
+                                                Formato do Arquivo para Impressão
+                                            </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col col-12">
+                                                    @{
+                                                        var listaFormatoExportacaoArquivo = new SelectList(typeof(FormatoExportacaoArquivo).ToItemListaDTO(), "Id", "Descricao", (int)FormatoExportacaoArquivo.PDF);
+                                                        foreach (var item in listaFormatoExportacaoArquivo)
+	                                                    {
+                                                            var itemChecked = string.Empty;
+                                                            if (item.Selected)
+                                                            {
+                                                                itemChecked = "checked=\"checked\"";
+                                                            }
+                                                            @:<label class="radio">
+							                                @:  <input type="radio" name="formatoExportacaoArquivo" value="@item.Value" @itemChecked>
+							                                @:  <i></i>@item.Text
+                                                            @:</label>
+	                                                    }
+                                                    }
+					                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+					                        <button type="button" id="btnConfirmarImpressao" class="btn btn-primary" data-dismiss="modal">
+						                        Ok
+					                        </button>
+				                        </div>
+                                    </div>
+                                </div>
+                                <script type="text/javascript">
+                                    var parametrosUrlImpressao = '';
+                                    $(document).ready(function () {
+                                        $(document).on("show.bs.modal", "#FormatoImpressao_ModalPanel", function (e) {
+                                            $.event.trigger({
+                                                type: "showFormatoImpressaoModalPanel",
+                                                event: e
+                                            });
+                                        });
+
+                                        $("#btnConfirmarImpressao").on("click", function () {
+                                            window.open('@url?formato=' + $("input:radio[name=formatoExportacaoArquivo]:checked").val() + parametrosUrlImpressao);
+                                        });
+                                    });
+                                </script>
+                            </div>
+
+                        </footer>
                     }
-                    @*<div id="resultadoBusca"></div>*@
+                    <div id="resultadoBusca"></div>
                 </div>
             </div>
         </div>
     </article>
 </div>
 @section scripts{
-    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript");
 }
 
 <script type="text/javascript">
+    jsonItemArrayClasseDespesa = JSON.parse($("#@Html.IdFor(m => m.JsonItensClasseDespesa)").val());
+    jsonItemArrayClasseReceita = JSON.parse($("#@Html.IdFor(m => m.JsonItensClasseReceita)").val());
+
     $(document).ready(function () {
         $('body').addClass("hidden-menu");
+
+        jQuery.validator.setDefaults({
+            ignore: '#formItensClasseDespesa *, #formItensClasseReceita *'
+        });
+
+        $('#btnAddClasseDespesa').on("click", function () {
+            if ($('#formItensClasseDespesa input').valid()) {
+                if (validaAdicionarClasseDespesa() == true) {
+                    addClasseDespesa();
+                }
+            }
+        });
+
+        $('#btnRemoverClasseDespesa').on("click", function () {
+            removerClasseDespesa();
+        });
+
+        $('#btnAddClasseReceita').on("click", function () {
+            if ($('#formItensClasseReceita input').valid()) {
+                if (validaAdicionarClasseReceita() == true) {
+                    addClasseReceita();
+                }
+            }
+        });
+
+        $('#btnRemoverClasseReceita').on("click", function () {
+            removerClasseReceita();
+        });
 
         jQuery.validator.addMethod(
             "ehCentroCustoValido",
@@ -281,8 +366,8 @@
         jQuery.validator.addMethod(
             "ehClasseDespesaValida",
             function (value, element, params) {
-                var isValid = validaClasse_@(Html.IdFor(m => m.Filtro.ClasseDespesa.Codigo))();
-                $.validator.messages.ehClasseDespesaValida = $('#@Html.IdFor(m => m.Filtro.ClasseDespesa.Codigo)_ValidationMessage').html();
+                var isValid = validaClasse_@(Html.IdFor(m => m.ClasseDespesa.Codigo))();
+                $.validator.messages.ehClasseDespesaValida = $('#@Html.IdFor(m => m.ClasseDespesa.Codigo)_ValidationMessage').html();
                 return isValid;
             }, ''
         );
@@ -290,8 +375,8 @@
         jQuery.validator.addMethod(
             "ehClasseReceitaValida",
             function (value, element, params) {
-                var isValid = validaClasse_@(Html.IdFor(m => m.Filtro.ClasseReceita.Codigo))();
-                $.validator.messages.ehClasseReceitaValida = $('#@Html.IdFor(m => m.Filtro.ClasseReceita.Codigo)_ValidationMessage').html();
+                var isValid = validaClasse_@(Html.IdFor(m => m.ClasseReceita.Codigo))();
+                $.validator.messages.ehClasseReceitaValida = $('#@Html.IdFor(m => m.ClasseReceita.Codigo)_ValidationMessage').html();
                 return isValid;
             }, ''
         );
@@ -307,10 +392,10 @@
                 '@Html.NameFor(m => m.Filtro.CentroCusto.Codigo)': {
                     ehCentroCustoValido: true
                 },
-                '@Html.NameFor(m => m.Filtro.ClasseDespesa.Codigo)': {
+                '@Html.NameFor(m => m.ClasseDespesa.Codigo)': {
                     ehClasseDespesaValida: true
                 },
-                '@Html.NameFor(m => m.Filtro.ClasseReceita.Codigo)': {
+                '@Html.NameFor(m => m.ClasseReceita.Codigo)': {
                     ehClasseReceitaValida: true
                 }
             },
@@ -340,27 +425,247 @@
                 span.addClass("field-validation-valid");
             }
         });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberFaturado)").on("change", function () {
+            habilitarDesabitarOpcaoCreditoCobranca();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberRecebido)").on("change", function () {
+            habilitarDesabitarOpcaoCreditoCobranca();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberQuitado)").on("change", function () {
+            habilitarDesabitarOpcaoCreditoCobranca();
+        });
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
+            var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
+
+            var centroCustoCodigo = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
+
+            if ((dataInicial == "") || (dataFinal == "")) {
+                smartAlert("Atenção", "Informe o período !", "warning");
+                e.event.preventDefault();
+            }
+
+            if ((dataInicial != "") && (dataFinal != "")) {
+                if (compararDatas(dataInicial, dataFinal) > 0) {
+                    smartAlert("Atenção", "Data inicial maior que data final !", "warning");
+                    e.event.preventDefault();
+                }
+            }
+
+            if (validaCentroDeCusto() == false) {
+                e.event.preventDefault();
+            }
+
+        });
+
     });
 
-    function limpaLista() {
-        tratarBotoes(false);
-        //$("#resultadoBusca").empty();
+    function processData(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        return false;
     }
 
-    function tratarBotoes(condicaoImprimir) {
-        @{
-            bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
-        }
+    function addClasseDespesa() {
+        var item = $("#formItensClasseDespesa").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
 
-        @if(podeImprimir.ToString().ToLower() == "false"){
-            @:condicaoImprimir = false;
-        }
+        jsonItemArrayClasseDespesa.push(item.ClasseDespesa);
 
-        if (condicaoImprimir) {
-            $('#btnImprimir').attr("class","btn btn-primary");
+        $("#@Html.IdFor(m => m.JsonItensClasseDespesa)").val(JSON.stringify(jsonItemArrayClasseDespesa));
+        fillTableClasseDespesa();
+        clearFormItemClasseDespesa();
+    }
+
+    function removerClasseDespesa() {
+        var arrClasseDespesaCodigo = [];
+        var index;
+        $($('#tableItensClasseDespesa input[type=checkbox]:checked').get().reverse()).each(function () {
+            index = parseInt($(this).val());
+            arrClasseDespesaCodigo.push(index);
+            jsonItemArrayClasseDespesa.splice(index, 1);
+        });
+
+        if (arrClasseDespesaCodigo.length > 0) {
+            $("#@Html.IdFor(m => m.JsonItensClasseDespesa)").val(JSON.stringify(jsonItemArrayClasseDespesa));
+            fillTableClasseDespesa();
         }
         else {
-            $('#btnImprimir').attr("class","btn btn-primary disabled");
+            smartAlert("Erro", "Selecione pelo menos uma classe de despesa para ser removida.", "error");
         }
+    }
+
+    function fillTableClasseDespesa() {
+        $("#tableItensClasseDespesa tbody").empty();
+        for (var i = 0; i < jsonItemArrayClasseDespesa.length; i++) {
+            var row = $('<tr />')
+            $("#tableItensClasseDespesa tbody").append(row);
+
+            var chkDisabled = '';
+            var labelClass = 'checkbox';
+            //row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + jsonItemArrayClasseDespesa[i].ClasseDespesa.Codigo + '</label></td>'));
+            //row.append($('<td class="text-left">' + jsonItemArrayClasseDespesa[i].ClasseDespesa.Descricao + '</td>'));
+            row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + jsonItemArrayClasseDespesa[i].Codigo + '</label></td>'));
+            row.append($('<td class="text-left">' + jsonItemArrayClasseDespesa[i].Descricao + '</td>'));
+        }
+    }
+
+    function clearFormItemClasseDespesa() {
+        $("#@Html.IdFor(m => m.ClasseDespesa.Codigo)").val('');
+
+        limpaClasseForm_@(Html.IdFor(m => m.ClasseDespesa.Codigo))();
+    }
+
+    function validaAdicionarClasseDespesa() {
+        var result = true;
+        if (($('#@Html.IdFor(m => m.ClasseDespesa.Codigo)').val() == '')) {
+            result = false;
+            smartAlert("Erro", "Informe a classe despesa.", "error");
+            return false;
+        }
+
+        var ehValidoClasse = validaClasse_@(Html.IdFor(m => m.ClasseDespesa.Codigo))();
+        if (!ehValidoClasse) {
+            result = false;
+            smartAlert("Erro", "Selecione uma classe cadastrada.", "error");
+            return false;
+        }
+
+        $.each(jsonItemArrayClasseDespesa, function (index, obj) {
+@*            var ehMesmaClasse = (obj.ClasseDespesa.Codigo == $('#@Html.IdFor(m => m.ClasseDespesa.Codigo)').val());*@
+            var ehMesmaClasse = (obj.Codigo == $('#@Html.IdFor(m => m.ClasseDespesa.Codigo)').val());
+
+            if (ehMesmaClasse) {
+                result = false;
+                smartAlert("Erro", "A classe informada já foi adicionada !", "error");
+                return false;
+            }
+
+        });
+
+        return result;
+    }
+
+    function validaCentroDeCusto() {
+        var result = true;
+        if (($('#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)').val() == '')) {
+            result = false;
+            smartAlert("Erro", "Informe o centro de custo.", "warning");
+            return false;
+        }
+
+        var ehValidoCentroCusto = validaCentroCusto();
+        if (!ehValidoCentroCusto) {
+            result = false;
+            smartAlert("Erro", "Selecione um centro de custo cadastrado.", "warning");
+            return false;
+        }
+
+        return result;
+    }
+
+    function addClasseReceita() {
+        var item = $("#formItensClasseReceita").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
+
+        jsonItemArrayClasseReceita.push(item.ClasseReceita);
+
+        $("#@Html.IdFor(m => m.JsonItensClasseReceita)").val(JSON.stringify(jsonItemArrayClasseReceita));
+        fillTableClasseReceita();
+        clearFormItemClasseReceita();
+    }
+
+    function removerClasseReceita() {
+        var arrClasseReceitaCodigo = [];
+        var index;
+        $($('#tableItensClasseReceita input[type=checkbox]:checked').get().reverse()).each(function () {
+            index = parseInt($(this).val());
+            arrClasseReceitaCodigo.push(index);
+            jsonItemArrayClasseReceita.splice(index, 1);
+        });
+
+        if (arrClasseReceitaCodigo.length > 0) {
+            $("#@Html.IdFor(m => m.JsonItensClasseReceita)").val(JSON.stringify(jsonItemArrayClasseReceita));
+            fillTableClasseReceita();
+        }
+        else {
+            smartAlert("Erro", "Selecione pelo menos uma classe de receita para ser removida.", "error");
+        }
+    }
+
+    function fillTableClasseReceita() {
+        $("#tableItensClasseReceita tbody").empty();
+        for (var i = 0; i < jsonItemArrayClasseReceita.length; i++) {
+            var row = $('<tr />')
+            $("#tableItensClasseReceita tbody").append(row);
+
+            var chkDisabled = '';
+            var labelClass = 'checkbox';
+            //row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + jsonItemArrayClasseReceita[i].ClasseReceita.Codigo + '</label></td>'));
+            //row.append($('<td class="text-left">' + jsonItemArrayClasseReceita[i].ClasseReceita.Descricao + '</td>'));
+            row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + jsonItemArrayClasseReceita[i].Codigo + '</label></td>'));
+            row.append($('<td class="text-left">' + jsonItemArrayClasseReceita[i].Descricao + '</td>'));
+        }
+    }
+
+    function clearFormItemClasseReceita() {
+        $("#@Html.IdFor(m => m.ClasseReceita.Codigo)").val('');
+
+        limpaClasseForm_@(Html.IdFor(m => m.ClasseReceita.Codigo))();
+    }
+
+    function validaAdicionarClasseReceita() {
+        var result = true;
+        if (($('#@Html.IdFor(m => m.ClasseReceita.Codigo)').val() == '')) {
+            result = false;
+            smartAlert("Erro", "Informe a classe receita.", "error");
+            return false;
+        }
+
+        var ehValidoClasse = validaClasse_@(Html.IdFor(m => m.ClasseReceita.Codigo))();
+        if (!ehValidoClasse) {
+            result = false;
+            smartAlert("Erro", "Selecione uma classe cadastrada.", "error");
+            return false;
+        }
+
+        $.each(jsonItemArrayClasseReceita, function (index, obj) {
+            @*var ehMesmaClasse = (obj.ClasseReceita.Codigo == $('#@Html.IdFor(m => m.ClasseReceita.Codigo)').val());*@
+            var ehMesmaClasse = (obj.Codigo == $('#@Html.IdFor(m => m.ClasseReceita.Codigo)').val());
+
+            if (ehMesmaClasse) {
+                result = false;
+                smartAlert("Erro", "A classe informada já foi adicionada !", "error");
+                return false;
+            }
+
+        });
+
+        return result;
+    }
+
+    function habilitarDesabitarOpcaoCreditoCobranca() {
+        var habilitar = false;
+        habilitar = $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberFaturado)").is(':checked');
+        habilitar = habilitar || $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberQuitado)").is(':checked');
+        habilitar = habilitar || $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberRecebido)").is(':checked');
+        if (habilitar) {
+            $('#@Html.IdFor(m => m.Filtro.EhMovimentoCreditoCobranca)').prop('disabled', '');
+            $('#lblCreditoCobranca').removeClass("state-disabled");
+        }
+        else {
+            $('#@Html.IdFor(m => m.Filtro.EhMovimentoCreditoCobranca)').prop('checked', false);
+            $('#@Html.IdFor(m => m.Filtro.EhMovimentoCreditoCobranca)').prop('disabled', 'disabled');
+            $('#lblCreditoCobranca').addClass("state-disabled");
+        }
+    }
+
+    function executarImpressao() {
+
+        $('#btnImprimir')[0].click();
+        hideLoading();
     }
 </script>

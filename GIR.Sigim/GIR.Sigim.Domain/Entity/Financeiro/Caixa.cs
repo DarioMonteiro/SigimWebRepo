@@ -15,5 +15,13 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public string CentroContabil { get; set; }
         public string CodigoCentroCusto { get; set; }
         public CentroCusto CentroCusto { get; set; }
+
+        public ICollection<MovimentoFinanceiro> ListaMovimentoFinanceiro { get; set; }
+
+        public Caixa()
+        {
+            this.ListaMovimentoFinanceiro = new HashSet<MovimentoFinanceiro>();
+        }
+
     }
 }

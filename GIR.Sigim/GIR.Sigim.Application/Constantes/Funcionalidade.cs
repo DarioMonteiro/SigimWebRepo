@@ -134,8 +134,8 @@ namespace GIR.Sigim.Application.Constantes
         public const string ContaCorrenteDeletar = "CONTACORRENTE_DELETAR";
         //public const string ContaCorrenteImprimir = "CONTACORRENTE_IMPRIMIR";
 
-        public const string RelApropriacaoPorClasseAcessar = "REL_APROPRIACAO_POR_CLASSE_ACESSAR";
-
+        public const string RelatorioApropriacaoPorClasseAcessar = "REL_APROPRIACAO_POR_CLASSE_ACESSAR";
+        public const string RelatorioApropriacaoPorClasseImprimir = "REL_APROPRIACAO_POR_CLASSE_IMPRIMIR";
            
         #endregion
 
@@ -176,8 +176,8 @@ namespace GIR.Sigim.Application.Constantes
         public const string EntradaMaterialImprimir = "ENTRADAMATERIAL_IMPRIMIR";
         public const string EntradaMaterialLiberar = "ENTRADAMATERIAL_LIBERAR";
 
-        public const string RelatorioItensOrdemCompraAcessar = "RELATORIOITENSORDEMCOMPRA_ACESSAR";
-        public const string RelatorioItensOrdemCompraImprimir = "RELATORIOITENSORDEMCOMPRA_IMPRIMIR";
+        public const string RelatorioItensOrdemCompraAcessar = "REL_ITENS_ORDEMCOMPRA_ACESSAR";
+        public const string RelatorioItensOrdemCompraImprimir = "REL_ITENS_ORDEMCOMPRA_IMPRIMIR";
 
         #endregion
 
@@ -318,6 +318,10 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(ContaCorrenteGravar, "Conta corrente - gravar");
             MenuFinanceiro.Add(ContaCorrenteDeletar, "Conta corrente - deletar");
             //MenuFinanceiro.Add(ContaCorrenteImprimir, "Conta corrente - imprimir");
+
+            MenuFinanceiro.Add(RelatorioApropriacaoPorClasseAcessar, "Relatório de apropriação por classe - acessar");
+            MenuFinanceiro.Add(RelatorioApropriacaoPorClasseImprimir, "Relatório de apropriação por classe - imprimir");
+
         }
 
         private void FuncionalidadeOrdemCompra()

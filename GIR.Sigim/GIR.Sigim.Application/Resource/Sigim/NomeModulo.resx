@@ -120,6 +120,9 @@
   <data name="Contrato" xml:space="preserve">
     <value>CONTRATO</value>
   </data>
+  <data name="Financeiro" xml:space="preserve">
+    <value>FINANCEIRO</value>
+  </data>
   <data name="OrdemCompra" xml:space="preserve">
     <value>ORDEMCOMPRA</value>
   </data>

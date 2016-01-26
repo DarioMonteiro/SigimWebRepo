@@ -235,6 +235,12 @@
       <DependentUpon>relNotaFiscalLiberada.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Financeiro\relApropriacaoPorClasseSintetico.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relApropriacaoPorClasseSintetico.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Financeiro\relCaixa.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -404,6 +410,7 @@
     <Compile Include="Service\Contrato\IContratoRetificacaoItemImpostoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoItemMedicaoAppService.cs" />
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
+    <Compile Include="Service\Financeiro\IApropriacaoAppService.cs" />
     <Compile Include="Service\Financeiro\IHistoricoContabilAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoMovimentoAppService.cs" />
     <Compile Include="Service\Financeiro\ITaxaAdministracaoAppService.cs" />
@@ -493,6 +500,10 @@
     <EmbeddedResource Include="Reports\Contrato\relNotaFiscalLiberada.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relNotaFiscalLiberada.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relApropriacaoPorClasseSintetico.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relApropriacaoPorClasseSintetico.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Financeiro\relCaixa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

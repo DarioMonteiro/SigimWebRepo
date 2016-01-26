@@ -69,6 +69,7 @@
     <Compile Include="Admin\PerfilAppService.cs" />
     <Compile Include="Admin\UsuarioAppService.cs" />
     <Compile Include="BaseAppService.cs" />
+    <Compile Include="Financeiro\ApropriacaoAppService.cs" />
     <Compile Include="IoC\AdminBootstraper.cs" />
     <Compile Include="IoC\Bootstrapper.cs" />
     <Compile Include="Contrato\ContratoAppService.cs" />

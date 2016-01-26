@@ -22,15 +22,11 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
 
         public CentroCustoDTO CentroCusto { get; set; }
 
-        [Display(Name = "Por competência")]
-        public bool EhPorCompetencia { get; set; }
+        public int? OpcoesRelatorio { get; set; }
 
-        [Display(Name = "Por emissão documento")]
-        public bool EhPorEmissaoDocumento { get; set; }
+        public int? TipoPesquisa { get; set; }
 
-        public ClasseDTO ClasseDespesa { get; set; }
-
-        public string JsonItensClasseDespesa { get; set; }
+        public List<ClasseDTO> ListaClasseDespesa { get; set; }
 
         [Display(Name = "Movimentos de débito ")]
         public bool EhMovimentoDebito { get; set; }
@@ -59,9 +55,7 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
         [Display(Name = "Cancelado")]
         public bool EhSituacaoAPagarCancelado { get; set; }
 
-        public ClasseDTO ClasseReceita { get; set; }
-
-        public string JsonItensClasseReceita { get; set; }
+        public List<ClasseDTO> ListaClasseReceita { get; set; }
 
         [Display(Name = "Movimentos de crédito")]
         public bool EhMovimentoCredito { get; set; }
@@ -93,5 +87,14 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
         [Display(Name = "Cancelado")]
         public bool EhSituacaoAReceberCancelado { get; set; }
 
+        public RelApropriacaoPorClasseFiltro()
+        {
+            TipoPesquisa = 3;
+            OpcoesRelatorio = 2;
+
+            ListaClasseDespesa = new List<ClasseDTO>();
+            ListaClasseReceita = new List<ClasseDTO>();
+
+        }
     }
 }

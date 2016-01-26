@@ -57,7 +57,10 @@
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicaoNF.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
+    <Compile Include="Entity\Financeiro\ApropriacaoClasseCCRelatorio.cs" />
     <Compile Include="Entity\Financeiro\MovimentoFinanceiro.cs" />
+    <Compile Include="Entity\Financeiro\OpcoesRelatorioApropriacaoPorClasse.cs" />
+    <Compile Include="Entity\Financeiro\TipoPesquisaRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Sigim\CarteiraBanco.cs" />
     <Compile Include="Entity\Sigim\UnidadeFederacao.cs" />
     <Compile Include="Repository\Contrato\IContratoRetencaoRepository.cs" />
@@ -308,6 +311,7 @@
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />
     <Compile Include="Specification\ExpressionBuilder.cs" />
+    <Compile Include="Specification\Financeiro\ApropriacaoSpecification.cs" />
     <Compile Include="Specification\Financeiro\RateioAutomaticoSpecification.cs" />
     <Compile Include="Specification\Financeiro\TipoMovimentoSpecification.cs" />
     <Compile Include="Specification\ISpecification.cs" />
