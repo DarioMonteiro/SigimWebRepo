@@ -534,6 +534,17 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
             return specification;
         }
 
+        public static Specification<Apropriacao> EhValorDoMovimentoPositivo()
+        {
+            Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
+
+            var directSpecification = new DirectSpecification<Apropriacao>(l => l.Movimento.Valor > 0);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
+
         public static Specification<Apropriacao> PossuiCaixaNoMovimento()
         {
             Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
@@ -591,6 +602,18 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
             return specification;
 
         }
+
+        public static Specification<Apropriacao> EhMovimentoDiferenteDeCredCob()
+        {
+            Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
+
+            //TipoMovimentoId == 12 refere-se a sistema de crédito cobrança
+            var directSpecification = new DirectSpecification<Apropriacao>(l => l.Movimento.TipoMovimentoId != 12);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
 
     }
 }

@@ -146,9 +146,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
             if (filtro.EhMovimentoDebito)
             {
-                string tipoMovimento = "MVD";
                 var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
-                specification = MontarSpecificationMovimentoRelApropriacaoPorClasse(filtro, usuarioId, tipoMovimento);
+                specification = MontarSpecificationMovimentoRelApropriacaoPorClasse(filtro, usuarioId, TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoDebito);
                 var listaApropriacao =
                  apropriacaoRepository.ListarPeloFiltro(specification,
                                                         l => l.CentroCusto,
@@ -157,13 +156,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                         l => l.Classe,
                                                         l => l.Movimento).To<List<Apropriacao>>();
 
-                GeraListaRelApropriacaoPorClasseMovimentos(listaApropriacao, listaApropriacaoClasseRelatorio);
+                GeraListaRelApropriacaoPorClasseMovimentoDebito(listaApropriacao, listaApropriacaoClasseRelatorio);
             }
             if (filtro.EhMovimentoDebitoCaixa)
             {
-                string tipoMovimento = "MVDC";
                 var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
-                specification = MontarSpecificationMovimentoRelApropriacaoPorClasse(filtro, usuarioId, tipoMovimento);
+                specification = MontarSpecificationMovimentoRelApropriacaoPorClasse(filtro, usuarioId, TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoDebitoCaixa);
                 var listaApropriacao =
                  apropriacaoRepository.ListarPeloFiltro(specification,
                                                         l => l.CentroCusto,
@@ -172,9 +170,36 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                         l => l.Classe,
                                                         l => l.Movimento).To<List<Apropriacao>>();
 
-                GeraListaRelApropriacaoPorClasseMovimentos(listaApropriacao, listaApropriacaoClasseRelatorio);
+                GeraListaRelApropriacaoPorClasseMovimentoDebito(listaApropriacao, listaApropriacaoClasseRelatorio);
             }
+            if (filtro.EhMovimentoCredito)
+            {
+                var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+                specification = MontarSpecificationMovimentoRelApropriacaoPorClasse(filtro, usuarioId, TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoCredito);
+                var listaApropriacao =
+                 apropriacaoRepository.ListarPeloFiltro(specification,
+                                                        l => l.CentroCusto,
+                                                        l => l.CentroCusto.ListaUsuarioCentroCusto.Select(u => u.Modulo),
+                                                        l => l.CentroCusto.ListaCentroCustoEmpresa,
+                                                        l => l.Classe,
+                                                        l => l.Movimento).To<List<Apropriacao>>();
 
+                GeraListaRelApropriacaoPorClasseMovimentoCredito(listaApropriacao, listaApropriacaoClasseRelatorio);
+            }
+            if (filtro.EhMovimentoCreditoCaixa)
+            {
+                var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+                specification = MontarSpecificationMovimentoRelApropriacaoPorClasse(filtro, usuarioId, TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoCreditoCaixa);
+                var listaApropriacao =
+                 apropriacaoRepository.ListarPeloFiltro(specification,
+                                                        l => l.CentroCusto,
+                                                        l => l.CentroCusto.ListaUsuarioCentroCusto.Select(u => u.Modulo),
+                                                        l => l.CentroCusto.ListaCentroCustoEmpresa,
+                                                        l => l.Classe,
+                                                        l => l.Movimento).To<List<Apropriacao>>();
+
+                GeraListaRelApropriacaoPorClasseMovimentoCredito(listaApropriacao, listaApropriacaoClasseRelatorio);
+            }
 
             relApropriacaoPorClasseSintetico objRel = new relApropriacaoPorClasseSintetico();
 
@@ -452,7 +477,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
         }
 
-        private void GeraListaRelApropriacaoPorClasseMovimentos(List<Apropriacao> listaApropriacao, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        private void GeraListaRelApropriacaoPorClasseMovimentoDebito(List<Apropriacao> listaApropriacao, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
         {
             foreach (var groupApropriacaoClasse in listaApropriacao.OrderBy(l => l.CodigoClasse).GroupBy(l => new { l.CodigoClasse, l.TituloPagarId.HasValue }))
             {
@@ -497,6 +522,50 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
         }
 
+        private void GeraListaRelApropriacaoPorClasseMovimentoCredito(List<Apropriacao> listaApropriacao, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        {
+            foreach (var groupApropriacaoClasse in listaApropriacao.OrderBy(l => l.CodigoClasse).GroupBy(l => new { l.CodigoClasse, l.TituloPagarId.HasValue }))
+            {
+                string tipoClasse = "";
+
+                if (groupApropriacaoClasse.Count() > 0)
+                {
+                    tipoClasse = "E";
+                }
+
+                Classe classe = groupApropriacaoClasse.Select(l => l.Classe).FirstOrDefault().To<Classe>();
+
+                ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorio = new ApropriacaoClasseCCRelatorio();
+
+                bool recuperouApropriacao = false;
+                if (listaApropriacaoClasseRelatorio.Any(l => (l.Classe.Codigo == classe.Codigo && l.TipoClasseCC == "E")))
+                {
+                    apropriacaoClasseRelatorio = listaApropriacaoClasseRelatorio.Where(l => l.Classe.Codigo == classe.Codigo && l.TipoClasseCC == "E").FirstOrDefault();
+                    recuperouApropriacao = true;
+                }
+                else
+                {
+                    apropriacaoClasseRelatorio.TipoClasseCC = tipoClasse;
+                    apropriacaoClasseRelatorio.Classe = classe;
+                    apropriacaoClasseRelatorio.ValorApropriado = 0;
+                    apropriacaoClasseRelatorio.TipoCodigo = "MV";
+                }
+
+                decimal valorApropriado = groupApropriacaoClasse.Sum(l => l.Valor);
+
+                apropriacaoClasseRelatorio.ValorApropriado = apropriacaoClasseRelatorio.ValorApropriado + valorApropriado;
+
+                if (!recuperouApropriacao)
+                {
+                    listaApropriacaoClasseRelatorio.Add(apropriacaoClasseRelatorio);
+                }
+
+                if (apropriacaoClasseRelatorio.Classe.ClassePai != null)
+                {
+                    AdicionaRegistroRelatorioPai(apropriacaoClasseRelatorio, listaApropriacaoClasseRelatorio, valorApropriado, apropriacaoClasseRelatorio.TipoClasseCC);
+                }
+            }
+        }
 
         private Specification<Apropriacao> MontarSpecificationContasAPagarPagosRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? idUsuario)
         {
@@ -617,7 +686,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return specification;
         }
 
-        private Specification<Apropriacao> MontarSpecificationMovimentoRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? idUsuario,string tipoMovimento)
+        private Specification<Apropriacao> MontarSpecificationMovimentoRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? idUsuario,TipoMovimentoRelatorioApropriacaoPorClasse tipoMovimento)
         {
             var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
 
@@ -635,14 +704,29 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 specification &= ApropriacaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
             }
 
-            specification &= ApropriacaoSpecification.EhValorDoMovimentoNegativo();
-            if (tipoMovimento == "MVD")
+            if (tipoMovimento == TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoDebito ||
+                tipoMovimento == TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoDebitoCaixa)
+            {
+                specification &= ApropriacaoSpecification.EhValorDoMovimentoNegativo();
+            }
+
+            if (tipoMovimento == TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoDebito || 
+                tipoMovimento == TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoCredito)
             {
                 specification &= ApropriacaoSpecification.PossuiContaCorrenteNoMovimento();
             }
-            else if (tipoMovimento == "MVDC")
+
+            if (tipoMovimento == TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoDebitoCaixa ||
+                tipoMovimento == TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoCreditoCaixa)
             {
                 specification &= ApropriacaoSpecification.PossuiCaixaNoMovimento();
+            }
+
+            if (tipoMovimento == TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoCredito ||
+                tipoMovimento == TipoMovimentoRelatorioApropriacaoPorClasse.MovimentoCreditoCaixa)
+            {
+                specification &= ApropriacaoSpecification.EhValorDoMovimentoPositivo();
+                specification &= ApropriacaoSpecification.EhMovimentoDiferenteDeCredCob();
             }
 
             specification &= ApropriacaoSpecification.EhSituacaoMovimentoDiferenteDeEstornado();
