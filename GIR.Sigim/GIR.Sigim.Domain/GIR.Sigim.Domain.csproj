@@ -47,6 +47,13 @@
     <Compile Include="Entity\Admin\Perfil.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Admin\Usuario.cs" />
+    <Compile Include="Entity\Comercial\Bloco.cs" />
+    <Compile Include="Entity\Comercial\ContratoComercial.cs" />
+    <Compile Include="Entity\Comercial\Empreendimento.cs" />
+    <Compile Include="Entity\Comercial\TipoParticipante.cs" />
+    <Compile Include="Entity\Comercial\Unidade.cs" />
+    <Compile Include="Entity\Comercial\Venda.cs" />
+    <Compile Include="Entity\Comercial\VendaParticipante.cs" />
     <Compile Include="Entity\Contrato\Contrato.cs" />
     <Compile Include="Entity\Contrato\ContratoRetencao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetencaoLiberada.cs" />
@@ -57,6 +64,8 @@
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicaoNF.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
+    <Compile Include="Entity\CredCob\TituloCredCob.cs" />
+    <Compile Include="Entity\CredCob\VerbaCobranca.cs" />
     <Compile Include="Entity\Financeiro\ApropriacaoClasseCCRelatorio.cs" />
     <Compile Include="Entity\Financeiro\MovimentoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\OpcoesRelatorioApropriacaoPorClasse.cs" />
@@ -209,6 +218,7 @@
     <Compile Include="Repository\Contrato\IContratoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
+    <Compile Include="Repository\CredCob\ITituloCredCobRepository.cs" />
     <Compile Include="Repository\Financeiro\IApropriacaoRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoPagarRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoReceberRepository.cs" />
@@ -309,6 +319,7 @@
     <Compile Include="Specification\CompositeSpecification.cs" />
     <Compile Include="Specification\Contrato\ContratoRetificacaoItemMedicaoSpecification.cs" />
     <Compile Include="Specification\Contrato\ContratoSpecification.cs" />
+    <Compile Include="Specification\CredCob\TituloCredCobSpecification.cs" />
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />
     <Compile Include="Specification\ExpressionBuilder.cs" />

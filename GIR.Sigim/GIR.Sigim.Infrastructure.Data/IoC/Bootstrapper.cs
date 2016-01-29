@@ -16,6 +16,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
 
             AdminBootstraper.Initialise();
             ContratoBootstraper.Initialise();
+            CredCobBootstrapper.Initialise();
             EstoqueBootstraper.Initialise();
             FinanceiroBootstraper.Initialise();
             OrcamentoBootstraper.Initialise();

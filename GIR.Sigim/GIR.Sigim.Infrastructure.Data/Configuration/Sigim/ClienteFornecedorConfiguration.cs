@@ -89,6 +89,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 
             Ignore(l => l.Ativo);
 
+            Ignore(l => l.VendaParticipanteId);
+
+            HasRequired(l => l.VendaParticipante).WithRequiredPrincipal(l => l.Cliente);
+
             HasMany<ParametrosOrdemCompra>(l => l.ListaParametrosOrdemCompra)
                 .WithOptional(c => c.Cliente)
                 .HasForeignKey (c => c.ClienteId);

@@ -10,7 +10,9 @@ using GIR.Sigim.Domain.Entity;
 using GIR.Sigim.Domain.Entity.Admin;
 using GIR.Sigim.Infrastructure.Data;
 using GIR.Sigim.Infrastructure.Data.Configuration.Admin;
+using GIR.Sigim.Infrastructure.Data.Configuration.Comercial;
 using GIR.Sigim.Infrastructure.Data.Configuration.Contrato;
+using GIR.Sigim.Infrastructure.Data.Configuration.CredCob;
 using GIR.Sigim.Infrastructure.Data.Configuration.Financeiro;
 using GIR.Sigim.Infrastructure.Data.Configuration.Orcamento;
 using GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra;
@@ -107,6 +109,18 @@ namespace GIR.Sigim.Infrastructure.Data
 
             #endregion
 
+            #region Comercial
+
+            modelBuilder.Configurations.Add(new BlocoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoComercialConfiguration());
+            modelBuilder.Configurations.Add(new EmpreendimentoConfiguration());
+            modelBuilder.Configurations.Add(new TipoParticipanteConfiguration());
+            modelBuilder.Configurations.Add(new UnidadeConfiguration());
+            modelBuilder.Configurations.Add(new VendaConfiguration());
+            modelBuilder.Configurations.Add(new VendaParticipanteConfiguration());
+
+            #endregion
+
             #region Contrato
 
             modelBuilder.Configurations.Add(new ParametrosContratoConfiguration());
@@ -123,6 +137,13 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoNFConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemImpostoConfiguration());
+
+            #endregion
+
+            #region CrebCob
+
+            modelBuilder.Configurations.Add(new TituloCredCobConfiguration());
+            modelBuilder.Configurations.Add(new VerbaCobrancaConfiguration());
 
             #endregion
 

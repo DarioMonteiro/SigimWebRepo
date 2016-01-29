@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Contrato;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
+using GIR.Sigim.Domain.Entity.Comercial;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
@@ -30,6 +31,9 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public PessoaJuridica PessoaJuridica { get; set; }
         public PessoaFisica PessoaFisica { get; set; }
         public int? EnderecoComercialId { get; set; }
+
+        public int? VendaParticipanteId { get; set; }
+        public VendaParticipante VendaParticipante { get; set; } 
 
         public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
         public ICollection<OrdemCompra.ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }

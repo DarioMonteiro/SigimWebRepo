@@ -410,6 +410,7 @@
     <Compile Include="Service\Contrato\IContratoRetificacaoItemImpostoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoItemMedicaoAppService.cs" />
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
+    <Compile Include="Service\CredCob\ITituloCredCobAppService.cs" />
     <Compile Include="Service\Financeiro\IApropriacaoAppService.cs" />
     <Compile Include="Service\Financeiro\IHistoricoContabilAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoMovimentoAppService.cs" />

@@ -60,6 +60,13 @@
     <Compile Include="Configuration\Admin\UsuarioPerfilConfiguration.cs" />
     <Compile Include="Configuration\Admin\UsuarioFuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Admin\PerfilFuncionalidadeConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\BlocoConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\ContratoComercialConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\EmpreendimentoConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\TipoParticipanteConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\UnidadeConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\VendaConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\VendaParticipanteConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetencaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetencaoLiberadaConfiguration.cs" />
@@ -74,6 +81,8 @@
     <Compile Include="Configuration\Contrato\LicitacaoDescricaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\LicitacaoCronogramaConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ParametrosContratoConfiguration.cs" />
+    <Compile Include="Configuration\CredCob\TituloCredCobConfiguration.cs" />
+    <Compile Include="Configuration\CredCob\VerbaCobrancaConfiguration.cs" />
     <Compile Include="Configuration\Estoque\MovimentoItemConfiguration.cs" />
     <Compile Include="Configuration\Estoque\EstoqueConfiguration.cs" />
     <Compile Include="Configuration\Estoque\EstoqueMaterialConfiguration.cs" />
@@ -176,6 +185,7 @@
     <Compile Include="IoC\AdminBootstraper.cs" />
     <Compile Include="IoC\Bootstrapper.cs" />
     <Compile Include="IoC\ContratoBootstraper.cs" />
+    <Compile Include="IoC\CredCobBootstrapper.cs" />
     <Compile Include="IoC\SigimBootstraper.cs" />
     <Compile Include="IoC\SacBootstraper.cs" />
     <Compile Include="IoC\OrdemCompraBootstraper.cs" />
@@ -197,6 +207,7 @@
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
+    <Compile Include="Repository\CredCob\TituloCredCobRepository.cs" />
     <Compile Include="Repository\Estoque\EstoqueRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\ApropriacaoRepository.cs" />

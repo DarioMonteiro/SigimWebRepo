@@ -69,6 +69,7 @@
     <Compile Include="Admin\PerfilAppService.cs" />
     <Compile Include="Admin\UsuarioAppService.cs" />
     <Compile Include="BaseAppService.cs" />
+    <Compile Include="CredCob\TituloCredCobAppService.cs" />
     <Compile Include="Financeiro\ApropriacaoAppService.cs" />
     <Compile Include="IoC\AdminBootstraper.cs" />
     <Compile Include="IoC\Bootstrapper.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Financeiro\TipoRateioAppService.cs" />
     <Compile Include="Financeiro\TituloPagarAppService.cs" />
     <Compile Include="IoC\ContratoBootstraper.cs" />
+    <Compile Include="IoC\CredCobBootstraper.cs" />
     <Compile Include="IoC\SigimBootstraper.cs" />
     <Compile Include="IoC\SacBootstraper.cs" />
     <Compile Include="IoC\OrdemCompraBootstraper.cs" />

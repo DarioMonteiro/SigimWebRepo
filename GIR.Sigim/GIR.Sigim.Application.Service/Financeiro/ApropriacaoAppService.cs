@@ -10,6 +10,7 @@ using GIR.Sigim.Application.Service.Admin;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.CredCob;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.Filtros.Financeiro;
@@ -17,6 +18,8 @@ using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Domain.Specification.Financeiro;
 using GIR.Sigim.Application.Reports.Financeiro;
 using GIR.Sigim.Application.DTO.Financeiro;
+using GIR.Sigim.Application.Service.CredCob;
+using GIR.Sigim.Domain.Repository.CredCob;
 
 
 namespace GIR.Sigim.Application.Service.Financeiro
@@ -30,6 +33,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
         private ICentroCustoRepository centroCustoRepository;
         private IClasseRepository classeRepository;
         private IApropriacaoRepository apropriacaoRepository;
+        private ITituloCredCobAppService tituloCredCobAppService;
+        private ITituloCredCobRepository tituloCredCobRepository;
 
         #endregion
 
@@ -40,6 +45,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                      ICentroCustoRepository centroCustoRepository,
                                      IClasseRepository classeRepository,
                                      IApropriacaoRepository apropriacaoRepository,
+                                     ITituloCredCobAppService tituloCredCobAppService,
+                                     ITituloCredCobRepository tituloCredCobRepository,
                                      MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -48,6 +55,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
             this.centroCustoRepository = centroCustoRepository;
             this.classeRepository = classeRepository;
             this.apropriacaoRepository = apropriacaoRepository;
+            this.tituloCredCobAppService = tituloCredCobAppService;
+            this.tituloCredCobRepository = tituloCredCobRepository;
         }
 
         #endregion
@@ -200,6 +209,28 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
                 GeraListaRelApropriacaoPorClasseMovimentoCredito(listaApropriacao, listaApropriacaoClasseRelatorio);
             }
+            if (filtro.EhMovimentoCreditoCobranca)
+            {
+                if (filtro.EhSituacaoAReceberFaturado || filtro.EhSituacaoAReceberRecebido)
+                {
+                    var specification = (Specification<TituloCredCob>)new TrueSpecification<TituloCredCob>();
+                    specification = tituloCredCobAppService.MontarSpecificationMovimentoCredCobRelApropriacaoPorClasse(filtro, usuarioId);
+
+                    var listaTituloCredCob =
+                     tituloCredCobRepository.ListarPeloFiltro(specification,
+                                                              l => l.Contrato.Unidade.Bloco.CentroCusto,
+                                                              l => l.Contrato.Unidade.Bloco.CentroCusto.ListaUsuarioCentroCusto.Select(u => u.Modulo),
+                                                              l => l.Contrato.Unidade.Bloco.CentroCusto.ListaCentroCustoEmpresa,
+                                                              l => l.VerbaCobranca.Classe).To<List<TituloCredCob>>();
+                }
+                //if (!filtro.EhSituacaoAReceberRecebido || filtro.EhSituacaoAReceberQuitado)
+                //{
+
+                //}
+
+
+
+            }
 
             relApropriacaoPorClasseSintetico objRel = new relApropriacaoPorClasseSintetico();
 
@@ -256,7 +287,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Financeiro))
             {
-                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Financeiro);
             }
             else
             {
@@ -315,7 +346,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Financeiro))
             {
-                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Financeiro);
             }
             else
             {
@@ -573,7 +604,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Financeiro))
             {
-                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Financeiro);
             }
             else
             {
@@ -632,7 +663,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Financeiro))
             {
-                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Financeiro);
             }
             else
             {
@@ -692,7 +723,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(idUsuario, Resource.Sigim.NomeModulo.Financeiro))
             {
-                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Contrato);
+                specification &= ApropriacaoSpecification.UsuarioPossuiAcessoAoCentroCusto(idUsuario, Resource.Sigim.NomeModulo.Financeiro);
             }
             else
             {
