@@ -72,7 +72,7 @@ namespace GIR.Sigim.Application.Service.CredCob
             {
                 if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
                 {
-                    if (filtro.ListaClasseDespesa.Count > 0)
+                    if (filtro.ListaClasseReceita.Count > 0)
                     {
                         string[] arrayCodigoClasse = PopulaArrayComCodigosDeClassesSelecionadas(filtro.ListaClasseDespesa);
 
@@ -83,6 +83,21 @@ namespace GIR.Sigim.Application.Service.CredCob
                     }
                 }
             }
+
+            if (!(filtro.EhSituacaoAReceberFaturado && filtro.EhSituacaoAReceberRecebido))
+            {
+                if (filtro.EhSituacaoAReceberFaturado)
+                {
+                    specification &= TituloCredCobSpecification.EhSituacaoPendente();
+
+                }
+
+                if (filtro.EhSituacaoAReceberRecebido)
+                {
+                    specification &= TituloCredCobSpecification.EhSituacaoQuitado();
+                }
+            }
+
 
             return specification;
         }

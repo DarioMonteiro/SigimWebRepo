@@ -28,13 +28,13 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
             Property(l => l.TipoParticipanteId)
                 .HasColumnName("tipoParticipante");
 
-            HasRequired<TipoParticipante>(l => l.TipoParticipante)
+            HasOptional<TipoParticipante>(l => l.TipoParticipante)
                 .WithMany(c => c.ListaVendaParticipante)
                 .HasForeignKey(l => l.TipoParticipanteId);
 
             Property(l => l.PercentualParticipacao)
                 .HasPrecision(18, 2)
-                .HasColumnName("percentualParticipante");
+                .HasColumnName("percentualParticipacao");
         }
     }
 }

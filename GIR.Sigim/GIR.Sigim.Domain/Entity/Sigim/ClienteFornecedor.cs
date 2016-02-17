@@ -32,9 +32,6 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public PessoaFisica PessoaFisica { get; set; }
         public int? EnderecoComercialId { get; set; }
 
-        public int? VendaParticipanteId { get; set; }
-        public VendaParticipante VendaParticipante { get; set; } 
-
         public ICollection<CentroCustoEmpresa> ListaCentroCustoEmpresa { get; set; }
         public ICollection<OrdemCompra.ParametrosOrdemCompra> ListaParametrosOrdemCompra { get; set; }
         public ICollection<Contrato.Contrato> ListaContratoContratante { get; set; }

@@ -21,7 +21,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .HasColumnOrder(1);
 
             Property(l => l.EmpreendimentoId)
-                .HasColumnName("empreedimento")
+                .HasColumnName("empreendimento")
                 .HasColumnOrder(2);
 
             HasRequired<Empreendimento>(l => l.Empreendimento)

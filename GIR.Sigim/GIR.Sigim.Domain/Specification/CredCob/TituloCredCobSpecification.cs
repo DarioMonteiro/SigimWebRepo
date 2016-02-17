@@ -52,7 +52,7 @@ namespace GIR.Sigim.Domain.Specification.CredCob
         {
             Specification<TituloCredCob> specification = new TrueSpecification<TituloCredCob>();
 
-            var directSpecification = new DirectSpecification<TituloCredCob>(l => l.Contrato.VendaParticipanteId.Value == 1);
+            var directSpecification = new DirectSpecification<TituloCredCob>(l => l.Contrato.Venda.Contrato.ListaVendaParticipante.Any(v => v.TipoParticipanteId.Value == 1));
             specification &= directSpecification;
 
             return specification;
@@ -62,7 +62,7 @@ namespace GIR.Sigim.Domain.Specification.CredCob
         {
             Specification<TituloCredCob> specification = new TrueSpecification<TituloCredCob>();
 
-            var directSpecification = new DirectSpecification<TituloCredCob>(l => l.Situacao == "C");
+            var directSpecification = new DirectSpecification<TituloCredCob>(l => l.Situacao != "C");
             specification &= directSpecification;
 
             return specification;
@@ -107,6 +107,25 @@ namespace GIR.Sigim.Domain.Specification.CredCob
             return specification;
         }
 
+        public static Specification<TituloCredCob> EhSituacaoPendente()
+        {
+            Specification<TituloCredCob> specification = new TrueSpecification<TituloCredCob>();
+
+            var directSpecification = new DirectSpecification<TituloCredCob>(l => l.Situacao == "P");
+            specification &= directSpecification;
+
+            return specification;
+        }
+
+        public static Specification<TituloCredCob> EhSituacaoQuitado()
+        {
+            Specification<TituloCredCob> specification = new TrueSpecification<TituloCredCob>();
+
+            var directSpecification = new DirectSpecification<TituloCredCob>(l => l.Situacao == "Q");
+            specification &= directSpecification;
+
+            return specification;
+        }
 
     }
 }

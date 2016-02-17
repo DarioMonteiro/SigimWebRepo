@@ -13,5 +13,13 @@ namespace GIR.Sigim.Domain.Entity.CredCob
         public string CodigoClasse { get; set; }
         public Classe Classe { get; set; }
         public bool? Automatico { get; set; }
+
+        public ICollection<TituloCredCob> ListaTituloCredCob { get; set; }
+
+        public VerbaCobranca()
+        {
+            this.ListaTituloCredCob = new HashSet<TituloCredCob>();
+        }
+
     }
 }

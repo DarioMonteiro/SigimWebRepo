@@ -211,7 +211,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
             if (filtro.EhMovimentoCreditoCobranca)
             {
-                if (filtro.EhSituacaoAReceberFaturado || filtro.EhSituacaoAReceberRecebido)
+                if (filtro.EhSituacaoAReceberFaturado || filtro.EhSituacaoAReceberRecebido) 
                 {
                     var specification = (Specification<TituloCredCob>)new TrueSpecification<TituloCredCob>();
                     specification = tituloCredCobAppService.MontarSpecificationMovimentoCredCobRelApropriacaoPorClasse(filtro, usuarioId);
@@ -221,8 +221,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                               l => l.Contrato.Unidade.Bloco.CentroCusto,
                                                               l => l.Contrato.Unidade.Bloco.CentroCusto.ListaUsuarioCentroCusto.Select(u => u.Modulo),
                                                               l => l.Contrato.Unidade.Bloco.CentroCusto.ListaCentroCustoEmpresa,
+                                                              l => l.Contrato.Venda.Contrato.ListaVendaParticipante,
                                                               l => l.VerbaCobranca.Classe).To<List<TituloCredCob>>();
+                    GeraListaRelApropriacaoPorClasseCreditoCobranca(listaTituloCredCob, listaApropriacaoClasseRelatorio);
                 }
+
+
                 //if (!filtro.EhSituacaoAReceberRecebido || filtro.EhSituacaoAReceberQuitado)
                 //{
 
@@ -583,6 +587,52 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 }
 
                 decimal valorApropriado = groupApropriacaoClasse.Sum(l => l.Valor);
+
+                apropriacaoClasseRelatorio.ValorApropriado = apropriacaoClasseRelatorio.ValorApropriado + valorApropriado;
+
+                if (!recuperouApropriacao)
+                {
+                    listaApropriacaoClasseRelatorio.Add(apropriacaoClasseRelatorio);
+                }
+
+                if (apropriacaoClasseRelatorio.Classe.ClassePai != null)
+                {
+                    AdicionaRegistroRelatorioPai(apropriacaoClasseRelatorio, listaApropriacaoClasseRelatorio, valorApropriado, apropriacaoClasseRelatorio.TipoClasseCC);
+                }
+            }
+        }
+
+        private void GeraListaRelApropriacaoPorClasseCreditoCobranca(List<TituloCredCob> listaTituloCredCob, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        {
+            //foreach (var groupApropriacaoClasse in listaTituloCredCob.OrderBy(l => l.VerbaCobranca.CodigoClasse).GroupBy(l => new { l.VerbaCobranca.CodigoClasse, l.Id.HasValue }))
+            foreach (var groupApropriacaoClasse in listaTituloCredCob.OrderBy(l => l.VerbaCobranca.CodigoClasse).GroupBy(l => l.VerbaCobranca.CodigoClasse))
+            {
+                string tipoClasse = "";
+
+                if (groupApropriacaoClasse.Count() > 0)
+                {
+                    tipoClasse = "E";
+                }
+
+                Classe classe = groupApropriacaoClasse.Select(l => l.VerbaCobranca.Classe).FirstOrDefault().To<Classe>();
+
+                ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorio = new ApropriacaoClasseCCRelatorio();
+
+                bool recuperouApropriacao = false;
+                if (listaApropriacaoClasseRelatorio.Any(l => (l.Classe.Codigo == classe.Codigo && l.TipoClasseCC == "E")))
+                {
+                    apropriacaoClasseRelatorio = listaApropriacaoClasseRelatorio.Where(l => l.Classe.Codigo == classe.Codigo && l.TipoClasseCC == "E").FirstOrDefault();
+                    recuperouApropriacao = true;
+                }
+                else
+                {
+                    apropriacaoClasseRelatorio.TipoClasseCC = tipoClasse;
+                    apropriacaoClasseRelatorio.Classe = classe;
+                    apropriacaoClasseRelatorio.ValorApropriado = 0;
+                    apropriacaoClasseRelatorio.TipoCodigo = "CC";
+                }
+
+                decimal valorApropriado = groupApropriacaoClasse.Sum(l => (l.ValorIndiceBase * l.QtdIndice));
 
                 apropriacaoClasseRelatorio.ValorApropriado = apropriacaoClasseRelatorio.ValorApropriado + valorApropriado;
 

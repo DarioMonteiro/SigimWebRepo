@@ -13,7 +13,7 @@ namespace GIR.Sigim.Domain.Entity.Comercial
         public ContratoComercial Contrato { get; set; }
         public int ClienteId { get; set; }
         public ClienteFornecedor Cliente { get; set; }
-        public int TipoParticipanteId { get; set; }
+        public int? TipoParticipanteId { get; set; }
         public TipoParticipante TipoParticipante { get; set; }
         public Decimal PercentualParticipacao { get; set; }
 
