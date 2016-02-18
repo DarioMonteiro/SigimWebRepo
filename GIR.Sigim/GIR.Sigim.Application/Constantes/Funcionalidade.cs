@@ -88,12 +88,12 @@ namespace GIR.Sigim.Application.Constantes
         public const string RateioAutomaticoGravar = "RATEIOAUTOMATICO_GRAVAR";
         public const string RateioAutomaticoDeletar = "RATEIOAUTOMATICO_DELETAR";
         public const string RateioAutomaticoImprimir = "RATEIOAUTOMATICO_IMPRIMIR";
-            
+
         public const string TabelaBasicaFinanceiroAcessar = "TABELABASICA_FINANCEIRO_ACESSAR";
         public const string TabelaBasicaFinanceiroGravar = "TABELABASICA_FINANCEIRO_GRAVAR";
         public const string TabelaBasicaFinanceiroDeletar = "TABELABASICA_FINANCEIRO_DELETAR";
         public const string TabelaBasicaFinanceiroImprimir = "TABELABASICA_FINANCEIRO_IMPRIMIR";
-   
+
         public const string TaxaAdministracaoAcessar = "TAXAADMINISTRACAO_ACESSAR";
         public const string TaxaAdministracaoGravar = "TAXAADMINISTRACAO_GRAVAR";
         public const string TaxaAdministracaoDeletar = "TAXAADMINISTRACAO_DELETAR";
@@ -118,7 +118,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string TipoRateioGravar = "TIPORATEIO_GRAVAR";
         public const string TipoRateioDeletar = "TIPORATEIO_DELETAR";
         public const string TipoRateioImprimir = "TIPORATEIO_IMPRIMIR";
-            
+
         public const string BancoAcessar = "BANCO_ACESSAR";
         public const string BancoGravar = "BANCO_GRAVAR";
         public const string BancoDeletar = "BANCO_DELETAR";
@@ -199,7 +199,7 @@ namespace GIR.Sigim.Application.Constantes
             FuncionalidadeContrato();
             FuncionalidadeFinanceiro();
             FuncionalidadeOrdemCompra();
-            FuncionalidadeSac();
+            //FuncionalidadeSac();
         }
 
         private void FuncionalidadeAdmin()
@@ -243,81 +243,81 @@ namespace GIR.Sigim.Application.Constantes
         {
             MenuFinanceiro = new System.Collections.Hashtable();
 
-            MenuFinanceiro.Add(ParametroFinanceiroAcessar, "Parâmetros - acessar");
-            MenuFinanceiro.Add(ParametroFinanceiroGravar, "Parâmetros - gravar");
+            //MenuFinanceiro.Add(ParametroFinanceiroAcessar, "Parâmetros - acessar");
+            //MenuFinanceiro.Add(ParametroFinanceiroGravar, "Parâmetros - gravar");
 
-            MenuFinanceiro.Add(ParametroUsuarioFinanceiroAcessar, "Parâmetros do usuário - acessar");
-            MenuFinanceiro.Add(ParametroUsuarioFinanceiroGravar, "Parâmetros do usuário - gravar");
+            //MenuFinanceiro.Add(ParametroUsuarioFinanceiroAcessar, "Parâmetros do usuário - acessar");
+            //MenuFinanceiro.Add(ParametroUsuarioFinanceiroGravar, "Parâmetros do usuário - gravar");
 
-            MenuFinanceiro.Add(CaixaAcessar, "Caixa - acessar");
-            MenuFinanceiro.Add(CaixaGravar, "Caixa - gravar");
-            MenuFinanceiro.Add(CaixaDeletar, "Caixa - deletar");
-            MenuFinanceiro.Add(CaixaImprimir, "Caixa - imprimir");
+            //MenuFinanceiro.Add(CaixaAcessar, "Caixa - acessar");
+            //MenuFinanceiro.Add(CaixaGravar, "Caixa - gravar");
+            //MenuFinanceiro.Add(CaixaDeletar, "Caixa - deletar");
+            //MenuFinanceiro.Add(CaixaImprimir, "Caixa - imprimir");
 
-            MenuFinanceiro.Add(ImpostoFinanceiroAcessar, "Imposto financeiro - acessar");
-            MenuFinanceiro.Add(ImpostoFinanceiroGravar, "Imposto financeiro - gravar");
-            MenuFinanceiro.Add(ImpostoFinanceiroDeletar, "Imposto financeiro - deletar");
-            MenuFinanceiro.Add(ImpostoFinanceiroImprimir, "Imposto financeiro - imprimir");
+            //MenuFinanceiro.Add(ImpostoFinanceiroAcessar, "Imposto financeiro - acessar");
+            //MenuFinanceiro.Add(ImpostoFinanceiroGravar, "Imposto financeiro - gravar");
+            //MenuFinanceiro.Add(ImpostoFinanceiroDeletar, "Imposto financeiro - deletar");
+            //MenuFinanceiro.Add(ImpostoFinanceiroImprimir, "Imposto financeiro - imprimir");
 
-            MenuFinanceiro.Add(FormaRecebimentoAcessar, "Forma de recebimento - acessar");
-            MenuFinanceiro.Add(FormaRecebimentoGravar, "Forma de recebimento - gravar");
-            MenuFinanceiro.Add(FormaRecebimentoDeletar, "Forma de recebimento - deletar");
-            MenuFinanceiro.Add(FormaRecebimentoImprimir, "Forma de recebimento - imprimir");
+            //MenuFinanceiro.Add(FormaRecebimentoAcessar, "Forma de recebimento - acessar");
+            //MenuFinanceiro.Add(FormaRecebimentoGravar, "Forma de recebimento - gravar");
+            //MenuFinanceiro.Add(FormaRecebimentoDeletar, "Forma de recebimento - deletar");
+            //MenuFinanceiro.Add(FormaRecebimentoImprimir, "Forma de recebimento - imprimir");
 
-            MenuFinanceiro.Add(MotivoCancelamentoAcessar, "Motivo de cancelamento - acessar");
-            MenuFinanceiro.Add(MotivoCancelamentoGravar, "Motivo de cancelamento - gravar");
-            MenuFinanceiro.Add(MotivoCancelamentoDeletar, "Motivo de cancelamento - deletar");
-            MenuFinanceiro.Add(MotivoCancelamentoImprimir, "Motivo de cancelamento - imprimir");
+            //MenuFinanceiro.Add(MotivoCancelamentoAcessar, "Motivo de cancelamento - acessar");
+            //MenuFinanceiro.Add(MotivoCancelamentoGravar, "Motivo de cancelamento - gravar");
+            //MenuFinanceiro.Add(MotivoCancelamentoDeletar, "Motivo de cancelamento - deletar");
+            //MenuFinanceiro.Add(MotivoCancelamentoImprimir, "Motivo de cancelamento - imprimir");
 
-            MenuFinanceiro.Add(RateioAutomaticoAcessar, "Rateio automático - acessar");
-            MenuFinanceiro.Add(RateioAutomaticoGravar, "Rateio automático - gravar");
-            MenuFinanceiro.Add(RateioAutomaticoDeletar, "Rateio automático - deletar");
-            MenuFinanceiro.Add(RateioAutomaticoImprimir, "Rateio automático - imprimir");
+            //MenuFinanceiro.Add(RateioAutomaticoAcessar, "Rateio automático - acessar");
+            //MenuFinanceiro.Add(RateioAutomaticoGravar, "Rateio automático - gravar");
+            //MenuFinanceiro.Add(RateioAutomaticoDeletar, "Rateio automático - deletar");
+            //MenuFinanceiro.Add(RateioAutomaticoImprimir, "Rateio automático - imprimir");
 
-            MenuFinanceiro.Add(TabelaBasicaFinanceiroAcessar, "Tabelas básicas - acessar");
-            MenuFinanceiro.Add(TabelaBasicaFinanceiroGravar, "Tabelas básicas - gravar");
-            MenuFinanceiro.Add(TabelaBasicaFinanceiroDeletar, "Tabelas básicas - deletar");
-            MenuFinanceiro.Add(TabelaBasicaFinanceiroImprimir, "Tabelas básicas - imprimir");
+            //MenuFinanceiro.Add(TabelaBasicaFinanceiroAcessar, "Tabelas básicas - acessar");
+            //MenuFinanceiro.Add(TabelaBasicaFinanceiroGravar, "Tabelas básicas - gravar");
+            //MenuFinanceiro.Add(TabelaBasicaFinanceiroDeletar, "Tabelas básicas - deletar");
+            //MenuFinanceiro.Add(TabelaBasicaFinanceiroImprimir, "Tabelas básicas - imprimir");
 
-            MenuFinanceiro.Add(TaxaAdministracaoAcessar, "Taxa de administração - acessar");
-            MenuFinanceiro.Add(TaxaAdministracaoGravar, "Taxa de administração - gravar");
-            MenuFinanceiro.Add(TaxaAdministracaoDeletar, "Taxa de administração - deletar");
-            MenuFinanceiro.Add(TaxaAdministracaoImprimir, "Taxa de administração - imprimir");
+            //MenuFinanceiro.Add(TaxaAdministracaoAcessar, "Taxa de administração - acessar");
+            //MenuFinanceiro.Add(TaxaAdministracaoGravar, "Taxa de administração - gravar");
+            //MenuFinanceiro.Add(TaxaAdministracaoDeletar, "Taxa de administração - deletar");
+            //MenuFinanceiro.Add(TaxaAdministracaoImprimir, "Taxa de administração - imprimir");
 
-            MenuFinanceiro.Add(TipoCompromissoAcessar, "Tipo de compromisso - acessar");
-            MenuFinanceiro.Add(TipoCompromissoGravar, "Tipo de compromisso - gravar");
-            MenuFinanceiro.Add(TipoCompromissoDeletar, "Tipo de compromisso - deletar");
-            MenuFinanceiro.Add(TipoCompromissoImprimir, "Tipo de compromisso - imprimir");
+            //MenuFinanceiro.Add(TipoCompromissoAcessar, "Tipo de compromisso - acessar");
+            //MenuFinanceiro.Add(TipoCompromissoGravar, "Tipo de compromisso - gravar");
+            //MenuFinanceiro.Add(TipoCompromissoDeletar, "Tipo de compromisso - deletar");
+            //MenuFinanceiro.Add(TipoCompromissoImprimir, "Tipo de compromisso - imprimir");
 
-            MenuFinanceiro.Add(TipoDocumentoAcessar, "Tipo de documento - acessar");
-            MenuFinanceiro.Add(TipoDocumentoGravar, "Tipo de documento - gravar");
-            MenuFinanceiro.Add(TipoDocumentoDeletar, "Tipo de documento - deletar");
-            MenuFinanceiro.Add(TipoDocumentoImprimir, "Tipo de documento - Imprimir");
+            //MenuFinanceiro.Add(TipoDocumentoAcessar, "Tipo de documento - acessar");
+            //MenuFinanceiro.Add(TipoDocumentoGravar, "Tipo de documento - gravar");
+            //MenuFinanceiro.Add(TipoDocumentoDeletar, "Tipo de documento - deletar");
+            //MenuFinanceiro.Add(TipoDocumentoImprimir, "Tipo de documento - Imprimir");
 
-            MenuFinanceiro.Add(TipoMovimentoAcessar, "Tipo movimento - acessar");
-            MenuFinanceiro.Add(TipoMovimentoGravar, "Tipo movimento - gravar");
-            MenuFinanceiro.Add(TipoMovimentoDeletar, "Tipo movimento - deletar");
-            MenuFinanceiro.Add(TipoMovimentoImprimir, "Tipo movimento - Imprimir");
+            //MenuFinanceiro.Add(TipoMovimentoAcessar, "Tipo movimento - acessar");
+            //MenuFinanceiro.Add(TipoMovimentoGravar, "Tipo movimento - gravar");
+            //MenuFinanceiro.Add(TipoMovimentoDeletar, "Tipo movimento - deletar");
+            //MenuFinanceiro.Add(TipoMovimentoImprimir, "Tipo movimento - Imprimir");
 
-            MenuFinanceiro.Add(TipoRateioAcessar, "Tipo rateio - acessar");
-            MenuFinanceiro.Add(TipoRateioGravar, "Tipo rateio - gravar");
-            MenuFinanceiro.Add(TipoRateioDeletar, "Tipo rateio - deletar");
-            MenuFinanceiro.Add(TipoRateioImprimir, "Tipo rateio - Imprimir");
+            //MenuFinanceiro.Add(TipoRateioAcessar, "Tipo rateio - acessar");
+            //MenuFinanceiro.Add(TipoRateioGravar, "Tipo rateio - gravar");
+            //MenuFinanceiro.Add(TipoRateioDeletar, "Tipo rateio - deletar");
+            //MenuFinanceiro.Add(TipoRateioImprimir, "Tipo rateio - Imprimir");
 
-            MenuFinanceiro.Add(BancoAcessar, "Banco - acessar");
-            MenuFinanceiro.Add(BancoGravar, "Banco - gravar");
-            MenuFinanceiro.Add(BancoDeletar, "Banco - deletar");
-            MenuFinanceiro.Add(BancoImprimir, "Banco - Imprimir");
+            //MenuFinanceiro.Add(BancoAcessar, "Banco - acessar");
+            //MenuFinanceiro.Add(BancoGravar, "Banco - gravar");
+            //MenuFinanceiro.Add(BancoDeletar, "Banco - deletar");
+            //MenuFinanceiro.Add(BancoImprimir, "Banco - Imprimir");
 
-            MenuFinanceiro.Add(AgenciaAcessar, "Agência - acessar");
-            MenuFinanceiro.Add(AgenciaGravar, "Agência - gravar");
-            MenuFinanceiro.Add(AgenciaDeletar, "Agência - deletar");
-            MenuFinanceiro.Add(AgenciaImprimir, "Agência - imprimir");
+            //MenuFinanceiro.Add(AgenciaAcessar, "Agência - acessar");
+            //MenuFinanceiro.Add(AgenciaGravar, "Agência - gravar");
+            //MenuFinanceiro.Add(AgenciaDeletar, "Agência - deletar");
+            //MenuFinanceiro.Add(AgenciaImprimir, "Agência - imprimir");
 
-            MenuFinanceiro.Add(ContaCorrenteAcessar, "Conta corrente - acessar");
-            MenuFinanceiro.Add(ContaCorrenteGravar, "Conta corrente - gravar");
-            MenuFinanceiro.Add(ContaCorrenteDeletar, "Conta corrente - deletar");
-            //MenuFinanceiro.Add(ContaCorrenteImprimir, "Conta corrente - imprimir");
+            //MenuFinanceiro.Add(ContaCorrenteAcessar, "Conta corrente - acessar");
+            //MenuFinanceiro.Add(ContaCorrenteGravar, "Conta corrente - gravar");
+            //MenuFinanceiro.Add(ContaCorrenteDeletar, "Conta corrente - deletar");
+            ////MenuFinanceiro.Add(ContaCorrenteImprimir, "Conta corrente - imprimir");
 
             MenuFinanceiro.Add(RelatorioApropriacaoPorClasseAcessar, "Relatório de apropriação por classe - acessar");
             MenuFinanceiro.Add(RelatorioApropriacaoPorClasseImprimir, "Relatório de apropriação por classe - imprimir");
@@ -328,21 +328,21 @@ namespace GIR.Sigim.Application.Constantes
         {
             MenuOrdemCompra = new System.Collections.Hashtable();
 
-            //MenuOrdemCompra.Add(OrdemCompraMaterialAcessar, "Material - acessar");
-            //MenuOrdemCompra.Add(OrdemCompraMaterialGravar, "Material - gravar");
-            //MenuOrdemCompra.Add(OrdemCompraMaterialDeletar, "Material - deletar");
-            //MenuOrdemCompra.Add(OrdemCompraMaterialImprimir, "Material - Imprimir");
+            ////MenuOrdemCompra.Add(OrdemCompraMaterialAcessar, "Material - acessar");
+            ////MenuOrdemCompra.Add(OrdemCompraMaterialGravar, "Material - gravar");
+            ////MenuOrdemCompra.Add(OrdemCompraMaterialDeletar, "Material - deletar");
+            ////MenuOrdemCompra.Add(OrdemCompraMaterialImprimir, "Material - Imprimir");
 
-            MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaAcessar, "Unidade de medida - acessar");
-            MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaGravar, "Unidade de medida - gravar");
-            MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaDeletar, "Unidade de medida - deletar");
-            MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaImprimir, "Unidade de medida - imprimir");
+            //MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaAcessar, "Unidade de medida - acessar");
+            //MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaGravar, "Unidade de medida - gravar");
+            //MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaDeletar, "Unidade de medida - deletar");
+            //MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaImprimir, "Unidade de medida - imprimir");
 
-            MenuOrdemCompra.Add(ParametroOrdemCompraAcessar, "Parâmetros - acessar");
-            MenuOrdemCompra.Add(ParametroOrdemCompraGravar, "Parâmetros - gravar");
+            //MenuOrdemCompra.Add(ParametroOrdemCompraAcessar, "Parâmetros - acessar");
+            //MenuOrdemCompra.Add(ParametroOrdemCompraGravar, "Parâmetros - gravar");
 
-            MenuOrdemCompra.Add(ParametroUsuarioOrdemCompraAcessar, "Parâmetros do usuário - acessar");
-            MenuOrdemCompra.Add(ParametroUsuarioOrdemCompraGravar, "Parâmetros do usuário - gravar");
+            //MenuOrdemCompra.Add(ParametroUsuarioOrdemCompraAcessar, "Parâmetros do usuário - acessar");
+            //MenuOrdemCompra.Add(ParametroUsuarioOrdemCompraGravar, "Parâmetros do usuário - gravar");
 
             MenuOrdemCompra.Add(PreRequisicaoMaterialAcessar, "Pré-Requisição de material - acessar");
             MenuOrdemCompra.Add(PreRequisicaoMaterialGravar, "Pré-Requisição de material - gravar");
@@ -366,17 +366,17 @@ namespace GIR.Sigim.Application.Constantes
             MenuOrdemCompra.Add(RelatorioItensOrdemCompraImprimir, "Relatório de itens de ordem de compra - imprimir");
         }
 
-        private void FuncionalidadeSac()
-        {
-            MenuSac = new System.Collections.Hashtable();
+        //private void FuncionalidadeSac()
+        //{
+        //    MenuSac = new System.Collections.Hashtable();
 
-            MenuSac.Add(ParametroSacAcessar, "Parâmetros - acessar");
-            MenuSac.Add(ParametroSacGravar, "Parâmetros - gravar");
+        //    MenuSac.Add(ParametroSacAcessar, "Parâmetros - acessar");
+        //    MenuSac.Add(ParametroSacGravar, "Parâmetros - gravar");
 
-            MenuSac.Add(SetorSacAcessar, "Setor - acessar");
-            MenuSac.Add(SetorSacGravar, "Setor - gravar");
-            MenuSac.Add(SetorSacDeletar, "Setor - deletar");
-            //MenuSac.Add(SetorSacImprimir, "Setor - imprimir");
-        }
+        //    MenuSac.Add(SetorSacAcessar, "Setor - acessar");
+        //    MenuSac.Add(SetorSacGravar, "Setor - gravar");
+        //    MenuSac.Add(SetorSacDeletar, "Setor - deletar");
+        //    //MenuSac.Add(SetorSacImprimir, "Setor - imprimir");
+        //}
     }
 }
