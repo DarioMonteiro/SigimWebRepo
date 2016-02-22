@@ -649,9 +649,9 @@
 
     function habilitarDesabitarOpcaoCreditoCobranca() {
         var habilitar = false;
-        habilitar = $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberFaturado)").is(':checked');
+@*        habilitar = $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberFaturado)").is(':checked');
         habilitar = habilitar || $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberQuitado)").is(':checked');
-        habilitar = habilitar || $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberRecebido)").is(':checked');
+        habilitar = habilitar || $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberRecebido)").is(':checked');*@
         if (habilitar) {
             $('#@Html.IdFor(m => m.Filtro.EhMovimentoCreditoCobranca)').prop('disabled', '');
             $('#lblCreditoCobranca').removeClass("state-disabled");
