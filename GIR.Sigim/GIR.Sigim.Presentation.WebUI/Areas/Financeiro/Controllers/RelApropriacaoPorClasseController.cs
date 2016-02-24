@@ -89,7 +89,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
         private void CarregarListas(RelApropriacaoPorClasseListaViewModel model)
         {
-            model.ListaTipoPesquisa  = new SelectList(apropriacaoAppService.ListarTipoPesquisaRelatorioApropriacaoPorClasse(), "Id", "Descricao", model.Filtro.TipoPesquisa);
             model.ListaOpcoesRelatorio = new SelectList(apropriacaoAppService.ListarOpcoesRelatorioApropriacaoPorClasse(), "Id", "Descricao", model.Filtro.OpcoesRelatorio);
         }
 

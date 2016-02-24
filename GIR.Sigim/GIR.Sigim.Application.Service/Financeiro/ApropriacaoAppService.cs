@@ -313,11 +313,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
 
             string tipoPesquisa = "";
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorCompetencia)
+            if (filtro.EhTipoPesquisaPorCompetencia)
             {
                 tipoPesquisa = "V";
             }
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorEmissaoDocumento)
+            if (filtro.EhTipoPesquisaPorEmissao)
             {
                 tipoPesquisa = "E";
             }
@@ -327,7 +327,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (filtro.OpcoesRelatorio.HasValue)
             {
-                if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                //if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
                 {
                     if (filtro.ListaClasseDespesa.Count > 0)
                     {
@@ -373,11 +374,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
 
             string tipoPesquisa = "";
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorCompetencia)
+            if (filtro.EhTipoPesquisaPorCompetencia)
             {
                 tipoPesquisa = "V";
             }
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorEmissaoDocumento)
+            if (filtro.EhTipoPesquisaPorEmissao)
             {
                 tipoPesquisa = "E";
             }
@@ -387,7 +388,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (filtro.OpcoesRelatorio.HasValue)
             {
-                if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                //if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
                 {
                     if (filtro.ListaClasseReceita.Count > 0)
                     {
@@ -676,11 +678,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
 
             string tipoPesquisa = "";
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorCompetencia)
+            if (filtro.EhTipoPesquisaPorCompetencia)
             {
                 tipoPesquisa = "V";
             }
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorEmissaoDocumento)
+            if (filtro.EhTipoPesquisaPorEmissao)
             {
                 tipoPesquisa = "E";
             }
@@ -690,7 +692,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (filtro.OpcoesRelatorio.HasValue)
             {
-                if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                //if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
                 {
                     if (filtro.ListaClasseDespesa.Count > 0)
                     {
@@ -735,11 +738,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
 
             string tipoPesquisa = "";
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorCompetencia)
+            if (filtro.EhTipoPesquisaPorCompetencia)
             {
                 tipoPesquisa = "V";
             }
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorEmissaoDocumento)
+            if (filtro.EhTipoPesquisaPorEmissao)
             {
                 tipoPesquisa = "E";
             }
@@ -749,7 +752,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (filtro.OpcoesRelatorio.HasValue)
             {
-                if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                //if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
                 {
                     if (filtro.ListaClasseReceita.Count > 0)
                     {
@@ -817,7 +821,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             if (filtro.OpcoesRelatorio.HasValue)
             {
-                if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                //if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
                 {
                     if (filtro.ListaClasseDespesa.Count > 0)
                     {
@@ -1034,11 +1039,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
         private string MontaStringTipoPesquisa(RelApropriacaoPorClasseFiltro filtro)
         {
             string strTipoData = "";
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorCompetencia)
+
+            if (filtro.EhTipoPesquisaPorCompetencia)
             {
                 strTipoData = "por competência";
             }
-            if (filtro.TipoPesquisa.Value == (int)TipoPesquisaRelatorioApropriacaoPorClasse.PorEmissaoDocumento)
+            if (filtro.EhTipoPesquisaPorEmissao)
             {
                 strTipoData = "por emissão de documento";
             }

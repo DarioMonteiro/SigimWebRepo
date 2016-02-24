@@ -70,7 +70,9 @@ namespace GIR.Sigim.Application.Service.CredCob
 
             if (filtro.OpcoesRelatorio.HasValue)
             {
-                if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                //if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+
+                if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
                 {
                     if (filtro.ListaClasseReceita.Count > 0)
                     {
