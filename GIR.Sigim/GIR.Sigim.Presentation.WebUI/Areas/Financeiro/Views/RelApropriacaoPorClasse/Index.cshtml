@@ -16,6 +16,7 @@
             </header>
             <div>
                 <div class="widget-body no-padding">
+                    <div id="resultadoBusca"></div>
                     @using (Ajax.BeginForm(
                         "Imprimir",
                         "RelApropriacaoPorClasse",
@@ -306,7 +307,7 @@
 
                         </footer>
                     }
-                    <div id="resultadoBusca"></div>
+                    @*<div id="resultadoBusca"></div>*@
                 </div>
             </div>
         </div>
