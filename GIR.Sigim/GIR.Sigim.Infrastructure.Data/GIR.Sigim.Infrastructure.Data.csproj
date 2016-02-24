@@ -67,6 +67,7 @@
     <Compile Include="Configuration\Comercial\UnidadeConfiguration.cs" />
     <Compile Include="Configuration\Comercial\VendaConfiguration.cs" />
     <Compile Include="Configuration\Comercial\VendaParticipanteConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\VendaSerieConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetencaoConfiguration.cs" />
     <Compile Include="Configuration\Contrato\ContratoRetencaoLiberadaConfiguration.cs" />
@@ -147,7 +148,10 @@
     <Compile Include="Configuration\Sigim\AvaliacaoFornecedorConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ComplementoCSTConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ComplementoNaturezaOperacaoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\CotacaoValoresConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\EnderecoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\FeriadoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\IndiceFinanceiroConfiguration.cs" />
     <Compile Include="Configuration\Sigim\NaturezaReceitaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\LogAcessoConfiguration.cs" />
     <Compile Include="Configuration\Sigim\AgenciaConfiguration.cs" />

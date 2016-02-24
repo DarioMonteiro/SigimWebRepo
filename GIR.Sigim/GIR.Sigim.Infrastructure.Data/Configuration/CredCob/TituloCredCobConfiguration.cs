@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.CredCob;
 using GIR.Sigim.Domain.Entity.Comercial;
+using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
 {
@@ -134,7 +135,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
                 .HasColumnName("indice")
                 .HasColumnOrder(23);
 
-            Property(l => l.SerieId)
+            HasOptional<IndiceFinanceiro>(l => l.Indice)
+                .WithMany(c => c.ListaTituloCredCob)
+                .HasForeignKey(l => l.IndiceId);
+
+            Property(l => l.Serie)
                 .HasColumnName("serie")
                 .HasColumnOrder(24);
 

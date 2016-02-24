@@ -118,6 +118,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new UnidadeConfiguration());
             modelBuilder.Configurations.Add(new VendaConfiguration());
             modelBuilder.Configurations.Add(new VendaParticipanteConfiguration());
+            modelBuilder.Configurations.Add(new VendaSerieConfiguration());
 
             #endregion
 
@@ -231,12 +232,15 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ComplementoNaturezaOperacaoConfiguration());
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());
             modelBuilder.Configurations.Add(new ContaCorrenteConfiguration());
+            modelBuilder.Configurations.Add(new CotacaoValoresConfiguration());
             modelBuilder.Configurations.Add(new CSTConfiguration());
+            modelBuilder.Configurations.Add(new EnderecoConfiguration());
             modelBuilder.Configurations.Add(new EstadoCivilConfiguration());
             modelBuilder.Configurations.Add(new FeriadoConfiguration());
             modelBuilder.Configurations.Add(new FonteNegocioConfiguration());
             modelBuilder.Configurations.Add(new FormaRecebimentoConfiguration());
             modelBuilder.Configurations.Add(new GrupoConfiguration());
+            modelBuilder.Configurations.Add(new IndiceFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new InteresseBairroConfiguration());
             modelBuilder.Configurations.Add(new LogAcessoConfiguration());
             modelBuilder.Configurations.Add(new LogOperacaoConfiguration());

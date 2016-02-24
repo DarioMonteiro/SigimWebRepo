@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Comercial;
+using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Domain.Entity.CredCob
 {
@@ -32,7 +33,8 @@ namespace GIR.Sigim.Domain.Entity.CredCob
         public Decimal QtdIndiceAmortizacaoOriginal { get; set; }
         public int? ContaCorrenteId { get; set; }
         public int? IndiceId { get; set; }
-        public int? SerieId { get; set; }
+        public IndiceFinanceiro Indice { get; set; }
+        public int? Serie { get; set; }
         public string NumeroParcela { get; set; }
         public int? VerbaCobrancaId { get; set; }
         public VerbaCobranca VerbaCobranca { get; set; }
@@ -59,5 +61,121 @@ namespace GIR.Sigim.Domain.Entity.CredCob
         public int? NumeroAgrupamentoRenegociacaoId { get; set; }
         public string NumeroBoleto { get; set; }
         public int? IndiceAtrasoCorrecaoId { get; set; }
+
+        public decimal ObterValorDevido(Nullable<DateTime> dataReferencia, bool corrigeParcelaResiduo)
+        {
+            //var quantidadeTotalMedida = (from med in ListaContratoRetificacaoItemMedicao
+            //                             where (med.Situacao == SituacaoMedicao.AguardandoAprovacao || med.Situacao == SituacaoMedicao.AguardandoLiberacao) &&
+            //                                   (med.SequencialItem == sequencialItem && med.SequencialCronograma == sequencialCronograma)
+            //                             select med.Quantidade).Sum();
+
+            decimal valorDevido = 0;
+            decimal valorTituloAtrasado = 0;
+            //decimal valorTituloDataBase = 0;
+            //decimal valorMulta = 0;
+            decimal valorTituloDataReferencia = 0;
+            decimal valorIndiceDataVencimentoDefasada = 0;
+            decimal valorIndiceDataReferenciaDefasada = 0;
+            DateTime dataVencimentoDefasada;
+            DateTime dataReferenciaDefasada;
+            DateTime ultimaData;
+
+            if (dataReferencia.HasValue) {
+                dataReferencia = dataReferencia.Value.Date;
+            }
+
+            if ((Situacao == "P") || (Situacao == "Q")){
+                if (!dataReferencia.HasValue) {
+                    dataReferencia = DataVencimento;
+                }
+            }
+
+            //Trata data referencia
+            if (dataReferencia.HasValue) {
+                if (DataVencimento < dataReferencia){
+                    ClienteFornecedor clienteTitular = Contrato.Venda.Contrato.ListaVendaParticipante.Where(l => l.TipoParticipanteId == 1).FirstOrDefault().Cliente;
+                    bool achouProximoDiaUtil = false;
+                    DateTime dataUtil = DataVencimento.AddDays(-1);
+
+                    while (!achouProximoDiaUtil){
+                        dataUtil = dataUtil.AddDays(1);
+                        Feriado feriado = null;
+                        if (clienteTitular.Correspondencia == "R"){
+                            feriado = clienteTitular.EnderecoResidencial.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault(); 
+                        }
+                        if (clienteTitular.Correspondencia == "C"){
+                            feriado = clienteTitular.EnderecoComercial.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault(); 
+                        }
+                        if (clienteTitular.Correspondencia == "O"){
+                            feriado = clienteTitular.EnderecoOutro.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault(); 
+                        }
+                        if (feriado == null){
+                            if ((dataUtil.DayOfWeek != DayOfWeek.Saturday)&&(dataUtil.DayOfWeek != DayOfWeek.Sunday)){
+                                achouProximoDiaUtil = true;
+                            }
+                        }
+                    }
+                    if (dataUtil >= dataReferencia.Value){
+                        dataReferencia = DataVencimento;
+                    }
+                }
+            }
+            //Trata data referencia
+
+            if (Situacao == "P"){
+
+                VendaSerie vendaSerie = Contrato.ListaVendaSerie.Where(l => l.NumeroSerie == Serie).FirstOrDefault();
+
+                CotacaoValores cotacaoValores = null;
+                //Calcula cotacao 
+                dataReferenciaDefasada = dataReferencia.Value.Date.AddMonths(vendaSerie.DefasagemMesIndiceCorrecao * -1);
+                ultimaData = Indice.ListaCotacaoValores.Where(l => l.Data <= dataReferenciaDefasada).Select(l => l.Data.Value).Max();
+                cotacaoValores = Indice.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
+                //Fim calcula cotacao
+
+                valorIndiceDataReferenciaDefasada = cotacaoValores.Valor.HasValue ? cotacaoValores.Valor.Value : 0;
+
+
+                //Calcula cotacao 
+                dataVencimentoDefasada = DataVencimento.Date.AddMonths(vendaSerie.DefasagemMesIndiceCorrecao * -1);
+                ultimaData = Indice.ListaCotacaoValores.Where(l => l.Data <= dataVencimentoDefasada).Select(l => l.Data.Value).Max();
+                cotacaoValores = Indice.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
+                //Fim calcula cotacao
+
+                valorIndiceDataVencimentoDefasada = cotacaoValores.Valor.HasValue ? cotacaoValores.Valor.Value : 0;
+
+                //Calcula valor atualizado
+                if (dataReferencia >= DataVencimento){
+                    valorTituloDataReferencia = QtdIndice * valorIndiceDataVencimentoDefasada;
+                }
+                else {
+                    valorTituloDataReferencia = QtdIndice * valorIndiceDataReferenciaDefasada;
+                }
+                //Calcula valor atualizado
+
+                if (!corrigeParcelaResiduo){
+                    if ((Situacao == "P") && (vendaSerie.CobrancaResiduo =="S")){
+                        valorTituloDataReferencia = QtdIndice * ValorIndiceBase;
+                    }
+                }
+
+                if (corrigeParcelaResiduo){
+                    if ((Situacao == "P") && (vendaSerie.CobrancaResiduo =="S") && (dataReferencia.Value > DataVencimento)){
+                        valorTituloDataReferencia = QtdIndice * ValorIndiceBase;
+                    }
+                }
+
+		        valorTituloDataBase = valorTituloDataReferencia;
+
+                valorTituloAtrasado = valorTituloDataBase;
+                if (DataVencimento < dataReferencia){
+                    valorTituloAtrasado = valorTituloDataBase + valorMulta + valorEncargos + valorCorrecaoAtraso + valorCorrecaoProrrata
+                }
+                valorDevido = valorTituloAtrasado;
+            }
+
+            return valorDevido;
+        }
+
     }
 }

@@ -26,6 +26,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("descricao")
                 .HasMaxLength(50);
 
+            Property(l => l.UnidadeFederacaoSigla)
+                .HasColumnName("unidadeFederacao")
+                .HasMaxLength(2);
+
+            HasRequired<UnidadeFederacao>(l => l.UnidadeFederacao)
+                .WithMany(l => l.ListaFeriado)
+                .HasForeignKey(l => l.UnidadeFederacaoSigla);
+
             Property(l => l.Ativo)
                 .HasColumnName("ativo")
                 .HasColumnType("bit");
