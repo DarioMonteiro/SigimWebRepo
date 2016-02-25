@@ -136,7 +136,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
                 .HasColumnOrder(23);
 
             HasOptional<IndiceFinanceiro>(l => l.Indice)
-                .WithMany(c => c.ListaTituloCredCob)
+                .WithMany(c => c.ListaTituloCredCobIndice)
                 .HasForeignKey(l => l.IndiceId);
 
             Property(l => l.Serie)
@@ -269,6 +269,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
             Property(l => l.IndiceAtrasoCorrecaoId)
                 .HasColumnName("indiceAtrasoCorrecao")
                 .HasColumnOrder(49);
+
+            HasOptional<IndiceFinanceiro>(l => l.IndiceAtrasoCorrecao)
+                .WithMany(c => c.ListaTituloCredCobIndiceAtraso)
+                .HasForeignKey(l => l.IndiceAtrasoCorrecaoId);
+
 
         }
     }

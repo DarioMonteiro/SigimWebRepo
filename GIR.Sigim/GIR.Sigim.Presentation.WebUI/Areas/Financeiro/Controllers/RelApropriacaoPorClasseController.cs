@@ -87,7 +87,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             List<ApropriacaoClasseCCRelatorioDTO> listaApropriacaoPorClasseDTO = apropriacaoAppService.GerarRelatorioApropriacaoPorClasse(model.Filtro, Usuario.Id);
             if (listaApropriacaoPorClasseDTO == null)
             {
-                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NaoExistemRegistros, TypeMessage.Error);
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
                 return PartialView("_NotificationMessagesPartial");
             }
 

@@ -41,6 +41,15 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .WithMany(c => c.ListaUnidade)
                 .HasForeignKey(l => l.BlocoId);
 
+            Property(l => l.MultaPorAtraso)
+                .HasColumnName("multaPorAtraso")
+                .HasPrecision(18,5)
+                .HasColumnOrder(17);
+
+            Property(l => l.ConsiderarParametroUnidade)
+                .HasColumnName("considerarParametroUnidade")
+                .HasColumnType("bit")
+                .HasColumnOrder(34);
         }
 
     }

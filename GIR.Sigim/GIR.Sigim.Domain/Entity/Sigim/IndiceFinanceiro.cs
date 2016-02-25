@@ -19,7 +19,8 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public String Status { get; set; }
         public bool? Dissidio { get; set; } 
 
-        public ICollection<TituloCredCob> ListaTituloCredCob { get; set; }
+        public ICollection<TituloCredCob> ListaTituloCredCobIndice { get; set; }
+        public ICollection<TituloCredCob> ListaTituloCredCobIndiceAtraso { get; set; }
         public ICollection<VendaSerie> ListaVendaSerieIndiceCorrecao { get; set; }
         public ICollection<VendaSerie> ListaVendaSerieIndiceAtrasoCorrecao { get; set; }
         public ICollection<VendaSerie> ListaVendaSerieIndiceReajuste { get; set; }
@@ -27,7 +28,8 @@ namespace GIR.Sigim.Domain.Entity.Sigim
 
         public IndiceFinanceiro()
         {
-            this.ListaTituloCredCob = new HashSet<TituloCredCob>();
+            this.ListaTituloCredCobIndice = new HashSet<TituloCredCob>();
+            this.ListaTituloCredCobIndiceAtraso = new HashSet<TituloCredCob>();
             this.ListaVendaSerieIndiceCorrecao = new HashSet<VendaSerie>();
             this.ListaVendaSerieIndiceAtrasoCorrecao = new HashSet<VendaSerie>();
             this.ListaVendaSerieIndiceReajuste = new HashSet<VendaSerie>();

@@ -61,6 +61,7 @@ namespace GIR.Sigim.Domain.Entity.CredCob
         public int? NumeroAgrupamentoRenegociacaoId { get; set; }
         public string NumeroBoleto { get; set; }
         public int? IndiceAtrasoCorrecaoId { get; set; }
+        public IndiceFinanceiro IndiceAtrasoCorrecao { get; set; }
 
         public decimal ObterValorDevido(Nullable<DateTime> dataReferencia, bool corrigeParcelaResiduo)
         {
@@ -71,7 +72,7 @@ namespace GIR.Sigim.Domain.Entity.CredCob
 
             decimal valorDevido = 0;
             decimal valorTituloAtrasado = 0;
-            //decimal valorTituloDataBase = 0;
+            decimal valorTituloDataBase = 0;
             //decimal valorMulta = 0;
             decimal valorTituloDataReferencia = 0;
             decimal valorIndiceDataVencimentoDefasada = 0;
@@ -79,6 +80,7 @@ namespace GIR.Sigim.Domain.Entity.CredCob
             DateTime dataVencimentoDefasada;
             DateTime dataReferenciaDefasada;
             DateTime ultimaData;
+            //decimal fatorCorrecao = 0;
 
             if (dataReferencia.HasValue) {
                 dataReferencia = dataReferencia.Value.Date;
@@ -88,39 +90,41 @@ namespace GIR.Sigim.Domain.Entity.CredCob
                 if (!dataReferencia.HasValue) {
                     dataReferencia = DataVencimento;
                 }
-            }
 
-            //Trata data referencia
-            if (dataReferencia.HasValue) {
-                if (DataVencimento < dataReferencia){
-                    ClienteFornecedor clienteTitular = Contrato.Venda.Contrato.ListaVendaParticipante.Where(l => l.TipoParticipanteId == 1).FirstOrDefault().Cliente;
-                    bool achouProximoDiaUtil = false;
-                    DateTime dataUtil = DataVencimento.AddDays(-1);
+                //Trata dia util
+                //Trata data referencia
+                if (dataReferencia.HasValue) {
+                    if (DataVencimento < dataReferencia){
+                        ClienteFornecedor clienteTitular = Contrato.Venda.Contrato.ListaVendaParticipante.Where(l => l.TipoParticipanteId == 1).FirstOrDefault().Cliente;
+                        bool achouProximoDiaUtil = false;
+                        DateTime dataUtil = DataVencimento.AddDays(-1);
 
-                    while (!achouProximoDiaUtil){
-                        dataUtil = dataUtil.AddDays(1);
-                        Feriado feriado = null;
-                        if (clienteTitular.Correspondencia == "R"){
-                            feriado = clienteTitular.EnderecoResidencial.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault(); 
-                        }
-                        if (clienteTitular.Correspondencia == "C"){
-                            feriado = clienteTitular.EnderecoComercial.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault(); 
-                        }
-                        if (clienteTitular.Correspondencia == "O"){
-                            feriado = clienteTitular.EnderecoOutro.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault(); 
-                        }
-                        if (feriado == null){
-                            if ((dataUtil.DayOfWeek != DayOfWeek.Saturday)&&(dataUtil.DayOfWeek != DayOfWeek.Sunday)){
-                                achouProximoDiaUtil = true;
+                        while (!achouProximoDiaUtil){
+                            dataUtil = dataUtil.AddDays(1);
+                            Feriado feriado = null;
+                            if (clienteTitular.Correspondencia == "R"){
+                                feriado = clienteTitular.EnderecoResidencial.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault(); 
+                            }
+                            if (clienteTitular.Correspondencia == "C"){
+                                feriado = clienteTitular.EnderecoComercial.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault(); 
+                            }
+                            if (clienteTitular.Correspondencia == "O"){
+                                feriado = clienteTitular.EnderecoOutro.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault(); 
+                            }
+                            if (feriado == null){
+                                if ((dataUtil.DayOfWeek != DayOfWeek.Saturday)&&(dataUtil.DayOfWeek != DayOfWeek.Sunday)){
+                                    achouProximoDiaUtil = true;
+                                }
                             }
                         }
-                    }
-                    if (dataUtil >= dataReferencia.Value){
-                        dataReferencia = DataVencimento;
+                        if (dataUtil >= dataReferencia.Value){
+                            dataReferencia = DataVencimento;
+                        }
                     }
                 }
+                //Trata data referencia
+
             }
-            //Trata data referencia
 
             if (Situacao == "P"){
 
@@ -167,7 +171,74 @@ namespace GIR.Sigim.Domain.Entity.CredCob
 
 		        valorTituloDataBase = valorTituloDataReferencia;
 
+                if (!corrigeParcelaResiduo){
+                    if ((Situacao == "P") && (vendaSerie.CobrancaResiduo =="S")){
+                        valorTituloDataBase = QtdIndice * ValorIndiceBase;
+                    }
+                }
+
+                if (corrigeParcelaResiduo){
+                    if ((Situacao == "P") && (vendaSerie.CobrancaResiduo =="S") && (dataReferencia.Value > DataVencimento)){
+                        valorTituloDataBase = QtdIndice * ValorIndiceBase;
+                    }
+                }
+
                 valorTituloAtrasado = valorTituloDataBase;
+
+
+                if (DataVencimento < dataReferencia)
+                {
+                    valorTituloDataReferenciaCorrigido = valorTituloDataReferencia;
+
+                    if (IndiceAtrasoCorrecaoId > 1){
+                        CotacaoValores cotacaoIndiceAtrasoDtRef = null;
+                        //Calcula cotacao 
+                        ultimaData = IndiceAtrasoCorrecao.ListaCotacaoValores.Where(l => l.Data <= dataReferenciaDefasada).Select(l => l.Data.Value).Max();
+                        cotacaoIndiceAtrasoDtRef = IndiceAtrasoCorrecao.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
+                        //Fim calcula cotacao
+
+                        CotacaoValores cotacaoIndiceAtrasoDtVencto = null;
+                        //Calcula cotacao 
+                        ultimaData = IndiceAtrasoCorrecao.ListaCotacaoValores.Where(l => l.Data <= dataVencimentoDefasada).Select(l => l.Data.Value).Max();
+                        cotacaoIndiceAtrasoDtVencto = IndiceAtrasoCorrecao.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
+                        //Fim calcula cotacao
+
+
+                        if ((cotacaoIndiceAtrasoDtRef.Valor.HasValue) && (cotacaoIndiceAtrasoDtVencto.Valor.HasValue))
+                        {
+                            fatorCorrecao = (cotacaoIndiceAtrasoDtRef.Valor.Value / cotacaoIndiceAtrasoDtVencto.Valor.Value) -1;
+                        }
+
+                        if ((cotacaoIndiceAtrasoDtRef.Valor.HasValue) && (cotacaoIndiceAtrasoDtVencto.Valor.HasValue))
+                        {
+                            if (DataVencimento.Day > dataReferencia.Value.Day){
+                                //Calcula cotacao 
+                                ultimaData = IndiceAtrasoCorrecao.ListaCotacaoValores.Where(l => l.Data <= dataReferenciaDefasada.AddMonths(-1)).Select(l => l.Data.Value).Max();
+                                cotacaoIndiceAtrasoDtRef = IndiceAtrasoCorrecao.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
+                                //Fim calcula cotacao
+
+
+                                fatorCorrecao = (cotacaoIndiceAtrasoDtRef.Valor.Value / cotacaoIndiceAtrasoDtVencto.Valor.Value) -1;
+                                }
+                        }
+
+
+                        valorTituloDataReferenciaCorrigido = valorTituloDataReferencia + (valorTituloDataReferencia + fatorCorrecao);
+
+                        valorCorrecaoAtraso = valorTituloDataReferenciaCorrigido - valorTituloDataReferencia;
+                    }
+
+                    valorCorrecaoAtraso = valorTituloDataReferenciaCorrigido - valorTituloDataReferencia;
+
+
+                    if ((Contrato.Unidade.ConsiderarParametroUnidade.HasValue) && (Contrato.Unidade.ConsiderarParametroUnidade.Value))
+                    {
+                        Decimal percentualMultaPorAtraso = Contrato.Unidade.MultaPorAtraso.HasValue ? Contrato.Unidade.MultaPorAtraso.Value : 0;
+                        ValorMulta = ((valorTituloDataBase + valorCorrecaoAtraso + AUX.valorCorrecaoProrrata) * (percentualMultaPorAtraso / 100.0m));
+                    }
+                }
+
+
                 if (DataVencimento < dataReferencia){
                     valorTituloAtrasado = valorTituloDataBase + valorMulta + valorEncargos + valorCorrecaoAtraso + valorCorrecaoProrrata
                 }
