@@ -93,8 +93,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             var arquivo = apropriacaoAppService.ExportarRelApropriacaoPorClasse(model.Filtro,listaApropriacaoPorClasseDTO, formato);
 
-
-            //var arquivo = apropriacaoAppService.ExportarRelApropriacaoPorClasse(model.Filtro, Usuario.Id, formato);
             if (arquivo != null)
             {
                 Response.Buffer = false;
@@ -105,7 +103,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             return PartialView("_NotificationMessagesPartial");
         }
-
 
         private void CarregarListas(RelApropriacaoPorClasseListaViewModel model)
         {
