@@ -83,6 +83,7 @@
     <Compile Include="DTO\Contrato\ResumoLiberacaoDTO.cs" />
     <Compile Include="DTO\Estoque\MovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
+    <Compile Include="DTO\Financeiro\ApropriacaoClasseCCRelatorioDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />

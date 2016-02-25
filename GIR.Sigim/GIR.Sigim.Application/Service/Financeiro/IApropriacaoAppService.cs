@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.Filtros.Financeiro;
 
 namespace GIR.Sigim.Application.Service.Financeiro
@@ -13,6 +14,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
         List<ItemListaDTO> ListarTipoPesquisaRelatorioApropriacaoPorClasse();
         List<ItemListaDTO> ListarOpcoesRelatorioApropriacaoPorClasse();
         bool EhPermitidoImprimirRelApropriacaoPorClasse();
+        List<ApropriacaoClasseCCRelatorioDTO> GerarRelatorioApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? usuarioId);
         FileDownloadDTO ExportarRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? usuarioId, FormatoExportacaoArquivo formato);
+        FileDownloadDTO ExportarRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, List<ApropriacaoClasseCCRelatorioDTO> listaApropriacaoPorClasseDTO, FormatoExportacaoArquivo formato);
     }
 }
