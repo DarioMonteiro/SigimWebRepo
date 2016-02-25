@@ -15,7 +15,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
         List<ItemListaDTO> ListarOpcoesRelatorioApropriacaoPorClasse();
         bool EhPermitidoImprimirRelApropriacaoPorClasse();
         List<ApropriacaoClasseCCRelatorioDTO> GerarRelatorioApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? usuarioId);
-        FileDownloadDTO ExportarRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? usuarioId, FormatoExportacaoArquivo formato);
         FileDownloadDTO ExportarRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, List<ApropriacaoClasseCCRelatorioDTO> listaApropriacaoPorClasseDTO, FormatoExportacaoArquivo formato);
     }
 }
