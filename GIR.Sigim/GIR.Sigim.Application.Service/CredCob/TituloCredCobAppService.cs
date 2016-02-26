@@ -14,6 +14,9 @@ using GIR.Sigim.Domain.Specification.CredCob;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Domain.Repository.Financeiro;
+using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.DTO.CredCob;
+
 
 namespace GIR.Sigim.Application.Service.CredCob
 {
@@ -104,6 +107,25 @@ namespace GIR.Sigim.Application.Service.CredCob
             return specification;
         }
 
+        public List<TituloDetalheCredCobDTO> RecTit(List<TituloCredCob> listaTituloCredCob,
+                                                 Nullable<DateTime> dataReferencia,
+                                                 bool excluiTabelaTemporaria,
+                                                 bool corrigeParcelaResiduo)
+        {
+            List<TituloDetalheCredCobDTO> listaTituloDetalheCredCob = new List<TituloDetalheCredCobDTO>();
+
+            foreach (TituloCredCob titulo in listaTituloCredCob)
+            {
+                TituloDetalheCredCobDTO tituloDetalhe = new TituloDetalheCredCobDTO();
+                tituloDetalhe = titulo.To<TituloDetalheCredCobDTO>();
+
+                listaTituloDetalheCredCob.Add(tituloDetalhe);
+            }
+
+
+            return listaTituloDetalheCredCob;
+        }
+
         #endregion
 
 
@@ -132,7 +154,7 @@ namespace GIR.Sigim.Application.Service.CredCob
 
         }
 
-        public void MontaArrayClasseExistentes(Classe classeSelecionada, List<Classe> listaClassesSelecionadas)
+        private void MontaArrayClasseExistentes(Classe classeSelecionada, List<Classe> listaClassesSelecionadas)
         {
             if (classeSelecionada.ListaFilhos.Count == 0)
             {

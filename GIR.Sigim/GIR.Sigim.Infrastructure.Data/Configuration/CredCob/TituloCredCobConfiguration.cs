@@ -247,6 +247,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
                 .HasColumnName("formaRecebimento")
                 .HasColumnOrder(44);
 
+            HasOptional<FormaRecebimento>(l => l.FormaRecebimento)
+                .WithMany(c => c.ListaTituloCredCob)
+                .HasForeignKey(l => l.FormaRecebimentoId);
+
+
             Property(l => l.QtdDiasAtraso)
                 .HasColumnName("qtdDiasAtraso")
                 .HasColumnType("smallint")
@@ -273,6 +278,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
             HasOptional<IndiceFinanceiro>(l => l.IndiceAtrasoCorrecao)
                 .WithMany(c => c.ListaTituloCredCobIndiceAtraso)
                 .HasForeignKey(l => l.IndiceAtrasoCorrecaoId);
+
+            HasRequired<VendaSerie>(l => l.VendaSerie)
+                .WithMany(c => c.ListaTituloCredCob)
+                .HasForeignKey(l => new { l.ContratoId, l.Serie });
 
 
         }
