@@ -160,6 +160,8 @@
     <Compile Include="Areas\Admin\Controllers\PerfilController.cs" />
     <Compile Include="Areas\Admin\ViewModel\UsuarioFuncionalidadeViewModel.cs" />
     <Compile Include="Areas\Admin\ViewModel\PerfilViewModel.cs" />
+    <Compile Include="Areas\Comercial\ComercialAreaRegistration.cs" />
+    <Compile Include="Areas\Comercial\Controllers\HomeController.cs" />
     <Compile Include="Areas\Contrato\ContratoAreaRegistration.cs" />
     <Compile Include="Areas\Contrato\Controllers\ContratoController.cs" />
     <Compile Include="Areas\Contrato\Controllers\HomeController.cs" />
@@ -277,6 +279,7 @@
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\avatars\female.png" />
     <Content Include="Content\img\avatars\male.png" />
+    <Content Include="Content\img\COMERCIAL.ico" />
     <Content Include="Content\img\favicon\favicon.ico" />
     <Content Include="Content\img\FINANCEIRO.ico" />
     <Content Include="Content\img\logo.png" />
@@ -404,6 +407,10 @@
     <Content Include="Areas\Contrato\Views\LiberacaoContrato\ListaPartial.cshtml" />
     <Content Include="Areas\Contrato\Views\LiberacaoContrato\Liberacao.cshtml" />
     <Content Include="Areas\Financeiro\Views\RelApropriacaoPorClasse\Index.cshtml" />
+    <Content Include="Areas\Comercial\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Comercial\Views\Shared\_MenuPartial.cshtml" />
+    <Content Include="Areas\Comercial\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Comercial\Views\Web.config" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -881,6 +888,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Comercial\ViewModel\" />
     <Folder Include="Areas\Financeiro\Views\CentroCusto\" />
     <Folder Include="Areas\Orcamento\ViewModel\" />
     <Folder Include="Areas\Orcamento\Views\Shared\" />
