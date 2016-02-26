@@ -178,6 +178,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Informações não encontradas !.
+        /// </summary>
+        public static string InformacaoNaoEncontrada {
+            get {
+                return ResourceManager.GetString("InformacaoNaoEncontrada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Informe uma data válida..
         /// </summary>
         public static string InformeDataValida {

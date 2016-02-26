@@ -18,7 +18,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
 
         public RelApropriacaoPorClasseFiltro Filtro { get; set; }
         public bool PodeImprimir { get; set; }
-        public SelectList ListaTipoPesquisa { get; set; }
+        //public SelectList ListaTipoPesquisa { get; set; }
         public SelectList ListaOpcoesRelatorio { get; set; }
 
         public RelApropriacaoPorClasseListaViewModel()

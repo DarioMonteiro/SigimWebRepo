@@ -16,6 +16,9 @@ namespace GIR.Sigim.Application.Helper
     {
         public static void Initialise()
         {
+            Mapper.CreateMap<ApropriacaoClasseCCRelatorio, ApropriacaoClasseCCRelatorioDTO>();
+            Mapper.CreateMap<ApropriacaoClasseCCRelatorioDTO, ApropriacaoClasseCCRelatorio>();
+
             Mapper.CreateMap<Caixa, CaixaDTO>();
             Mapper.CreateMap<CaixaDTO, Caixa>();
 

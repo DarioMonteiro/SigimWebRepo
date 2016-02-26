@@ -24,7 +24,11 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
 
         public int? OpcoesRelatorio { get; set; }
 
-        public int? TipoPesquisa { get; set; }
+        [Display(Name = "Por competência")]
+        public bool EhTipoPesquisaPorCompetencia { get; set; }
+
+        [Display(Name = "Por emissão documento")]
+        public bool EhTipoPesquisaPorEmissao { get; set; }
 
         public List<ClasseDTO> ListaClasseDespesa { get; set; }
 
@@ -89,7 +93,6 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
 
         public RelApropriacaoPorClasseFiltro()
         {
-            TipoPesquisa = 3;
             OpcoesRelatorio = 2;
 
             ListaClasseDespesa = new List<ClasseDTO>();

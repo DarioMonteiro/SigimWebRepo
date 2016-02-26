@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.CredCob;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
@@ -13,6 +14,14 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public string TipoRecebimento { get; set; }
         public bool? Automatico { get; set; }
         public int? NumeroDias { get; set; }
+
+        public ICollection<TituloCredCob> ListaTituloCredCob { get; set; }
+
+        public FormaRecebimento()
+        {
+            this.ListaTituloCredCob = new HashSet<TituloCredCob>();
+        }
+
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

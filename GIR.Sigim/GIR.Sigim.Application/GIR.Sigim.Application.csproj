@@ -65,6 +65,14 @@
     <Compile Include="DTO\Admin\PerfilDTO.cs" />
     <Compile Include="DTO\Admin\UsuarioDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
+    <Compile Include="DTO\Comercial\BlocoDTO.cs" />
+    <Compile Include="DTO\Comercial\ContratoComercialDTO.cs" />
+    <Compile Include="DTO\Comercial\EmpreendimentoDTO.cs" />
+    <Compile Include="DTO\Comercial\TipoParticipanteDTO.cs" />
+    <Compile Include="DTO\Comercial\UnidadeDTO.cs" />
+    <Compile Include="DTO\Comercial\VendaDTO.cs" />
+    <Compile Include="DTO\Comercial\VendaParticipanteDTO.cs" />
+    <Compile Include="DTO\Comercial\VendaSerieDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetencaoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetencaoLiberadaDTO.cs" />
@@ -81,8 +89,12 @@
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
     <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
     <Compile Include="DTO\Contrato\ResumoLiberacaoDTO.cs" />
+    <Compile Include="DTO\CredCob\TituloCredCobDTO.cs" />
+    <Compile Include="DTO\CredCob\TituloDetalheCredCobDTO.cs" />
+    <Compile Include="DTO\CredCob\VerbaCobrancaDTO.cs" />
     <Compile Include="DTO\Estoque\MovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
+    <Compile Include="DTO\Financeiro\ApropriacaoClasseCCRelatorioDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
@@ -98,6 +110,8 @@
     <Compile Include="DTO\Sigim\AvaliacaoFornecedorDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoNaturezaOperacaoDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoCSTDTO.cs" />
+    <Compile Include="DTO\Sigim\CotacaoValoresDTO.cs" />
+    <Compile Include="DTO\Sigim\IndiceFinanceiroDTO.cs" />
     <Compile Include="DTO\Sigim\NaturezaReceitaDTO.cs" />
     <Compile Include="DTO\Sigim\TabelaBasicaDTO.cs" />
     <Compile Include="DTO\Financeiro\MotivoCancelamentoDTO.cs" />
@@ -214,7 +228,9 @@
     <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />
     <Compile Include="Filtros\Sigim\UnidadeMedidaFiltro.cs" />
     <Compile Include="Helper\AdminMapperHelper.cs" />
+    <Compile Include="Helper\ComercialMapperHelper.cs" />
     <Compile Include="Helper\ContratoMapperHelper.cs" />
+    <Compile Include="Helper\CredCobMapperHelper.cs" />
     <Compile Include="Helper\EstoqueMapperHelper.cs" />
     <Compile Include="Helper\SacMapperHelper.cs" />
     <Compile Include="Helper\SigimMapperHelper.cs" />

@@ -3,25 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Application.DTO.Comercial;
 
-namespace GIR.Sigim.Domain.Entity.Comercial
+namespace GIR.Sigim.Application.DTO.Comercial
 {
-    public class Unidade : BaseEntity
+    public class UnidadeDTO : BaseDTO
     {
         public string Descricao { get; set; }
         public int? EmpreendimentoId { get; set; }
-        public Empreendimento Empreendimento { get; set; }
+        public EmpreendimentoDTO Empreendimento { get; set; }
         public int? BlocoId { get; set; }
-        public Bloco Bloco { get; set; }
+        public BlocoDTO Bloco { get; set; }
 
         public Nullable<Decimal> MultaPorAtraso { get; set; } 
         public bool? ConsiderarParametroUnidade { get; set; }
 
-        public ICollection<ContratoComercial> ListaContratoComercial { get; set; }
+        public List<ContratoComercialDTO> ListaContratoComercial { get; set; }
 
-        public Unidade()
+        public UnidadeDTO()
         {
-            this.ListaContratoComercial = new HashSet<ContratoComercial>();
+            this.ListaContratoComercial = new List<ContratoComercialDTO>();
         }
+
     }
 }

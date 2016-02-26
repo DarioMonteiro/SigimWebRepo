@@ -72,6 +72,34 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("clienteContrato")
                 .HasColumnOrder(14);
 
+            Property(l => l.EnderecoResidencialId)
+                .HasColumnName("enderecoResidencial")
+                .HasColumnOrder(15);
+
+            HasOptional<Endereco>(l => l.EnderecoResidencial)
+                .WithMany(c => c.ListaClienteFornecedorEndResidencial)
+                .HasForeignKey(l => l.EnderecoResidencialId);
+
+            Property(l => l.EnderecoComercialId)
+                .HasColumnName("enderecoComercial")
+                .HasColumnOrder(16);
+
+            HasOptional<Endereco>(l => l.EnderecoComercial)
+                .WithMany(c => c.ListaClienteFornecedorEndComercial)
+                .HasForeignKey(l => l.EnderecoComercialId);
+
+            Property(l => l.EnderecoOutroId)
+                .HasColumnName("enderecoOutro")
+                .HasColumnOrder(17);
+
+            HasOptional<Endereco>(l => l.EnderecoOutro)
+                .WithMany(c => c.ListaClienteFornecedorEndOutro)
+                .HasForeignKey(l => l.EnderecoComercialId);
+
+            Property(l => l.Correspondencia)
+                .HasColumnName("correspondencia")
+                .HasColumnOrder(18);
+
             Property(l => l.ClienteAluguel)
                 .HasColumnType("char")
                 .HasMaxLength(1)
@@ -84,8 +112,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("clienteEmpreitada")
                 .HasColumnOrder(24);
 
-            Property(l => l.EnderecoComercialId)
-                .HasColumnName("enderecoComercial");
 
             Ignore(l => l.Ativo);
 

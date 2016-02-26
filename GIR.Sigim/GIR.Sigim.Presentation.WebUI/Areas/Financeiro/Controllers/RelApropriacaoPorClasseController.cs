@@ -57,6 +57,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             {
                 Session["Filtro"] = model;
 
+                model.Filtro.ListaClasseDespesa = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasseDespesa);
+                model.Filtro.ListaClasseReceita = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasseReceita);
+
+                List<ApropriacaoClasseCCRelatorioDTO> listaApropriacaoPorClasseDTO = apropriacaoAppService.GerarRelatorioApropriacaoPorClasse(model.Filtro, Usuario.Id);
+                if (listaApropriacaoPorClasseDTO == null)
+                {
+                    messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
+                    return PartialView("_NotificationMessagesPartial");
+                }
+
                 return Content("<script>executarImpressao();</script>");
 
             }
@@ -74,7 +84,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             model.Filtro.ListaClasseDespesa = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasseDespesa);
             model.Filtro.ListaClasseReceita = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasseReceita);
 
-            var arquivo = apropriacaoAppService.ExportarRelApropriacaoPorClasse(model.Filtro, Usuario.Id, formato);
+            List<ApropriacaoClasseCCRelatorioDTO> listaApropriacaoPorClasseDTO = apropriacaoAppService.GerarRelatorioApropriacaoPorClasse(model.Filtro, Usuario.Id);
+            if (listaApropriacaoPorClasseDTO == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
+                return PartialView("_NotificationMessagesPartial");
+            }
+
+            var arquivo = apropriacaoAppService.ExportarRelApropriacaoPorClasse(model.Filtro,listaApropriacaoPorClasseDTO, formato);
+
             if (arquivo != null)
             {
                 Response.Buffer = false;
@@ -86,10 +104,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-
         private void CarregarListas(RelApropriacaoPorClasseListaViewModel model)
         {
-            model.ListaTipoPesquisa  = new SelectList(apropriacaoAppService.ListarTipoPesquisaRelatorioApropriacaoPorClasse(), "Id", "Descricao", model.Filtro.TipoPesquisa);
             model.ListaOpcoesRelatorio = new SelectList(apropriacaoAppService.ListarOpcoesRelatorioApropriacaoPorClasse(), "Id", "Descricao", model.Filtro.OpcoesRelatorio);
         }
 

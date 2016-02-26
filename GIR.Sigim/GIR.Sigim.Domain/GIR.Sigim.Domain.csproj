@@ -54,6 +54,7 @@
     <Compile Include="Entity\Comercial\Unidade.cs" />
     <Compile Include="Entity\Comercial\Venda.cs" />
     <Compile Include="Entity\Comercial\VendaParticipante.cs" />
+    <Compile Include="Entity\Comercial\VendaSerie.cs" />
     <Compile Include="Entity\Contrato\Contrato.cs" />
     <Compile Include="Entity\Contrato\ContratoRetencao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetencaoLiberada.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicaoNF.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
+    <Compile Include="Entity\CredCob\Periodicidade.cs" />
     <Compile Include="Entity\CredCob\TituloCredCob.cs" />
     <Compile Include="Entity\CredCob\VerbaCobranca.cs" />
     <Compile Include="Entity\Financeiro\ApropriacaoClasseCCRelatorio.cs" />
@@ -72,6 +74,9 @@
     <Compile Include="Entity\Financeiro\TipoMovimentoRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Financeiro\TipoPesquisaRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Sigim\CarteiraBanco.cs" />
+    <Compile Include="Entity\Sigim\CotacaoValores.cs" />
+    <Compile Include="Entity\Sigim\Endereco.cs" />
+    <Compile Include="Entity\Sigim\IndiceFinanceiro.cs" />
     <Compile Include="Entity\Sigim\UnidadeFederacao.cs" />
     <Compile Include="Repository\Contrato\IContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />

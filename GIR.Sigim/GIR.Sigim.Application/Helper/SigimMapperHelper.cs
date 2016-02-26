@@ -23,7 +23,6 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<AssuntoContato, TabelaBasicaDTO>();
             Mapper.CreateMap<AssuntoContatoDTO, AssuntoContato>();
 
-
             Mapper.CreateMap<AssuntoContatoDTO, TabelaBasicaDTO>()
                .ForMember(d => d.TipoTabela, m => m.UseValue((int)TabelaBasicaFinanceiro.AssuntoContato));
             Mapper.CreateMap<TabelaBasicaDTO, AssuntoContatoDTO>();
@@ -61,8 +60,14 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<Composicao, ComposicaoDTO>();
             Mapper.CreateMap<ComposicaoDTO, Composicao>();
 
+            Mapper.CreateMap<CotacaoValores, CotacaoValoresDTO>();
+            Mapper.CreateMap<CotacaoValoresDTO, CotacaoValores>();
+
             Mapper.CreateMap<CST, CSTDTO>();
             Mapper.CreateMap<CSTDTO, CST>();
+
+            Mapper.CreateMap<IndiceFinanceiro, IndiceFinanceiroDTO>();
+            Mapper.CreateMap<IndiceFinanceiroDTO, IndiceFinanceiro>();
 
             Mapper.CreateMap<InteresseBairro, InteresseBairroDTO>();
             Mapper.CreateMap<InteresseBairro, TabelaBasicaDTO>();

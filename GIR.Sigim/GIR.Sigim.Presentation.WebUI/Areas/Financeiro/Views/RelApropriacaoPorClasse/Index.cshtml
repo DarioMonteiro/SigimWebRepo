@@ -16,6 +16,7 @@
             </header>
             <div>
                 <div class="widget-body no-padding">
+                    <div id="resultadoBusca"></div>
                     @using (Ajax.BeginForm(
                         "Imprimir",
                         "RelApropriacaoPorClasse",
@@ -43,6 +44,7 @@
                                 <div id="collapseFiltro" class="panel-collapse collapse in">
                                     <div class="panel-body no-padding">
                                         <fieldset>
+                                            @*<legend></legend>*@
                                             <div class="row">
                                                 <section class="col col-3">
                                                     @Html.LabelFor(m => m.Filtro.DataInicial, new { @class = "label" })
@@ -74,7 +76,6 @@
                                                                     $(this).datepicker('enable');
                                                                     selectedDate = new Date();
                                                                 }
-                                                                $('#@Html.IdFor(m => m.Filtro.DataFinal)').datepicker('option', 'minDate', selectedDate);
                                                             }
                                                         });
 
@@ -90,7 +91,6 @@
                                                                     $(this).datepicker('enable');
                                                                     selectedDate = new Date();
                                                                 }
-                                                                $('#@Html.IdFor(m => m.Filtro.DataInicial)').datepicker('option', 'maxDate', selectedDate);
                                                             }
                                                         });
                                                     });
@@ -113,16 +113,13 @@
                                             <div class="row">
                                                 <section class="col col-12">
                                                     <div class="inline-group">
-                                                        @foreach (var item in Model.ListaTipoPesquisa)
-                                                        {
-                                                            string idTipoPesquisa = "rbtTipoPesquisa" + item.Value; 
-                                                            <label id="lblTipoPesquisa@(item.Value)" class="radio">@Html.RadioButtonFor(m => m.Filtro.TipoPesquisa, @item.Value, new { @id=@idTipoPesquisa }) <i></i>@item.Text</label>
-                                                        }
-
+                                                        <label id="lblTipoPesquisaPorCompetencia" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhTipoPesquisaPorCompetencia)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhTipoPesquisaPorCompetencia)</label>
+                                                        <label id="lblTipoPesquisaPorEmissao" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhTipoPesquisaPorEmissao)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhTipoPesquisaPorEmissao)</label>
                                                     </div>
                                                 </section>
                                             </div>
                                             <fieldset id="formItensClasseDespesa">
+                                                @*<legend></legend>*@
                                                 <div class="row">
                                                     <section class="col col-12">
                                                         <header>Contas a pagar</header>
@@ -176,6 +173,7 @@
                                                 </section>
                                             </div>
                                             <fieldset id="formItensClasseReceita">
+                                                @*<legend></legend>*@
                                                 <div class="row">
                                                     <section class="col col-12">
                                                         <header>Contas a receber</header>
@@ -309,7 +307,7 @@
 
                         </footer>
                     }
-                    <div id="resultadoBusca"></div>
+                    @*<div id="resultadoBusca"></div>*@
                 </div>
             </div>
         </div>
@@ -426,6 +424,15 @@
             }
         });
 
+        $("#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorCompetencia)").on("change", function () {
+            marcarDesmarcarTipoPesquisa();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorEmissao)").on("change", function () {
+            marcarDesmarcarTipoPesquisa();
+        });
+
+
         $("#@Html.IdFor(m => m.Filtro.EhSituacaoAReceberFaturado)").on("change", function () {
             habilitarDesabitarOpcaoCreditoCobranca();
         });
@@ -507,8 +514,6 @@
 
             var chkDisabled = '';
             var labelClass = 'checkbox';
-            //row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + jsonItemArrayClasseDespesa[i].ClasseDespesa.Codigo + '</label></td>'));
-            //row.append($('<td class="text-left">' + jsonItemArrayClasseDespesa[i].ClasseDespesa.Descricao + '</td>'));
             row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + jsonItemArrayClasseDespesa[i].Codigo + '</label></td>'));
             row.append($('<td class="text-left">' + jsonItemArrayClasseDespesa[i].Descricao + '</td>'));
         }
@@ -536,7 +541,6 @@
         }
 
         $.each(jsonItemArrayClasseDespesa, function (index, obj) {
-@*            var ehMesmaClasse = (obj.ClasseDespesa.Codigo == $('#@Html.IdFor(m => m.ClasseDespesa.Codigo)').val());*@
             var ehMesmaClasse = (obj.Codigo == $('#@Html.IdFor(m => m.ClasseDespesa.Codigo)').val());
 
             if (ehMesmaClasse) {
@@ -604,8 +608,6 @@
 
             var chkDisabled = '';
             var labelClass = 'checkbox';
-            //row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + jsonItemArrayClasseReceita[i].ClasseReceita.Codigo + '</label></td>'));
-            //row.append($('<td class="text-left">' + jsonItemArrayClasseReceita[i].ClasseReceita.Descricao + '</td>'));
             row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + jsonItemArrayClasseReceita[i].Codigo + '</label></td>'));
             row.append($('<td class="text-left">' + jsonItemArrayClasseReceita[i].Descricao + '</td>'));
         }
@@ -633,7 +635,6 @@
         }
 
         $.each(jsonItemArrayClasseReceita, function (index, obj) {
-            @*var ehMesmaClasse = (obj.ClasseReceita.Codigo == $('#@Html.IdFor(m => m.ClasseReceita.Codigo)').val());*@
             var ehMesmaClasse = (obj.Codigo == $('#@Html.IdFor(m => m.ClasseReceita.Codigo)').val());
 
             if (ehMesmaClasse) {
@@ -660,6 +661,33 @@
             $('#@Html.IdFor(m => m.Filtro.EhMovimentoCreditoCobranca)').prop('checked', false);
             $('#@Html.IdFor(m => m.Filtro.EhMovimentoCreditoCobranca)').prop('disabled', 'disabled');
             $('#lblCreditoCobranca').addClass("state-disabled");
+        }
+    }
+
+    function marcarDesmarcarTipoPesquisa() {
+        var marcadoCompetencia = false;
+        var marcadoEmissao = false;
+
+        marcadoCompetencia = $("#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorCompetencia)").is(':checked');
+        marcadoEmissao = $("#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorEmissao)").is(':checked');
+
+        if (marcadoCompetencia) {
+            $('#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorEmissao)').prop('checked', false);
+            $('#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorEmissao)').prop('disabled', 'disabled');
+            $('#lblTipoPesquisaPorEmissao').addClass("state-disabled");
+        }
+        else {
+            if (marcadoEmissao) {
+                $('#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorCompetencia)').prop('checked', false);
+                $('#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorCompetencia)').prop('disabled', 'disabled');
+                $('#lblTipoPesquisaPorCompetencia').addClass("state-disabled");
+            }
+            else {
+                $('#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorCompetencia)').prop('disabled', '');
+                $('#@Html.IdFor(m => m.Filtro.EhTipoPesquisaPorEmissao)').prop('disabled', '');
+                $('#lblTipoPesquisaPorCompetencia').removeClass("state-disabled");
+                $('#lblTipoPesquisaPorEmissao').removeClass("state-disabled");
+            }
         }
     }
 

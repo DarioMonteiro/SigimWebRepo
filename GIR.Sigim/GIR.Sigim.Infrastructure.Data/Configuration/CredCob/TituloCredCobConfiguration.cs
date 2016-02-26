@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.CredCob;
 using GIR.Sigim.Domain.Entity.Comercial;
+using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
 {
@@ -134,7 +135,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
                 .HasColumnName("indice")
                 .HasColumnOrder(23);
 
-            Property(l => l.SerieId)
+            HasOptional<IndiceFinanceiro>(l => l.Indice)
+                .WithMany(c => c.ListaTituloCredCobIndice)
+                .HasForeignKey(l => l.IndiceId);
+
+            Property(l => l.Serie)
                 .HasColumnName("serie")
                 .HasColumnOrder(24);
 
@@ -242,6 +247,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
                 .HasColumnName("formaRecebimento")
                 .HasColumnOrder(44);
 
+            HasOptional<FormaRecebimento>(l => l.FormaRecebimento)
+                .WithMany(c => c.ListaTituloCredCob)
+                .HasForeignKey(l => l.FormaRecebimentoId);
+
+
             Property(l => l.QtdDiasAtraso)
                 .HasColumnName("qtdDiasAtraso")
                 .HasColumnType("smallint")
@@ -264,6 +274,15 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
             Property(l => l.IndiceAtrasoCorrecaoId)
                 .HasColumnName("indiceAtrasoCorrecao")
                 .HasColumnOrder(49);
+
+            HasOptional<IndiceFinanceiro>(l => l.IndiceAtrasoCorrecao)
+                .WithMany(c => c.ListaTituloCredCobIndiceAtraso)
+                .HasForeignKey(l => l.IndiceAtrasoCorrecaoId);
+
+            HasRequired<VendaSerie>(l => l.VendaSerie)
+                .WithMany(c => c.ListaTituloCredCob)
+                .HasForeignKey(l => new { l.ContratoId, l.Serie });
+
 
         }
     }
