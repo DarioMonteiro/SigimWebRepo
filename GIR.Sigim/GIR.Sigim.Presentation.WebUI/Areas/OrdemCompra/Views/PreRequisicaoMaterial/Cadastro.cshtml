@@ -161,7 +161,7 @@
                                             }
                                         });
 
-                                        $(document).on("change", "#@Html.IdFor(m => m.Prazo)", function () {
+                                        $(document).on("blur", "#@Html.IdFor(m => m.Prazo)", function () {
                                             ajustarDataMaxima();
                                         });
                                     });
@@ -184,6 +184,8 @@
                                         var dataMinima = $("#@Html.IdFor(m => m.DataMinima)");
                                         var dataMaxima = $("#@Html.IdFor(m => m.DataMaxima)");
                                         var prazo = $("#@Html.IdFor(m => m.Prazo)");
+
+                                        if (prazo.val() == '') prazo.val(0);
 
                                         if (dataMinima.val() != "" && prazo.val() != "") {
                                             if (isValidDate(format, $("#@Html.IdFor(m => m.DataMinima)").val()) && $.isNumeric($("#@Html.IdFor(m => m.Prazo)").val())) {
