@@ -139,7 +139,7 @@ namespace GIR.Sigim.Application.Service
             return caminhoImagem;
         }
 
-        protected string ObterNomeEmpresa(CentroCusto centroCusto, IParametros parametros)
+        protected virtual string ObterNomeEmpresa(CentroCusto centroCusto, IParametros parametros)
         {
             if (centroCusto != null)
             {
