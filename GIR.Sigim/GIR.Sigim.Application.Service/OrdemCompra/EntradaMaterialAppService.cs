@@ -16,6 +16,7 @@ using GIR.Sigim.Application.Reports.OrdemCompra;
 using GIR.Sigim.Application.Service.Admin;
 using GIR.Sigim.Application.Service.Financeiro;
 using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Domain.Entity;
 using GIR.Sigim.Domain.Entity.Estoque;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Orcamento;
@@ -1278,13 +1279,16 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             objRel.Database.Tables["OrdemCompra_entradaMaterialFormaPagamentoRelatorio"].SetDataSource(ListaFormaPagamentoToDataTable(entradaMaterial.ListaFormaPagamento.ToList()));
             objRel.Database.Tables["OrdemCompra_entradaMaterialImpostoRelatorio"].SetDataSource(ListaImpostoToDataTable(entradaMaterial.ListaImposto.ToList()));
 
-            var centroCusto = centroCustoRepository.ObterPeloCodigo(entradaMaterial.CodigoCentroCusto, l => l.ListaCentroCustoEmpresa);
+            var centroCusto = centroCustoRepository.ObterPeloCodigo(entradaMaterial.CodigoCentroCusto, l => l.ListaEmpresaOrdemCompra);
 
             var caminhoImagem = PrepararIconeRelatorio(centroCusto, ParametrosOrdemCompra);
             objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 
             var nomeEmpresa = ObterNomeEmpresa(centroCusto, ParametrosOrdemCompra);
             objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
+
+            objRel.SetParameterValue("valorTotalItens", entradaMaterial.ValorTotalItens);
+            objRel.SetParameterValue("descontoOC", entradaMaterial.ValorTotalDescontoOrdemCompra.ToString());
 
             FileDownloadDTO arquivo = new FileDownloadDTO(
                 "EntradaMaterial_" + id.ToString(),
@@ -1294,6 +1298,17 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             RemoverIconeRelatorio(caminhoImagem);
 
             return arquivo;
+        }
+
+        protected override string ObterNomeEmpresa(CentroCusto centroCusto, IParametros parametros)
+        {
+            if (centroCusto != null)
+            {
+                var empresaOrdemCompra = centroCusto.ListaEmpresaOrdemCompra.FirstOrDefault();
+                if (empresaOrdemCompra != null)
+                    return empresaOrdemCompra.Cliente.Nome;
+            }
+            return parametros.Cliente != null ? parametros.Cliente.Nome : string.Empty;
         }
 
         public bool EhPermitidoSalvar(EntradaMaterialDTO dto)
@@ -2365,8 +2380,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             //DataColumn descricaoSituacaoTituloFrete = new DataColumn("descricaoSituacaoTituloFrete");
             //DataColumn tipoCompromissoFrete = new DataColumn("tipoCompromissoFrete");
             //DataColumn descricaoTipoCompromissoFrete = new DataColumn("descricaoTipoCompromissoFrete");
-            //DataColumn desconto = new DataColumn("desconto");
-            //DataColumn percentualDesconto = new DataColumn("percentualDesconto");
+            DataColumn desconto = new DataColumn("desconto", typeof(decimal));
+            DataColumn percentualDesconto = new DataColumn("percentualDesconto", typeof(decimal));
+            DataColumn freteIncluso = new DataColumn("freteIncluso", typeof(decimal));
             //DataColumn CIFFOB = new DataColumn("CIFFOB");
             //DataColumn serieNF = new DataColumn("serieNF");
             //DataColumn tipoCompra = new DataColumn("tipoCompra");
@@ -2439,8 +2455,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             //dta.Columns.Add(descricaoSituacaoTituloFrete);
             //dta.Columns.Add(tipoCompromissoFrete);
             //dta.Columns.Add(descricaoTipoCompromissoFrete);
-            //dta.Columns.Add(desconto);
-            //dta.Columns.Add(percentualDesconto);
+            dta.Columns.Add(desconto);
+            dta.Columns.Add(percentualDesconto);
+            dta.Columns.Add(freteIncluso);
             //dta.Columns.Add(CIFFOB);
             //dta.Columns.Add(serieNF);
             //dta.Columns.Add(tipoCompra);
@@ -2511,15 +2528,16 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             //row[cnpjTransportadora] = entradaMaterial.
             //row[cpfTransportadora] = entradaMaterial.
             row[dataFrete] = entradaMaterial.DataFrete.HasValue ? entradaMaterial.DataFrete.Value.ToString("dd/MM/yyyy") : string.Empty;
-            row[valorFrete] = entradaMaterial.ValorFrete;
-            row[tituloFrete] = entradaMaterial.TituloFreteId;
+//            row[valorFrete] = entradaMaterial.ValorFrete;
+//            row[tituloFrete] = entradaMaterial.TituloFreteId;
             //row[numeroNotaFrete] = entradaMaterial.
             //row[situacaoTituloFrete] = entradaMaterial.
             //row[descricaoSituacaoTituloFrete] = entradaMaterial.
             //row[tipoCompromissoFrete] = entradaMaterial.
             //row[descricaoTipoCompromissoFrete] = entradaMaterial.
-            //row[desconto] = entradaMaterial.
-            //row[percentualDesconto] = entradaMaterial.
+            row[desconto] = entradaMaterial.Desconto.Value;
+            row[percentualDesconto] = entradaMaterial.PercentualDesconto.HasValue ? 1 : 0;
+            row[freteIncluso] = entradaMaterial.FreteIncluso.Value;
             //row[CIFFOB] = entradaMaterial.
             //row[serieNF] = entradaMaterial.
             //row[tipoCompra] = entradaMaterial.
@@ -2593,7 +2611,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             DataColumn data = new DataColumn("data");
             DataColumn valor = new DataColumn("valor", typeof(decimal));
             DataColumn tituloPagar = new DataColumn("tituloPagar", typeof(int));
-            DataColumn codigoOrdemCompra = new DataColumn("codigoOrdemCompra");
+            DataColumn codigoOrdemCompra = new DataColumn("codigoOrdemCompra", typeof(int));
             DataColumn descricaoTipoCompromisso = new DataColumn("descricaoTipoCompromisso");
             DataColumn descricaoSituacaoTitulo = new DataColumn("descricaoSituacaoTitulo");
 

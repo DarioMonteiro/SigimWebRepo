@@ -200,6 +200,7 @@ namespace GIR.Sigim.Infrastructure.Data
 
             modelBuilder.Configurations.Add(new CotacaoConfiguration());
             modelBuilder.Configurations.Add(new CotacaoItemConfiguration());
+            modelBuilder.Configurations.Add(new EmpresaCentroCustoConfiguration());
             modelBuilder.Configurations.Add(new EntradaMaterialConfiguration());
             modelBuilder.Configurations.Add(new EntradaMaterialFormaPagamentoConfiguration());
             modelBuilder.Configurations.Add(new EntradaMaterialImpostoConfiguration());

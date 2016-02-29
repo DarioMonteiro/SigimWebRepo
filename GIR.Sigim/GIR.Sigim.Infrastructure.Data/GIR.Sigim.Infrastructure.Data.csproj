@@ -119,6 +119,7 @@
     <Compile Include="Configuration\Orcamento\OrcamentoInsumoRequisitadoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\AbstractRequisicaoMaterialItemConfiguration.cs" />
+    <Compile Include="Configuration\OrdemCompra\EmpresaCentroCustoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\OrdemCompraFormaPagamentoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\EntradaMaterialImpostoConfiguration.cs" />
     <Compile Include="Configuration\OrdemCompra\EntradaMaterialFormaPagamentoConfiguration.cs" />
