@@ -189,6 +189,7 @@
     <Compile Include="Configuration\Sigim\UsuarioCentroCustoConfiguration.cs" />
     <Compile Include="IoC\AdminBootstraper.cs" />
     <Compile Include="IoC\Bootstrapper.cs" />
+    <Compile Include="IoC\ComercialBootstrapper.cs" />
     <Compile Include="IoC\ContratoBootstraper.cs" />
     <Compile Include="IoC\CredCobBootstrapper.cs" />
     <Compile Include="IoC\SigimBootstraper.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Repository\Admin\PerfilFuncionalidadeRepository.cs" />
     <Compile Include="Repository\Admin\ModuloRepository.cs" />
     <Compile Include="Repository\Admin\PerfilRepository.cs" />
+    <Compile Include="Repository\Comercial\VendaSerieRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />

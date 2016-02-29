@@ -79,6 +79,7 @@
     <Compile Include="Entity\Sigim\Endereco.cs" />
     <Compile Include="Entity\Sigim\IndiceFinanceiro.cs" />
     <Compile Include="Entity\Sigim\UnidadeFederacao.cs" />
+    <Compile Include="Repository\Comercial\IVendaSerieRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />

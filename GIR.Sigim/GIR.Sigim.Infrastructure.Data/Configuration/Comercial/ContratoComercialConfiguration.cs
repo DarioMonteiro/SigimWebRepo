@@ -44,7 +44,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
 
             Ignore(l => l.VendaId);
 
-            HasRequired(l => l.Venda).WithRequiredPrincipal(l => l.Contrato);
+            HasRequired<Venda>(l => l.Venda).WithRequiredPrincipal(l => l.Contrato);
 
         }
 

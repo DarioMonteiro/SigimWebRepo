@@ -279,10 +279,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.CredCob
                 .WithMany(c => c.ListaTituloCredCobIndiceAtraso)
                 .HasForeignKey(l => l.IndiceAtrasoCorrecaoId);
 
-            HasRequired<VendaSerie>(l => l.VendaSerie)
-                .WithMany(c => c.ListaTituloCredCob)
-                .HasForeignKey(l => new { l.ContratoId, l.Serie });
-
 
         }
     }

@@ -19,13 +19,13 @@ namespace GIR.Sigim.Domain.Entity.Comercial
 
         public ICollection<TituloCredCob> ListaTituloCredCob { get; set; }
         public ICollection<VendaParticipante> ListaVendaParticipante { get; set; }
-        public ICollection<VendaSerie> ListaVendaSerie { get; set; }
+        //public ICollection<VendaSerie> ListaVendaSerie { get; set; }
 
         public ContratoComercial()
         {
             this.ListaTituloCredCob = new HashSet<TituloCredCob>();
             this.ListaVendaParticipante = new HashSet<VendaParticipante>();
-            this.ListaVendaSerie = new HashSet<VendaSerie>();
+            //this.ListaVendaSerie = new HashSet<VendaSerie>();
         }
     }
 }

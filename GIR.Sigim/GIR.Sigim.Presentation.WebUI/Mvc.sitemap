@@ -95,10 +95,10 @@
         <mvcSiteMapNode title="Cadastro" controller="RequisicaoMaterial" action="Index" visibility="MenuHelper,!*"/>
         <mvcSiteMapNode title="Cadastro" controller="RequisicaoMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
       </mvcSiteMapNode>
-      <!--<mvcSiteMapNode title="Entrada de Material" controller="EntradaMaterial" action="Index">
+      <mvcSiteMapNode title="Entrada de Material" controller="EntradaMaterial" action="Index">
         <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Index" visibility="MenuHelper,!*"/>
         <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
-      </mvcSiteMapNode>-->
+      </mvcSiteMapNode>
       <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_ITENS_ORDEMCOMPRA_ACESSAR">
         <mvcSiteMapNode title="Ordem de Compra" url="#" clickable="false" roles="REL_ITENS_ORDEMCOMPRA_ACESSAR">
           <mvcSiteMapNode title="Itens de ordem de compra" controller="RelOCItensOrdemCompra" action="Index"/>

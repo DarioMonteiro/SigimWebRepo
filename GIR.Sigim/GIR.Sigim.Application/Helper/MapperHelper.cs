@@ -11,7 +11,9 @@ namespace GIR.Sigim.Application.Helper
         public static void Initialise()
         {
             AdminMapperHelper.Initialise();
+            ComercialMapperHelper.Initialise();
             ContratoMapperHelper.Initialise();
+            CredCobMapperHelper.Initialise();
             EstoqueMapperHelper.Initialise();
             FinanceiroMapperHelper.Initialise();
             OrcamentoMapperHelper.Initialise();
