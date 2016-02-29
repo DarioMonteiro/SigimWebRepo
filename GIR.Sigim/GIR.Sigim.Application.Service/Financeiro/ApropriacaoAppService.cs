@@ -20,6 +20,7 @@ using GIR.Sigim.Application.Reports.Financeiro;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.Service.CredCob;
 using GIR.Sigim.Domain.Repository.CredCob;
+using GIR.Sigim.Application.DTO.CredCob;
 
 
 namespace GIR.Sigim.Application.Service.Financeiro
@@ -35,6 +36,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
         private IApropriacaoRepository apropriacaoRepository;
         private ITituloCredCobAppService tituloCredCobAppService;
         private ITituloCredCobRepository tituloCredCobRepository;
+
 
         #endregion
 
@@ -220,6 +222,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                               l => l.Contrato.Unidade.Bloco.CentroCusto.ListaCentroCustoEmpresa,
                                                               l => l.Contrato.Venda.Contrato.ListaVendaParticipante,
                                                               l => l.VerbaCobranca.Classe).To<List<TituloCredCob>>();
+
+                    List<TituloDetalheCredCobDTO> listaTituloDetalheCredCobDTO = tituloCredCobAppService.RecTit(listaTituloCredCob, DateTime.Now.Date, false, false);
                     GeraListaRelApropriacaoPorClasseCreditoCobranca(listaTituloCredCob, listaApropriacaoClasseRelatorio);
                 }
 

@@ -16,7 +16,8 @@ using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.CredCob;
-
+using GIR.Sigim.Domain.Repository.Comercial;
+using GIR.Sigim.Domain.Entity.Comercial;
 
 namespace GIR.Sigim.Application.Service.CredCob
 {
@@ -27,6 +28,7 @@ namespace GIR.Sigim.Application.Service.CredCob
         private IUsuarioAppService usuarioAppService;
         private ITituloCredCobRepository tituloCredCobRepository;
         private IClasseRepository classeRepository;
+        private IVendaSerieRepository vendaSerieRepository;
 
         #endregion
 
@@ -35,12 +37,14 @@ namespace GIR.Sigim.Application.Service.CredCob
         public TituloCredCobAppService(IUsuarioAppService usuarioAppService,
                                        ITituloCredCobRepository tituloCredCobRepository,
                                        IClasseRepository classeRepository, 
+                                       IVendaSerieRepository vendaSerieRepository,
                                        MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.tituloCredCobRepository = tituloCredCobRepository;
             this.usuarioAppService = usuarioAppService;
             this.classeRepository = classeRepository;
+            this.vendaSerieRepository = vendaSerieRepository;
         }
 
         #endregion
@@ -109,15 +113,77 @@ namespace GIR.Sigim.Application.Service.CredCob
 
         public List<TituloDetalheCredCobDTO> RecTit(List<TituloCredCob> listaTituloCredCob,
                                                  Nullable<DateTime> dataReferencia,
-                                                 bool excluiTabelaTemporaria,
-                                                 bool corrigeParcelaResiduo)
+                                                 bool excluiTabelaTemporaria = false,
+                                                 bool corrigeParcelaResiduo = false)
         {
             List<TituloDetalheCredCobDTO> listaTituloDetalheCredCob = new List<TituloDetalheCredCobDTO>();
 
             foreach (TituloCredCob titulo in listaTituloCredCob)
             {
                 TituloDetalheCredCobDTO tituloDetalhe = new TituloDetalheCredCobDTO();
+
                 tituloDetalhe = titulo.To<TituloDetalheCredCobDTO>();
+
+                VendaSerie vendaSerie = vendaSerieRepository.ObterPeloIdComposto(titulo.ContratoId, titulo.Serie);
+
+                if (dataReferencia.HasValue)
+                {
+                    dataReferencia = dataReferencia.Value.Date;
+                }
+
+                //if ((titulo.Situacao == "P") || (titulo.Situacao == "Q"))
+                //{
+                //    if (!dataReferencia.HasValue)
+                //    {
+                //        dataReferencia = titulo.DataVencimento;
+                //    }
+
+                //    //Trata dia util
+                //    //Trata data referencia
+                //    if (dataReferencia.HasValue)
+                //    {
+                //        if (titulo.DataVencimento < dataReferencia)
+                //        {
+                //            ClienteFornecedor clienteTitular = Contrato.Venda.Contrato.ListaVendaParticipante.Where(l => l.TipoParticipanteId == 1).FirstOrDefault().Cliente;
+                //            bool achouProximoDiaUtil = false;
+                //            DateTime dataUtil = DataVencimento.AddDays(-1);
+
+                //            while (!achouProximoDiaUtil)
+                //            {
+                //                dataUtil = dataUtil.AddDays(1);
+                //                Feriado feriado = null;
+                //                if (clienteTitular.Correspondencia == "R")
+                //                {
+                //                    feriado = clienteTitular.EnderecoResidencial.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault();
+                //                }
+                //                if (clienteTitular.Correspondencia == "C")
+                //                {
+                //                    feriado = clienteTitular.EnderecoComercial.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault();
+                //                }
+                //                if (clienteTitular.Correspondencia == "O")
+                //                {
+                //                    feriado = clienteTitular.EnderecoOutro.UnidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault();
+                //                }
+                //                if (feriado == null)
+                //                {
+                //                    if ((dataUtil.DayOfWeek != DayOfWeek.Saturday) && (dataUtil.DayOfWeek != DayOfWeek.Sunday))
+                //                    {
+                //                        achouProximoDiaUtil = true;
+                //                    }
+                //                }
+                //            }
+                //            if (dataUtil >= dataReferencia.Value)
+                //            {
+                //                dataReferencia = DataVencimento;
+                //            }
+                //        }
+                //    }
+                //    //Trata data referencia
+
+                //}
+
+
+
 
                 listaTituloDetalheCredCob.Add(tituloDetalhe);
             }

@@ -64,7 +64,6 @@ namespace GIR.Sigim.Domain.Entity.CredCob
         public int? IndiceAtrasoCorrecaoId { get; set; }
         public IndiceFinanceiro IndiceAtrasoCorrecao { get; set; }
 
-        public VendaSerie VendaSerie { get; set; }
 
         //public decimal ObterValorDevido(Nullable<DateTime> dataReferencia, bool corrigeParcelaResiduo)
         //{

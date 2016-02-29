@@ -99,12 +99,12 @@ namespace GIR.Sigim.Infrastructure.Data
 
             #region Admin
 
-            modelBuilder.Configurations.Add(new UsuarioConfiguration());
-            modelBuilder.Configurations.Add(new UsuarioFuncionalidadeConfiguration());
-            modelBuilder.Configurations.Add(new UsuarioPerfilConfiguration());
             modelBuilder.Configurations.Add(new ModuloConfiguration());
             modelBuilder.Configurations.Add(new PerfilConfiguration());
             modelBuilder.Configurations.Add(new PerfilFuncionalidadeConfiguration());
+            modelBuilder.Configurations.Add(new UsuarioConfiguration());
+            modelBuilder.Configurations.Add(new UsuarioFuncionalidadeConfiguration());
+            modelBuilder.Configurations.Add(new UsuarioPerfilConfiguration());
             modelBuilder.Configurations.Add(new UnidadeFederacaoConfiguration());
 
             #endregion
@@ -179,8 +179,8 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new TipoDocumentoConfiguration());
             modelBuilder.Configurations.Add(new TipoMovimentoConfiguration());
             modelBuilder.Configurations.Add(new TipoRateioConfiguration());
-            modelBuilder.Configurations.Add(new TituloPagarAdiantamentoConfiguration());
             modelBuilder.Configurations.Add(new TituloPagarConfiguration());
+            modelBuilder.Configurations.Add(new TituloPagarAdiantamentoConfiguration());
             modelBuilder.Configurations.Add(new TituloReceberConfiguration());
 
             #endregion
@@ -244,8 +244,8 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new InteresseBairroConfiguration());
             modelBuilder.Configurations.Add(new LogAcessoConfiguration());
             modelBuilder.Configurations.Add(new LogOperacaoConfiguration());
-            modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
             modelBuilder.Configurations.Add(new MaterialConfiguration());
+            modelBuilder.Configurations.Add(new MaterialClasseInsumoConfiguration());
             modelBuilder.Configurations.Add(new NacionalidadeConfiguration());
             modelBuilder.Configurations.Add(new NaturezaOperacaoConfiguration());
             modelBuilder.Configurations.Add(new NaturezaReceitaConfiguration());

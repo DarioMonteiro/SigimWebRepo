@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Domain.Entity.CredCob;
 using GIR.Sigim.Application.DTO.CredCob;
 
