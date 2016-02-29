@@ -17,7 +17,7 @@
                         "Lista",
                         "RelOCItensOrdemCompra",
                         null,
-                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "refresh", UpdateTargetId = "resultadoBusca" },
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "renderTela", UpdateTargetId = "resultadoBusca" },
                         new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
@@ -259,6 +259,8 @@
 }
 
 <script type="text/javascript">
+    var ListaScrollLeft = 0;
+
     $(document).ready(function () {
 
         tratarBotoes(false);
@@ -275,7 +277,7 @@
         jQuery.validator.addMethod(
             "ehClasseValida",
             function (value, element, params) {
-                var isValid = validaClasse();
+                var isValid = validaClasse_@(Html.IdFor(m => m.Filtro.Classe.Codigo))();
                 $.validator.messages.ehClasseValida = $('#@Html.IdFor(m => m.Filtro.Classe.Codigo)_ValidationMessage').html();
                 return isValid;
             }, ''
@@ -361,11 +363,17 @@
 
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
+                ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
                 listarFiltro();
             }
         );
 
     });
+
+    function renderTela() {
+        onSuccess();
+        $('#resultadoBusca div.table-responsive').scrollLeft(ListaScrollLeft);
+    }
 
     function refresh(result) {
         onSuccess();

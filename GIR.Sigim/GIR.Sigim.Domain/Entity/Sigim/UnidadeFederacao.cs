@@ -13,10 +13,14 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public int? CodigoIBGE { get; set; }
 
         public ICollection<Agencia> ListaAgencia { get; set; }
+        public ICollection<Feriado> ListaFeriado { get; set; }
+        public ICollection<Endereco> ListaEndereco { get; set; }
 
         public UnidadeFederacao()
         {
             this.ListaAgencia = new HashSet<Agencia>();
+            this.ListaFeriado = new HashSet<Feriado>();
+            this.ListaEndereco = new HashSet<Endereco>();
         }
 
     }

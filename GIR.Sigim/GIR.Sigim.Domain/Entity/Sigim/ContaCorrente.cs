@@ -33,5 +33,13 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public int? ContaCorrentePenhor { get; set; }
         public string ContaContabilCredCob { get; set; }
         public string EnderecoCedente { get; set; }
+
+        public ICollection<MovimentoFinanceiro> ListaMovimentoFinanceiro { get; set; }
+
+        public ContaCorrente()
+        {
+            this.ListaMovimentoFinanceiro = new HashSet<MovimentoFinanceiro>();
+        }
+        
     }
 }

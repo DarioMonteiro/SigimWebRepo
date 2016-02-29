@@ -7,6 +7,7 @@ using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Entity.Contrato;
+using GIR.Sigim.Domain.Entity.Comercial;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -47,6 +48,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<Apropriacao> ListaApropriacao { get; set; }
         public ICollection<ContaCorrente> ListaContaCorrente { get; set; }
         public ICollection<ApropriacaoAdiantamento> ListaApropriacaoAdiantamento { get; set; }
+        public ICollection<Bloco> ListaBloco { get; set; }
         public ICollection<EmpresaCentroCusto> ListaEmpresaOrdemCompra { get; set; }
 
         public CentroCusto()
@@ -72,6 +74,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaApropriacao = new HashSet<Apropriacao>();
             this.ListaContaCorrente = new HashSet<ContaCorrente>();
             this.ListaApropriacaoAdiantamento = new HashSet<ApropriacaoAdiantamento>();
+            this.ListaBloco = new HashSet<Bloco>();
             this.ListaEmpresaOrdemCompra = new HashSet<EmpresaCentroCusto>();
         }
 

@@ -53,6 +53,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
             Property(l => l.MovimentoId)
                 .HasColumnName("movimento");
 
+            HasOptional(l => l.Movimento)
+                .WithMany(l => l.ListaApropriacao)
+                .HasForeignKey(l => l.MovimentoId);
+
             Property(l => l.Valor)
                 .HasPrecision(18, 5)
                 .HasColumnName("valor");

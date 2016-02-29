@@ -29,11 +29,11 @@
     </mvcSiteMapNode>
 
     <mvcSiteMapNode title="Financeiro" controller="Home" action="Index" area="Financeiro">
-      <mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_FINANCEIRO_ACESSAR,PARAMETRO_USUARIO_FINANCEIRO_ACESSAR">
+      <!--<mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_FINANCEIRO_ACESSAR,PARAMETRO_USUARIO_FINANCEIRO_ACESSAR">
         <mvcSiteMapNode title="Parâmetros" controller="ParametrosFinanceiro" action="Index"/>
         <mvcSiteMapNode title="Parâmetros - usuário" controller="ParametrosUsuarioFinanceiro" action="Index"/>
-      </mvcSiteMapNode>
-      <mvcSiteMapNode title="Cadastros" url="#" clickable="false" roles="CAIXA_ACESSAR,
+      </mvcSiteMapNode>-->
+      <!--<mvcSiteMapNode title="Cadastros" url="#" clickable="false" roles="CAIXA_ACESSAR,
                                                                          IMPOSTOFINANCEIRO_ACESSAR,
                                                                          FORMARECEBIMENTO_ACESSAR,
                                                                          MOTIVOCANCELAMENTO_ACESSAR,
@@ -64,22 +64,29 @@
             <mvcSiteMapNode title="Agência" controller="Agencia" action="Index">
               <mvcSiteMapNode title="Cadastro" controller="Agencia" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
             </mvcSiteMapNode>
-            <!--<mvcSiteMapNode title="Conta corrente" controller="ContaCorrente" action="Index"/>-->
-          </mvcSiteMapNode>
+            <mvcSiteMapNode title="Conta corrente" controller="ContaCorrente" action="Index"/>
+          </mvcSiteMapNode>       
+      </mvcSiteMapNode>-->
+
+      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_APROPRIACAO_POR_CLASSE_ACESSAR">
+        <mvcSiteMapNode title="Apropriação" url="#" clickable="false" roles="REL_APROPRIACAO_POR_CLASSE_ACESSAR">
+          <mvcSiteMapNode title="por classe" controller="RelApropriacaoPorClasse" action="Index"/>
+        </mvcSiteMapNode>
       </mvcSiteMapNode>
+
     </mvcSiteMapNode>
     
     <mvcSiteMapNode title="Ordem de Compra" controller="Home" action="Index" area="OrdemCompra">
-      <mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_ORDEMCOMPRA_ACESSAR,
+      <!--<mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_ORDEMCOMPRA_ACESSAR,
                                                                        PARAMETRO_USUARIO_ORDEMCOMPRA_ACESSAR">
         <mvcSiteMapNode title="Parâmetros" controller="Parametros" action="Index"/>
         <mvcSiteMapNode title="Parâmetros - usuário" controller="ParametrosUsuario" action="Index"/>
-      </mvcSiteMapNode>
-      <mvcSiteMapNode title="Cadastros" url="#" clickable="false" roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR,
+      </mvcSiteMapNode>-->
+      <!--<mvcSiteMapNode title="Cadastros" url="#" clickable="false" roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR,
                                                                          ORDEMCOMPRA_MATERIAL_ACESSAR">
         <mvcSiteMapNode title="Unidade de medida" controller="UnidadeMedida" action="Index" roles="ORDEMCOMPRA_UNIDADEMEDIDA_ACESSAR"/>
-        <!--<mvcSiteMapNode title="Material" controller="Material" action="Index" roles="ORDEMCOMPRA_MATERIAL_ACESSAR"/>-->
-      </mvcSiteMapNode>
+        --><!--mvcSiteMapNode title="Material" controller="Material" action="Index" roles="ORDEMCOMPRA_MATERIAL_ACESSAR"/--><!--
+      </mvcSiteMapNode>-->
       <mvcSiteMapNode title="Requisição de Material" url="#" clickable="false" roles="PREREQUISICAOMATERIAL_ACESSAR,REQUISICAOMATERIAL_ACESSAR">
         <mvcSiteMapNode title="Pré-requisição de Material" controller="PreRequisicaoMaterial" action="Index">
           <mvcSiteMapNode title="Cadastro" controller="PreRequisicaoMaterial" action="Index" visibility="MenuHelper,!*"/>
@@ -88,23 +95,23 @@
         <mvcSiteMapNode title="Cadastro" controller="RequisicaoMaterial" action="Index" visibility="MenuHelper,!*"/>
         <mvcSiteMapNode title="Cadastro" controller="RequisicaoMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
       </mvcSiteMapNode>
-      <mvcSiteMapNode title="Entrada de Material" controller="EntradaMaterial" action="Index">
+      <!--<mvcSiteMapNode title="Entrada de Material" controller="EntradaMaterial" action="Index">
         <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Index" visibility="MenuHelper,!*"/>
         <mvcSiteMapNode title="Cadastro" controller="EntradaMaterial" action="Cadastro" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
-      </mvcSiteMapNode>
-      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="RELATORIOITENSORDEMCOMPRA_ACESSAR">
-        <mvcSiteMapNode title="Ordem de Compra" url="#" clickable="false" roles="RELATORIOITENSORDEMCOMPRA_ACESSAR">
+      </mvcSiteMapNode>-->
+      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_ITENS_ORDEMCOMPRA_ACESSAR">
+        <mvcSiteMapNode title="Ordem de Compra" url="#" clickable="false" roles="REL_ITENS_ORDEMCOMPRA_ACESSAR">
           <mvcSiteMapNode title="Itens de ordem de compra" controller="RelOCItensOrdemCompra" action="Index"/>
         </mvcSiteMapNode>
       </mvcSiteMapNode>
     </mvcSiteMapNode>
 
-    <mvcSiteMapNode title="Sac" controller="Home" action="Index" area="Sac">
+    <!--<mvcSiteMapNode title="Sac" controller="Home" action="Index" area="Sac">
       <mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_SAC_ACESSAR,SETOR_SAC_ACESSAR">
         <mvcSiteMapNode title="Parâmetros" controller="ParametrosSac" action="Index"/>
         <mvcSiteMapNode title="Setor" controller="Setor" action="Index" preservedRouteParameters="id"/>
       </mvcSiteMapNode>
-    </mvcSiteMapNode>
+    </mvcSiteMapNode>-->
 
   </mvcSiteMapNode>
 </mvcSiteMap>

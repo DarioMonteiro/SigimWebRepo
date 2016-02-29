@@ -8,6 +8,7 @@ using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Domain.Entity.Contrato;
 using GIR.Sigim.Domain.Entity.Estoque;
+using GIR.Sigim.Domain.Entity.CredCob;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -17,7 +18,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public string Descricao { get; set; }
         public string ContaContabil { get; set; }
         public string CodigoPai { get; set; }
-        public Classe ClassePai { get; set; }
+        public virtual Classe ClassePai { get; set; }
         public virtual ICollection<Classe> ListaFilhos { get; set; }
         public ICollection<PreRequisicaoMaterialItem> ListaPreRequisicaoMaterialItem { get; set; }
         public ICollection<RequisicaoMaterialItem> ListaRequisicaoMaterialItem { get; set; }
@@ -32,6 +33,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<MovimentoItem> ListaMovimentoItem { get; set; }
         public ICollection<Apropriacao> ListaApropriacao { get; set; }
         public ICollection<ApropriacaoAdiantamento> ListaApropriacaoAdiantamento { get; set; }
+        public ICollection<VerbaCobranca> ListaVerbaCobranca { get; set; }
         
         public Classe()
         {
@@ -49,8 +51,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaMovimentoItem = new HashSet<MovimentoItem>();
             this.ListaApropriacao = new HashSet<Apropriacao>();
             this.ListaApropriacaoAdiantamento = new HashSet<ApropriacaoAdiantamento>();
+            this.ListaVerbaCobranca = new HashSet<VerbaCobranca>();
         }
-
         
     }
 }

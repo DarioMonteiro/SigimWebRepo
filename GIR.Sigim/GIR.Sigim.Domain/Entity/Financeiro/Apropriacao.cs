@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GIR.Sigim.Domain.Entity.Estoque;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -18,7 +17,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public int? TituloReceberId { get; set; }
         public TituloReceber TituloReceber { get; set; }
         public int? MovimentoId { get; set; }
-        public Movimento Movimento { get; set; }
+        public MovimentoFinanceiro Movimento { get; set; }
         public decimal Valor { get; set; }
         public decimal Percentual { get; set; }
     }

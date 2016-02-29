@@ -156,6 +156,9 @@
   <data name="GravacaoErro" xml:space="preserve">
     <value>Erro ao efetuar a gravação !</value>
   </data>
+  <data name="InformacaoNaoEncontrada" xml:space="preserve">
+    <value>Informações não encontradas !</value>
+  </data>
   <data name="InformeDataValida" xml:space="preserve">
     <value>Informe uma data válida.</value>
   </data>

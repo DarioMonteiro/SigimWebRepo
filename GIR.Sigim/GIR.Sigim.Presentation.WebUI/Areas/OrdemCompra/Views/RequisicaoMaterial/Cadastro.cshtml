@@ -434,7 +434,7 @@
             clearFormItem();
             $("#@Html.IdFor(m => m.Classe.Codigo)").val('');
             $("#@Html.IdFor(m => m.Classe.Descricao)").val('');
-            validaClasse();
+            validaClasse_@(Html.IdFor(m => m.Classe.Codigo))();
         });
 
         $('#btnAprovarRequisicao').on("click", function () {
@@ -457,7 +457,7 @@
         jQuery.validator.addMethod(
             "ehClasseValida",
             function (value, element, params) {
-                var isValid = validaClasse();
+                var isValid = validaClasse_@(Html.IdFor(m => m.Classe.Codigo))();
                 $.validator.messages.ehClasseValida = $('#@Html.IdFor(m => m.Classe.Codigo)_ValidationMessage').html();
                 return isValid;
             }, ''

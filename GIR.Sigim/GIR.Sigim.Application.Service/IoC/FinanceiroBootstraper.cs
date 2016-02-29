@@ -13,6 +13,7 @@ namespace GIR.Sigim.Application.Service.IoC
     {
         public static void Initialise()
         {
+            Container.Current.RegisterType<IApropriacaoAppService, ApropriacaoAppService>();
             Container.Current.RegisterType<ICaixaAppService, CaixaAppService>();
             Container.Current.RegisterType<ICentroCustoAppService, CentroCustoAppService>();
             Container.Current.RegisterType<IClasseAppService, ClasseAppService>();

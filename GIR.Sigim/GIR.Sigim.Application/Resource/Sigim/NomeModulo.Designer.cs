@@ -70,6 +70,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FINANCEIRO.
+        /// </summary>
+        public static string Financeiro {
+            get {
+                return ResourceManager.GetString("Financeiro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ORDEMCOMPRA.
         /// </summary>
         public static string OrdemCompra {
@@ -77,7 +86,5 @@ namespace GIR.Sigim.Application.Resource.Sigim {
                 return ResourceManager.GetString("OrdemCompra", resourceCulture);
             }
         }
-
-        public static object Financeiro { get; set; }
     }
 }

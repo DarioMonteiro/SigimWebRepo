@@ -65,6 +65,14 @@
     <Compile Include="DTO\Admin\PerfilDTO.cs" />
     <Compile Include="DTO\Admin\UsuarioDTO.cs" />
     <Compile Include="DTO\BaseDTO.cs" />
+    <Compile Include="DTO\Comercial\BlocoDTO.cs" />
+    <Compile Include="DTO\Comercial\ContratoComercialDTO.cs" />
+    <Compile Include="DTO\Comercial\EmpreendimentoDTO.cs" />
+    <Compile Include="DTO\Comercial\TipoParticipanteDTO.cs" />
+    <Compile Include="DTO\Comercial\UnidadeDTO.cs" />
+    <Compile Include="DTO\Comercial\VendaDTO.cs" />
+    <Compile Include="DTO\Comercial\VendaParticipanteDTO.cs" />
+    <Compile Include="DTO\Comercial\VendaSerieDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetencaoDTO.cs" />
     <Compile Include="DTO\Contrato\ContratoRetencaoLiberadaDTO.cs" />
@@ -81,8 +89,12 @@
     <Compile Include="DTO\Contrato\ParametrosContratoDTO.cs" />
     <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
     <Compile Include="DTO\Contrato\ResumoLiberacaoDTO.cs" />
+    <Compile Include="DTO\CredCob\TituloCredCobDTO.cs" />
+    <Compile Include="DTO\CredCob\TituloDetalheCredCobDTO.cs" />
+    <Compile Include="DTO\CredCob\VerbaCobrancaDTO.cs" />
     <Compile Include="DTO\Estoque\MovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
+    <Compile Include="DTO\Financeiro\ApropriacaoClasseCCRelatorioDTO.cs" />
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
@@ -98,6 +110,8 @@
     <Compile Include="DTO\Sigim\AvaliacaoFornecedorDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoNaturezaOperacaoDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoCSTDTO.cs" />
+    <Compile Include="DTO\Sigim\CotacaoValoresDTO.cs" />
+    <Compile Include="DTO\Sigim\IndiceFinanceiroDTO.cs" />
     <Compile Include="DTO\Sigim\NaturezaReceitaDTO.cs" />
     <Compile Include="DTO\Sigim\TabelaBasicaDTO.cs" />
     <Compile Include="DTO\Financeiro\MotivoCancelamentoDTO.cs" />
@@ -193,6 +207,7 @@
     <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\HistoricoContabilFiltro.cs" />
+    <Compile Include="Filtros\Financeiro\RelApropriacaoPorClasseFiltro.cs" />
     <Compile Include="Filtros\Financeiro\TipoMovimentoFiltro.cs" />
     <Compile Include="Filtros\Financeiro\MotivoCancelamento.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
@@ -213,7 +228,9 @@
     <Compile Include="Filtros\Sigim\MaterialFiltro.cs" />
     <Compile Include="Filtros\Sigim\UnidadeMedidaFiltro.cs" />
     <Compile Include="Helper\AdminMapperHelper.cs" />
+    <Compile Include="Helper\ComercialMapperHelper.cs" />
     <Compile Include="Helper\ContratoMapperHelper.cs" />
+    <Compile Include="Helper\CredCobMapperHelper.cs" />
     <Compile Include="Helper\EstoqueMapperHelper.cs" />
     <Compile Include="Helper\SacMapperHelper.cs" />
     <Compile Include="Helper\SigimMapperHelper.cs" />
@@ -232,6 +249,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relNotaFiscalLiberada.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Financeiro\relApropriacaoPorClasseSintetico.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relApropriacaoPorClasseSintetico.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Financeiro\relCaixa.cs">
@@ -403,6 +426,8 @@
     <Compile Include="Service\Contrato\IContratoRetificacaoItemImpostoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoItemMedicaoAppService.cs" />
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
+    <Compile Include="Service\CredCob\ITituloCredCobAppService.cs" />
+    <Compile Include="Service\Financeiro\IApropriacaoAppService.cs" />
     <Compile Include="Service\Financeiro\IHistoricoContabilAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoMovimentoAppService.cs" />
     <Compile Include="Service\Financeiro\ITaxaAdministracaoAppService.cs" />
@@ -492,6 +517,10 @@
     <EmbeddedResource Include="Reports\Contrato\relNotaFiscalLiberada.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relNotaFiscalLiberada.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relApropriacaoPorClasseSintetico.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relApropriacaoPorClasseSintetico.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Financeiro\relCaixa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

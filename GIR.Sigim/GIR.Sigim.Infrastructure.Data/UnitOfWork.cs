@@ -10,7 +10,9 @@ using GIR.Sigim.Domain.Entity;
 using GIR.Sigim.Domain.Entity.Admin;
 using GIR.Sigim.Infrastructure.Data;
 using GIR.Sigim.Infrastructure.Data.Configuration.Admin;
+using GIR.Sigim.Infrastructure.Data.Configuration.Comercial;
 using GIR.Sigim.Infrastructure.Data.Configuration.Contrato;
+using GIR.Sigim.Infrastructure.Data.Configuration.CredCob;
 using GIR.Sigim.Infrastructure.Data.Configuration.Financeiro;
 using GIR.Sigim.Infrastructure.Data.Configuration.Orcamento;
 using GIR.Sigim.Infrastructure.Data.Configuration.OrdemCompra;
@@ -107,6 +109,19 @@ namespace GIR.Sigim.Infrastructure.Data
 
             #endregion
 
+            #region Comercial
+
+            modelBuilder.Configurations.Add(new BlocoConfiguration());
+            modelBuilder.Configurations.Add(new ContratoComercialConfiguration());
+            modelBuilder.Configurations.Add(new EmpreendimentoConfiguration());
+            modelBuilder.Configurations.Add(new TipoParticipanteConfiguration());
+            modelBuilder.Configurations.Add(new UnidadeConfiguration());
+            modelBuilder.Configurations.Add(new VendaConfiguration());
+            modelBuilder.Configurations.Add(new VendaParticipanteConfiguration());
+            modelBuilder.Configurations.Add(new VendaSerieConfiguration());
+
+            #endregion
+
             #region Contrato
 
             modelBuilder.Configurations.Add(new ParametrosContratoConfiguration());
@@ -123,6 +138,13 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemMedicaoNFConfiguration());
             modelBuilder.Configurations.Add(new ContratoRetificacaoItemImpostoConfiguration());
+
+            #endregion
+
+            #region CrebCob
+
+            modelBuilder.Configurations.Add(new TituloCredCobConfiguration());
+            modelBuilder.Configurations.Add(new VerbaCobrancaConfiguration());
 
             #endregion
 
@@ -211,12 +233,15 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new ComplementoNaturezaOperacaoConfiguration());
             modelBuilder.Configurations.Add(new ComposicaoConfiguration());
             modelBuilder.Configurations.Add(new ContaCorrenteConfiguration());
+            modelBuilder.Configurations.Add(new CotacaoValoresConfiguration());
             modelBuilder.Configurations.Add(new CSTConfiguration());
+            modelBuilder.Configurations.Add(new EnderecoConfiguration());
             modelBuilder.Configurations.Add(new EstadoCivilConfiguration());
             modelBuilder.Configurations.Add(new FeriadoConfiguration());
             modelBuilder.Configurations.Add(new FonteNegocioConfiguration());
             modelBuilder.Configurations.Add(new FormaRecebimentoConfiguration());
             modelBuilder.Configurations.Add(new GrupoConfiguration());
+            modelBuilder.Configurations.Add(new IndiceFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new InteresseBairroConfiguration());
             modelBuilder.Configurations.Add(new LogAcessoConfiguration());
             modelBuilder.Configurations.Add(new LogOperacaoConfiguration());
