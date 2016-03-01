@@ -14,7 +14,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
     {
         public VendaSerieConfiguration()
         {
-            ToTable("VendaSerie", "CredCob");
+            ToTable("VendaSerie", "Comercial");
 
             Ignore(l => l.Id);
 
@@ -27,7 +27,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
 
             //HasRequired<ContratoComercial>(l => l.Contrato)
             //    .WithMany(c => c.ListaVendaSerie)
-            //    .HasForeignKey(l => l.ContratoId);
+            //    .HasForeignKey(l => l.ContratoId );
 
             Property(l => l.NumeroSerie)
                 .HasColumnName("numeroSerie")
@@ -143,7 +143,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .HasColumnOrder(22);
 
             Property(l => l.IndiceReajusteId)
-                .HasColumnName("indiceReajusteId")
+                .HasColumnName("indiceReajuste")
                 .HasColumnOrder(23);
 
             //HasOptional<IndiceFinanceiro>(l => l.IndiceReajuste)

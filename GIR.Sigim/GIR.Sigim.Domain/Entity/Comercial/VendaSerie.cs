@@ -11,7 +11,7 @@ namespace GIR.Sigim.Domain.Entity.Comercial
     public class VendaSerie : BaseEntity
     {
         public int ContratoId { get; set; }
-        //public ContratoComercial Contrato { get; set; }
+        public ContratoComercial Contrato { get; set; }
         public int NumeroSerie { get; set; }
         public Byte NomeSerie { get; set; }
         public Decimal CapitalSerie { get; set; }
@@ -46,11 +46,11 @@ namespace GIR.Sigim.Domain.Entity.Comercial
         public Nullable<DateTime> DataCancelamentoRenegociacao { get; set; }
         public Int16 DefasagemMesIndiceCorrecao { get; set; }
 
-        public ICollection<TituloCredCob> ListaTituloCredCob { get; set; }
+        //public ICollection<TituloCredCob> ListaTituloCredCob { get; set; }
 
-        public VendaSerie()
-        {
-            this.ListaTituloCredCob = new HashSet<TituloCredCob>();
-        }
+        //public VendaSerie()
+        //{
+        //    this.ListaTituloCredCob = new HashSet<TituloCredCob>();
+        //}
     }
 }

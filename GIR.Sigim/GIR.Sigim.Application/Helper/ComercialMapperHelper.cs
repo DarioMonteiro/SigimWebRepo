@@ -34,8 +34,8 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<VendaParticipante, VendaParticipanteDTO>();
             Mapper.CreateMap<VendaParticipanteDTO, VendaParticipante>();
 
-            Mapper.CreateMap<VendaSerie, VendaSerieDTO>();
-            Mapper.CreateMap<VendaSerieDTO, VendaSerie>();
+            //Mapper.CreateMap<VendaSerie, VendaSerieDTO>();
+            //Mapper.CreateMap<VendaSerieDTO, VendaSerie>();
 
         }
     }
