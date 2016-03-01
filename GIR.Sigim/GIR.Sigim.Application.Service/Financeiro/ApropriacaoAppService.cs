@@ -221,7 +221,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                               l => l.Contrato.Unidade.Bloco.CentroCusto.ListaUsuarioCentroCusto.Select(u => u.Modulo),
                                                               l => l.Contrato.Unidade.Bloco.CentroCusto.ListaCentroCustoEmpresa,
                                                               l => l.Contrato.Venda.Contrato.ListaVendaParticipante,
-                                                              l => l.VerbaCobranca.Classe).To<List<TituloCredCob>>();
+                                                              l => l.VerbaCobranca.Classe,
+                                                              l => l.VendaSerie,
+                                                              l => l.VendaSerie.IndiceCorrecao,
+                                                              l => l.VendaSerie.IndiceAtrasoCorrecao,
+                                                              l => l.VendaSerie.IndiceReajuste).To<List<TituloCredCob>>();
 
                     List<TituloDetalheCredCobDTO> listaTituloDetalheCredCobDTO = tituloCredCobAppService.RecTit(listaTituloCredCob, DateTime.Now.Date, false, false);
                     GeraListaRelApropriacaoPorClasseCreditoCobranca(listaTituloCredCob, listaApropriacaoClasseRelatorio);

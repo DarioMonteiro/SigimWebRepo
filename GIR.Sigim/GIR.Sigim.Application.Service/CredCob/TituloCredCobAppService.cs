@@ -16,7 +16,6 @@ using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.DTO.CredCob;
-using GIR.Sigim.Domain.Repository.Comercial;
 using GIR.Sigim.Domain.Entity.Comercial;
 
 namespace GIR.Sigim.Application.Service.CredCob
@@ -28,7 +27,6 @@ namespace GIR.Sigim.Application.Service.CredCob
         private IUsuarioAppService usuarioAppService;
         private ITituloCredCobRepository tituloCredCobRepository;
         private IClasseRepository classeRepository;
-        private IVendaSerieRepository vendaSerieRepository;
 
         #endregion
 
@@ -37,14 +35,12 @@ namespace GIR.Sigim.Application.Service.CredCob
         public TituloCredCobAppService(IUsuarioAppService usuarioAppService,
                                        ITituloCredCobRepository tituloCredCobRepository,
                                        IClasseRepository classeRepository, 
-                                       IVendaSerieRepository vendaSerieRepository,
                                        MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.tituloCredCobRepository = tituloCredCobRepository;
             this.usuarioAppService = usuarioAppService;
             this.classeRepository = classeRepository;
-            this.vendaSerieRepository = vendaSerieRepository;
         }
 
         #endregion
@@ -123,8 +119,6 @@ namespace GIR.Sigim.Application.Service.CredCob
                 TituloDetalheCredCobDTO tituloDetalhe = new TituloDetalheCredCobDTO();
 
                 tituloDetalhe = titulo.To<TituloDetalheCredCobDTO>();
-
-                VendaSerie vendaSerie = vendaSerieRepository.ObterPeloIdComposto(titulo.ContratoId, titulo.Serie);
 
                 if (dataReferencia.HasValue)
                 {

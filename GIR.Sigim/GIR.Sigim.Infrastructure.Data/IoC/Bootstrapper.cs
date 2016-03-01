@@ -15,7 +15,6 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType(typeof(UnitOfWork), new PerResolveLifetimeManager());
 
             AdminBootstraper.Initialise();
-            ComercialBootstrapper.Initialise();
             ContratoBootstraper.Initialise();
             CredCobBootstrapper.Initialise();
             EstoqueBootstraper.Initialise();

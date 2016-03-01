@@ -66,9 +66,7 @@ namespace GIR.Sigim.Application.DTO.CredCob
         public int? IndiceAtrasoCorrecaoId { get; set; }
         public IndiceFinanceiroDTO IndiceAtrasoCorrecao { get; set; }
 
-        public TituloCredCobDTO()
-        {
-        }
+        public VendaSerieDTO VendaSerie { get; set; }
 
     }
 }

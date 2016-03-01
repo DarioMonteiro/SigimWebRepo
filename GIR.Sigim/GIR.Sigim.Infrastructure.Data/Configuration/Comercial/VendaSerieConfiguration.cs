@@ -25,9 +25,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .IsRequired()
                 .HasColumnOrder(1);
 
-            //HasRequired<ContratoComercial>(l => l.Contrato)
-            //    .WithMany(c => c.ListaVendaSerie)
-            //    .HasForeignKey(l => l.ContratoId );
+            HasRequired<ContratoComercial>(l => l.Contrato)
+                .WithMany(c => c.ListaVendaSerie)
+                .HasForeignKey(l => l.ContratoId);
 
             Property(l => l.NumeroSerie)
                 .HasColumnName("numeroSerie")
@@ -90,9 +90,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .HasColumnName("indiceCorrecao")
                 .HasColumnOrder(12);
 
-            //HasOptional<IndiceFinanceiro>(l => l.IndiceCorrecao)
-            //    .WithMany(c => c.ListaVendaSerieIndiceCorrecao)
-            //    .HasForeignKey(l => l.IndiceCorrecaoId);
+            HasOptional<IndiceFinanceiro>(l => l.IndiceCorrecao)
+                .WithMany(c => c.ListaVendaSerieIndiceCorrecao)
+                .HasForeignKey(l => l.IndiceCorrecaoId);
 
             Property(l => l.DataBaseIndiceCorrecao)
                 .HasColumnName("dataBaseIndiceCorrecao")
@@ -107,9 +107,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .HasColumnName("indiceAtrasoCorrecao")
                 .HasColumnOrder(15);
 
-            //HasOptional<IndiceFinanceiro>(l => l.IndiceAtrasoCorrecao)
-            //    .WithMany(c => c.ListaVendaSerieIndiceAtrasoCorrecao)
-            //    .HasForeignKey(l => l.IndiceAtrasoCorrecaoId);
+            HasOptional<IndiceFinanceiro>(l => l.IndiceAtrasoCorrecao)
+                .WithMany(c => c.ListaVendaSerieIndiceAtrasoCorrecao)
+                .HasForeignKey(l => l.IndiceAtrasoCorrecaoId);
 
             Property(l => l.CobrancaResiduo)
                 .HasColumnName("cobrancaResiduo")
@@ -146,9 +146,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .HasColumnName("indiceReajuste")
                 .HasColumnOrder(23);
 
-            //HasOptional<IndiceFinanceiro>(l => l.IndiceReajuste)
-            //    .WithMany(c => c.ListaVendaSerieIndiceReajuste)
-            //    .HasForeignKey(l => l.IndiceReajusteId);
+            HasOptional<IndiceFinanceiro>(l => l.IndiceReajuste)
+                .WithMany(c => c.ListaVendaSerieIndiceReajuste)
+                .HasForeignKey(l => l.IndiceReajusteId);
 
             Property(l => l.DataBaseIndiceReajuste)
                 .HasColumnName("dataBaseIndiceReajuste")
