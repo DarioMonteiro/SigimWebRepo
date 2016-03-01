@@ -9,7 +9,7 @@ using Microsoft.Practices.Unity;
 
 namespace GIR.Sigim.Application.Service.IoC
 {
-    public class FinanceiroBootstraper
+    public class FinanceiroBootstrapper
     {
         public static void Initialise()
         {

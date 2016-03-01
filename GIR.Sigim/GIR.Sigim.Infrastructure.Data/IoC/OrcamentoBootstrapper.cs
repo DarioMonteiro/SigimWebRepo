@@ -10,7 +10,7 @@ using Microsoft.Practices.Unity;
 
 namespace GIR.Sigim.Infrastructure.Data.IoC
 {
-    public class OrcamentoBootstraper
+    public class OrcamentoBootstrapper
     {
         public static void Initialise()
         {

@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GIR.Sigim.Domain.Repository.Estoque;
+using GIR.Sigim.Domain.Repository.Sac;
 using GIR.Sigim.Infrastructure.Crosscutting.IoC;
-using GIR.Sigim.Infrastructure.Data.Repository.Estoque;
+using GIR.Sigim.Infrastructure.Data.Repository.Sac;
 using Microsoft.Practices.Unity;
 
 namespace GIR.Sigim.Infrastructure.Data.IoC
 {
-    public class EstoqueBootstraper
+    public class SacBootstrapper
     {
         public static void Initialise()
         {
-            Container.Current.RegisterType<IEstoqueRepository, EstoqueRepository>();
+            Container.Current.RegisterType<IParametrosSacRepository, ParametrosSacRepository>();
+            Container.Current.RegisterType<ISetorRepository, SetorRepository>();
         }
     }
 }

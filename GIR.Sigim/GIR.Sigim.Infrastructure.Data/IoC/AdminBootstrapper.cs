@@ -10,7 +10,7 @@ using Microsoft.Practices.Unity;
 
 namespace GIR.Sigim.Infrastructure.Data.IoC
 {
-    public class AdminBootstraper
+    public class AdminBootstrapper
     {
         public static void Initialise()
         {
