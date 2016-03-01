@@ -1472,7 +1472,7 @@
                                                                 }
                                                             });
 
-                                                            $(document).on("change", "#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)", function () {
+                                                            $(document).on("blur", "#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)", function () {
                                                                 ajustarDataVencimentoLiberado();
                                                             });
                                                         });
@@ -1493,6 +1493,8 @@
                                                             var dataEmissaoNota = $("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)");
                                                             var dataVencimentoLiberado = $("#@Html.IdFor(m => m.DataVencimentoLiberado)");
                                                             var quantidadeDiasAposEmissao = $("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)");
+
+                                                            if (quantidadeDiasAposEmissao.val() == '') quantidadeDiasAposEmissao.val(0);
 
                                                             if (dataEmissaoNota.val() != "" && quantidadeDiasAposEmissao.val() != "") {
                                                                 if (isValidDate(format, $("#@Html.IdFor(m => m.EntradaMaterial.DataEmissaoNota)").val()) && $.isNumeric($("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)").val())) {
