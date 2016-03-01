@@ -2985,7 +2985,7 @@
             valorTotalICMSST += valorICMSST;
         });
 
-        valorSubTotal = valorTotalItens;// - valorTotalDescontoOrdemCompra;
+        valorSubTotal = valorTotalItens - valorTotalDescontoOrdemCompra;
 
         $.each(jsonImpostos, function (i, imposto) {
             percentualTotalAliquota += imposto.ImpostoFinanceiro.Aliquota;
@@ -3004,7 +3004,7 @@
         var valorFreteIncluso = parseFloat($("#@Html.IdFor(m => m.EntradaMaterial.FreteIncluso)").val().replace(".", "").replace(",", "."));
         valorTotalAcrescimo = valorFreteIncluso;
 
-        valorTotal = valorTotalItens - valorTotalDesconto + valorTotalAcrescimo;
+        valorTotal = valorTotalItens - valorTotalDesconto - valorTotalDescontoOrdemCompra + valorTotalAcrescimo;
 
         $("#@Html.IdFor(m => m.ValorTotalItem)").val(roundDecimal(floatToString(valorTotalItens), 2));
         $("#@Html.IdFor(m => m.ValorTotalDescontoOrdemCompra)").val(roundDecimal(floatToString(valorTotalDescontoOrdemCompra), 2));
