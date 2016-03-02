@@ -1,0 +1,80 @@
+﻿@using GIR.Sigim.Application.DTO.Comercial 
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<RelStatusVendaDTO> Lista = Model.Records as IEnumerable<RelStatusVendaDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls = "dt_basic",
+                                @class = "form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="min-height: 115px; border: 1px solid #ddd; margin-bottom: 13px; overflow-x: auto;">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string contratoSortingSuffix = "sorting";
+                            string incorporadorSortingSuffix = "sorting";
+                            //string descricaoSortingSuffix = "sorting";
+                            //string tipoPagarSortingSuffix = "sorting";
+                            //string tipoReceberSortingSuffix = "sorting";
+
+                            switch (Model.OrderBy)
+                            {
+                                case "contratoId":
+                                    contratoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "incorporador":
+                                    incorporadorSortingSuffix += sortingSuffix;
+                                    break;
+                                //case "tipoPagar":
+                                //    tipoPagarSortingSuffix += sortingSuffix;
+                                //    break;
+                                //case "tipoReceber":
+                                //    tipoReceberSortingSuffix += sortingSuffix;
+                                //    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        <th class="sorting @contratoSortingSuffix text-center" data-order="Contrato" style="width:60px; ">Contrato</th>
+                        <th class="sorting @incorporadorSortingSuffix text-center" data-order="incorporador" style="min-width:65px;">Incorporador</th>
+                        @*<th class="sorting @tipoPagarSortingSuffix text-center" data-order="tipoPagar" style="min-width:75px;">Tipo a pagar</th>
+                        <th class="sorting @tipoReceberSortingSuffix text-center" data-order="tipoReceber" style="min-width:75px;">Tipo a receber</th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            @*<td class="text-right"><a href="javascript:loadItem(@item.Id.ToString());">@item.Id.ToString()</a></td>*@
+                            <td class="text-left">@item.Venda.Contrato.Id</td>
+                            <td class="text-left">@item.Venda.Contrato.Unidade.Empreendimento.Incorporador.RazaoSocial </td>
+                           @* <td class="text-center">@item.TipoPagarDescricao</td>
+                            <td class="text-center">@item.TipoReceberDescricao</td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>

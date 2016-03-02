@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GIR.Sigim.Application.DTO.Comercial
-{
-    public class VendaDTO : BaseDTO
     {
-        public ContratoComercialDTO Contrato { get; set; }
-
+    public class RelStatusVendaDTO : BaseDTO
+    {
+        public VendaDTO Venda { get; set; }
     }
 }

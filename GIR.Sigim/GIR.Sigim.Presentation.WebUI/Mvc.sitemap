@@ -17,9 +17,9 @@
     </mvcSiteMapNode>
 
     <mvcSiteMapNode title="Comercial" controller="Home" action="Index" area="Comercial">
-     <!--<mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_NF_LIBERADAS_ACESSAR">
-        <mvcSiteMapNode title="Notas fiscais liberadas" controller="RelNotaFiscalLiberada" action="Index"/>
-      </mvcSiteMapNode>-->
+     <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_STATUS_VENDA_ACESSAR">
+        <mvcSiteMapNode title="Relatórios de status da venda" controller="RelStatusVenda" action="Index"/>
+      </mvcSiteMapNode>
     </mvcSiteMapNode>
 
     <mvcSiteMapNode title="Contrato" controller="Home" action="Index" area="Contrato">

@@ -162,6 +162,8 @@
     <Compile Include="Areas\Admin\ViewModel\PerfilViewModel.cs" />
     <Compile Include="Areas\Comercial\ComercialAreaRegistration.cs" />
     <Compile Include="Areas\Comercial\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Comercial\Controllers\RelStatusVendaController.cs" />
+    <Compile Include="Areas\Comercial\ViewModel\RelStatusVendaViewModel.cs" />
     <Compile Include="Areas\Contrato\ContratoAreaRegistration.cs" />
     <Compile Include="Areas\Contrato\Controllers\ContratoController.cs" />
     <Compile Include="Areas\Contrato\Controllers\HomeController.cs" />
@@ -411,6 +413,8 @@
     <Content Include="Areas\Comercial\Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Areas\Comercial\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Comercial\Views\Web.config" />
+    <Content Include="Areas\Comercial\Views\RelStatusVenda\ListaPartial.cshtml" />
+    <Content Include="Areas\Comercial\Views\RelStatusVenda\Index.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -888,7 +892,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Comercial\ViewModel\" />
     <Folder Include="Areas\Financeiro\Views\CentroCusto\" />
     <Folder Include="Areas\Orcamento\ViewModel\" />
     <Folder Include="Areas\Orcamento\Views\Shared\" />

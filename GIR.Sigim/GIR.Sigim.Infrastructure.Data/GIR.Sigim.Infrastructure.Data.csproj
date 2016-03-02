@@ -62,6 +62,7 @@
     <Compile Include="Configuration\Admin\PerfilFuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Comercial\BlocoConfiguration.cs" />
     <Compile Include="Configuration\Comercial\ContratoComercialConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\IncorporadorConfiguration.cs" />
     <Compile Include="Configuration\Comercial\EmpreendimentoConfiguration.cs" />
     <Compile Include="Configuration\Comercial\TipoParticipanteConfiguration.cs" />
     <Compile Include="Configuration\Comercial\UnidadeConfiguration.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="IoC\AdminBootstraper.cs" />
     <Compile Include="IoC\Bootstrapper.cs" />
     <Compile Include="IoC\ContratoBootstraper.cs" />
+    <Compile Include="IoC\ComercialBootstrapper.cs" />
     <Compile Include="IoC\CredCobBootstrapper.cs" />
     <Compile Include="IoC\SigimBootstraper.cs" />
     <Compile Include="IoC\SacBootstraper.cs" />
@@ -206,6 +208,10 @@
     <Compile Include="Repository\Admin\PerfilFuncionalidadeRepository.cs" />
     <Compile Include="Repository\Admin\ModuloRepository.cs" />
     <Compile Include="Repository\Admin\PerfilRepository.cs" />
+    <Compile Include="Repository\Comercial\IncorporadorRepository.cs" />
+    <Compile Include="Repository\Comercial\EmpreendimentoRepository.cs" />
+    <Compile Include="Repository\Comercial\BlocoRepository.cs" />
+    <Compile Include="Repository\Comercial\VendaRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\ContratoRetificacaoItemMedicaoRepository.cs" />

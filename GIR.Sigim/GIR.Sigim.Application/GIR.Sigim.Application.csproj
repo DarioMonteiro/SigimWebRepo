@@ -67,7 +67,9 @@
     <Compile Include="DTO\BaseDTO.cs" />
     <Compile Include="DTO\Comercial\BlocoDTO.cs" />
     <Compile Include="DTO\Comercial\ContratoComercialDTO.cs" />
+    <Compile Include="DTO\Comercial\IncorporadorDTO.cs" />
     <Compile Include="DTO\Comercial\EmpreendimentoDTO.cs" />
+    <Compile Include="DTO\Comercial\RelStatusVendaDTO.cs" />
     <Compile Include="DTO\Comercial\TipoParticipanteDTO.cs" />
     <Compile Include="DTO\Comercial\UnidadeDTO.cs" />
     <Compile Include="DTO\Comercial\VendaDTO.cs" />
@@ -202,6 +204,7 @@
     <Compile Include="Enums\TipoPessoaAutoComplete.cs" />
     <Compile Include="Filtros\Admin\PerfilFiltro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
+    <Compile Include="Filtros\Comercial\RelStatusVendaFiltro.cs" />
     <Compile Include="Filtros\Contrato\ContratoPesquisaFiltro.cs" />
     <Compile Include="Filtros\Contrato\LiberacaoContratoFiltro.cs" />
     <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
@@ -420,6 +423,10 @@
     <Compile Include="Service\Admin\IModuloAppService.cs" />
     <Compile Include="Service\Admin\IPerfilAppService.cs" />
     <Compile Include="Service\Admin\IUsuarioAppService.cs" />
+    <Compile Include="Service\Comercial\IBlocoAppService.cs" />
+    <Compile Include="Service\Comercial\IIncorporadorAppService.cs" />
+    <Compile Include="Service\Comercial\IEmpreendimentoAppService.cs" />
+    <Compile Include="Service\Comercial\IVendaAppService.cs" />
     <Compile Include="Service\Contrato\IContratoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoItemAppService.cs" />

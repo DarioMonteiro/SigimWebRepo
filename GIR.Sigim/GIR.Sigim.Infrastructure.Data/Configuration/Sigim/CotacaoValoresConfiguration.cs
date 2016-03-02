@@ -68,7 +68,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
             Property(l => l.UsuarioAlteracao)
                 .HasColumnName("usuarioAlteracao")
                 .HasMaxLength(50)
-                .HasColumnOrder(9);
+                .HasColumnOrder(10);
 
         }
 
