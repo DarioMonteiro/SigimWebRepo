@@ -15,14 +15,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
         {
             ToTable("Parametros", "Sigim");
 
-            //Dario - Cambalacho
-            // Essa tabela não tem chave primaria , assim foi como ela só tem um registro
-            // foi escolhido o primeiro campo do tipo int nulo para ser a chave primaria ficticia 
-            // para o modelo , para que não ocorra erro, mas no banco ele continua sem chave.
-            //
-            Ignore(l => l.Id);
-
-            HasKey(l => l.IndiceVendas);
+            Property(l => l.Id)
+                .HasColumnName("codigo")
+                .HasColumnOrder(46);
 
             Property(l => l.IndiceVendas)
                 .HasColumnName("indiceVendas")
