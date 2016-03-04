@@ -24,6 +24,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<ICodigoContribuicaoRepository, CodigoContribuicaoRepository>();
             Container.Current.RegisterType<IComplementoCSTRepository, ComplementoCSTRepository>();
             Container.Current.RegisterType<IComplementoNaturezaOperacaoRepository, ComplementoNaturezaOperacaoRepository>();
+            Container.Current.RegisterType<ICotacaoValoresRepository, CotacaoValoresRepository>();
             Container.Current.RegisterType<IContaCorrenteRepository, ContaCorrenteRepository>();
             Container.Current.RegisterType<ICSTRepository, CSTRepository>();
             Container.Current.RegisterType<IEstadoCivilRepository, EstadoCivilRepository>();

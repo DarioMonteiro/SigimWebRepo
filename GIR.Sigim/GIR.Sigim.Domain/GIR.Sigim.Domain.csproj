@@ -266,6 +266,7 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\ICotacaoValoresRepository.cs" />
     <Compile Include="Repository\Sigim\IFeriadoRepository.cs" />
     <Compile Include="Repository\Sigim\IComplementoCSTRepository.cs" />
     <Compile Include="Repository\Sigim\IComplementoNaturezaOperacaoRepository.cs" />

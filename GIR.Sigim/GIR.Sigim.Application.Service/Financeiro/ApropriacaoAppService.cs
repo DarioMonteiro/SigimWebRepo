@@ -226,7 +226,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                               l => l.VendaSerie.IndiceCorrecao,
                                                               l => l.VendaSerie.IndiceAtrasoCorrecao,
                                                               l => l.VendaSerie.IndiceReajuste,
-                                                              l => l.Indice.ListaCotacaoValores).To<List<TituloCredCob>>();
+                                                              l => l.Indice).To<List<TituloCredCob>>();
 
                     List<TituloDetalheCredCobDTO> listaTituloDetalheCredCobDTO = tituloCredCobAppService.RecTit(listaTituloCredCob, DateTime.Now.Date, false, false);
                     GeraListaRelApropriacaoPorClasseCreditoCobranca(listaTituloCredCob, listaApropriacaoClasseRelatorio);
