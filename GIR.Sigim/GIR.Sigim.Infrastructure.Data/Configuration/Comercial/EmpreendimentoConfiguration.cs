@@ -13,7 +13,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
     {
         public EmpreendimentoConfiguration()
         {
-            ToTable("Empreeendimento","Comercial");
+            ToTable("Empreendimento","Comercial");
 
             Property(l => l.Id)
                 .HasColumnName("codigo")
@@ -24,6 +24,20 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .HasMaxLength(50)
                 .HasColumnName("nome")
                 .HasColumnOrder(2);
+
+            Property(l => l.EnderecoId)
+                .HasColumnName("endereco")
+                .IsRequired()
+                .HasColumnOrder(3);
+
+            Property(l => l.IncorporadorId )
+                .HasColumnName("incorporador")
+                .IsRequired()
+                .HasColumnOrder(4);
+
+            HasRequired<Incorporador>(l => l.Incorporador)
+               .WithMany(c => c.ListaEmpreendimento)
+               .HasForeignKey(l => l.IncorporadorId);
 
         }
     }

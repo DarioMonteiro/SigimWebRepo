@@ -12,6 +12,7 @@ namespace GIR.Sigim.Application.Service.IoC
         {
             GIR.Sigim.Infrastructure.Data.IoC.Bootstrapper.Initialise();
             AdminBootstrapper.Initialise();
+            ComercialBootstrapper.Initialise();
             ContratoBootstrapper.Initialise();
             CredCobBootstrapper.Initialise();
             FinanceiroBootstrapper.Initialise();

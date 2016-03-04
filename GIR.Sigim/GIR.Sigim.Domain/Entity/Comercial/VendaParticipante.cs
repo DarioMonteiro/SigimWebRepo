@@ -11,6 +11,7 @@ namespace GIR.Sigim.Domain.Entity.Comercial
     {
         public int ContratoId { get; set; }
         public ContratoComercial Contrato { get; set; }
+        //public Venda Venda { get; set; }
         public int ClienteId { get; set; }
         public ClienteFornecedor Cliente { get; set; }
         public int? TipoParticipanteId { get; set; }

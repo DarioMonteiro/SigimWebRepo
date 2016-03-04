@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constantes\Comercial.cs" />
     <Compile Include="Entity\Admin\UsuarioPerfil.cs" />
     <Compile Include="Entity\Admin\UsuarioFuncionalidade.cs" />
     <Compile Include="Entity\Admin\PerfilFuncionalidade.cs" />
@@ -49,6 +50,8 @@
     <Compile Include="Entity\Admin\Usuario.cs" />
     <Compile Include="Entity\Comercial\Bloco.cs" />
     <Compile Include="Entity\Comercial\ContratoComercial.cs" />
+    <Compile Include="Entity\Comercial\Incorporador.cs" />
+    <Compile Include="Entity\Comercial\TabelaVenda.cs" />
     <Compile Include="Entity\Comercial\Empreendimento.cs" />
     <Compile Include="Entity\Comercial\Renegociacao.cs" />
     <Compile Include="Entity\Comercial\TipoParticipante.cs" />
@@ -81,6 +84,10 @@
     <Compile Include="Entity\Sigim\IndiceFinanceiro.cs" />
     <Compile Include="Entity\Sigim\ParametrosSigim.cs" />
     <Compile Include="Entity\Sigim\UnidadeFederacao.cs" />
+    <Compile Include="Repository\Comercial\IIncorporadorRepository.cs" />
+    <Compile Include="Repository\Comercial\IEmpreendimentoRepository.cs" />
+    <Compile Include="Repository\Comercial\IBlocoRepository.cs" />
+    <Compile Include="Repository\Comercial\IVendaRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />
@@ -325,6 +332,7 @@
     <Compile Include="Specification\Admin\PerfilSpecification.cs" />
     <Compile Include="Specification\AndSpecification.cs" />
     <Compile Include="Specification\BaseSpecification.cs" />
+    <Compile Include="Specification\Comercial\VendaSpecification.cs" />
     <Compile Include="Specification\CompositeSpecification.cs" />
     <Compile Include="Specification\Contrato\ContratoRetificacaoItemMedicaoSpecification.cs" />
     <Compile Include="Specification\Contrato\ContratoSpecification.cs" />

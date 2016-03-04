@@ -25,6 +25,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<VendaSerie> ListaVendaSerieIndiceAtrasoCorrecao { get; set; }
         public ICollection<VendaSerie> ListaVendaSerieIndiceReajuste { get; set; }
         public ICollection<CotacaoValores> ListaCotacaoValores { get; set; }
+        public ICollection<Venda> ListaVendaIndiceFinanceiro { get; set; }
 
         public IndiceFinanceiro()
         {
@@ -34,6 +35,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaVendaSerieIndiceAtrasoCorrecao = new HashSet<VendaSerie>();
             this.ListaVendaSerieIndiceReajuste = new HashSet<VendaSerie>();
             this.ListaCotacaoValores = new HashSet<CotacaoValores>();
+            this.ListaVendaIndiceFinanceiro = new HashSet<Venda>();
         }
     }
 }
