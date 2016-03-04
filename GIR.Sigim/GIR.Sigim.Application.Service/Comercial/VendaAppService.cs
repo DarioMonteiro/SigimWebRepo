@@ -134,18 +134,18 @@ namespace GIR.Sigim.Application.Service.Comercial
             objRel.SetDataSource(RelStatusVendaToDataTable(lista));
 
             //var parametros = parametrosRepository.Obter();
-            var caminhoImagem = PrepararIconeRelatorio(null, parametros);
+            //var caminhoImagem = PrepararIconeRelatorio(null, parametros);
 
             objRel.SetParameterValue("descricaoMoeda", "");
-            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+            //objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 
             FileDownloadDTO arquivo = new FileDownloadDTO(
                 "Rel. Status da Venda",
                 objRel.ExportToStream((ExportFormatType)formato),
                 formato);
 
-            if (System.IO.File.Exists(caminhoImagem))
-                System.IO.File.Delete(caminhoImagem);
+            //if (System.IO.File.Exists(caminhoImagem))
+            //    System.IO.File.Delete(caminhoImagem);
             return arquivo;
         }
         

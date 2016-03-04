@@ -192,8 +192,8 @@
     <Compile Include="Configuration\Sigim\UsuarioCentroCustoConfiguration.cs" />
     <Compile Include="IoC\AdminBootstrapper.cs" />
     <Compile Include="IoC\Bootstrapper.cs" />
-    <Compile Include="IoC\ContratoBootstraper.cs" />
     <Compile Include="IoC\ComercialBootstrapper.cs" />
+    <Compile Include="IoC\ContratoBootstrapper.cs" />
     <Compile Include="IoC\CredCobBootstrapper.cs" />
     <Compile Include="IoC\SigimBootstrapper.cs" />
     <Compile Include="IoC\SacBootstrapper.cs" />
