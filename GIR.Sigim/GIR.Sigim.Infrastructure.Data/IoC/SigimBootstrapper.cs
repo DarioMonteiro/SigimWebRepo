@@ -39,6 +39,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<INacionalidadeRepository, NacionalidadeRepository>();
             Container.Current.RegisterType<INaturezaOperacaoRepository, NaturezaOperacaoRepository>();
             Container.Current.RegisterType<INaturezaReceitaRepository, NaturezaReceitaRepository>();
+            Container.Current.RegisterType<IParametrosSigimRepository, ParametrosSigimRepository>();
             Container.Current.RegisterType<IParentescoRepository, ParentescoRepository>();
             Container.Current.RegisterType<IProfissaoRepository, ProfissaoRepository>();
             Container.Current.RegisterType<IRamoAtividadeRepository, RamoAtividadeRepository>();

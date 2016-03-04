@@ -33,6 +33,7 @@ namespace GIR.Sigim.Application.Service.IoC
             Container.Current.RegisterType<ILogOperacaoAppService, LogOperacaoAppService>();
             Container.Current.RegisterType<IMaterialAppService, MaterialAppService>();
             Container.Current.RegisterType<IMaterialClasseInsumoAppService, MaterialClasseInsumoAppService>();
+            Container.Current.RegisterType<IModuloSigimAppService, ModuloSigimAppService>();
             Container.Current.RegisterType<INacionalidadeAppService, NacionalidadeAppService>();
             Container.Current.RegisterType<INaturezaOperacaoAppService, NaturezaOperacaoAppService>();
             Container.Current.RegisterType<INaturezaReceitaAppService, NaturezaReceitaAppService>();

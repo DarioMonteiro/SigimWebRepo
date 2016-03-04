@@ -251,6 +251,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new NaturezaOperacaoConfiguration());
             modelBuilder.Configurations.Add(new NaturezaReceitaConfiguration());
             modelBuilder.Configurations.Add(new NCMConfiguration());
+            modelBuilder.Configurations.Add(new ParametrosSigimConfiguration());
             modelBuilder.Configurations.Add(new ParentescoConfiguration());
             modelBuilder.Configurations.Add(new PessoaFisicaConfiguration());
             modelBuilder.Configurations.Add(new PessoaJuridicaConfiguration());

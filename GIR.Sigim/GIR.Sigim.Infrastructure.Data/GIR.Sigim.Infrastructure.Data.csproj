@@ -158,6 +158,7 @@
     <Compile Include="Configuration\Sigim\AgenciaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\ContaCorrenteConfiguration.cs" />
     <Compile Include="Configuration\Sigim\FormaRecebimentoConfiguration.cs" />
+    <Compile Include="Configuration\Sigim\ParametrosSigimConfiguration.cs" />
     <Compile Include="Configuration\Sigim\TipoAreaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\TipoCaracteristicaConfiguration.cs" />
     <Compile Include="Configuration\Sigim\TipoEspecificacaoConfiguration.cs" />
@@ -263,6 +264,7 @@
     <Compile Include="Repository\Sigim\LogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\FormaRecebimentoRepository.cs" />
     <Compile Include="Repository\Sigim\MaterialClasseInsumoRepository.cs" />
+    <Compile Include="Repository\Sigim\ParametrosSigimRepository.cs" />
     <Compile Include="Repository\Sigim\TratamentoRepository.cs" />
     <Compile Include="Repository\Sigim\TipoCaracteristicaRepository.cs" />
     <Compile Include="Repository\Sigim\TipoEspecificacaoRepository.cs" />

@@ -124,6 +124,7 @@
     <Compile Include="Sigim\ContaCorrenteAppService.cs" />
     <Compile Include="Sigim\ComplementoNaturezaOperacaoAppService.cs" />
     <Compile Include="Sigim\ComplementoCSTAppService.cs" />
+    <Compile Include="Sigim\ModuloSigimAppService.cs" />
     <Compile Include="Sigim\NaturezaReceitaAppService.cs" />
     <Compile Include="Sigim\FormaRecebimentoAppService.cs" />
     <Compile Include="Sigim\MaterialClasseInsumoAppService.cs" />

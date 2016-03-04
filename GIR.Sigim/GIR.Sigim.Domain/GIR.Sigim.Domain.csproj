@@ -78,6 +78,7 @@
     <Compile Include="Entity\Sigim\CotacaoValores.cs" />
     <Compile Include="Entity\Sigim\Endereco.cs" />
     <Compile Include="Entity\Sigim\IndiceFinanceiro.cs" />
+    <Compile Include="Entity\Sigim\ParametrosSigim.cs" />
     <Compile Include="Entity\Sigim\UnidadeFederacao.cs" />
     <Compile Include="Repository\Contrato\IContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
@@ -270,6 +271,7 @@
     <Compile Include="Repository\Sac\ISetorRepository.cs" />
     <Compile Include="Repository\Sigim\ILogOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\IMaterialClasseInsumoRepository.cs" />
+    <Compile Include="Repository\Sigim\IParametrosSigimRepository.cs" />
     <Compile Include="Repository\Sigim\IUnidadeFederacaoRepository.cs" />
     <Compile Include="Repository\Sigim\IUnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sac\IParametrosSacRepository.cs" />
