@@ -20,6 +20,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .HasColumnName("contrato")
                 .HasColumnOrder(1);
 
+            HasRequired<ContratoComercial>(l => l.Contrato)
+                .WithRequiredDependent();              
+
              Property(l => l.DataVenda)
                 .HasColumnName("dataVenda")
                 .HasColumnOrder(2);
