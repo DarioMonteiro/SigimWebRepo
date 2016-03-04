@@ -22,7 +22,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
 
              Property(l => l.DataVenda)
                 .HasColumnName("dataVenda")
-                .IsRequired()
                 .HasColumnOrder(2);
 
              Property(l => l.TabelaVendaId)
@@ -52,7 +51,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
 
              Property(l => l.IndiceFinanceiroId)
                 .HasColumnName("indiceFinanceiro")
-                .IsRequired()
                 .HasColumnOrder(7);
 
              HasRequired<IndiceFinanceiro>(l => l.IndiceFinanceiro)
@@ -110,7 +108,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .HasColumnName("contaCorrente")
                 .HasColumnOrder(19);
 
-             HasRequired<ContaCorrente>(l => l.ContaCorrente)
+             HasOptional<ContaCorrente>(l => l.ContaCorrente)
                 .WithMany(c => c.ListaVenda)
                 .HasForeignKey(l => l.ContaCorrenteId);
 
