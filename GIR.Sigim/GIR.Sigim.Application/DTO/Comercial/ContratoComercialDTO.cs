@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.CredCob;
+using GIR.Sigim.Domain.Constantes;
 
 namespace GIR.Sigim.Application.DTO.Comercial
 {
@@ -14,6 +15,24 @@ namespace GIR.Sigim.Application.DTO.Comercial
         public string TipoContrato { get; set; }
         public string SituacaoContrato { get; set; }
 
+        public string DescricaoSituacaoContrato
+        {
+            get
+            {
+                switch (SituacaoContrato)
+                {
+                    case GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoPropostaCodigo: return GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoPropostaDescricao;
+                    case GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoAssinadoCodigo: return GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoAssinadoDescricao;
+                    case GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoCanceladoCodigo: return GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoCanceladoDescricao;
+                    case GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoRescindidoCodigo: return GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoRescindidoDescricao;
+                    case GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoQuitadoCodigo: return GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoQuitadoDescricao;
+                    case GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoEscrituradoCodigo: return GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoEscrituradoDescricao;
+                    default: return "?????";
+                }
+
+            }
+        }
+        
         public int? VendaId { get; set; }
         public VendaDTO Venda { get; set; }
 

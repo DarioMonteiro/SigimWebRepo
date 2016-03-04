@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace GIR.Sigim.Application.DTO.Comercial
     {
-    public class RelStatusVendaDTO : BaseDTO
+    public class RelStatusVendaDTO : VendaDTO
     {
-        public VendaDTO Venda { get; set; }
+        //public VendaDTO Venda { get; set; }
     }
 }

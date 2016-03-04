@@ -32,7 +32,7 @@ namespace GIR.Sigim.Application.Service.Comercial
 
         #region IBlocoAppService Members
 
-        public List<BlocoDTO> ListarPeloEmpreendimento(int empreendimentoId)
+        public List<BlocoDTO> ListarPeloEmpreendimento(int? empreendimentoId)
         {
             return blocoRepository.ListarPeloFiltro(l => l.EmpreendimentoId == empreendimentoId).To<List<BlocoDTO>>();
         }

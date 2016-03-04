@@ -120,6 +120,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new VendaConfiguration());
             modelBuilder.Configurations.Add(new VendaParticipanteConfiguration());
             modelBuilder.Configurations.Add(new VendaSerieConfiguration());
+            modelBuilder.Configurations.Add(new TabelaVendaConfiguration());
 
             #endregion
 

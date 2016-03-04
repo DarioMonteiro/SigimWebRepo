@@ -13,6 +13,7 @@ namespace GIR.Sigim.Application.Service.Comercial
     public interface IVendaAppService
     {
         List<RelStatusVendaDTO> ListarPeloFiltroRelStatusVenda(RelStatusVendaFiltro filtro, out int totalRegistros);
+        FileDownloadDTO ExportarRelStatusVenda(RelStatusVendaFiltro filtro, int? usuarioId, FormatoExportacaoArquivo formato);
         bool EhPermitidoImprimirRelStatusVenda();
     }
 }

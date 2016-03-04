@@ -47,32 +47,32 @@ namespace GIR.Sigim.Domain.Specification.Comercial
 
         public static Specification<Venda> EhProposta()
         {
-            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == "P");
+            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoPropostaCodigo);
         }
 
         public static Specification<Venda> EhAssinada()
         {
-            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == "A");
+            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoAssinadoCodigo);
         }
 
         public static Specification<Venda> EhCancelada()
         {
-            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == "C");
+            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoCanceladoCodigo);
         }
 
         public static Specification<Venda> EhRescindida()
         {
-            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == "R");
+            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoRescindidoCodigo);
         }
 
         public static Specification<Venda> EhQuitada()
         {
-            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == "Q");
+            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoQuitadoCodigo);
         }
 
         public static Specification<Venda> EhEscriturada()
         {
-            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == "E");
+            return new DirectSpecification<Venda>(l => l.Contrato.SituacaoContrato == GIR.Sigim.Domain.Constantes.Comercial.ContratoSituacaoEscrituradoCodigo);
         }
 
     }

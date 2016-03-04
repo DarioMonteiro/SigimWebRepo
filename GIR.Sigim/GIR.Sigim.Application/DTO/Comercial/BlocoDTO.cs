@@ -9,7 +9,7 @@ namespace GIR.Sigim.Application.DTO.Comercial
 {
     public class BlocoDTO : BaseDTO
     {
-        public int EmpreendimentoId { get; set; }
+        public int? EmpreendimentoId { get; set; }
         public EmpreendimentoDTO Empreendimento { get; set; }
         public string Nome { get; set; }
         public string CodigoCentroCusto { get; set; }

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constantes\Comercial.cs" />
     <Compile Include="Entity\Admin\UsuarioPerfil.cs" />
     <Compile Include="Entity\Admin\UsuarioFuncionalidade.cs" />
     <Compile Include="Entity\Admin\PerfilFuncionalidade.cs" />

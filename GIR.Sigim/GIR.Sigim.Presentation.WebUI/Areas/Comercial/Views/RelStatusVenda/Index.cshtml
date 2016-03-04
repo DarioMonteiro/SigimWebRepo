@@ -17,7 +17,7 @@
                         "Lista",
                         "RelStatusVenda",
                         null,
-                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "renderTela", UpdateTargetId = "resultadoBusca" },
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
                         new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
@@ -47,6 +47,7 @@
                                                     <label class="select">
                                                         @Html.DropDownListFor(m => m.Filtro.IncorporadorId, Model.ListaIncorporador, string.Empty)<i></i>
                                                     </label>
+                                                    @Html.ValidationMessageFor(m => m.Filtro.IncorporadorId, "", new { @class = "note note-error" })
                                                 </section>
                                                 <section class="col col-9">
                                                     @Html.HiddenFor(m => m.Filtro.Empreendimento.Id)
@@ -185,17 +186,27 @@
         $("#@Html.IdFor(m => m.Filtro.IncorporadorId)").on("change", function () {
             var IncorporadorId = $('#@Html.IdFor(m => m.Filtro.IncorporadorId)').val();
             $('#@Html.IdFor(m => m.Filtro.Incorporador.Id)').val(IncorporadorId);
+            limpaComboEmpreendimento();
+            limpaComboBloco();
             carregaComboEmpreendimento();
+            limpaLista();
         });
 
         $("#@Html.IdFor(m => m.Filtro.EmpreendimentoId)").on("change", function () {
             var EmpreendimentoId = $('#@Html.IdFor(m => m.Filtro.EmpreendimentoId)').val();
             $('#@Html.IdFor(m => m.Filtro.Empreendimento.Id)').val(EmpreendimentoId);
+            limpaComboBloco();
             carregaComboBloco();
+            limpaLista();
         });
+
+        $("#@Html.IdFor(m => m.Filtro.BlocoId)").on("change", function () {
+             limpaLista();
+         });
 
         $("#@Html.IdFor(m => m.Filtro.SituacaoTodas)").on("change", function () {
             marcaDesmarcaCheckBox($(this).is(':checked'));
+            limpaLista();
         });
 
        @* $(document).on("showFormatoImpressaoModalPanel", function (e) {

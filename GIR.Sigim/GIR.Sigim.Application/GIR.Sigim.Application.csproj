@@ -67,6 +67,7 @@
     <Compile Include="DTO\BaseDTO.cs" />
     <Compile Include="DTO\Comercial\BlocoDTO.cs" />
     <Compile Include="DTO\Comercial\ContratoComercialDTO.cs" />
+    <Compile Include="DTO\Comercial\TabelaVendaDTO.cs" />
     <Compile Include="DTO\Comercial\IncorporadorDTO.cs" />
     <Compile Include="DTO\Comercial\EmpreendimentoDTO.cs" />
     <Compile Include="DTO\Comercial\RelStatusVendaDTO.cs" />
@@ -242,6 +243,11 @@
     <Compile Include="Helper\FinanceiroMapperHelper.cs" />
     <Compile Include="Helper\MapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\Comercial\relStatusVenda.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relStatusVenda.rpt</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Contrato\relMedicao.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -517,6 +523,10 @@
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Comercial\relStatusVenda.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relStatusVenda.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Contrato\relMedicao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relMedicao.cs</LastGenOutput>

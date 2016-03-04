@@ -9,6 +9,6 @@ namespace GIR.Sigim.Application.Service.Comercial
 {
     public interface IBlocoAppService
     {
-        List<BlocoDTO> ListarPeloEmpreendimento(int empreendimentoId);
+        List<BlocoDTO> ListarPeloEmpreendimento(int? empreendimentoId);
     }
 }

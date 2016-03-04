@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.Filtros;
+using GIR.Sigim.Application.DTO.Comercial;
 
 namespace GIR.Sigim.Application.DTO.Sigim
 {
@@ -24,10 +25,14 @@ namespace GIR.Sigim.Application.DTO.Sigim
         public PessoaJuridicaDTO PessoaJuridica { get; set; }
         public PaginationParameters PaginationParameters { get; set; }
 
+        public ICollection<VendaParticipanteDTO> ListaVendaParticipante { get; set; }
+
         public ClienteFornecedorDTO()
         {
             PaginationParameters = new PaginationParameters();
             PaginationParameters.UniqueIdentifier = "_" + Guid.NewGuid().ToString().Replace("-", string.Empty);
+
+            this.ListaVendaParticipante = new HashSet<VendaParticipanteDTO>();
         }
     }
 }

@@ -14,9 +14,10 @@ namespace GIR.Sigim.Domain.Entity.Comercial
 	    public String Situacao { get; set; }
         public Nullable<DateTime> DataElaboracao { get; set; }
 	    public String Observacao { get; set; }
-	    public Decimal PrecoReferencia  { get; set; }
-	    public Decimal PercentualCorretora  { get; set; }
-	    public Decimal PercentualCorretor  { get; set; }
+        public Decimal? PrecoReferencia { get; set; }
+        public Decimal? PercentualCorretora { get; set; }
+        public Decimal? PercentualCorretor { get; set; }
+
         public ICollection<Venda> ListaVenda { get; set; }
 
         public TabelaVenda()

@@ -15,11 +15,11 @@ namespace GIR.Sigim.Application.Filtros.Comercial
         public IncorporadorDTO Incorporador { get; set; }
 
         [Display(Name = "Empreendimento")]
-        public int EmpreendimentoId { get; set; }
+        public int? EmpreendimentoId { get; set; }
         public EmpreendimentoDTO Empreendimento { get; set; }
 
         [Display(Name = "Bloco")]
-        public int BlocoId { get; set; }
+        public int? BlocoId { get; set; }
         public BlocoDTO Bloco { get; set; }
 
         [Display(Name = "Proposta")]

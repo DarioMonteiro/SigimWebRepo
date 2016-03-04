@@ -94,26 +94,26 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Comercial.Controllers
             return Json(lista);
         }
 
-        //public ActionResult Imprimir(FormatoExportacaoArquivo formato)
-        //{
-        //    var model = Session["Filtro"] as RelOcItensOrdemCompraListaViewModel;
-        //    if (model == null)
-        //    {
-        //        messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NaoExistemRegistros, TypeMessage.Error);
-        //        return PartialView("_NotificationMessagesPartial");
-        //    }
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var model = Session["Filtro"] as RelStatusVendaViewModel;
+            if (model == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NaoExistemRegistros, TypeMessage.Error);
+                return PartialView("_NotificationMessagesPartial");
+            }
 
-        //    var arquivo = ordemCompraItemAppService.ExportarRelOCItensOrdemCompra(model.Filtro, Usuario.Id, formato);
-        //    if (arquivo != null)
-        //    {
-        //        Response.Buffer = false;
-        //        Response.ClearContent();
-        //        Response.ClearHeaders();
-        //        return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
-        //    }
+            var arquivo = ordemCompraItemAppService.ExportarRelOCItensOrdemCompra(model.Filtro, Usuario.Id, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
 
-        //    return PartialView("_NotificationMessagesPartial");
-        //}
+            return PartialView("_NotificationMessagesPartial");
+        }
 
     }
 }
