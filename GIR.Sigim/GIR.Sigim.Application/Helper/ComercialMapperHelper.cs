@@ -22,6 +22,9 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<Empreendimento, EmpreendimentoDTO>();
             Mapper.CreateMap<EmpreendimentoDTO, Empreendimento>();
 
+            Mapper.CreateMap<Renegociacao, RenegociacaoDTO>();
+            Mapper.CreateMap<RenegociacaoDTO, Renegociacao>();
+
             Mapper.CreateMap<TipoParticipante, TipoParticipanteDTO>();
             Mapper.CreateMap<TipoParticipanteDTO, TipoParticipante>();
 

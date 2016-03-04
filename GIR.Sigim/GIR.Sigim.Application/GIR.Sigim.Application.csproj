@@ -68,6 +68,7 @@
     <Compile Include="DTO\Comercial\BlocoDTO.cs" />
     <Compile Include="DTO\Comercial\ContratoComercialDTO.cs" />
     <Compile Include="DTO\Comercial\EmpreendimentoDTO.cs" />
+    <Compile Include="DTO\Comercial\RenegociacaoDTO.cs" />
     <Compile Include="DTO\Comercial\TipoParticipanteDTO.cs" />
     <Compile Include="DTO\Comercial\UnidadeDTO.cs" />
     <Compile Include="DTO\Comercial\VendaDTO.cs" />

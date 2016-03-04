@@ -43,6 +43,7 @@ namespace GIR.Sigim.Application.DTO.Comercial
         public Nullable<DateTime> DataProximoAniversario { get; set; }
         public Nullable<DateTime> DataUltimoAniversario { get; set; }
         public int? RenegociacaoId { get; set; }
+        public RenegociacaoDTO Renegociacao { get; set; }
         public Nullable<DateTime> DataCancelamentoRenegociacao { get; set; }
         public Int16 DefasagemMesIndiceCorrecao { get; set; }
 

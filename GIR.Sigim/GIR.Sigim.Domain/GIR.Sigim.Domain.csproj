@@ -50,6 +50,7 @@
     <Compile Include="Entity\Comercial\Bloco.cs" />
     <Compile Include="Entity\Comercial\ContratoComercial.cs" />
     <Compile Include="Entity\Comercial\Empreendimento.cs" />
+    <Compile Include="Entity\Comercial\Renegociacao.cs" />
     <Compile Include="Entity\Comercial\TipoParticipante.cs" />
     <Compile Include="Entity\Comercial\Unidade.cs" />
     <Compile Include="Entity\Comercial\Venda.cs" />

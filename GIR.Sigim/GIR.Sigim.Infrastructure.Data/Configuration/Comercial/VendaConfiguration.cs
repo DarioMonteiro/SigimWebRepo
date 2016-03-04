@@ -18,6 +18,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
             Property(l => l.Id)
                 .HasColumnName("contrato")
                 .HasColumnOrder(1);
+
+            Property(l => l.DataVenda)
+                .HasColumnName("dataVenda")
+                .HasColumnOrder(2);
         }
 
     }

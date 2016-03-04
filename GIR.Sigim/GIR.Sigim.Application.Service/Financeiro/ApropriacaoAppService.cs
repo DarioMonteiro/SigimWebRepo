@@ -222,7 +222,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                               l => l.Contrato.Unidade.Bloco.CentroCusto.ListaCentroCustoEmpresa,
                                                               l => l.Contrato.Venda.Contrato.ListaVendaParticipante,
                                                               l => l.VerbaCobranca.Classe,
-                                                              l => l.VendaSerie,
+                                                              l => l.VendaSerie.Renegociacao,
                                                               l => l.VendaSerie.IndiceCorrecao,
                                                               l => l.VendaSerie.IndiceAtrasoCorrecao,
                                                               l => l.VendaSerie.IndiceReajuste,
