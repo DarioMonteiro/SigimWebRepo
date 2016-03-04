@@ -10,6 +10,7 @@ namespace GIR.Sigim.Application.Constantes
     public class Modulo
     {
         public const string Admin = "ADMINWEB";
+        public const string Comercial = "COMERCIALWEB";
         public const string Contrato = "CONTRATOWEB";
         public const string Financeiro = "FINANCEIROWEB";
         public const string OrdemCompra = "ORDEMCOMPRAWEB";

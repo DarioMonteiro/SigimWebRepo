@@ -67,7 +67,10 @@
     <Compile Include="DTO\BaseDTO.cs" />
     <Compile Include="DTO\Comercial\BlocoDTO.cs" />
     <Compile Include="DTO\Comercial\ContratoComercialDTO.cs" />
+    <Compile Include="DTO\Comercial\TabelaVendaDTO.cs" />
+    <Compile Include="DTO\Comercial\IncorporadorDTO.cs" />
     <Compile Include="DTO\Comercial\EmpreendimentoDTO.cs" />
+    <Compile Include="DTO\Comercial\RelStatusVendaDTO.cs" />
     <Compile Include="DTO\Comercial\TipoParticipanteDTO.cs" />
     <Compile Include="DTO\Comercial\UnidadeDTO.cs" />
     <Compile Include="DTO\Comercial\VendaDTO.cs" />
@@ -202,6 +205,7 @@
     <Compile Include="Enums\TipoPessoaAutoComplete.cs" />
     <Compile Include="Filtros\Admin\PerfilFiltro.cs" />
     <Compile Include="Filtros\BaseFiltro.cs" />
+    <Compile Include="Filtros\Comercial\RelStatusVendaFiltro.cs" />
     <Compile Include="Filtros\Contrato\ContratoPesquisaFiltro.cs" />
     <Compile Include="Filtros\Contrato\LiberacaoContratoFiltro.cs" />
     <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
@@ -239,6 +243,12 @@
     <Compile Include="Helper\FinanceiroMapperHelper.cs" />
     <Compile Include="Helper\MapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\Comercial\relStatusVenda.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relStatusVenda.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Contrato\relMedicao.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -420,6 +430,10 @@
     <Compile Include="Service\Admin\IModuloAppService.cs" />
     <Compile Include="Service\Admin\IPerfilAppService.cs" />
     <Compile Include="Service\Admin\IUsuarioAppService.cs" />
+    <Compile Include="Service\Comercial\IBlocoAppService.cs" />
+    <Compile Include="Service\Comercial\IIncorporadorAppService.cs" />
+    <Compile Include="Service\Comercial\IEmpreendimentoAppService.cs" />
+    <Compile Include="Service\Comercial\IVendaAppService.cs" />
     <Compile Include="Service\Contrato\IContratoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoAppService.cs" />
     <Compile Include="Service\Contrato\IContratoRetificacaoItemAppService.cs" />
@@ -511,6 +525,10 @@
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Comercial\relStatusVenda.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relStatusVenda.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Contrato\relMedicao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relMedicao.cs</LastGenOutput>

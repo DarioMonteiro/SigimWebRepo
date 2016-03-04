@@ -14,15 +14,16 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
         {
             Container.Current.RegisterType(typeof(UnitOfWork), new PerResolveLifetimeManager());
 
-            AdminBootstrapper.Initialise();
-            ContratoBootstrapper.Initialise();
+            AdminBootstraper.Initialise();
+            ComercialBootstrapper.Initialise();
+            ContratoBootstraper.Initialise();
             CredCobBootstrapper.Initialise();
-            EstoqueBootstrapper.Initialise();
-            FinanceiroBootstrapper.Initialise();
-            OrcamentoBootstrapper.Initialise();
-            OrdemCompraBootstrapper.Initialise();
-            SacBootstrapper.Initialise();
-            SigimBootstrapper.Initialise();
+            EstoqueBootstraper.Initialise();
+            FinanceiroBootstraper.Initialise();
+            OrcamentoBootstraper.Initialise();
+            OrdemCompraBootstraper.Initialise();
+            SacBootstraper.Initialise();
+            SigimBootstraper.Initialise();
         }
     }
 }

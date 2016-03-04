@@ -1,0 +1,363 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Comercial.ViewModel.RelStatusVendaViewModel
+@{
+    ViewBag.Title = "Relatório de Status da Venda";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    @using (Ajax.BeginForm(
+                        "Lista",
+                        "RelStatusVenda",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Filtro
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFiltro" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-9">
+                                                    @Html.HiddenFor(m => m.Filtro.Incorporador.Id)
+                                                    @Html.LabelFor(m => m.Filtro.IncorporadorId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.Filtro.IncorporadorId, Model.ListaIncorporador, string.Empty)<i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Filtro.IncorporadorId, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-9">
+                                                    @Html.HiddenFor(m => m.Filtro.Empreendimento.Id)
+                                                    @Html.LabelFor(m => m.Filtro.EmpreendimentoId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.Filtro.EmpreendimentoId, Model.ListaEmpreendimento, string.Empty)<i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-9">
+                                                    @Html.LabelFor(m => m.Filtro.BlocoId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.Filtro.BlocoId, Model.ListaBloco, string.Empty)<i></i>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
+                                                        <i class="fa fa-search fa-lg"></i>
+                                                    </button>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset id="situacao">
+                                            <div class="row">
+                                                <section class="col col-8">
+                                                    <div class="inline-group">
+                                                        <label class="label">Situação</label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.SituacaoProposta)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.SituacaoProposta)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.SituacaoProposta)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.SituacaoAssinada)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.SituacaoAssinada)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.SituacaoAssinada)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.SituacaoCancelada)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.SituacaoCancelada)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.SituacaoCancelada)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.SituacaoRescindida)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.SituacaoRescindida)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.SituacaoRescindida)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.SituacaoQuitada)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.SituacaoQuitada)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.SituacaoQuitada)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.SituacaoEscriturada)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.SituacaoEscriturada)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.SituacaoEscriturada)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.Filtro.SituacaoTodas)
+                                                            <i></i>@Html.DisplayNameFor(m => m.Filtro.SituacaoTodas)
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    $("#@Html.IdFor(m => m.Filtro.SituacaoTodas)").on("change", function () {
+                                                                        limpaLista();
+                                                                    });
+                                                                });
+                                                            </script>
+                                                        </label>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer>
+                            @{
+                        var url = Url.Action("Imprimir", "RelStatusVenda");
+                            }
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })                           
+                        </footer>
+                    }
+                    <div id="resultadoBusca"></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript")
+}
+
+<script type="text/javascript">
+    var ListaScrollLeft = 0;
+
+    $(document).ready(function () {
+
+        tratarBotoes(false);
+
+        $("#@Html.IdFor(m => m.Filtro.IncorporadorId)").on("change", function () {
+            var IncorporadorId = $('#@Html.IdFor(m => m.Filtro.IncorporadorId)').val();
+            $('#@Html.IdFor(m => m.Filtro.Incorporador.Id)').val(IncorporadorId);
+            limpaComboEmpreendimento();
+            limpaComboBloco();
+            carregaComboEmpreendimento();
+            limpaLista();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EmpreendimentoId)").on("change", function () {
+            var EmpreendimentoId = $('#@Html.IdFor(m => m.Filtro.EmpreendimentoId)').val();
+            $('#@Html.IdFor(m => m.Filtro.Empreendimento.Id)').val(EmpreendimentoId);
+            limpaComboBloco();
+            carregaComboBloco();
+            limpaLista();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.BlocoId)").on("change", function () {
+             limpaLista();
+         });
+
+        $("#@Html.IdFor(m => m.Filtro.SituacaoTodas)").on("change", function () {
+            marcaDesmarcaCheckBox($(this).is(':checked'));
+            limpaLista();
+        });
+
+       @* $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
+            var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
+
+            if ((dataInicial == "") || (dataFinal == "")) {
+                smartAlert("Atenção", "Informe o período !", "warning");
+                e.event.preventDefault();
+            }
+
+            if ((dataInicial != "") && (dataFinal != "")) {
+                if (compararDatas(dataInicial, dataFinal) > 0) {
+                    smartAlert("Atenção", "Data inicial maior que data final !", "warning");
+                    e.event.preventDefault();
+                }
+            }
+        })*@
+
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
+                listarFiltro();
+            }
+        );
+
+    });
+
+    function renderTela() {
+        onSuccess();
+        $('#resultadoBusca div.table-responsive').scrollLeft(ListaScrollLeft);
+    }
+
+    function refresh(result) {
+        onSuccess();
+        // se a lista da pesquisa nao retornou , se não retornou desabilita o botão imprimir
+        if (result.search('tableSearchResult') == -1) {
+            tratarBotoes(false);
+        }
+    }
+
+    function limpaLista() {
+        tratarBotoes(false);
+        $("#resultadoBusca").empty();
+    }
+
+    function marcaDesmarcaCheckBox(condicao) {
+        var arrSequencial = [];
+        var index;
+        $($('#situacao input[type=checkbox]').get().reverse()).each(function () {
+            if (!$(this).is(":disabled")) {
+                $(this).prop("checked", condicao);
+            }
+        });
+    }
+
+    function tratarBotoes(condicaoImprimir) {
+        @{
+            bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
+        }
+
+        @if(podeImprimir.ToString().ToLower() == "false"){
+            @:condicaoImprimir = false;
+        }
+
+        if (condicaoImprimir) {
+            $('#btnImprimir').attr("class", "btn btn-primary");
+        }
+        else {
+            $('#btnImprimir').attr("class", "btn btn-primary disabled");
+        }
+    }
+
+    function listarFiltro() {
+        var situacaoFiltroMarcado = false;
+
+        situacaoFiltroMarcado = $("#@Html.IdFor(m => m.Filtro.SituacaoProposta)")[0].checked;
+        situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.SituacaoAssinada)")[0].checked;
+        situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.SituacaoCancelada)")[0].checked;
+        situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.SituacaoRescindida)")[0].checked;
+        situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.SituacaoQuitada)")[0].checked;
+        situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.SituacaoEscriturada)")[0].checked;
+
+        if (!situacaoFiltroMarcado) {
+            smartAlert("Erro", "Selecione uma situação.", "error");
+            tratarBotoes(false);
+            return;
+        }
+
+        tratarBotoes(true);
+
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+    }
+
+    function limpaComboEmpreendimento() {
+        $('#@Html.IdFor(m => m.Filtro.EmpreendimentoId)').html('');
+        $('#@Html.IdFor(m => m.Filtro.EmpreendimentoId)').append($('<option>').text('').attr('value', ''));
+        $('#@Html.IdFor(m => m.Filtro.EmpreendimentoId)').val(0);
+    }
+
+    function carregaComboEmpreendimento() {
+        var IncorporadorId = $('#@Html.IdFor(m => m.Filtro.Incorporador.Id)').val();
+        if ((IncorporadorId == null) || (IncorporadorId == '')) { IncorporadorId = 0; }
+        limpaComboEmpreendimento();
+        if (IncorporadorId != 0) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CarregaEmpreendimentoPorIncorporador", "RelStatusVenda")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    IncorporadorId: IncorporadorId
+                })
+            })
+                .success(function (result) {
+                    $.each(result, function (index, item) {
+                        $('#@Html.IdFor(m => m.Filtro.EmpreendimentoId)').append($('<option>').text(item.Nome).attr('value', item.Id));
+                    });
+                });
+                }
+    }
+
+    function limpaComboBloco() {
+        $('#@Html.IdFor(m => m.Filtro.BlocoId)').html('');
+        $('#@Html.IdFor(m => m.Filtro.BlocoId)').append($('<option>').text('').attr('value', ''));
+        $('#@Html.IdFor(m => m.Filtro.BlocoId)').val(0);
+    }
+
+    function carregaComboBloco() {
+        var EmpreendimentoId = $('#@Html.IdFor(m => m.Filtro.Empreendimento.Id)').val();
+        if ((EmpreendimentoId == null) || (EmpreendimentoId == '')) { EmpreendimentoId = 0; }
+        limpaComboBloco();
+        if (EmpreendimentoId != 0) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CarregaBlocoPorEmpreendimento", "RelStatusVenda")',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    EmpreendimentoId: EmpreendimentoId
+                })
+            })
+                .success(function (result) {
+                    $.each(result, function (index, item) {
+                        $('#@Html.IdFor(m => m.Filtro.BlocoId)').append($('<option>').text(item.Nome).attr('value', item.Id));
+                    });
+                });
+                }
+        }
+
+</script>
