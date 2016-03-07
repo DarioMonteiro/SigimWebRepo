@@ -28,6 +28,18 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasMaxLength(50)
                 .HasColumnOrder(10);
 
+            Property(l => l.ClienteId)
+                .HasColumnName("empresa")
+                .HasColumnOrder(14);
+
+            HasOptional(l => l.Cliente)
+                .WithMany(l => l.ListaParametrosSigim);
+
+            Property(l => l.IconeRelatorio)
+                .HasColumnType("image")
+                .HasColumnName("iconeRelatorios")
+                .HasColumnOrder(15);
+
 
             Property(l => l.CorrecaoMesCheioDiaPrimeiro)
                 .HasColumnName("correcaoMesCheioDiaPrimeiro")

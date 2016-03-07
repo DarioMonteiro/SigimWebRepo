@@ -103,14 +103,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Comercial.Controllers
                 return PartialView("_NotificationMessagesPartial");
             }
 
-            //var arquivo = ordemCompraItemAppService.ExportarRelOCItensOrdemCompra(model.Filtro, Usuario.Id, formato);
-            //if (arquivo != null)
-            //{
-            //    Response.Buffer = false;
-            //    Response.ClearContent();
-            //    Response.ClearHeaders();
-            //    return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
-            //}
+            var arquivo = vendaAppService.ExportarRelStatusVenda(model.Filtro, Usuario.Id, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
 
             return PartialView("_NotificationMessagesPartial");
         }

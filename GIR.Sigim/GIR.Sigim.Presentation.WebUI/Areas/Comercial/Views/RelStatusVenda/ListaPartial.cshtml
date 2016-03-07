@@ -127,7 +127,7 @@
                             <td class="text-left text-nowrap">@item.Contrato.Unidade.Descricao</td>
                             <td class="text-left text-nowrap">@item.Contrato.Id</td>
                             <td class="text-center text-nowrap">@item.Contrato.DescricaoSituacaoContrato</td>
-                            <td class="text-left text-nowrap">@item.Contrato.ListaVendaParticipante.Where(l => l.TipoParticipanteId == 1).FirstOrDefault().Cliente.Nome</td>
+                            <td class="text-left text-nowrap">@item.Contrato.ListaVendaParticipante.Where(l => l.TipoParticipanteId == GIR.Sigim.Domain.Constantes.Comercial.ContratoTipoParticipanteTitular).FirstOrDefault().Cliente.Nome</td>
                             <td class="text-left text-nowrap">@item.TabelaVenda.Nome</td>
                             <td class="text-left text-nowrap">@item.DataVenda.Value.ToString("dd/MM/yyyy")</td>
                             <td class="text-right text-nowrap">@item.PrecoTabela.ToString("N2")</td>
