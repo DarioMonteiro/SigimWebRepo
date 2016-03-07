@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.CredCob;
 using GIR.Sigim.Domain.Constantes;
+using GIR.Sigim.Domain.Entity.Comercial;
 
 namespace GIR.Sigim.Application.DTO.Comercial
 {
@@ -39,12 +40,14 @@ namespace GIR.Sigim.Application.DTO.Comercial
         public List<TituloCredCobDTO> ListaTituloCredCob { get; set; }
         public List<VendaParticipanteDTO> ListaVendaParticipante { get; set; }
         public List<VendaSerieDTO> ListaVendaSerie { get; set; }
+        public ICollection<Renegociacao> ListaRenegociacao { get; set; }
 
         public ContratoComercialDTO()
         {
             this.ListaTituloCredCob = new List<TituloCredCobDTO>();
             this.ListaVendaParticipante = new List<VendaParticipanteDTO>();
             this.ListaVendaSerie = new List<VendaSerieDTO>();
+            this.ListaRenegociacao = new HashSet<Renegociacao>();
         }
 
     }

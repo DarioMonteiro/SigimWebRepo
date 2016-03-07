@@ -10,7 +10,6 @@ namespace GIR.Sigim.Application.DTO.Comercial
 {
     public class VendaDTO : BaseDTO
     {
-        public int ContratoId { get; set; }
         public ContratoComercialDTO Contrato { get; set; }
         public Nullable<DateTime> DataVenda { get; set; }
         public int TabelaVendaId { get; set; }

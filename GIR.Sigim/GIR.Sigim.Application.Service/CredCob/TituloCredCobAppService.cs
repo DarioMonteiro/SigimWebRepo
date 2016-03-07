@@ -33,6 +33,8 @@ namespace GIR.Sigim.Application.Service.CredCob
         private IClienteFornecedorRepository clienteFornecedorRepository;
         private IParametrosSigimRepository parametrosSigimRepository;
         private IModuloSigimAppService moduloSigimAppService;
+        private ICotacaoValoresRepository cotacaoValoresRepository;
+
 
         #endregion
 
@@ -44,6 +46,7 @@ namespace GIR.Sigim.Application.Service.CredCob
                                        IClienteFornecedorRepository clienteFornecedorRepository,
                                        IParametrosSigimRepository parametrosSigimRepository,
                                        IModuloSigimAppService moduloSigimAppService,
+                                       ICotacaoValoresRepository cotacaoValoresRepository, 
                                        MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -53,6 +56,7 @@ namespace GIR.Sigim.Application.Service.CredCob
             this.clienteFornecedorRepository = clienteFornecedorRepository;
             this.parametrosSigimRepository = parametrosSigimRepository;
             this.moduloSigimAppService = moduloSigimAppService;
+            this.cotacaoValoresRepository = cotacaoValoresRepository;
         }
 
         #endregion
@@ -209,7 +213,6 @@ namespace GIR.Sigim.Application.Service.CredCob
 
                 DateTime dataVencimentoDefasada;
                 DateTime dataReferenciaDefasada;
-                DateTime ultimaData;
                 decimal valorIndiceDataVencimentoDefasada = 0;
                 decimal valorIndiceDataReferenciaDefasada = 0;
 
@@ -218,62 +221,72 @@ namespace GIR.Sigim.Application.Service.CredCob
 
                 decimal valorAmortizacaoOriginal = valorIndiceOriginal * qtdIndiceOriginal;
 
+                decimal valorPresente = 0;
+                decimal valorDescontoAntecipacao = 0;
+                int qtdDiasAtraso = 0;
+                int qtdMesesAtraso = 0;
+                decimal valorTituloDataReferenciaCorrigido = 0;
+
+                decimal valorIndiceDataReferenciaDefasadaAtrasado = 0;
+                DateTime dataReferenciaDefasadaAtrasado;
+
+                decimal valorIndiceDataVencimentoDefasadaAtrasado = 0;
+                DateTime dataVencimentoDefasadaAtrasado;
+
+                decimal fatorCorrecao = 0;
+
                 if (titulo.Situacao == "P") 
                 {
-                    CotacaoValores cotacaoValores = null;
 
-                    valorIndiceDataReferencia = 0;
                     #region "Calcula cotacao data referencia defasada"
-                    ultimaData = titulo.Indice.ListaCotacaoValores.Where(l => l.Data <= dataReferencia.Value.Date).Select(l => l.Data.Value).Max();
-                    cotacaoValores = titulo.Indice.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
+
+                    valorIndiceDataReferencia = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceId.Value, dataReferencia.Value.Date);
+                    
                     #endregion
 
-                    valorIndiceDataReferencia = cotacaoValores.Valor.HasValue ? cotacaoValores.Valor.Value : 0;
-
                     #region "Calcula cotacao data referencia defasada"
+
                     dataReferenciaDefasada = dataReferencia.Value.Date.AddMonths(titulo.VendaSerie.DefasagemMesIndiceCorrecao * -1);
-                    ultimaData =  titulo.Indice.ListaCotacaoValores.Where(l => l.Data <= dataReferenciaDefasada).Select(l => l.Data.Value).Max();
-                    cotacaoValores = titulo.Indice.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
-                    #endregion
+                    valorIndiceDataReferenciaDefasada = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceId.Value, dataReferenciaDefasada.Date);
 
-                    valorIndiceDataReferenciaDefasada = cotacaoValores.Valor.HasValue ? cotacaoValores.Valor.Value : 0;
+                    #endregion
 
                     #region "Calcula cotacao data vencimento"
-                    ultimaData = titulo.Indice.ListaCotacaoValores.Where(l => l.Data <= titulo.DataVencimento.Date).Select(l => l.Data.Value).Max();
-                    cotacaoValores = titulo.Indice.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
-                    #endregion
+                    
+                    valorIndiceDataVencimento = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceId.Value, titulo.DataVencimento.Date);
 
-                    valorIndiceDataVencimento = cotacaoValores.Valor.HasValue ? cotacaoValores.Valor.Value : 0;
+                    #endregion
 
                     #region "Calcula cotacao data vencimento defasada"
+
                     dataVencimentoDefasada = titulo.DataVencimento.Date.AddMonths(titulo.VendaSerie.DefasagemMesIndiceCorrecao * -1);
-                    ultimaData = titulo.Indice.ListaCotacaoValores.Where(l => l.Data <= dataVencimentoDefasada).Select(l => l.Data.Value).Max();
-                    cotacaoValores = titulo.Indice.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
+                    valorIndiceDataVencimentoDefasada = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceId.Value, dataVencimentoDefasada.Date);
+                    
                     #endregion
 
-                    valorIndiceDataVencimentoDefasada = cotacaoValores.Valor.HasValue ? cotacaoValores.Valor.Value : 0;
 
                     if ((titulo.DataVencimento.Day > dataReferencia.Value.Day) &&
                         (titulo.DataVencimento < dataReferencia))
                     {
                         #region "Calcula cotacao data referencia"
+
                         dataReferenciaDefasada = dataReferencia.Value.Date.AddMonths(-1);
-                        ultimaData = titulo.Indice.ListaCotacaoValores.Where(l => l.Data <= dataReferenciaDefasada).Select(l => l.Data.Value).Max();
-                        cotacaoValores = titulo.Indice.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
+                        valorIndiceDataReferenciaDefasada = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceId.Value, dataReferenciaDefasada.Date);
+                        
                         #endregion
 
-                        valorIndiceDataReferenciaDefasada = cotacaoValores.Valor.HasValue ? cotacaoValores.Valor.Value : 0;
                     }
 
                     if (parametrosSigim.CorrecaoMesCheioDiaPrimeiro.HasValue && parametrosSigim.CorrecaoMesCheioDiaPrimeiro.Value)
                     {
                         #region "Calcula cotacao data referencia"
+
                         dataReferenciaDefasada = dataReferencia.Value.Date.AddMonths(titulo.VendaSerie.DefasagemMesIndiceCorrecao * -1);
-                        ultimaData = titulo.Indice.ListaCotacaoValores.Where(l => l.Data <= dataReferenciaDefasada).Select(l => l.Data.Value).Max();
-                        cotacaoValores = titulo.Indice.ListaCotacaoValores.Where(l => l.Data == ultimaData).FirstOrDefault();
+                        valorIndiceDataReferenciaDefasada = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceId.Value, dataReferenciaDefasada.Date);
+                        
                         #endregion
 
-                        valorIndiceDataReferenciaDefasada = cotacaoValores.Valor.HasValue ? cotacaoValores.Valor.Value : 0;
+
                     }
 
                     decimal valorTituloDataReferencia = 0;
@@ -557,23 +570,128 @@ namespace GIR.Sigim.Application.Service.CredCob
                         }
                     }
 
-                    //bool condicao = false;
+                    bool condicao = false;
 
-                    //if (titulo.VendaSerie.RenegociacaoId.HasValue)
-                    //{
-                    //    DateTime dataReferenciaRenegociacao = titulo.VendaSerie.Renegociacao.DataReferencia.HasValue ? titulo.VendaSerie.Renegociacao.DataReferencia.Value, new DateTime();
-                    //    condicao = dataReferenciaDescapitalizacao <= titulo.VendaSerie.Renegociacao.DataReferencia
-                    //}
-                    //if (condicao &&
-                    //    (valorPercentualJuros > 0) &&
-                    //    (titulo.VendaSerie.FormaFinanciamento == "3"))
-                    //{
-                    //}
+                    if (titulo.VendaSerie.RenegociacaoId.HasValue)
+                    {
+                        condicao = dataReferenciaDescapitalizacao <= titulo.VendaSerie.Renegociacao.DataReferencia;
+                    }
+                    else
+                    {
+                        if (titulo.Contrato.Venda.DataVenda.HasValue)
+                        {
+                            condicao = dataReferenciaDescapitalizacao <= titulo.Contrato.Venda.DataVenda.Value;
+                        }
+                    }
+                    if (condicao &&
+                        (valorPercentualJuros > 0) &&
+                        (titulo.VendaSerie.FormaFinanciamento == "3"))
+                    {
+                        valorTituloPresenteCheio = valorAmortizacaoDataReferencia;
+                    }
 
                     #endregion
 
+                    #region "JS_Residuo"
+
+                    if ((valorPercentualJuros > 0) && (titulo.VendaSerie.FormaFinanciamento == "5"))
+                    {
+                        valorTituloPresenteCheio = valorTituloDataBase;
+                    }
+
+                    #endregion
+
+                    #region "Atualiza valor presente"
+
+                    if (titulo.DataVencimento >= dataReferenciaDescapitalizacao)
+                    {
+                        if (valorPercentualJuros > 0)
+                        {
+                            valorPresente = valorTituloPresenteCheio;
+                        }
+                        else
+                        {
+                            valorPresente = valorTituloDataBase;
+                        }
+                    }
+
+                    #endregion
+
+                    #region "Atualiza valor do desconto por antecipacao"
+
+                    if (titulo.DataVencimento >= dataReferencia)
+                    {
+                        valorDescontoAntecipacao = valorTituloDataBase - valorPresente;
+                    }
+
+                    #endregion
+
+                    #region "Calcula valores de titulos com data de vencimento MENOR que data de referencia e penalidades"
+
+                    if (titulo.DataVencimento < dataReferencia)
+                    {
+                        valorPresente = valorTituloDataBase;
+		                qtdDiasAtraso = moduloSigimAppService.ObtemQuantidadeDeDias(titulo.DataVencimento, dataReferencia.Value);
+		                qtdMesesAtraso = moduloSigimAppService.ObtemQuantidadeDeMeses(titulo.DataVencimento, dataReferencia.Value);
+                        valorTituloDataReferenciaCorrigido = valorTituloDataReferencia;
+                    }
+
+                    #endregion
+
+                    #region "Recupera cotacoes para calculo do atraso"
+
+                    if (titulo.DataVencimento < dataReferencia)
+                    {
+                        #region "Calcula cotacao data referencia atrasado"
+
+                        dataReferenciaDefasadaAtrasado = dataReferencia.Value.AddMonths(1).AddMonths(titulo.VendaSerie.DefasagemMesIndiceCorrecao * -1);
+                        valorIndiceDataReferenciaDefasadaAtrasado = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceAtrasoCorrecaoId.Value, dataReferenciaDefasadaAtrasado.Date);
+
+                        #endregion
+
+                        #region "Calcula cotacao data vencimento atrasado"
+
+                        dataVencimentoDefasadaAtrasado = dataReferencia.Value.AddMonths(titulo.VendaSerie.DefasagemMesIndiceCorrecao * -1);
+                        valorIndiceDataVencimentoDefasadaAtrasado = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceAtrasoCorrecaoId.Value, dataVencimentoDefasadaAtrasado.Date);
+
+                        #endregion
+                    }
+
+                    if ((titulo.DataVencimento < dataReferencia) && (titulo.DataVencimento.Day > dataReferencia.Value.Day))
+                    {
+                        #region "Calcula cotacao data referencia atrasado"
+
+                        dataReferenciaDefasadaAtrasado = dataReferencia.Value.AddMonths(titulo.VendaSerie.DefasagemMesIndiceCorrecao * -1);
+                        valorIndiceDataReferenciaDefasadaAtrasado = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceAtrasoCorrecaoId.Value, dataReferenciaDefasadaAtrasado.Date);
+
+                        #endregion
+
+                        #region "Calcula cotacao data vencimento atrasado"
+
+                        dataVencimentoDefasadaAtrasado = dataReferencia.Value.AddMonths(-1).AddMonths(titulo.VendaSerie.DefasagemMesIndiceCorrecao * -1);
+                        valorIndiceDataVencimentoDefasadaAtrasado = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceAtrasoCorrecaoId.Value, dataVencimentoDefasadaAtrasado.Date);
+
+                        #endregion
 
 
+                    }
+
+                    #endregion
+
+                    #region "Calcula Fator de correção"
+
+                    if ((titulo.DataVencimento < dataReferencia) && 
+                        (titulo.IndiceAtrasoCorrecaoId.HasValue && titulo.IndiceAtrasoCorrecaoId > 1))
+                    {
+                        #region "Calcula cotacao fator correcao"
+
+                        dataReferenciaDefasadaAtrasado = dataReferencia.Value.AddMonths(titulo.VendaSerie.DefasagemMesIndiceCorrecao * -1);
+                        valorIndiceDataReferenciaDefasadaAtrasado = cotacaoValoresRepository.RecuperaCotacao(titulo.IndiceAtrasoCorrecaoId.Value, dataReferenciaDefasadaAtrasado.Date);
+
+                        #endregion
+                    }
+
+                    #endregion
                 }
 
 

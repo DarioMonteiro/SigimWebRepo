@@ -53,6 +53,7 @@
     <Compile Include="Entity\Comercial\Incorporador.cs" />
     <Compile Include="Entity\Comercial\TabelaVenda.cs" />
     <Compile Include="Entity\Comercial\Empreendimento.cs" />
+    <Compile Include="Entity\Comercial\Renegociacao.cs" />
     <Compile Include="Entity\Comercial\TipoParticipante.cs" />
     <Compile Include="Entity\Comercial\Unidade.cs" />
     <Compile Include="Entity\Comercial\Venda.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\ICotacaoValoresRepository.cs" />
     <Compile Include="Repository\Sigim\IFeriadoRepository.cs" />
     <Compile Include="Repository\Sigim\IComplementoCSTRepository.cs" />
     <Compile Include="Repository\Sigim\IComplementoNaturezaOperacaoRepository.cs" />

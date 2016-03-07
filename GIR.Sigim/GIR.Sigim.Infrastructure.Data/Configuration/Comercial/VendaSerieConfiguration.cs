@@ -175,6 +175,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .HasColumnName("renegociacao")
                 .HasColumnOrder(29);
 
+            HasOptional<Renegociacao>(l => l.Renegociacao)
+                .WithMany(c => c.ListaVendaSerie)
+                .HasForeignKey(l => l.RenegociacaoId);
+
             Property(l => l.DataCancelamentoRenegociacao)
                 .HasColumnName("dataCancelamentoRenegociacao")
                 .HasColumnOrder(30);

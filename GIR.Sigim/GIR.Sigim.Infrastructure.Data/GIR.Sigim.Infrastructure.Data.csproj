@@ -65,6 +65,7 @@
     <Compile Include="Configuration\Comercial\TabelaVendaConfiguration.cs" />
     <Compile Include="Configuration\Comercial\IncorporadorConfiguration.cs" />
     <Compile Include="Configuration\Comercial\EmpreendimentoConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\RenegociacaoConfiguration.cs" />
     <Compile Include="Configuration\Comercial\TipoParticipanteConfiguration.cs" />
     <Compile Include="Configuration\Comercial\UnidadeConfiguration.cs" />
     <Compile Include="Configuration\Comercial\VendaConfiguration.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Repository\Sigim\ContaCorrenteRepository.cs" />
     <Compile Include="Repository\Sigim\ComplementoCSTRepository.cs" />
     <Compile Include="Repository\Sigim\ComplementoNaturezaOperacaoRepository.cs" />
+    <Compile Include="Repository\Sigim\CotacaoValoresRepository.cs" />
     <Compile Include="Repository\Sigim\FeriadoRepository.cs" />
     <Compile Include="Repository\Sigim\NaturezaReceitaRepository.cs" />
     <Compile Include="Repository\Sigim\LogAcessoRepository.cs" />

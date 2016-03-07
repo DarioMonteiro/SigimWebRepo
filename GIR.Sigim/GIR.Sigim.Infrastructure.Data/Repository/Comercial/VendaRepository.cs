@@ -42,14 +42,14 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Comercial
             switch (orderBy)
             {
                 case "id":
-                    set = ascending ? set.OrderBy(l => l.ContratoId) : set.OrderByDescending(l => l.ContratoId);
+                    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
                     break;
                 case "ContratoId":
-                    set = ascending ? set.OrderBy(l => l.ContratoId) : set.OrderByDescending(l => l.ContratoId);
+                    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
                     break;
                 case "codigo":
                 default:
-                    set = ascending ? set.OrderBy(l => l.ContratoId) : set.OrderByDescending(l => l.ContratoId);
+                    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
                     break;
             }
 

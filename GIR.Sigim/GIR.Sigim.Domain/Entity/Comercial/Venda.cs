@@ -9,7 +9,6 @@ namespace GIR.Sigim.Domain.Entity.Comercial
 {
     public class Venda : BaseEntity
     {
-        public int ContratoId { get; set; }
         public ContratoComercial Contrato { get; set; }
         public Nullable<DateTime> DataVenda { get; set; }
         public int TabelaVendaId { get; set; }
