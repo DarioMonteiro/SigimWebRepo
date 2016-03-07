@@ -28,5 +28,7 @@ namespace GIR.Sigim.Domain.Constantes
         public const string ContratoSituacaoEscrituradoCodigo = "E";
         public const string ContratoSituacaoEscrituradoDescricao = "Escriturado";
 
+        public const int ContratoTipoParticipanteTitular = 1;
+
     }
 }

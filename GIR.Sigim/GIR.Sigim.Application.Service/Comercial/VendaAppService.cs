@@ -16,6 +16,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using GIR.Sigim.Application.DTO.Comercial;
 using GIR.Sigim.Domain.Entity.Comercial;
 using GIR.Sigim.Domain.Repository.Comercial;
+using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Domain.Specification.Comercial;
 using GIR.Sigim.Application.Filtros.Comercial;
@@ -27,13 +28,14 @@ namespace GIR.Sigim.Application.Service.Comercial
     public class VendaAppService : BaseAppService, IVendaAppService
     {
         private IVendaRepository vendaRepository;
-        //private IParametrosRepository parametrosRepository;
+        private IParametrosSigimRepository parametrosRepository;
 
 
-        public VendaAppService(IVendaRepository vendaRepository, MessageQueue messageQueue)
+        public VendaAppService(IVendaRepository vendaRepository, IParametrosSigimRepository parametrosRepository, MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.vendaRepository = vendaRepository;
+            this.parametrosRepository = parametrosRepository;
         }
 
         #region IVendaRepositoryAppService Members
@@ -65,9 +67,9 @@ namespace GIR.Sigim.Application.Service.Comercial
                                  (filtro.SituacaoProposta ? VendaSpecification.EhProposta() : new FalseSpecification<Venda>()) ||
                                  (filtro.SituacaoAssinada ? VendaSpecification.EhAssinada() : new FalseSpecification<Venda>()) ||
                                  (filtro.SituacaoCancelada ? VendaSpecification.EhCancelada() : new FalseSpecification<Venda>()) ||
-                                 (filtro.SituacaoCancelada ? VendaSpecification.EhRescindida() : new FalseSpecification<Venda>()) ||
-                                 (filtro.SituacaoCancelada ? VendaSpecification.EhQuitada() : new FalseSpecification<Venda>()) ||
-                                 (filtro.SituacaoCancelada ? VendaSpecification.EhEscriturada() : new FalseSpecification<Venda>())
+                                 (filtro.SituacaoRescindida ? VendaSpecification.EhRescindida() : new FalseSpecification<Venda>()) ||
+                                 (filtro.SituacaoQuitada ? VendaSpecification.EhQuitada() : new FalseSpecification<Venda>()) ||
+                                 (filtro.SituacaoEscriturada ? VendaSpecification.EhEscriturada() : new FalseSpecification<Venda>())
                                  );
             }
 
@@ -133,19 +135,19 @@ namespace GIR.Sigim.Application.Service.Comercial
             relStatusVenda objRel = new relStatusVenda();
             objRel.SetDataSource(RelStatusVendaToDataTable(lista));
 
-            //var parametros = parametrosRepository.Obter();
-            //var caminhoImagem = PrepararIconeRelatorio(null, parametros);
+            var parametros = parametrosRepository.Obter();
+            var caminhoImagem = PrepararIconeRelatorio(null, parametros);
 
             objRel.SetParameterValue("descricaoMoeda", "");
-            //objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 
             FileDownloadDTO arquivo = new FileDownloadDTO(
                 "Rel. Status da Venda",
                 objRel.ExportToStream((ExportFormatType)formato),
                 formato);
 
-            //if (System.IO.File.Exists(caminhoImagem))
-            //    System.IO.File.Delete(caminhoImagem);
+            if (System.IO.File.Exists(caminhoImagem)) System.IO.File.Delete(caminhoImagem);
+
             return arquivo;
         }
         
@@ -156,66 +158,72 @@ namespace GIR.Sigim.Application.Service.Comercial
         private DataTable RelStatusVendaToDataTable(List<Venda> lista)
         {
             DataTable dta = new DataTable();
-            DataColumn codigo = new DataColumn("codigo", System.Type.GetType("System.Int32"));
-            DataColumn ordemCompra = new DataColumn("ordemCompra", System.Type.GetType("System.Int32"));
-            DataColumn requisicaoMaterial = new DataColumn("requisicaoMaterial");
-            DataColumn cotacaoItem = new DataColumn("cotacaoItem");
-            DataColumn material = new DataColumn("material", System.Type.GetType("System.Int32"));
-            DataColumn descricaoMaterial = new DataColumn("descricaoMaterial");
-            DataColumn classe = new DataColumn("classe");
-            DataColumn descricaoClasse = new DataColumn("descricaoClasse");
-            DataColumn sequencial = new DataColumn("sequencial");
-            DataColumn complementoDescricao = new DataColumn("complementoDescricao");
-            DataColumn unidadeMedida = new DataColumn("unidadeMedida");
-            DataColumn quantidade = new DataColumn("quantidade", System.Type.GetType("System.Decimal"));
-            DataColumn quantidadeEntregue = new DataColumn("quantidadeEntregue", System.Type.GetType("System.Decimal"));
-            DataColumn valorUnitario = new DataColumn("valorUnitario", System.Type.GetType("System.Decimal"));
-            DataColumn percentualIPI = new DataColumn("percentualIPI", System.Type.GetType("System.Decimal"));
+            DataColumn codigoIncorporador = new DataColumn("codigoIncorporador", System.Type.GetType("System.Int64"));
+            DataColumn razaoSocialIncorporador = new DataColumn("razaoSocialIncorporador");
+            DataColumn codigoEmpreendimento = new DataColumn("codigoEmpreendimento", System.Type.GetType("System.Int64"));
+            DataColumn nomeEmpreendimento = new DataColumn("nomeEmpreendimento");
+            DataColumn codigoBloco = new DataColumn("codigoBloco", System.Type.GetType("System.Int64"));
+            DataColumn nomeBloco = new DataColumn("nomeBloco");
+            DataColumn codigoUnidade = new DataColumn("codigoUnidade", System.Type.GetType("System.Int64"));
+            DataColumn descricaoUnidade = new DataColumn("descricaoUnidade");
+            DataColumn codigoContrato = new DataColumn("codigoContrato", System.Type.GetType("System.Int64"));
+            DataColumn descricaoSituacaoContrato = new DataColumn("descricaoSituacaoContrato");
+            DataColumn nomeCliente = new DataColumn("nomeCliente");
+            DataColumn dataVenda = new DataColumn("dataVenda", System.Type.GetType("System.DateTime"));
+            DataColumn precoTabela = new DataColumn("precoTabela", System.Type.GetType("System.Decimal"));
+            DataColumn valorDesconto = new DataColumn("valorDesconto", System.Type.GetType("System.Decimal"));
+            DataColumn precoPraticado = new DataColumn("precoPraticado", System.Type.GetType("System.Decimal"));
+            DataColumn dataAssinatura = new DataColumn("dataAssinatura", System.Type.GetType("System.DateTime"));
+            DataColumn dataCancelamento = new DataColumn("dataCancelamento", System.Type.GetType("System.DateTime"));
+            DataColumn descricaoTabelaVenda = new DataColumn("descricaoTabelaVenda");
             DataColumn percentualDesconto = new DataColumn("percentualDesconto", System.Type.GetType("System.Decimal"));
-            DataColumn valorTotalComImposto = new DataColumn("valorTotalComImposto", System.Type.GetType("System.Decimal"));
-            DataColumn valorTotalItem = new DataColumn("valorTotalItem", System.Type.GetType("System.Decimal"));
-            DataColumn prazoEntrega = new DataColumn("prazoEntrega", System.Type.GetType("System.Decimal"));
-            DataColumn situacaoOrdemCompra = new DataColumn("situacaoOrdemCompra");
-            DataColumn descricaoSituacaoOrdemCompra = new DataColumn("descricaoSituacaoOrdemCompra");
-            DataColumn codigoFornecedor = new DataColumn("codigoFornecedor");
-            DataColumn nomeFornecedor = new DataColumn("nomeFornecedor");
-            DataColumn dataOrdemCompra = new DataColumn("dataOrdemCompra", System.Type.GetType("System.DateTime"));
-            DataColumn centroCusto = new DataColumn("centroCusto");
-            DataColumn girErro = new DataColumn("girErro");
 
-
-            dta.Columns.Add(codigo);
-            dta.Columns.Add(ordemCompra);
-            dta.Columns.Add(requisicaoMaterial);
-            dta.Columns.Add(cotacaoItem);
-            dta.Columns.Add(material);
-            dta.Columns.Add(descricaoMaterial);
-            dta.Columns.Add(classe);
-            dta.Columns.Add(descricaoClasse);
-            dta.Columns.Add(sequencial);
-            dta.Columns.Add(complementoDescricao);
-            dta.Columns.Add(unidadeMedida);
-            dta.Columns.Add(quantidade);
-            dta.Columns.Add(quantidadeEntregue);
-            dta.Columns.Add(valorUnitario);
-            dta.Columns.Add(percentualIPI);
+            dta.Columns.Add(codigoIncorporador);
+            dta.Columns.Add(razaoSocialIncorporador);
+            dta.Columns.Add(codigoEmpreendimento);
+            dta.Columns.Add(nomeEmpreendimento);
+            dta.Columns.Add(codigoBloco);
+            dta.Columns.Add(nomeBloco);
+            dta.Columns.Add(codigoUnidade);
+            dta.Columns.Add(descricaoUnidade);
+            dta.Columns.Add(codigoContrato);
+            dta.Columns.Add(descricaoSituacaoContrato);
+            dta.Columns.Add(nomeCliente);
+            dta.Columns.Add(dataVenda);
+            dta.Columns.Add(precoTabela);
+            dta.Columns.Add(valorDesconto);
+            dta.Columns.Add(precoPraticado);
+            dta.Columns.Add(dataAssinatura);
+            dta.Columns.Add(dataCancelamento);
+            dta.Columns.Add(descricaoTabelaVenda);
             dta.Columns.Add(percentualDesconto);
-            dta.Columns.Add(valorTotalComImposto);
-            dta.Columns.Add(valorTotalItem);
-            dta.Columns.Add(prazoEntrega);
-            dta.Columns.Add(situacaoOrdemCompra);
-            dta.Columns.Add(descricaoSituacaoOrdemCompra);
-            dta.Columns.Add(codigoFornecedor);
-            dta.Columns.Add(nomeFornecedor);
-            dta.Columns.Add(dataOrdemCompra);
-            dta.Columns.Add(centroCusto);
-            dta.Columns.Add(girErro);
-
+       
             foreach (var item in lista)
             {
                 DataRow row = dta.NewRow();
 
-                //row[codigo] = item.Id;
+                VendaDTO objeto = item.To<VendaDTO>();
+
+                row[codigoIncorporador] = objeto.Contrato.Unidade.Empreendimento.IncorporadorId;
+                row[razaoSocialIncorporador] = objeto.Contrato.Unidade.Empreendimento.Incorporador.RazaoSocial;
+                row[codigoEmpreendimento] = objeto.Contrato.Unidade.EmpreendimentoId;
+                row[nomeEmpreendimento] = objeto.Contrato.Unidade.Empreendimento.Nome;
+                row[codigoBloco] = objeto.Contrato.Unidade.BlocoId;
+                row[nomeBloco] = objeto.Contrato.Unidade.Bloco.Nome;
+                row[codigoUnidade] = objeto.Contrato.Unidade.Id;
+                row[descricaoUnidade] = objeto.Contrato.Unidade.Descricao;
+                row[codigoContrato] = objeto.Contrato.Id;
+                row[descricaoSituacaoContrato] = objeto.Contrato.DescricaoSituacaoContrato;
+                row[nomeCliente] = objeto.Contrato.ListaVendaParticipante.Where(l => l.TipoParticipanteId == GIR.Sigim.Domain.Constantes.Comercial.ContratoTipoParticipanteTitular).FirstOrDefault().Cliente.Nome;
+                row[dataVenda] = objeto.Contrato.Venda.DataVenda;
+                row[precoTabela] = objeto.Contrato.Venda.PrecoTabela;
+                if (!objeto.Contrato.Venda.ValorDesconto.HasValue) row[valorDesconto] = 0M; else row[valorDesconto] = objeto.Contrato.Venda.ValorDesconto;
+                row[precoPraticado] = objeto.Contrato.Venda.PrecoPraticado;
+                if (!objeto.Contrato.Venda.DataAssinatura.HasValue) row[dataAssinatura] = DBNull.Value; else row[dataAssinatura] = objeto.Contrato.Venda.DataAssinatura;
+                if (!objeto.Contrato.Venda.DataCancelamento.HasValue) row[dataCancelamento] = DBNull.Value; else row[dataCancelamento] = objeto.Contrato.Venda.DataCancelamento;
+                row[descricaoTabelaVenda] = objeto.Contrato.Venda.TabelaVenda.Nome;
+                row[percentualDesconto] = objeto.Contrato.Venda.PercentualDesconto;
+
                 //row[ordemCompra] = item.OrdemCompraId;
                 //row[requisicaoMaterial] = item.RequisicaoMaterialItemId;
                 //row[cotacaoItem] = item.CotacaoItemId;
