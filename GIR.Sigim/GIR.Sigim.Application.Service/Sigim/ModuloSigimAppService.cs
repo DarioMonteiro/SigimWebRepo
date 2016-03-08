@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
+using GIR.Sigim.Domain.Repository.Sigim;
+using GIR.Sigim.Domain.Entity.Sigim;
 
 namespace GIR.Sigim.Application.Service.Sigim
 {
@@ -12,13 +14,17 @@ namespace GIR.Sigim.Application.Service.Sigim
 
         #region Declaração
 
+        private IUnidadeFederacaoRepository unidadeFederacaoRepository;
+
         #endregion
 
         #region Construtor
 
-        public ModuloSigimAppService(MessageQueue messageQueue)
+        public ModuloSigimAppService(IUnidadeFederacaoRepository unidadeFederacaoRepository, 
+                                     MessageQueue messageQueue)
             : base(messageQueue)
         {
+            this.unidadeFederacaoRepository = unidadeFederacaoRepository;
         }
 
         #endregion
@@ -126,6 +132,48 @@ namespace GIR.Sigim.Application.Service.Sigim
             valorPresente = Math.Round(valorPresenteProRataDia, 5);
 
             return valorPresente;
+        }
+
+        public DateTime RecuperaProximoDiaUtil(DateTime data,string siglaUF)
+        {
+            bool achouProximoDiaUtil = false;
+            DateTime dataUtil = data.AddDays(-1);
+
+            while (!achouProximoDiaUtil)
+            {
+                dataUtil = dataUtil.AddDays(1);
+
+                UnidadeFederacao unidadeFederacao = 
+                    unidadeFederacaoRepository.ListarPeloFiltro(l => l.Sigla == siglaUF,
+                                                                l => l.ListaFeriado).FirstOrDefault();
+                Feriado feriado = null;
+
+                if (unidadeFederacao != null)
+                {
+                    feriado = unidadeFederacao.ListaFeriado.Where(l => l.Data.Value.Date == dataUtil.Date).FirstOrDefault();
+                }
+
+                if (feriado == null)
+                {
+                    if ((dataUtil.DayOfWeek != DayOfWeek.Saturday) && (dataUtil.DayOfWeek != DayOfWeek.Sunday))
+                    {
+                        achouProximoDiaUtil = true;
+                    }
+                }
+            }
+            return dataUtil;
+        }
+
+        public decimal AplicaPercentual(decimal valor,Nullable<Decimal> percentual)
+        {
+            decimal valorRetorno = 0;
+
+	        if (percentual.HasValue)
+            {
+                valorRetorno = Convert.ToDecimal(valor * (percentual / 100));
+            }
+
+            return Math.Round(valorRetorno,5);
         }
 
         #endregion

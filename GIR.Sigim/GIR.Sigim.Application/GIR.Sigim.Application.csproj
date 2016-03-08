@@ -94,7 +94,6 @@
     <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
     <Compile Include="DTO\Contrato\ResumoLiberacaoDTO.cs" />
     <Compile Include="DTO\CredCob\TituloCredCobDTO.cs" />
-    <Compile Include="DTO\CredCob\TituloDetalheCredCobDTO.cs" />
     <Compile Include="DTO\CredCob\VerbaCobrancaDTO.cs" />
     <Compile Include="DTO\Estoque\MovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />

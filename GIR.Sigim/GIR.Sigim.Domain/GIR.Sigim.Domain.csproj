@@ -71,6 +71,7 @@
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
     <Compile Include="Entity\CredCob\Periodicidade.cs" />
     <Compile Include="Entity\CredCob\TituloCredCob.cs" />
+    <Compile Include="Entity\CredCob\TituloDetalheCredCob.cs" />
     <Compile Include="Entity\CredCob\VerbaCobranca.cs" />
     <Compile Include="Entity\Financeiro\ApropriacaoClasseCCRelatorio.cs" />
     <Compile Include="Entity\Financeiro\MovimentoFinanceiro.cs" />

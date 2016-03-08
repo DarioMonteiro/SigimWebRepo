@@ -15,6 +15,7 @@ namespace GIR.Sigim.Application.DTO.Comercial
         public int? BlocoId { get; set; }
         public BlocoDTO Bloco { get; set; }
 
+        public Nullable<Decimal> TaxaPermanenciaDiaria { get; set; }
         public Nullable<Decimal> MultaPorAtraso { get; set; } 
         public bool? ConsiderarParametroUnidade { get; set; }
 

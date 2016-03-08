@@ -228,8 +228,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                               l => l.VendaSerie.IndiceReajuste,
                                                               l => l.Indice).To<List<TituloCredCob>>();
 
-                    List<TituloDetalheCredCobDTO> listaTituloDetalheCredCobDTO = tituloCredCobAppService.RecTit(listaTituloCredCob, DateTime.Now.Date, false, false);
-                    GeraListaRelApropriacaoPorClasseCreditoCobranca(listaTituloCredCob, listaApropriacaoClasseRelatorio);
+                    List<TituloDetalheCredCob> listaTituloDetalheCredCob = tituloCredCobAppService.RecTit(listaTituloCredCob, DateTime.Now.Date, false, false);
+                    GeraListaRelApropriacaoPorClasseCreditoCobranca(listaTituloDetalheCredCob, listaApropriacaoClasseRelatorio);
                 }
 
 
@@ -630,10 +630,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
         }
 
-        private void GeraListaRelApropriacaoPorClasseCreditoCobranca(List<TituloCredCob> listaTituloCredCob, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        private void GeraListaRelApropriacaoPorClasseCreditoCobranca(List<TituloDetalheCredCob> listaTituloDetalheCredCob, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
         {
-            //foreach (var groupApropriacaoClasse in listaTituloCredCob.OrderBy(l => l.VerbaCobranca.CodigoClasse).GroupBy(l => new { l.VerbaCobranca.CodigoClasse, l.Id.HasValue }))
-            foreach (var groupApropriacaoClasse in listaTituloCredCob.OrderBy(l => l.VerbaCobranca.CodigoClasse).GroupBy(l => l.VerbaCobranca.CodigoClasse))
+            foreach (var groupApropriacaoClasse in listaTituloDetalheCredCob.Where(l => l.VerbaCobranca.CodigoClasse != null).OrderBy(l => l.VerbaCobranca.CodigoClasse).GroupBy(l => l.VerbaCobranca.CodigoClasse))
             {
                 string tipoClasse = "";
 
@@ -660,7 +659,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     apropriacaoClasseRelatorio.TipoCodigo = "CC";
                 }
 
-                decimal valorApropriado = groupApropriacaoClasse.Sum(l => (l.ValorIndiceBase * l.QtdIndice));
+                decimal valorApropriado = 0;
+                valorApropriado = groupApropriacaoClasse.Where(l => l.Situacao == "P").Sum(l => l.ValorDevido);
+                valorApropriado = valorApropriado + groupApropriacaoClasse.Where(l => l.Situacao == "Q").Sum(l => l.ValorBaixa.Value);
 
                 apropriacaoClasseRelatorio.ValorApropriado = apropriacaoClasseRelatorio.ValorApropriado + valorApropriado;
 

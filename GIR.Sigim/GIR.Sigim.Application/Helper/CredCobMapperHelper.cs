@@ -17,7 +17,7 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TituloCredCob, TituloCredCobDTO>();
             Mapper.CreateMap<TituloCredCobDTO, TituloCredCob>();
 
-            Mapper.CreateMap<TituloCredCob,TituloDetalheCredCobDTO>();
+            Mapper.CreateMap<TituloCredCob,TituloDetalheCredCob>();
 
             Mapper.CreateMap<VerbaCobranca, VerbaCobrancaDTO>();
             Mapper.CreateMap<VerbaCobrancaDTO, VerbaCobranca>();
