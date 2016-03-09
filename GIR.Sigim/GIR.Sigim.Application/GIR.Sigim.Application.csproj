@@ -457,6 +457,7 @@
     <Compile Include="Service\Financeiro\ITipoCompromissoAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoDocumentoAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoRateioAppService.cs" />
+    <Compile Include="Service\CredCob\ITituloMovimentoAppService.cs" />
     <Compile Include="Service\Financeiro\ITituloPagarAppService.cs" />
     <Compile Include="Service\IBaseAppService.cs" />
     <Compile Include="Service\Orcamento\IOrcamentoAppService.cs" />

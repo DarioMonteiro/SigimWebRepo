@@ -72,6 +72,7 @@
     <Compile Include="Entity\CredCob\Periodicidade.cs" />
     <Compile Include="Entity\CredCob\TituloCredCob.cs" />
     <Compile Include="Entity\CredCob\TituloDetalheCredCob.cs" />
+    <Compile Include="Entity\CredCob\TituloMovimento.cs" />
     <Compile Include="Entity\CredCob\VerbaCobranca.cs" />
     <Compile Include="Entity\Financeiro\ApropriacaoClasseCCRelatorio.cs" />
     <Compile Include="Entity\Financeiro\MovimentoFinanceiro.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
     <Compile Include="Repository\CredCob\ITituloCredCobRepository.cs" />
+    <Compile Include="Repository\CredCob\ITituloMovimentoRepository.cs" />
     <Compile Include="Repository\Financeiro\IApropriacaoRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoPagarRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoReceberRepository.cs" />
@@ -339,6 +341,7 @@
     <Compile Include="Specification\Contrato\ContratoRetificacaoItemMedicaoSpecification.cs" />
     <Compile Include="Specification\Contrato\ContratoSpecification.cs" />
     <Compile Include="Specification\CredCob\TituloCredCobSpecification.cs" />
+    <Compile Include="Specification\CredCob\TituloMovimentoSpecification.cs" />
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />
     <Compile Include="Specification\ExpressionBuilder.cs" />

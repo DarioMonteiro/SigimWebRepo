@@ -95,7 +95,7 @@ namespace GIR.Sigim.Application.Service.CredCob
                 {
                     if (filtro.ListaClasseReceita.Count > 0)
                     {
-                        string[] arrayCodigoClasse = PopulaArrayComCodigosDeClassesSelecionadas(filtro.ListaClasseDespesa);
+                        string[] arrayCodigoClasse = PopulaArrayComCodigosDeClassesSelecionadas(filtro.ListaClasseReceita);
 
                         if (arrayCodigoClasse.Length > 0)
                         {
@@ -240,7 +240,6 @@ namespace GIR.Sigim.Application.Service.CredCob
                             }
 
                             DateTime dataUtil = tituloDetalhe.DataVencimento.AddDays(-1);
-                            moduloSigimAppService.RecuperaProximoDiaUtil(dataUtil, clienteTitular.EnderecoResidencial.UnidadeFederacaoSigla);
 
                             if (clienteTitular.Correspondencia == "R")
                             {

@@ -111,6 +111,7 @@
     <Compile Include="Configuration\Financeiro\TipoCompromissoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoDocumentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TipoRateioConfiguration.cs" />
+    <Compile Include="Configuration\CredCob\TituloMovimentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloPagarAdiantamentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloPagarConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloReceberConfiguration.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="Repository\Contrato\ContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Repository\Contrato\ParametrosContratoRepository.cs" />
     <Compile Include="Repository\CredCob\TituloCredCobRepository.cs" />
+    <Compile Include="Repository\CredCob\TituloMovimentoRepository.cs" />
     <Compile Include="Repository\Estoque\EstoqueRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\ApropriacaoRepository.cs" />

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.CredCob;
 
 namespace GIR.Sigim.Domain.Entity.Financeiro
 {
@@ -33,11 +34,14 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
 
         public virtual ICollection<MovimentoFinanceiro> ListaFilhos { get; set; }
         public virtual ICollection<Apropriacao> ListaApropriacao { get; set; }
+        public ICollection<TituloMovimento> ListaTituloMovimento { get; set; }
+
 
         public MovimentoFinanceiro()
         {
             this.ListaFilhos = new HashSet<MovimentoFinanceiro>();
             this.ListaApropriacao = new HashSet<Apropriacao>();
+            this.ListaTituloMovimento = new HashSet<TituloMovimento>();
         }
     }
 }

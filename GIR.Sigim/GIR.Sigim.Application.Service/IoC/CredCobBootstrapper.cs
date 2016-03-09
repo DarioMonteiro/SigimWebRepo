@@ -14,6 +14,7 @@ namespace GIR.Sigim.Application.Service.IoC
         public static void Initialise()
         {
             Container.Current.RegisterType<ITituloCredCobAppService, TituloCredCobAppService>();
+            Container.Current.RegisterType<ITituloMovimentoAppService, TituloMovimentoAppService>();
         }
     }
 }

@@ -66,5 +66,11 @@ namespace GIR.Sigim.Domain.Entity.CredCob
 
         public VendaSerie VendaSerie { get; set; }
 
+        public ICollection<TituloMovimento> ListaTituloMovimento { get; set; }
+
+        public TituloCredCob()
+        {
+            this.ListaTituloMovimento = new HashSet<TituloMovimento>();
+        }
     }
 }
