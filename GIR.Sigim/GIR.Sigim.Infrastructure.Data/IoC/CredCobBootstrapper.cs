@@ -15,6 +15,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
         public static void Initialise()
         {
             Container.Current.RegisterType<ITituloCredCobRepository, TituloCredCobRepository>();
+            Container.Current.RegisterType<ITituloMovimentoRepository, TituloMovimentoRepository>();
         }
     }
 }

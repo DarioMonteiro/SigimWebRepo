@@ -22,7 +22,6 @@ using GIR.Sigim.Application.Service.CredCob;
 using GIR.Sigim.Domain.Repository.CredCob;
 using GIR.Sigim.Application.DTO.CredCob;
 
-
 namespace GIR.Sigim.Application.Service.Financeiro
 {
     public class ApropriacaoAppService : BaseAppService, IApropriacaoAppService
@@ -36,6 +35,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
         private IApropriacaoRepository apropriacaoRepository;
         private ITituloCredCobAppService tituloCredCobAppService;
         private ITituloCredCobRepository tituloCredCobRepository;
+        private ITituloMovimentoAppService tituloMovimentoAppService;
+        private ITituloMovimentoRepository tituloMovimentoRepository;
 
 
         #endregion
@@ -49,6 +50,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                      IApropriacaoRepository apropriacaoRepository,
                                      ITituloCredCobAppService tituloCredCobAppService,
                                      ITituloCredCobRepository tituloCredCobRepository,
+                                     ITituloMovimentoAppService tituloMovimentoAppService,
+                                     ITituloMovimentoRepository tituloMovimentoRepository,
                                      MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -59,6 +62,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
             this.apropriacaoRepository = apropriacaoRepository;
             this.tituloCredCobAppService = tituloCredCobAppService;
             this.tituloCredCobRepository = tituloCredCobRepository;
+            this.tituloMovimentoAppService = tituloMovimentoAppService;
+            this.tituloMovimentoRepository = tituloMovimentoRepository;
         }
 
         #endregion
@@ -228,17 +233,26 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                               l => l.VendaSerie.IndiceReajuste,
                                                               l => l.Indice).To<List<TituloCredCob>>();
 
-                    List<TituloDetalheCredCobDTO> listaTituloDetalheCredCobDTO = tituloCredCobAppService.RecTit(listaTituloCredCob, DateTime.Now.Date, false, false);
-                    GeraListaRelApropriacaoPorClasseCreditoCobranca(listaTituloCredCob, listaApropriacaoClasseRelatorio);
+                    List<TituloDetalheCredCob> listaTituloDetalheCredCob = tituloCredCobAppService.RecTit(listaTituloCredCob, DateTime.Now.Date, false, false);
+                    GeraListaRelApropriacaoPorClasseCreditoCobranca(listaTituloDetalheCredCob, listaApropriacaoClasseRelatorio);
                 }
 
 
-                //if (!filtro.EhSituacaoAReceberRecebido || filtro.EhSituacaoAReceberQuitado)
-                //{
+                if ((!filtro.EhSituacaoAReceberRecebido) || filtro.EhSituacaoAReceberQuitado)
+                {
+                    var specification = (Specification<TituloMovimento>)new TrueSpecification<TituloMovimento>();
+                    specification = tituloMovimentoAppService.MontarSpecificationTituloMovimentoRelApropriacaoPorClasse(filtro, usuarioId);
 
-                //}
+                    var listaTituloMovimento =
+                     tituloMovimentoRepository.ListarPeloFiltro(specification,
+                                                                l => l.TituloCredCob.Contrato.Unidade.Bloco.CentroCusto.ListaUsuarioCentroCusto.Select(u => u.Modulo),
+                                                                l => l.TituloCredCob.Contrato.Unidade.Bloco.CentroCusto.ListaCentroCustoEmpresa,
+                                                                l => l.TituloCredCob.Contrato.ListaVendaParticipante,
+                                                                l => l.TituloCredCob.VerbaCobranca.Classe,
+                                                                l => l.MovimentoFinanceiro).To<List<TituloMovimento>>();
+                    GeraListaRelApropriacaoPorClasseCreditoCobrancaTituloMovimento(listaTituloMovimento, listaApropriacaoClasseRelatorio);
 
-
+                }
 
             }
 
@@ -630,10 +644,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
         }
 
-        private void GeraListaRelApropriacaoPorClasseCreditoCobranca(List<TituloCredCob> listaTituloCredCob, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        private void GeraListaRelApropriacaoPorClasseCreditoCobranca(List<TituloDetalheCredCob> listaTituloDetalheCredCob, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
         {
-            //foreach (var groupApropriacaoClasse in listaTituloCredCob.OrderBy(l => l.VerbaCobranca.CodigoClasse).GroupBy(l => new { l.VerbaCobranca.CodigoClasse, l.Id.HasValue }))
-            foreach (var groupApropriacaoClasse in listaTituloCredCob.OrderBy(l => l.VerbaCobranca.CodigoClasse).GroupBy(l => l.VerbaCobranca.CodigoClasse))
+            foreach (var groupApropriacaoClasse in listaTituloDetalheCredCob.Where(l => l.VerbaCobranca.CodigoClasse != null).OrderBy(l => l.VerbaCobranca.CodigoClasse).GroupBy(l => l.VerbaCobranca.CodigoClasse))
             {
                 string tipoClasse = "";
 
@@ -660,7 +673,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     apropriacaoClasseRelatorio.TipoCodigo = "CC";
                 }
 
-                decimal valorApropriado = groupApropriacaoClasse.Sum(l => (l.ValorIndiceBase * l.QtdIndice));
+                decimal valorApropriado = 0;
+                valorApropriado = groupApropriacaoClasse.Where(l => l.Situacao == "P").Sum(l => l.ValorDevido);
+                valorApropriado = valorApropriado + groupApropriacaoClasse.Where(l => l.Situacao == "Q").Sum(l => l.ValorBaixa.Value);
 
                 apropriacaoClasseRelatorio.ValorApropriado = apropriacaoClasseRelatorio.ValorApropriado + valorApropriado;
 
@@ -675,6 +690,53 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 }
             }
         }
+
+        private void GeraListaRelApropriacaoPorClasseCreditoCobrancaTituloMovimento(List<TituloMovimento> listaTituloMovimento, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        {
+            foreach (var groupApropriacaoClasse in listaTituloMovimento.Where(l => l.TituloCredCob.VerbaCobranca.CodigoClasse != null).OrderBy(l => l.TituloCredCob.VerbaCobranca.CodigoClasse).GroupBy(l => l.TituloCredCob.VerbaCobranca.CodigoClasse))
+            {
+                string tipoClasse = "";
+
+                if (groupApropriacaoClasse.Count() > 0)
+                {
+                    tipoClasse = "E";
+                }
+
+                Classe classe = groupApropriacaoClasse.Select(l => l.TituloCredCob.VerbaCobranca.Classe).FirstOrDefault().To<Classe>();
+
+                ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorio = new ApropriacaoClasseCCRelatorio();
+
+                bool recuperouApropriacao = false;
+                if (listaApropriacaoClasseRelatorio.Any(l => (l.Classe.Codigo == classe.Codigo && l.TipoClasseCC == "E")))
+                {
+                    apropriacaoClasseRelatorio = listaApropriacaoClasseRelatorio.Where(l => l.Classe.Codigo == classe.Codigo && l.TipoClasseCC == "E").FirstOrDefault();
+                    recuperouApropriacao = true;
+                }
+                else
+                {
+                    apropriacaoClasseRelatorio.TipoClasseCC = tipoClasse;
+                    apropriacaoClasseRelatorio.Classe = classe;
+                    apropriacaoClasseRelatorio.ValorApropriado = 0;
+                    apropriacaoClasseRelatorio.TipoCodigo = "CC";
+                }
+
+                decimal valorApropriado = 0;
+                valorApropriado = groupApropriacaoClasse.Sum(l => l.TituloCredCob.ValorBaixa.Value);
+
+                apropriacaoClasseRelatorio.ValorApropriado = apropriacaoClasseRelatorio.ValorApropriado + valorApropriado;
+
+                if (!recuperouApropriacao)
+                {
+                    listaApropriacaoClasseRelatorio.Add(apropriacaoClasseRelatorio);
+                }
+
+                if (apropriacaoClasseRelatorio.Classe.ClassePai != null)
+                {
+                    AdicionaRegistroRelatorioPai(apropriacaoClasseRelatorio, listaApropriacaoClasseRelatorio, valorApropriado, apropriacaoClasseRelatorio.TipoClasseCC);
+                }
+            }
+        }
+
 
         private Specification<Apropriacao> MontarSpecificationContasAPagarPagosRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? idUsuario)
         {
@@ -871,16 +933,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
                     }
 
-
-                    //if (filtro.ListaClasseDespesa.Count > 0)
-                    //{
-                        //string[] arrayCodigoClasse = PopulaArrayComCodigosDeClassesSelecionadas(filtro.ListaClasseDespesa);
-
-                        if (arrayCodigoClasse.Length > 0)
-                        {
-                            specification &= ApropriacaoSpecification.SaoClassesExistentes(arrayCodigoClasse);
-                        }
-                    //}
+                    if (arrayCodigoClasse.Length > 0)
+                    {
+                        specification &= ApropriacaoSpecification.SaoClassesExistentes(arrayCodigoClasse);
+                    }
                 }
             }
 
@@ -1099,7 +1155,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             return strTipoData;
         }
-
 
         #endregion
 

@@ -41,6 +41,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
                 .WithMany(c => c.ListaUnidade)
                 .HasForeignKey(l => l.BlocoId);
 
+            Property(l => l.TaxaPermanenciaDiaria)
+                .HasColumnName("taxaPermanenciaDiaria")
+                .HasPrecision(18, 5)
+                .HasColumnOrder(16);
+
             Property(l => l.MultaPorAtraso)
                 .HasColumnName("multaPorAtraso")
                 .HasPrecision(18,5)

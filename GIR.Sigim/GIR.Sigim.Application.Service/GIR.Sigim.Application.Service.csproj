@@ -75,6 +75,7 @@
     <Compile Include="BaseAppService.cs" />
     <Compile Include="CredCob\TituloCredCobAppService.cs" />
     <Compile Include="Financeiro\ApropriacaoAppService.cs" />
+    <Compile Include="CredCob\TituloMovimentoAppService.cs" />
     <Compile Include="IoC\AdminBootstrapper.cs" />
     <Compile Include="IoC\Bootstrapper.cs" />
     <Compile Include="Contrato\ContratoAppService.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="Financeiro\TipoRateioAppService.cs" />
     <Compile Include="Financeiro\TituloPagarAppService.cs" />
     <Compile Include="IoC\ContratoBootstrapper.cs" />
-	<Compile Include="IoC\ComercialBootstrapper.cs" />
+    <Compile Include="IoC\ComercialBootstrapper.cs" />
     <Compile Include="IoC\CredCobBootstrapper.cs" />
     <Compile Include="IoC\SigimBootstrapper.cs" />
     <Compile Include="IoC\SacBootstrapper.cs" />

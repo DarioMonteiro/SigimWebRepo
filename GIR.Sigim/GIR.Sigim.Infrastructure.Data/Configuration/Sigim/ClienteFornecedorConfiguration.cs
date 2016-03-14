@@ -164,7 +164,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasForeignKey(c => c.ClienteFornecedorId);
 
             HasMany<ParametrosSigim>(l => l.ListaParametrosSigim)
-                .WithOptional(c => c.Cliente)
+                .WithRequired(c => c.Cliente)
                 .HasForeignKey(c => c.ClienteId);
         }
     }

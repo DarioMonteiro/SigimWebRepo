@@ -13,6 +13,6 @@ namespace GIR.Sigim.Application.Service.CredCob
     public interface ITituloCredCobAppService
     {
         Specification<TituloCredCob> MontarSpecificationMovimentoCredCobRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? idUsuario);
-        List<TituloDetalheCredCobDTO> RecTit(List<TituloCredCob> listaTituloCredCob, Nullable<DateTime> dataReferencia, bool excluiTabelaTemporaria, bool corrigeParcelaResiduo);
+        List<TituloDetalheCredCob> RecTit(List<TituloCredCob> listaTituloCredCob, Nullable<DateTime> dataReferencia, bool excluiTabelaTemporaria, bool corrigeParcelaResiduo);
     }
 }
