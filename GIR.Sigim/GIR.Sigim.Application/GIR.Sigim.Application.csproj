@@ -102,6 +102,7 @@
     <Compile Include="DTO\Financeiro\CentroCustoDTO.cs" />
     <Compile Include="DTO\Financeiro\ClasseDTO.cs" />
     <Compile Include="DTO\Financeiro\CaixaDTO.cs" />
+    <Compile Include="DTO\Financeiro\ApropriacaoDTO.cs" />
     <Compile Include="DTO\Financeiro\HistoricoContabilDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoReceberDTO.cs" />
     <Compile Include="DTO\Financeiro\MovimentoFinanceiroDTO.cs" />
