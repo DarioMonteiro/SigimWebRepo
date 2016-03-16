@@ -62,7 +62,15 @@ namespace GIR.Sigim.Application.Service.Sigim
         }
 
         public List<ItemListaDTO> ListarTipo()
-        { return typeof(TipoContaCorrente).ToItemListaDTO(); }
+        { 
+            return typeof(TipoContaCorrente).ToItemListaDTO(); 
+        }
+
+        public List<ContaCorrenteDTO> ListarAtivosPorBanco(int? bancoId)
+        {
+            return contaCorrenteRepository.ListarPeloFiltro(l => l.Situacao == "A" && l.BancoId == bancoId,
+                                                            l => l.Banco.ListaAgencia).To<List<ContaCorrenteDTO>>();
+        }
 
 
         public bool Salvar(ContaCorrenteDTO dto)

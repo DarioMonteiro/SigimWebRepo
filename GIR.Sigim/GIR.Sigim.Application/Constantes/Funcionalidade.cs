@@ -144,7 +144,8 @@ namespace GIR.Sigim.Application.Constantes
 
         public const string RelatorioApropriacaoPorClasseAcessar = "REL_APROPRIACAO_POR_CLASSE_ACESSAR";
         public const string RelatorioApropriacaoPorClasseImprimir = "REL_APROPRIACAO_POR_CLASSE_IMPRIMIR";
-           
+
+        public const string RelatorioContasAPagarTitulosAcessar = "REL_CONTASAPAGAR_TITULOS_ACESSAR";
         #endregion
 
         #region OrdemCompra
@@ -339,6 +340,8 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(RelatorioApropriacaoPorClasseAcessar, "Relatório de apropriação por classe - acessar");
             MenuFinanceiro.Add(RelatorioApropriacaoPorClasseImprimir, "Relatório de apropriação por classe - imprimir");
 
+
+            //MenuFinanceiro.Add(RelatorioContasAPagarTitulosAcessar, "Relatório de títulos a pagar - acessar");
         }
 
         private void FuncionalidadeOrdemCompra()

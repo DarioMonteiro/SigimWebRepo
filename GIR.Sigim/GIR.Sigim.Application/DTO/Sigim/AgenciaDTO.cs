@@ -66,6 +66,12 @@ namespace GIR.Sigim.Application.DTO.Sigim
         [StringLength(20, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         public string Telefone { get; set; }
 
+        public List<ContaCorrenteDTO> ListaContaCorrente { get; set; }
+        
+        public AgenciaDTO()
+        {            
+            this.ListaContaCorrente = new List<ContaCorrenteDTO>();
+        }
 
     }
 }
