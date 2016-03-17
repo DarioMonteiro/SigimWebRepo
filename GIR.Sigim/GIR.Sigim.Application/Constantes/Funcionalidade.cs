@@ -341,7 +341,7 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(RelatorioApropriacaoPorClasseImprimir, "Relatório de apropriação por classe - imprimir");
 
 
-            //MenuFinanceiro.Add(RelatorioContasAPagarTitulosAcessar, "Relatório de títulos a pagar - acessar");
+            MenuFinanceiro.Add(RelatorioContasAPagarTitulosAcessar, "Relatório de títulos a pagar - acessar");
         }
 
         private void FuncionalidadeOrdemCompra()

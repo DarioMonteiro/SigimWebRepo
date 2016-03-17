@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Application.Constantes;
@@ -69,6 +71,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             model.ListaBanco = new SelectList(listaBanco, "Id", "Nome", model.Filtro.BancoId);
             List<ContaCorrenteDTO> listaContaCorrente = contaCorrenteAppService.ListarAtivosPorBanco(model.Filtro.BancoId).ToList();
             model.ListaAgenciaConta = new SelectList(listaContaCorrente, "Id", "AgenciaConta", model.Filtro.BancoId); ;
+        }
+
+        [HttpPost]
+        public ActionResult CarregaComboAgenciaContaCorrente(int? bancoId)
+        {
+            List<ContaCorrenteDTO> listaContaCorrente = null;
+            if (bancoId.HasValue)
+            {
+                listaContaCorrente = contaCorrenteAppService.ListarAtivosPorBanco(bancoId.Value).ToList();
+            }
+            return Json(new
+            {
+                listaContaCorrente = JsonConvert.SerializeObject(listaContaCorrente, Formatting.Indented,
+                                      new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore})
+            });
         }
 
     }

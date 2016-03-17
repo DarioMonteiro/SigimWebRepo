@@ -69,6 +69,9 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
         public int? BancoId { get; set; }
         public BancoDTO Banco { get; set; }
 
+        [Display(Name = "Ag / Cc")]
+        public int? ContaCorrenteId { get; set; }
+        public ContaCorrenteDTO ContaCorrente { get; set; }
 
     }
 }

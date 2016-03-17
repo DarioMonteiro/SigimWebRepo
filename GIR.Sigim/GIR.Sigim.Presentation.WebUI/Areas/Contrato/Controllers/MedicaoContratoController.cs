@@ -254,7 +254,21 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
                     EhNaturezaItemPorPrecoGlobal = contratoRetificacaoItemAppService.EhNaturezaItemPrecoGlobal(contratoRetificacaoItem);
                     EhNaturezaItemPorPrecoUnitario = contratoRetificacaoItemAppService.EhNaturezaItemPrecoUnitario(contratoRetificacaoItem);
+                    List<ContratoRetificacaoProvisaoDTO> listaContratoRetificacaoProvisaoAux = new List<ContratoRetificacaoProvisaoDTO>();
+                    ContratoRetificacaoItemCronogramaDTO contratoRetificacaoItemCronograma = listaContratoRetificacaoProvisao.Select(l => l.ContratoRetificacaoItemCronograma).FirstOrDefault();
 
+                    if (contratoRetificacaoItemCronograma != null)
+                    {
+                        listaContratoRetificacaoProvisaoAux = listaContratoRetificacaoProvisao.
+                                                                OrderBy(l => l.ContratoRetificacaoItemCronograma.DataVencimento).
+                                                                ThenByDescending(l => l.ContratoRetificacaoItemCronograma.Sequencial).ToList();
+                    }
+                    else
+                    {
+                        listaContratoRetificacaoProvisaoAux = listaContratoRetificacaoProvisao;
+                    }
+
+ 
                     return Json(new
                     {
                         ehRecuperou = true,
@@ -262,9 +276,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                         ehNaturezaItemPorPrecoGlobal = EhNaturezaItemPorPrecoGlobal,
                         ehNaturezaItemPorPrecoUnitario = EhNaturezaItemPorPrecoUnitario,
                         contratoRetificacaoItem = contratoRetificacaoItem,
-                        listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao.
-                                                            OrderBy(l => l.ContratoRetificacaoItemCronograma.DataVencimento).
-                                                            ThenByDescending(l => l.ContratoRetificacaoItemCronograma.Sequencial)
+                        //listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisao.
+                        //                                    OrderBy(l => l.ContratoRetificacaoItemCronograma.DataVencimento).
+                        //                                    ThenByDescending(l => l.ContratoRetificacaoItemCronograma.Sequencial)
+                        listaContratoRetificacaoProvisao = listaContratoRetificacaoProvisaoAux
                     });
                 }
             }
