@@ -73,5 +73,27 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
         public int? ContaCorrenteId { get; set; }
         public ContaCorrenteDTO ContaCorrente { get; set; }
 
+        [Display(Name = "Caixa")]
+        public int? CaixaId { get; set; }
+        public CaixaDTO Caixa { get; set; }
+
+        [Display(Name = "Inicial")]
+        public decimal ValorTituloInicial { get; set; }
+
+        [Display(Name = "Final")]
+        public decimal ValorTituloFinal { get; set; }
+
+        [Display(Name = "Doc. pagamento")]
+        [StringLength(20, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
+        public string DocumentoPagamento { get; set; }
+
+        [Display(Name = "Por data de competência")]
+        public bool EhPorCompetencia { get; set; }
+
+        [Display(Name = "Sem dados da apropriação")]
+        public bool EhSemApropriacao { get; set; }
+
+        public short? EhTotalizadoPor { get; set; }
+
     }
 }

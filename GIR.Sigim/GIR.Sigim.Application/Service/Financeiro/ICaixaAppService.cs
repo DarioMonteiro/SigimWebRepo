@@ -12,6 +12,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
     public interface ICaixaAppService
     {
         List<CaixaDTO> ListarPeloFiltro(CaixaFiltro filtro, out int totalRegistros);
+        List<CaixaDTO> ListarCaixaAtivo();
         CaixaDTO ObterPeloId(int? id);
         bool Salvar(CaixaDTO dto);
         bool Deletar(int? id);

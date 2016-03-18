@@ -11,6 +11,7 @@ using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Domain.Specification.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
+using GIR.Sigim.Application.Service.Admin;
 
 
 namespace GIR.Sigim.Application.Service.Sigim
@@ -20,15 +21,19 @@ namespace GIR.Sigim.Application.Service.Sigim
         #region Declaração
 
         private IContaCorrenteRepository contaCorrenteRepository;
+        private IUsuarioAppService usuarioAppService;
 
         #endregion
         
         #region Construtor
 
-        public ContaCorrenteAppService(IContaCorrenteRepository contaCorrenteRepository, MessageQueue messageQueue)
+        public ContaCorrenteAppService(IContaCorrenteRepository contaCorrenteRepository, 
+                                       IUsuarioAppService usuarioAppService,
+                                       MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.contaCorrenteRepository = contaCorrenteRepository;
+            this.usuarioAppService = usuarioAppService;
         }
               
         #endregion
@@ -68,10 +73,29 @@ namespace GIR.Sigim.Application.Service.Sigim
 
         public List<ContaCorrenteDTO> ListarAtivosPorBanco(int? bancoId)
         {
-            return contaCorrenteRepository.ListarPeloFiltro(l => l.Situacao == "A" && l.BancoId == bancoId,
-                                                            l => l.Banco.ListaAgencia).To<List<ContaCorrenteDTO>>();
-        }
+            List<ContaCorrenteDTO> listaContaCorrente = new List<ContaCorrenteDTO>();
 
+            if (bancoId.HasValue)
+            {
+
+                var specification = (Specification<ContaCorrente>)new TrueSpecification<ContaCorrente>();
+
+                if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(UsuarioLogado.Id, Resource.Sigim.NomeModulo.Financeiro))
+                {
+                    specification &= ContaCorrenteSpecification.UsuarioPossuiAcessoAoCentroCusto(UsuarioLogado.Id, Resource.Sigim.NomeModulo.Financeiro);
+                }
+
+                specification &= ContaCorrenteSpecification.MatchingBancoId(bancoId);
+
+                specification &= ContaCorrenteSpecification.EhAtivo();
+
+                listaContaCorrente = contaCorrenteRepository.ListarPeloFiltro(specification,
+                                                                l => l.Banco.ListaAgencia).To<List<ContaCorrenteDTO>>();
+
+            }
+
+            return listaContaCorrente;
+        }
 
         public bool Salvar(ContaCorrenteDTO dto)
         {

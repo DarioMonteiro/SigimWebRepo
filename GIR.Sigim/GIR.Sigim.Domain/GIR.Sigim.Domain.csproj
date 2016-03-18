@@ -75,6 +75,7 @@
     <Compile Include="Entity\CredCob\TituloMovimento.cs" />
     <Compile Include="Entity\CredCob\VerbaCobranca.cs" />
     <Compile Include="Entity\Financeiro\ApropriacaoClasseCCRelatorio.cs" />
+    <Compile Include="Entity\Financeiro\FormaPagamento.cs" />
     <Compile Include="Entity\Financeiro\MovimentoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\OpcoesRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Financeiro\TipoMovimentoRelatorioApropriacaoPorClasse.cs" />
@@ -346,6 +347,7 @@
     <Compile Include="Specification\DirectSpecification.cs" />
     <Compile Include="Specification\ExpressionBuilder.cs" />
     <Compile Include="Specification\Financeiro\ApropriacaoSpecification.cs" />
+    <Compile Include="Specification\Financeiro\CaixaSpecification.cs" />
     <Compile Include="Specification\Financeiro\RateioAutomaticoSpecification.cs" />
     <Compile Include="Specification\Financeiro\TipoMovimentoSpecification.cs" />
     <Compile Include="Specification\ISpecification.cs" />

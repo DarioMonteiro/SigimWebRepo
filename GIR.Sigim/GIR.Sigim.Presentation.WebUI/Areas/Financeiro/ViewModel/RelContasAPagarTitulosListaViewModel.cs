@@ -18,12 +18,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
         public SelectList ListaFormaPagamento { get; set; }
         public SelectList ListaBanco { get; set; }
         public SelectList ListaAgenciaConta { get; set; }
+        public SelectList ListaCaixa { get; set; }
 
         public RelContasAPagarTitulosListaViewModel()
         {
             Filtro = new RelContasAPagarTitulosFiltro();
             Filtro.ClienteFornecedor = new ClienteFornecedorDTO();
             Filtro.VisualizarClientePor = 0;
+            Filtro.EhTotalizadoPor = 0;
         }
     }
 }

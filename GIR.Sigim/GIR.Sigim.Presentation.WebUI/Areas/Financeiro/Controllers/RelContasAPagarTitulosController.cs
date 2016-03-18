@@ -22,12 +22,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         private IFormaPagamentoAppService formaPagamentoAppService;
         private IBancoAppService bancoAppService;
         private IContaCorrenteAppService contaCorrenteAppService;
+        private ICaixaAppService caixaAppService;
+        private ITituloPagarAppService tituloPagarAppService;
 
 
         public RelContasAPagarTitulosController(ITipoCompromissoAppService tipoCompromissoAppService,
                                                 IFormaPagamentoAppService formaPagamentoAppService,
                                                 IBancoAppService bancoAppService,
                                                 IContaCorrenteAppService contaCorrenteAppService,
+                                                ICaixaAppService caixaAppService,
+                                                ITituloPagarAppService tituloPagarAppService,
                                                 MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -35,6 +39,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.formaPagamentoAppService = formaPagamentoAppService;
             this.bancoAppService = bancoAppService;
             this.contaCorrenteAppService = contaCorrenteAppService;
+            this.caixaAppService = caixaAppService;
+            this.tituloPagarAppService = tituloPagarAppService;
         }
 
 
@@ -51,13 +57,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 model.Filtro.DataFinal = DateTime.Now;
             }
 
-            //model.PodeImprimir = apropriacaoAppService.EhPermitidoImprimirRelApropriacaoPorClasse();
+            model.PodeImprimir = tituloPagarAppService.EhPermitidoImprimirRelContasPagarTitulo();
 
             CarregarListas(model);
-
-            //model.JsonItensClasseDespesa = JsonConvert.SerializeObject(new List<ClasseDTO>());
-            //model.JsonItensClasseReceita = JsonConvert.SerializeObject(new List<ClasseDTO>());
-
 
             return View(model);
         }
@@ -69,8 +71,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             model.ListaFormaPagamento = new SelectList(formaPagamentoAppService.ListaFormaPagamento(), "Codigo", "Descricao", model.Filtro.FormaPagamentoCodigo);
             List<BancoDTO> listaBanco = bancoAppService.ListarTodosComContaCorrenteAtiva().OrderBy(l => l.Nome).ToList();
             model.ListaBanco = new SelectList(listaBanco, "Id", "Nome", model.Filtro.BancoId);
-            List<ContaCorrenteDTO> listaContaCorrente = contaCorrenteAppService.ListarAtivosPorBanco(model.Filtro.BancoId).ToList();
-            model.ListaAgenciaConta = new SelectList(listaContaCorrente, "Id", "AgenciaConta", model.Filtro.BancoId); ;
+            List<ContaCorrenteDTO> listaContaCorrente = new List<ContaCorrenteDTO>();
+            model.ListaAgenciaConta = new SelectList(listaContaCorrente, "Id", "AgenciaContaCorrente", model.Filtro.BancoId);
+            model.ListaCaixa = new SelectList(caixaAppService.ListarCaixaAtivo(), "Id", "Descricao", model.Filtro.CaixaId);
         }
 
         [HttpPost]

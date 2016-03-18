@@ -95,6 +95,7 @@
     <Compile Include="DTO\Contrato\RelNotaFiscalLiberadaDTO.cs" />
     <Compile Include="DTO\Contrato\ResumoLiberacaoDTO.cs" />
     <Compile Include="DTO\CredCob\TituloCredCobDTO.cs" />
+    <Compile Include="DTO\CredCob\TituloMovimentoDTO.cs" />
     <Compile Include="DTO\CredCob\VerbaCobrancaDTO.cs" />
     <Compile Include="DTO\Estoque\MovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\AbstractTituloDTO.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="DTO\Financeiro\HistoricoContabilDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoReceberDTO.cs" />
     <Compile Include="DTO\Financeiro\MovimentoFinanceiroDTO.cs" />
+    <Compile Include="DTO\Financeiro\RelContasPagarTitulosDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoMovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoPagarDTO.cs" />
     <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />

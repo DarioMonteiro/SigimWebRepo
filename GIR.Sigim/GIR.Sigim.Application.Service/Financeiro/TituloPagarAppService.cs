@@ -6,6 +6,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Repository.Financeiro;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -73,6 +74,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
 
             return existe;
+        }
+
+        public bool EhPermitidoImprimirRelContasPagarTitulo()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.RelatorioContasAPagarTitulosImprimir);
         }
 
         #endregion

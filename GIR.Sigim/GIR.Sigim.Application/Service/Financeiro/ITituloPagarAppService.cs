@@ -9,5 +9,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
     public interface ITituloPagarAppService : IBaseAppService
     {
         bool ExisteNumeroDocumento(Nullable<DateTime> DataEmissao, Nullable<DateTime> DataVencimento, string NumeroDocumento, int? ClienteId);
+        bool EhPermitidoImprimirRelContasPagarTitulo();
     }
 }
