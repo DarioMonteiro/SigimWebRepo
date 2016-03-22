@@ -238,7 +238,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 }
 
 
-                if ((!filtro.EhSituacaoAReceberRecebido) || filtro.EhSituacaoAReceberQuitado)
+                if ((!filtro.EhSituacaoAReceberRecebido) && filtro.EhSituacaoAReceberQuitado)
                 {
                     var specification = (Specification<TituloMovimento>)new TrueSpecification<TituloMovimento>();
                     specification = tituloMovimentoAppService.MontarSpecificationTituloMovimentoRelApropriacaoPorClasse(filtro, usuarioId);
