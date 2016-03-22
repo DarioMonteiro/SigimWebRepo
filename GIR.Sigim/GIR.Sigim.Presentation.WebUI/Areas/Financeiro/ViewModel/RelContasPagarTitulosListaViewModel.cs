@@ -8,9 +8,9 @@ using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
 {
-    public class RelContasAPagarTitulosListaViewModel
+    public class RelContasPagarTitulosListaViewModel
     {
-        public RelContasAPagarTitulosFiltro Filtro { get; set; }
+        public RelContasPagarTitulosFiltro Filtro { get; set; }
 
         public bool PodeImprimir { get; set; }
 
@@ -20,9 +20,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
         public SelectList ListaAgenciaConta { get; set; }
         public SelectList ListaCaixa { get; set; }
 
-        public RelContasAPagarTitulosListaViewModel()
+        public RelContasPagarTitulosListaViewModel()
         {
-            Filtro = new RelContasAPagarTitulosFiltro();
+            Filtro = new RelContasPagarTitulosFiltro();
             Filtro.ClienteFornecedor = new ClienteFornecedorDTO();
             Filtro.VisualizarClientePor = 0;
             Filtro.EhTotalizadoPor = 0;

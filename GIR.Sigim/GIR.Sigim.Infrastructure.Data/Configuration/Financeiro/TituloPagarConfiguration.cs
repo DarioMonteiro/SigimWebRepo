@@ -101,6 +101,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnName("dataApropriacao");
 
             Property(l => l.FormaPagamento)
+                .HasColumnType("smallint")
                 .HasColumnName("formaPagamento");
 
             Property(l => l.CodigoInterface)

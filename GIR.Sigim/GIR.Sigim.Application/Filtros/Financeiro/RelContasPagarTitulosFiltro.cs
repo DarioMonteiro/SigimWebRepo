@@ -9,7 +9,7 @@ using GIR.Sigim.Application.DTO.Financeiro;
 
 namespace GIR.Sigim.Application.Filtros.Financeiro
 {
-    public class RelContasAPagarTitulosFiltro : BaseFiltro
+    public class RelContasPagarTitulosFiltro : BaseFiltro
     {
         [DataType(DataType.Date, ErrorMessageResourceType = typeof(Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "InformeDataValida")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
@@ -36,8 +36,9 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
         public TipoCompromissoDTO TipoCompromisso { get; set; }
 
         [Display(Name = "Forma de pagamento")]
-        public string FormaPagamentoCodigo { get; set; }
-        public FormaPagamentoDTO FormaPagamento { get; set; }
+        public Nullable<Int16> FormaPagamentoCodigo { get; set; }
+        //public string FormaPagamentoCodigo { get; set; }
+        //public FormaPagamentoDTO FormaPagamento { get; set; }
 
         public ClasseDTO Classe { get; set; }
         public CentroCustoDTO CentroCusto { get; set; }

@@ -179,7 +179,7 @@
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CaixaController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\RelApropriacaoPorClasseController.cs" />
-    <Compile Include="Areas\Financeiro\Controllers\RelContasAPagarTitulosController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\RelContasPagarTitulosController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\TipoMovimentoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\TaxaAdministracaoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\RateioAutomaticoController.cs" />
@@ -195,7 +195,7 @@
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\CaixaViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\RelApropriacaoPorClasseListaViewModel.cs" />
-    <Compile Include="Areas\Financeiro\ViewModel\RelContasAPagarTitulosListaViewModel.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\RelContasPagarTitulosListaViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TipoMovimentoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TaxaAdministracaoViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\RateioAutomaticoViewModel.cs" />
@@ -417,8 +417,8 @@
     <Content Include="Areas\Comercial\Views\Web.config" />
     <Content Include="Areas\Comercial\Views\RelStatusVenda\ListaPartial.cshtml" />
     <Content Include="Areas\Comercial\Views\RelStatusVenda\Index.cshtml" />
-    <Content Include="Areas\Financeiro\Views\RelContasAPagarTitulos\Index.cshtml" />
-    <Content Include="Areas\Financeiro\Views\RelContasAPagarTitulos\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\ListaPartial.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -941,7 +941,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>63721</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8756/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

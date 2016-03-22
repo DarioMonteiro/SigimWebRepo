@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIR.Sigim.Domain.Entity.Financeiro
+namespace GIR.Sigim.Application.Enums
 {
     public enum FormaPagamento : short
     {

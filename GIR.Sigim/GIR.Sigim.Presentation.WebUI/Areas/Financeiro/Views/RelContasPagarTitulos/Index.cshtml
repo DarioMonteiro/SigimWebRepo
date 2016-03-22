@@ -1,4 +1,4 @@
-﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.RelContasAPagarTitulosListaViewModel
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.RelContasPagarTitulosListaViewModel
 @{
     ViewBag.Title = "Titulos a pagar";
 }
@@ -15,7 +15,7 @@
                 <div class="widget-body no-padding">
                     @using (Ajax.BeginForm(
                         "Lista",
-                        "RelContasAPagarTitulo",
+                        "RelContasPagarTitulos",
                         null,
                         new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "renderTela", UpdateTargetId = "resultadoBusca" },
                         new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))

@@ -8,6 +8,7 @@ using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Application.Adapter;
+using GIR.Sigim.Application.Enums;
 
 namespace GIR.Sigim.Application.DTO.Financeiro
 {
@@ -46,7 +47,15 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public FormaPagamento? FormaPagamento { get; set; }
         public string FormaPagamentoDescricao
         {
-            get { return this.FormaPagamento.ObterDescricao(); }
+            get
+            {
+                string descricaoFormaPagamento = "";
+                if (FormaPagamento.HasValue)
+                {
+                    descricaoFormaPagamento = this.FormaPagamento.Value.ObterDescricao();
+                }
+                return descricaoFormaPagamento;
+            }
         }
         public int? CodigoInterface { get; set; }
         public string SistemaOrigem { get; set; }

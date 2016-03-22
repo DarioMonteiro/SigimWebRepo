@@ -81,7 +81,7 @@
         </mvcSiteMapNode>
         
         <mvcSiteMapNode title="Contas a pagar" url="#" clickable="false" roles="REL_CONTASAPAGAR_TITULOS_ACESSAR">
-          <mvcSiteMapNode title="Títulos" controller="RelContasAPagarTitulos" action="Index"/>
+          <mvcSiteMapNode title="Títulos" controller="RelContasPagarTitulos" action="Index"/>
         </mvcSiteMapNode>
         
       </mvcSiteMapNode>

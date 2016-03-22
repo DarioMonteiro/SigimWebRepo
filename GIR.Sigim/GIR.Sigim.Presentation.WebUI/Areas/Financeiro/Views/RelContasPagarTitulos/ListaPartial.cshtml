@@ -207,7 +207,25 @@
                         {
                             documentoPagamento = item.TituloPagar.Movimento.Documento;
                         }
-                            
+
+                        string agenciaContaCorrente = "";
+                        if (item.TituloPagar.ContaCorrente != null)
+                        {
+                            agenciaContaCorrente = item.TituloPagar.ContaCorrente.AgenciaContaCorrente;
+                        }
+
+                        string tipoCompromissoDescricao = "";
+                        if (item.TituloPagar.TipoCompromisso != null)
+                        {
+                            tipoCompromissoDescricao = item.TituloPagar.TipoCompromisso.Descricao;
+                        }
+
+                        string motivoCancelamentoDescricao = "";
+                        if (item.TituloPagar.MotivoCancelamento != null)
+                        {
+                            motivoCancelamentoDescricao = item.TituloPagar.MotivoCancelamento.Descricao;
+                        }                                               
+                        
                         <tr>
                             <td class="text-right text-nowrap">@item.TituloPagar.Id</td>
                             <td class="text-center text-nowrap">@item.TituloPagar.DataVencimento.ToShortDateString()</td>
@@ -219,14 +237,14 @@
                             <td class="text-left text-nowrap">@item.TituloPagar.Identificacao</td>
                             <td class="text-left text-nowrap">@item.TituloPagar.FormaPagamentoDescricao</td>
                             <td class="text-left text-nowrap">@documentoPagamento</td>
-                            <td class="text-left text-nowrap">@item.TituloPagar.ContaCorrente.AgenciaContaCorrente</td>                           
-                            <td class="text-left text-nowrap">@item.TituloPagar.TipoCompromisso.Descricao</td>
+                            <td class="text-left text-nowrap">@agenciaContaCorrente</td>                           
+                            <td class="text-left text-nowrap">@tipoCompromissoDescricao</td>
                             <td class="text-left text-nowrap">@item.TituloPagar.SituacaoDescricao</td>
                             <td class="text-center text-nowrap">@dataSituacao</td>
                             <td class="text-center text-nowrap">@dataEmissao</td>
                             <td class="text-center text-nowrap">@dataPagamento</td>
                             <td class="text-center text-nowrap">@dataBaixa</td>
-                            <td class="text-left text-nowrap">@item.TituloPagar.MotivoCancelamento.Descricao</td>
+                            <td class="text-left text-nowrap">@motivoCancelamentoDescricao</td>
                             <td class="text-left text-nowrap">@cpfCnpj</td>
                             <td class="text-left text-nowrap">@item.TituloPagar.LoginUsuarioCadastro</td>
                             <td class="text-left text-nowrap">@dataCadastro</td>
