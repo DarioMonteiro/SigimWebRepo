@@ -366,11 +366,11 @@
                                             <div class="row">
                                                 <section class="col col-12">
 									                <div class="inline-group">
-										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 0) <i></i>Totalizado geral</label>
-										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 1) <i></i>Totalizado por data situação</label>
-										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 2) <i></i>Totalizado por data situação (sintético)</label>
-                                                        <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 3) <i></i>Totalizado por fornecedor</label>
-                                                        <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 4) <i></i>Totalizado por classe</label>
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 0, new { @id="rdbTotalizado0"}) <i></i>Totalizado geral</label>
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 1, new { @id="rdbTotalizado1"}) <i></i>Totalizado por data situação</label>
+										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 2, new { @id="rdbTotalizado2"}) <i></i>Totalizado por data situação (sintético)</label>
+                                                        <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 3, new { @id="rdbTotalizado3"}) <i></i>Totalizado por fornecedor</label>
+                                                        <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 4, new { @id="rdbTotalizado4"}) <i></i>Totalizado por classe</label>
 									                </div>
 								                </section>
                                             </div>
@@ -403,6 +403,22 @@
 
         $('body').addClass("hidden-menu");
 
+        $("#rdbTotalizado0").on("change", function () {
+            habilitaDesabilitaChkSemDadosApropriacao(true);
+        });
+        $("#rdbTotalizado1").on("change", function () {
+            habilitaDesabilitaChkSemDadosApropriacao(false);
+        });
+        $("#rdbTotalizado2").on("change", function () {
+            habilitaDesabilitaChkSemDadosApropriacao(false);
+        });
+        $("#rdbTotalizado3").on("change", function () {
+            habilitaDesabilitaChkSemDadosApropriacao(false);
+        });
+        $("#rdbTotalizado4").on("change", function () {
+            habilitaDesabilitaChkSemDadosApropriacao(false);
+        });
+
         $(document).on("showFormatoImpressaoModalPanel", function (e) {
             var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
             var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
@@ -427,6 +443,22 @@
             }
         );
     });
+
+    function habilitaDesabilitaChkSemDadosApropriacao(condicao) 
+    {
+        if (condicao == true) {
+            $('#@Html.IdFor(m => m.Filtro.EhSemApropriacao)').prop('disabled', '');
+            $('#@Html.IdFor(m => m.Filtro.EhSemApropriacao)').prop('checked', false);
+            $('#@Html.IdFor(m => m.Filtro.EhSemApropriacao)').removeClass("state-disabled");
+            $('#lblSemApropriacao').removeClass("state-disabled");
+        }
+        else {
+            $('#@Html.IdFor(m => m.Filtro.EhSemApropriacao)').prop('disabled', 'disabled');
+            $('#@Html.IdFor(m => m.Filtro.EhSemApropriacao)').prop('checked', false);
+            $('#@Html.IdFor(m => m.Filtro.EhSemApropriacao)').addClass("state-disabled");
+            $('#lblSemApropriacao').addClass("state-disabled");
+        }
+    }
 
     function renderTela() {
         onSuccess();
@@ -479,7 +511,7 @@
         if (bancoId != 0) {
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("CarregaComboAgenciaContaCorrente", "RelContasAPagarTitulos", new { Area = "Financeiro" })',
+                url: '@Url.Action("CarregaComboAgenciaContaCorrente", "RelContasPagarTitulos", new { Area = "Financeiro" })',
                 cache: false,
                 async: false,
                 contentType: 'application/json; charset=utf-8',

@@ -419,6 +419,8 @@
     <Content Include="Areas\Comercial\Views\RelStatusVenda\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\ListaPartialSemApropriacao.cshtml" />
+    <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\ListaPartialSintetico.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>

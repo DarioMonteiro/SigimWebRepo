@@ -15,16 +15,19 @@ namespace GIR.Sigim.Application.Service.Sigim
         #region Declaração
 
         private IUnidadeFederacaoRepository unidadeFederacaoRepository;
+        private IFeriadoRepository feriadoRepository;
 
         #endregion
 
         #region Construtor
 
         public ModuloSigimAppService(IUnidadeFederacaoRepository unidadeFederacaoRepository, 
+                                     IFeriadoRepository feriadoRepository,
                                      MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.unidadeFederacaoRepository = unidadeFederacaoRepository;
+            this.feriadoRepository = feriadoRepository;
         }
 
         #endregion
@@ -162,6 +165,45 @@ namespace GIR.Sigim.Application.Service.Sigim
                 }
             }
             return dataUtil;
+        }
+
+        public DateTime RecuperaProximoDiaUtil(DateTime data)
+        {
+            bool achouProximoDiaUtil = false;
+            DateTime dataUtil = data.AddDays(-1);
+
+            while (!achouProximoDiaUtil)
+            {
+                dataUtil = dataUtil.AddDays(1);
+
+                List<Feriado> listaFeriado =
+                    feriadoRepository.ListarPeloFiltro(l => l.Data == data).ToList<Feriado>();
+
+                if (listaFeriado.Count() == 0)
+                {
+                    if ((dataUtil.DayOfWeek != DayOfWeek.Saturday) && (dataUtil.DayOfWeek != DayOfWeek.Sunday))
+                    {
+                        achouProximoDiaUtil = true;
+                    }
+                }
+            }
+            return dataUtil;
+        }
+
+        public bool OperacaoEmDia(DateTime dataVencimento, DateTime dataDia)
+        {         
+            if (dataVencimento.Date >= dataDia.Date)
+            {
+                return true;
+            }
+
+            DateTime dataUtil = RecuperaProximoDiaUtil(dataVencimento.Date);
+            if (dataUtil.Date >= dataDia.Date)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public decimal AplicaPercentual(decimal valor,Nullable<Decimal> percentual)

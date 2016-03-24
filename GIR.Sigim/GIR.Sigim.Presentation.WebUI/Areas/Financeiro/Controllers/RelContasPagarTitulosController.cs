@@ -80,6 +80,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 if (result.Any())
                 {
                     var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
+                    if ((model.Filtro.EhTotalizadoPor.HasValue) && (model.Filtro.EhTotalizadoPor.Value == 2))
+                    {
+                        return PartialView("ListaPartialSintetico", listaViewModel);
+                    }
+                    else
+                    {
+                        if (model.Filtro.EhSemApropriacao)
+                        {
+                            return PartialView("ListaPartialSemApropriacao", listaViewModel);
+                        }
+                    }
                     return PartialView("ListaPartial", listaViewModel);
                 }
                 return PartialView("_EmptyListPartial");

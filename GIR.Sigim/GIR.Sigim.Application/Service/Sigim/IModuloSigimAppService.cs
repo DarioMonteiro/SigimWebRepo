@@ -14,6 +14,8 @@ namespace GIR.Sigim.Application.Service.Sigim
         DateTime CalculaDataDefasagem(DateTime dataBaseJuros, int defasagemMes, int defasagemDia);
         decimal CalculaPV(decimal valor, decimal juros, DateTime dataInicial, DateTime dataFinal, int qtdDiasProrrata);
         DateTime RecuperaProximoDiaUtil(DateTime data, string siglaUF);
+        DateTime RecuperaProximoDiaUtil(DateTime data);
+        bool OperacaoEmDia(DateTime dataVencimento, DateTime dataDia);
         decimal AplicaPercentual(decimal valor, Nullable<Decimal> percentual);
     }
 }

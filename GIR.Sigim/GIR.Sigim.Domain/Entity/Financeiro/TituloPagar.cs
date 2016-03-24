@@ -35,7 +35,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public Nullable<DateTime> DataSituacao { get; set; }
         public string LoginUsuarioApropriacao { get; set; }
         public Nullable<DateTime> DataApropriacao { get; set; }
-        public Nullable<Int16> FormaPagamento { get; set; }
+        public short? FormaPagamento { get; set; }
         public int? CodigoInterface { get; set; }
         public string SistemaOrigem { get; set; }
         public string CBBanco { get; set; }

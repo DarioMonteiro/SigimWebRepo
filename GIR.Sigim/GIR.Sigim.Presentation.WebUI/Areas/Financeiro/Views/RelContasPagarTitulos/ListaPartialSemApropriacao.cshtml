@@ -52,9 +52,6 @@
                             string cpfCnpjSortingSuffix = "sorting";
                             string operadorCadastroSortingSuffix = "sorting";
                             string dataCadastroSortingSuffix = "sorting";
-                            string valorApropriadoSortingSuffix = "sorting";
-                            string classeSortingSuffix = "sorting";
-                            string centroCustoSortingSuffix = "sorting";
 
                             switch (Model.OrderBy)
                             {
@@ -121,15 +118,6 @@
                                 case "dataCadastro":
                                     dataCadastroSortingSuffix += sortingSuffix;
                                     break;
-                                case "valorApropriado":
-                                    valorApropriadoSortingSuffix += sortingSuffix;
-                                    break;
-                                case "classe":
-                                    classeSortingSuffix += sortingSuffix;
-                                    break;
-                                case "centroCusto":
-                                    centroCustoSortingSuffix += sortingSuffix;
-                                    break;
                                 default:
                                     break;
                             }
@@ -156,10 +144,6 @@
                         <th class="sorting @cpfCnpjSortingSuffix text-left" data-order="cpfCnpj" style="min-width:70px;">CNPJ/CPF</th>
                         <th class="sorting @operadorCadastroSortingSuffix text-left" data-order="operadorCadastro" style="min-width:70px;">Operador cadastro</th>
                         <th class="sorting @dataCadastroSortingSuffix text-left" data-order="dataCadastro" style="min-width:70px;">Data cadastro</th>
-                        <th class="sorting @valorApropriadoSortingSuffix text-left" data-order="valorApropriacao" style="min-width:70px;">Valor Apropriado</th>
-                        <th class="sorting @classeSortingSuffix text-left" data-order="classe" style="min-width:70px;">Classe</th>
-                        <th class="sorting @centroCustoSortingSuffix text-left" data-order="centroCusto" style="min-width:70px;">Centro de custo</th>
-
                     </tr>
                 </thead>
 @*                <tbody>
@@ -310,7 +294,7 @@
                         <tr>
                             <td class="text-right text-nowrap">@item.TituloId</td>
                             <td class="text-center text-nowrap">@item.DataVencimento.ToShortDateString()</td>
-                            <td class="text-center text-nowrap">@item.DataEmissaoDocumento.ToShortDateString()</td>
+                            <td class="text-left text-nowrap">@item.DataEmissaoDocumento.ToShortDateString()</td>
                             <td class="text-left text-nowrap">@item.DocumentoCompleto</td>
                             <td class="text-right text-nowrap">@item.ValorTitulo.ToString("N2")</td>
                             <td class="text-right text-nowrap">@item.ValorLiquido.ToString("N2")</td>
@@ -329,9 +313,6 @@
                             <td class="text-left text-nowrap">@item.CPFCNPJ</td>
                             <td class="text-left text-nowrap">@item.LoginUsuarioCadastro</td>
                             <td class="text-center text-nowrap">@dataCadastro</td>
-                            <td class="text-right text-nowrap">@item.ValorApropriado.ToString("N2")</td>
-                            <td class="text-left text-nowrap">@item.CodigoDescricaoClasse</td>
-                            <td class="text-left text-nowrap">@item.CodigoDescricaoCentroCusto</td>
                         </tr>
                     }
                 </tbody>
