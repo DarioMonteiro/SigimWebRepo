@@ -14,6 +14,7 @@ namespace GIR.Sigim.Domain.Entity.Comercial
         public int? BlocoId { get; set; }
         public Bloco Bloco { get; set; }
 
+        public Nullable<Decimal> TaxaPermanenciaDiaria { get; set; }
         public Nullable<Decimal> MultaPorAtraso { get; set; } 
         public bool? ConsiderarParametroUnidade { get; set; }
 

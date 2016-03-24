@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.Comercial;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
@@ -35,10 +36,12 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public string EnderecoCedente { get; set; }
 
         public ICollection<MovimentoFinanceiro> ListaMovimentoFinanceiro { get; set; }
+        public ICollection<Venda> ListaVenda { get; set; }
 
         public ContaCorrente()
         {
             this.ListaMovimentoFinanceiro = new HashSet<MovimentoFinanceiro>();
+            this.ListaVenda = new HashSet<Venda>();
         }
         
     }

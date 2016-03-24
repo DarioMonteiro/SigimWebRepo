@@ -17,6 +17,8 @@ using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.Reports.Financeiro;
 using CrystalDecisions.Shared;
 using System.Data;
+using GIR.Sigim.Application.Service.Admin;
+using GIR.Sigim.Domain.Specification.Financeiro;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -24,14 +26,17 @@ namespace GIR.Sigim.Application.Service.Financeiro
     {
         private ICaixaRepository caixaRepository;
         private IParametrosFinanceiroRepository parametrosFinanceiroRepository;
+        private IUsuarioAppService usuarioAppService;
 
         public CaixaAppService(ICaixaRepository caixaRepository, 
                                IParametrosFinanceiroRepository parametrosFinanceiroRepository, 
+                               IUsuarioAppService usuarioAppService,
                                MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.caixaRepository = caixaRepository;
             this.parametrosFinanceiroRepository = parametrosFinanceiroRepository;
+            this.usuarioAppService = usuarioAppService;
         }
 
         #region ICaixaAppService Members
@@ -49,6 +54,23 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 filtro.PaginationParameters.Ascending,
                 out totalRegistros,
                 l => l.CentroCusto ).To<List<CaixaDTO>>();
+        }
+
+        public List<CaixaDTO> ListarCaixaAtivo()
+        {
+            List<CaixaDTO> listaCaixa = new List<CaixaDTO>();
+
+            var specification = (Specification<Caixa>)new TrueSpecification<Caixa>();
+
+            if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(UsuarioLogado.Id, Resource.Sigim.NomeModulo.Financeiro))
+            {
+                specification &= CaixaSpecification.UsuarioPossuiAcessoAoCentroCusto(UsuarioLogado.Id, Resource.Sigim.NomeModulo.Financeiro);
+            }
+
+            specification &= CaixaSpecification.EhAtivo();
+
+            listaCaixa = caixaRepository.ListarPeloFiltro(specification).To<List<CaixaDTO>>();
+            return listaCaixa;
         }
 
         public CaixaDTO ObterPeloId(int? id)

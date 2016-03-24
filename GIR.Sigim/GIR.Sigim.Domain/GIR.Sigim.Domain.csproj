@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constantes\Comercial.cs" />
     <Compile Include="Entity\Admin\UsuarioPerfil.cs" />
     <Compile Include="Entity\Admin\UsuarioFuncionalidade.cs" />
     <Compile Include="Entity\Admin\PerfilFuncionalidade.cs" />
@@ -49,7 +50,10 @@
     <Compile Include="Entity\Admin\Usuario.cs" />
     <Compile Include="Entity\Comercial\Bloco.cs" />
     <Compile Include="Entity\Comercial\ContratoComercial.cs" />
+    <Compile Include="Entity\Comercial\Incorporador.cs" />
+    <Compile Include="Entity\Comercial\TabelaVenda.cs" />
     <Compile Include="Entity\Comercial\Empreendimento.cs" />
+    <Compile Include="Entity\Comercial\Renegociacao.cs" />
     <Compile Include="Entity\Comercial\TipoParticipante.cs" />
     <Compile Include="Entity\Comercial\Unidade.cs" />
     <Compile Include="Entity\Comercial\Venda.cs" />
@@ -67,6 +71,8 @@
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
     <Compile Include="Entity\CredCob\Periodicidade.cs" />
     <Compile Include="Entity\CredCob\TituloCredCob.cs" />
+    <Compile Include="Entity\CredCob\TituloDetalheCredCob.cs" />
+    <Compile Include="Entity\CredCob\TituloMovimento.cs" />
     <Compile Include="Entity\CredCob\VerbaCobranca.cs" />
     <Compile Include="Entity\Financeiro\ApropriacaoClasseCCRelatorio.cs" />
     <Compile Include="Entity\Financeiro\MovimentoFinanceiro.cs" />
@@ -78,8 +84,12 @@
     <Compile Include="Entity\Sigim\CotacaoValores.cs" />
     <Compile Include="Entity\Sigim\Endereco.cs" />
     <Compile Include="Entity\Sigim\IndiceFinanceiro.cs" />
+    <Compile Include="Entity\Sigim\ParametrosSigim.cs" />
     <Compile Include="Entity\Sigim\UnidadeFederacao.cs" />
-    <Compile Include="Repository\Comercial\IVendaSerieRepository.cs" />
+    <Compile Include="Repository\Comercial\IIncorporadorRepository.cs" />
+    <Compile Include="Repository\Comercial\IEmpreendimentoRepository.cs" />
+    <Compile Include="Repository\Comercial\IBlocoRepository.cs" />
+    <Compile Include="Repository\Comercial\IVendaRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetencaoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoProvisaoRepository.cs" />
     <Compile Include="Entity\Contrato\Licitacao.cs" />
@@ -226,6 +236,7 @@
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
     <Compile Include="Repository\CredCob\ITituloCredCobRepository.cs" />
+    <Compile Include="Repository\CredCob\ITituloMovimentoRepository.cs" />
     <Compile Include="Repository\Financeiro\IApropriacaoRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoPagarRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoReceberRepository.cs" />
@@ -258,6 +269,7 @@
     <Compile Include="Repository\OrdemCompra\IPreRequisicaoMaterialRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosOrdemCompraRepository.cs" />
     <Compile Include="Repository\OrdemCompra\IParametrosUsuarioRepository.cs" />
+    <Compile Include="Repository\Sigim\ICotacaoValoresRepository.cs" />
     <Compile Include="Repository\Sigim\IFeriadoRepository.cs" />
     <Compile Include="Repository\Sigim\IComplementoCSTRepository.cs" />
     <Compile Include="Repository\Sigim\IComplementoNaturezaOperacaoRepository.cs" />
@@ -271,6 +283,7 @@
     <Compile Include="Repository\Sac\ISetorRepository.cs" />
     <Compile Include="Repository\Sigim\ILogOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\IMaterialClasseInsumoRepository.cs" />
+    <Compile Include="Repository\Sigim\IParametrosSigimRepository.cs" />
     <Compile Include="Repository\Sigim\IUnidadeFederacaoRepository.cs" />
     <Compile Include="Repository\Sigim\IUnidadeMedidaRepository.cs" />
     <Compile Include="Repository\Sac\IParametrosSacRepository.cs" />
@@ -323,16 +336,20 @@
     <Compile Include="Specification\Admin\PerfilSpecification.cs" />
     <Compile Include="Specification\AndSpecification.cs" />
     <Compile Include="Specification\BaseSpecification.cs" />
+    <Compile Include="Specification\Comercial\VendaSpecification.cs" />
     <Compile Include="Specification\CompositeSpecification.cs" />
     <Compile Include="Specification\Contrato\ContratoRetificacaoItemMedicaoSpecification.cs" />
     <Compile Include="Specification\Contrato\ContratoSpecification.cs" />
     <Compile Include="Specification\CredCob\TituloCredCobSpecification.cs" />
+    <Compile Include="Specification\CredCob\TituloMovimentoSpecification.cs" />
     <Compile Include="Specification\FalseSpecification.cs" />
     <Compile Include="Specification\DirectSpecification.cs" />
     <Compile Include="Specification\ExpressionBuilder.cs" />
     <Compile Include="Specification\Financeiro\ApropriacaoSpecification.cs" />
+    <Compile Include="Specification\Financeiro\CaixaSpecification.cs" />
     <Compile Include="Specification\Financeiro\RateioAutomaticoSpecification.cs" />
     <Compile Include="Specification\Financeiro\TipoMovimentoSpecification.cs" />
+    <Compile Include="Specification\Financeiro\TituloPagarSpecification.cs" />
     <Compile Include="Specification\ISpecification.cs" />
     <Compile Include="Specification\NotSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\AbstractRequisicaoMaterialSpecification.cs" />

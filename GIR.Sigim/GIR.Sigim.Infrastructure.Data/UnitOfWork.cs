@@ -111,14 +111,17 @@ namespace GIR.Sigim.Infrastructure.Data
 
             #region Comercial
 
+            modelBuilder.Configurations.Add(new IncorporadorConfiguration());
+            modelBuilder.Configurations.Add(new EmpreendimentoConfiguration());
             modelBuilder.Configurations.Add(new BlocoConfiguration());
             modelBuilder.Configurations.Add(new ContratoComercialConfiguration());
-            modelBuilder.Configurations.Add(new EmpreendimentoConfiguration());
             modelBuilder.Configurations.Add(new TipoParticipanteConfiguration());
+            modelBuilder.Configurations.Add(new RenegociacaoConfiguration());
             modelBuilder.Configurations.Add(new UnidadeConfiguration());
             modelBuilder.Configurations.Add(new VendaConfiguration());
             modelBuilder.Configurations.Add(new VendaParticipanteConfiguration());
             modelBuilder.Configurations.Add(new VendaSerieConfiguration());
+            modelBuilder.Configurations.Add(new TabelaVendaConfiguration());
 
             #endregion
 
@@ -144,6 +147,7 @@ namespace GIR.Sigim.Infrastructure.Data
             #region CrebCob
 
             modelBuilder.Configurations.Add(new TituloCredCobConfiguration());
+            modelBuilder.Configurations.Add(new TituloMovimentoConfiguration());
             modelBuilder.Configurations.Add(new VerbaCobrancaConfiguration());
 
             #endregion
@@ -251,6 +255,7 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new NaturezaOperacaoConfiguration());
             modelBuilder.Configurations.Add(new NaturezaReceitaConfiguration());
             modelBuilder.Configurations.Add(new NCMConfiguration());
+            modelBuilder.Configurations.Add(new ParametrosSigimConfiguration());
             modelBuilder.Configurations.Add(new ParentescoConfiguration());
             modelBuilder.Configurations.Add(new PessoaFisicaConfiguration());
             modelBuilder.Configurations.Add(new PessoaJuridicaConfiguration());

@@ -162,6 +162,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
             HasMany<Domain.Entity.OrdemCompra.OrdemCompra>(l => l.ListaOrdemCompra)
                 .WithRequired(c => c.ClienteFornecedor)
                 .HasForeignKey(c => c.ClienteFornecedorId);
+
+            HasMany<ParametrosSigim>(l => l.ListaParametrosSigim)
+                .WithRequired(c => c.Cliente)
+                .HasForeignKey(c => c.ClienteId);
         }
     }
 }

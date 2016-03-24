@@ -13,17 +13,9 @@ namespace GIR.Sigim.Application.DTO.Financeiro
     public class AbstractTituloDTO : BaseDTO
     {
         public int ClienteID { get; set; }
-        public ClienteFornecedorDTO Cliente { get; set; }
         public int? TipoCompromissoId { get; set; }
-        public TipoCompromissoDTO TipoCompromisso { get; set; }
         public string Identificacao { get; set; }
-        public SituacaoTituloPagar Situacao { get; set; }
-        public string SituacaoDescricao
-        {
-            get { return this.Situacao.ObterDescricao(); }
-        }
         public int? TipoDocumentoId { get; set; }
-        public TipoDocumentoDTO TipoDocumento { get; set; }
         public string Documento { get; set; }
         public DateTime DataEmissaoDocumento { get; set; }
         public DateTime DataVencimento { get; set; }

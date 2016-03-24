@@ -57,6 +57,10 @@ namespace GIR.Sigim.Application.Service.Admin
                     Menu = Funcionalidade.MenuAdmin;
                     break;
 
+                case GIR.Sigim.Application.Constantes.Modulo.Comercial:
+                    Menu = Funcionalidade.MenuComercial;
+                    break;
+
                 case GIR.Sigim.Application.Constantes.Modulo.Contrato:
                     Menu = Funcionalidade.MenuContrato;
                     break;

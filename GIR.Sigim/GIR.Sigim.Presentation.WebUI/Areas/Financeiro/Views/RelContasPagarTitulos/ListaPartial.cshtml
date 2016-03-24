@@ -1,0 +1,264 @@
+﻿@using GIR.Sigim.Application.DTO.Financeiro
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<RelContasPagarTitulosDTO> Lista = Model.Records as IEnumerable<RelContasPagarTitulosDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls = "dt_basic",
+                                @class = "form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="width:100%; overflow-x:auto;">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string tituloIdSortingSuffix = "sorting";
+                            string dataVencimentoSortingSuffix = "sorting";
+                            string dataEmissaoDocumentoSortingSuffix = "sorting";
+                            string documentoCompletoSortingSuffix = "sorting";
+                            string valorTituloSortingSuffix = "sorting";
+                            string valorLiquidoSortingSuffix = "sorting";
+                            string nomeClienteSortingSuffix = "sorting";
+                            string identificacaoSortingSuffix = "sorting";
+                            string descricaoFormaPagamentoSortingSuffix = "sorting";
+                            string documentoPagamentoSortingSuffix = "sorting";
+                            string agenciaContaSortingSuffix = "sorting";
+                            string descricaoTipoCompromissoSortingSuffix = "sorting";
+                            string descricaoSituacaoSortingSuffix = "sorting";
+                            string dataSituacaoSortingSuffix = "sorting";
+                            string dataEmissaoSortingSuffix = "sorting";
+                            string dataPagamentoSortingSuffix = "sorting";
+                            string dataBaixaSortingSuffix = "sorting";
+                            string descricaoMotivoCancelamentoSortingSuffix = "sorting";
+                            string cpfCnpjSortingSuffix = "sorting";
+                            string operadorCadastroSortingSuffix = "sorting";
+                            string dataCadastroSortingSuffix = "sorting";
+
+                            switch (Model.OrderBy)
+                            {
+                                case "tituloId":
+                                    tituloIdSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataVencimento":
+                                    dataVencimentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataEmissaoDocumento":
+                                    dataEmissaoDocumentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "documentoCompleto":
+                                    documentoCompletoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "valorTitulo":
+                                    valorTituloSortingSuffix += sortingSuffix;
+                                    break;
+                                case "valorLiquido":
+                                    valorLiquidoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "nomeCliente":
+                                    nomeClienteSortingSuffix += sortingSuffix;
+                                    break;
+                                case "identificacao":
+                                    identificacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoFormaPagamento":
+                                    descricaoFormaPagamentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "documentoPagamento":
+                                    documentoPagamentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "agenciaConta":
+                                    agenciaContaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoTipoCompromisso":
+                                    descricaoTipoCompromissoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoSituacao":
+                                    descricaoSituacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataSituacao":
+                                    dataSituacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataEmissao":
+                                    dataEmissaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataPagamento":
+                                    dataPagamentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataBaixa":
+                                    dataBaixaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoMotivoCancelamento":
+                                    descricaoMotivoCancelamentoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "cpfCnpj":
+                                    cpfCnpjSortingSuffix += sortingSuffix;
+                                    break;
+                                case "operadorCadastro":
+                                    operadorCadastroSortingSuffix += sortingSuffix;
+                                    break;
+                                case "dataCadastro":
+                                    dataCadastroSortingSuffix += sortingSuffix;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                        <th class="sorting @tituloIdSortingSuffix text-center" data-order="tituloId" style="min-width:60px;">Título</th>
+                        <th class="sorting @dataVencimentoSortingSuffix text-center" data-order="dataVencimento" style="min-width:70px;">Data vencimento</th>
+                        <th class="sorting @dataEmissaoDocumentoSortingSuffix text-center" data-order="dataEmissaoDocumento" style="min-width:80px;">Data emissão documento</th>
+                        <th class="sorting @documentoCompletoSortingSuffix text-left" data-order="documentoCompleto" style="min-width:70px;">Documento</th>
+                        <th class="sorting @valorTituloSortingSuffix text-right" data-order="valorTitulo" style="min-width:90px;">Valor título</th>
+                        <th class="sorting @valorLiquidoSortingSuffix text-right" data-order="valorLiquido" style="min-width:60px;">Valor líquido</th>
+                        <th class="sorting @nomeClienteSortingSuffix text-left" data-order="nomeCliente">Cliente</th>
+                        <th class="sorting @identificacaoSortingSuffix text-left" data-order="identificacao" style="min-width:100px;">Identificação</th>
+                        <th class="sorting @descricaoFormaPagamentoSortingSuffix text-left" data-order="descricaoFormaPagamento" style="min-width:70px;">Forma de pagamento</th>
+                        <th class="sorting @documentoPagamentoSortingSuffix text-left" data-order="documentoPagamento" style="min-width:70px;">Doc. pagamento</th>
+                        <th class="sorting @agenciaContaSortingSuffix text-left" data-order="agenciaConta" style="min-width:80px;">Agência conta</th>
+                        <th class="sorting @descricaoTipoCompromissoSortingSuffix text-left" data-order="descricaoTipoDocumento" style="min-width:80px;">Tipo compromisso</th>
+                        <th class="sorting @descricaoSituacaoSortingSuffix text-left" data-order="descricaoSituacao" style="min-width:60px;">Situação</th>
+                        <th class="sorting @dataSituacaoSortingSuffix text-center" data-order="dataSituacao" style="min-width:70px;">Data seleção</th>
+                        <th class="sorting @dataEmissaoSortingSuffix text-center" data-order="dataEmissao" style="min-width:70px;">Data emissão</th>
+                        <th class="sorting @dataPagamentoSortingSuffix text-center" data-order="dataPagamento" style="min-width:70px;">Data pagamento</th>
+                        <th class="sorting @dataBaixaSortingSuffix text-center" data-order="dataBaixa" style="min-width:70px;">Data baixa</th>
+                        <th class="sorting @descricaoMotivoCancelamentoSortingSuffix text-left" data-order="descricaoMotivoCancelamento" style="min-width:70px;">Motivo cancelamento</th>
+                        <th class="sorting @cpfCnpjSortingSuffix text-left" data-order="cpfCnpj" style="min-width:70px;">CNPJ/CPF</th>
+                        <th class="sorting @operadorCadastroSortingSuffix text-left" data-order="operadorCadastro" style="min-width:70px;">Operador cadastro</th>
+                        <th class="sorting @dataCadastroSortingSuffix text-left" data-order="dataCadastro" style="min-width:70px;">Data cadastro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        string cpfCnpj = "";
+                        if (item.TituloPagar.Cliente.TipoPessoa == "F")
+                        {
+                            cpfCnpj = item.TituloPagar.Cliente.PessoaFisica.Cpf;
+                        }
+                        else
+                        {
+                            if (item.TituloPagar.Cliente.TipoPessoa == "J")
+                            {
+                                cpfCnpj = item.TituloPagar.Cliente.PessoaJuridica.Cnpj;
+                            }
+                        }
+                        
+                        string dataSituacao = "";
+                        if (item.TituloPagar.DataSituacao.HasValue)
+                        {
+                            dataSituacao = item.TituloPagar.DataSituacao.Value.ToShortDateString();
+                        }
+
+                        string dataPagamento = "";
+                        if (item.TituloPagar.DataPagamento.HasValue)
+                        {
+                            dataPagamento = item.TituloPagar.DataPagamento.Value.ToShortDateString();
+                        }
+
+                        string dataEmissao = "";
+                        if (item.TituloPagar.DataEmissao.HasValue)
+                        {
+                            dataEmissao = item.TituloPagar.DataEmissao.Value.ToShortDateString();
+                        }
+
+                        string dataBaixa = "";
+                        if (item.TituloPagar.DataBaixa.HasValue)
+                        {
+                            dataBaixa = item.TituloPagar.DataBaixa.Value.ToShortDateString();
+                        }
+
+                        string dataCadastro = "";
+                        if (item.TituloPagar.DataCadastro.HasValue)
+                        {
+                            dataCadastro = item.TituloPagar.DataCadastro.Value.ToShortDateString();
+                        }
+
+                        string documentoCompleto = "";
+                        if (item.TituloPagar.TipoDocumentoId.HasValue)
+                        {
+                            documentoCompleto = item.TituloPagar.TipoDocumentoId.Value + " " + item.TituloPagar.Documento;
+                        }
+                        else
+                        {
+                            documentoCompleto = item.TituloPagar.Documento;
+                        }
+                            
+                        string documentoPagamento = "";
+                        if (item.TituloPagar.MovimentoId.HasValue)
+                        {
+                            documentoPagamento = item.TituloPagar.Movimento.Documento;
+                        }
+
+                        string agenciaContaCorrente = "";
+                        if (item.TituloPagar.ContaCorrente != null)
+                        {
+                            agenciaContaCorrente = item.TituloPagar.ContaCorrente.AgenciaContaCorrente;
+                        }
+
+                        string tipoCompromissoDescricao = "";
+                        if (item.TituloPagar.TipoCompromisso != null)
+                        {
+                            tipoCompromissoDescricao = item.TituloPagar.TipoCompromisso.Descricao;
+                        }
+
+                        string motivoCancelamentoDescricao = "";
+                        if (item.TituloPagar.MotivoCancelamento != null)
+                        {
+                            motivoCancelamentoDescricao = item.TituloPagar.MotivoCancelamento.Descricao;
+                        }                                               
+                        
+                        <tr>
+                            <td class="text-right text-nowrap">@item.TituloPagar.Id</td>
+                            <td class="text-center text-nowrap">@item.TituloPagar.DataVencimento.ToShortDateString()</td>
+                            <td class="text-left text-nowrap">@item.TituloPagar.DataEmissaoDocumento.ToShortDateString()</td>
+                            <td class="text-left text-nowrap">@documentoCompleto</td>
+                            <td class="text-left text-nowrap">@item.TituloPagar.ValorTitulo.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.TituloPagar.ValorLiquido</td>
+                            <td class="text-left text-nowrap">@item.TituloPagar.Cliente.Nome</td>
+                            <td class="text-left text-nowrap">@item.TituloPagar.Identificacao</td>
+                            <td class="text-left text-nowrap">@item.TituloPagar.FormaPagamentoDescricao</td>
+                            <td class="text-left text-nowrap">@documentoPagamento</td>
+                            <td class="text-left text-nowrap">@agenciaContaCorrente</td>                           
+                            <td class="text-left text-nowrap">@tipoCompromissoDescricao</td>
+                            <td class="text-left text-nowrap">@item.TituloPagar.SituacaoDescricao</td>
+                            <td class="text-center text-nowrap">@dataSituacao</td>
+                            <td class="text-center text-nowrap">@dataEmissao</td>
+                            <td class="text-center text-nowrap">@dataPagamento</td>
+                            <td class="text-center text-nowrap">@dataBaixa</td>
+                            <td class="text-left text-nowrap">@motivoCancelamentoDescricao</td>
+                            <td class="text-left text-nowrap">@cpfCnpj</td>
+                            <td class="text-left text-nowrap">@item.TituloPagar.LoginUsuarioCadastro</td>
+                            <td class="text-left text-nowrap">@dataCadastro</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('body').addClass("hidden-menu");
+    });
+</script>

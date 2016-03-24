@@ -12,6 +12,7 @@ namespace GIR.Sigim.Application.Service.Sigim
     {
         List<BancoDTO> ListarPeloFiltro(BancoFiltro filtro, out int totalRegistros);
         List<BancoDTO> ListarTodos();
+        List<BancoDTO> ListarTodosComContaCorrenteAtiva();
         List<BancoDTO> ListarTodosBancoComExcecaoCarteira();
         BancoDTO ObterPeloId(int? Id);
         bool Salvar(BancoDTO dto);

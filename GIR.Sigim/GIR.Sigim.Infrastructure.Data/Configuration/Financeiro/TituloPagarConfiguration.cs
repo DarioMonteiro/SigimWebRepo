@@ -101,6 +101,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasColumnName("dataApropriacao");
 
             Property(l => l.FormaPagamento)
+                .HasColumnType("smallint")
                 .HasColumnName("formaPagamento");
 
             Property(l => l.CodigoInterface)
@@ -151,6 +152,10 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             Property(l => l.MovimentoId)
                 .HasColumnName("movimento");
+
+            HasOptional<MovimentoFinanceiro>(l => l.Movimento)
+                .WithMany(c => c.ListaTituloPagar)
+                .HasForeignKey(l => l.MovimentoId);
 
             Property(l => l.BancoBaseBordero)
                 .HasColumnName("bancoBaseBordero");

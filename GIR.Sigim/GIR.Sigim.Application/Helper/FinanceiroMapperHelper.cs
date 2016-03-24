@@ -16,6 +16,9 @@ namespace GIR.Sigim.Application.Helper
     {
         public static void Initialise()
         {
+            Mapper.CreateMap<Apropriacao, ApropriacaoDTO>();
+            Mapper.CreateMap<ApropriacaoDTO, Apropriacao>();
+
             Mapper.CreateMap<ApropriacaoClasseCCRelatorio, ApropriacaoClasseCCRelatorioDTO>();
             Mapper.CreateMap<ApropriacaoClasseCCRelatorioDTO, ApropriacaoClasseCCRelatorio>();
 
@@ -74,8 +77,10 @@ namespace GIR.Sigim.Application.Helper
             Mapper.CreateMap<TipoRateio, TipoRateioDTO>();
             Mapper.CreateMap<TipoRateioDTO, TipoRateio>();
 
-            Mapper.CreateMap<TituloPagar, TituloPagarDTO>();
+            Mapper.CreateMap<TituloPagar, TituloPagarDTO>()
+                .ForMember(d => d.FormaPagamento, m => m.MapFrom(s => s.FormaPagamento.HasValue ? (FormaPagamento)s.FormaPagamento.Value : (FormaPagamento?)null));
             Mapper.CreateMap<TituloPagarDTO, TituloPagar>();
+
 
             Mapper.CreateMap<TituloReceber, TituloReceberDTO>();
             Mapper.CreateMap<TituloReceberDTO, TituloReceber>();

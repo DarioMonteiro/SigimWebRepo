@@ -21,19 +21,21 @@ namespace GIR.Sigim.Domain.Entity.Sigim
 
         public ICollection<TituloCredCob> ListaTituloCredCobIndice { get; set; }
         public ICollection<TituloCredCob> ListaTituloCredCobIndiceAtraso { get; set; }
-        //public ICollection<VendaSerie> ListaVendaSerieIndiceCorrecao { get; set; }
-        //public ICollection<VendaSerie> ListaVendaSerieIndiceAtrasoCorrecao { get; set; }
-        //public ICollection<VendaSerie> ListaVendaSerieIndiceReajuste { get; set; }
+        public ICollection<VendaSerie> ListaVendaSerieIndiceCorrecao { get; set; }
+        public ICollection<VendaSerie> ListaVendaSerieIndiceAtrasoCorrecao { get; set; }
+        public ICollection<VendaSerie> ListaVendaSerieIndiceReajuste { get; set; }
         public ICollection<CotacaoValores> ListaCotacaoValores { get; set; }
+        public ICollection<Venda> ListaVendaIndiceFinanceiro { get; set; }
 
         public IndiceFinanceiro()
         {
             this.ListaTituloCredCobIndice = new HashSet<TituloCredCob>();
             this.ListaTituloCredCobIndiceAtraso = new HashSet<TituloCredCob>();
-            //this.ListaVendaSerieIndiceCorrecao = new HashSet<VendaSerie>();
-            //this.ListaVendaSerieIndiceAtrasoCorrecao = new HashSet<VendaSerie>();
-            //this.ListaVendaSerieIndiceReajuste = new HashSet<VendaSerie>();
+            this.ListaVendaSerieIndiceCorrecao = new HashSet<VendaSerie>();
+            this.ListaVendaSerieIndiceAtrasoCorrecao = new HashSet<VendaSerie>();
+            this.ListaVendaSerieIndiceReajuste = new HashSet<VendaSerie>();
             this.ListaCotacaoValores = new HashSet<CotacaoValores>();
+            this.ListaVendaIndiceFinanceiro = new HashSet<Venda>();
         }
     }
 }

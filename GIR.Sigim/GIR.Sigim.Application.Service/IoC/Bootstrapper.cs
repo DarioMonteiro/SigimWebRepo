@@ -11,14 +11,15 @@ namespace GIR.Sigim.Application.Service.IoC
         public static void Initialise()
         {
             GIR.Sigim.Infrastructure.Data.IoC.Bootstrapper.Initialise();
-            AdminBootstraper.Initialise();
-            ContratoBootstraper.Initialise();
-            CredCobBootstraper.Initialise();
-            FinanceiroBootstraper.Initialise();
-            OrcamentoBootstraper.Initialise();
-            OrdemCompraBootstraper.Initialise();
-            SacBootstraper.Initialise();
-            SigimBootstraper.Initialise();
+            AdminBootstrapper.Initialise();
+            ComercialBootstrapper.Initialise();
+            ContratoBootstrapper.Initialise();
+            CredCobBootstrapper.Initialise();
+            FinanceiroBootstrapper.Initialise();
+            OrcamentoBootstrapper.Initialise();
+            OrdemCompraBootstrapper.Initialise();
+            SacBootstrapper.Initialise();
+            SigimBootstrapper.Initialise();
         }
     }
 }

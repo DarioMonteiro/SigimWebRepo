@@ -14,6 +14,7 @@ namespace GIR.Sigim.Application.Constantes
 
         public System.Collections.Hashtable MenuAdmin;
         public System.Collections.Hashtable MenuContrato;
+        public System.Collections.Hashtable MenuComercial;
         public System.Collections.Hashtable MenuFinanceiro;
         public System.Collections.Hashtable MenuOrdemCompra;
         public System.Collections.Hashtable MenuSac;
@@ -54,6 +55,13 @@ namespace GIR.Sigim.Application.Constantes
         public const string RelNotasFiscaisLiberadasAcessar = "REL_NF_LIBERADAS_ACESSAR";
         public const string RelNotasFiscaisLiberadasImprimir = "REL_NF_LIBERADAS_IMPRIMIR";
         
+        #endregion
+
+        #region Comercial
+
+        public const string RelStatusVendaAcessar = "REL_STATUS_VENDA_ACESSAR";
+        public const string RelStatusVendaImprimir = "REL_STATUS_VENDA_IMPRIMIR";
+
         #endregion
 
         #region Financeiro
@@ -136,7 +144,9 @@ namespace GIR.Sigim.Application.Constantes
 
         public const string RelatorioApropriacaoPorClasseAcessar = "REL_APROPRIACAO_POR_CLASSE_ACESSAR";
         public const string RelatorioApropriacaoPorClasseImprimir = "REL_APROPRIACAO_POR_CLASSE_IMPRIMIR";
-           
+
+        public const string RelatorioContasAPagarTitulosAcessar = "REL_CONTASAPAGAR_TITULOS_ACESSAR";
+        public const string RelatorioContasAPagarTitulosImprimir = "REL_CONTASAPAGAR_TITULOS_IMPRIMIR";
         #endregion
 
         #region OrdemCompra
@@ -196,6 +206,7 @@ namespace GIR.Sigim.Application.Constantes
         public Funcionalidade()
         {
             FuncionalidadeAdmin();
+            FuncionalidadeComercial();
             FuncionalidadeContrato();
             FuncionalidadeFinanceiro();
             FuncionalidadeOrdemCompra();
@@ -237,6 +248,14 @@ namespace GIR.Sigim.Application.Constantes
 
             MenuContrato.Add(RelNotasFiscaisLiberadasAcessar, "Relatório de notas fiscais liberadas - acessar");
             MenuContrato.Add(RelNotasFiscaisLiberadasImprimir, "Relatório de notas fiscais liberadas - imprimir");
+        }
+
+        private void FuncionalidadeComercial()
+        {
+            MenuComercial = new System.Collections.Hashtable();
+
+            MenuComercial.Add(RelStatusVendaAcessar , "Relatório de status da venda - acessar");
+            MenuComercial.Add(RelStatusVendaImprimir, "Relatório de status da venda - imprimir");
         }
 
         private void FuncionalidadeFinanceiro()
@@ -322,6 +341,9 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(RelatorioApropriacaoPorClasseAcessar, "Relatório de apropriação por classe - acessar");
             MenuFinanceiro.Add(RelatorioApropriacaoPorClasseImprimir, "Relatório de apropriação por classe - imprimir");
 
+
+            MenuFinanceiro.Add(RelatorioContasAPagarTitulosAcessar, "Relatório de títulos a pagar - acessar");
+            MenuFinanceiro.Add(RelatorioContasAPagarTitulosImprimir, "Relatório de títulos a pagar - imprimir");
         }
 
         private void FuncionalidadeOrdemCompra()

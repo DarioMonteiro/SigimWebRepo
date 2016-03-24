@@ -10,6 +10,9 @@ namespace GIR.Sigim.Application.DTO.Comercial
     {
         public string Nome { get; set; }
 
+        public int IncorporadorId { get; set; }
+        public IncorporadorDTO Incorporador { get; set; }
+        
         public List<BlocoDTO> ListaBloco { get; set; }
         public List<UnidadeDTO> ListaUnidade { get; set; }
 

@@ -35,7 +35,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public Nullable<DateTime> DataSituacao { get; set; }
         public string LoginUsuarioApropriacao { get; set; }
         public Nullable<DateTime> DataApropriacao { get; set; }
-        public short? FormaPagamento { get; set; }
+        public Nullable<Int16> FormaPagamento { get; set; }
         public int? CodigoInterface { get; set; }
         public string SistemaOrigem { get; set; }
         public string CBBanco { get; set; }
@@ -49,6 +49,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public int? MotivoCancelamentoId { get; set; }
         public MotivoCancelamento MotivoCancelamento { get; set; }
         public int? MovimentoId { get; set; }
+        public MovimentoFinanceiro Movimento { get; set; }
         public int? BancoBaseBordero { get; set; }
         public string AgenciaContaBaseBordero { get; set; }
         public int? ContaCorrenteId { get; set; }

@@ -35,11 +35,11 @@ namespace GIR.Sigim.Application.DTO.Sigim
         public int? NumeroRemessaPagamento { get; set; }       
 
         
-        public ICollection<AgenciaDTO> ListaAgencia { get; set; }
+        public List<AgenciaDTO> ListaAgencia { get; set; }
 
         public BancoDTO()
         {
-           this.ListaAgencia = new HashSet<AgenciaDTO>(); 
+           this.ListaAgencia = new List<AgenciaDTO>(); 
         }
     }
 }

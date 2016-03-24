@@ -13,6 +13,7 @@ namespace GIR.Sigim.Application.Service.Sigim
         List<ContaCorrenteDTO> ListarPeloFiltro(ContaCorrenteFiltro filtro, int? idUsuario, out int totalRegistros);
         ContaCorrenteDTO ObterPeloId(int? Id);
         List<ItemListaDTO> ListarTipo();
+        List<ContaCorrenteDTO> ListarAtivosPorBanco(int? bancoId);
         bool Salvar(ContaCorrenteDTO dto);
         bool Deletar(int? id);
 

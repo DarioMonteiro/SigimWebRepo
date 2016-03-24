@@ -58,6 +58,13 @@ namespace GIR.Sigim.Application.DTO.Sigim
             get { return Situacao == "I"; }
             set { Situacao = value ? "I" : "A"; }
         }
-        
+
+        public string AgenciaContaCorrente
+        {
+            get 
+            {
+                return Agencia.AgenciaCodigo + "-" + Agencia.DVAgencia + " / " + ContaCodigo + "-" + DVConta;
+            }
+        }
     }
 }

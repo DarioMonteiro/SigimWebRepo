@@ -66,6 +66,11 @@ namespace GIR.Sigim.Application.Service.Sigim
             return bancoRepository.ListarTodos().To<List<BancoDTO>>();
         }
 
+        public List<BancoDTO> ListarTodosComContaCorrenteAtiva()
+        {
+            return bancoRepository.ListarTodos(l => l.ListaAgencia.Select(a => a.ListaContaCorrente)).Where(l => l.ListaAgencia.Count() > 0 && l.ListaAgencia.Where(a => a.ListaContaCorrente.Count() > 0 && (a.ListaContaCorrente.Any(c => c.Situacao == "A"))).Count() > 0 ).To<List<BancoDTO>>();
+        }
+
         public List<BancoDTO> ListarTodosBancoComExcecaoCarteira()
         {
             return bancoRepository.ListarTodos().Where(l => l.Id != CarteiraBanco.CodigoCarteiraBanco).To<List<BancoDTO>>();
