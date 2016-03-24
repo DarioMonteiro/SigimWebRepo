@@ -27,7 +27,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public decimal? PercentualDesconto { get; set; }
         public decimal? ValorDesconto
         {
-            get { return this.ValorTotal * this.PercentualDesconto / 100; }
+            get { return this.ValorTotal * this.OrdemCompraItem.PercentualDesconto / 100; }
         }
         public decimal? ValorTotal { get; set; }
         public decimal? BaseICMS { get; set; }
@@ -48,7 +48,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
 
         public decimal? ValorDescontoOrdemCompra
         {
-            get { return this.ValorTotal * this.OrdemCompraItem.PercentualDesconto / 100; }
+            get { return this.ValorTotal * this.OrdemCompraItem.OrdemCompra.PercentualDesconto / 100; }
         }
     }
 }

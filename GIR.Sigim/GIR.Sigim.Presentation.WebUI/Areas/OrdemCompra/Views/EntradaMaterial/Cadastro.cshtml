@@ -1699,16 +1699,28 @@
                                                 function addFormaPagamento() {
                                                     var jsonObj = $("#formSelecaoFormaPagamento").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processDataFormaPagamento })
 
+                                                    var id = [];
+                                                    id.push($('#@Html.IdFor(m => m.OrdemCompraId)').val());
+                                                    var ordemCompra = obterResumoValoresOC(id)[0];
+                                                    var valorPendente = parseFloat(ordemCompra.ValorPendenteProvisorio == null ? ordemCompra.ValorPendente : ordemCompra.ValorPendenteProvisorio);
+
                                                     $.each(jsonFormasPagamentoPendentes, function (i, formaPagamento) {
                                                         if ($('#@Html.IdFor(m => m.FormaPagamentoId)').val() == formaPagamento.Id) {
-                                                            formaPagamento.DataVencimentoLiberado = jsonObj.DataVencimentoLiberado;
-                                                            formaPagamento.ValorParcelaLiberado = jsonObj.ValorParcelaLiberado;
-                                                            return false;
+                                                            if (typeof formaPagamento.ValorParcelaLiberado !== 'undefined' && formaPagamento.ValorParcelaLiberado !== null) {
+                                                                valorPendente += parseFloat(formaPagamento.ValorParcelaLiberado);
+                                                            }
+
+                                                            if ((valorPendente) >= jsonObj.ValorParcelaLiberado) {
+                                                                formaPagamento.DataVencimentoLiberado = jsonObj.DataVencimentoLiberado;
+                                                                formaPagamento.ValorParcelaLiberado = jsonObj.ValorParcelaLiberado;
+                                                                clearFormFormaPagamento();
+                                                                loadPainelFormaPagamento();
+                                                                return false;
+                                                            }
+                                                            else
+                                                                smartAlert("Erro", "Valor inválido para Ordem de Compra.", "error");
                                                         }
                                                     });
-
-                                                    clearFormFormaPagamento();
-                                                    loadPainelFormaPagamento();
                                                 }
 
                                                 function processDataFormaPagamento(node) {
@@ -1833,42 +1845,68 @@
                                                 function obterResumoValoresOC(ordemCompraIds) {
                                                     var jsonItens = JSON.parse($("#@Html.IdFor(m => m.JsonItens)").val());
                                                     var resumoOC = [];
+                                                    var valorFreteProporcional = 0;
 
-                                                    $.each(ordemCompraIds, function (index, ordenCompraId) {
+                                                    $.each(ordemCompraIds, function (index, ordemCompraId) {
                                                         var valorTotalItens = 0;
                                                         $.each(jsonItens, function (i, item) {
-                                                            if (item.OrdemCompraItem.OrdemCompraId == ordenCompraId) {
-                                                                var valorIPI = item.ValorTotal * item.PercentualIPI / 100;
-                                                                valorTotalItens += item.ValorTotal + valorIPI - (item.ValorTotal * item.PercentualDesconto / 100);
+                                                            if (item.OrdemCompraItem.OrdemCompraId == ordemCompraId) {
+                                                                valorTotalItens += item.ValorTotal - (item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100);
                                                             }
                                                         });
 
                                                         var jsonFormasPagamento = JSON.parse($("#@Html.IdFor(m => m.JsonFormasPagamento)").val());
                                                         var valorTotalDistribuido = 0;
                                                         $.each(jsonFormasPagamento, function (i, formaPagamento) {
-                                                            if (formaPagamento.OrdemCompraFormaPagamento.OrdemCompraId == ordenCompraId) {
+                                                            if (formaPagamento.OrdemCompraFormaPagamento.OrdemCompraId == ordemCompraId) {
                                                                 valorTotalDistribuido += formaPagamento.Valor;
                                                             }
                                                         });
 
                                                         var valorTotalDistribuidoProvisorio = valorTotalDistribuido
                                                         $.each(jsonFormasPagamentoPendentes, function (i, formaPagamento) {
-                                                            if ((formaPagamento.OrdemCompraId == ordenCompraId) && (formaPagamento.ValorParcelaLiberado != null)) {
+                                                            if ((formaPagamento.OrdemCompraId == ordemCompraId) && (formaPagamento.ValorParcelaLiberado != null)) {
                                                                 valorTotalDistribuidoProvisorio += formaPagamento.ValorParcelaLiberado;
                                                             }
                                                         });
 
+                                                        var valorFreteIncluso = parseFloat($("#@Html.IdFor(m => m.EntradaMaterial.FreteIncluso)").val().replace(".", "").replace(",", "."));
+                                                        if (valorFreteIncluso > 0) {
+                                                            var ordemCompra = obterOrdemCompra(ordemCompraId);
+                                                            var percentualItemOC = valorTotalItens / parseFloat(ordemCompra.ValorTotalOC) * 100;
+                                                            valorFreteProporcional = ordemCompra.ValorFrete * percentualItemOC / 100;
+                                                        }
+
                                                         var jsonOC = {};
-                                                        jsonOC.Id = ordenCompraId;
-                                                        jsonOC.ValorTotalItens = parseFloat(valorTotalItens.toFixed(2));
+                                                        jsonOC.Id = ordemCompraId;
+                                                        jsonOC.ValorTotalItens = parseFloat((valorTotalItens + valorFreteProporcional).toFixed(2));
                                                         jsonOC.ValorTotalDistribuido = parseFloat(valorTotalDistribuido.toFixed(2));
                                                         jsonOC.ValorTotalDistribuidoProvisorio = parseFloat(valorTotalDistribuidoProvisorio.toFixed(2));
-                                                        jsonOC.ValorPendente = parseFloat(valorTotalItens - valorTotalDistribuido).toFixed(2);
-                                                        jsonOC.ValorPendenteProvisorio = parseFloat(valorTotalItens - valorTotalDistribuidoProvisorio).toFixed(2);
+                                                        jsonOC.ValorPendente = parseFloat(valorTotalItens + valorFreteProporcional - valorTotalDistribuido).toFixed(2);
+                                                        jsonOC.ValorPendenteProvisorio = parseFloat(valorTotalItens + valorFreteProporcional - valorTotalDistribuidoProvisorio).toFixed(2);
                                                         resumoOC.push(jsonOC);
                                                     });
 
                                                     return resumoOC;
+                                                }
+
+                                                function obterOrdemCompra(ordemCompraId) {
+                                                    var OC;
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        url: '@Url.Action("ObterOrdemCompra", "EntradaMaterial")',
+                                                        cache: false,
+                                                        async: false,
+                                                        contentType: 'application/json; charset=utf-8',
+                                                        data: JSON.stringify({
+                                                            id: ordemCompraId
+                                                        })
+                                                    })
+                                                    .success(function (result) {
+                                                        OC = result;
+                                                    });
+
+                                                    return OC;
                                                 }
 
                                                 function fillTableOrdemCompraValor(resumoValoresOC) {
@@ -2985,7 +3023,7 @@
             valorTotalICMSST += valorICMSST;
         });
 
-        valorSubTotal = valorTotalItens;// - valorTotalDescontoOrdemCompra;
+        valorSubTotal = valorTotalItens - valorTotalDescontoOrdemCompra;
 
         $.each(jsonImpostos, function (i, imposto) {
             percentualTotalAliquota += imposto.ImpostoFinanceiro.Aliquota;
@@ -3004,7 +3042,7 @@
         var valorFreteIncluso = parseFloat($("#@Html.IdFor(m => m.EntradaMaterial.FreteIncluso)").val().replace(".", "").replace(",", "."));
         valorTotalAcrescimo = valorFreteIncluso;
 
-        valorTotal = valorTotalItens - valorTotalDesconto + valorTotalAcrescimo;
+        valorTotal = valorTotalItens - valorTotalDesconto - valorTotalDescontoOrdemCompra + valorTotalAcrescimo;
 
         $("#@Html.IdFor(m => m.ValorTotalItem)").val(roundDecimal(floatToString(valorTotalItens), 2));
         $("#@Html.IdFor(m => m.ValorTotalDescontoOrdemCompra)").val(roundDecimal(floatToString(valorTotalDescontoOrdemCompra), 2));

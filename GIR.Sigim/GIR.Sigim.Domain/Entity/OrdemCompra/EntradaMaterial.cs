@@ -25,14 +25,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public Nullable<DateTime> DataEmissaoNota { get; set; }
         public Nullable<DateTime> DataEntregaNota { get; set; }
         public string Observacao { get; set; }
-
-        private decimal? percentualDesconto;
-        public decimal? PercentualDesconto
-        {
-            get { return percentualDesconto.HasValue ? percentualDesconto : 0; }
-            set { percentualDesconto = value; }
-        }
-
+        public decimal? PercentualDesconto { get; set; }
 
         private decimal? desconto;
         public decimal? Desconto
@@ -91,7 +84,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         }
 
         public decimal? ValorTotalItens {
-            get { return this.ListaItens.Sum(l => l.ValorTotal + l.ValorIPI - l.ValorDesconto); }
+            get { return this.ListaItens.Sum(l => l.ValorTotal + l.ValorIPI); }
         }
 
         public decimal? ValorTotalDescontoOrdemCompra
