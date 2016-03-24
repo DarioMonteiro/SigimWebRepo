@@ -36,6 +36,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         #region Métodos IOrdemCompraAppService
 
+        public OrdemCompraDTO ObterPeloId(int? id)
+        {
+            return ordemCompraRepository.ObterPeloId(id, l => l.ListaItens).To<OrdemCompraDTO>();
+        }
+
         public List<OrdemCompraDTO> PesquisarOrdensCompraPeloFiltro(OrdemCompraPesquisaFiltro filtro, out int totalRegistros)
         {
             var specification = (Specification<Domain.Entity.OrdemCompra.OrdemCompra>)new TrueSpecification<Domain.Entity.OrdemCompra.OrdemCompra>();

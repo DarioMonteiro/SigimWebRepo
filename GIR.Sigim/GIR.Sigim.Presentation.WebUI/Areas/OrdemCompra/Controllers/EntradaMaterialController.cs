@@ -33,6 +33,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         private INaturezaReceitaAppService naturezaReceitaAppService;
         private IParametrosUsuarioAppService parametrosUsuarioAppService;
         private IImpostoFinanceiroAppService impostoFinanceiroAppService;
+        private IOrdemCompraAppService ordemCompraAppService;
 
         public EntradaMaterialController(
             IEntradaMaterialAppService entradaMaterialAppService,
@@ -48,6 +49,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             INaturezaReceitaAppService naturezaReceitaAppService,
             IParametrosUsuarioAppService parametrosUsuarioAppService,
             IImpostoFinanceiroAppService impostoFinanceiroAppService,
+            IOrdemCompraAppService ordemCompraAppService,
             MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -64,6 +66,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.naturezaReceitaAppService = naturezaReceitaAppService;
             this.parametrosUsuarioAppService = parametrosUsuarioAppService;
             this.impostoFinanceiroAppService = impostoFinanceiroAppService;
+            this.ordemCompraAppService = ordemCompraAppService;
         }
 
         [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
@@ -344,6 +347,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         public ActionResult ListarFormasPagamentoOrdemCompraPendentes(int?[] ordemCompraIds)
         {
             return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamentoOrdemCompraPendentes(ordemCompraIds)));
+        }
+
+        [HttpPost]
+        public ActionResult ObterOrdemCompra(int? id)
+        {
+            return Json(ordemCompraAppService.ObterPeloId(id));
         }
 
         [HttpPost]

@@ -35,6 +35,8 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public int? PrazoEntrega { get; set; }
         public List<OrdemCompraItemDTO> ListaItens { get; set; }
         public PaginationParameters PaginationParameters { get; set; }
+        public decimal? ValorFrete { get; set; }
+        public decimal? ValorTotalOC { get; set; }
 
         public OrdemCompraDTO()
         {

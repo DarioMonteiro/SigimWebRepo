@@ -33,6 +33,15 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
             set { percentualDesconto = value; }
         }
 
+        public decimal? ValorTotalOC
+        {
+            get
+            {
+                var valorTotalItens = ListaItens.Sum(l => l.ValorTotalItem);
+                return valorTotalItens - (valorTotalItens * PercentualDesconto / 100);
+            }
+        }
+
         public virtual ICollection<OrdemCompraItem> ListaItens { get; set; }
         public ICollection<OrdemCompraFormaPagamento> ListaOrdemCompraFormaPagamento { get; set; }
         public ICollection<EntradaMaterial> ListaEntradaMaterialFrete { get; set; }
