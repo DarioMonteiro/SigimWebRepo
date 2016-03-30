@@ -12,6 +12,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
     {
         bool ExisteNumeroDocumento(Nullable<DateTime> DataEmissao, Nullable<DateTime> DataVencimento, string NumeroDocumento, int? ClienteId);
         bool EhPermitidoImprimirRelContasPagarTitulo();
-        List<RelContasPagarTitulosDTO> ListarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, int? usuarioId, out int totalRegistros);
+        List<RelContasPagarTitulosDTO> ListarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, int? usuarioId, out int totalRegistros, out decimal totalValorTitulo, out decimal totalValorLiquido, out decimal totalValorApropriado);
     }
 }

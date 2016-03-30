@@ -375,7 +375,6 @@
 								                </section>
                                             </div>
                                         </fieldset>
-
                                     </div>
                                 </div>
                             </div>
@@ -384,7 +383,7 @@
                             @{
                                 var url = Url.Action("Imprimir", "RelContasAPagarTitulo");
                             }
-                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })                           
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
                         </footer>
                     }
                     <div id="resultadoBusca"></div>
@@ -500,6 +499,9 @@
         tratarBotoes(true);
 
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+
+        $('#collapseFiltro').attr("class", "panel-collapse collapse");
+
     }
 
     function carregaComboAgenciaConta() {

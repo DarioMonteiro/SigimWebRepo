@@ -1,0 +1,47 @@
+﻿@model GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel.ListaViewModelRelContasPagarTitulo
+
+<div class="dt-toolbar-footer table-footer">
+    <div class="col-sm-6 col-xs-12 hidden-xs">
+        <div class="dataTables_info" id="dt_basic_info" role="status" aria-live="polite">
+            Exibindo <span class="txt-color-darken">@Model.Pagination.FirstRecord</span> a <span class="txt-color-darken">@Model.Pagination.LastRecord</span>
+            de <span class="text-primary">@Model.Pagination.TotalRecords</span> registros
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <div class="dataTables_paginate paging_simple_numbers">
+            <ul class="pagination">
+                @foreach (var item in Model.Pagination.PageList)
+                {
+                    string classActive = string.Empty;
+                    if (item.Active)
+                    {
+                        classActive = "class=active";
+                    }
+
+                    <li @classActive>
+                        <a href="javascript:goToPage@(Model.UniqueIdentifier)(@item.Index);">
+                            @switch (item.Decription)
+                            {
+                                case "<<":
+                                    @Html.Raw("<i class=\"fa fa-chevron-left\"></i><i class=\"fa fa-chevron-left\"></i>");
+                                    break;
+                                case "<":
+                                    @Html.Raw("<i class=\"fa fa-chevron-left\"></i>");
+                                    break;
+                                case ">":
+                                    @Html.Raw("<i class=\"fa fa-chevron-right\"></i>");
+                                    break;
+                                case ">>":
+                                    @Html.Raw("<i class=\"fa fa-chevron-right\"></i><i class=\"fa fa-chevron-right\"></i>");
+                                    break;
+                                default:
+                                    @item.Decription
+                                    break;
+                            }
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

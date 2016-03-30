@@ -177,7 +177,7 @@ namespace GIR.Sigim.Application.Service.Sigim
                 dataUtil = dataUtil.AddDays(1);
 
                 List<Feriado> listaFeriado =
-                    feriadoRepository.ListarPeloFiltro(l => l.Data == data).ToList<Feriado>();
+                    feriadoRepository.ListarPeloFiltro(l => l.Data == dataUtil).ToList<Feriado>();
 
                 if (listaFeriado.Count() == 0)
                 {

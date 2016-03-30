@@ -97,73 +97,18 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return UsuarioLogado.IsInRole(Funcionalidade.RelatorioContasAPagarTitulosImprimir);
         }
 
-        public List<RelContasPagarTitulosDTO> ListarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, int? usuarioId, out int totalRegistros)
+        public List<RelContasPagarTitulosDTO> ListarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, 
+                                                                                    int? usuarioId, 
+                                                                                    out int totalRegistros, 
+                                                                                    out decimal totalValorTitulo, 
+                                                                                    out decimal totalValorLiquido,
+                                                                                    out decimal totalValorApropriado)
         {
-
             bool situacaoPagamentoPendente = filtro.EhSituacaoAPagarProvisionado || filtro.EhSituacaoAPagarAguardandoLiberacao || filtro.EhSituacaoAPagarLiberado || filtro.EhSituacaoAPagarCancelado;
             bool situacaoPagamentoPago = filtro.EhSituacaoAPagarEmitido || filtro.EhSituacaoAPagarPago || filtro.EhSituacaoAPagarBaixado;
 
-            totalRegistros = 0;
-
-
             List<TituloPagar> listaTitulosPagar = new List<TituloPagar>();
 
-            //if ((situacaoPagamentoPendente) || ((!situacaoPagamentoPendente) && (!situacaoPagamentoPago)))
-            //{
-            //    var specification = (Specification<TituloPagar>)new TrueSpecification<TituloPagar>();
-
-            //    specification &= MontarSpecificationSituacaoPendentesRelContasPagarTitulos(filtro, usuarioId);
-
-            //    var listaTitulosPagarPendentes =
-            //     tituloPagarRepository.ListarPeloFiltroComPaginacao(specification,
-            //                                                        filtro.PaginationParameters.PageIndex,
-            //                                                        filtro.PaginationParameters.PageSize,
-            //                                                        filtro.PaginationParameters.OrderBy,
-            //                                                        filtro.PaginationParameters.Ascending,
-            //                                                        out totalRegistros,
-            //                                                        l => l.Cliente.PessoaFisica,
-            //                                                        l => l.Cliente.PessoaJuridica,
-            //                                                        l => l.Movimento.ContaCorrente.Agencia,
-            //                                                        l => l.Movimento.Caixa,
-            //                                                        l => l.TipoCompromisso,
-            //                                                        l => l.TipoDocumento,
-            //                                                        l => l.ListaApropriacao.Select(a => a.CentroCusto),
-            //                                                        l => l.ListaApropriacao.Select(a => a.Classe),
-            //                                                        l => l.MotivoCancelamento).To<List<TituloPagar>>();
-
-            //    listaTitulosPagar.AddRange(listaTitulosPagarPendentes);
-
-            //}
-
-            //if ((situacaoPagamentoPago) || ((!situacaoPagamentoPendente) && (!situacaoPagamentoPago)))
-            //{
-            //    var specification = (Specification<TituloPagar>)new TrueSpecification<TituloPagar>();
-
-            //    specification &= MontarSpecificationSituacaoPagosRelContasPagarTitulos(filtro, usuarioId);
-
-            //    var listaTitulosPagarPagos =
-            //     tituloPagarRepository.ListarPeloFiltroComPaginacao(specification,
-            //                                                        filtro.PaginationParameters.PageIndex,
-            //                                                        filtro.PaginationParameters.PageSize,
-            //                                                        filtro.PaginationParameters.OrderBy,
-            //                                                        filtro.PaginationParameters.Ascending,
-            //                                                        out totalRegistros,
-            //                                                        l => l.Cliente.PessoaFisica,
-            //                                                        l => l.Cliente.PessoaJuridica,
-            //                                                        l => l.Movimento.ContaCorrente.Agencia,
-            //                                                        l => l.Movimento.Caixa,
-            //                                                        l => l.TipoCompromisso,
-            //                                                        l => l.TipoDocumento,
-            //                                                        l => l.ListaApropriacao.Select(a => a.CentroCusto),
-            //                                                        l => l.ListaApropriacao.Select(a => a.Classe),
-            //                                                        l => l.MotivoCancelamento).To<List<TituloPagar>>();
-
-            //    listaTitulosPagar.AddRange(listaTitulosPagarPagos);
-            //}
-
-            //var listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro, listaTitulosPagar);
-
-            #region "Teste Union"
             var specificationTeste1 = (Specification<TituloPagar>)new TrueSpecification<TituloPagar>();
 
             if ((situacaoPagamentoPendente) || ((!situacaoPagamentoPendente) && (!situacaoPagamentoPago)))
@@ -178,28 +123,25 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 specificationTeste2 &= MontarSpecificationSituacaoPagosRelContasPagarTitulos(filtro, usuarioId);
             }
 
-            var listaTitulosPagarXXX =
-             tituloPagarRepository.ListarPeloFiltroComPaginacaoComUnion(specificationTeste1,
-                                                                specificationTeste2,
-                                                                filtro.PaginationParameters.PageIndex,
-                                                                filtro.PaginationParameters.PageSize,
-                                                                filtro.PaginationParameters.OrderBy,
-                                                                filtro.PaginationParameters.Ascending,
-                                                                out totalRegistros,
-                                                                l => l.Cliente.PessoaFisica,
-                                                                l => l.Cliente.PessoaJuridica,
-                                                                l => l.Movimento.ContaCorrente.Agencia,
-                                                                l => l.Movimento.Caixa,
-                                                                l => l.TipoCompromisso,
-                                                                l => l.TipoDocumento,
-                                                                l => l.ListaApropriacao.Select(a => a.CentroCusto),
-                                                                l => l.ListaApropriacao.Select(a => a.Classe),
-                                                                l => l.MotivoCancelamento).To<List<TituloPagar>>();
+            listaTitulosPagar =
+             tituloPagarRepository.ListarPeloFiltroComUnion(specificationTeste1,
+                                                            specificationTeste2,
+                                                            l => l.Cliente.PessoaFisica,
+                                                            l => l.Cliente.PessoaJuridica,
+                                                            l => l.Movimento.ContaCorrente.Agencia,
+                                                            l => l.Movimento.Caixa,
+                                                            l => l.TipoCompromisso,
+                                                            l => l.TipoDocumento,
+                                                            l => l.ListaApropriacao.Select(a => a.CentroCusto),
+                                                            l => l.ListaApropriacao.Select(a => a.Classe),
+                                                            l => l.MotivoCancelamento).To<List<TituloPagar>>();
 
-            var listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro, listaTitulosPagarXXX);
-
-            #endregion
-
+            var listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro, 
+                                                                                 listaTitulosPagar,
+                                                                                 out totalRegistros,
+                                                                                 out totalValorTitulo, 
+                                                                                 out totalValorLiquido,
+                                                                                 out totalValorApropriado);
 
             return listaRelContasPagarTitulos;
 
@@ -209,8 +151,115 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         #region "Métodos privados"
 
-        private List<RelContasPagarTitulosDTO> PopulaListaRelContasPagarTitulosDTO(RelContasPagarTitulosFiltro filtro, List<TituloPagar> listaTitulosPagar)
+        private List<RelContasPagarTitulosDTO> OrdenaListaRelContasPagarTitulosDTO(RelContasPagarTitulosFiltro filtro, List<RelContasPagarTitulosDTO> listaRelContasPagarTitulos)
         {
+            int pageCount = filtro.PaginationParameters.PageSize;
+            int pageIndex = filtro.PaginationParameters.PageIndex;
+
+            switch (filtro.PaginationParameters.OrderBy)
+            {
+                case "tituloId":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.TituloId).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.TituloId).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "dataVencimento":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DataVencimento).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.DataVencimento).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "dataEmissaoDocumento":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DataEmissaoDocumento).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.DataEmissaoDocumento).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "documentoCompleto":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DocumentoCompleto).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.DocumentoCompleto).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "valorTitulo":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.ValorTitulo).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.ValorTitulo).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "valorLiquido":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.ValorLiquido).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.ValorLiquido).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "nomeCliente":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.NomeCliente).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.NomeCliente).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "identificacao":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.Identificacao).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.Identificacao).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "descricaoFormaPagamento":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.FormaPagamentoDescricao).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.FormaPagamentoDescricao).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "documentoPagamento":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DocumentoPagamento).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.DocumentoPagamento).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "agenciaConta":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.AgenciaContaCorrente).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.AgenciaContaCorrente).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "descricaoTipoCompromisso":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.TipoCompromissoDescricao).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.TipoCompromissoDescricao).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "descricaoSituacao":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.SituacaoTituloDescricao).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.SituacaoTituloDescricao).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "dataSelecao":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DataSelecao).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.DataSelecao).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "dataEmissao":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DataEmissao).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.DataEmissao).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "dataPagamento":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DataPagamento).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.DataPagamento).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "dataBaixa":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DataBaixa).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.DataBaixa).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "cpfCnpj":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.CPFCNPJ).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.CPFCNPJ).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "operadorCadastro":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.LoginUsuarioCadastro).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.LoginUsuarioCadastro).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "valorApropriacao":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.ValorApropriado).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.ValorApropriado).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "classe":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.CodigoDescricaoClasse).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.CodigoDescricaoClasse).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                case "centroCusto":
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.CodigoDescricaoCentroCusto).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.CodigoDescricaoCentroCusto).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+                default:
+                    if (filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.TituloId).ToList<RelContasPagarTitulosDTO>(); }
+                    if (!filtro.PaginationParameters.Ascending) { listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderByDescending(l => l.TituloId).ToList<RelContasPagarTitulosDTO>(); }
+                    break;
+            }
+
+            return listaRelContasPagarTitulos;
+        }
+
+        private List<RelContasPagarTitulosDTO> PopulaListaRelContasPagarTitulosDTO(RelContasPagarTitulosFiltro filtro, List<TituloPagar> listaTitulosPagar, out int totalRegistros,out decimal totalizadoValorTitulo, out decimal totalizadoValorLiquido, out decimal totalizadoValorApropriado)
+        {
+            int pageCount = filtro.PaginationParameters.PageSize;
+            int pageIndex = filtro.PaginationParameters.PageIndex;
+
             bool situacaoPagamentoPendente = filtro.EhSituacaoAPagarProvisionado || filtro.EhSituacaoAPagarAguardandoLiberacao || filtro.EhSituacaoAPagarLiberado || filtro.EhSituacaoAPagarCancelado;
             bool situacaoPagamentoPago = filtro.EhSituacaoAPagarEmitido || filtro.EhSituacaoAPagarPago || filtro.EhSituacaoAPagarBaixado;
 
@@ -373,15 +422,18 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     relat.MotivoCancelamentoDescricao = tituloPagar.MotivoCancelamentoInterface;
                 }
                 relat.CPFCNPJ = "";
-                if (tituloPagar.Cliente.TipoPessoa == "F")
+                if (tituloPagar.Cliente != null)
                 {
-                    relat.CPFCNPJ = tituloPagar.Cliente.PessoaFisica.Cpf;
-                }
-                else
-                {
-                    if (tituloPagar.Cliente.TipoPessoa == "J")
+                    if (tituloPagar.Cliente.TipoPessoa == "F")
                     {
-                        relat.CPFCNPJ = tituloPagar.Cliente.PessoaJuridica.Cnpj;
+                        relat.CPFCNPJ = tituloPagar.Cliente.PessoaFisica.Cpf;
+                    }
+                    else
+                    {
+                        if (tituloPagar.Cliente.TipoPessoa == "J")
+                        {
+                            relat.CPFCNPJ = tituloPagar.Cliente.PessoaJuridica.Cnpj;
+                        }
                     }
                 }
                 relat.LoginUsuarioCadastro = tituloPagar.LoginUsuarioCadastro;
@@ -452,6 +504,16 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 }
 
             }
+
+            totalRegistros = listaRelContasPagarTitulos.Count();
+
+            totalizadoValorTitulo = listaRelContasPagarTitulos.Sum(l => l.ValorTitulo);
+            totalizadoValorLiquido = listaRelContasPagarTitulos.Sum(l => l.ValorLiquido);
+            totalizadoValorApropriado = listaRelContasPagarTitulos.Sum(l => l.ValorApropriado);
+
+            listaRelContasPagarTitulos = OrdenaListaRelContasPagarTitulosDTO(filtro, listaRelContasPagarTitulos);
+
+            listaRelContasPagarTitulos = listaRelContasPagarTitulos.Skip(pageCount * pageIndex).Take(pageCount).To<List<RelContasPagarTitulosDTO>>();
 
             return listaRelContasPagarTitulos;
         }

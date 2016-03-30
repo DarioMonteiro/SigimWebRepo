@@ -16,16 +16,6 @@ namespace GIR.Sigim.Domain.Repository.Financeiro
         void RemoverImpostoPagar(ImpostoPagar impostoPagar);
         void RemoverTituloPagar(TituloPagar titulo);
         void RemoverApropriacao(Apropriacao apropriacao);
-
-        IEnumerable<TituloPagar> ListarPeloFiltroComPaginacaoComUnion(
-            ISpecification<TituloPagar> specification,
-            ISpecification<TituloPagar> specification1,
-            int pageIndex,
-            int pageCount,
-            string orderBy,
-            bool ascending,
-            out int totalRecords,
-            params Expression<Func<TituloPagar, object>>[] includes);
-
+        IEnumerable<TituloPagar> ListarPeloFiltroComUnion(ISpecification<TituloPagar> specification, ISpecification<TituloPagar> specification1, params Expression<Func<TituloPagar, object>>[] includes);
     }
 }
