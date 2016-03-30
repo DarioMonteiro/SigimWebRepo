@@ -27,11 +27,17 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         private bool? ehUtilizada;
         public bool? EhUtilizada
         {
-            get { return ehUtilizada; }
+            get { return ehUtilizada.HasValue ? ehUtilizada : false; }
             set { ehUtilizada = value; }
         }
 
-        public bool? EhAssociada { get; set; }
+        private bool? ehAssociada;
+        public bool? EhAssociada
+        {
+            get { return ehAssociada.HasValue ? ehAssociada : false; }
+            set { ehAssociada = value; }
+        }
+
         public ICollection<EntradaMaterialFormaPagamento> ListaEntradaMaterialFormaPagamento { get; set; }
 
         public OrdemCompraFormaPagamento()

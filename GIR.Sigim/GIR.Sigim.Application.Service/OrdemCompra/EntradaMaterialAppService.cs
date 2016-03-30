@@ -210,7 +210,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 l => l.ListaOrdemCompraFormaPagamento.Select(o => o.TipoCompromisso),
                 l => l.ListaOrdemCompraFormaPagamento.Select(o => o.TituloPagar));
 
-            return listaOrdemCompra.SelectMany(l => l.ListaOrdemCompraFormaPagamento.Where(o => (o.EhUtilizada.HasValue && !o.EhUtilizada.Value))).To<List<OrdemCompraFormaPagamentoDTO>>();
+            return listaOrdemCompra.SelectMany(l => l.ListaOrdemCompraFormaPagamento.Where(o => (
+                (o.EhPagamentoAntecipado.Value && !o.EhAssociada.Value)
+                || !o.EhUtilizada.Value))).To<List<OrdemCompraFormaPagamentoDTO>>();
         }
 
         public bool Salvar(EntradaMaterialDTO dto)
@@ -508,8 +510,9 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 entradaMaterialItem.ValorUnitario = ordemCompraItem.ValorUnitario;
                 entradaMaterialItem.PercentualIPI = ordemCompraItem.PercentualIPI;
                 entradaMaterialItem.PercentualDesconto = ordemCompraItem.PercentualDesconto;
-                entradaMaterialItem.ValorTotal = ordemCompraItem.ValorTotalItem;
-                entradaMaterialItem.BaseIPI = ordemCompraItem.Quantidade * ordemCompraItem.ValorUnitario;
+                decimal? valorTotalItens = ordemCompraItem.Saldo * ordemCompraItem.ValorUnitario;
+                entradaMaterialItem.ValorTotal = valorTotalItens - (valorTotalItens * ordemCompraItem.PercentualDesconto / 100);
+                entradaMaterialItem.BaseIPI = ordemCompraItem.Saldo * ordemCompraItem.ValorUnitario;
                 entradaMaterial.ListaItens.Add(entradaMaterialItem);
 
                 ordemCompraItem.QuantidadeEntregue += entradaMaterialItem.Quantidade;
@@ -565,8 +568,8 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
             {
                 var dto = listaEntradaMaterialFormaPagamento.Where(l => l.OrdemCompraFormaPagamentoId == ordemCompraFormaPagamento.Id).SingleOrDefault();
                 var entradaMaterialFormaPagamento = new EntradaMaterialFormaPagamento();
-                
-                entradaMaterialFormaPagamento.Data = dto.Data.Value;
+
+                entradaMaterialFormaPagamento.Data = dto.Data.HasValue ? dto.Data.Value : ordemCompraFormaPagamento.Data;
                 entradaMaterialFormaPagamento.Valor = dto.Valor;
                 entradaMaterialFormaPagamento.TipoCompromissoId = ordemCompraFormaPagamento.TipoCompromissoId;
                 if (entradaMaterialFormaPagamento.Valor == ordemCompraFormaPagamento.Valor)
@@ -2131,13 +2134,13 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
         private bool TodosOsTitulosEstaoProvisionados(EntradaMaterial entradaMaterial)
         {
-            return entradaMaterial.ListaFormaPagamento.Where(l => l.TituloPagarId.HasValue).All(o => o.TituloPagar.Situacao == SituacaoTituloPagar.Provisionado);
+            return entradaMaterial.ListaFormaPagamento.Where(l => l.TituloPagarId.HasValue && !l.OrdemCompraFormaPagamento.EhPagamentoAntecipado.Value).All(o => o.TituloPagar.Situacao == SituacaoTituloPagar.Provisionado);
         }
 
         private bool ValoresOrdemCompraIguaisValoresTituloPagar(EntradaMaterial entradaMaterial)
         {
             foreach (var ordemCompra in entradaMaterial.ListaItens.Select(l => l.OrdemCompraItem.OrdemCompra).Distinct())
-                if (!ordemCompra.ListaOrdemCompraFormaPagamento.Where(l => l.TituloPagarId.HasValue).All(o => o.TituloPagar.ValorTitulo == o.Valor))
+                if (!ordemCompra.ListaOrdemCompraFormaPagamento.Where(l => l.TituloPagarId.HasValue && !l.EhPagamentoAntecipado.Value).All(o => o.TituloPagar.ValorTitulo == o.Valor))
                     return false;
 
             return true;
