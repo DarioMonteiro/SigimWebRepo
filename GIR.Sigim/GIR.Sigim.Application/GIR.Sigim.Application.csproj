@@ -326,6 +326,23 @@
       <DependentUpon>relTipoRateio.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Financeiro\relTituloPagar.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relTituloPagar.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Financeiro\relTituloPagarDataSintetico.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relTituloPagarDataSintetico.rpt</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Financeiro\relTituloPagarDataSituacao.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relTituloPagarDataSituacao.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\OrdemCompra\relEntradaMaterial.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -582,6 +599,18 @@
     <EmbeddedResource Include="Reports\Financeiro\relTipoRateio.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relTipoRateio.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relTituloPagar.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relTituloPagar.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relTituloPagarDataSintetico.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relTituloPagarDataSintetico.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relTituloPagarDataSituacao.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relTituloPagarDataSituacao.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\OrdemCompra\relEntradaMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

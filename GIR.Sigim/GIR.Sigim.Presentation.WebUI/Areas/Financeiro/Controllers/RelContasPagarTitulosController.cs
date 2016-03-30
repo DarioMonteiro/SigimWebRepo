@@ -142,14 +142,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 return PartialView("_NotificationMessagesPartial");
             }
 
-            //var arquivo = tituloPagarAppService.ExportarRelOCItensOrdemCompra(model.Filtro, Usuario.Id, formato);
-            //if (arquivo != null)
-            //{
-            //    Response.Buffer = false;
-            //    Response.ClearContent();
-            //    Response.ClearHeaders();
-            //    return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
-            //}
+            var arquivo = tituloPagarAppService.ExportarRelContasPagarTitulos(model.Filtro, Usuario.Id, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
 
             return PartialView("_NotificationMessagesPartial");
 

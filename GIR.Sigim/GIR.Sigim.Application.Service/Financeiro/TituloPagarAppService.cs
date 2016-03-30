@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,9 @@ using GIR.Sigim.Domain.Specification.Financeiro;
 using GIR.Sigim.Application.Enums;
 using GIR.Sigim.Domain.Entity.Sigim;
 using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Application.Reports.Financeiro;
+using CrystalDecisions.Shared;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -26,6 +30,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
         private ITituloPagarRepository tituloPagarRepository;
         private IUsuarioAppService usuarioAppService;
         private IModuloSigimAppService moduloSigimAppService;
+        private IParametrosFinanceiroRepository parametrosFinanceiroRepository;
+        private ICentroCustoRepository centroCustoRepository;
 
         #endregion
 
@@ -34,12 +40,16 @@ namespace GIR.Sigim.Application.Service.Financeiro
         public TituloPagarAppService(ITituloPagarRepository tituloPagarRepository, 
                                      IUsuarioAppService usuarioAppService,
                                      IModuloSigimAppService moduloSigimAppService,
+                                     IParametrosFinanceiroRepository parametrosFinanceiroRepository,
+                                     ICentroCustoRepository centroCustoRepository,
                                      MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.tituloPagarRepository = tituloPagarRepository;
             this.usuarioAppService = usuarioAppService;
             this.moduloSigimAppService = moduloSigimAppService;
+            this.parametrosFinanceiroRepository = parametrosFinanceiroRepository;
+            this.centroCustoRepository = centroCustoRepository;
         }
 
         #endregion
@@ -138,18 +148,324 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             var listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro, 
                                                                                  listaTitulosPagar,
-                                                                                 out totalRegistros,
                                                                                  out totalValorTitulo, 
                                                                                  out totalValorLiquido,
                                                                                  out totalValorApropriado);
+
+            totalRegistros = listaRelContasPagarTitulos.Count();
+
+            if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 2))
+            {
+                filtro.PaginationParameters.OrderBy = "dataSelecao";
+            }
+
+            listaRelContasPagarTitulos = OrdenaListaRelContasPagarTitulosDTO(filtro, listaRelContasPagarTitulos);
+
+            int pageCount = filtro.PaginationParameters.PageSize;
+            int pageIndex = filtro.PaginationParameters.PageIndex;
+
+            listaRelContasPagarTitulos = listaRelContasPagarTitulos.Skip(pageCount * pageIndex).Take(pageCount).To<List<RelContasPagarTitulosDTO>>();
 
             return listaRelContasPagarTitulos;
 
         }
 
+        public FileDownloadDTO ExportarRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro,
+                                                             int? usuarioId,
+                                                             FormatoExportacaoArquivo formato)
+        {
+            if (!EhPermitidoImprimirRelContasPagarTitulo())
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.PrivilegiosInsuficientes, TypeMessage.Error);
+                return null;
+            }
+
+            decimal totalValorTitulo = 0; 
+            decimal totalValorLiquido = 0;
+            decimal totalValorApropriado = 0;
+
+            bool situacaoPagamentoPendente = filtro.EhSituacaoAPagarProvisionado || filtro.EhSituacaoAPagarAguardandoLiberacao || filtro.EhSituacaoAPagarLiberado || filtro.EhSituacaoAPagarCancelado;
+            bool situacaoPagamentoPago = filtro.EhSituacaoAPagarEmitido || filtro.EhSituacaoAPagarPago || filtro.EhSituacaoAPagarBaixado;
+
+            List<TituloPagar> listaTitulosPagar = new List<TituloPagar>();
+
+            var specificationTeste1 = (Specification<TituloPagar>)new TrueSpecification<TituloPagar>();
+
+            if ((situacaoPagamentoPendente) || ((!situacaoPagamentoPendente) && (!situacaoPagamentoPago)))
+            {
+                specificationTeste1 &= MontarSpecificationSituacaoPendentesRelContasPagarTitulos(filtro, usuarioId);
+            }
+
+            var specificationTeste2 = (Specification<TituloPagar>)new TrueSpecification<TituloPagar>();
+
+            if ((situacaoPagamentoPago) || ((!situacaoPagamentoPendente) && (!situacaoPagamentoPago)))
+            {
+                specificationTeste2 &= MontarSpecificationSituacaoPagosRelContasPagarTitulos(filtro, usuarioId);
+            }
+
+            listaTitulosPagar =
+             tituloPagarRepository.ListarPeloFiltroComUnion(specificationTeste1,
+                                                            specificationTeste2,
+                                                            l => l.Cliente.PessoaFisica,
+                                                            l => l.Cliente.PessoaJuridica,
+                                                            l => l.Movimento.ContaCorrente.Agencia,
+                                                            l => l.Movimento.Caixa,
+                                                            l => l.TipoCompromisso,
+                                                            l => l.TipoDocumento,
+                                                            l => l.ListaApropriacao.Select(a => a.CentroCusto),
+                                                            l => l.ListaApropriacao.Select(a => a.Classe),
+                                                            l => l.MotivoCancelamento).To<List<TituloPagar>>();
+
+            var listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro,
+                                                                                 listaTitulosPagar,
+                                                                                 out totalValorTitulo,
+                                                                                 out totalValorLiquido,
+                                                                                 out totalValorApropriado);
+
+            if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 2))
+            {
+                listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DataSelecao).ToList<RelContasPagarTitulosDTO>();
+            }
+
+
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Contas a pagar títulos", null, formato);
+
+            var parametros = parametrosFinanceiroRepository.Obter();
+            CentroCusto centroCusto = new CentroCusto();
+            if (filtro.CentroCusto != null)
+            {
+                centroCusto = centroCustoRepository.ObterPeloCodigo(filtro.CentroCusto.Codigo, l => l.ListaCentroCustoEmpresa);
+            }
+
+            var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
+            var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
+
+            if (filtro.EhTotalizadoPor.HasValue)
+            {
+                switch (filtro.EhTotalizadoPor.Value)
+                {
+                    case 0:
+                        relTituloPagar objRelGeral = new relTituloPagar();
+                        objRelGeral.SetDataSource(RelContasPagarTitulosToDataTable(listaRelContasPagarTitulos));
+
+                        objRelGeral.SetParameterValue("dataInicial", filtro.DataInicial.Value.ToString("dd/MM/yyyy"));
+                        objRelGeral.SetParameterValue("dataFinal", filtro.DataFinal.Value.ToString("dd/MM/yyyy"));
+                        objRelGeral.SetParameterValue("valorTotalBruto", totalValorTitulo);
+                        objRelGeral.SetParameterValue("valorTotalLiquido", totalValorLiquido);
+                        objRelGeral.SetParameterValue("NomeEmpresa", nomeEmpresa);
+                        objRelGeral.SetParameterValue("tipoPesquisa", (filtro.EhPorCompetencia ? "V" : ""));
+                        objRelGeral.SetParameterValue("semApropriacao", filtro.EhSemApropriacao);
+                        objRelGeral.SetParameterValue("caminhoImagem", caminhoImagem);
+
+                        arquivo = new FileDownloadDTO("Rel. Contas a pagar títulos",
+                                                      objRelGeral.ExportToStream((ExportFormatType)formato),
+                                                      formato);
+
+                        break;
+
+                    case 1:
+                        relTituloPagarDataSituacao objRelDataSituacao = new relTituloPagarDataSituacao();
+                        objRelDataSituacao.SetDataSource(RelContasPagarTitulosToDataTable(listaRelContasPagarTitulos));
+
+                        objRelDataSituacao.SetParameterValue("dataInicial", filtro.DataInicial.Value.ToString("dd/MM/yyyy"));
+                        objRelDataSituacao.SetParameterValue("dataFinal", filtro.DataFinal.Value.ToString("dd/MM/yyyy"));
+                        objRelDataSituacao.SetParameterValue("valorTotalBruto", totalValorTitulo);
+                        objRelDataSituacao.SetParameterValue("valorTotalLiquido", totalValorLiquido);
+                        objRelDataSituacao.SetParameterValue("NomeEmpresa", nomeEmpresa);
+                        objRelDataSituacao.SetParameterValue("tipoPesquisa", (filtro.EhPorCompetencia ? "V" : ""));
+                        objRelDataSituacao.SetParameterValue("caminhoImagem", caminhoImagem);
+
+                        arquivo = new FileDownloadDTO("Rel. Contas a pagar títulos",
+                                                      objRelDataSituacao.ExportToStream((ExportFormatType)formato),
+                                                      formato);
+
+                        break;
+
+                    case 2:
+                        string parCentroCusto = "Todos";
+                        if (centroCusto != null)
+                        {
+                            parCentroCusto = centroCusto.Codigo + " - " + centroCusto.Descricao;
+                        }
+
+                        string parClasse = "Todas";
+                        if (!string.IsNullOrEmpty(filtro.Classe.Codigo))
+                        {
+                            parClasse = filtro.Classe.Codigo + " - " + filtro.Classe.Descricao;
+                        }
+
+                        string parCorrentista = "Todos";
+                        if (filtro.ClienteFornecedor.Id.HasValue)
+                        {
+                            parCorrentista = filtro.ClienteFornecedor.Nome;
+                        }
+
+                        relTituloPagarDataSintetico objRelDataSituacaoSintetico = new relTituloPagarDataSintetico();
+                        objRelDataSituacaoSintetico.SetDataSource(RelContasPagarTitulosToDataTable(listaRelContasPagarTitulos));
+
+                        objRelDataSituacaoSintetico.SetParameterValue("dataInicial", filtro.DataInicial.Value.ToString("dd/MM/yyyy"));
+                        objRelDataSituacaoSintetico.SetParameterValue("dataFinal", filtro.DataFinal.Value.ToString("dd/MM/yyyy"));
+                        objRelDataSituacaoSintetico.SetParameterValue("NomeEmpresa", nomeEmpresa);
+                        objRelDataSituacaoSintetico.SetParameterValue("tipoPesquisa", (filtro.EhPorCompetencia ? "V" : ""));
+                        objRelDataSituacaoSintetico.SetParameterValue("centroCusto", parCentroCusto);
+                        objRelDataSituacaoSintetico.SetParameterValue("classe", parClasse);
+                        objRelDataSituacaoSintetico.SetParameterValue("correntista", parCorrentista);
+                        objRelDataSituacaoSintetico.SetParameterValue("caminhoImagem", caminhoImagem);
+
+                        arquivo = new FileDownloadDTO("Rel. Contas a pagar títulos",
+                                                      objRelDataSituacaoSintetico.ExportToStream((ExportFormatType)formato),
+                                                      formato);
+
+                        break;
+
+
+                    default:
+                        break;
+                }
+            }
+
+            if (System.IO.File.Exists(caminhoImagem))
+                System.IO.File.Delete(caminhoImagem);
+
+
+            return arquivo;
+        }
+
+
+
         #endregion
 
         #region "Métodos privados"
+
+        private DataTable RelContasPagarTitulosToDataTable(List<RelContasPagarTitulosDTO> listaRelContasPagarTitulos)
+        {
+            DataTable dta = new DataTable();
+            DataColumn codigo = new DataColumn("codigo", System.Type.GetType("System.Int32"));
+            DataColumn codigoCliente = new DataColumn("codigoCliente", System.Type.GetType("System.Int32"));
+            DataColumn nomeCliente = new DataColumn("nomeCliente");
+            DataColumn descricaoTipoCompromisso = new DataColumn("descricaoTipoCompromisso");
+            DataColumn identificacao = new DataColumn("identificacao");
+            DataColumn descricaoSituacao = new DataColumn("descricaoSituacao");
+            DataColumn siglaTipoDocumento = new DataColumn("siglaTipoDocumento");
+            DataColumn documento = new DataColumn("documento");
+            DataColumn documentoCompleto = new DataColumn("documentoCompleto");
+            DataColumn dataVencimento = new DataColumn("dataVencimento", System.Type.GetType("System.DateTime"));
+            DataColumn dataCadastro = new DataColumn("dataCadastro", System.Type.GetType("System.DateTime"));
+            DataColumn dataEmissaoDocumento = new DataColumn("dataEmissaoDocumento", System.Type.GetType("System.DateTime"));
+            DataColumn valorTitulo = new DataColumn("valorTitulo", System.Type.GetType("System.Decimal"));
+            DataColumn valorLiquido = new DataColumn("valorLiquido", System.Type.GetType("System.Decimal"));
+            DataColumn dataEmissao = new DataColumn("dataEmissao", System.Type.GetType("System.DateTime"));
+            DataColumn dataPagamento = new DataColumn("dataPagamento", System.Type.GetType("System.DateTime"));
+            DataColumn dataBaixa = new DataColumn("dataBaixa", System.Type.GetType("System.DateTime"));
+            DataColumn valorPago = new DataColumn("valorPago", System.Type.GetType("System.Decimal"));
+            DataColumn codigoClasse = new DataColumn("codigoClasse");
+            DataColumn descricaoClasse = new DataColumn("descricaoClasse");
+            DataColumn codigoDescricaoClasse = new DataColumn("codigoDescricaoClasse");
+            DataColumn codigoCentroCusto = new DataColumn("codigoCentroCusto");
+            DataColumn descricaoCentroCusto = new DataColumn("descricaoCentroCusto");
+            DataColumn codigoDescricaoCentroCusto = new DataColumn("codigoDescricaoCentroCusto");
+            DataColumn valorApropriado = new DataColumn("valorApropriado", System.Type.GetType("System.Decimal"));
+            DataColumn descricaoFormaPagamento = new DataColumn("descricaoFormaPagamento");
+            DataColumn agenciaConta = new DataColumn("agenciaConta");
+            DataColumn documentoPagamento = new DataColumn("documentoPagamento");
+            DataColumn numeroCheque = new DataColumn("numeroCheque");
+            DataColumn numeroChequeFormatado = new DataColumn("numeroChequeFormatado");
+            DataColumn dataSituacao = new DataColumn("dataSituacao");
+            DataColumn girErro = new DataColumn("girErro");
+
+            dta.Columns.Add(codigo);
+            dta.Columns.Add(codigoCliente);
+            dta.Columns.Add(nomeCliente);
+            dta.Columns.Add(descricaoTipoCompromisso);
+            dta.Columns.Add(identificacao);
+            dta.Columns.Add(descricaoSituacao);
+            dta.Columns.Add(siglaTipoDocumento);
+            dta.Columns.Add(documento);
+            dta.Columns.Add(documentoCompleto);
+            dta.Columns.Add(dataVencimento);
+            dta.Columns.Add(dataCadastro);
+            dta.Columns.Add(dataEmissaoDocumento);
+            dta.Columns.Add(valorTitulo);
+            dta.Columns.Add(valorLiquido);
+            dta.Columns.Add(dataEmissao);
+            dta.Columns.Add(dataPagamento);
+            dta.Columns.Add(dataBaixa);
+            dta.Columns.Add(valorPago);
+            dta.Columns.Add(codigoClasse);
+            dta.Columns.Add(descricaoClasse);
+            dta.Columns.Add(codigoDescricaoClasse);
+            dta.Columns.Add(codigoCentroCusto);
+            dta.Columns.Add(descricaoCentroCusto);
+            dta.Columns.Add(codigoDescricaoCentroCusto);
+            dta.Columns.Add(valorApropriado);
+            dta.Columns.Add(descricaoFormaPagamento);
+            dta.Columns.Add(agenciaConta);
+            dta.Columns.Add(documentoPagamento);
+            dta.Columns.Add(numeroCheque);
+            dta.Columns.Add(numeroChequeFormatado);
+            dta.Columns.Add(dataSituacao);
+            dta.Columns.Add(girErro);
+
+            foreach (var item in listaRelContasPagarTitulos)
+            {
+                DataRow row = dta.NewRow();
+
+                row[codigo] = item.TituloId;
+                //row[codigoCliente] = null;
+                row[nomeCliente] = item.NomeCliente;
+                row[descricaoTipoCompromisso] = item.TipoCompromissoDescricao;
+                row[identificacao] = item.Identificacao;
+                row[descricaoSituacao] = item.SituacaoTituloDescricao;
+                //row[siglaTipoDocumento] = null;
+                //row[documento] = null;
+                row[documentoCompleto] = item.DocumentoCompleto;
+                row[dataVencimento] = item.DataVencimento.Date;
+                if (item.DataCadastro.HasValue)
+                {
+                    row[dataCadastro] = item.DataCadastro.Value.Date.ToShortDateString();
+                }
+                row[dataEmissaoDocumento] = item.DataEmissaoDocumento;
+                row[valorTitulo] = item.ValorTitulo;
+                row[valorLiquido] = item.ValorLiquido;
+                if (item.DataEmissao.HasValue)
+                {
+                    row[dataEmissao] = item.DataEmissao.Value.Date.ToShortDateString();
+                }
+                if (item.DataPagamento.HasValue)
+                {
+                    row[dataPagamento] = item.DataPagamento.Value.Date.ToShortDateString();
+                }
+                if (item.DataBaixa.HasValue)
+                {
+                    row[dataBaixa] = item.DataBaixa.Value.Date.ToShortDateString();
+                }
+                //row[valorPago] = null;
+                //row[codigoClasse] = null;
+                //row[descricaoClasse] = null;
+                row[codigoDescricaoClasse] = item.CodigoDescricaoClasse;
+                //row[codigoCentroCusto] = null;
+                //row[descricaoCentroCusto] = null;
+                row[codigoDescricaoCentroCusto] = item.CodigoDescricaoCentroCusto;
+                row[valorApropriado] = item.ValorApropriado;
+                row[descricaoFormaPagamento] = item.FormaPagamentoDescricao;
+                row[agenciaConta] = item.AgenciaContaCorrente;
+                row[documentoPagamento] = item.DocumentoPagamento;
+
+                row[documentoPagamento] = item.DocumentoPagamento;
+                //row[numeroCheque] = null;
+                //row[numeroChequeFormatado] = null;
+                if (item.DataSelecao.HasValue)
+                {
+                    row[dataSituacao] = item.DataSelecao.Value.Date.ToShortDateString();
+                }
+
+                row[girErro] = "";
+
+                dta.Rows.Add(row);
+            }
+
+            return dta;
+        }
 
         private List<RelContasPagarTitulosDTO> OrdenaListaRelContasPagarTitulosDTO(RelContasPagarTitulosFiltro filtro, List<RelContasPagarTitulosDTO> listaRelContasPagarTitulos)
         {
@@ -255,11 +571,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return listaRelContasPagarTitulos;
         }
 
-        private List<RelContasPagarTitulosDTO> PopulaListaRelContasPagarTitulosDTO(RelContasPagarTitulosFiltro filtro, List<TituloPagar> listaTitulosPagar, out int totalRegistros,out decimal totalizadoValorTitulo, out decimal totalizadoValorLiquido, out decimal totalizadoValorApropriado)
+        private List<RelContasPagarTitulosDTO> PopulaListaRelContasPagarTitulosDTO(RelContasPagarTitulosFiltro filtro, List<TituloPagar> listaTitulosPagar, out decimal totalizadoValorTitulo, out decimal totalizadoValorLiquido, out decimal totalizadoValorApropriado)
         {
-            int pageCount = filtro.PaginationParameters.PageSize;
-            int pageIndex = filtro.PaginationParameters.PageIndex;
-
             bool situacaoPagamentoPendente = filtro.EhSituacaoAPagarProvisionado || filtro.EhSituacaoAPagarAguardandoLiberacao || filtro.EhSituacaoAPagarLiberado || filtro.EhSituacaoAPagarCancelado;
             bool situacaoPagamentoPago = filtro.EhSituacaoAPagarEmitido || filtro.EhSituacaoAPagarPago || filtro.EhSituacaoAPagarBaixado;
 
@@ -505,15 +818,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             }
 
-            totalRegistros = listaRelContasPagarTitulos.Count();
-
             totalizadoValorTitulo = listaRelContasPagarTitulos.Sum(l => l.ValorTitulo);
             totalizadoValorLiquido = listaRelContasPagarTitulos.Sum(l => l.ValorLiquido);
             totalizadoValorApropriado = listaRelContasPagarTitulos.Sum(l => l.ValorApropriado);
-
-            listaRelContasPagarTitulos = OrdenaListaRelContasPagarTitulosDTO(filtro, listaRelContasPagarTitulos);
-
-            listaRelContasPagarTitulos = listaRelContasPagarTitulos.Skip(pageCount * pageIndex).Take(pageCount).To<List<RelContasPagarTitulosDTO>>();
 
             return listaRelContasPagarTitulos;
         }
