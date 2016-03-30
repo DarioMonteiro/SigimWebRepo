@@ -79,10 +79,10 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
         public CaixaDTO Caixa { get; set; }
 
         [Display(Name = "Inicial")]
-        public decimal ValorTituloInicial { get; set; }
+        public decimal? ValorTituloInicial { get; set; }
 
         [Display(Name = "Final")]
-        public decimal ValorTituloFinal { get; set; }
+        public decimal? ValorTituloFinal { get; set; }
 
         [Display(Name = "Doc. pagamento")]
         [StringLength(20, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Specification;
 
 namespace GIR.Sigim.Domain.Repository.Financeiro
 {
@@ -14,5 +16,16 @@ namespace GIR.Sigim.Domain.Repository.Financeiro
         void RemoverImpostoPagar(ImpostoPagar impostoPagar);
         void RemoverTituloPagar(TituloPagar titulo);
         void RemoverApropriacao(Apropriacao apropriacao);
+
+        IEnumerable<TituloPagar> ListarPeloFiltroComPaginacaoComUnion(
+            ISpecification<TituloPagar> specification,
+            ISpecification<TituloPagar> specification1,
+            int pageIndex,
+            int pageCount,
+            string orderBy,
+            bool ascending,
+            out int totalRecords,
+            params Expression<Func<TituloPagar, object>>[] includes);
+
     }
 }

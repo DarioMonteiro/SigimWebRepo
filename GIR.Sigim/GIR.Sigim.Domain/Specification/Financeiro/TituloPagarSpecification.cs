@@ -166,7 +166,6 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
             return specification;
         }
 
-
         public static Specification<TituloPagar> EhSituacaoAPagarProvisionado(bool provisionado)
         {
             if (provisionado)
@@ -336,6 +335,81 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
             {
                 var directSpecification = new DirectSpecification<TituloPagar>(l => l.Movimento.Documento.Contains(documentoPagamento));
                 specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<TituloPagar> EhTipoTituloDiferenteDeTituloPai()
+        {
+            Specification<TituloPagar> specification = new TrueSpecification<TituloPagar>();
+
+            var directSpecification = new DirectSpecification<TituloPagar>(l => l.TipoTitulo != TipoTitulo.Pai);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
+        public static Specification<TituloPagar> ValorTituloMaiorOuIgualRelContasPagarTitulos(decimal? valor)
+        {
+            Specification<TituloPagar> specification = new TrueSpecification<TituloPagar>();
+
+            if (valor.HasValue && (valor.Value != 0))
+            {
+                var directSpecification = new DirectSpecification<TituloPagar>(l => l.ValorTitulo > valor);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<TituloPagar> ValorTituloMenorOuIgualRelContasPagarTitulos(decimal? valor)
+        {
+            Specification<TituloPagar> specification = new TrueSpecification<TituloPagar>();
+
+            if (valor.HasValue && (valor.Value != 0))
+            {
+                var directSpecification = new DirectSpecification<TituloPagar>(l => l.ValorTitulo < valor);
+                specification &= directSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<TituloPagar> MatchingMovimentoBancoId(int? bancoId)
+        {
+            Specification<TituloPagar> specification = new TrueSpecification<TituloPagar>();
+
+            if (bancoId.HasValue)
+            {
+                var idSpecification = new DirectSpecification<TituloPagar>(l => l.Movimento.ContaCorrente.BancoId == bancoId);
+                specification &= idSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<TituloPagar> MatchingMovimentoContaCorrenteId(int? contaCorrenteId)
+        {
+            Specification<TituloPagar> specification = new TrueSpecification<TituloPagar>();
+
+            if (contaCorrenteId.HasValue)
+            {
+                var idSpecification = new DirectSpecification<TituloPagar>(l => l.Movimento.ContaCorrenteId == contaCorrenteId);
+                specification &= idSpecification;
+            }
+
+            return specification;
+        }
+
+        public static Specification<TituloPagar> MatchingMovimentoCaixaId(int? caixaId)
+        {
+            Specification<TituloPagar> specification = new TrueSpecification<TituloPagar>();
+
+            if (caixaId.HasValue)
+            {
+                var idSpecification = new DirectSpecification<TituloPagar>(l => l.Movimento.CaixaId == caixaId);
+                specification &= idSpecification;
             }
 
             return specification;
