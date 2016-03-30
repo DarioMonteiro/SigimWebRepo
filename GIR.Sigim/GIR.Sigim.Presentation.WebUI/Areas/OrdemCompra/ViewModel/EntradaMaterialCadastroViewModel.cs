@@ -125,6 +125,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel
         #region Accordion Seleção de Formas de Pagamento
 
         public int? FormaPagamentoId { get; set; }
+        public bool? EhPagamentoAntecipado { get; set; }
 
         [Display(Name = "OC")]
         public int? OrdemCompraId { get; set; }

@@ -1429,6 +1429,7 @@
                                             <fieldset id="formSelecaoFormaPagamento">
                                                 <div class="row">
                                                     @Html.HiddenFor(m => m.FormaPagamentoId)
+                                                    @Html.HiddenFor(m => m.EhPagamentoAntecipado)
                                                     <section class="col col-3">
                                                         @Html.LabelFor(m => m.OrdemCompraId, new { @class = "label" })
                                                         <label class="input">
@@ -1538,6 +1539,7 @@
                                                                 <th class="text-right">Título pagar</th>
                                                                 <th class="text-center">Data vencimento lib.</th>
                                                                 <th class="text-right">Valor liberado</th>
+                                                                <th class="text-center">Antecipação</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -1635,7 +1637,7 @@
                                                         }
                                                         else {
                                                             var arr = jQuery.grep(jsonFormasPagamentoPendentes, function (formaPagamento, i) {
-                                                                return (formaPagamento.DataVencimentoLiberado != null);
+                                                                return ((formaPagamento.ValorParcelaLiberado != null) && (formaPagamento.ValorParcelaLiberado > 0));
                                                             });
 
                                                             if (arr.length == 0) {
@@ -1746,6 +1748,7 @@
                                                 }
 
                                                 function fillTableOrdemCompraFormaPagamento() {
+                                                    //$("#@Html.IdFor(m => m.EntradaMaterial.Observacao)").val(JSON.stringify(jsonFormasPagamentoPendentes));
                                                     $("#tableOrdemCompraFormaPagamento tbody").empty();
                                                     for (var i = 0; i < jsonFormasPagamentoPendentes.length; i++) {
                                                         var row = $('<tr />')
@@ -1772,6 +1775,7 @@
                                                             row.append($('<td class="text-right decimal-2-casas">' + roundDecimal(floatToString(jsonFormasPagamentoPendentes[i].ValorParcelaLiberado), 2) + '</td>'));
                                                         else
                                                             row.append($('<td>&nbsp;</td>'));
+                                                        row.append($('<td class="text-center">' + jsonFormasPagamentoPendentes[i].EhPagamentoAntecipadoDescricao + '</td>'));
                                                     }
 
                                                     initializeDecimalBehaviour();
@@ -1786,16 +1790,26 @@
                                                     if (arr.length > 0) {
                                                         var formaPagamento = arr[0];
                                                         $("#@Html.IdFor(m => m.FormaPagamentoId)").val(formaPagamento.Id);
+                                                        $("#@Html.IdFor(m => m.EhPagamentoAntecipado)").val(formaPagamento.EhPagamentoAntecipado);
                                                         $("#@Html.IdFor(m => m.OrdemCompraId)").val(formaPagamento.OrdemCompraId);
                                                         $("#@Html.IdFor(m => m.DataVencimento)").val(new Date(formaPagamento.Data).toFormatDDMMYYYY());
-
-                                                        var dataVencimentoLiberado = formaPagamento.DataVencimentoLiberado == null ? formaPagamento.Data : formaPagamento.DataVencimentoLiberado;
-                                                        $("#@Html.IdFor(m => m.DataVencimentoLiberado)").val(new Date(dataVencimentoLiberado).toFormatDDMMYYYY());
                                                         $("#@Html.IdFor(m => m.ValorParcela)").val(roundDecimal(floatToString(formaPagamento.Valor), 2));
 
                                                         var valorParcelaLiberado = formaPagamento.ValorParcelaLiberado == null ? formaPagamento.Valor : formaPagamento.ValorParcelaLiberado;
                                                         $("#@Html.IdFor(m => m.ValorParcelaLiberado)").val(roundDecimal(floatToString(valorParcelaLiberado), 2));
-                                                        ajustarQuantidadeDiasAposEmissao();
+
+                                                        if (formaPagamento.EhPagamentoAntecipado) {
+                                                            $("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)").attr('readonly', true);
+                                                            $("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)").addClass("readonly");
+                                                            $("#@Html.IdFor(m => m.DataVencimentoLiberado)").attr('readonly', true);
+                                                            $("#@Html.IdFor(m => m.DataVencimentoLiberado)").addClass("readonly");
+                                                            $("#@Html.IdFor(m => m.DataVencimentoLiberado)").attr('disabled', true);
+                                                        }
+                                                        else {
+                                                            var dataVencimentoLiberado = formaPagamento.DataVencimentoLiberado == null ? formaPagamento.Data : formaPagamento.DataVencimentoLiberado;
+                                                            $("#@Html.IdFor(m => m.DataVencimentoLiberado)").val(new Date(dataVencimentoLiberado).toFormatDDMMYYYY());
+                                                            ajustarQuantidadeDiasAposEmissao();
+                                                        }
                                                     }
 
                                                     initializeDecimalBehaviour();
@@ -1803,12 +1817,18 @@
 
                                                 function clearFormFormaPagamento() {
                                                     $("#@Html.IdFor(m => m.FormaPagamentoId)").val('');
+                                                    $("#@Html.IdFor(m => m.EhPagamentoAntecipado)").val('');
                                                     $("#@Html.IdFor(m => m.OrdemCompraId)").val('');
                                                     $("#@Html.IdFor(m => m.DataVencimento)").val('');
                                                     $("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)").val('');
                                                     $("#@Html.IdFor(m => m.DataVencimentoLiberado)").val('');
                                                     $("#@Html.IdFor(m => m.ValorParcela)").val(roundDecimal('0', 2));
                                                     $("#@Html.IdFor(m => m.ValorParcelaLiberado)").val(roundDecimal('0', 2));
+                                                    $("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)").attr('readonly', false);
+                                                    $("#@Html.IdFor(m => m.QuantidadeDiasAposEmissao)").removeClass("readonly");
+                                                    $("#@Html.IdFor(m => m.DataVencimentoLiberado)").attr('readonly', false);
+                                                    $("#@Html.IdFor(m => m.DataVencimentoLiberado)").removeClass("readonly");
+                                                    $("#@Html.IdFor(m => m.DataVencimentoLiberado)").attr('disabled', false);
                                                 }
 
                                                 function atualizarTotaisSelecaoFormaPagamento() {
@@ -2771,6 +2791,14 @@
         );
 
         jQuery.validator.addMethod(
+            "ehDataVencimentoLiberadoObrigatoria",
+            function (value, element, params) {
+                var ehPagamentoAntecipado = $("#@Html.IdFor(m => m.EhPagamentoAntecipado)").val() == 'true';
+                return $("#@Html.IdFor(m => m.DataVencimentoLiberado)").val() != '' || ehPagamentoAntecipado;
+            }, ''
+        );
+
+        jQuery.validator.addMethod(
             "ehValorLiberadoMenorIgualParcela",
             function (value, element, params) {
                 var valorParcela = parseFloat($('#@Html.IdFor(m => m.ValorParcela)').val().replace(".", "").replace(",", "."));
@@ -2817,7 +2845,7 @@
                 '@Html.NameFor(m => m.Material.Id)': 'required',
                 '@Html.NameFor(m => m.OrdemCompraId)': 'required',
                 '@Html.NameFor(m => m.DataVencimentoLiberado)': {
-                    required: true,
+                    ehDataVencimentoLiberadoObrigatoria: true,
                     date: true,
                     ehDataVencimentoNoLimitePagamento: true
                 },
@@ -2864,7 +2892,7 @@
                     required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "OC")'
                 },
                 '@Html.NameFor(m => m.DataVencimentoLiberado)': {
-                    required: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data vencimento lib.")',
+                    ehDataVencimentoLiberadoObrigatoria: '@string.Format(GIR.Sigim.Application.Resource.Sigim.ErrorMessages.CampoObrigatorio, "Data vencimento lib.")',
                     date: '@GIR.Sigim.Application.Resource.Sigim.ErrorMessages.InformeDataValida',
                     ehDataVencimentoNoLimitePagamento: "Data de vencimento fora do limite de pagamento"
                 },
