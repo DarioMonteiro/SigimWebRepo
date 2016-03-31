@@ -510,8 +510,16 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 entradaMaterialItem.ValorUnitario = ordemCompraItem.ValorUnitario;
                 entradaMaterialItem.PercentualIPI = ordemCompraItem.PercentualIPI;
                 entradaMaterialItem.PercentualDesconto = ordemCompraItem.PercentualDesconto;
-                decimal? valorTotalItens = ordemCompraItem.Saldo * ordemCompraItem.ValorUnitario;
-                entradaMaterialItem.ValorTotal = valorTotalItens - (valorTotalItens * ordemCompraItem.PercentualDesconto / 100);
+
+
+                //decimal? valorTotalItens = ordemCompraItem.Saldo * ordemCompraItem.ValorUnitario;
+                //entradaMaterialItem.ValorTotal = valorTotalItens - (valorTotalItens * ordemCompraItem.PercentualDesconto / 100);
+
+                var valorTotalItem = ordemCompraItem.Saldo * ordemCompraItem.ValorUnitario;
+                var valorTotalItemComDesconto = valorTotalItem - ((valorTotalItem * ordemCompraItem.PercentualDesconto) / 100);
+                var valorTotalItemComIPI = valorTotalItemComDesconto + ((valorTotalItemComDesconto * ordemCompraItem.PercentualIPI) / 100);
+                entradaMaterialItem.ValorTotal = valorTotalItemComIPI;
+
                 entradaMaterialItem.BaseIPI = ordemCompraItem.Saldo * ordemCompraItem.ValorUnitario;
                 entradaMaterial.ListaItens.Add(entradaMaterialItem);
 

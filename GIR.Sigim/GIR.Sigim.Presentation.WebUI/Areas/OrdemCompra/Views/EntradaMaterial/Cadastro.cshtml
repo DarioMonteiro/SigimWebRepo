@@ -963,7 +963,7 @@
                                                     row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].ValorUnitario), 4) + '</td>'));
                                                     row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].PercentualIPI), 4) + '</td>'));
                                                     row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].PercentualDesconto), 4) + '</td>'));
-                                                    row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].ValorTotal + jsonItens[i].ValorIPI), 4) + '</td>'));
+                                                    row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].ValorTotal), 4) + '</td>'));
                                                     row.append($('<td class="text-nowrap">' + jsonItens[i].Classe.ClasseDescricao + '</td>'));
                                                     row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].PercentualICMS), 4) + '</td>'));
                                                     row.append($('<td class="text-right decimal-4-casas">' + roundDecimal(floatToString(jsonItens[i].PercentualICMSST), 4) + '</td>'));
@@ -1871,7 +1871,7 @@
                                                         var valorTotalItens = 0;
                                                         $.each(jsonItens, function (i, item) {
                                                             if (item.OrdemCompraItem.OrdemCompraId == ordemCompraId) {
-                                                                valorTotalItens += item.ValorTotal + item.ValorIPI - (item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100);
+                                                                valorTotalItens += item.ValorTotal - (item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100);
                                                             }
                                                         });
 
@@ -3037,9 +3037,7 @@
         var valorTotal = 0;
 
         $.each(jsonItens, function (i, item) {
-            var valorIPI = item.ValorTotal * item.PercentualIPI / 100;
-            valorTotalIPI += valorIPI;
-            valorTotalItens += item.ValorTotal + item.ValorIPI;// + valorIPI - (item.ValorTotal * item.PercentualDesconto / 100);
+            valorTotalItens += item.ValorTotal;
 
             var valorDescontoOC = item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100;
             valorTotalDescontoOrdemCompra += valorDescontoOC;
