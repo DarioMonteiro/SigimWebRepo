@@ -84,7 +84,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         }
 
         public decimal? ValorTotalItens {
-            get { return this.ListaItens.Sum(l => l.ValorTotal + l.ValorIPI); }
+            get { return this.ListaItens.Sum(l => l.ValorTotal); }
         }
 
         public decimal? ValorTotalDescontoOrdemCompra
