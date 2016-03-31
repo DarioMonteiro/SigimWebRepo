@@ -22,6 +22,7 @@ namespace GIR.Sigim.Application.DTO.OrdemCompra
         public decimal ValorUnitario { get; set; }
         public decimal PercentualIPI { get; set; }
         public decimal PercentualDesconto { get; set; }
+        public decimal ValorIPI { get; set; }
         public decimal ValorTotal { get; set; }
         public decimal BaseICMS { get; set; }
         public decimal PercentualICMS { get; set; }
