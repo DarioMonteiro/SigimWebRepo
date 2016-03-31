@@ -332,15 +332,28 @@
       <DependentUpon>relTituloPagar.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Financeiro\relTituloPagarClasse.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relTituloPagarClasse.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Financeiro\relTituloPagarDataSintetico.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relTituloPagarDataSintetico.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Financeiro\relTituloPagarDataSituacao.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relTituloPagarDataSituacao.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Financeiro\relTituloPagarFornecedor.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relTituloPagarFornecedor.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\OrdemCompra\relEntradaMaterial.cs">
@@ -604,6 +617,10 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relTituloPagar.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relTituloPagarClasse.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relTituloPagarClasse.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Financeiro\relTituloPagarDataSintetico.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relTituloPagarDataSintetico.cs</LastGenOutput>
@@ -611,6 +628,10 @@
     <EmbeddedResource Include="Reports\Financeiro\relTituloPagarDataSituacao.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relTituloPagarDataSituacao.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relTituloPagarFornecedor.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relTituloPagarFornecedor.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\OrdemCompra\relEntradaMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

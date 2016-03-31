@@ -17,6 +17,7 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public string DocumentoCompleto { get; set; }
         public decimal ValorTitulo { get; set; }
         public decimal ValorLiquido { get; set; }
+        public int? ClienteId { get; set; }
         public string NomeCliente { get; set; }
         public string Identificacao { get; set; }
         public string FormaPagamentoDescricao { get; set; }
@@ -33,7 +34,9 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public string LoginUsuarioCadastro { get; set; }
         public Nullable<DateTime> DataCadastro { get; set; }
         public decimal ValorApropriado { get; set; }
+        public string CodigoClasse { get; set; }
         public string CodigoDescricaoClasse { get; set; }
+        public string CodigoCentroCusto { get; set; }
         public string CodigoDescricaoCentroCusto { get; set; }
     }
 }
