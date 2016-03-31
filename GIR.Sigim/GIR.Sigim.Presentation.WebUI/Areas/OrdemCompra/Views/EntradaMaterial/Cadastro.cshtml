@@ -1871,7 +1871,7 @@
                                                         var valorTotalItens = 0;
                                                         $.each(jsonItens, function (i, item) {
                                                             if (item.OrdemCompraItem.OrdemCompraId == ordemCompraId) {
-                                                                valorTotalItens += item.ValorTotal - (item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100);
+                                                                valorTotalItens += item.ValorTotal + item.ValorIPI - (item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100);
                                                             }
                                                         });
 
