@@ -154,7 +154,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             totalRegistros = listaRelContasPagarTitulos.Count();
 
-            if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 2))
+            if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 4))
             {
                 filtro.PaginationParameters.OrderBy = "dataSelecao";
             }
@@ -222,7 +222,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                                                  out totalValorLiquido,
                                                                                  out totalValorApropriado);
 
-            if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 2))
+            if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 4))
             {
                 listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DataSelecao).ToList<RelContasPagarTitulosDTO>();
             }
@@ -264,6 +264,40 @@ namespace GIR.Sigim.Application.Service.Financeiro
                         break;
 
                     case 1:
+                        relTituloPagarFornecedor objRelFornecedor = new relTituloPagarFornecedor();
+                        objRelFornecedor.SetDataSource(RelContasPagarTitulosToDataTable(listaRelContasPagarTitulos.OrderBy(l => l.ClienteId).ThenBy(l => l.TituloId).ToList<RelContasPagarTitulosDTO>()));
+
+                        objRelFornecedor.SetParameterValue("dataInicial", filtro.DataInicial.Value.ToString("dd/MM/yyyy"));
+                        objRelFornecedor.SetParameterValue("dataFinal", filtro.DataFinal.Value.ToString("dd/MM/yyyy"));
+                        objRelFornecedor.SetParameterValue("valorTotalBruto", totalValorTitulo);
+                        objRelFornecedor.SetParameterValue("valorTotalLiquido", totalValorLiquido);
+                        objRelFornecedor.SetParameterValue("NomeEmpresa", nomeEmpresa);
+                        objRelFornecedor.SetParameterValue("tipoPesquisa", (filtro.EhPorCompetencia ? "V" : ""));
+                        objRelFornecedor.SetParameterValue("caminhoImagem", caminhoImagem);
+
+                        arquivo = new FileDownloadDTO("Rel. Contas a pagar títulos",
+                                                      objRelFornecedor.ExportToStream((ExportFormatType)formato),
+                                                      formato);
+                        break;
+
+                    case 2:
+                        relTituloPagarClasse objRelClasse = new relTituloPagarClasse();
+                        objRelClasse.SetDataSource(RelContasPagarTitulosToDataTable(listaRelContasPagarTitulos));
+
+                        objRelClasse.SetParameterValue("dataInicial", filtro.DataInicial.Value.ToString("dd/MM/yyyy"));
+                        objRelClasse.SetParameterValue("dataFinal", filtro.DataFinal.Value.ToString("dd/MM/yyyy"));
+                        objRelClasse.SetParameterValue("valorTotalBruto", totalValorTitulo);
+                        objRelClasse.SetParameterValue("valorTotalLiquido", totalValorLiquido);
+                        objRelClasse.SetParameterValue("NomeEmpresa", nomeEmpresa);
+                        objRelClasse.SetParameterValue("tipoPesquisa", (filtro.EhPorCompetencia ? "V" : ""));
+                        objRelClasse.SetParameterValue("caminhoImagem", caminhoImagem);
+
+                        arquivo = new FileDownloadDTO("Rel. Contas a pagar títulos",
+                                                      objRelClasse.ExportToStream((ExportFormatType)formato),
+                                                      formato);
+                        break;
+
+                    case 3:
                         relTituloPagarDataSituacao objRelDataSituacao = new relTituloPagarDataSituacao();
                         objRelDataSituacao.SetDataSource(RelContasPagarTitulosToDataTable(listaRelContasPagarTitulos));
 
@@ -281,7 +315,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
                         break;
 
-                    case 2:
+                    case 4:
                         string parCentroCusto = "Todos";
                         if (centroCusto != null)
                         {
@@ -411,7 +445,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 DataRow row = dta.NewRow();
 
                 row[codigo] = item.TituloId;
-                //row[codigoCliente] = null;
+                if (item.ClienteId.HasValue)
+                {
+                    row[codigoCliente] = item.ClienteId.Value;
+                }
                 row[nomeCliente] = item.NomeCliente;
                 row[descricaoTipoCompromisso] = item.TipoCompromissoDescricao;
                 row[identificacao] = item.Identificacao;
@@ -440,10 +477,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     row[dataBaixa] = item.DataBaixa.Value.Date.ToShortDateString();
                 }
                 //row[valorPago] = null;
-                //row[codigoClasse] = null;
+                row[codigoClasse] = item.CodigoClasse;
                 //row[descricaoClasse] = null;
                 row[codigoDescricaoClasse] = item.CodigoDescricaoClasse;
-                //row[codigoCentroCusto] = null;
+                row[codigoCentroCusto] = item.CodigoCentroCusto;
                 //row[descricaoCentroCusto] = null;
                 row[codigoDescricaoCentroCusto] = item.CodigoDescricaoCentroCusto;
                 row[valorApropriado] = item.ValorApropriado;
@@ -609,6 +646,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 }
                 relat.ValorTitulo = tituloPagar.ValorTitulo;
 
+                relat.ClienteId = tituloPagar.ClienteId;
                 relat.NomeCliente = tituloPagar.Cliente.Nome;
                 relat.Identificacao = tituloPagar.Identificacao;
                 relat.FormaPagamentoDescricao = "";
@@ -778,20 +816,22 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                 }
                             }
 
-                            if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 2))
+                            if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 4))
                             {
                                 totalValorApropriado = totalValorApropriado + apropriacao.Valor;
                             }
                             else
                             {
                                 relat.ValorApropriado = apropriacao.Valor;
+                                relat.CodigoClasse = apropriacao.Classe.Codigo;
                                 relat.CodigoDescricaoClasse = apropriacao.Classe.Codigo + " - " + apropriacao.Classe.Descricao;
+                                relat.CodigoCentroCusto = apropriacao.CentroCusto.Codigo;
                                 relat.CodigoDescricaoCentroCusto = apropriacao.CentroCusto.Codigo + " - " + apropriacao.CentroCusto.Descricao;
 
                                 listaRelContasPagarTitulos.Add(relat);
                             }
                         }
-                        if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 2))
+                        if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 4))
                         {
                             relat.ValorApropriado = totalValorApropriado;
                             listaRelContasPagarTitulos.Add(relat);
@@ -801,7 +841,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     else
                     {
                         relat.ValorApropriado = 0;
+                        relat.CodigoClasse = "";
                         relat.CodigoDescricaoClasse = "";
+                        relat.CodigoCentroCusto = "";
                         relat.CodigoDescricaoCentroCusto = "";
 
                         listaRelContasPagarTitulos.Add(relat);
@@ -810,7 +852,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 else
                 {
                     relat.ValorApropriado = 0;
+                    relat.CodigoClasse = "";
                     relat.CodigoDescricaoClasse = "";
+                    relat.CodigoCentroCusto = "";
                     relat.CodigoDescricaoCentroCusto = "";
 
                     listaRelContasPagarTitulos.Add(relat);

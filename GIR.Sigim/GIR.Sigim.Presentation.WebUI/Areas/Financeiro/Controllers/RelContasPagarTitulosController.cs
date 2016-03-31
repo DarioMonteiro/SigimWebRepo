@@ -89,7 +89,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 if (result.Any())
                 {
                     var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result, totalValorTitulo, totalValorLiquido, totalValorApropriado);
-                    if ((model.Filtro.EhTotalizadoPor.HasValue) && (model.Filtro.EhTotalizadoPor.Value == 2))
+                    if ((model.Filtro.EhTotalizadoPor.HasValue) && (model.Filtro.EhTotalizadoPor.Value == 4))
                     {
                         return PartialView("ListaPartialSintetico", listaViewModel);
                     }
