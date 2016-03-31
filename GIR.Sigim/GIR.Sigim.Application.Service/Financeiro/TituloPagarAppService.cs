@@ -784,6 +784,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
                         if (tituloPagar.Cliente.TipoPessoa == "J")
                         {
                             relat.CPFCNPJ = tituloPagar.Cliente.PessoaJuridica.Cnpj;
+                            if ((filtro.VisualizarClientePor.HasValue) && (filtro.VisualizarClientePor.Value == 1))
+                            {
+                                relat.NomeCliente = tituloPagar.Cliente.PessoaJuridica.NomeFantasia;
+                            }
                         }
                     }
                 }

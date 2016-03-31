@@ -26,6 +26,7 @@
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
+                        @Html.HiddenFor(m => m.Filtro.EhTotalizadoPor)
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -357,7 +358,7 @@
                                                 </section>
                                             </div>
                                         </fieldset>
-                                        <fieldset>
+@*                                        <fieldset>
                                             <div class="row">
                                                 <section class="col col-12">
                                                     <h5>Apresentação do relatório</h5>
@@ -374,7 +375,7 @@
 									                </div>
 								                </section>
                                             </div>
-                                        </fieldset>
+                                        </fieldset>*@
                                     </div>
                                 </div>
                             </div>
@@ -383,7 +384,7 @@
                             @{
                                 var url = Url.Action("Imprimir", "RelContasPagarTitulos");
                             }
-                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url = url })
+                            @Html.EditorFor(m => m.PodeImprimir, "Imprimir", new { @url=url })
                         </footer>
                     }
                     <div id="resultadoBusca"></div>
@@ -433,15 +434,66 @@
                     e.event.preventDefault();
                 }
             }
+
+            var totalizadoPor = $("#@Html.IdFor(m => m.Filtro.EhTotalizadoPor)").val();
+
+            if (totalizadoPor == "")
+            {
+                totalizadoPor = 0;
+            }
+
+            parametrosUrlImpressao = '&totalizadoPor=' + totalizadoPor;
+
         })
 
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
                 ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
-                listarFiltro();
+
+                solicitaFormaDeExibicao();
+
+                //listarFiltro();
             }
         );
+
     });
+
+    function solicitaFormaDeExibicao() {
+        $.SmartMessageBox({
+            title: "Apresentação do relatório",
+            content: "Selecione o tipo de relatório que deseja",
+            buttons: "[OK]",
+            input: "select",
+            options: "[Totalizado geral][Totalizado por data situação][Totalizado por data situação (Sintético)][Totalizado por fornecedor][Totalizado por classe]"
+        },
+        function (ButtonPress, Value) {
+            var totalizadoPor = 0;
+            if (Value == "Totalizado geral") {
+                totalizadoPor = 0;
+            }
+            if (Value == "Totalizado por fornecedor") {
+                totalizadoPor = 1;
+            }
+            if (Value == "Totalizado por classe") {
+                totalizadoPor = 2;
+            }
+            if (Value == "Totalizado por data situação") {
+                totalizadoPor = 3;
+            }
+            if (Value == "Totalizado por data situação (Sintético)") {
+                totalizadoPor = 4;
+            }
+
+            $("#@Html.IdFor(m => m.Filtro.EhTotalizadoPor)").val(totalizadoPor);
+
+            if (ButtonPress == "OK")
+            {
+                listarFiltro();
+            }
+        });
+
+        //e.preventDefault();
+    }
 
     function habilitaDesabilitaChkSemDadosApropriacao(condicao) 
     {
@@ -559,5 +611,6 @@
 
         }
     }
+
 
 </script>

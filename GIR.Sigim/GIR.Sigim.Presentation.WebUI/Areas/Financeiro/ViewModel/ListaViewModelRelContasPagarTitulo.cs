@@ -21,5 +21,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel
         public decimal TotalValorLiquido { get; set; }
         [Display(Name = "Valor apropriado")]
         public decimal TotalValorApropriacao { get; set; }
+        public string TotalizadoPorDescricao { get; set; }
     }
 }
