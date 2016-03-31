@@ -133,20 +133,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             });
         }
 
-        public ActionResult Imprimir(short? totalizadoPor,FormatoExportacaoArquivo formato)
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
         {
             var model = Session["Filtro"] as RelContasPagarTitulosListaViewModel;
             if (model == null)
             {
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NaoExistemRegistros, TypeMessage.Error);
                 return PartialView("_NotificationMessagesPartial");
-            }
-
-            model.Filtro.EhTotalizadoPor = 0;
-
-            if (totalizadoPor.HasValue)
-            {
-                model.Filtro.EhTotalizadoPor = totalizadoPor.Value;
             }
 
             var arquivo = tituloPagarAppService.ExportarRelContasPagarTitulos(model.Filtro, Usuario.Id, formato);
