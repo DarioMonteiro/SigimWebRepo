@@ -3037,6 +3037,8 @@
         var valorTotal = 0;
 
         $.each(jsonItens, function (i, item) {
+            valorTotalIPI += item.ValorIPI;
+
             valorTotalItens += item.ValorTotal;
 
             var valorDescontoOC = item.ValorTotal * item.OrdemCompraItem.PercentualDescontoOrdemCompra / 100;

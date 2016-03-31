@@ -22,7 +22,7 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         public decimal? PercentualIPI { get; set; }
         public decimal? ValorIPI
         {
-            get { return this.ValorTotal * this.PercentualIPI / 100; }
+            get { return this.BaseIPI * this.PercentualIPI / 100; }
         }
         public decimal? PercentualDesconto { get; set; }
         public decimal? ValorDesconto
