@@ -148,6 +148,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             var listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro, 
                                                                                  listaTitulosPagar,
+                                                                                 usuarioId,
                                                                                  out totalValorTitulo, 
                                                                                  out totalValorLiquido,
                                                                                  out totalValorApropriado);
@@ -218,6 +219,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             var listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro,
                                                                                  listaTitulosPagar,
+                                                                                 usuarioId,
                                                                                  out totalValorTitulo,
                                                                                  out totalValorLiquido,
                                                                                  out totalValorApropriado);
@@ -608,7 +610,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return listaRelContasPagarTitulos;
         }
 
-        private List<RelContasPagarTitulosDTO> PopulaListaRelContasPagarTitulosDTO(RelContasPagarTitulosFiltro filtro, List<TituloPagar> listaTitulosPagar, out decimal totalizadoValorTitulo, out decimal totalizadoValorLiquido, out decimal totalizadoValorApropriado)
+        private List<RelContasPagarTitulosDTO> PopulaListaRelContasPagarTitulosDTO(RelContasPagarTitulosFiltro filtro, List<TituloPagar> listaTitulosPagar,int? usuarioId, out decimal totalizadoValorTitulo, out decimal totalizadoValorLiquido, out decimal totalizadoValorApropriado)
         {
             bool situacaoPagamentoPendente = filtro.EhSituacaoAPagarProvisionado || filtro.EhSituacaoAPagarAguardandoLiberacao || filtro.EhSituacaoAPagarLiberado || filtro.EhSituacaoAPagarCancelado;
             bool situacaoPagamentoPago = filtro.EhSituacaoAPagarEmitido || filtro.EhSituacaoAPagarPago || filtro.EhSituacaoAPagarBaixado;
@@ -817,6 +819,14 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                 if (filtro.CentroCusto.Codigo != apropriacao.CentroCusto.Codigo)
                                 {
                                     continue;
+                                }
+                                if (usuarioAppService.UsuarioPossuiCentroCustoDefinidoNoModulo(usuarioId, Resource.Sigim.NomeModulo.Financeiro))
+                                {
+                                    if (!apropriacao.CentroCusto.ListaUsuarioCentroCusto.Any(c =>
+                                        c.UsuarioId == usuarioId && c.Modulo.Nome == Resource.Sigim.NomeModulo.Financeiro && c.CentroCusto.Situacao == "A"))
+                                    {
+                                        continue;
+                                    }
                                 }
                             }
 
