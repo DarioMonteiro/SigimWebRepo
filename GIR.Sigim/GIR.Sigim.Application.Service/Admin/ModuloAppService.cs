@@ -40,6 +40,18 @@ namespace GIR.Sigim.Application.Service.Admin
             return moduloRepository.ObterPeloId(id).To<ModuloDTO>();
         }
 
-           #endregion
+        public bool PossuiModulo(string nomeModulo)
+        {
+            string nomeModuloAux =  nomeModulo + "WEB";
+            if (moduloRepository.ListarTodos().Any(l => l.Nome.ToUpper() == nomeModuloAux.ToUpper()))
+            {
+                return true;
+            }
+
+            messageQueue.Add(Resource.Sigim.ErrorMessages.ModuloNaoPermitido, TypeMessage.Info);
+            return false;
+        }
+
+        #endregion
     }
 }

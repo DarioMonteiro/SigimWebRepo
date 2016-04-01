@@ -168,6 +168,9 @@
   <data name="LimiteMinimoCaracteresNaoAtingido" xml:space="preserve">
     <value>Preencha o campo com no mínimo {1} caracteres.</value>
   </data>
+  <data name="ModuloNaoPermitido" xml:space="preserve">
+    <value>Esse módulo não faz parte do seu pacote.</value>
+  </data>
   <data name="NaoExistemRegistros" xml:space="preserve">
     <value>Não existem registros.</value>
   </data>
