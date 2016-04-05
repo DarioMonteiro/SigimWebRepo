@@ -86,6 +86,13 @@ namespace GIR.Sigim.Application.Service.Admin
                 messageQueue.Add(Resource.Sigim.ErrorMessages.DataExpirada, TypeMessage.Error);
                 return false;
             }
+
+            //if (acessoAppService.ValidaSistemaBloqueado(nomeModulo))
+            //{
+            //    messageQueue.Add(Resource.Sigim.ErrorMessages.DataExpiracaoNaoInformada, TypeMessage.Error);
+            //    return false;
+            //}
+
             return true;
         }
 
