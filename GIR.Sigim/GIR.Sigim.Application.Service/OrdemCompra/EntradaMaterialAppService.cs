@@ -612,10 +612,11 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
 
                     if (ordemCompraFormaPagamento.EhPagamentoAntecipado.Value)
                     {
-                        novaOrdemCompraFormaPagamento.TituloPagar.Id = ordemCompraFormaPagamento.TituloPagarId;
+                        novaOrdemCompraFormaPagamento.TituloPagarId = ordemCompraFormaPagamento.TituloPagarId;
                         novaOrdemCompraFormaPagamento.EhPagamentoAntecipado = true;
                         novaOrdemCompraFormaPagamento.EhUtilizada = true;
                         novaOrdemCompraFormaPagamento.EhAssociada = true;
+                        entradaMaterialFormaPagamento.TituloPagarId = ordemCompraFormaPagamento.TituloPagarId;
                     }
                     else
                     {
