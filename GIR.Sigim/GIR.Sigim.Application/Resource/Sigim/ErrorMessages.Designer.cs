@@ -97,6 +97,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chave de acesso não informada. Entre em contato com a GIR !.
+        /// </summary>
+        public static string ChaveAcessoNaoInformada {
+            get {
+                return ResourceManager.GetString("ChaveAcessoNaoInformada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Classe insumo não cadastrada..
         /// </summary>
         public static string ClasseInsumoNaoCadastrada {
@@ -111,6 +120,24 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         public static string ClasseUltimoNivel {
             get {
                 return ResourceManager.GetString("ClasseUltimoNivel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data de expiração não foi informada ou está inválida. Entre em contato com a GIR !.
+        /// </summary>
+        public static string DataExpiracaoNaoInformada {
+            get {
+                return ResourceManager.GetString("DataExpiracaoNaoInformada", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Período de utilização do sistema expirou. Entre em contato com a GIR !.
+        /// </summary>
+        public static string DataExpirada {
+            get {
+                return ResourceManager.GetString("DataExpirada", resourceCulture);
             }
         }
         

@@ -79,6 +79,7 @@
     <Compile Include="Entity\Financeiro\OpcoesRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Financeiro\TipoMovimentoRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Financeiro\TipoPesquisaRelatorioApropriacaoPorClasse.cs" />
+    <Compile Include="Entity\GirCliente\ClienteAcessoChaveAcesso.cs" />
     <Compile Include="Entity\OrdemCompra\EmpresaCentroCusto.cs" />
     <Compile Include="Entity\Sigim\CarteiraBanco.cs" />
     <Compile Include="Entity\Sigim\CotacaoValores.cs" />

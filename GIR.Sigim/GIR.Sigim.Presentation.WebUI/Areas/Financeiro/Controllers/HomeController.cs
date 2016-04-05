@@ -22,11 +22,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
         public ActionResult Index()
         {
-            if (moduloAppService.PossuiModulo(GIR.Sigim.Application.Resource.Sigim.NomeModulo.Financeiro))
+            if (!moduloAppService.PossuiModulo(GIR.Sigim.Application.Resource.Sigim.NomeModulo.Financeiro))
             {
-                return View();
+                return RedirectToLocal("/");
             }
-            return RedirectToLocal("/");
+
+            if (!moduloAppService.ValidaAcessoAoModulo(GIR.Sigim.Application.Resource.Sigim.NomeModulo.Financeiro))
+            {
+                return RedirectToLocal("/");
+            }
+            return View();
         }
 
     }

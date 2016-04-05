@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Entity.Sigim;
+using Microsoft.VisualBasic;
+
 
 namespace GIR.Sigim.Application.Service.Sigim
 {
@@ -217,6 +219,61 @@ namespace GIR.Sigim.Application.Service.Sigim
 
             return Math.Round(valorRetorno,5);
         }
+
+        public string UnCrypt(string parStrMsg)
+        {
+            //Programa que descriptografa strings
+            string vUnCrypt;
+            vUnCrypt = "";
+            for (int i = 0; i <= parStrMsg.Length - 1; i++)
+            {
+                //Feito em VB
+                vUnCrypt = vUnCrypt + Strings.Chr((Strings.Asc(Strings.Mid(parStrMsg, (i + 1), 1)) ^ 127) & 127);
+                //Feito em VB
+
+                // 1º formar feito em C# 
+                //string letra = parStrMsg.Substring(i,1);
+                //char tempChar = Convert.ToChar(letra);
+                //int ascII = Convert.ToInt32(tempChar);
+                ////cambalacho
+                //if (ascII == 402)
+                //{
+                //    ascII = 131;
+                //}
+                ////acmbalacho
+                //int intXOR = ascII ^ 127;
+                //char codigoCharLetra = (char)(intXOR & 127);
+                //vUnCrypt = vUnCrypt + codigoCharLetra;
+                // 1º formar feito em C# 
+
+                // 2º formar feito em C# 
+                //vUnCrypt = vUnCrypt + (char)((Convert.ToInt32(Convert.ToChar(parStrMsg.Substring(i, 1))) ^ 127) & 127);
+                // 2º formar feito em C# 
+            }
+            return vUnCrypt;
+        }
+
+        public string GetPiece(string parStrText, string parStrDelimiter, long parLngPosicao)
+        {
+            string[] vetor;
+            string sPiece;
+
+            sPiece = "";
+            if (Strings.InStr(parStrText, parStrDelimiter) > 0)
+            {
+                vetor = Strings.Split(parStrText, parStrDelimiter);
+                if (parLngPosicao <= vetor.Length)
+                {
+                    sPiece = vetor[parLngPosicao - 1];
+                }
+            }
+            return sPiece;
+        }
+
+        #endregion
+
+        #region "Métodos privados"
+
 
         #endregion
 
