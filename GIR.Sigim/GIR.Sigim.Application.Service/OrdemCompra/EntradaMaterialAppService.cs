@@ -2065,7 +2065,7 @@ namespace GIR.Sigim.Application.Service.OrdemCompra
                 return false;
             }
 
-            if (entradaMaterial.ValorTotalFormasPagamento != (entradaMaterial.ValorTotal + entradaMaterial.ValorTotalDesconto))
+            if (decimal.Round(entradaMaterial.ValorTotalFormasPagamento.Value, 2) != decimal.Round((entradaMaterial.ValorTotal + entradaMaterial.ValorTotalDesconto).Value, 2))
             {
                 messageQueue.Add(Resource.OrdemCompra.ErrorMessages.ValorTotalDiferenteValorNotaFiscal, TypeMessage.Error);
                 return false;

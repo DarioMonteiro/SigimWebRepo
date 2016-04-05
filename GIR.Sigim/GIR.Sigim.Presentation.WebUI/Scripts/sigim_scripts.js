@@ -154,13 +154,19 @@ function formataValorComCasasDecimais(elemento, tamanho, casasDecimais) {
 
 function roundDecimal(value, precision) {
     var originalValue = 0 + value;
+    var fatorDePrecisao = 1; //Para resolver problema de arredondamento do toFixed();
+    for (i = 0; i < precision; i++)
+        fatorDePrecisao *= 10;
+
     if (value != null) {
         var sinal = value.toString().substring(0, 1);
         if (sinal == "-") {
             originalValue = sinal + 0 + value.toString().substring(1, value.length);
         }
     }
-    var roundedValue = parseFloat(stringToFloat(originalValue.toString())).toFixed(precision);
+    originalValue = Math.round(parseFloat(stringToFloat(originalValue.toString())) * fatorDePrecisao) / fatorDePrecisao;
+
+    var roundedValue = originalValue.toFixed(precision);
     return roundedValue.replace(".", ",");
 }
 
