@@ -1649,7 +1649,7 @@
                                                                     var jsonFormaPagamento = {};
                                                                     jsonFormaPagamento.OrdemCompraFormaPagamentoId = formaPagamento.Id;
                                                                     jsonFormaPagamento.Data = formaPagamento.DataVencimentoLiberado;
-                                                                    jsonFormaPagamento.Valor = parseFloat(formaPagamento.ValorParcelaLiberado.toFixed(2));
+                                                                    jsonFormaPagamento.Valor = stringToFloat(roundDecimal(floatToString(formaPagamento.ValorParcelaLiberado), 2));
                                                                     arrFormasPagamentoAdicionadas.push(jsonFormaPagamento);
                                                                 });
 
@@ -1899,11 +1899,11 @@
 
                                                         var jsonOC = {};
                                                         jsonOC.Id = ordemCompraId;
-                                                        jsonOC.ValorTotalItens = parseFloat((valorTotalItens + valorFreteProporcional).toFixed(2));
-                                                        jsonOC.ValorTotalDistribuido = parseFloat(valorTotalDistribuido.toFixed(2));
-                                                        jsonOC.ValorTotalDistribuidoProvisorio = parseFloat(valorTotalDistribuidoProvisorio.toFixed(2));
-                                                        jsonOC.ValorPendente = parseFloat(valorTotalItens + valorFreteProporcional - valorTotalDistribuido).toFixed(2);
-                                                        jsonOC.ValorPendenteProvisorio = parseFloat(valorTotalItens + valorFreteProporcional - valorTotalDistribuidoProvisorio).toFixed(2);
+                                                        jsonOC.ValorTotalItens = stringToFloat(roundDecimal(floatToString(valorTotalItens + valorFreteProporcional), 2));
+                                                        jsonOC.ValorTotalDistribuido = stringToFloat(roundDecimal(floatToString(valorTotalDistribuido), 2));
+                                                        jsonOC.ValorTotalDistribuidoProvisorio = stringToFloat(roundDecimal(floatToString(valorTotalDistribuidoProvisorio), 2));
+                                                        jsonOC.ValorPendente = stringToFloat(roundDecimal(floatToString(valorTotalItens + valorFreteProporcional - valorTotalDistribuido), 2));
+                                                        jsonOC.ValorPendenteProvisorio = stringToFloat(roundDecimal(floatToString(valorTotalItens + valorFreteProporcional - valorTotalDistribuidoProvisorio), 2));
                                                         resumoOC.push(jsonOC);
                                                     });
 
@@ -2449,7 +2449,7 @@
                                                 })
                                                 .success(function (result) {
                                                     imposto["ImpostoFinanceiro"] = result;
-                                                    var valor = (imposto["BaseCalculo"] * result.Aliquota / 100).toFixed(2);
+                                                    var valor = roundDecimal(floatToString(imposto["BaseCalculo"] * result.Aliquota / 100), 2);
                                                     imposto["Valor"] = parseFloat(valor);
                                                 });
 
