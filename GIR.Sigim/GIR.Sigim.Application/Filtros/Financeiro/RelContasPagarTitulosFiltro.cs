@@ -96,5 +96,32 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
 
         public short? EhTotalizadoPor { get; set; }
 
+        public string DescricaoTotalizadoPor
+        {
+            get
+            {
+                string descricao = "";
+                switch (EhTotalizadoPor)
+                {
+                    case 0:
+                        descricao = "Totalizado geral";
+                        break;
+                    case 1:
+                        descricao = "Totalizado por fornecedor";
+                        break;
+                    case 2:
+                        descricao = "Totalizado por classe";
+                        break;
+                    case 3:
+                        descricao = "Totalizado por data situação";
+                        break;
+                    case 4:
+                        descricao = "Totalizado por data situação (Sintético)";
+                        break;
+                }
+                return descricao;
+            }
+        }
+
     }
 }

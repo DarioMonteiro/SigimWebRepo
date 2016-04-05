@@ -129,11 +129,20 @@
   <data name="CampoObrigatorio" xml:space="preserve">
     <value>O campo {0} é obrigatório.</value>
   </data>
+  <data name="ChaveAcessoNaoInformada" xml:space="preserve">
+    <value>Chave de acesso não informada. Entre em contato com a GIR !</value>
+  </data>
   <data name="ClasseInsumoNaoCadastrada" xml:space="preserve">
     <value>Classe insumo não cadastrada.</value>
   </data>
   <data name="ClasseUltimoNivel" xml:space="preserve">
     <value>Selecione uma classe insumo do último nível.</value>
+  </data>
+  <data name="DataExpiracaoNaoInformada" xml:space="preserve">
+    <value>Data de expiração não foi informada ou está inválida. Entre em contato com a GIR !</value>
+  </data>
+  <data name="DataExpirada" xml:space="preserve">
+    <value>Período de utilização do sistema expirou. Entre em contato com a GIR !</value>
   </data>
   <data name="DataMaiorQue" xml:space="preserve">
     <value>A data do campo "{0}" está maior que a data do campo "{1}".</value>
@@ -167,6 +176,9 @@
   </data>
   <data name="LimiteMinimoCaracteresNaoAtingido" xml:space="preserve">
     <value>Preencha o campo com no mínimo {1} caracteres.</value>
+  </data>
+  <data name="ModuloNaoPermitido" xml:space="preserve">
+    <value>Esse módulo não faz parte do seu pacote.</value>
   </data>
   <data name="NaoExistemRegistros" xml:space="preserve">
     <value>Não existem registros.</value>

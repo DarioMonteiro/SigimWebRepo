@@ -9,8 +9,6 @@ namespace GIR.Sigim.Application.DTO.Financeiro
 {
     public class RelContasPagarTitulosDTO 
     {
-        //public TituloPagarDTO TituloPagar { get; set; }
-
         public int TituloId { get; set; }
         public DateTime DataVencimento { get; set; }
         public DateTime DataEmissaoDocumento { get; set; }

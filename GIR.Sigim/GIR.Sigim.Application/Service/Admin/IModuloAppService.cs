@@ -14,5 +14,7 @@ namespace GIR.Sigim.Application.Service.Admin
     {
         List<ModuloDTO> ListarTodos();
         ModuloDTO ObterPeloId(int? id);
+        bool PossuiModulo(string nomeModulo);
+        bool ValidaAcessoAoModulo(string nomeModulo);
     }
 }

@@ -88,7 +88,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
                 if (result.Any())
                 {
-                    var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result, totalValorTitulo, totalValorLiquido, totalValorApropriado);
+                    var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result, totalValorTitulo, totalValorLiquido, totalValorApropriado, model.Filtro.DescricaoTotalizadoPor);
                     if ((model.Filtro.EhTotalizadoPor.HasValue) && (model.Filtro.EhTotalizadoPor.Value == 4))
                     {
                         return PartialView("ListaPartialSintetico", listaViewModel);
@@ -160,7 +160,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                                                                         object records,
                                                                         decimal totalValorTitulo,
                                                                         decimal totalValorLiquido,
-                                                                        decimal totalValorApropriado)
+                                                                        decimal totalValorApropriado,
+                                                                        string totalizadoPorDescricao)
         {
             var listaViewModel = new ListaViewModelRelContasPagarTitulo();
             listaViewModel.Records = records;
@@ -177,6 +178,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             listaViewModel.TotalValorTitulo = totalValorTitulo;
             listaViewModel.TotalValorLiquido = totalValorLiquido;
             listaViewModel.TotalValorApropriacao = totalValorApropriado;
+            listaViewModel.TotalizadoPorDescricao = totalizadoPorDescricao;
 
             return listaViewModel;
         }

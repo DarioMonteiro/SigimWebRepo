@@ -17,5 +17,7 @@ namespace GIR.Sigim.Application.Service.Sigim
         DateTime RecuperaProximoDiaUtil(DateTime data);
         bool OperacaoEmDia(DateTime dataVencimento, DateTime dataDia);
         decimal AplicaPercentual(decimal valor, Nullable<Decimal> percentual);
+        string UnCrypt(string parStrMsg);
+        string GetPiece(string parStrText, string parStrDelimiter, long parLngPosicao);
     }
 }

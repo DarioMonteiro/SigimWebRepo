@@ -15,17 +15,26 @@ using GIR.Sigim.Domain.Entity.Admin;
 using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Admin;
+using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Domain.Entity.GirCliente;
 
 namespace GIR.Sigim.Application.Service.Admin
 {
     public class ModuloAppService : BaseAppService, IModuloAppService
     {
         private IModuloRepository moduloRepository;
+        private IModuloSigimAppService moduloSigimAppService;
+        private IAcessoAppService acessoAppService;
 
-        public ModuloAppService(IModuloRepository moduloRepository, MessageQueue messageQueue)
+        public ModuloAppService(IModuloRepository moduloRepository, 
+                                IModuloSigimAppService moduloSigimAppService,
+                                IAcessoAppService acessoAppService,
+                                MessageQueue messageQueue)
             : base(messageQueue)
         {
+            this.moduloSigimAppService = moduloSigimAppService;
             this.moduloRepository = moduloRepository;
+            this.acessoAppService = acessoAppService;
         }
 
         #region IModuloAppService Members
@@ -40,6 +49,50 @@ namespace GIR.Sigim.Application.Service.Admin
             return moduloRepository.ObterPeloId(id).To<ModuloDTO>();
         }
 
-           #endregion
+        public bool PossuiModulo(string nomeModulo)
+        {
+            string nomeModuloAux =  nomeModulo + "WEB";
+            if (moduloRepository.ListarTodos().Any(l => l.Nome.ToUpper() == nomeModuloAux.ToUpper()))
+            {
+                return true;
+            }
+
+            messageQueue.Add(Resource.Sigim.ErrorMessages.ModuloNaoPermitido, TypeMessage.Info);
+            return false;
+        }
+
+        public bool ValidaAcessoAoModulo(string nomeModulo)
+        {
+            string nomeModuloAux = nomeModulo + "WEB";
+
+            Modulo modulo = moduloRepository.ListarPeloFiltro(l => l.Nome.ToUpper() == nomeModuloAux.ToUpper()).FirstOrDefault();
+
+            if (string.IsNullOrEmpty(modulo.ChaveAcesso))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.ChaveAcessoNaoInformada, TypeMessage.Error);
+                return false;
+            }
+
+            ClienteAcessoChaveAcesso infoAcesso = acessoAppService.ObterInfoAcesso(modulo.ChaveAcesso);
+
+            if (!infoAcesso.DataExpiracao.HasValue)
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.DataExpiracaoNaoInformada, TypeMessage.Error);
+                return false;
+            }
+
+            if ((infoAcesso.DataExpiracao.HasValue) && (infoAcesso.DataExpiracao.Value.Date < DateTime.Now.Date))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.DataExpirada, TypeMessage.Error);
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
+
+        #region "Métodos Privados"
+
+        #endregion
     }
 }

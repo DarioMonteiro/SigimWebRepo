@@ -506,6 +506,7 @@
     <Compile Include="Service\OrdemCompra\IParametrosUsuarioAppService.cs" />
     <Compile Include="Service\Sac\ISetorAppService.cs" />
     <Compile Include="Service\Sac\IParametrosSacAppService.cs" />
+    <Compile Include="Service\Sigim\IAcessoAppService.cs" />
     <Compile Include="Service\Sigim\IComplementoNaturezaOperacaoAppService.cs" />
     <Compile Include="Service\Sigim\IComplementoCSTAppService.cs" />
     <Compile Include="Service\Sigim\IModuloSigimAppService.cs" />
