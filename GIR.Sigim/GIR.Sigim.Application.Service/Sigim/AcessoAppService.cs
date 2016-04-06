@@ -56,15 +56,17 @@ namespace GIR.Sigim.Application.Service.Sigim
             return infoAcesso;
         }
 
-        //public bool ValidaSistemaBloqueado(string NomeModulo)
-        //{
-        //    if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
-        //    {
-        //        Object objClienteSistemaBloqueioWS = new cliente
-        //    }
+        public bool ValidaSistemaBloqueado(string NomeModulo)
+        {
+            if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                clienteSistemaBloqueioWS.clienteSistemaBloqueioWS objClienteSistemaBloqueioWS = new clienteSistemaBloqueioWS.clienteSistemaBloqueioWS();
+                objClienteSistemaBloqueioWS.RecuperaPorCliente(10);
+            }
 
-        //    return true;
-        //}
+            return true;
+        }
+
         #endregion
     }
 }

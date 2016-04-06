@@ -10,6 +10,6 @@ namespace GIR.Sigim.Application.Service.Sigim
     public interface IAcessoAppService
     {
         ClienteAcessoChaveAcesso ObterInfoAcesso(string textCripto);
-        //bool ValidaSistemaBloqueado(string NomeModulo);
+        bool ValidaSistemaBloqueado(string NomeModulo);
     }
 }
