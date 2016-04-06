@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.GirCliente;
+using GIR.Sigim.Domain.Entity.Admin;
 
 namespace GIR.Sigim.Application.Service.Sigim
 {
     public interface IAcessoAppService
     {
-        ClienteAcessoChaveAcesso ObterInfoAcesso(string textCripto);
-        bool ValidaSistemaBloqueado(string NomeModulo);
+        bool ValidaAcessoAoModulo(string nomeModulo, bool logGirCliente);
     }
 }

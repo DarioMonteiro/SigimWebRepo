@@ -12,9 +12,11 @@ namespace GIR.Sigim.Application.Service.Admin
 {
     public interface IModuloAppService
     {
+        List<ModuloDTO> ListarTodosWEB();
         List<ModuloDTO> ListarTodos();
         ModuloDTO ObterPeloId(int? id);
+        ModuloDTO ObterPeloNome(string nomeModulo);
         bool PossuiModulo(string nomeModulo);
-        bool ValidaAcessoAoModulo(string nomeModulo);
+        bool AtualizaBloqueio(int ModuloId, bool bloqueio);
     }
 }

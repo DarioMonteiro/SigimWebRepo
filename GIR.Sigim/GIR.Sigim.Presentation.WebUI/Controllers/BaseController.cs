@@ -137,5 +137,23 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
         {
             return "_" + Guid.NewGuid().ToString().Replace("-", string.Empty);
         }
+
+        protected bool LogGIRCliente
+        {
+            get
+            {
+                var paramLogGIRCliente = System.Web.Configuration.WebConfigurationManager.AppSettings["LogGIRCliente"];
+                bool logGIRCliente = false;
+                if (!string.IsNullOrEmpty(paramLogGIRCliente))
+                {
+                    if (paramLogGIRCliente == "1")
+                    {
+                        logGIRCliente = true;
+                    }
+                }
+                return logGIRCliente ; 
+            }
+        }
+
     }
 }

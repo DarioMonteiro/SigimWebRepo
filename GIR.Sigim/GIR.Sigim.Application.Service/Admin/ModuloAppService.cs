@@ -24,29 +24,37 @@ namespace GIR.Sigim.Application.Service.Admin
     {
         private IModuloRepository moduloRepository;
         private IModuloSigimAppService moduloSigimAppService;
-        private IAcessoAppService acessoAppService;
+        //private IAcessoAppService acessoAppService;
 
         public ModuloAppService(IModuloRepository moduloRepository, 
                                 IModuloSigimAppService moduloSigimAppService,
-                                IAcessoAppService acessoAppService,
                                 MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.moduloSigimAppService = moduloSigimAppService;
             this.moduloRepository = moduloRepository;
-            this.acessoAppService = acessoAppService;
         }
 
         #region IModuloAppService Members
 
-        public List<ModuloDTO> ListarTodos()
+        public List<ModuloDTO> ListarTodosWEB()
         {
             return moduloRepository.ListarTodos().Where(l => l.Nome.Contains("WEB")).Where(l => l.Nome != "SIGIMWEB").OrderBy(l => l.Nome).To<List<ModuloDTO>>();
+        }
+
+        public List<ModuloDTO> ListarTodos()
+        {
+            return moduloRepository.ListarTodos().To<List<ModuloDTO>>();
         }
 
         public ModuloDTO ObterPeloId(int? id)
         {
             return moduloRepository.ObterPeloId(id).To<ModuloDTO>();
+        }
+
+        public ModuloDTO ObterPeloNome(string nomeModulo)
+        {
+            return moduloRepository.ListarPeloFiltro(l => l.Nome.ToUpper() == nomeModulo.ToUpper()).FirstOrDefault().To<ModuloDTO>();
         }
 
         public bool PossuiModulo(string nomeModulo)
@@ -61,40 +69,28 @@ namespace GIR.Sigim.Application.Service.Admin
             return false;
         }
 
-        public bool ValidaAcessoAoModulo(string nomeModulo)
+        public bool AtualizaBloqueio(int ModuloId,bool bloqueio)
         {
-            string nomeModuloAux = nomeModulo + "WEB";
+            bool atualizou = false;
 
-            Modulo modulo = moduloRepository.ListarPeloFiltro(l => l.Nome.ToUpper() == nomeModuloAux.ToUpper()).FirstOrDefault();
-
-            if (string.IsNullOrEmpty(modulo.ChaveAcesso))
+            var modulo = moduloRepository.ObterPeloId(ModuloId);
+            if (modulo != null)
             {
-                messageQueue.Add(Resource.Sigim.ErrorMessages.ChaveAcessoNaoInformada, TypeMessage.Error);
-                return false;
+                modulo.Bloqueio = bloqueio;
+                try
+                {
+                    //moduloRepository.Alterar(modulo);
+                    //moduloRepository.UnitOfWork.Commit();
+                    atualizou = true;
+                }
+                catch (Exception exception)
+                {
+                }
             }
 
-            ClienteAcessoChaveAcesso infoAcesso = acessoAppService.ObterInfoAcesso(modulo.ChaveAcesso);
-
-            if (!infoAcesso.DataExpiracao.HasValue)
-            {
-                messageQueue.Add(Resource.Sigim.ErrorMessages.DataExpiracaoNaoInformada, TypeMessage.Error);
-                return false;
-            }
-
-            if ((infoAcesso.DataExpiracao.HasValue) && (infoAcesso.DataExpiracao.Value.Date < DateTime.Now.Date))
-            {
-                messageQueue.Add(Resource.Sigim.ErrorMessages.DataExpirada, TypeMessage.Error);
-                return false;
-            }
-
-            //if (acessoAppService.ValidaSistemaBloqueado(nomeModulo))
-            //{
-            //    messageQueue.Add(Resource.Sigim.ErrorMessages.DataExpiracaoNaoInformada, TypeMessage.Error);
-            //    return false;
-            //}
-
-            return true;
+            return atualizou;
         }
+
 
         #endregion
 

@@ -13,6 +13,7 @@ namespace GIR.Sigim.Domain.Entity.Admin
         public string NomeCompleto { get; set; }
         public string ChaveAcesso { get; set; }
         public string Versao { get; set; }
+        public bool Bloqueio { get; set; }
         public ICollection<Perfil> ListaPerfil { get; set; }
         public ICollection<UsuarioCentroCusto> ListaUsuarioCentroCusto { get; set; }
 

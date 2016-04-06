@@ -38,6 +38,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
                 .HasColumnName("versao")
                 .HasColumnOrder(5);
 
+            Property(l => l.Bloqueio)
+                .HasColumnName("bloqueio")
+                .HasColumnType("bit")
+                .HasColumnOrder(6);
+
             //TODO: Implementar controle de acesso
             //Ignore(l => l.ListaFuncionalidade);
             Ignore(l => l.ListaPerfil);

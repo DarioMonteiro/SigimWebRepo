@@ -12,6 +12,6 @@ namespace GIR.Sigim.Application.DTO.Admin
         public string NomeCompleto { get; set; }
         public string ChaveAcesso { get; set; }
         public string Versao { get; set; }
-        
+        public bool Bloqueio { get; set; }      
     }
 }
