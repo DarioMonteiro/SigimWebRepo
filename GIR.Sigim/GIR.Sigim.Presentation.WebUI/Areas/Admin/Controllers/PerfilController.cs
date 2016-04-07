@@ -160,7 +160,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
 
         private void CarregarCombos(PerfilViewModel model)
         {
-            model.ListaModulo = new SelectList(moduloAppService.ListarTodos(), "Id", "NomeCompleto", model.Perfil.ModuloId);
+            model.ListaModulo = new SelectList(moduloAppService.ListarTodosWEB(), "Id", "NomeCompleto", model.Perfil.ModuloId);
         }
 
         //private List<PerfilDTO> LimpaClasseListaFilhos(List<PerfilDTO> lista)

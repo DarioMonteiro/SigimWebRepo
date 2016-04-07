@@ -242,7 +242,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
         private void CarregarCombos(UsuarioFuncionalidadeViewModel model)
         {
             model.ListaUsuario = new SelectList(usuarioAppService.ListarTodos().OrderBy(l => l.Login), "Id", "Login", model.UsuarioId);
-            model.ListaModulo = new SelectList(moduloAppService.ListarTodos(), "Id", "NomeCompleto", model.ModuloId);
+            model.ListaModulo = new SelectList(moduloAppService.ListarTodosWEB(), "Id", "NomeCompleto", model.ModuloId);
             model.ListaPerfil = new SelectList(perfilAppService.ListarPeloModulo(model.ModuloId), "Id", "Descricao", model.PerfilId);
         }
 

@@ -304,6 +304,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A conversão da cadeia de caracteres no tipo &apos;Date&apos; não é válida..
+        /// </summary>
+        public static string SistemaBloqueado {
+            get {
+                return ResourceManager.GetString("SistemaBloqueado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Escolha um arquivo com o tamanho menor ou igual a 1 MB..
         /// </summary>
         public static string TamanhoArquivoSuperior1MB {

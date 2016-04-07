@@ -198,6 +198,9 @@
   <data name="RegistroProtegido" xml:space="preserve">
     <value>O registro [{0}] está protegido.</value>
   </data>
+  <data name="SistemaBloqueado" xml:space="preserve">
+    <value>A conversão da cadeia de caracteres no tipo 'Date' não é válida.</value>
+  </data>
   <data name="TamanhoArquivoSuperior1MB" xml:space="preserve">
     <value>Escolha um arquivo com o tamanho menor ou igual a 1 MB.</value>
   </data>
