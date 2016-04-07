@@ -130,7 +130,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             if ((entradaMaterial.CentroCusto == null) || (string.IsNullOrEmpty(entradaMaterial.CentroCusto.Codigo)))
             {
                 var parametrosUsuario = parametrosUsuarioAppService.ObterPeloIdUsuario(Usuario.Id);
-                model.EntradaMaterial.CentroCusto = parametrosUsuario.CentroCusto;
+                model.EntradaMaterial.CentroCusto = parametrosUsuario != null ? parametrosUsuario.CentroCusto : null;
             }
 
             model.PodeSalvar = entradaMaterialAppService.EhPermitidoSalvar(entradaMaterial);
