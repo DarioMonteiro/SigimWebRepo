@@ -213,6 +213,7 @@
     <Compile Include="Repository\Admin\PerfilFuncionalidadeRepository.cs" />
     <Compile Include="Repository\Admin\ModuloRepository.cs" />
     <Compile Include="Repository\Admin\PerfilRepository.cs" />
+    <Compile Include="Repository\Admin\UsuarioFuncionalidadeRepository.cs" />
     <Compile Include="Repository\Comercial\IncorporadorRepository.cs" />
     <Compile Include="Repository\Comercial\EmpreendimentoRepository.cs" />
     <Compile Include="Repository\Comercial\BlocoRepository.cs" />

@@ -7,6 +7,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Repository.Sigim;
 using GIR.Sigim.Domain.Entity.Sigim;
 using Microsoft.VisualBasic;
+using GIR.Sigim.Application.DTO.Sigim;
 
 
 namespace GIR.Sigim.Application.Service.Sigim
@@ -270,6 +271,16 @@ namespace GIR.Sigim.Application.Service.Sigim
             return sPiece;
         }
 
+        public InformacaoConfiguracaoDTO SetarInformacaoConfiguracao(bool logGirCliente, string enderecoIP, string instancia, string stringConexao)
+        {
+            InformacaoConfiguracaoDTO informacaoConfiguracao = new InformacaoConfiguracaoDTO();
+            informacaoConfiguracao.EnderecoIP = enderecoIP;
+            informacaoConfiguracao.LogGirCliente = logGirCliente;
+            informacaoConfiguracao.Instancia = instancia;
+            informacaoConfiguracao.StringConexao = stringConexao;
+
+            return informacaoConfiguracao;
+        }
         #endregion
 
         #region "Métodos privados"

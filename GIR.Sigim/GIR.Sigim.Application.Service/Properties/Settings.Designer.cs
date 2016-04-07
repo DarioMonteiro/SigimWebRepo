@@ -32,5 +32,15 @@ namespace GIR.Sigim.Application.Service.Properties {
                 return ((string)(this["GIR_Sigim_Application_Service_clienteSistemaBloqueioWS_clienteSistemaBloqueioWS"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://www.sigim.srv.br/gircliente/WS/clienteAcessoLogWS.asmx")]
+        public string GIR_Sigim_Application_Service_clienteAcessoLogWS_clienteAcessoLogWS {
+            get {
+                return ((string)(this["GIR_Sigim_Application_Service_clienteAcessoLogWS_clienteAcessoLogWS"]));
+            }
+        }
     }
 }

@@ -118,6 +118,7 @@
     <Compile Include="DTO\Sigim\ComplementoCSTDTO.cs" />
     <Compile Include="DTO\Sigim\CotacaoValoresDTO.cs" />
     <Compile Include="DTO\Sigim\IndiceFinanceiroDTO.cs" />
+    <Compile Include="DTO\Sigim\InformacaoConfiguracaoDTO.cs" />
     <Compile Include="DTO\Sigim\NaturezaReceitaDTO.cs" />
     <Compile Include="DTO\Sigim\TabelaBasicaDTO.cs" />
     <Compile Include="DTO\Financeiro\MotivoCancelamentoDTO.cs" />
@@ -465,6 +466,7 @@
     <Compile Include="Service\Admin\IModuloAppService.cs" />
     <Compile Include="Service\Admin\IPerfilAppService.cs" />
     <Compile Include="Service\Admin\IUsuarioAppService.cs" />
+    <Compile Include="Service\Admin\IUsuarioFuncionalidadeAppService.cs" />
     <Compile Include="Service\Comercial\IBlocoAppService.cs" />
     <Compile Include="Service\Comercial\IIncorporadorAppService.cs" />
     <Compile Include="Service\Comercial\IEmpreendimentoAppService.cs" />

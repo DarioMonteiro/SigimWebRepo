@@ -11,7 +11,6 @@ namespace GIR.Sigim.Domain.Entity.GirCliente
     {
         public ClienteFornecedor ClienteFornecedor { get; set; }
         public Nullable<DateTime> DataExpiracao { get; set; }
-        public string NomeUsuario { get; set; }
         public int? NumeroUsuario { get; set; }
 
         public ClienteAcessoChaveAcesso()

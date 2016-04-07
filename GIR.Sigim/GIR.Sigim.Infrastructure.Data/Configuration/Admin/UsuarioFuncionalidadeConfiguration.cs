@@ -22,13 +22,18 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Admin
                .HasColumnName("usuario")
                .HasColumnOrder(2);
 
-            HasRequired(l => l.Usuario)
+            HasRequired<Usuario>(l => l.Usuario)
                .WithMany(l => l.ListaUsuarioFuncionalidade)
                .HasForeignKey(l => l.UsuarioId);
 
             Property(l => l.ModuloId)
                .HasColumnName("sistema")
                .HasColumnOrder(3);
+
+            HasRequired<Modulo>(l => l.Modulo)
+               .WithMany(l => l.ListaUsuarioFuncionalidade)
+               .HasForeignKey(l => l.ModuloId);
+
 
             Property(l => l.Funcionalidade)
                 .IsRequired()

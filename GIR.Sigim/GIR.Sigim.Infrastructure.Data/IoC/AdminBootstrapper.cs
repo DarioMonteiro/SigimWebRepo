@@ -18,6 +18,7 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
             Container.Current.RegisterType<IPerfilFuncionalidadeRepository, PerfilFuncionalidadeRepository>();
             Container.Current.RegisterType<IPerfilRepository, PerfilRepository>();
             Container.Current.RegisterType<IUsuarioRepository, UsuarioRepository>();
+            Container.Current.RegisterType<IUsuarioFuncionalidadeRepository, UsuarioFuncionalidadeRepository>();
         }
     }
 }

@@ -156,6 +156,9 @@
   <data name="EmailInvalido" xml:space="preserve">
     <value>Por favor insira um endereço de email válido.</value>
   </data>
+  <data name="ErroAcessoLogGirCliente" xml:space="preserve">
+    <value>Acesso negado. Entre em contato com a GIR !</value>
+  </data>
   <data name="ExclusaoErro" xml:space="preserve">
     <value>Erro ao efetuar a exclusão !</value>
   </data>

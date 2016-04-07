@@ -178,6 +178,15 @@ namespace GIR.Sigim.Application.Resource.Sigim {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Acesso negado. Entre em contato com a GIR !.
+        /// </summary>
+        public static string ErroAcessoLogGirCliente {
+            get {
+                return ResourceManager.GetString("ErroAcessoLogGirCliente", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Erro ao efetuar a exclusão !.
         /// </summary>
         public static string ExclusaoErro {

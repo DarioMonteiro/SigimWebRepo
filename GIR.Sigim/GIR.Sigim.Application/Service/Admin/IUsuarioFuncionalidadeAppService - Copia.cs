@@ -12,6 +12,9 @@ namespace GIR.Sigim.Application.Service.Admin
 {
     public interface IUsuarioFuncionalidadeAppService
     {
-        int ObterQuantidadeDeUsuariosNoModulo(int ModuloId);
+        List<UsuarioFuncionalidadeDTO> ListarPeloFiltro(UsuarioFuncionalidadeFiltro filtro, out int totalRegistros);
+        List<UsuarioFuncionalidadeDTO> ListarPeloUsuarioModulo(int UsuarioId, int ModuloId);
+        bool Salvar(int UsuarioId, int ModuloId, int? PerfilId, List<UsuarioFuncionalidadeDTO> listaDto);
+        bool Deletar(int UsuarioId, int ModuloId);
     }
 }

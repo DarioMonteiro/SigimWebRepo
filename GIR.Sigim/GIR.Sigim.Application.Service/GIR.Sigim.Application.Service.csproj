@@ -72,6 +72,7 @@
     <Compile Include="Admin\FuncionalidadeAppService.cs" />
     <Compile Include="Admin\ModuloAppService.cs" />
     <Compile Include="Admin\PerfilAppService.cs" />
+    <Compile Include="Admin\UsuarioFuncionalidadeAppService.cs" />
     <Compile Include="Comercial\IncorporadorAppService.cs" />
     <Compile Include="Comercial\EmpreendimentoAppService.cs" />
     <Compile Include="Comercial\BlocoAppService.cs" />
@@ -167,6 +168,11 @@
     <Compile Include="Sigim\TipoCompraAppService.cs" />
     <Compile Include="Sigim\UnidadeFederacaoAppService.cs" />
     <Compile Include="Sigim\UnidadeMedidaAppService.cs" />
+    <Compile Include="Web References\clienteAcessoLogWS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\clienteSistemaBloqueioWS\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -202,6 +208,11 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Web References\clienteAcessoLogWS\clienteAcessoLogWS.wsdl" />
+    <None Include="Web References\clienteAcessoLogWS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <None Include="Web References\clienteSistemaBloqueioWS\clienteSistemaBloqueioSIGIMWS.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -218,6 +229,17 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="http://www.sigim.srv.br/gircliente/WS/clienteAcessoLogWS.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\clienteAcessoLogWS\</RelPath>
+      <UpdateFromURL>http://www.sigim.srv.br/gircliente/WS/clienteAcessoLogWS.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>GIR_Sigim_Application_Service_clienteAcessoLogWS_clienteAcessoLogWS</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="http://www.sigim.srv.br/gircliente/WS/clienteSistemaBloqueioWS.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\clienteSistemaBloqueioWS\</RelPath>
@@ -232,6 +254,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Web References\clienteSistemaBloqueioWS\clienteSistemaBloqueioWS.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\clienteAcessoLogWS\clienteAcessoLogWS.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

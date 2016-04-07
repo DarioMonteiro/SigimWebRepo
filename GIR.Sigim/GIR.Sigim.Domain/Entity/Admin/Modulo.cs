@@ -16,11 +16,14 @@ namespace GIR.Sigim.Domain.Entity.Admin
         public bool Bloqueio { get; set; }
         public ICollection<Perfil> ListaPerfil { get; set; }
         public ICollection<UsuarioCentroCusto> ListaUsuarioCentroCusto { get; set; }
+        public ICollection<UsuarioFuncionalidade> ListaUsuarioFuncionalidade { get; set; }
+
 
         public Modulo()
         {
             this.ListaPerfil = new HashSet<Perfil>();
             this.ListaUsuarioCentroCusto = new HashSet<UsuarioCentroCusto>();
+            this.ListaUsuarioFuncionalidade = new HashSet<UsuarioFuncionalidade>();
         }
     }
 }

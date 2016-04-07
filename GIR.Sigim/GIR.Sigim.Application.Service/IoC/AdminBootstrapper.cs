@@ -17,6 +17,7 @@ namespace GIR.Sigim.Application.Service.IoC
             Container.Current.RegisterType<IModuloAppService, ModuloAppService>();
             Container.Current.RegisterType<IPerfilAppService, PerfilAppService>();
             Container.Current.RegisterType<IUsuarioAppService, UsuarioAppService>();
+            Container.Current.RegisterType<IUsuarioFuncionalidadeAppService, UsuarioFuncionalidadeAppService>();
         }
     }
 }

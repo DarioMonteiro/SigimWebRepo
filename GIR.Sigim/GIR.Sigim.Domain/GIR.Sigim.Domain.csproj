@@ -79,7 +79,6 @@
     <Compile Include="Entity\Financeiro\OpcoesRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Financeiro\TipoMovimentoRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Financeiro\TipoPesquisaRelatorioApropriacaoPorClasse.cs" />
-    <Compile Include="Entity\GirCliente\AcaoWS.cs" />
     <Compile Include="Entity\GirCliente\ClienteAcessoChaveAcesso.cs" />
     <Compile Include="Entity\OrdemCompra\EmpresaCentroCusto.cs" />
     <Compile Include="Entity\Sigim\CarteiraBanco.cs" />
@@ -88,6 +87,7 @@
     <Compile Include="Entity\Sigim\IndiceFinanceiro.cs" />
     <Compile Include="Entity\Sigim\ParametrosSigim.cs" />
     <Compile Include="Entity\Sigim\UnidadeFederacao.cs" />
+    <Compile Include="Repository\Admin\IUsuarioFuncionalidadeRepository.cs" />
     <Compile Include="Repository\Comercial\IIncorporadorRepository.cs" />
     <Compile Include="Repository\Comercial\IEmpreendimentoRepository.cs" />
     <Compile Include="Repository\Comercial\IBlocoRepository.cs" />
