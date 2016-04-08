@@ -14,6 +14,7 @@ using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Filtros;
 using Newtonsoft.Json;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
 {
@@ -39,7 +40,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
             this.funcionalidadeAppService = funcionalidadeAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.UsuarioFuncionalidadeAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.AdminWeb, Roles = Funcionalidade.UsuarioFuncionalidadeAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as UsuarioFuncionalidadeViewModel;
@@ -99,7 +100,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
                        );
         }
 
-        [Authorize(Roles = Funcionalidade.UsuarioFuncionalidadeAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.AdminWeb, Roles = Funcionalidade.UsuarioFuncionalidadeAcessar)]
         public ActionResult Cadastro(int? UsuarioId, int? ModuloId)
         {
             UsuarioFuncionalidadeViewModel model = new UsuarioFuncionalidadeViewModel();

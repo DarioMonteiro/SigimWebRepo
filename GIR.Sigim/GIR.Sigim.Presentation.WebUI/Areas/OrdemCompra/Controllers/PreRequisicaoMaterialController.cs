@@ -35,7 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.parametrosOrdemCompraAppService = parametrosOrdemCompraAppService;
         }
 
-        [PreRequisicaoMaterialAuthorize(Roles = Funcionalidade.PreRequisicaoMaterialAcessar)]
+        [PreRequisicaoMaterialAuthorize(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb, Roles = Funcionalidade.PreRequisicaoMaterialAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as PreRequisicaoMaterialListaViewModel;
@@ -79,7 +79,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        [PreRequisicaoMaterialAuthorize(Roles = Funcionalidade.PreRequisicaoMaterialAcessar)]
+        [PreRequisicaoMaterialAuthorize(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb, Roles = Funcionalidade.PreRequisicaoMaterialAcessar)]
         public ActionResult Cadastro(int? id)
         {
             PreRequisicaoMaterialCadastroViewModel model = new PreRequisicaoMaterialCadastroViewModel();

@@ -10,16 +10,27 @@ using Microsoft.Practices.Unity;
 
 namespace GIR.Sigim.Presentation.WebUI.CustomAttributes
 {
-    public class PreRequisicaoMaterialAuthorizeAttribute : AuthorizeAttribute
+    public class PreRequisicaoMaterialAuthorizeAttribute : AutorizacaoAcessoAuthorizeAttribute
     {
+        private string modulo;
+        public PreRequisicaoMaterialAuthorizeAttribute(string modulo) : base(modulo) 
+        {
+            this.modulo = modulo;
+        }
+
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            var parametrosOrdemCompraAppService = Container.Current.Resolve<IParametrosOrdemCompraAppService>();
-            var parametrosOrdemCompra = parametrosOrdemCompraAppService.Obter();
-            if (!parametrosOrdemCompra.EhPreRequisicaoMaterial)
-                return false;
+            bool autorizou = base.AuthorizeCore(httpContext);
 
-            return base.AuthorizeCore(httpContext);
+            if (autorizou)
+            {
+                var parametrosOrdemCompraAppService = Container.Current.Resolve<IParametrosOrdemCompraAppService>();
+                var parametrosOrdemCompra = parametrosOrdemCompraAppService.Obter();
+                if (!parametrosOrdemCompra.EhPreRequisicaoMaterial)
+                    return false;
+            }
+
+            return autorizou;
         }
     }
 }

@@ -16,6 +16,7 @@ using GIR.Sigim.Application.DTO.Contrato;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.Enums;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -80,7 +81,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
         #region Methods
 
-        [Authorize(Roles = Funcionalidade.MedicaoAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.ContratoWeb, Roles = Funcionalidade.MedicaoAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as MedicaoContratoListaViewModel;
@@ -126,7 +127,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        [Authorize(Roles = Funcionalidade.MedicaoAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.ContratoWeb, Roles = Funcionalidade.MedicaoAcessar)]
         public ActionResult Medicao(int? id)
         {
             MedicaoContratoMedicaoViewModel model = new MedicaoContratoMedicaoViewModel();

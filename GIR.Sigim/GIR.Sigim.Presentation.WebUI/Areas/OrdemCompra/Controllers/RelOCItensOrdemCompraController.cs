@@ -10,6 +10,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.Service.OrdemCompra;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 {
@@ -24,7 +25,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.ordemCompraItemAppService = ordemCompraItemAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.RelatorioItensOrdemCompraAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb, Roles = Funcionalidade.RelatorioItensOrdemCompraAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as RelOcItensOrdemCompraListaViewModel;

@@ -14,6 +14,7 @@ using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Service.Financeiro;
 using Newtonsoft.Json;
 using GIR.Sigim.Application.Enums;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -51,7 +52,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 
         #region Methods
 
-        [Authorize(Roles = Funcionalidade.LiberacaoAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.ContratoWeb, Roles = Funcionalidade.LiberacaoAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as LiberacaoContratoListaViewModel;
@@ -97,7 +98,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        [Authorize(Roles = Funcionalidade.LiberacaoAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.ContratoWeb, Roles = Funcionalidade.LiberacaoAcessar)]
         public ActionResult Liberacao(int? id)
         {
             LiberacaoContratoLiberacaoViewModel model = new LiberacaoContratoLiberacaoViewModel();

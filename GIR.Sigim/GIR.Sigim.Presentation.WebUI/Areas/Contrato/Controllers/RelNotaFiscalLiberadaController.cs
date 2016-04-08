@@ -10,6 +10,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.Service.Contrato;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
@@ -27,7 +28,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             this.contratoRetificacaoItemMedicaoAppService = contratoRetificacaoItemMedicaoAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.RelNotasFiscaisLiberadasAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.ContratoWeb, Roles = Funcionalidade.RelNotasFiscaisLiberadasAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as RelNotaFiscalLiberadaListaViewModel;

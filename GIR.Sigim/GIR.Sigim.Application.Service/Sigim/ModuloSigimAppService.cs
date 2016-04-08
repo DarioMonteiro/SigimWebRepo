@@ -228,7 +228,8 @@ namespace GIR.Sigim.Application.Service.Sigim
             vUnCrypt = "";
             for (int i = 0; i <= parStrMsg.Length - 1; i++)
             {
-                //Feito em VB
+                //Feito em VB para ser compativel com o Desktop, 
+                //pois utilizando as funcoes do c# , a funcão Asc trazia outro caracter 
                 vUnCrypt = vUnCrypt + Strings.Chr((Strings.Asc(Strings.Mid(parStrMsg, (i + 1), 1)) ^ 127) & 127);
                 //Feito em VB
 
@@ -271,17 +272,60 @@ namespace GIR.Sigim.Application.Service.Sigim
             return sPiece;
         }
 
-        public InformacaoConfiguracaoDTO SetarInformacaoConfiguracao(bool logGirCliente, string enderecoIP, string instancia, string stringConexao)
+        public InformacaoConfiguracaoDTO SetarInformacaoConfiguracao(bool logGirCliente, string hostName)
         {
             InformacaoConfiguracaoDTO informacaoConfiguracao = new InformacaoConfiguracaoDTO();
-            informacaoConfiguracao.EnderecoIP = enderecoIP;
+
+            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            System.Data.SqlClient.SqlConnectionStringBuilder connectionStringBuilder = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString);
+
+            informacaoConfiguracao.HostName = hostName;
             informacaoConfiguracao.LogGirCliente = logGirCliente;
-            informacaoConfiguracao.Instancia = instancia;
-            informacaoConfiguracao.StringConexao = stringConexao;
+            informacaoConfiguracao.NomeDoBancoDeDados = connectionStringBuilder.InitialCatalog.ToUpper();
+            informacaoConfiguracao.Servidor = connectionStringBuilder.DataSource.ToUpper();
 
             return informacaoConfiguracao;
         }
+
+        public bool ValidaVersaoSigim(string parStrVersao ) 
+        {
+            int intMajorBD, intMinorBD, intBuildBD, intRevisionBD;
+            int intMajorSigim, intMinorSigim, intBuildSigim, intRevisionSigim;
+            string strVersaoSigim;
+
+            if (string.IsNullOrEmpty(parStrVersao))
+            {
+                parStrVersao = "";
+            }
+
+            if (parStrVersao == "")
+            {
+                return false;
+            }
+
+            intMajorBD = Convert.ToInt32(GetPiece(parStrVersao, ".", 1));
+            intMinorBD = Convert.ToInt32(GetPiece(parStrVersao, ".", 2));
+            intBuildBD = Convert.ToInt32(GetPiece(parStrVersao, ".", 3));
+            intRevisionBD = Convert.ToInt32(GetPiece(parStrVersao, ".", 4));
+
+            strVersaoSigim = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            intMajorSigim = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major;
+            intMinorSigim = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor;
+            intBuildSigim = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Build;
+            intRevisionSigim = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision;
+
+
+            if ((intMajorSigim != intMajorBD) || (intMinorSigim != intMinorBD) ||
+                (intBuildSigim != intBuildBD) || (intRevisionSigim != intRevisionBD))
+            {
+                return false;
+            }
+
+            return  true;
+        }
+
         #endregion
+
 
         #region "Métodos privados"
 

@@ -9,8 +9,8 @@ namespace GIR.Sigim.Application.DTO.Sigim
     public class InformacaoConfiguracaoDTO
     {
         public bool LogGirCliente { get; set; }
-        public string EnderecoIP { get; set; }
-        public string Instancia { get; set; }
-        public string StringConexao { get; set; }
+        public string HostName { get; set; }
+        public string NomeDoBancoDeDados { get; set; }
+        public string Servidor { get; set; }
     }
 }

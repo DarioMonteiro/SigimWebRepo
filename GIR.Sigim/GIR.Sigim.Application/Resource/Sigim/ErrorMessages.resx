@@ -222,4 +222,7 @@
   <data name="ValorMaiorQue" xml:space="preserve">
     <value>O valor do campo "{0}" está maior que o valor do campo "{1}".</value>
   </data>
+  <data name="VersaoInvalida" xml:space="preserve">
+    <value>Versão inválida !</value>
+  </data>
 </root>

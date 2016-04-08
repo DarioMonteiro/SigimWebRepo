@@ -374,5 +374,14 @@ namespace GIR.Sigim.Application.Resource.Sigim {
                 return ResourceManager.GetString("ValorMaiorQue", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Versão inválida !.
+        /// </summary>
+        public static string VersaoInvalida {
+            get {
+                return ResourceManager.GetString("VersaoInvalida", resourceCulture);
+            }
+        }
     }
 }

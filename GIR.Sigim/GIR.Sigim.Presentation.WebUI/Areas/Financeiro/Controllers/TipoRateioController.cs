@@ -10,6 +10,7 @@ using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -18,15 +19,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
        private ITipoRateioAppService tipoRateioAppService;
 
-       public TipoRateioController(
-            ITipoRateioAppService tipoRateioAppService,
-            MessageQueue messageQueue)
+       public TipoRateioController(ITipoRateioAppService tipoRateioAppService,
+                                   MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.tipoRateioAppService = tipoRateioAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.TipoRateioAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.TipoRateioAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as TipoRateioViewModel;

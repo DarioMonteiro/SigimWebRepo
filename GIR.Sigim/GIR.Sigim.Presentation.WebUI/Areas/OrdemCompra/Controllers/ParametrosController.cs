@@ -14,6 +14,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 {
@@ -41,7 +42,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.bancoLayoutAppService = bancoLayoutAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.ParametroOrdemCompraAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb, Roles = Funcionalidade.ParametroOrdemCompraAcessar)]
         public ActionResult Index()
         {
             ParametrosViewModel model = new ParametrosViewModel();

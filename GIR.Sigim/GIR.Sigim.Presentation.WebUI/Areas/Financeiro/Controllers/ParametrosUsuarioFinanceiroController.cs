@@ -8,6 +8,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -29,27 +30,27 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
         #region Methods
 
-            [Authorize(Roles = Funcionalidade.ParametroUsuarioFinanceiroAcessar)]
-            public ActionResult Index()
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.ParametroUsuarioFinanceiroAcessar)]
+        public ActionResult Index()
+        {
+            ParametrosUsuarioFinanceiroViewModel model = new ParametrosUsuarioFinanceiroViewModel();
+            model.ParametrosUsuarioFinanceiro = parametrosUsuarioFinanceiroAppService.ObterPeloIdUsuario(Usuario.Id);
+            model.PodeSalvar = parametrosUsuarioFinanceiroAppService.EhPermitidoSalvar();
+            return View(model);               
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(ParametrosUsuarioFinanceiroViewModel model)
+        {
+            if (ModelState.IsValid)
             {
-                ParametrosUsuarioFinanceiroViewModel model = new ParametrosUsuarioFinanceiroViewModel();
-                model.ParametrosUsuarioFinanceiro = parametrosUsuarioFinanceiroAppService.ObterPeloIdUsuario(Usuario.Id);
-                model.PodeSalvar = parametrosUsuarioFinanceiroAppService.EhPermitidoSalvar();
-                return View(model);               
+                model.ParametrosUsuarioFinanceiro.Id = Usuario.Id;
+                parametrosUsuarioFinanceiroAppService.Salvar(model.ParametrosUsuarioFinanceiro);
             }
 
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public ActionResult Index(ParametrosUsuarioFinanceiroViewModel model)
-            {
-                if (ModelState.IsValid)
-                {
-                    model.ParametrosUsuarioFinanceiro.Id = Usuario.Id;
-                    parametrosUsuarioFinanceiroAppService.Salvar(model.ParametrosUsuarioFinanceiro);
-                }
-
-                return PartialView("_NotificationMessagesPartial");
-            }
+            return PartialView("_NotificationMessagesPartial");
+        }
 
 
         #endregion

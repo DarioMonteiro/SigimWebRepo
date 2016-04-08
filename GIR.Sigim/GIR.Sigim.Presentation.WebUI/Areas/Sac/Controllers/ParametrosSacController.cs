@@ -11,6 +11,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Sac.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
 {
@@ -31,7 +32,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
             this.setorAppService = setorAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.ParametroSacAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.SacWeb, Roles = Funcionalidade.ParametroSacAcessar)]
         public ActionResult Index()
         {
             ParametrosViewModel model = new ParametrosViewModel();

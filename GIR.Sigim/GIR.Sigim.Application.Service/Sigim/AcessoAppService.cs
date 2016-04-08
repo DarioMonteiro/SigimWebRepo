@@ -46,9 +46,13 @@ namespace GIR.Sigim.Application.Service.Sigim
 
         public bool ValidaAcessoAoModulo(string nomeModulo, InformacaoConfiguracaoDTO informacaoConfiguracao)
         {
-            string nomeModuloAux = nomeModulo + "WEB";
+            ModuloDTO modulo = moduloAppService.ObterPeloNome(nomeModulo.ToUpper());
 
-            ModuloDTO modulo = moduloAppService.ObterPeloNome(nomeModuloAux.ToUpper());
+            if (!moduloSigimAppService.ValidaVersaoSigim(modulo.Versao))
+            {
+                messageQueue.Add(Resource.Sigim.ErrorMessages.VersaoInvalida, TypeMessage.Error);
+                return false;
+            }
 
             if (string.IsNullOrEmpty(modulo.ChaveAcesso))
             {
@@ -56,24 +60,24 @@ namespace GIR.Sigim.Application.Service.Sigim
                 return false;
             }
 
-            ClienteAcessoChaveAcesso infoAcesso = ObterInfoAcesso(modulo.ChaveAcesso);
+            ClienteAcessoChaveAcesso infoChaveAcesso = ObterInfoAcesso(modulo.ChaveAcesso);
 
-            if (!infoAcesso.DataExpiracao.HasValue)
+            if (!infoChaveAcesso.DataExpiracao.HasValue)
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.DataExpiracaoNaoInformada, TypeMessage.Error);
                 return false;
             }
 
-            if ((infoAcesso.DataExpiracao.HasValue) && (infoAcesso.DataExpiracao.Value.Date < DateTime.Now.Date))
+            if ((infoChaveAcesso.DataExpiracao.HasValue) && (infoChaveAcesso.DataExpiracao.Value.Date < DateTime.Now.Date))
             {
                 messageQueue.Add(Resource.Sigim.ErrorMessages.DataExpirada, TypeMessage.Error);
                 return false;
             }
 
-            //infoAcesso.ClienteFornecedor.Id = 4215;
-            if (EhSistemaBloqueado(nomeModulo, infoAcesso.ClienteFornecedor.Id.Value, informacaoConfiguracao.LogGirCliente))
+            //infoAcesso.ClienteFornecedor.Id = 4215; //cliente com bloqueio de modulo para testar
+            if (EhSistemaBloqueado(nomeModulo, infoChaveAcesso.ClienteFornecedor.Id.Value, informacaoConfiguracao.LogGirCliente))
             {
-                TratarBloqueioNoSistemaSigim(infoAcesso.ClienteFornecedor.Id.Value, informacaoConfiguracao.LogGirCliente);
+                TratarBloqueioNoSistemaSigim(infoChaveAcesso.ClienteFornecedor.Id.Value, informacaoConfiguracao.LogGirCliente);
                 messageQueue.Add(Resource.Sigim.ErrorMessages.SistemaBloqueado, TypeMessage.Error);
                 return false;
             }
@@ -88,9 +92,7 @@ namespace GIR.Sigim.Application.Service.Sigim
             if (!informacaoConfiguracao.LogGirCliente) return validou;
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()) return validou;
 
-            string nomeModuloAux = nomeModulo + "WEB";
-
-            ModuloDTO modulo = moduloAppService.ObterPeloNome(nomeModuloAux.ToUpper());
+            ModuloDTO modulo = moduloAppService.ObterPeloNome(nomeModulo.ToUpper());
 
             UsuarioDTO usuario = usuarioAppService.ObterUsuarioPorId(usuarioId);
 
@@ -108,12 +110,12 @@ namespace GIR.Sigim.Application.Service.Sigim
             clienteAcessoLogWS.Timeout = 10000;
             validou = clienteAcessoLogWS.AtualizaAcessoCliente(infoAcesso.ClienteFornecedor.Id.Value,
                                                                infoAcesso.ClienteFornecedor.Nome,
-                                                               informacaoConfiguracao.StringConexao,
-                                                               informacaoConfiguracao.EnderecoIP,
+                                                               informacaoConfiguracao.Servidor,
+                                                               informacaoConfiguracao.HostName,
                                                                usuario.Login,
                                                                modulo.Nome,
                                                                numeroUsuarioSistema,
-                                                               informacaoConfiguracao.Instancia,
+                                                               informacaoConfiguracao.NomeDoBancoDeDados,
                                                                modulo.Versao);  
             if (!validou)
             {

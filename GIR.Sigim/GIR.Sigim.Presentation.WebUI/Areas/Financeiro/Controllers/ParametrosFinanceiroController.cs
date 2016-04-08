@@ -12,6 +12,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -30,7 +31,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.clienteFornecedorAppService = clienteFornecedorAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.ParametroFinanceiroAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.ParametroFinanceiroAcessar)]
         public ActionResult Index()
         {
             ParametrosFinanceiroViewModel model = new ParametrosFinanceiroViewModel();

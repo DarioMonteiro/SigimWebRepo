@@ -12,6 +12,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -20,17 +21,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         private IRateioAutomaticoAppService rateioAutomaticoAppService;
         private ITipoRateioAppService tipoRateioAppService;
 
-        public RateioAutomaticoController(
-            IRateioAutomaticoAppService rateioAutomaticoAppService,
-            ITipoRateioAppService tipoRateioAppService,
-            MessageQueue messageQueue)
+        public RateioAutomaticoController(IRateioAutomaticoAppService rateioAutomaticoAppService,
+                                          ITipoRateioAppService tipoRateioAppService,
+                                          MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.rateioAutomaticoAppService = rateioAutomaticoAppService;
             this.tipoRateioAppService = tipoRateioAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.RateioAutomaticoAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.RateioAutomaticoAcessar)]
         public ActionResult Index()
         {
             var model = Session["RateioAutomatico"] as RateioAutomaticoViewModel;
@@ -48,8 +48,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             return View(model);
         }
-
-        
+      
         public ActionResult CarregarItem(int tipoRateio)
         {
             var listaRateioAutomaticoDTO = rateioAutomaticoAppService.ListarPeloTipoRateio(tipoRateio);

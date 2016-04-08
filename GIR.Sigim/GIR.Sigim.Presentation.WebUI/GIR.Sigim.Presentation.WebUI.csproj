@@ -239,6 +239,7 @@
     <Compile Include="Areas\Sac\SacAreaRegistration.cs" />
     <Compile Include="Areas\Sac\ViewModel\SetorViewModel.cs" />
     <Compile Include="Areas\Sac\ViewModel\ParametrosViewModel.cs" />
+    <Compile Include="CustomAttributes\AutorizacaoAcessoAuthorizeAttribute.cs" />
     <Compile Include="CustomAttributes\PreRequisicaoMaterialAuthorizeAttribute.cs" />
     <Compile Include="ModelBinder\DecimalModelBinder.cs" />
     <Compile Include="ViewModel\BancoViewModel.cs" />

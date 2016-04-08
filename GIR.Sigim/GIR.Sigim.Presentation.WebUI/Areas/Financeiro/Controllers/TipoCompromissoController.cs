@@ -12,6 +12,7 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -19,15 +20,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
     {
         private ITipoCompromissoAppService tipoCompromissoAppService;
 
-        public TipoCompromissoController(
-            ITipoCompromissoAppService tipoCompromissoAppService,
-            MessageQueue messageQueue)
+        public TipoCompromissoController(ITipoCompromissoAppService tipoCompromissoAppService,
+                                         MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.tipoCompromissoAppService = tipoCompromissoAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.TipoCompromissoAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.TipoCompromissoAcessar)]
         public ActionResult Index(int? id)
         {
             var model = Session["Filtro"] as TipoCompromissoViewModel;

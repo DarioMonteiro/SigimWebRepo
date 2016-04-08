@@ -11,7 +11,7 @@ using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Presentation.WebUI.Areas.Financeiro.ViewModel;
 using Newtonsoft.Json;
 using GIR.Sigim.Application.DTO.Sigim;
-
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -26,7 +26,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.apropriacaoAppService = apropriacaoAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.RelatorioApropriacaoPorClasseAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.RelatorioApropriacaoPorClasseAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as RelApropriacaoPorClasseListaViewModel;

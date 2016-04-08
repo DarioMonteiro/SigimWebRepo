@@ -10,6 +10,7 @@ using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.Service.Comercial;
 using GIR.Sigim.Application.DTO.Sigim;
 using GIR.Sigim.Application.Constantes;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Comercial.Controllers
 {
@@ -33,7 +34,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Comercial.Controllers
             this.blocoAppService = blocoAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.RelStatusVendaAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.ComercialWeb, Roles = Funcionalidade.RelStatusVendaAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as RelStatusVendaViewModel;

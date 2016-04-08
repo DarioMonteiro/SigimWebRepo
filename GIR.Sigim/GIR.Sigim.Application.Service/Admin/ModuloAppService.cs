@@ -24,7 +24,6 @@ namespace GIR.Sigim.Application.Service.Admin
     {
         private IModuloRepository moduloRepository;
         private IModuloSigimAppService moduloSigimAppService;
-        //private IAcessoAppService acessoAppService;
 
         public ModuloAppService(IModuloRepository moduloRepository, 
                                 IModuloSigimAppService moduloSigimAppService,
@@ -59,8 +58,7 @@ namespace GIR.Sigim.Application.Service.Admin
 
         public bool PossuiModulo(string nomeModulo)
         {
-            string nomeModuloAux =  nomeModulo + "WEB";
-            if (moduloRepository.ListarTodos().Any(l => l.Nome.ToUpper() == nomeModuloAux.ToUpper()))
+            if (moduloRepository.ListarTodos().Any(l => l.Nome.ToUpper() == nomeModulo.ToUpper()))
             {
                 return true;
             }
@@ -79,12 +77,13 @@ namespace GIR.Sigim.Application.Service.Admin
                 modulo.Bloqueio = bloqueio;
                 try
                 {
-                    //moduloRepository.Alterar(modulo);
-                    //moduloRepository.UnitOfWork.Commit();
+                    moduloRepository.Alterar(modulo);
+                    moduloRepository.UnitOfWork.Commit();
                     atualizou = true;
                 }
                 catch (Exception exception)
                 {
+                    QueueExeptionMessages(exception);
                 }
             }
 

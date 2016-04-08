@@ -53,27 +53,27 @@ namespace GIR.Sigim.Application.Service.Admin
 
             switch (nomeModulo)
             {
-                case GIR.Sigim.Application.Constantes.Modulo.Admin:
+                case GIR.Sigim.Application.Constantes.Modulo.AdminWeb:
                     Menu = Funcionalidade.MenuAdmin;
                     break;
 
-                case GIR.Sigim.Application.Constantes.Modulo.Comercial:
+                case GIR.Sigim.Application.Constantes.Modulo.ComercialWeb:
                     Menu = Funcionalidade.MenuComercial;
                     break;
 
-                case GIR.Sigim.Application.Constantes.Modulo.Contrato:
+                case GIR.Sigim.Application.Constantes.Modulo.ContratoWeb:
                     Menu = Funcionalidade.MenuContrato;
                     break;
 
-                case GIR.Sigim.Application.Constantes.Modulo.Financeiro:
+                case GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb:
                     Menu = Funcionalidade.MenuFinanceiro;
                     break;
 
-                case GIR.Sigim.Application.Constantes.Modulo.OrdemCompra: 
+                case GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb: 
                     Menu = Funcionalidade.MenuOrdemCompra;
                     break;
 
-                case GIR.Sigim.Application.Constantes.Modulo.Sac:
+                case GIR.Sigim.Application.Constantes.Modulo.SacWeb:
                     Menu = Funcionalidade.MenuSac;
                     break;                
 

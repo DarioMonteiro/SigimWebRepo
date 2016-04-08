@@ -16,6 +16,7 @@ using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.Enums;
 using GIR.Sigim.Application.Filtros;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -43,8 +44,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.tituloPagarAppService = tituloPagarAppService;
         }
 
-
-        [Authorize(Roles = Funcionalidade.RelatorioContasAPagarTitulosAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.RelatorioContasAPagarTitulosAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as RelContasPagarTitulosListaViewModel;

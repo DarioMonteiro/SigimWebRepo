@@ -20,6 +20,7 @@ namespace GIR.Sigim.Application.Service.Sigim
         decimal AplicaPercentual(decimal valor, Nullable<Decimal> percentual);
         string UnCrypt(string parStrMsg);
         string GetPiece(string parStrText, string parStrDelimiter, long parLngPosicao);
-        InformacaoConfiguracaoDTO SetarInformacaoConfiguracao(bool logGirCliente, string enderecoIP, string instancia, string stringConexao);
+        InformacaoConfiguracaoDTO SetarInformacaoConfiguracao(bool logGirCliente, string hostName);
+        bool ValidaVersaoSigim(string parStrVersao);
     }
 }

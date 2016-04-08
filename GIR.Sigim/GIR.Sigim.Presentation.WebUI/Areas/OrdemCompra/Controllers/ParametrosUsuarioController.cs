@@ -8,6 +8,7 @@ using GIR.Sigim.Application.Service.OrdemCompra;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 {
@@ -21,7 +22,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.parametrosUsuarioAppService = parametrosUsuarioAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.ParametroUsuarioOrdemCompraAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb, Roles = Funcionalidade.ParametroUsuarioOrdemCompraAcessar)]
         public ActionResult Index()
         {
             ParametrosUsuarioViewModel model = new ParametrosUsuarioViewModel();

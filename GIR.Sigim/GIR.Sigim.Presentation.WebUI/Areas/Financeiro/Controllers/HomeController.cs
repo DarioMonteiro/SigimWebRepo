@@ -30,23 +30,22 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
         public ActionResult Index()
         {
-            InformacaoConfiguracaoDTO informacaoConfiguracao = moduloSigimAppService.SetarInformacaoConfiguracao(this.LogGIRCliente, this.EnderecoIP, this.Instancia, this.StringConexao);
+            InformacaoConfiguracaoDTO informacaoConfiguracao = moduloSigimAppService.SetarInformacaoConfiguracao(this.LogGIRCliente,Request.UserHostName);
 
-            if (!moduloAppService.PossuiModulo(GIR.Sigim.Application.Resource.Sigim.NomeModulo.Financeiro))
+            if (!moduloAppService.PossuiModulo(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb))
             {
                 return RedirectToLocal("/");
             }
 
-            if (!acessoAppService.ValidaAcessoAoModulo(GIR.Sigim.Application.Resource.Sigim.NomeModulo.Financeiro, informacaoConfiguracao))
+            if (!acessoAppService.ValidaAcessoAoModulo(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, informacaoConfiguracao))
             {
                 return RedirectToLocal("/");
             }
 
-            if (!acessoAppService.ValidaAcessoGirCliente(GIR.Sigim.Application.Resource.Sigim.NomeModulo.Financeiro, Usuario.Id.Value, informacaoConfiguracao))
+            if (!acessoAppService.ValidaAcessoGirCliente(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Usuario.Id.Value, informacaoConfiguracao))
             {
                 return RedirectToLocal("/");
             }
-
 
             return View();
         }

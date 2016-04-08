@@ -15,6 +15,8 @@ using GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
 using Newtonsoft.Json;
+using GIR.Sigim.Presentation.WebUI.CustomAttributes;
+
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 {
@@ -69,7 +71,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             this.ordemCompraAppService = ordemCompraAppService;
         }
 
-        [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb, Roles = Funcionalidade.EntradaMaterialAcessar)]
         public ActionResult Index()
         {
             var model = Session["Filtro"] as EntradaMaterialListaViewModel;
@@ -113,7 +115,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        [Authorize(Roles = Funcionalidade.EntradaMaterialAcessar)]
+        [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb, Roles = Funcionalidade.EntradaMaterialAcessar)]
         public ActionResult Cadastro(int? id)
         {
             EntradaMaterialCadastroViewModel model = new EntradaMaterialCadastroViewModel();

@@ -6,28 +6,48 @@ using System.Web.Mvc;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Service.Admin;
-
+using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
 {
     public class HomeController : BaseController
     {
         private IModuloAppService moduloAppService;
+        private IAcessoAppService acessoAppService;
+        private IModuloSigimAppService moduloSigimAppService;
 
-        public HomeController(IModuloAppService moduloAppService, 
+        public HomeController(IModuloAppService moduloAppService,
+                              IAcessoAppService acessoAppService,
+                              IModuloSigimAppService moduloSigimAppService, 
                               MessageQueue messageQueue)
             : base(messageQueue)
         {
-            this.moduloAppService = moduloAppService;        
+            this.moduloAppService = moduloAppService;
+            this.acessoAppService = acessoAppService;
+            this.moduloSigimAppService = moduloSigimAppService;
         }
 
         public ActionResult Index()
         {
-            if (moduloAppService.PossuiModulo(GIR.Sigim.Application.Resource.Sigim.NomeModulo.Contrato))
+            InformacaoConfiguracaoDTO informacaoConfiguracao = moduloSigimAppService.SetarInformacaoConfiguracao(this.LogGIRCliente, Request.UserHostName);
+
+            if (!moduloAppService.PossuiModulo(GIR.Sigim.Application.Constantes.Modulo.ContratoWeb))
             {
-                return View();
+                return RedirectToLocal("/");
             }
-            return RedirectToLocal("/");
+
+            if (!acessoAppService.ValidaAcessoAoModulo(GIR.Sigim.Application.Constantes.Modulo.ContratoWeb, informacaoConfiguracao))
+            {
+                return RedirectToLocal("/");
+            }
+
+            if (!acessoAppService.ValidaAcessoGirCliente(GIR.Sigim.Application.Constantes.Modulo.ContratoWeb, Usuario.Id.Value, informacaoConfiguracao))
+            {
+                return RedirectToLocal("/");
+            }
+
+            return View();
         }
 
     }
