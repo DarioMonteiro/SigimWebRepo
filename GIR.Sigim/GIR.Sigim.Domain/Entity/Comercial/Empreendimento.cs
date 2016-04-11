@@ -9,7 +9,7 @@ namespace GIR.Sigim.Domain.Entity.Comercial
     public class Empreendimento : BaseEntity
     {
         public string Nome { get; set; }
-        public int EnderecoId { get; set; }
+        public int? EnderecoId { get; set; }
         public int IncorporadorId { get; set; }
         public Incorporador Incorporador { get; set; }
         

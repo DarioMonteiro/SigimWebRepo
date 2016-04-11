@@ -27,7 +27,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Comercial
 
             Property(l => l.EnderecoId)
                 .HasColumnName("endereco")
-                .IsRequired()
                 .HasColumnOrder(3);
 
             Property(l => l.IncorporadorId )

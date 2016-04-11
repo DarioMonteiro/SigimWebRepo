@@ -9,7 +9,7 @@ namespace GIR.Sigim.Application.DTO.Comercial
     public class EmpreendimentoDTO : BaseDTO
     {
         public string Nome { get; set; }
-
+        public int? EnderecoId { get; set; }
         public int IncorporadorId { get; set; }
         public IncorporadorDTO Incorporador { get; set; }
         
