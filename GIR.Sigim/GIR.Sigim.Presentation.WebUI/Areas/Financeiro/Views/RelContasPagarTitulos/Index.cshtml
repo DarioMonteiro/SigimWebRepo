@@ -116,7 +116,7 @@
                                                                 })
                                                     <script type="text/javascript">
                                                         $(document).ready(function () {
-                                                            $("#@Html.IdFor(m => m.Filtro.ClienteFornecedor.Id)").on("change", function () {
+                                                            $(document).on("clienteFornecedorAlterado@(Model.Filtro.ClienteFornecedor.Id)", function (e) {
                                                                 limpaLista();
                                                             });
                                                         });
@@ -193,8 +193,10 @@
                                                 @Html.EditorFor(m => m.Filtro.Classe, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
                                                 <script type="text/javascript">
                                                     $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.Classe.Codigo)").on("change", function () {
-                                                            limpaLista();
+                                                        $(document).ready(function () {
+                                                            $(document).on("classeValidada", function (e) {
+                                                                limpaLista();
+                                                            });
                                                         });
                                                     });
                                                 </script>
@@ -203,7 +205,7 @@
                                                 @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de Custo" })
                                                 <script type="text/javascript">
                                                     $(document).ready(function () {
-                                                        $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").on("change", function () {
+                                                        $(document).on("centroCustoValidado", function (e) {
                                                             limpaLista();
                                                         });
                                                     });
@@ -309,6 +311,7 @@
                                                             $(document).ready(function () {
                                                                 $("#@Html.IdFor(m => m.Filtro.ValorTituloInicial)").on("focusout", function () {
                                                                     validaValores();
+                                                                    limpaLista();
                                                                 });
                                                             });
                                                         </script>
@@ -358,24 +361,6 @@
                                                 </section>
                                             </div>
                                         </fieldset>
-@*                                        <fieldset>
-                                            <div class="row">
-                                                <section class="col col-12">
-                                                    <h5>Apresentação do relatório</h5>
-                                                </section>
-                                            </div>
-                                            <div class="row">
-                                                <section class="col col-12">
-									                <div class="inline-group">
-										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 0, new { @id="rdbTotalizado0"}) <i></i>Totalizado geral</label>
-										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 3, new { @id="rdbTotalizado1"}) <i></i>Totalizado por data situação</label>
-										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 4, new { @id="rdbTotalizado2"}) <i></i>Totalizado por data situação (sintético)</label>
-                                                        <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 1, new { @id="rdbTotalizado3"}) <i></i>Totalizado por fornecedor</label>
-                                                        <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.EhTotalizadoPor, 2, new { @id="rdbTotalizado4"}) <i></i>Totalizado por classe</label>
-									                </div>
-								                </section>
-                                            </div>
-                                        </fieldset>*@
                                     </div>
                                 </div>
                             </div>
@@ -441,9 +426,59 @@
 
                 solicitaFormaDeExibicao();
 
-                //listarFiltro();
             }
         );
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAPagarProvisionado)").on("change", function () {
+            limpaLista();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAPagarAguardandoLiberacao)").on("change", function () {
+            limpaLista();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAPagarLiberado)").on("change", function () {
+            limpaLista();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAPagarEmitido)").on("change", function () {
+            limpaLista();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAPagarPago)").on("change", function () {
+            limpaLista();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAPagarBaixado)").on("change", function () {
+            limpaLista();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSituacaoAPagarCancelado)").on("change", function () {
+            limpaLista();
+        });
+
+        $('input[type=radio][name="Filtro.VisualizarClientePor"]').change(function () {
+            var valor = $(this).val();
+            if (valor == 0)
+            {
+                limpaLista();
+            }
+            else
+            {
+                if (valor == 1)
+                {
+                    limpaLista();
+                }
+            }
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhPorCompetencia)").on("change", function () {
+            limpaLista();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.EhSemApropriacao)").on("change", function () {
+            limpaLista();
+        });
 
     });
 
