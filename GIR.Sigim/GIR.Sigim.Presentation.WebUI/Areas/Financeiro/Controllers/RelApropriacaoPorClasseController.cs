@@ -35,7 +35,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 model = new RelApropriacaoPorClasseListaViewModel();
                 model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
                 model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
-                model.Filtro.DataInicial = DateTime.Now;
+                model.Filtro.DataInicial = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                 model.Filtro.DataFinal = DateTime.Now;
             }
 

@@ -47,15 +47,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.RelatorioContasAPagarTitulosAcessar)]
         public ActionResult Index()
         {
-            var model = Session["Filtro"] as RelContasPagarTitulosListaViewModel;
-            if (model == null)
-            {
-                model = new RelContasPagarTitulosListaViewModel();
-                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
-                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
-                model.Filtro.DataInicial = DateTime.Now;
-                model.Filtro.DataFinal = DateTime.Now;
-            }
+            var model = new RelContasPagarTitulosListaViewModel();
+            model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+            model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
+            model.Filtro.DataInicial = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            model.Filtro.DataFinal = DateTime.Now;
 
             model.PodeImprimir = tituloPagarAppService.EhPermitidoImprimirRelContasPagarTitulo();
 
