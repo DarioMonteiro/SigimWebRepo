@@ -37,13 +37,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Comercial.Controllers
         [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.ComercialWeb, Roles = Funcionalidade.RelStatusVendaAcessar)]
         public ActionResult Index()
         {
-            var model = Session["Filtro"] as RelStatusVendaViewModel;
-            if (model == null)
-            {
-                model = new RelStatusVendaViewModel();
-                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
-                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
-            }
+            var model = new RelStatusVendaViewModel();
+            model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+            model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
 
             model.PodeImprimir = vendaAppService.EhPermitidoImprimirRelStatusVenda();
 

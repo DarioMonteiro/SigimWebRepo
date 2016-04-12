@@ -45,7 +45,7 @@
                                                     @Html.HiddenFor(m => m.Filtro.Incorporador.Id)
                                                     @Html.LabelFor(m => m.Filtro.IncorporadorId, new { @class = "label" })
                                                     <label class="select">
-                                                        @Html.DropDownListFor(m => m.Filtro.IncorporadorId, Model.ListaIncorporador, string.Empty)<i></i>
+                                                        @Html.DropDownListFor(m => m.Filtro.IncorporadorId, Model.ListaIncorporador, string.Empty, new {@class="required"})<i></i>
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.IncorporadorId, "", new { @class = "note note-error" })
                                                 </section>
@@ -209,24 +209,6 @@
             limpaLista();
         });
 
-       @* $(document).on("showFormatoImpressaoModalPanel", function (e) {
-            var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
-            var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
-
-            if ((dataInicial == "") || (dataFinal == "")) {
-                smartAlert("Atenção", "Informe o período !", "warning");
-                e.event.preventDefault();
-            }
-
-            if ((dataInicial != "") && (dataFinal != "")) {
-                if (compararDatas(dataInicial, dataFinal) > 0) {
-                    smartAlert("Atenção", "Data inicial maior que data final !", "warning");
-                    e.event.preventDefault();
-                }
-            }
-        })*@
-
-
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
                 ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
@@ -282,8 +264,15 @@
     }
 
     function listarFiltro() {
-        var situacaoFiltroMarcado = false;
+        var incorporadorId = $("#@Html.IdFor(m => m.Filtro.IncorporadorId)").val();
 
+        if (incorporadorId == "") {
+            smartAlert("Atenção", "Informe o incorporador", "warning");
+            tratarBotoes(false);
+            return;
+        }
+
+        var situacaoFiltroMarcado = false;
         situacaoFiltroMarcado = $("#@Html.IdFor(m => m.Filtro.SituacaoProposta)")[0].checked;
         situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.SituacaoAssinada)")[0].checked;
         situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.SituacaoCancelada)")[0].checked;
@@ -292,7 +281,7 @@
         situacaoFiltroMarcado = situacaoFiltroMarcado || $("#@Html.IdFor(m => m.Filtro.SituacaoEscriturada)")[0].checked;
 
         if (!situacaoFiltroMarcado) {
-            smartAlert("Erro", "Selecione uma situação.", "error");
+            smartAlert("Atenção", "Selecione uma situação.", "warning");
             tratarBotoes(false);
             return;
         }

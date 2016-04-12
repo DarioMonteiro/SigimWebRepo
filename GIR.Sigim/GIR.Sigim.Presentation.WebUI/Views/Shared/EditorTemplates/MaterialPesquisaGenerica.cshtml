@@ -475,9 +475,11 @@
         $("#@Html.IdFor(m => m.Descricao)").addClass("readonly");
         if ("#@ViewBag.exibirCampoUnidadeMedida") {
             $("#BtnShowModalPanel1_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+            $("#BtnShowModalPanel1_@(uniqueIdentifier)").removeAttr("data-toggle");
         }
         else {
             $("#BtnShowModalPanel2_@(uniqueIdentifier)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+            $("#BtnShowModalPanel2_@(uniqueIdentifier)").removeAttr("data-toggle");
         }
     }
 
@@ -486,9 +488,11 @@
         $("#@Html.IdFor(m => m.Descricao)").removeClass("readonly");
         if ("#@ViewBag.exibirCampoUnidadeMedida") {
             $("#BtnShowModalPanel1_@(uniqueIdentifier)").attr('href', '@linkModal');
+            $("#BtnShowModalPanel1_@(uniqueIdentifier)").attr('data-toggle', 'modal');
         }
         else {
             $("#BtnShowModalPanel2_@(uniqueIdentifier)").attr('href', '@linkModal');
+            $("#BtnShowModalPanel2_@(uniqueIdentifier)").attr('data-toggle', 'modal');
         }
     }
 

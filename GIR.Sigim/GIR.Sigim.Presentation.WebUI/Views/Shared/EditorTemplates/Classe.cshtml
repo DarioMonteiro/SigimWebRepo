@@ -180,12 +180,14 @@
         $("#@Html.IdFor(m => m.Codigo)").attr("readonly", true);
         $("#@Html.IdFor(m => m.Codigo)").addClass("readonly");
         $("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").attr('href', '@linkNotificarObrigatoriedadeCentroCusto');
+        $("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").removeAttr("data-toggle");
     }
 
     function unblockClasseForm_@(Html.IdFor(m => m.Codigo))() {
         $("#@Html.IdFor(m => m.Codigo)").attr("readonly", false);
         $("#@Html.IdFor(m => m.Codigo)").removeClass("readonly");
         $("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").attr('href', '@linkModal');
+        $("#BtnShowModalPanel_@Html.IdFor(m => m.Codigo)").attr('data-toggle','modal');
     }
 
     function validaClasse_@(Html.IdFor(m => m.Codigo))() {
