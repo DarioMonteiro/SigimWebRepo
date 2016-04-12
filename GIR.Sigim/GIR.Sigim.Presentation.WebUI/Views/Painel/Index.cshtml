@@ -1,15 +1,8 @@
 ﻿@{
     ViewBag.Title = "Painel";
 }
-<h3>Painel</h3>
+<h3>Painel <font size="1">(versão @ViewContext.HttpContext.ApplicationInstance.GetType().BaseType.Assembly.GetName().Version.ToString() )</font></h3>
 <ul>
-@*    <li>@Html.ActionLink("Admin", "Index", "Home", new { area = "Admin" }, htmlAttributes: new { @class = "username", title = "Admin" })</li>
-    <li>@Html.ActionLink("Contrato", "Index", "Home", new { area = "Contrato" }, htmlAttributes: new { @class = "username", title = "Contrato" })</li>
-    <li>@Html.ActionLink("Financeiro", "Index", "Home", new { area = "Financeiro" }, htmlAttributes: new { @class = "username", title = "Financeiro" })</li>
-    <li>@Html.ActionLink("Ordem de Compra", "Index", "Home", new { area = "OrdemCompra" }, htmlAttributes: new { @class = "username", title = "Ordem de Compra" })</li>
-    <li>@Html.ActionLink("Sac", "Index", "Home", new { area = "Sac" }, htmlAttributes: new { @class = "username", title = "Sac" })</li>*@
-
-
     <li style="list-style-type:none">
         <a href="@Url.Action("Index","Home",new { area = "Admin" })" class="">
             <img src="@Url.Content("~/Content/img/ADMINISTRADOR.ico")" alt="Icon Image" />
