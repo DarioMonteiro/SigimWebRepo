@@ -8,12 +8,12 @@ namespace GIR.Sigim.Presentation.WebUI.ViewModel.Admin
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "CampoObrigatorio")]
         [StringLength(50, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [Display(Name = "Usuário")]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "CampoObrigatorio")]
         [StringLength(50, ErrorMessageResourceType = typeof(Application.Resource.Sigim.ErrorMessages), ErrorMessageResourceName = "LimiteMaximoCaracteresExcedido")]
         [DataType(DataType.Password)]
         [Display(Name = "Senha")]
