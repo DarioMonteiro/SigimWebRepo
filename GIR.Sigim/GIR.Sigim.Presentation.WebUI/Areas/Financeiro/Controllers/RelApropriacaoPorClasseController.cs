@@ -29,15 +29,11 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.RelatorioApropriacaoPorClasseAcessar)]
         public ActionResult Index()
         {
-            var model = Session["Filtro"] as RelApropriacaoPorClasseListaViewModel;
-            if (model == null)
-            {
-                model = new RelApropriacaoPorClasseListaViewModel();
-                model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
-                model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
-                model.Filtro.DataInicial = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                model.Filtro.DataFinal = DateTime.Now;
-            }
+            var model = new RelApropriacaoPorClasseListaViewModel();
+            model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
+            model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
+            model.Filtro.DataInicial = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            model.Filtro.DataFinal = DateTime.Now;
 
             model.PodeImprimir = apropriacaoAppService.EhPermitidoImprimirRelApropriacaoPorClasse();
 
