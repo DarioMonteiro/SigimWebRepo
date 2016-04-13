@@ -12,7 +12,6 @@ using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
 using GIR.Sigim.Application.DTO.Comercial;
 using GIR.Sigim.Domain.Entity.Comercial;
-using GIR.Sigim.Domain.Repository.Comercial;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Domain.Specification.Comercial;
 using GIR.Sigim.Application.Filtros.Comercial;
@@ -32,9 +31,9 @@ namespace GIR.Sigim.Application.Service.Comercial
 
         #region IEmpreendimentoAppService Members
 
-        public List<EmpreendimentoDTO> ListarPeloIncorporador(int incorporadorId)
+        public List<EmpreendimentoDTO> ListarPeloIncorporadorAssociado(int incorporadorId)
         {
-            return empreendimentoRepository.ListarPeloFiltro(l => l.IncorporadorId == incorporadorId).To<List<EmpreendimentoDTO>>();
+            return empreendimentoRepository.ListarPeloFiltro(l => (l.ListaBloco.Any(b => b.ListaIncorporadorAssociado.Any(a => a.IncorporadorId == incorporadorId)))).To<List<EmpreendimentoDTO>>();
         }
 
         #endregion

@@ -41,15 +41,62 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Comercial
 
             switch (orderBy)
             {
-                case "id":
+                case "incorporador":
+                    set = ascending ? set.OrderBy(l => l.Contrato.Unidade.Empreendimento.Incorporador.RazaoSocial) : set.OrderByDescending(l => l.Contrato.Unidade.Empreendimento.Incorporador.RazaoSocial);
+                    break;
+                case "empreendimento":
+                    set = ascending ? set.OrderBy(l => l.Contrato.Unidade.Empreendimento.Nome) : set.OrderByDescending(l => l.Contrato.Unidade.Empreendimento.Nome);
+                    break;
+                case "bloco":
+                    set = ascending ? set.OrderBy(l => l.Contrato.Unidade.Bloco.Nome) : set.OrderByDescending(l => l.Contrato.Unidade.Bloco.Nome);
+                    break;
+                case "unidade":
+                    set = ascending ? set.OrderBy(l => l.Contrato.Unidade.Descricao) : set.OrderByDescending(l => l.Contrato.Unidade.Descricao);
+                    break;
+                case "contratoId":
                     set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
                     break;
-                case "ContratoId":
-                    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
+                case "descricaoSituacaoContrato":
+                    set = ascending ? set.OrderBy(l => l.Contrato.SituacaoContrato) : set.OrderByDescending(l => l.Contrato.SituacaoContrato);
                     break;
-                case "codigo":
+                case "cliente":
+                    set = ascending ? set.OrderBy(l => l.Contrato.ListaVendaParticipante.Where(p => p.TipoParticipanteId == GIR.Sigim.Domain.Constantes.Comercial.ContratoTipoParticipanteTitular).FirstOrDefault().Cliente.Nome) : set.OrderByDescending(l => l.Contrato.ListaVendaParticipante.Where(p => p.TipoParticipanteId == GIR.Sigim.Domain.Constantes.Comercial.ContratoTipoParticipanteTitular).FirstOrDefault().Cliente.Nome);
+                    break;
+                case "tabelaVenda":
+                    set = ascending ? set.OrderBy(l => l.TabelaVenda.Nome) : set.OrderByDescending(l => l.TabelaVenda.Nome);
+                    break;
+                case "dataVenda":
+                    set = ascending ? set.OrderBy(l => l.DataVenda) : set.OrderByDescending(l => l.DataVenda);
+                    break;
+                case "precoTabela":
+                    set = ascending ? set.OrderBy(l => l.PrecoTabela) : set.OrderByDescending(l => l.PrecoTabela);
+                    break;
+                case "valorDesconto":
+                    set = ascending ? set.OrderBy(l => l.ValorDesconto) : set.OrderByDescending(l => l.ValorDesconto);
+                    break;
+                case "percentualDesconto":
+                    set = ascending ? set.OrderBy(l => l.ValorDesconto) : set.OrderByDescending(l => l.ValorDesconto);
+                    break;
+                case "precoPraticado":
+                    set = ascending ? set.OrderBy(l => l.PrecoPraticado) : set.OrderByDescending(l => l.PrecoPraticado);
+                    break;
+                case "dataAssinatura":
+                    set = ascending ? set.OrderBy(l => l.DataAssinatura) : set.OrderByDescending(l => l.DataAssinatura);
+                    break;
+                case "dataCancelamento":
+                    set = ascending ? set.OrderBy(l => l.DataCancelamento) : set.OrderByDescending(l => l.DataCancelamento);
+                    break;
+                case "aprovado":
+                    set = ascending ? set.OrderBy(l => l.Aprovado) : set.OrderByDescending(l => l.Aprovado);
+                    break;
+                case "usuarioAprovacao":
+                    set = ascending ? set.OrderBy(l => l.UsuarioAprovacao) : set.OrderByDescending(l => l.UsuarioAprovacao);
+                    break;
+                case "dataAprovacao":
+                    set = ascending ? set.OrderBy(l => l.DataAprovacao) : set.OrderByDescending(l => l.DataAprovacao);
+                    break;
                 default:
-                    set = ascending ? set.OrderBy(l => l.Id) : set.OrderByDescending(l => l.Id);
+                    set = ascending ? set.OrderBy(l => l.Contrato.Unidade.Empreendimento.Incorporador.RazaoSocial) : set.OrderByDescending(l => l.Contrato.Unidade.Empreendimento.Incorporador.RazaoSocial);
                     break;
             }
 

@@ -25,10 +25,6 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Comercial
 
         #region IEmpreendimentoRepository Members
 
-        public List<Empreendimento> ListarPeloIncorporador(int incorporadorId)
-        {
-            return QueryableUnitOfWork.CreateSet<Empreendimento>().Where(l => l.IncorporadorId == incorporadorId).ToList<Empreendimento>();
-        }
 
         #endregion
     }

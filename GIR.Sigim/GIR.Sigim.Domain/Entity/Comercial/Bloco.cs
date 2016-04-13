@@ -17,11 +17,14 @@ namespace GIR.Sigim.Domain.Entity.Comercial
 
         public ICollection<Unidade> ListaUnidade { get; set; }
         public ICollection<TabelaVenda> ListaTabelaVenda { get; set; }
+        public ICollection<IncorporadorAssociado> ListaIncorporadorAssociado { get; set; }
+
 
         public Bloco()
         {
             this.ListaUnidade = new HashSet<Unidade>();
             this.ListaTabelaVenda = new HashSet<TabelaVenda>();
+            this.ListaIncorporadorAssociado = new HashSet<IncorporadorAssociado>();
         }
 
     }

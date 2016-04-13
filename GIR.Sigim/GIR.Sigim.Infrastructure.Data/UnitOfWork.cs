@@ -111,6 +111,7 @@ namespace GIR.Sigim.Infrastructure.Data
 
             #region Comercial
 
+            modelBuilder.Configurations.Add(new IncorporadorAssociadoConfiguration());
             modelBuilder.Configurations.Add(new IncorporadorConfiguration());
             modelBuilder.Configurations.Add(new EmpreendimentoConfiguration());
             modelBuilder.Configurations.Add(new BlocoConfiguration());

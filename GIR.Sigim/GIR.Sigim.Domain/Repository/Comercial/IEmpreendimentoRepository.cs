@@ -9,6 +9,5 @@ namespace GIR.Sigim.Domain.Repository.Comercial
 {
     public interface IEmpreendimentoRepository : IRepository<Empreendimento>
     {
-        List<Empreendimento> ListarPeloIncorporador(int incorporadorId);
     }
 }

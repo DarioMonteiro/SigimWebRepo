@@ -18,6 +18,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Comercial.ViewModel
         public SelectList ListaIncorporador { get; set; }
         public SelectList ListaEmpreendimento { get; set; }
         public SelectList ListaBloco { get; set; }
+        public SelectList ListaSimNao { get; set; }
 
         public bool PodeImprimir { get; set; }
         

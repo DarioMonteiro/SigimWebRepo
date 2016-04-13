@@ -10,6 +10,6 @@ namespace GIR.Sigim.Application.Service.Comercial
 {
     public interface IEmpreendimentoAppService
     {
-        List<EmpreendimentoDTO> ListarPeloIncorporador(int incorporadorId);
+        List<EmpreendimentoDTO> ListarPeloIncorporadorAssociado(int incorporadorId);
     }
 }

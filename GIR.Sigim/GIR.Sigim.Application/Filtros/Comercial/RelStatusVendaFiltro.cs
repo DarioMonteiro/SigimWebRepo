@@ -43,5 +43,9 @@ namespace GIR.Sigim.Application.Filtros.Comercial
         [Display(Name = "Todas")]
         public bool SituacaoTodas { get; set; }
 
+        [Display(Name = "Aprovado")]
+        public int? Aprovado { get; set; }
+
+
     }
 }

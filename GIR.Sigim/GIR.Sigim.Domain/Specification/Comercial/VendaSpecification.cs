@@ -33,6 +33,12 @@ namespace GIR.Sigim.Domain.Specification.Comercial
             return specification;
         }
 
+        public static Specification<Venda> EhTipoParticipanteTitular()
+        {
+            Specification<Venda> specification = new TrueSpecification<Venda>();
+            return new DirectSpecification<Venda>(l => l.Contrato.ListaVendaParticipante.Any(t => t.TipoParticipanteId == 1)); 
+        }
+
         public static Specification<Venda> IgualAoBlocoId(int? blocoId)
         {
             Specification<Venda> specification = new TrueSpecification<Venda>();
@@ -43,6 +49,18 @@ namespace GIR.Sigim.Domain.Specification.Comercial
                 specification &= directSpecification;
             }
             return specification;
+        }
+
+        public static Specification<Venda> EhAprovado()
+        {
+            Specification<Venda> specification = new TrueSpecification<Venda>();
+            return new DirectSpecification<Venda>(l => (l.Aprovado.HasValue && l.Aprovado.Value == true)); 
+        }
+
+        public static Specification<Venda> NaoEhAprovado()
+        {
+            Specification<Venda> specification = new TrueSpecification<Venda>();
+            return new DirectSpecification<Venda>(l => ((!l.Aprovado.HasValue) || (l.Aprovado.HasValue && l.Aprovado.Value == false)));
         }
 
         public static Specification<Venda> EhProposta()

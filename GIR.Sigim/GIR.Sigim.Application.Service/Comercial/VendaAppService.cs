@@ -48,7 +48,21 @@ namespace GIR.Sigim.Application.Service.Comercial
             specification &= VendaSpecification.IgualAoIncorporadorId(filtro.IncorporadorId);
             specification &= VendaSpecification.IgualAoEmpreendimentoId(filtro.EmpreendimentoId);
             specification &= VendaSpecification.IgualAoBlocoId(filtro.BlocoId);
-
+            specification &= VendaSpecification.EhTipoParticipanteTitular();
+            if (filtro.Aprovado.HasValue)
+            {
+                if (filtro.Aprovado.Value == 1)
+                {
+                    specification &= VendaSpecification.EhAprovado();
+                }
+                else
+                {
+                    if (filtro.Aprovado.Value == 2)
+                    {
+                        specification &= VendaSpecification.NaoEhAprovado();
+                    }
+                }
+            }
 
             if (filtro.SituacaoTodas)
             {

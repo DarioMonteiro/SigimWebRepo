@@ -51,6 +51,7 @@
     <Compile Include="Entity\Comercial\Bloco.cs" />
     <Compile Include="Entity\Comercial\ContratoComercial.cs" />
     <Compile Include="Entity\Comercial\Incorporador.cs" />
+    <Compile Include="Entity\Comercial\IncorporadorAssociado.cs" />
     <Compile Include="Entity\Comercial\TabelaVenda.cs" />
     <Compile Include="Entity\Comercial\Empreendimento.cs" />
     <Compile Include="Entity\Comercial\Renegociacao.cs" />

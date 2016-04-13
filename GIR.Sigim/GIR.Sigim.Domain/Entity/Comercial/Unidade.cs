@@ -19,10 +19,13 @@ namespace GIR.Sigim.Domain.Entity.Comercial
         public bool? ConsiderarParametroUnidade { get; set; }
 
         public ICollection<ContratoComercial> ListaContratoComercial { get; set; }
+        public ICollection<IncorporadorAssociado> ListaIncorporadorAssociado { get; set; }
+
 
         public Unidade()
         {
             this.ListaContratoComercial = new HashSet<ContratoComercial>();
+            this.ListaIncorporadorAssociado = new HashSet<IncorporadorAssociado>();
         }
     }
 }

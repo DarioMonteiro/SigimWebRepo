@@ -16,10 +16,12 @@ namespace GIR.Sigim.Domain.Entity.Comercial
         public string CodigoSUFRAMA { get; set; }
         
         public ICollection<Empreendimento> ListaEmpreendimento { get; set; }
+        public ICollection<IncorporadorAssociado> ListaIncorporadorAssociado { get; set; }
         
         public Incorporador()
         {
             this.ListaEmpreendimento = new HashSet<Empreendimento>();
+            this.ListaIncorporadorAssociado = new HashSet<IncorporadorAssociado>();
         }
 
     }

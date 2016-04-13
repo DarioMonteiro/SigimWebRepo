@@ -58,7 +58,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Comercial.Controllers
                 int totalRegistros;
 
                 if (string.IsNullOrEmpty(model.Filtro.PaginationParameters.OrderBy))
-                    model.Filtro.PaginationParameters.OrderBy = "contratoId";
+                    model.Filtro.PaginationParameters.OrderBy = "incorporador";
 
                 var result = vendaAppService.ListarPeloFiltroRelStatusVenda(model.Filtro, out totalRegistros);
 
@@ -74,14 +74,18 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Comercial.Controllers
 
         private void CarregarCombos(RelStatusVendaViewModel model)
         {
+
+            List<Object> listaSimNao = new List<Object> { new { value = 1, text = "Sim" }, new { value = 2, text = "Não" } };
+
             model.ListaIncorporador = new SelectList(incorporadorAppService.ListarTodos().OrderBy(l => l.RazaoSocial), "Id", "RazaoSocial", model.Filtro.IncorporadorId);
-            model.ListaEmpreendimento = new SelectList(empreendimentoAppService.ListarPeloIncorporador(model.Filtro.IncorporadorId), "Id", "Nome", model.Filtro.EmpreendimentoId);
+            model.ListaEmpreendimento = new SelectList(empreendimentoAppService.ListarPeloIncorporadorAssociado(model.Filtro.IncorporadorId), "Id", "Nome", model.Filtro.EmpreendimentoId);
             model.ListaBloco = new SelectList(blocoAppService.ListarPeloEmpreendimento(model.Filtro.EmpreendimentoId), "Id", "Nome", model.Filtro.BlocoId );
+            model.ListaSimNao = new SelectList(listaSimNao, "value", "text", model.Filtro.Aprovado);
         }
 
         public ActionResult CarregaEmpreendimentoPorIncorporador(int IncorporadorId)
         {
-            var lista = empreendimentoAppService.ListarPeloIncorporador(IncorporadorId);
+            var lista = empreendimentoAppService.ListarPeloIncorporadorAssociado(IncorporadorId);
             return Json(lista);
         }
 

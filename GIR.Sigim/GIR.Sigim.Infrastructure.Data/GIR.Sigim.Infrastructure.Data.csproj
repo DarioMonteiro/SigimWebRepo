@@ -62,6 +62,7 @@
     <Compile Include="Configuration\Admin\PerfilFuncionalidadeConfiguration.cs" />
     <Compile Include="Configuration\Comercial\BlocoConfiguration.cs" />
     <Compile Include="Configuration\Comercial\ContratoComercialConfiguration.cs" />
+    <Compile Include="Configuration\Comercial\IncorporadorAssociadoConfiguration.cs" />
     <Compile Include="Configuration\Comercial\TabelaVendaConfiguration.cs" />
     <Compile Include="Configuration\Comercial\IncorporadorConfiguration.cs" />
     <Compile Include="Configuration\Comercial\EmpreendimentoConfiguration.cs" />
