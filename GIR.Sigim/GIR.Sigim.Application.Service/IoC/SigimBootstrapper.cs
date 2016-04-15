@@ -30,6 +30,7 @@ namespace GIR.Sigim.Application.Service.IoC
             Container.Current.RegisterType<IFonteNegocioAppService, FonteNegocioAppService>();
             Container.Current.RegisterType<IFormaRecebimentoAppService, FormaRecebimentoAppService>();
             Container.Current.RegisterType<IGrupoAppService, GrupoAppService>();
+            Container.Current.RegisterType<IIndiceFinanceiroAppService, IndiceFinanceiroAppService>();
             Container.Current.RegisterType<IInteresseBairroAppService, InteresseBairroAppService>();
             Container.Current.RegisterType<ILogOperacaoAppService, LogOperacaoAppService>();
             Container.Current.RegisterType<IMaterialAppService, MaterialAppService>();

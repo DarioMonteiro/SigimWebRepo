@@ -178,6 +178,7 @@
     <Compile Include="Areas\Financeiro\Controllers\CentroCustoController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\ClasseController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\CaixaController.cs" />
+    <Compile Include="Areas\Financeiro\Controllers\RelAcompanhamentoFinanceiroController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\RelApropriacaoPorClasseController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\RelContasPagarTitulosController.cs" />
     <Compile Include="Areas\Financeiro\Controllers\TipoMovimentoController.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Areas\Financeiro\FinanceiroAreaRegistration.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\CaixaViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\ListaViewModelRelContasPagarTitulo.cs" />
+    <Compile Include="Areas\Financeiro\ViewModel\RelAcompanhamentoFinanceiroListaViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\RelApropriacaoPorClasseListaViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\RelContasPagarTitulosListaViewModel.cs" />
     <Compile Include="Areas\Financeiro\ViewModel\TipoMovimentoViewModel.cs" />
@@ -424,6 +426,7 @@
     <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\ListaPartialSemApropriacao.cshtml" />
     <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\ListaPartialSintetico.cshtml" />
     <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\_PaginationPartialRelContasPagarTitulos.cshtml" />
+    <Content Include="Areas\Financeiro\Views\RelAcompanhamentoFinanceiro\Index.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>

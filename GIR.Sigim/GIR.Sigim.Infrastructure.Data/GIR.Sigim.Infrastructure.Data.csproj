@@ -273,6 +273,7 @@
     <Compile Include="Repository\Sigim\ComplementoNaturezaOperacaoRepository.cs" />
     <Compile Include="Repository\Sigim\CotacaoValoresRepository.cs" />
     <Compile Include="Repository\Sigim\FeriadoRepository.cs" />
+    <Compile Include="Repository\Sigim\IndiceFinanceiroRepository.cs" />
     <Compile Include="Repository\Sigim\NaturezaReceitaRepository.cs" />
     <Compile Include="Repository\Sigim\LogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\FormaRecebimentoRepository.cs" />

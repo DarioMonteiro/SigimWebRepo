@@ -216,6 +216,7 @@
     <Compile Include="Filtros\Contrato\RelNotaFiscalLiberadaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\CaixaFiltro.cs" />
     <Compile Include="Filtros\Financeiro\HistoricoContabilFiltro.cs" />
+    <Compile Include="Filtros\Financeiro\RelAcompanhamentoFinanceiroFiltro.cs" />
     <Compile Include="Filtros\Financeiro\RelApropriacaoPorClasseFiltro.cs" />
     <Compile Include="Filtros\Financeiro\RelContasPagarTitulosFiltro.cs" />
     <Compile Include="Filtros\Financeiro\TipoMovimentoFiltro.cs" />
@@ -511,6 +512,7 @@
     <Compile Include="Service\Sigim\IAcessoAppService.cs" />
     <Compile Include="Service\Sigim\IComplementoNaturezaOperacaoAppService.cs" />
     <Compile Include="Service\Sigim\IComplementoCSTAppService.cs" />
+    <Compile Include="Service\Sigim\IIndiceFinanceiroAppService.cs" />
     <Compile Include="Service\Sigim\IModuloSigimAppService.cs" />
     <Compile Include="Service\Sigim\INaturezaReceitaAppService.cs" />
     <Compile Include="Service\Sigim\IContaCorrenteAppService.cs" />

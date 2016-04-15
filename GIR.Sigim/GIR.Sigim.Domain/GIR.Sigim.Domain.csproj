@@ -276,6 +276,7 @@
     <Compile Include="Repository\Sigim\IFeriadoRepository.cs" />
     <Compile Include="Repository\Sigim\IComplementoCSTRepository.cs" />
     <Compile Include="Repository\Sigim\IComplementoNaturezaOperacaoRepository.cs" />
+    <Compile Include="Repository\Sigim\IIndiceFinanceiroRepository.cs" />
     <Compile Include="Repository\Sigim\INaturezaReceitaRepository.cs" />
     <Compile Include="Repository\Sigim\ILogAcessoRepository.cs" />
     <Compile Include="Repository\Sigim\IContaCorrenteRepository.cs" />

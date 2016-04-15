@@ -74,7 +74,9 @@
           </mvcSiteMapNode>       
       </mvcSiteMapNode>-->
 
-      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_APROPRIACAO_POR_CLASSE_ACESSAR">
+      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_APROPRIACAO_POR_CLASSE_ACESSAR,
+                                                                          REL_CONTASAPAGAR_TITULOS_ACESSAR,
+                                                                          REL_ACOMPANHAMENTO_FINANCEIRO_ACESSAR">
 
         <mvcSiteMapNode title="Apropriação" url="#" clickable="false" roles="REL_APROPRIACAO_POR_CLASSE_ACESSAR">
           <mvcSiteMapNode title="Por classe" controller="RelApropriacaoPorClasse" action="Index"/>
@@ -83,6 +85,8 @@
         <mvcSiteMapNode title="Contas a pagar" url="#" clickable="false" roles="REL_CONTASAPAGAR_TITULOS_ACESSAR">
           <mvcSiteMapNode title="Títulos" controller="RelContasPagarTitulos" action="Index"/>
         </mvcSiteMapNode>
+
+        <mvcSiteMapNode title="Acompanhamento financeiro" controller="RelAcompanhamentoFinanceiro" action="Index"/>
         
       </mvcSiteMapNode>
 
