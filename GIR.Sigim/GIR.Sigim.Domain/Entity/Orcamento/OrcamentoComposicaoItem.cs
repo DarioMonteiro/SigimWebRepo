@@ -30,7 +30,7 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
             get
             {
                 return Material.ListaOrcamentoInsumoRequisitado.Where(l => l.CodigoCentroCusto == OrcamentoComposicao.Orcamento.Obra.CodigoCentroCusto
-                    && l.CodigoClasse == OrcamentoComposicao.codigoClasse
+                    && l.CodigoClasse == OrcamentoComposicao.CodigoClasse
                     && l.ComposicaoId == OrcamentoComposicao.ComposicaoId).Sum(l => l.Quantidade);
             }
         }

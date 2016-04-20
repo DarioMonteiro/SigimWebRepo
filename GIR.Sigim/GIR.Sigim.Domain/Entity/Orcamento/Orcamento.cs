@@ -9,7 +9,9 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
 {
     public class Orcamento : BaseEntity
     {
-        public int? ObraId { get; set; }
+        public int EmpresaId { get; set; }
+        public Empresa Empresa { get; set; }
+        public int ObraId { get; set; }
         public Obra Obra { get; set; }
         public int? Sequencial { get; set; }
         public string Descricao { get; set; }

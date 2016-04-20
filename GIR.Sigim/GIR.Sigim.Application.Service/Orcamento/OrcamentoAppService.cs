@@ -8,18 +8,30 @@ using GIR.Sigim.Application.DTO.Orcamento;
 using GIR.Sigim.Domain.Entity.Orcamento;
 using GIR.Sigim.Domain.Repository.Orcamento;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
+using GIR.Sigim.Domain.Specification;
+using GIR.Sigim.Application.Filtros.Financeiro;
 
 namespace GIR.Sigim.Application.Service.Orcamento
 {
     public class OrcamentoAppService : BaseAppService, IOrcamentoAppService
     {
+        #region Declaração
+
         private IOrcamentoRepository orcamentoRepository;
+
+        #endregion
+
+        #region Construtor
 
         public OrcamentoAppService(IOrcamentoRepository orcamentoRepository, MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.orcamentoRepository = orcamentoRepository;
         }
+
+        #endregion
+
+        #region Métodos IOrcamentoAppService
 
         public OrcamentoDTO ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(string codigoCentroCusto)
         {
@@ -30,5 +42,7 @@ namespace GIR.Sigim.Application.Service.Orcamento
         {
             return orcamentoRepository.ObterUltimoOrcamentoPeloCentroCusto(codigoCentroCusto).To<OrcamentoDTO>();
         }
+
+        #endregion
     }
 }

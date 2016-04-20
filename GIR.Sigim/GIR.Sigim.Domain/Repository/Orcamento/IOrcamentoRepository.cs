@@ -10,6 +10,7 @@ namespace GIR.Sigim.Domain.Repository.Orcamento
 {
     public interface IOrcamentoRepository : IRepository<Entity.Orcamento.Orcamento>
     {
+        Domain.Entity.Orcamento.Orcamento ObterPrimeiroOrcamentoPeloCentroCusto(string codigoCentroCusto, params Expression<Func<Domain.Entity.Orcamento.Orcamento, object>>[] includes);
         Domain.Entity.Orcamento.Orcamento ObterUltimoOrcamentoPeloCentroCusto(string codigoCentroCusto, params Expression<Func<Domain.Entity.Orcamento.Orcamento, object>>[] includes);
         Domain.Entity.Orcamento.Orcamento ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(string codigoCentroCusto);
     }

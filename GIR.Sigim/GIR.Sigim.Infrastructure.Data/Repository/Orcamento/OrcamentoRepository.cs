@@ -22,6 +22,17 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Orcamento
 
         #region IOrcamentoRepository Members
 
+        public Domain.Entity.Orcamento.Orcamento ObterPrimeiroOrcamentoPeloCentroCusto(string codigoCentroCusto, params Expression<Func<Domain.Entity.Orcamento.Orcamento, object>>[] includes)
+        {
+            var set = CreateSetAsQueryable(includes);
+
+            set = set.Where(l => l.Situacao == "A"
+                && l.Obra.CodigoCentroCusto == codigoCentroCusto);
+
+            set = set.OrderBy(l => l.Sequencial);
+            return set.FirstOrDefault();
+        }
+
         public Domain.Entity.Orcamento.Orcamento ObterUltimoOrcamentoPeloCentroCusto(string codigoCentroCusto, params Expression<Func<Domain.Entity.Orcamento.Orcamento, object>>[] includes)
         {
             var set = CreateSetAsQueryable(includes);

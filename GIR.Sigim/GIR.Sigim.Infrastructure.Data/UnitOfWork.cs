@@ -192,6 +192,7 @@ namespace GIR.Sigim.Infrastructure.Data
 
             #region Orcamento
 
+            modelBuilder.Configurations.Add(new EmpresaConfiguration());
             modelBuilder.Configurations.Add(new ObraConfiguration());
             modelBuilder.Configurations.Add(new OrcamentoComposicaoConfiguration());
             modelBuilder.Configurations.Add(new OrcamentoComposicaoItemConfiguration());

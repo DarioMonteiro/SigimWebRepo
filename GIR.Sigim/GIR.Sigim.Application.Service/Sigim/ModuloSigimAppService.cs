@@ -19,6 +19,7 @@ namespace GIR.Sigim.Application.Service.Sigim
 
         private IUnidadeFederacaoRepository unidadeFederacaoRepository;
         private IFeriadoRepository feriadoRepository;
+        private ICotacaoValoresRepository cotacaoValoresRepository;
 
         #endregion
 
@@ -26,11 +27,13 @@ namespace GIR.Sigim.Application.Service.Sigim
 
         public ModuloSigimAppService(IUnidadeFederacaoRepository unidadeFederacaoRepository, 
                                      IFeriadoRepository feriadoRepository,
+                                     ICotacaoValoresRepository cotacaoValoresRepository,
                                      MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.unidadeFederacaoRepository = unidadeFederacaoRepository;
             this.feriadoRepository = feriadoRepository;
+            this.cotacaoValoresRepository = cotacaoValoresRepository;
         }
 
         #endregion
@@ -324,6 +327,29 @@ namespace GIR.Sigim.Application.Service.Sigim
             return  true;
         }
 
+        public decimal CalculaValorIndice(int? indiceId, int defasagem, DateTime data, Nullable<Decimal> valor)
+        {
+            decimal retorno;
+            decimal cotacao;
+
+            if (indiceId.HasValue)
+            {
+                DateTime dataDefasada = data.Date.AddMonths(defasagem * -1);
+                cotacao = cotacaoValoresRepository.RecuperaCotacao(indiceId.Value, dataDefasada.Date);               
+            }
+            else 
+            {
+                cotacao = 1;
+            }
+
+            if (!valor.HasValue) {
+                valor = 0;
+            }
+
+            retorno = Math.Round((valor.Value / cotacao), 7);
+
+            return retorno;
+        }
         #endregion
 
 

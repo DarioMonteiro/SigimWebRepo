@@ -20,9 +20,17 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
                 .HasColumnName("codigo")
                 .HasColumnOrder(1);
 
-            //Empresa
+            Property(l => l.EmpresaId)
+                .IsRequired()
+                .HasColumnName("empresa")
+                .HasColumnOrder(2);
+
+            HasRequired<Empresa>(l => l.Empresa)
+                .WithMany(l => l.ListaOrcamento)
+                .HasForeignKey(l => l.EmpresaId);
 
             Property(l => l.ObraId)
+                .IsRequired()
                 .HasColumnName("obra")
                 .HasColumnOrder(3);
 

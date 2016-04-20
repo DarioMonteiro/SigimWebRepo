@@ -137,7 +137,7 @@ namespace GIR.Sigim.Application.Service.Sigim
                 if (listaOrcamentoComposicao.Any())
                     possuiInterfaceOrcamento = true;
 
-                listaDTO = listaOrcamentoComposicao.Where(l => !string.IsNullOrEmpty(codigoClasse) ? l.OrcamentoComposicao.codigoClasse == codigoClasse : true).To<List<OrcamentoComposicaoItemDTO>>();
+                listaDTO = listaOrcamentoComposicao.Where(l => !string.IsNullOrEmpty(codigoClasse) ? l.OrcamentoComposicao.CodigoClasse == codigoClasse : true).To<List<OrcamentoComposicaoItemDTO>>();
             }
 
             return listaDTO;

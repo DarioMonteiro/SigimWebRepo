@@ -22,5 +22,6 @@ namespace GIR.Sigim.Application.Service.Sigim
         string GetPiece(string parStrText, string parStrDelimiter, long parLngPosicao);
         InformacaoConfiguracaoDTO SetarInformacaoConfiguracao(bool logGirCliente, string hostName);
         bool ValidaVersaoSigim(string parStrVersao);
+        decimal CalculaValorIndice(int? indiceId, int defasagem, DateTime data, Nullable<Decimal> valor);
     }
 }

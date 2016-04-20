@@ -36,14 +36,14 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
                 .WithMany(l => l.ListaOrcamentoComposicao)
                 .HasForeignKey(l => l.ComposicaoId);
 
-            Property(l => l.codigoClasse)
+            Property(l => l.CodigoClasse)
                 .HasMaxLength(18)
                 .HasColumnName("classe")
                 .HasColumnOrder(4);
 
             HasRequired(l => l.Classe)
                 .WithMany(l => l.ListaOrcamentoComposicao)
-                .HasForeignKey(l => l.codigoClasse);
+                .HasForeignKey(l => l.CodigoClasse);
 
             Property(l => l.Quantidade)
                 .HasPrecision(18, 5)

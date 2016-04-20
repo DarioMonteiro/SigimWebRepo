@@ -14,7 +14,7 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
         public Orcamento Orcamento { get; set; }
         public int? ComposicaoId { get; set; }
         public virtual Composicao Composicao { get; set; }
-        public string codigoClasse { get; set; }
+        public string CodigoClasse { get; set; }
         public virtual Classe Classe { get; set; }
         public decimal? Quantidade { get; set; }
         public decimal? Preco { get; set; }

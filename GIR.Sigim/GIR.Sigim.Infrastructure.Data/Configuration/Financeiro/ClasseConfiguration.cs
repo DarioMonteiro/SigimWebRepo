@@ -52,7 +52,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
 
             HasMany(l => l.ListaOrcamentoComposicao)
                 .WithRequired(c => c.Classe)
-                .HasForeignKey(c => c.codigoClasse);
+                .HasForeignKey(c => c.CodigoClasse);
 
             HasMany(l => l.ListaOrdemCompraItem)
                 .WithRequired(c => c.Classe)

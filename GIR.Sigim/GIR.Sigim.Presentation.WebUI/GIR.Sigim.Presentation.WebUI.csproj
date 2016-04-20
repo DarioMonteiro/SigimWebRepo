@@ -427,6 +427,7 @@
     <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\ListaPartialSintetico.cshtml" />
     <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\_PaginationPartialRelContasPagarTitulos.cshtml" />
     <Content Include="Areas\Financeiro\Views\RelAcompanhamentoFinanceiro\Index.cshtml" />
+    <Content Include="Areas\Financeiro\Views\RelAcompanhamentoFinanceiro\ListaPartial.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>

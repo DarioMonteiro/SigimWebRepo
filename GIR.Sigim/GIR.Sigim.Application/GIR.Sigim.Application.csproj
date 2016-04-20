@@ -106,6 +106,7 @@
     <Compile Include="DTO\Financeiro\HistoricoContabilDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoReceberDTO.cs" />
     <Compile Include="DTO\Financeiro\MovimentoFinanceiroDTO.cs" />
+    <Compile Include="DTO\Financeiro\RelAcompanhamentoFinanceiroDTO.cs" />
     <Compile Include="DTO\Financeiro\RelContasPagarTitulosDTO.cs" />
     <Compile Include="DTO\Financeiro\TipoMovimentoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoPagarDTO.cs" />

@@ -7,6 +7,7 @@ using GIR.Sigim.Domain.Entity.Financeiro;
 using GIR.Sigim.Domain.Entity.Contrato;
 using GIR.Sigim.Domain.Entity.OrdemCompra;
 using GIR.Sigim.Domain.Entity.Comercial;
+using GIR.Sigim.Domain.Entity.Orcamento;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
@@ -62,6 +63,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public ICollection<VendaParticipante> ListaVendaParticipante { get; set; }
         public ICollection<EmpresaCentroCusto> ListaEmpresaOrdemCompra { get; set; }
         public ICollection<ParametrosSigim> ListaParametrosSigim { get; set; }
+        public ICollection<Empresa> ListaEmpresa { get; set; }
 
         public ClienteFornecedor()
         {
@@ -85,6 +87,7 @@ namespace GIR.Sigim.Domain.Entity.Sigim
             this.ListaVendaParticipante = new HashSet<VendaParticipante>();
             this.ListaEmpresaOrdemCompra = new HashSet<EmpresaCentroCusto>();
             this.ListaParametrosSigim = new HashSet<ParametrosSigim>();
+            this.ListaEmpresa = new HashSet<Empresa>();
         }
     }
 }

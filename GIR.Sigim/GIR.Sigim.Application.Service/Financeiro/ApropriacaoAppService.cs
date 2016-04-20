@@ -21,6 +21,11 @@ using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.Service.CredCob;
 using GIR.Sigim.Domain.Repository.CredCob;
 using GIR.Sigim.Application.DTO.CredCob;
+using GIR.Sigim.Domain.Repository.Orcamento;
+using GIR.Sigim.Domain.Entity.Orcamento;
+using GIR.Sigim.Domain.Repository.Sigim;
+using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Application.Service.Orcamento;
 
 namespace GIR.Sigim.Application.Service.Financeiro
 {
@@ -37,6 +42,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
         private ITituloCredCobRepository tituloCredCobRepository;
         private ITituloMovimentoAppService tituloMovimentoAppService;
         private ITituloMovimentoRepository tituloMovimentoRepository;
+        private IOrcamentoAppService orcamentoAppService;
+        private IOrcamentoRepository orcamentoRepository;
+        private IModuloSigimAppService moduloSigimAppService;
+        private ICotacaoValoresRepository cotacaoValoresRepository;
 
 
         #endregion
@@ -52,6 +61,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                      ITituloCredCobRepository tituloCredCobRepository,
                                      ITituloMovimentoAppService tituloMovimentoAppService,
                                      ITituloMovimentoRepository tituloMovimentoRepository,
+                                     IOrcamentoRepository orcamentoRepository,
+                                     IOrcamentoAppService orcamentoAppService,
+                                     IModuloSigimAppService moduloSigimAppService,
+                                     ICotacaoValoresRepository cotacaoValoresRepository,
                                      MessageQueue messageQueue)
             : base(messageQueue)
         {
@@ -64,6 +77,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
             this.tituloCredCobRepository = tituloCredCobRepository;
             this.tituloMovimentoAppService = tituloMovimentoAppService;
             this.tituloMovimentoRepository = tituloMovimentoRepository;
+            this.orcamentoRepository = orcamentoRepository;
+            this.orcamentoAppService = orcamentoAppService;
+            this.moduloSigimAppService = moduloSigimAppService;
+            this.cotacaoValoresRepository = cotacaoValoresRepository;
         }
 
         #endregion
@@ -320,10 +337,496 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         }
 
+        public List<RelAcompanhamentoFinanceiroDTO> ListarPeloFiltroRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro,
+                                                                                                int? usuarioId,
+                                                                                                out int totalRegistros)
+        {
+            List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro = new List<RelAcompanhamentoFinanceiroDTO>();
+            totalRegistros = 0;
+
+            decimal cotacaoReajuste = 1;
+            int defasagem = filtro.Defasagem.HasValue ? filtro.Defasagem.Value : 0;
+            if ((filtro.EhValorCorrigido) && (filtro.IndiceId.HasValue))
+            {
+                DateTime dataReajuste = filtro.DataFinal.Value.Date.AddMonths(defasagem);
+                cotacaoReajuste = cotacaoValoresRepository.RecuperaCotacao(filtro.IndiceId.Value, dataReajuste.Date);
+            }
+
+            #region "Orcamento inicial"
+
+            var orcamentoPrimeiro = orcamentoRepository.ObterPrimeiroOrcamentoPeloCentroCusto(filtro.CentroCusto.Codigo,l => l.Obra, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
+
+            foreach (var orcamentoComposicao in orcamentoPrimeiro.ListaOrcamentoComposicao)
+            {
+                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoPrimeiro.Data.Value, orcamentoComposicao.Preco.Value);
+                decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
+
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
+                    relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
+                    relat.OrcamentoInicial = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorOrcamentoInicialNaClassePai(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+                    relatRecup.OrcamentoInicial = relatRecup.OrcamentoInicial + valor;
+
+                    AdicionarValorOrcamentoInicialNaClassePai(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+            #endregion
+
+            #region "Orçamento Atual"
+
+            var orcamentoUltimo = orcamentoRepository.ObterUltimoOrcamentoPeloCentroCusto(filtro.CentroCusto.Codigo, l => l.Obra, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
+
+            foreach (var orcamentoComposicao in orcamentoUltimo.ListaOrcamentoComposicao)
+            {
+                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoUltimo.Data.Value, orcamentoComposicao.Preco.Value);
+                decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
+
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
+                    relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
+                    relat.OrcamentoAtual = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorUltimoOrcamentoNaClassePai(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+                    
+                    relatRecup.OrcamentoAtual = relatRecup.OrcamentoAtual + valor;
+
+                    AdicionarValorUltimoOrcamentoNaClassePai(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+
+            #endregion
+
+            #region "Despesa por periodo"
+
+            var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+            specification = MontarSpecificationDespesaPorPeriodoTituloPagarRelAcompanhamentoFinanceiro(filtro);
+
+            var listaApropriacao = apropriacaoRepository.ListarPeloFiltro(specification,
+                                                                          l => l.CentroCusto,
+                                                                          l => l.Classe,
+                                                                          l => l.TituloPagar).To<List<Apropriacao>>();
+
+            foreach (var apropriacao in listaApropriacao)
+            {
+                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, apropriacao.TituloPagar.DataEmissao.Value, apropriacao.Valor);
+                decimal valor = valorIndice * cotacaoReajuste;
+
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == apropriacao.CodigoClasse))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = apropriacao.CodigoClasse;
+                    relat.DescricaoClasse = apropriacao.Classe.Descricao;
+                    relat.DespesaPeriodo = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorDespesaPeriodoNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == apropriacao.CodigoClasse).FirstOrDefault();
+                    relatRecup.DespesaPeriodo = relatRecup.DespesaPeriodo + valor;
+
+                    AdicionarValorDespesaPeriodoNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+
+            specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+            specification = MontarSpecificationDespesaPorPeriodoMovimentoRelAcompanhamentoFinanceiro(filtro);
+            listaApropriacao = apropriacaoRepository.ListarPeloFiltro(specification,
+                                                                          l => l.CentroCusto,
+                                                                          l => l.Classe,
+                                                                          l => l.Movimento.TipoMovimento).To<List<Apropriacao>>();
+            foreach (var apropriacao in listaApropriacao)
+            {
+                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, apropriacao.Movimento.DataMovimento.Date, apropriacao.Valor);
+                decimal valor = valorIndice * cotacaoReajuste;
+
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == apropriacao.CodigoClasse))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = apropriacao.CodigoClasse;
+                    relat.DescricaoClasse = apropriacao.Classe.Descricao;
+                    relat.DespesaPeriodo = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorDespesaPeriodoNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == apropriacao.CodigoClasse).FirstOrDefault();
+                    relatRecup.DespesaPeriodo = relatRecup.DespesaPeriodo + valor;
+
+                    AdicionarValorDespesaPeriodoNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+
+            #endregion
+
+            #region "Despesa acumulada"
+
+            specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+            specification = MontarSpecificationDespesaAcumuladaTituloPagarRelAcompanhamentoFinanceiro(filtro);
+
+            listaApropriacao = apropriacaoRepository.ListarPeloFiltro(specification,
+                                                                      l => l.CentroCusto,
+                                                                      l => l.Classe,
+                                                                      l => l.TituloPagar).To<List<Apropriacao>>();
+
+            foreach (var apropriacao in listaApropriacao)
+            {
+                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, apropriacao.TituloPagar.DataEmissao.Value, apropriacao.Valor);
+                decimal valor = valorIndice * cotacaoReajuste;
+
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == apropriacao.CodigoClasse))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = apropriacao.CodigoClasse;
+                    relat.DescricaoClasse = apropriacao.Classe.Descricao;
+                    relat.DespesaAcumulada = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorDespesaAcumuladaNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == apropriacao.CodigoClasse).FirstOrDefault();
+                    relatRecup.DespesaAcumulada = relatRecup.DespesaAcumulada + valor;
+
+                    AdicionarValorDespesaAcumuladaNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+
+            specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+            specification = MontarSpecificationDespesaAcumuladaMovimentoRelAcompanhamentoFinanceiro(filtro);
+            listaApropriacao = apropriacaoRepository.ListarPeloFiltro(specification,
+                                                                          l => l.CentroCusto,
+                                                                          l => l.Classe,
+                                                                          l => l.Movimento.TipoMovimento).To<List<Apropriacao>>();
+            foreach (var apropriacao in listaApropriacao)
+            {
+                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, apropriacao.Movimento.DataMovimento.Date, apropriacao.Valor);
+                decimal valor = valorIndice * cotacaoReajuste;
+
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == apropriacao.CodigoClasse))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = apropriacao.CodigoClasse;
+                    relat.DescricaoClasse = apropriacao.Classe.Descricao;
+                    relat.DespesaAcumulada = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorDespesaAcumuladaNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == apropriacao.CodigoClasse).FirstOrDefault();
+                    relatRecup.DespesaAcumulada = relatRecup.DespesaAcumulada + valor;
+
+                    AdicionarValorDespesaAcumuladaNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+
+            #endregion
+
+            #region "Comprometido pendente"
+
+            specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+            specification = MontarSpecificationComprometidoPendenteTituloPagarRelAcompanhamentoFinanceiro(filtro);
+
+            listaApropriacao = apropriacaoRepository.ListarPeloFiltro(specification,
+                                                                      l => l.CentroCusto,
+                                                                      l => l.Classe,
+                                                                      l => l.TituloPagar).To<List<Apropriacao>>();
+
+            foreach (var apropriacao in listaApropriacao)
+            {
+                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, apropriacao.TituloPagar.DataVencimento, apropriacao.Valor);
+                decimal valor = valorIndice * cotacaoReajuste;
+
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == apropriacao.CodigoClasse))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = apropriacao.CodigoClasse;
+                    relat.DescricaoClasse = apropriacao.Classe.Descricao;
+                    relat.ComprometidoPendente = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorComprometidoPendenteNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == apropriacao.CodigoClasse).FirstOrDefault();
+                    relatRecup.ComprometidoPendente = relatRecup.ComprometidoPendente + valor;
+
+                    AdicionarValorComprometidoPendenteNaClassePai(valor, apropriacao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+
+            #endregion
+
+            return listaRelAcompanhamentoFinanceiro.OrderBy(l => l.CodigoClasse).ToList<RelAcompanhamentoFinanceiroDTO>();
+        }
+
 
         #endregion
 
         #region "Métodos privados"
+
+        private void AdicionarValorComprometidoPendenteNaClassePai(decimal valor, Classe classe, List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro)
+        {
+            if (classe != null)
+            {
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == classe.Codigo))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = classe.Codigo;
+                    relat.DescricaoClasse = classe.Descricao;
+
+                    relat.ComprometidoPendente = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorComprometidoPendenteNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == classe.Codigo).FirstOrDefault();
+                    relatRecup.ComprometidoPendente = relatRecup.ComprometidoPendente + valor;
+
+                    AdicionarValorComprometidoPendenteNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+        }
+
+        private void AdicionarValorDespesaAcumuladaNaClassePai(decimal valor, Classe classe, List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro)
+        {
+            if (classe != null)
+            {
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == classe.Codigo))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = classe.Codigo;
+                    relat.DescricaoClasse = classe.Descricao;
+
+                    relat.DespesaAcumulada = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorDespesaAcumuladaNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == classe.Codigo).FirstOrDefault();
+                    relatRecup.DespesaAcumulada = relatRecup.DespesaAcumulada + valor;
+
+                    AdicionarValorDespesaAcumuladaNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+        }
+
+        private void AdicionarValorDespesaPeriodoNaClassePai(decimal valor, Classe classe, List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro)
+        {
+            if (classe != null)
+            {
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == classe.Codigo))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = classe.Codigo;
+                    relat.DescricaoClasse = classe.Descricao;
+
+                    relat.DespesaPeriodo = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorDespesaPeriodoNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == classe.Codigo).FirstOrDefault();
+                    relatRecup.DespesaPeriodo = relatRecup.DespesaPeriodo + valor;
+
+                    AdicionarValorDespesaPeriodoNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+        }
+
+        private void AdicionarValorOrcamentoInicialNaClassePai(decimal valor, Classe classe, List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro)
+        {
+            if (classe != null)
+            {
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == classe.Codigo))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = classe.Codigo;
+                    relat.DescricaoClasse = classe.Descricao;
+
+                    relat.OrcamentoInicial = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorOrcamentoInicialNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == classe.Codigo).FirstOrDefault();
+                    relatRecup.OrcamentoInicial = relatRecup.OrcamentoInicial + valor;
+
+                    AdicionarValorOrcamentoInicialNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+        }
+
+        private void AdicionarValorUltimoOrcamentoNaClassePai(decimal valor, Classe classe, List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro)
+        {
+            if (classe != null)
+            {
+                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == classe.Codigo))
+                {
+                    RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+                    relat.CodigoClasse = classe.Codigo;
+                    relat.DescricaoClasse = classe.Descricao;
+
+                    relat.OrcamentoAtual = valor;
+
+                    listaRelAcompanhamentoFinanceiro.Add(relat);
+
+                    AdicionarValorUltimoOrcamentoNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+                else
+                {
+                    var relatRecup = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == classe.Codigo).FirstOrDefault();
+                    relatRecup.OrcamentoAtual = relatRecup.OrcamentoAtual + valor;
+
+                    AdicionarValorUltimoOrcamentoNaClassePai(valor, classe.ClassePai, listaRelAcompanhamentoFinanceiro);
+                }
+            }
+        }
+
+        private Specification<Apropriacao> MontarSpecificationDespesaPorPeriodoTituloPagarRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro)
+        {
+            var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+
+            if (filtro.CentroCusto != null)
+            {
+                specification &= ApropriacaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
+            }
+
+            specification &= (ApropriacaoSpecification.EhSituacaoAPagarBaixado(true)) ||
+                (ApropriacaoSpecification.EhSituacaoAPagarPago(true)) ||
+                (ApropriacaoSpecification.EhSituacaoAPagarEmitido(true));
+
+            specification &= ApropriacaoSpecification.DataPeriodoPorEmissaoTituloPagarMaiorOuIgualRelAcompanhamentoFinanceiro(filtro.DataInicial);
+            specification &= ApropriacaoSpecification.DataPeriodoPorEmissaoTituloPagarMenorOuIgualRelAcompanhamentoFinanceiro(filtro.DataFinal);
+
+            return specification;
+        }
+
+        private Specification<Apropriacao> MontarSpecificationDespesaAcumuladaTituloPagarRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro)
+        {
+            var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+
+            if (filtro.CentroCusto != null)
+            {
+                specification &= ApropriacaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
+            }
+
+            specification &= (ApropriacaoSpecification.EhSituacaoAPagarBaixado(true)) ||
+                (ApropriacaoSpecification.EhSituacaoAPagarPago(true)) ||
+                (ApropriacaoSpecification.EhSituacaoAPagarEmitido(true));
+
+            specification &= ApropriacaoSpecification.DataPeriodoPorEmissaoTituloPagarMenorOuIgualRelAcompanhamentoFinanceiro(filtro.DataFinal);
+
+            return specification;
+        }
+
+        private Specification<Apropriacao> MontarSpecificationComprometidoPendenteTituloPagarRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro)
+        {
+            var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+
+            if (filtro.CentroCusto != null)
+            {
+                specification &= ApropriacaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
+            }
+
+            specification &= (ApropriacaoSpecification.EhSituacaoAPagarProvisionado(true)) ||
+                (ApropriacaoSpecification.EhSituacaoAPagarLiberado(true)) ||
+                (ApropriacaoSpecification.EhSituacaoAPagarAguardandoLiberacao(true));
+
+            specification &= ApropriacaoSpecification.DataPeriodoPorVencimentoTituloPagarMenorOuIgualRelAcompanhamentoFinanceiro(filtro.DataFinal);
+
+            specification &= ApropriacaoSpecification.EhTipoTituloDiferenteDeTituloPai();
+
+            return specification;
+        }
+
+        private Specification<Apropriacao> MontarSpecificationDespesaPorPeriodoMovimentoRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro)
+        {
+            var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+
+            if (filtro.CentroCusto != null)
+            {
+                specification &= ApropriacaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
+            }
+
+            specification &= (ApropriacaoSpecification.EhSituacaoMovimentoLancado(true)) ||
+                (ApropriacaoSpecification.EhSituacaoMovimentoConferido(true));
+
+            specification &= ApropriacaoSpecification.DataPeriodoMovimentoMaiorOuIgual(filtro.DataInicial);
+            specification &= ApropriacaoSpecification.DataPeriodoMovimentoMenorOuIgual(filtro.DataFinal);
+
+            specification &= ApropriacaoSpecification.EhTipoMovimentoOperacaoDebito();
+            specification &= ApropriacaoSpecification.EhTipoMovimentoCadastradoManualmente();
+
+            return specification;
+        }
+
+        private Specification<Apropriacao> MontarSpecificationDespesaAcumuladaMovimentoRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro)
+        {
+            var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
+
+            if (filtro.CentroCusto != null)
+            {
+                specification &= ApropriacaoSpecification.PertenceAoCentroCustoIniciadoPor(filtro.CentroCusto.Codigo);
+            }
+
+            specification &= (ApropriacaoSpecification.EhSituacaoMovimentoLancado(true)) ||
+                (ApropriacaoSpecification.EhSituacaoMovimentoConferido(true));
+
+            specification &= ApropriacaoSpecification.DataPeriodoMovimentoMenorOuIgual(filtro.DataFinal);
+
+            specification &= ApropriacaoSpecification.EhTipoMovimentoOperacaoDebito();
+            specification &= ApropriacaoSpecification.EhTipoMovimentoCadastradoManualmente();
+
+            return specification;
+        }
 
         private Specification<Apropriacao> MontarSpecificationContasAPagarPendentesRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? idUsuario)
         {
@@ -737,7 +1240,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
         }
 
-
         private Specification<Apropriacao> MontarSpecificationContasAPagarPagosRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, int? idUsuario)
         {
             var specification = (Specification<Apropriacao>)new TrueSpecification<Apropriacao>();
@@ -904,8 +1406,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             specification &= ApropriacaoSpecification.EhSituacaoMovimentoDiferenteDeEstornado();
 
-            specification &= ApropriacaoSpecification.DataPeriodoMovimentoMaiorOuIgualRelApropriacaoPorClasse(filtro.DataInicial);
-            specification &= ApropriacaoSpecification.DataPeriodoMovimentoMenorOuIgualRelApropriacaoPorClasse(filtro.DataFinal);
+            specification &= ApropriacaoSpecification.DataPeriodoMovimentoMaiorOuIgual(filtro.DataInicial);
+            specification &= ApropriacaoSpecification.DataPeriodoMovimentoMenorOuIgual(filtro.DataFinal);
 
             if (filtro.OpcoesRelatorio.HasValue)
             {

@@ -116,6 +116,7 @@
     <Compile Include="Configuration\Financeiro\TituloPagarAdiantamentoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloPagarConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloReceberConfiguration.cs" />
+    <Compile Include="Configuration\Orcamento\EmpresaConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoComposicaoItemConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoComposicaoConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoConfiguration.cs" />

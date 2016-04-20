@@ -277,6 +277,16 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
             return specification;
         }
 
+        public static Specification<Apropriacao> DataPeriodoPorEmissaoTituloPagarMaiorOuIgualRelAcompanhamentoFinanceiro(DateTime? data)
+        {
+            Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
+
+            var directSpecification = new DirectSpecification<Apropriacao>(l => l.TituloPagar.DataEmissao >= data);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
         public static Specification<Apropriacao> DataPeriodoTituloPagarMenorOuIgualPendentesRelApropriacaoPorClasse(string tipoPesquisa, DateTime? data)
         {
             Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
@@ -353,6 +363,31 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
 
             return specification;
         }
+
+        public static Specification<Apropriacao> DataPeriodoPorEmissaoTituloPagarMenorOuIgualRelAcompanhamentoFinanceiro(DateTime? data)
+        {
+            Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
+
+            DateTime dataUltimaHora = new DateTime(data.Value.Year, data.Value.Month, data.Value.Day, 23, 59, 59);
+
+            var directSpecification = new DirectSpecification<Apropriacao>(l => l.TituloPagar.DataEmissao <= data);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
+        public static Specification<Apropriacao> DataPeriodoPorVencimentoTituloPagarMenorOuIgualRelAcompanhamentoFinanceiro(DateTime? data)
+        {
+            Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
+
+            DateTime dataUltimaHora = new DateTime(data.Value.Year, data.Value.Month, data.Value.Day, 23, 59, 59);
+
+            var directSpecification = new DirectSpecification<Apropriacao>(l => l.TituloPagar.DataVencimento <= data);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
 
         public static Specification<Apropriacao> DataPeriodoTituloReceberMaiorOuIgualPendentesRelApropriacaoPorClasse(string tipoPesquisa, DateTime? data)
         {
@@ -575,7 +610,27 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
             return specification;
         }
 
-        public static Specification<Apropriacao> DataPeriodoMovimentoMaiorOuIgualRelApropriacaoPorClasse(DateTime? data)
+        public static Specification<Apropriacao> EhSituacaoMovimentoLancado(bool lancado)
+        {
+            if (lancado)
+            {
+                return new DirectSpecification<Apropriacao>(l => l.Movimento.Situacao == "L");
+            }
+
+            return new FalseSpecification<Apropriacao>();
+        }
+
+        public static Specification<Apropriacao> EhSituacaoMovimentoConferido(bool conferido)
+        {
+            if (conferido)
+            {
+                return new DirectSpecification<Apropriacao>(l => l.Movimento.Situacao == "C");
+            }
+
+            return new FalseSpecification<Apropriacao>();
+        }
+
+        public static Specification<Apropriacao> DataPeriodoMovimentoMaiorOuIgual(DateTime? data)
         {
             Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
 
@@ -588,7 +643,19 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
             return specification;
         }
 
-        public static Specification<Apropriacao> DataPeriodoMovimentoMenorOuIgualRelApropriacaoPorClasse(DateTime? data)
+        public static Specification<Apropriacao> EhTipoMovimentoOperacaoDebito()
+        {
+            return new DirectSpecification<Apropriacao>(l => l.Movimento.TipoMovimento.Operacao == "D");
+        }
+
+        public static Specification<Apropriacao> EhTipoMovimentoCadastradoManualmente()
+        {
+            return new DirectSpecification<Apropriacao>(l => l.Movimento.TipoMovimento.Automatico == false);
+        }
+
+
+
+        public static Specification<Apropriacao> DataPeriodoMovimentoMenorOuIgual(DateTime? data)
         {
             Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
 

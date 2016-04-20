@@ -1,0 +1,134 @@
+﻿@using GIR.Sigim.Application.DTO.Financeiro
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<RelAcompanhamentoFinanceiroDTO> Lista = Model.Records as IEnumerable<RelAcompanhamentoFinanceiroDTO>;
+}
+
+<div class="table-container">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs">
+            <div class="col-sm-12 col-xs-12">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new
+                            {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls = "dt_basic",
+                                @class = "form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" style="width:100%; overflow-x:auto;">
+            <table id="tableSearchResult@(Model.UniqueIdentifier)" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string classeSortingSuffix = "sorting";
+                            string classeDescricaoSortingSuffix = "sorting";
+                            string orcamentoInicialSortingSuffix = "sorting";
+                            string orcamentoAtualSortingSuffix = "sorting";
+                            string despesaPeriodoSortingSuffix = "sorting";
+                            string despesaAcumuladaSortingSuffix = "sorting";
+                            string comprometidoPendenteSortingSuffix = "sorting";
+                            string comprometidoFuturoSortingSuffix = "sorting";
+                            string resultadoAcrescimoSortingSuffix = "sorting";
+                            string resultadoSaldoSortingSuffix = "sorting";
+                            string descricaoClasseFechadaSortingSuffix = "sorting";
+                            string conclusaoSortingSuffix = "sorting";
+                            
+                            switch (Model.OrderBy)
+                            {
+                                case "classe":
+                                    classeSortingSuffix += sortingSuffix;
+                                    break;
+                                case "classeDescricao":
+                                    classeDescricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "orcamentoInicial":
+                                    orcamentoInicialSortingSuffix += sortingSuffix;
+                                    break;
+                                case "orcamentoAtual":
+                                    orcamentoAtualSortingSuffix += sortingSuffix;
+                                    break;
+                                case "despesaPeriodo":
+                                    despesaPeriodoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "despesaAcumulada":
+                                    despesaAcumuladaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "comprometidoPendente":
+                                    comprometidoPendenteSortingSuffix += sortingSuffix;
+                                    break;
+                                case "comprometidoFuturo":
+                                    comprometidoFuturoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "resultadoAcrescimo":
+                                    resultadoAcrescimoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "resultadoSaldo":
+                                    resultadoSaldoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricaoClasseFechada":
+                                    descricaoClasseFechadaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "conclusao":
+                                    conclusaoSortingSuffix += sortingSuffix;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        <th class="sorting @classeSortingSuffix text-left" data-order="classe" style="min-width:60px;">Classe</th>
+                        <th class="sorting @classeDescricaoSortingSuffix text-left" data-order="classeDescricao" style="min-width:70px;">Descrição</th>
+                        <th class="sorting @orcamentoInicialSortingSuffix text-left" data-order="orcamentoInicial" style="min-width:80px;">Orçamento Inicial</th>
+                        <th class="sorting @orcamentoAtualSortingSuffix text-left" data-order="orcamentoAtual" style="min-width:70px;">Orçamento Final (A)</th>
+                        <th class="sorting @despesaPeriodoSortingSuffix text-left" data-order="despesaPeriodo" style="min-width:90px;">Despesa período (B)</th>
+                        <th class="sorting @despesaAcumuladaSortingSuffix text-left" data-order="despesaAcumulada" style="min-width:60px;">Despesa acumuladas (C)</th>
+                        <th class="sorting @comprometidoPendenteSortingSuffix text-left" data-order="comprometidoPendente" style="min-width:60px;">Comprometido pendente (D)</th>
+                        <th class="sorting @comprometidoFuturoSortingSuffix text-left" data-order="comprometidoFuturo" style="min-width:60px;">Comprometido futuro (E)</th>
+                        <th class="sorting @resultadoAcrescimoSortingSuffix text-left" data-order="resultadoAcrescimo" style="min-width:100px;">Resultado acréscimo (-) (A-(C+D+E))</th>
+                        <th class="sorting @resultadoSaldoSortingSuffix text-left" data-order="resultaSaldo" style="min-width:70px;">Resultado saldo (+) (A-(C+D+E))</th>
+                        <th class="sorting @descricaoClasseFechadaSortingSuffix text-left" data-order="descricaoClasseFechada" style="min-width:70px;"></th>
+                        <th class="sorting @conclusaoSortingSuffix text-left" data-order="conclusao" style="min-width:80px;">Tendências conclusão (A) ou (C+D+E)</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        <tr>
+                            <td class="text-left text-nowrap">@item.CodigoClasse</td>
+                            <td class="text-left text-nowrap">@item.DescricaoClasse</td>
+                            <td class="text-right text-nowrap">@item.OrcamentoInicial.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.OrcamentoAtual.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.DespesaPeriodo.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.DespesaAcumulada.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.ComprometidoPendente.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.ComprometidoFuturo.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.ResultadoAcrescimo.ToString("N2")</td>
+                            <td class="text-right text-nowrap">@item.ResultadoSaldo.ToString("N2")</td>
+                            <td class="text-left text-nowrap">@item.DescricaoClasseFechada</td>                           
+                            <td class="text-right text-nowrap">@item.Conclusao.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+        
+    }
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('body').addClass("hidden-menu");
+    });
+</script>

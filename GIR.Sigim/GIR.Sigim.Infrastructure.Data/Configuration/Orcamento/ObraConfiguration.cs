@@ -25,7 +25,13 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
                 .HasColumnName("numero")
                 .HasColumnOrder(2);
 
-            //Empresa
+            Property(l => l.EmpresaId)
+                .HasColumnName("empresa")
+                .HasColumnOrder(3);
+
+            HasOptional<Empresa>(l => l.Empresa)
+                .WithMany(l => l.ListaObra)
+                .HasForeignKey(l => l.EmpresaId);
 
             Property(l => l.Descricao)
                 .HasMaxLength(50)

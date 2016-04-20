@@ -4,6 +4,9 @@
 }
 
 @Html.Partial("_NotificationMessagesPartial")
+<div class="row" style="margin: 0 0 13px 0;">
+        @Html.ActionLink("Novo", "Index", null, new { @class = "btn btn-primary", @style = "float:right;" })
+</div>
 <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
         <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
@@ -222,6 +225,8 @@
 }
 
 <script type="text/javascript">
+    var ListaScrollLeft = 0;
+
     jsonItemArrayClasse = JSON.parse($("#@Html.IdFor(m => m.JsonItensClasse)").val());
 
     $(document).ready(function () {
@@ -311,10 +316,36 @@
             }
         });
 
-        if (validaCentroDeCusto() == false) {
-            e.event.preventDefault();
-        }
 
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
+            var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
+            var centroCustoCodigo = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
+
+            if ((dataInicial == "") || (dataFinal == "")) {
+                smartAlert("Atenção", "Informe o período !", "warning");
+                e.event.preventDefault();
+            }
+
+            if ((dataInicial != "") && (dataFinal != "")) {
+                if (compararDatas(dataInicial, dataFinal) > 0) {
+                    smartAlert("Atenção", "Data inicial maior que data final !", "warning");
+                    e.event.preventDefault();
+                }
+            }
+
+            if (centroCustoCodigo = "") {
+                smartAlert("Atenção", "Informe o centro de custo !", "warning");
+                e.event.preventDefault();
+            }
+        });
+
+        $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
+            function (e) {
+                ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
+                listarFiltro();
+            }
+        );
 
     });
 
@@ -419,6 +450,18 @@
         }
     }
 
+    function renderTela() {
+        onSuccess();
+        $('#resultadoBusca div.table-responsive').scrollLeft(ListaScrollLeft);
+    }
+
+    function refresh(result) {
+        onSuccess();
+        // se a lista da pesquisa nao retornou , se não retornou desabilita o botão imprimir
+        if (result.search('tableSearchResult') == -1) {
+            tratarBotoes(false);
+        }
+    }
 
     function limpaLista() {
         tratarBotoes(false);
@@ -440,6 +483,39 @@
         else {
             $('#btnImprimir').attr("class", "btn btn-primary disabled");
         }
+    }
+
+    function listarFiltro() {
+        var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
+        var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
+        var centroCustoCodigo = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
+
+        if ((dataInicial == "") || (dataFinal == "")) {
+            smartAlert("Atenção", "Informe o período !", "warning");
+            tratarBotoes(false);
+            return;
+        }
+
+        if ((dataInicial != "") && (dataFinal != "")) {
+            if (compararDatas(dataInicial, dataFinal) > 0) {
+                smartAlert("Atenção", "Data inicial maior que data final !", "warning");
+                tratarBotoes(false);
+                return;
+            }
+        }
+
+        if (centroCustoCodigo = "") {
+            smartAlert("Atenção", "Informe o centro de custo !", "warning");
+            tratarBotoes(false);
+            return;
+        }
+
+        tratarBotoes(true);
+
+        $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+
+        $('#collapseFiltro').attr("class", "panel-collapse collapse");
+
     }
 
 </script>
