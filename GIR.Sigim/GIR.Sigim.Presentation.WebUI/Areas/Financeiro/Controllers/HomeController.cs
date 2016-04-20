@@ -34,17 +34,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             if (!moduloAppService.PossuiModulo(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             if (!acessoAppService.ValidaAcessoAoModulo(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, informacaoConfiguracao))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             if (!acessoAppService.ValidaAcessoGirCliente(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Usuario.Id.Value, informacaoConfiguracao))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             return View();
