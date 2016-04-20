@@ -34,17 +34,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
 
             if (!moduloAppService.PossuiModulo(GIR.Sigim.Application.Constantes.Modulo.AdminWeb))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             if (!acessoAppService.ValidaAcessoAoModulo(GIR.Sigim.Application.Constantes.Modulo.AdminWeb, informacaoConfiguracao))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             if (!acessoAppService.ValidaAcessoGirCliente(GIR.Sigim.Application.Constantes.Modulo.AdminWeb, Usuario.Id.Value, informacaoConfiguracao))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             return View();

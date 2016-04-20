@@ -34,17 +34,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 
             if (!moduloAppService.PossuiModulo(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = ""});
             }
 
             if (!acessoAppService.ValidaAcessoAoModulo(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb, informacaoConfiguracao))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             if (!acessoAppService.ValidaAcessoGirCliente(GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb, Usuario.Id.Value, informacaoConfiguracao))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             return View();

@@ -34,17 +34,17 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
 
             if (!moduloAppService.PossuiModulo(GIR.Sigim.Application.Constantes.Modulo.SacWeb))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             if (!acessoAppService.ValidaAcessoAoModulo(GIR.Sigim.Application.Constantes.Modulo.SacWeb, informacaoConfiguracao))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             if (!acessoAppService.ValidaAcessoGirCliente(GIR.Sigim.Application.Constantes.Modulo.SacWeb, Usuario.Id.Value, informacaoConfiguracao))
             {
-                return RedirectToLocal("/");
+                return RedirectToAction("Index", "Painel", new { Area = "" });
             }
 
             return View();
