@@ -125,7 +125,7 @@
                                                         });
                                                     </script>
                                                     <section class="col col-1">
-                                                        <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
+                                                        <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar">
                                                             <i class="fa fa-search fa-lg"></i>
                                                         </button>
                                                     </section>
@@ -423,12 +423,18 @@
 
         })
 
+        $('#btnSearch').on("click", function () {
+            if (validouPesquisa() == true) {
+                ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
+                solicitaFormaDeExibicao();
+            }
+        });
+
+
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
                 ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
-
-                solicitaFormaDeExibicao();
-
+                listarFiltro();
             }
         );
 
@@ -515,7 +521,7 @@
 
             if (ButtonPress == "OK")
             {
-                listarFiltro();
+                goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);
             }
         });
 
@@ -573,23 +579,34 @@
         }
     }
 
-    function listarFiltro() {
+    function validouPesquisa() {
+
         var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
         var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
+
+        var validou = true;
 
         if ((dataInicial == "") || (dataFinal == "")) {
             smartAlert("Atenção", "Informe o período !", "warning");
             tratarBotoes(false);
-            return;
+            validou = false;
+            return validou;
         }
 
         if ((dataInicial != "") && (dataFinal != "")) {
             if (compararDatas(dataInicial, dataFinal) > 0) {
                 smartAlert("Atenção", "Data inicial maior que data final !", "warning");
                 tratarBotoes(false);
-                return;
+                validou = false;
+                return validou;
             }
         }
+
+        return validou;
+
+    }
+
+    function listarFiltro() {
 
         tratarBotoes(true);
 

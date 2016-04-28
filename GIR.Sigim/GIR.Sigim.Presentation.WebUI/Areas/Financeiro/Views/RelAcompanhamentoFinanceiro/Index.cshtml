@@ -111,7 +111,7 @@
                                                 </script>
 
                                                 <section class="col col-1">
-                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar" onclick="javascript:goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);">
+                                                    <button id="btnSearch" type="submit" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar">
                                                         <i class="fa fa-search fa-lg"></i>
                                                     </button>
                                                 </section>
@@ -339,25 +339,17 @@
             }
         });
 
+        $('#btnSearch').on("click", function () {
+            if (validouPesquisa() == true) {
+                ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
+                solicitaFormaDeExibicao();
+            }          
+        });
+
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
-
-                if (validouPesquisa() == true)
-                {
-                    ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
-
-                    var pageIndex = $("#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)").val();
-                    var pageSize = $("#@Html.IdFor(m => m.Filtro.PaginationParameters.PageSize)").val();
-                    
-                    if ((pageIndex == 0) && (pageSize == 10)) {
-                        solicitaFormaDeExibicao();
-                    }
-                    else {
-                        listarFiltro();
-                    }
-
-                    //listarFiltro();
-                }
+                ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
+                listarFiltro();
             }
         );
 
@@ -563,7 +555,6 @@
     }
 
     function listarFiltro() {
-
         tratarBotoes(true);
 
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
@@ -600,7 +591,7 @@
             $("#@Html.IdFor(m => m.Filtro.BaseadoPor)").val(baseadoPor);
 
             if (ButtonPress == "OK") {
-                listarFiltro();
+                goToPage@(Model.Filtro.PaginationParameters.UniqueIdentifier)(0);
             }
         });
 
