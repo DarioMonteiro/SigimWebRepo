@@ -287,6 +287,26 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
             return specification;
         }
 
+        public static Specification<Apropriacao> DataPeriodoPorVencimentoTituloPagarMaiorRelAcompanhamentoFinanceiro(DateTime? data)
+        {
+            Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
+
+            var directSpecification = new DirectSpecification<Apropriacao>(l => l.TituloPagar.DataVencimento > data);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
+        public static Specification<Apropriacao> DataPeriodoPorEmissaoTituloPagarMaiorRelAcompanhamentoFinanceiro(DateTime? data)
+        {
+            Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
+
+            var directSpecification = new DirectSpecification<Apropriacao>(l => l.TituloPagar.DataEmissao > data);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
         public static Specification<Apropriacao> DataPeriodoTituloPagarMenorOuIgualPendentesRelApropriacaoPorClasse(string tipoPesquisa, DateTime? data)
         {
             Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();

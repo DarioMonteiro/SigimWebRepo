@@ -98,6 +98,8 @@
     <Compile Include="Configuration\Financeiro\CaixaConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ApropriacaoConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ApropriacaoAdiantamentoConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\CronogramaFisicoFinanceiroConfiguration.cs" />
+    <Compile Include="Configuration\Financeiro\CronogramaFisicoFinanceiroDetalheConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\HistoricoContabilConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\ImpostoReceberConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\MovimentoFinanceiroConfiguration.cs" />
@@ -117,6 +119,7 @@
     <Compile Include="Configuration\Financeiro\TituloPagarConfiguration.cs" />
     <Compile Include="Configuration\Financeiro\TituloReceberConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\EmpresaConfiguration.cs" />
+    <Compile Include="Configuration\Orcamento\OrcamentoClasseConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoComposicaoItemConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoComposicaoConfiguration.cs" />
     <Compile Include="Configuration\Orcamento\OrcamentoConfiguration.cs" />
@@ -230,6 +233,7 @@
     <Compile Include="Repository\Estoque\EstoqueRepository.cs" />
     <Compile Include="Repository\Financeiro\ClasseRepository.cs" />
     <Compile Include="Repository\Financeiro\ApropriacaoRepository.cs" />
+    <Compile Include="Repository\Financeiro\CronogramaFisicoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoReceberRepository.cs" />
     <Compile Include="Repository\Financeiro\ImpostoPagarRepository.cs" />
     <Compile Include="Repository\Financeiro\TipoMovimentoRepository.cs" />

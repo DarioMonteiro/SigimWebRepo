@@ -34,6 +34,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public ICollection<Apropriacao> ListaApropriacao { get; set; }
         public ICollection<ApropriacaoAdiantamento> ListaApropriacaoAdiantamento { get; set; }
         public ICollection<VerbaCobranca> ListaVerbaCobranca { get; set; }
+        public ICollection<OrcamentoClasse> ListaOrcamentoClasse { get; set; }
+        public ICollection<CronogramaFisicoFinanceiroDetalhe> ListaCronogramaFisicoFinanceiroDetalhe { get; set; }
         
         public Classe()
         {
@@ -52,6 +54,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
             this.ListaApropriacao = new HashSet<Apropriacao>();
             this.ListaApropriacaoAdiantamento = new HashSet<ApropriacaoAdiantamento>();
             this.ListaVerbaCobranca = new HashSet<VerbaCobranca>();
+            this.ListaOrcamentoClasse = new HashSet<OrcamentoClasse>();
+            this.ListaCronogramaFisicoFinanceiroDetalhe = new HashSet<CronogramaFisicoFinanceiroDetalhe>();
         }
         
     }

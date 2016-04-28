@@ -35,10 +35,10 @@
                             string classeDescricaoSortingSuffix = "sorting";
                             string orcamentoInicialSortingSuffix = "sorting";
                             string orcamentoAtualSortingSuffix = "sorting";
-                            string despesaPeriodoSortingSuffix = "sorting";
                             string despesaAcumuladaSortingSuffix = "sorting";
-                            string comprometidoPendenteSortingSuffix = "sorting";
+                            string percentualExecutadoSortingSuffix = "sorting";
                             string comprometidoFuturoSortingSuffix = "sorting";
+                            string percentualComprometidoSortingSuffix = "sorting";                           
                             string resultadoAcrescimoSortingSuffix = "sorting";
                             string resultadoSaldoSortingSuffix = "sorting";
                             string descricaoClasseFechadaSortingSuffix = "sorting";
@@ -58,17 +58,17 @@
                                 case "orcamentoAtual":
                                     orcamentoAtualSortingSuffix += sortingSuffix;
                                     break;
-                                case "despesaPeriodo":
-                                    despesaPeriodoSortingSuffix += sortingSuffix;
-                                    break;
                                 case "despesaAcumulada":
                                     despesaAcumuladaSortingSuffix += sortingSuffix;
                                     break;
-                                case "comprometidoPendente":
-                                    comprometidoPendenteSortingSuffix += sortingSuffix;
+                                case "percentualExecutado":
+                                    percentualExecutadoSortingSuffix += sortingSuffix;
                                     break;
                                 case "comprometidoFuturo":
                                     comprometidoFuturoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "percentualComprometido":
+                                    percentualComprometidoSortingSuffix += sortingSuffix;
                                     break;
                                 case "resultadoAcrescimo":
                                     resultadoAcrescimoSortingSuffix += sortingSuffix;
@@ -88,35 +88,42 @@
                         }
                         <th class="sorting @classeSortingSuffix text-left" data-order="classe" style="min-width:60px;">Classe</th>
                         <th class="sorting @classeDescricaoSortingSuffix text-left" data-order="classeDescricao" style="min-width:70px;">Descrição</th>
-                        <th class="sorting @orcamentoInicialSortingSuffix text-left" data-order="orcamentoInicial" style="min-width:80px;">Orçamento Inicial</th>
-                        <th class="sorting @orcamentoAtualSortingSuffix text-left" data-order="orcamentoAtual" style="min-width:70px;">Orçamento Final (A)</th>
-                        <th class="sorting @despesaPeriodoSortingSuffix text-left" data-order="despesaPeriodo" style="min-width:90px;">Despesa período (B)</th>
-                        <th class="sorting @despesaAcumuladaSortingSuffix text-left" data-order="despesaAcumulada" style="min-width:60px;">Despesa acumuladas (C)</th>
-                        <th class="sorting @comprometidoPendenteSortingSuffix text-left" data-order="comprometidoPendente" style="min-width:60px;">Comprometido pendente (D)</th>
-                        <th class="sorting @comprometidoFuturoSortingSuffix text-left" data-order="comprometidoFuturo" style="min-width:60px;">Comprometido futuro (E)</th>
-                        <th class="sorting @resultadoAcrescimoSortingSuffix text-left" data-order="resultadoAcrescimo" style="min-width:100px;">Resultado acréscimo (-) (A-(C+D+E))</th>
-                        <th class="sorting @resultadoSaldoSortingSuffix text-left" data-order="resultaSaldo" style="min-width:70px;">Resultado saldo (+) (A-(C+D+E))</th>
+                        <th class="sorting @orcamentoInicialSortingSuffix text-left" data-order="orcamentoInicial" style="min-width:80px;">Orçamento inicial</th>
+                        <th class="sorting @orcamentoAtualSortingSuffix text-left" data-order="orcamentoAtual" style="min-width:70px;">Orçamento final (A)</th>
+                        <th class="sorting @despesaAcumuladaSortingSuffix text-left" data-order="despesaAcumulada" style="min-width:60px;">Despesa executadas (B)</th>
+                        <th class="sorting @percentualExecutadoSortingSuffix text-left" data-order="percentualExecutado" style="min-width:60px;">% executado</th>
+                        <th class="sorting @comprometidoFuturoSortingSuffix text-left" data-order="comprometidoFuturo" style="min-width:60px;">Comprometido (C)</th>
+                        <th class="sorting @percentualComprometidoSortingSuffix text-left" data-order="percentualComprometido" style="min-width:60px;">% comprometido</th>
+                        <th class="sorting @resultadoAcrescimoSortingSuffix text-left" data-order="resultadoAcrescimo" style="min-width:100px;">Resultado acréscimo (-) (A-(B+C))</th>
+                        <th class="sorting @resultadoSaldoSortingSuffix text-left" data-order="resultaSaldo" style="min-width:70px;">Resultado saldo (+) (A-(B+C))</th>
                         <th class="sorting @descricaoClasseFechadaSortingSuffix text-left" data-order="descricaoClasseFechada" style="min-width:70px;"></th>
-                        <th class="sorting @conclusaoSortingSuffix text-left" data-order="conclusao" style="min-width:80px;">Tendências conclusão (A) ou (C+D+E)</th>
+                        <th class="sorting @conclusaoSortingSuffix text-left" data-order="conclusao" style="min-width:80px;">Tendências conclusão (A) ou (B+C) ou (B)</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     @foreach (var item in Lista)
                     {
+
+                        string style = "color:black";
+                        if (@item.AssinalarRegistro)
+                        {
+                            style = "color:red";
+                        }
+                        
                         <tr>
-                            <td class="text-left text-nowrap">@item.CodigoClasse</td>
-                            <td class="text-left text-nowrap">@item.DescricaoClasse</td>
-                            <td class="text-right text-nowrap">@item.OrcamentoInicial.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@item.OrcamentoAtual.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@item.DespesaPeriodo.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@item.DespesaAcumulada.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@item.ComprometidoPendente.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@item.ComprometidoFuturo.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@item.ResultadoAcrescimo.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@item.ResultadoSaldo.ToString("N2")</td>
-                            <td class="text-left text-nowrap">@item.DescricaoClasseFechada</td>                           
-                            <td class="text-right text-nowrap">@item.Conclusao.ToString("N2")</td>
+                            <td class="text-left text-nowrap" style="@style">@item.CodigoClasse</td>
+                            <td class="text-left text-nowrap" style="@style">@item.DescricaoClasse</td>
+                            <td class="text-right text-nowrap" style="@style">@item.OrcamentoInicial.ToString("N2")</td>
+                            <td class="text-right text-nowrap" style="@style">@item.OrcamentoAtual.ToString("N2")</td>
+                            <td class="text-right text-nowrap" style="@style">@item.DespesaAcumulada.ToString("N2")</td>
+                            <td class="text-right text-nowrap" style="@style">@item.PercentualExecutado.ToString("N5")</td>
+                            <td class="text-right text-nowrap" style="@style">@item.ComprometidoFuturo.ToString("N2")</td>
+                            <td class="text-right text-nowrap" style="@style">@item.PercentualComprometido.ToString("N5")</td>
+                            <td class="text-right text-nowrap" style="@style">@item.ResultadoAcrescimo.ToString("N2")</td>
+                            <td class="text-right text-nowrap" style="@style">@item.ResultadoSaldo.ToString("N2")</td>
+                            <td class="text-left text-nowrap" style="@style">@item.DescricaoClasseFechada</td>                           
+                            <td class="text-right text-nowrap" style="@style">@item.Conclusao.ToString("N2")</td>
                         </tr>
                     }
                 </tbody>

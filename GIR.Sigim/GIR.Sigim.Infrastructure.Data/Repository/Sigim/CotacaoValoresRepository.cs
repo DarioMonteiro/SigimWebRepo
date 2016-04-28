@@ -25,10 +25,16 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Sigim
         public decimal RecuperaCotacao(int indiceId, DateTime data)
         {
             decimal valor = 0;
-            Nullable<DateTime> ultimaData = this.ListarPeloFiltro(l => l.IndiceFinanceiroId == indiceId && l.Data.Value <= data).Select(l => l.Data.Value).Max(); 
-            if (ultimaData.HasValue)
+            List<CotacaoValores> listaCotacao = this.ListarPeloFiltro(l => l.IndiceFinanceiroId == indiceId && l.Data.Value <= data).ToList<CotacaoValores>();
+            if (listaCotacao.Count > 0)
             {
-                valor = this.ListarPeloFiltro(l => l.IndiceFinanceiroId == indiceId && l.Data.Value == ultimaData.Value).FirstOrDefault().Valor.Value;
+                Nullable<DateTime> ultimaData;
+
+                ultimaData = listaCotacao.Select(l => l.Data.Value).Max();
+                if (ultimaData.HasValue)
+                {
+                    valor = this.ListarPeloFiltro(l => l.IndiceFinanceiroId == indiceId && l.Data.Value == ultimaData.Value).FirstOrDefault().Valor.Value;
+                }
             }
 
             return valor;

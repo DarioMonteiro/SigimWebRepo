@@ -20,10 +20,12 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
         public string Situacao { get; set; }
         public bool? EhControlado { get; set; }
         public ICollection<OrcamentoComposicao> ListaOrcamentoComposicao { get; set; }
+        public ICollection<OrcamentoClasse> ListaOrcamentoClasse { get; set; }
 
         public Orcamento()
         {
             this.ListaOrcamentoComposicao = new HashSet<OrcamentoComposicao>();
+            this.ListaOrcamentoClasse = new HashSet<OrcamentoClasse>();
         }
     }
 }

@@ -76,12 +76,15 @@
     <Compile Include="Entity\CredCob\TituloMovimento.cs" />
     <Compile Include="Entity\CredCob\VerbaCobranca.cs" />
     <Compile Include="Entity\Financeiro\ApropriacaoClasseCCRelatorio.cs" />
+    <Compile Include="Entity\Financeiro\CronogramaFisicoFinanceiro.cs" />
+    <Compile Include="Entity\Financeiro\CronogramaFisicoFinanceiroDetalhe.cs" />
     <Compile Include="Entity\Financeiro\MovimentoFinanceiro.cs" />
     <Compile Include="Entity\Financeiro\OpcoesRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Financeiro\TipoMovimentoRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\Financeiro\TipoPesquisaRelatorioApropriacaoPorClasse.cs" />
     <Compile Include="Entity\GirCliente\ClienteAcessoChaveAcesso.cs" />
     <Compile Include="Entity\Orcamento\Empresa.cs" />
+    <Compile Include="Entity\Orcamento\OrcamentoClasse.cs" />
     <Compile Include="Entity\OrdemCompra\EmpresaCentroCusto.cs" />
     <Compile Include="Entity\Sigim\CarteiraBanco.cs" />
     <Compile Include="Entity\Sigim\CotacaoValores.cs" />
@@ -242,6 +245,7 @@
     <Compile Include="Repository\CredCob\ITituloCredCobRepository.cs" />
     <Compile Include="Repository\CredCob\ITituloMovimentoRepository.cs" />
     <Compile Include="Repository\Financeiro\IApropriacaoRepository.cs" />
+    <Compile Include="Repository\Financeiro\ICronogramaFisicoFinanceiroRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoPagarRepository.cs" />
     <Compile Include="Repository\Financeiro\IImpostoReceberRepository.cs" />
     <Compile Include="Repository\Financeiro\ITipoMovimentoRepository.cs" />

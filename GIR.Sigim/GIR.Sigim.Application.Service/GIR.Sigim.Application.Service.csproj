@@ -82,6 +82,7 @@
     <Compile Include="CredCob\TituloCredCobAppService.cs" />
     <Compile Include="Financeiro\ApropriacaoAppService.cs" />
     <Compile Include="CredCob\TituloMovimentoAppService.cs" />
+    <Compile Include="Financeiro\CronogramaFisicoFinanceiroAppService.cs" />
     <Compile Include="IoC\AdminBootstrapper.cs" />
     <Compile Include="IoC\Bootstrapper.cs" />
     <Compile Include="Contrato\ContratoAppService.cs" />

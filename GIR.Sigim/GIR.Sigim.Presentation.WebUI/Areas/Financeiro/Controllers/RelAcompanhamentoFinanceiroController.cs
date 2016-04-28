@@ -59,18 +59,38 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             if (ModelState.IsValid)
             {
                 Session["Filtro"] = model;
+
+                model.Filtro.ListaClasse = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasse);
+
                 int totalRegistros;
                 if (string.IsNullOrEmpty(model.Filtro.PaginationParameters.OrderBy))
                 {
                     model.Filtro.PaginationParameters.OrderBy = "classe";
                 }
 
-                var result = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiro(model.Filtro, 
-                                                                                               Usuario.Id, 
+
+                List<RelAcompanhamentoFinanceiroDTO> result;
+
+                if (model.Filtro.BaseadoPor == 0)
+                {
+                    result = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiro(model.Filtro,
+                                                                                               Usuario.Id,
                                                                                                out totalRegistros);
+                }
+                else
+                {
+                    result = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiroExecutado(model.Filtro,
+                                                                                                        Usuario.Id,
+                                                                                                        out totalRegistros);
+                }
+
                 if (result.Any())
                 {
                     var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
+                    if (model.Filtro.BaseadoPor == 1) 
+                    {
+                        return PartialView("ListaPartialPercentualExecutado", listaViewModel);
+                    }
                     return PartialView("ListaPartial", listaViewModel);
                 }
                 return PartialView("_EmptyListPartial");

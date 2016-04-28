@@ -170,6 +170,8 @@ namespace GIR.Sigim.Infrastructure.Data
             modelBuilder.Configurations.Add(new CentroCustoConfiguration());
             modelBuilder.Configurations.Add(new CentroCustoEmpresaConfiguration());
             modelBuilder.Configurations.Add(new ClasseConfiguration());
+            modelBuilder.Configurations.Add(new CronogramaFisicoFinanceiroConfiguration());
+            modelBuilder.Configurations.Add(new CronogramaFisicoFinanceiroDetalheConfiguration());
             modelBuilder.Configurations.Add(new HistoricoContabilConfiguration());
             modelBuilder.Configurations.Add(new ImpostoFinanceiroConfiguration());
             modelBuilder.Configurations.Add(new ImpostoPagarConfiguration());
@@ -194,6 +196,7 @@ namespace GIR.Sigim.Infrastructure.Data
 
             modelBuilder.Configurations.Add(new EmpresaConfiguration());
             modelBuilder.Configurations.Add(new ObraConfiguration());
+            modelBuilder.Configurations.Add(new OrcamentoClasseConfiguration());
             modelBuilder.Configurations.Add(new OrcamentoComposicaoConfiguration());
             modelBuilder.Configurations.Add(new OrcamentoComposicaoItemConfiguration());
             modelBuilder.Configurations.Add(new OrcamentoConfiguration());

@@ -346,7 +346,14 @@ namespace GIR.Sigim.Application.Service.Sigim
                 valor = 0;
             }
 
-            retorno = Math.Round((valor.Value / cotacao), 7);
+            if (cotacao != 0)
+            {
+                retorno = Math.Round((valor.Value / cotacao), 7);
+            }
+            else
+            {
+                retorno = 0;
+            }
 
             return retorno;
         }

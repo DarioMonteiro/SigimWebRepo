@@ -36,6 +36,25 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
         [Display(Name = "Defasagem")]
         public int? Defasagem { get; set; }
 
+
+        public string DescricaoBaseadoPor
+        {
+            get
+            {
+                string descricao = "";
+                switch (BaseadoPor)
+                {
+                    case 0:
+                        descricao = "Baseado títulos financeiro";
+                        break;
+                    case 1:
+                        descricao = "Baseado % executado";
+                        break;
+                }
+                return descricao;
+            }
+        }
+
         public RelAcompanhamentoFinanceiroFiltro()
         {
             CentroCusto = new CentroCustoDTO();

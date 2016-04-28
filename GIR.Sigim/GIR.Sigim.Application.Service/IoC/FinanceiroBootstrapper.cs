@@ -17,6 +17,7 @@ namespace GIR.Sigim.Application.Service.IoC
             Container.Current.RegisterType<ICaixaAppService, CaixaAppService>();
             Container.Current.RegisterType<ICentroCustoAppService, CentroCustoAppService>();
             Container.Current.RegisterType<IClasseAppService, ClasseAppService>();
+            Container.Current.RegisterType<ICronogramaFisicoFinanceiroAppService, CronogramaFisicoFinanceiroAppService>();
             Container.Current.RegisterType<IHistoricoContabilAppService, HistoricoContabilAppService>();
             Container.Current.RegisterType<IImpostoFinanceiroAppService, ImpostoFinanceiroAppService>();
             Container.Current.RegisterType<IMotivoCancelamentoAppService, MotivoCancelamentoAppService>();

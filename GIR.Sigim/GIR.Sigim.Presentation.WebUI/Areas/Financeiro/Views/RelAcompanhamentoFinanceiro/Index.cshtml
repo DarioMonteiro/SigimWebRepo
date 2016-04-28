@@ -29,6 +29,7 @@
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
+                        @Html.HiddenFor(m => m.Filtro.BaseadoPor)
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -136,8 +137,15 @@
                                                 <section class="col col-4">
                                                     @Html.LabelFor(m => m.Filtro.Defasagem, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.Defasagem, new { @maxlength = "10", @class = "text-right numeric" })
+                                                        @Html.TextBoxFor(m => m.Filtro.Defasagem, new { @maxlength = "10", @class = "numeric" })
                                                     </label>
+                                                    <script type="text/javascript">
+                                                        $(document).ready(function () {
+                                                            $("#@Html.IdFor(m => m.Filtro.Defasagem)").on("change", function () {
+                                                                limpaLista();
+                                                            });
+                                                        });
+                                                    </script> 
                                                     @Html.ValidationMessageFor(m => m.Filtro.Defasagem, "", new { @class = "note note-error" })
                                                 </section>
 
@@ -146,18 +154,10 @@
                                         <fieldset>
                                             <div class="row">
                                                 <section class="col col-6">
-									                <div class="inline-group">
-										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.BaseadoPor, 0) <i></i>Baseado títulos financeiro</label>
-										                <label class="radio"> @Html.RadioButtonFor(m => m.Filtro.BaseadoPor, 1) <i></i>Baseado % executado</label>
-									                </div>
-								                </section>
-
-                                                <section class="col col-6">
                                                     <div class="inline-group">
-                                                        <label id="lblEhValorCorrigido" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhValorCorrigido)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhValorCorrigido)</label>
+                                                        <label class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhValorCorrigido)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhValorCorrigido)</label>
                                                     </div>
                                                 </section>
-
                                             </div>
                                         </fieldset>
                                         <fieldset>
@@ -231,9 +231,9 @@
 
     $(document).ready(function () {
 
-        $('input[type=radio][name="Filtro.BaseadoPor"]').change(function () {
-            limpaLista();
-        });
+        //$('input[type=radio][name="Filtro.BaseadoPor"]').change(function () {
+        //    limpaLista();
+        //});
 
         $("#@Html.IdFor(m => m.Filtro.EhValorCorrigido)").on("change", function () {
             limpaLista();
@@ -316,7 +316,6 @@
             }
         });
 
-
         $(document).on("showFormatoImpressaoModalPanel", function (e) {
             var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
             var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
@@ -342,8 +341,23 @@
 
         $(document).on("doFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)",
             function (e) {
-                ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
-                listarFiltro();
+
+                if (validouPesquisa() == true)
+                {
+                    ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
+
+                    var pageIndex = $("#@Html.IdFor(m => m.Filtro.PaginationParameters.PageIndex)").val();
+                    var pageSize = $("#@Html.IdFor(m => m.Filtro.PaginationParameters.PageSize)").val();
+                    
+                    if ((pageIndex == 0) && (pageSize == 10)) {
+                        solicitaFormaDeExibicao();
+                    }
+                    else {
+                        listarFiltro();
+                    }
+
+                    //listarFiltro();
+                }
             }
         );
 
@@ -411,6 +425,7 @@
         $("#@Html.IdFor(m => m.JsonItensClasse)").val(JSON.stringify(jsonItemArrayClasse));
         fillTableClasse();
         clearFormItemClasse();
+        limpaLista();
     }
 
     function fillTableClasse() {
@@ -444,6 +459,7 @@
         if (arrClasseCodigo.length > 0) {
             $("#@Html.IdFor(m => m.JsonItensClasse)").val(JSON.stringify(jsonItemArrayClasse));
             fillTableClasse();
+            limpaLista();
         }
         else {
             smartAlert("Erro", "Selecione pelo menos uma classe para ser removida.", "error");
@@ -464,6 +480,7 @@
     }
 
     function limpaLista() {
+        
         tratarBotoes(false);
         $("#resultadoBusca").empty();
     }
@@ -485,30 +502,67 @@
         }
     }
 
-    function listarFiltro() {
+    function validouPesquisa() {
         var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
         var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
         var centroCustoCodigo = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)").val();
 
+        var indiceId = $("#@Html.IdFor(m => m.Filtro.IndiceId)").val();
+
+        var defasagem = $("#@Html.IdFor(m => m.Filtro.Defasagem)").val();
+
+        var validou = true;
+
+        @*var centroCustoValidation = $("#@Html.IdFor(m => m.Filtro.CentroCusto.Codigo)" + "_ValidationMessage").attr("class");*@
+
+        var ehValorCorrigido = false;
+
+        if ($("#@Html.IdFor(m => m.Filtro.EhValorCorrigido)").is(':checked')) {
+            ehValorCorrigido = true;
+        }
+
         if ((dataInicial == "") || (dataFinal == "")) {
             smartAlert("Atenção", "Informe o período !", "warning");
             tratarBotoes(false);
-            return;
+            validou = false;
+            return validou;
         }
 
         if ((dataInicial != "") && (dataFinal != "")) {
             if (compararDatas(dataInicial, dataFinal) > 0) {
                 smartAlert("Atenção", "Data inicial maior que data final !", "warning");
                 tratarBotoes(false);
-                return;
+                validou = false;
+                return validou;
             }
         }
 
-        if (centroCustoCodigo = "") {
+        if (centroCustoCodigo == "") {
             smartAlert("Atenção", "Informe o centro de custo !", "warning");
             tratarBotoes(false);
-            return;
+            validou = false;
+            return validou;
         }
+
+        if ((indiceId != "" && indiceId > 0) && (defasagem == "")) {
+            smartAlert("Atenção", "Informe a defasagem !", "warning");
+            tratarBotoes(false);
+            validou = false;
+            return validou;
+        }
+
+        if ((indiceId == "") && (ehValorCorrigido)) {
+            smartAlert("Atenção", "Informe o índice !", "warning");
+            tratarBotoes(false);
+            validou = false;
+            return validou;
+        }
+
+        return validou;
+
+    }
+
+    function listarFiltro() {
 
         tratarBotoes(true);
 
@@ -516,6 +570,42 @@
 
         $('#collapseFiltro').attr("class", "panel-collapse collapse");
 
+        //if (centroCustoValidation.search('note note-error field-validation-error') == -1) {
+        //    $('#collapseFiltro').attr("class", "panel-collapse collapse");
+
+        //    //tratarBotoes(false);
+        //    smartAlert("Atenção", centroCustoValidation, "warning");
+        //    ////e.preventDefault();
+        //    //return;
+        //}
     }
+
+    function solicitaFormaDeExibicao() {
+        $.SmartMessageBox({
+            title: "Apresentação do relatório",
+            content: "Selecione o tipo de relatório que deseja",
+            buttons: "[OK]",
+            input: "select",
+            options: "[Baseado título financeiro][Baseado % executado]"
+        },
+        function (ButtonPress, Value) {
+            var baseadoPor = 0;
+            if (Value == "Baseado título financeiro") {
+                baseadoPor = 0;
+            }
+            if (Value == "Baseado % executado") {
+                baseadoPor = 1;
+            }
+
+            $("#@Html.IdFor(m => m.Filtro.BaseadoPor)").val(baseadoPor);
+
+            if (ButtonPress == "OK") {
+                listarFiltro();
+            }
+        });
+
+        //e.preventDefault();
+    }
+
 
 </script>

@@ -428,6 +428,7 @@
     <Content Include="Areas\Financeiro\Views\RelContasPagarTitulos\_PaginationPartialRelContasPagarTitulos.cshtml" />
     <Content Include="Areas\Financeiro\Views\RelAcompanhamentoFinanceiro\Index.cshtml" />
     <Content Include="Areas\Financeiro\Views\RelAcompanhamentoFinanceiro\ListaPartial.cshtml" />
+    <Content Include="Areas\Financeiro\Views\RelAcompanhamentoFinanceiro\ListaPartialPercentualExecutado.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>

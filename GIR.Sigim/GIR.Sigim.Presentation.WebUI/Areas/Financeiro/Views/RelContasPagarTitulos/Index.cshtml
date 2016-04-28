@@ -574,6 +574,22 @@
     }
 
     function listarFiltro() {
+        var dataInicial = $("#@Html.IdFor(m => m.Filtro.DataInicial)").val();
+        var dataFinal = $("#@Html.IdFor(m => m.Filtro.DataFinal)").val();
+
+        if ((dataInicial == "") || (dataFinal == "")) {
+            smartAlert("Atenção", "Informe o período !", "warning");
+            tratarBotoes(false);
+            return;
+        }
+
+        if ((dataInicial != "") && (dataFinal != "")) {
+            if (compararDatas(dataInicial, dataFinal) > 0) {
+                smartAlert("Atenção", "Data inicial maior que data final !", "warning");
+                tratarBotoes(false);
+                return;
+            }
+        }
 
         tratarBotoes(true);
 

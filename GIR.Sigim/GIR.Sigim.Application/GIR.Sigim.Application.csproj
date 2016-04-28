@@ -481,6 +481,7 @@
     <Compile Include="Service\Contrato\IParametrosContratoAppService.cs" />
     <Compile Include="Service\CredCob\ITituloCredCobAppService.cs" />
     <Compile Include="Service\Financeiro\IApropriacaoAppService.cs" />
+    <Compile Include="Service\Financeiro\ICronogramaFisicoFinanceiroAppService.cs" />
     <Compile Include="Service\Financeiro\IHistoricoContabilAppService.cs" />
     <Compile Include="Service\Financeiro\ITipoMovimentoAppService.cs" />
     <Compile Include="Service\Financeiro\ITaxaAdministracaoAppService.cs" />
