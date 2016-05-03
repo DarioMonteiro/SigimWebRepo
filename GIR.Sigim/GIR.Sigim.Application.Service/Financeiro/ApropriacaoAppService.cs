@@ -339,6 +339,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         }
 
+        public bool EhPermitidoImprimirRelAcompanhamentoFinanceiro()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.RelatorioAcompanhamentoFinanceiroImprimir);
+        }
+
         public List<RelAcompanhamentoFinanceiroDTO> ListarPeloFiltroRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro,
                                                                                                          out int totalRegistros)
         {
@@ -365,11 +370,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             return listaRelAcompanhamentoFinanceiro;
 
-        }
-
-        public bool EhPermitidoImprimirRelAcompanhamentoFinanceiro()
-        {
-            return UsuarioLogado.IsInRole(Funcionalidade.RelatorioAcompanhamentoFinanceiroImprimir);
         }
 
         public FileDownloadDTO ExportarRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro,
@@ -1932,116 +1932,128 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 cotacaoReajuste = cotacaoValoresRepository.RecuperaCotacao(filtro.IndiceId.Value, dataReajuste.Date);
             }
 
-            #region "Orcamento inicial"
-
-            var orcamentoPrimeiro = orcamentoRepository.ObterPrimeiroOrcamentoPeloCentroCusto(filtro.CentroCusto.Codigo, l => l.Obra, l => l.ListaOrcamentoClasse, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
-
+            List<CentroCusto> listaCentroCusto = centroCustoRepository.ListarPeloFiltro(l => ((l.Codigo.Contains(filtro.CentroCusto.Codigo)) && (!l.ListaFilhos.Any()))).ToList<CentroCusto>();
             bool descartar;
 
-            foreach (var orcamentoComposicao in orcamentoPrimeiro.ListaOrcamentoComposicao)
+            #region "Orcamento inicial"
+
+            foreach (var centroCusto in listaCentroCusto)
             {
-                if (filtro.ListaClasse.Count > 0)
+                var orcamentoPrimeiro = orcamentoRepository.ObterPrimeiroOrcamentoPeloCentroCusto(centroCusto.Codigo, l => l.Obra, l => l.ListaOrcamentoClasse, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
+
+                if (orcamentoPrimeiro != null)
                 {
-                    descartar = true;
-                    foreach (var classe in filtro.ListaClasse)
+                    foreach (var orcamentoComposicao in orcamentoPrimeiro.ListaOrcamentoComposicao)
                     {
-                        if (orcamentoComposicao.CodigoClasse.StartsWith(classe.Codigo))
+                        if (filtro.ListaClasse.Count > 0)
                         {
-                            descartar = false;
+                            descartar = true;
+                            foreach (var classe in filtro.ListaClasse)
+                            {
+                                if (orcamentoComposicao.CodigoClasse.StartsWith(classe.Codigo))
+                                {
+                                    descartar = false;
+                                }
+                            }
+                            if (descartar)
+                            {
+                                continue;
+                            }
                         }
-                    }
-                    if (descartar)
-                    {
-                        continue;
+
+                        decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoPrimeiro.Data.Value, orcamentoComposicao.Preco.Value);
+                        decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
+
+                        RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+
+                        if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
+                        {
+                            relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
+                            relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
+                            relat.OrcamentoInicial = valor;
+                            relat.CodigoClassePai = orcamentoComposicao.Classe.CodigoPai;
+                            relat.ClassePossuiFilhos = false;
+                            if ((orcamentoComposicao.Classe.ListaFilhos != null) && (orcamentoComposicao.Classe.ListaFilhos.Count > 0))
+                            {
+                                relat.ClassePossuiFilhos = true;
+                            }
+
+                            listaRelAcompanhamentoFinanceiro.Add(relat);
+                        }
+                        else
+                        {
+                            relat = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+                            relat.OrcamentoInicial = relat.OrcamentoInicial + valor;
+                        }
+                        AdicionarValorNaClassePaiRelAcompanhamentoFinanceiro(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro, "OrcamentoInicial");
                     }
                 }
-
-                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoPrimeiro.Data.Value, orcamentoComposicao.Preco.Value);
-                decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
-
-                RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
-
-                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
-                {
-                    relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
-                    relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
-                    relat.OrcamentoInicial = valor;
-                    relat.CodigoClassePai = orcamentoComposicao.Classe.CodigoPai;
-                    relat.ClassePossuiFilhos = false;
-                    if ((orcamentoComposicao.Classe.ListaFilhos != null) && (orcamentoComposicao.Classe.ListaFilhos.Count > 0))
-                    {
-                        relat.ClassePossuiFilhos = true;
-                    }
-
-                    listaRelAcompanhamentoFinanceiro.Add(relat);
-                }
-                else
-                {
-                    relat = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
-                    relat.OrcamentoInicial = relat.OrcamentoInicial + valor;
-                }
-                AdicionarValorNaClassePaiRelAcompanhamentoFinanceiro(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro, "OrcamentoInicial");
             }
             #endregion
 
             #region "Orçamento Atual"
 
-            var orcamentoUltimo = orcamentoRepository.ObterUltimoOrcamentoPeloCentroCusto(filtro.CentroCusto.Codigo, l => l.Obra, l => l.ListaOrcamentoClasse, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
-
-            foreach (var orcamentoComposicao in orcamentoUltimo.ListaOrcamentoComposicao)
+            foreach (var centroCusto in listaCentroCusto)
             {
-                if (filtro.ListaClasse.Count > 0)
+                var orcamentoUltimo = orcamentoRepository.ObterUltimoOrcamentoPeloCentroCusto(centroCusto.Codigo, l => l.Obra, l => l.ListaOrcamentoClasse, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
+
+                if (orcamentoUltimo != null)
                 {
-                    descartar = true;
-                    foreach (var classe in filtro.ListaClasse)
+                    foreach (var orcamentoComposicao in orcamentoUltimo.ListaOrcamentoComposicao)
                     {
-                        if (orcamentoComposicao.CodigoClasse.StartsWith(classe.Codigo))
+                        if (filtro.ListaClasse.Count > 0)
                         {
-                            descartar = false;
+                            descartar = true;
+                            foreach (var classe in filtro.ListaClasse)
+                            {
+                                if (orcamentoComposicao.CodigoClasse.StartsWith(classe.Codigo))
+                                {
+                                    descartar = false;
+                                }
+                            }
+                            if (descartar)
+                            {
+                                continue;
+                            }
                         }
-                    }
-                    if (descartar)
-                    {
-                        continue;
+
+                        decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoUltimo.Data.Value, orcamentoComposicao.Preco.Value);
+                        decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
+
+                        RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+
+                        if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
+                        {
+                            relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
+                            relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
+                            relat.OrcamentoAtual = valor;
+                            relat.CodigoClassePai = orcamentoComposicao.Classe.CodigoPai;
+                            relat.ClassePossuiFilhos = false;
+                            if ((orcamentoComposicao.Classe.ListaFilhos != null) && (orcamentoComposicao.Classe.ListaFilhos.Count > 0))
+                            {
+                                relat.ClassePossuiFilhos = true;
+                            }
+
+                            OrcamentoClasse orcamentoClasse = orcamentoUltimo.ListaOrcamentoClasse.Where(l => l.ClasseCodigo == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+                            relat.DescricaoClasseFechada = orcamentoClasse.Fechada.HasValue ? (orcamentoClasse.Fechada.Value ? "F" : "") : "";
+
+                            listaRelAcompanhamentoFinanceiro.Add(relat);
+                        }
+                        else
+                        {
+                            relat = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+
+                            relat.OrcamentoAtual = relat.OrcamentoAtual + valor;
+
+                            OrcamentoClasse orcamentoClasse = orcamentoUltimo.ListaOrcamentoClasse.Where(l => l.ClasseCodigo == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+                            relat.DescricaoClasseFechada = orcamentoClasse.Fechada.HasValue ? (orcamentoClasse.Fechada.Value ? "F" : "") : "";
+
+                        }
+
+                        AdicionarValorNaClassePaiRelAcompanhamentoFinanceiro(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro, "OrcamentoAtual");
                     }
                 }
-
-                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoUltimo.Data.Value, orcamentoComposicao.Preco.Value);
-                decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
-
-                RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
-
-                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
-                {
-                    relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
-                    relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
-                    relat.OrcamentoAtual = valor;
-                    relat.CodigoClassePai = orcamentoComposicao.Classe.CodigoPai;
-                    relat.ClassePossuiFilhos = false;
-                    if ((orcamentoComposicao.Classe.ListaFilhos != null) && (orcamentoComposicao.Classe.ListaFilhos.Count > 0))
-                    {
-                        relat.ClassePossuiFilhos = true;
-                    }
-
-                    OrcamentoClasse orcamentoClasse = orcamentoUltimo.ListaOrcamentoClasse.Where(l => l.ClasseCodigo == orcamentoComposicao.CodigoClasse).FirstOrDefault();
-                    relat.DescricaoClasseFechada = orcamentoClasse.Fechada.HasValue ? (orcamentoClasse.Fechada.Value ? "F" : "") : "";
-
-                    listaRelAcompanhamentoFinanceiro.Add(relat);
-                }
-                else
-                {
-                    relat = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
-
-                    relat.OrcamentoAtual = relat.OrcamentoAtual + valor;
-
-                    OrcamentoClasse orcamentoClasse = orcamentoUltimo.ListaOrcamentoClasse.Where(l => l.ClasseCodigo == orcamentoComposicao.CodigoClasse).FirstOrDefault();
-                    relat.DescricaoClasseFechada = orcamentoClasse.Fechada.HasValue ? (orcamentoClasse.Fechada.Value ? "F" : "") : "";
-
-                }
-
-                AdicionarValorNaClassePaiRelAcompanhamentoFinanceiro(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro, "OrcamentoAtual");
             }
-
             #endregion
 
             #region "Despesa por periodo"
@@ -2406,15 +2418,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             #endregion
 
-            //totalRegistros = listaRelAcompanhamentoFinanceiro.Count();
-
-            //listaRelAcompanhamentoFinanceiro  = OrdenaListaRelAcompanhamentoFinanceiroDTO(filtro, listaRelAcompanhamentoFinanceiro);
-
-            //int pageCount = filtro.PaginationParameters.PageSize;
-            //int pageIndex = filtro.PaginationParameters.PageIndex;
-
-            //listaRelAcompanhamentoFinanceiro = listaRelAcompanhamentoFinanceiro.Skip(pageCount * pageIndex).Take(pageCount).To<List<RelAcompanhamentoFinanceiroDTO>>();
-
             return listaRelAcompanhamentoFinanceiro;
         }
 
@@ -2435,116 +2438,129 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 cotacaoReajuste = cotacaoValoresRepository.RecuperaCotacao(filtro.IndiceId.Value, dataReajuste.Date);
             }
 
-            #region "Orcamento inicial"
-
-            var orcamentoPrimeiro = orcamentoRepository.ObterPrimeiroOrcamentoPeloCentroCusto(filtro.CentroCusto.Codigo, l => l.Obra, l => l.ListaOrcamentoClasse, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
+            List<CentroCusto> listaCentroCusto = centroCustoRepository.ListarPeloFiltro(l => ((l.Codigo.Contains(filtro.CentroCusto.Codigo)) && (!l.ListaFilhos.Any()))).ToList<CentroCusto>();
             bool descartar = false;
 
-            foreach (var orcamentoComposicao in orcamentoPrimeiro.ListaOrcamentoComposicao)
+            #region "Orcamento inicial"
+
+            foreach (var centroCusto in listaCentroCusto)
             {
-                if (filtro.ListaClasse.Count > 0)
+                var orcamentoPrimeiro = orcamentoRepository.ObterPrimeiroOrcamentoPeloCentroCusto(centroCusto.Codigo, l => l.Obra, l => l.ListaOrcamentoClasse, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
+
+                if (orcamentoPrimeiro != null)
                 {
-                    descartar = true;
-                    foreach (var classe in filtro.ListaClasse)
+                    foreach (var orcamentoComposicao in orcamentoPrimeiro.ListaOrcamentoComposicao)
                     {
-                        if (orcamentoComposicao.CodigoClasse.StartsWith(classe.Codigo))
+                        if (filtro.ListaClasse.Count > 0)
                         {
-                            descartar = false;
+                            descartar = true;
+                            foreach (var classe in filtro.ListaClasse)
+                            {
+                                if (orcamentoComposicao.CodigoClasse.StartsWith(classe.Codigo))
+                                {
+                                    descartar = false;
+                                }
+                            }
+                            if (descartar)
+                            {
+                                continue;
+                            }
                         }
-                    }
-                    if (descartar)
-                    {
-                        continue;
+
+                        decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoPrimeiro.Data.Value, orcamentoComposicao.Preco.Value);
+                        decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
+
+                        RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+
+                        if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
+                        {
+                            relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
+                            relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
+                            relat.OrcamentoInicial = valor;
+                            relat.CodigoClassePai = orcamentoComposicao.Classe.CodigoPai;
+                            relat.ClassePossuiFilhos = false;
+                            if ((orcamentoComposicao.Classe.ListaFilhos != null) && (orcamentoComposicao.Classe.ListaFilhos.Count > 0))
+                            {
+                                relat.ClassePossuiFilhos = true;
+                            }
+
+                            listaRelAcompanhamentoFinanceiro.Add(relat);
+                        }
+                        else
+                        {
+                            relat = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+                            relat.OrcamentoInicial = relat.OrcamentoInicial + valor;
+                        }
+                        AdicionarValorNaClassePaiRelAcompanhamentoFinanceiro(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro, "OrcamentoInicial");
                     }
                 }
-
-                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoPrimeiro.Data.Value, orcamentoComposicao.Preco.Value);
-                decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
-
-                RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
-
-                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
-                {
-                    relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
-                    relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
-                    relat.OrcamentoInicial = valor;
-                    relat.CodigoClassePai = orcamentoComposicao.Classe.CodigoPai;
-                    relat.ClassePossuiFilhos = false;
-                    if ((orcamentoComposicao.Classe.ListaFilhos != null) && (orcamentoComposicao.Classe.ListaFilhos.Count > 0))
-                    {
-                        relat.ClassePossuiFilhos = true;
-                    }
-
-                    listaRelAcompanhamentoFinanceiro.Add(relat);
-                }
-                else
-                {
-                    relat = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
-                    relat.OrcamentoInicial = relat.OrcamentoInicial + valor;
-                }
-                AdicionarValorNaClassePaiRelAcompanhamentoFinanceiro(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro, "OrcamentoInicial");
             }
             #endregion
 
             #region "Orçamento Atual"
 
-            var orcamentoUltimo = orcamentoRepository.ObterUltimoOrcamentoPeloCentroCusto(filtro.CentroCusto.Codigo, l => l.Obra, l => l.ListaOrcamentoClasse, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
-
-            foreach (var orcamentoComposicao in orcamentoUltimo.ListaOrcamentoComposicao)
+            foreach (var centroCusto in listaCentroCusto)
             {
+                var orcamentoUltimo = orcamentoRepository.ObterUltimoOrcamentoPeloCentroCusto(centroCusto.Codigo, l => l.Obra, l => l.ListaOrcamentoClasse, l => l.ListaOrcamentoComposicao.Select(c => c.Classe));
 
-                if (filtro.ListaClasse.Count > 0)
+                if (orcamentoUltimo != null)
                 {
-                    descartar = true;
-                    foreach (var classe in filtro.ListaClasse)
+                    foreach (var orcamentoComposicao in orcamentoUltimo.ListaOrcamentoComposicao)
                     {
-                        if (orcamentoComposicao.CodigoClasse.StartsWith(classe.Codigo))
+
+                        if (filtro.ListaClasse.Count > 0)
                         {
-                            descartar = false;
+                            descartar = true;
+                            foreach (var classe in filtro.ListaClasse)
+                            {
+                                if (orcamentoComposicao.CodigoClasse.StartsWith(classe.Codigo))
+                                {
+                                    descartar = false;
+                                }
+                            }
+                            if (descartar)
+                            {
+                                continue;
+                            }
                         }
-                    }
-                    if (descartar)
-                    {
-                        continue;
+
+                        decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoUltimo.Data.Value, orcamentoComposicao.Preco.Value);
+                        decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
+
+                        RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
+
+                        if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
+                        {
+                            relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
+                            relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
+                            relat.OrcamentoAtual = valor;
+                            relat.CodigoClassePai = orcamentoComposicao.Classe.CodigoPai;
+                            relat.ClassePossuiFilhos = false;
+                            if ((orcamentoComposicao.Classe.ListaFilhos != null) && (orcamentoComposicao.Classe.ListaFilhos.Count > 0))
+                            {
+                                relat.ClassePossuiFilhos = true;
+                            }
+
+                            OrcamentoClasse orcamentoClasse = orcamentoUltimo.ListaOrcamentoClasse.Where(l => l.ClasseCodigo == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+                            relat.DescricaoClasseFechada = orcamentoClasse.Fechada.HasValue ? (orcamentoClasse.Fechada.Value ? "F" : "") : "";
+
+                            listaRelAcompanhamentoFinanceiro.Add(relat);
+                        }
+                        else
+                        {
+                            relat = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+
+                            relat.OrcamentoAtual = relat.OrcamentoAtual + valor;
+
+                            OrcamentoClasse orcamentoClasse = orcamentoUltimo.ListaOrcamentoClasse.Where(l => l.ClasseCodigo == orcamentoComposicao.CodigoClasse).FirstOrDefault();
+                            relat.DescricaoClasseFechada = orcamentoClasse.Fechada.HasValue ? (orcamentoClasse.Fechada.Value ? "F" : "") : "";
+
+                        }
+
+                        AdicionarValorNaClassePaiRelAcompanhamentoFinanceiro(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro, "OrcamentoAtual");
                     }
                 }
-
-                decimal valorIndice = moduloSigimAppService.CalculaValorIndice(filtro.IndiceId, defasagem, orcamentoUltimo.Data.Value, orcamentoComposicao.Preco.Value);
-                decimal valor = (valorIndice * orcamentoComposicao.Quantidade.Value * cotacaoReajuste);
-
-                RelAcompanhamentoFinanceiroDTO relat = new RelAcompanhamentoFinanceiroDTO();
-
-                if (!listaRelAcompanhamentoFinanceiro.Any(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse))
-                {
-                    relat.CodigoClasse = orcamentoComposicao.CodigoClasse;
-                    relat.DescricaoClasse = orcamentoComposicao.Classe.Descricao;
-                    relat.OrcamentoAtual = valor;
-                    relat.CodigoClassePai = orcamentoComposicao.Classe.CodigoPai;
-                    relat.ClassePossuiFilhos = false;
-                    if ((orcamentoComposicao.Classe.ListaFilhos != null) && (orcamentoComposicao.Classe.ListaFilhos.Count > 0))
-                    {
-                        relat.ClassePossuiFilhos = true;
-                    }
-
-                    OrcamentoClasse orcamentoClasse = orcamentoUltimo.ListaOrcamentoClasse.Where(l => l.ClasseCodigo == orcamentoComposicao.CodigoClasse).FirstOrDefault();
-                    relat.DescricaoClasseFechada = orcamentoClasse.Fechada.HasValue ? (orcamentoClasse.Fechada.Value ? "F" : "") : "";
-
-                    listaRelAcompanhamentoFinanceiro.Add(relat);
-                }
-                else
-                {
-                    relat = listaRelAcompanhamentoFinanceiro.Where(l => l.CodigoClasse == orcamentoComposicao.CodigoClasse).FirstOrDefault();
-
-                    relat.OrcamentoAtual = relat.OrcamentoAtual + valor;
-
-                    OrcamentoClasse orcamentoClasse = orcamentoUltimo.ListaOrcamentoClasse.Where(l => l.ClasseCodigo == orcamentoComposicao.CodigoClasse).FirstOrDefault();
-                    relat.DescricaoClasseFechada = orcamentoClasse.Fechada.HasValue ? (orcamentoClasse.Fechada.Value ? "F" : "") : "";
-
-                }
-
-                AdicionarValorNaClassePaiRelAcompanhamentoFinanceiro(valor, orcamentoComposicao.Classe.ClassePai, listaRelAcompanhamentoFinanceiro, "OrcamentoAtual");
             }
-
             #endregion
 
             #region "Despesa acumulada"
@@ -2788,16 +2804,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
 
             #endregion
-
-            //totalRegistros = listaRelAcompanhamentoFinanceiro.Count();
-
-            //listaRelAcompanhamentoFinanceiro = OrdenaListaRelAcompanhamentoFinanceiroDTO(filtro, listaRelAcompanhamentoFinanceiro);
-
-            //int pageCount = filtro.PaginationParameters.PageSize;
-            //int pageIndex = filtro.PaginationParameters.PageIndex;
-
-            //listaRelAcompanhamentoFinanceiro = listaRelAcompanhamentoFinanceiro.Skip(pageCount * pageIndex).Take(pageCount).To<List<RelAcompanhamentoFinanceiroDTO>>();
-
 
             return listaRelAcompanhamentoFinanceiro;
         }
