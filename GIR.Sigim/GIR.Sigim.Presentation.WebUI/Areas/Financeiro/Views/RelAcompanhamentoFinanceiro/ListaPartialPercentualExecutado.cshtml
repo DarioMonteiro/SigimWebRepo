@@ -8,6 +8,13 @@
 <div class="table-container">
     @if (Lista != null && Lista.Any())
     {
+        <div class="jarviswidget jarviswidget-sortable" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" role="widget" style="">
+			<header role="heading">
+				<span class="widget-icon"></span>
+				<h2>Baseado % executado</h2>
+				<span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+			</header>
+        </div>
         <div class="dt-toolbar table-header hidden-xs">
             <div class="col-sm-12 col-xs-12">
                 <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
@@ -30,74 +37,74 @@
                 <thead>
                     <tr role="row">
                         @{
-                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
-                            string classeSortingSuffix = "sorting";
-                            string classeDescricaoSortingSuffix = "sorting";
-                            string orcamentoInicialSortingSuffix = "sorting";
-                            string orcamentoAtualSortingSuffix = "sorting";
-                            string despesaAcumuladaSortingSuffix = "sorting";
-                            string percentualExecutadoSortingSuffix = "sorting";
-                            string comprometidoFuturoSortingSuffix = "sorting";
-                            string percentualComprometidoSortingSuffix = "sorting";                           
-                            string resultadoAcrescimoSortingSuffix = "sorting";
-                            string resultadoSaldoSortingSuffix = "sorting";
-                            string descricaoClasseFechadaSortingSuffix = "sorting";
-                            string conclusaoSortingSuffix = "sorting";
-                            
-                            switch (Model.OrderBy)
-                            {
-                                case "classe":
-                                    classeSortingSuffix += sortingSuffix;
-                                    break;
-                                case "classeDescricao":
-                                    classeDescricaoSortingSuffix += sortingSuffix;
-                                    break;
-                                case "orcamentoInicial":
-                                    orcamentoInicialSortingSuffix += sortingSuffix;
-                                    break;
-                                case "orcamentoAtual":
-                                    orcamentoAtualSortingSuffix += sortingSuffix;
-                                    break;
-                                case "despesaAcumulada":
-                                    despesaAcumuladaSortingSuffix += sortingSuffix;
-                                    break;
-                                case "percentualExecutado":
-                                    percentualExecutadoSortingSuffix += sortingSuffix;
-                                    break;
-                                case "comprometidoFuturo":
-                                    comprometidoFuturoSortingSuffix += sortingSuffix;
-                                    break;
-                                case "percentualComprometido":
-                                    percentualComprometidoSortingSuffix += sortingSuffix;
-                                    break;
-                                case "resultadoAcrescimo":
-                                    resultadoAcrescimoSortingSuffix += sortingSuffix;
-                                    break;
-                                case "resultadoSaldo":
-                                    resultadoSaldoSortingSuffix += sortingSuffix;
-                                    break;
-                                case "descricaoClasseFechada":
-                                    descricaoClasseFechadaSortingSuffix += sortingSuffix;
-                                    break;
-                                case "conclusao":
-                                    conclusaoSortingSuffix += sortingSuffix;
-                                    break;
-                                default:
-                                    break;
-                            }
+        string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+        string classeSortingSuffix = "sorting";
+        string classeDescricaoSortingSuffix = "sorting";
+        string orcamentoInicialSortingSuffix = "sorting";
+        string orcamentoAtualSortingSuffix = "sorting";
+        string despesaAcumuladaSortingSuffix = "sorting";
+        string percentualExecutadoSortingSuffix = "sorting";
+        string comprometidoFuturoSortingSuffix = "sorting";
+        string percentualComprometidoSortingSuffix = "sorting";
+        string resultadoAcrescimoSortingSuffix = "sorting";
+        string resultadoSaldoSortingSuffix = "sorting";
+        string descricaoClasseFechadaSortingSuffix = "sorting";
+        string conclusaoSortingSuffix = "sorting";
+
+        switch (Model.OrderBy)
+        {
+            case "classe":
+                classeSortingSuffix += sortingSuffix;
+                break;
+            case "classeDescricao":
+                classeDescricaoSortingSuffix += sortingSuffix;
+                break;
+            case "orcamentoInicial":
+                orcamentoInicialSortingSuffix += sortingSuffix;
+                break;
+            case "orcamentoAtual":
+                orcamentoAtualSortingSuffix += sortingSuffix;
+                break;
+            case "despesaAcumulada":
+                despesaAcumuladaSortingSuffix += sortingSuffix;
+                break;
+            case "percentualExecutado":
+                percentualExecutadoSortingSuffix += sortingSuffix;
+                break;
+            case "comprometidoFuturo":
+                comprometidoFuturoSortingSuffix += sortingSuffix;
+                break;
+            case "percentualComprometido":
+                percentualComprometidoSortingSuffix += sortingSuffix;
+                break;
+            case "resultadoAcrescimo":
+                resultadoAcrescimoSortingSuffix += sortingSuffix;
+                break;
+            case "resultadoSaldo":
+                resultadoSaldoSortingSuffix += sortingSuffix;
+                break;
+            case "descricaoClasseFechada":
+                descricaoClasseFechadaSortingSuffix += sortingSuffix;
+                break;
+            case "conclusao":
+                conclusaoSortingSuffix += sortingSuffix;
+                break;
+            default:
+                break;
+        }
                         }
                         <th class="sorting @classeSortingSuffix text-left" data-order="classe" style="min-width:60px;">Classe</th>
                         <th class="sorting @classeDescricaoSortingSuffix text-left" data-order="classeDescricao" style="min-width:70px;">Descrição</th>
-                        <th class="sorting @orcamentoInicialSortingSuffix text-left" data-order="orcamentoInicial" style="min-width:80px;">Orçamento inicial</th>
-                        <th class="sorting @orcamentoAtualSortingSuffix text-left" data-order="orcamentoAtual" style="min-width:70px;">Orçamento final (A)</th>
-                        <th class="sorting @despesaAcumuladaSortingSuffix text-left" data-order="despesaAcumulada" style="min-width:60px;">Despesa executadas (B)</th>
-                        <th class="sorting @percentualExecutadoSortingSuffix text-left" data-order="percentualExecutado" style="min-width:60px;">% executado</th>
-                        <th class="sorting @comprometidoFuturoSortingSuffix text-left" data-order="comprometidoFuturo" style="min-width:60px;">Comprometido (C)</th>
-                        <th class="sorting @percentualComprometidoSortingSuffix text-left" data-order="percentualComprometido" style="min-width:60px;">% comprometido</th>
+                        <th class="sorting @orcamentoInicialSortingSuffix text-left" data-order="orcamentoInicial" style="min-width:100px;">Orçamento inicial</th>
+                        <th class="sorting @orcamentoAtualSortingSuffix text-left" data-order="orcamentoAtual" style="min-width:110px;">Orçamento final (A)</th>
+                        <th class="sorting @despesaAcumuladaSortingSuffix text-left" data-order="despesaAcumulada" style="min-width:100px;">Despesa executadas (B)</th>
+                        <th class="sorting @percentualExecutadoSortingSuffix text-left" data-order="percentualExecutado" style="min-width:100px;">% executado</th>
+                        <th class="sorting @comprometidoFuturoSortingSuffix text-left" data-order="comprometidoFuturo" style="min-width:100px;">Comprometido (C)</th>
+                        <th class="sorting @percentualComprometidoSortingSuffix text-left" data-order="percentualComprometido" style="min-width:100px;">% comprometido</th>
                         <th class="sorting @resultadoAcrescimoSortingSuffix text-left" data-order="resultadoAcrescimo" style="min-width:100px;">Resultado acréscimo (-) (A-(B+C))</th>
-                        <th class="sorting @resultadoSaldoSortingSuffix text-left" data-order="resultaSaldo" style="min-width:70px;">Resultado saldo (+) (A-(B+C))</th>
-                        <th class="sorting @descricaoClasseFechadaSortingSuffix text-left" data-order="descricaoClasseFechada" style="min-width:70px;"></th>
-                        <th class="sorting @conclusaoSortingSuffix text-left" data-order="conclusao" style="min-width:80px;">Tendências conclusão (A) ou (B+C) ou (B)</th>
+                        <th class="sorting @resultadoSaldoSortingSuffix text-left" data-order="resultaSaldo" style="min-width:100px;">Resultado saldo (+) (A-(B+C))</th>
+                        <th class="sorting @descricaoClasseFechadaSortingSuffix text-left" data-order="descricaoClasseFechada"></th>
+                        <th class="sorting @conclusaoSortingSuffix text-left" data-order="conclusao" style="min-width:110px;">Tendências conclusão (A) ou (B+C) ou (B)</th>
                     </tr>
                 </thead>
 
@@ -134,8 +141,25 @@
     }
 </div>
 <script type="text/javascript">
+    function habilitaBotaoImpressaoPercentualExecutado() {
+        @if (Lista != null && Lista.Any())
+        {
+            @:$.event.trigger({type: "habilitaBotaoImpressao"});
+        }
+    }
+
     $(document).ready(function () {
 
         $('body').addClass("hidden-menu");
+
+        executaHabilitaBotaoPercentualExecutado()
     });
+
+    function executaHabilitaBotaoPercentualExecutado() {
+        @if (Lista != null && Lista.Any())
+        {
+            @:habilitaBotaoImpressaoPercentualExecutado();
+        }
+    }
+
 </script>

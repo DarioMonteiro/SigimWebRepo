@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Application.Service.Financeiro;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
@@ -34,14 +35,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
         [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.RelatorioAcompanhamentoFinanceiroAcessar)]
         public ActionResult Index()
         {
+            Session["Filtro"] = null;
+
             var model = new RelAcompanhamentoFinanceiroListaViewModel();
             model.Filtro.PaginationParameters.PageSize = this.DefaultPageSize;
             model.Filtro.PaginationParameters.UniqueIdentifier = GenerateUniqueIdentifier();
             model.Filtro.DataInicial = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             model.Filtro.DataFinal = DateTime.Now;
 
-            //model.PodeImprimir = apropriacaoAppService.EhPermitidoImprimirRelApropriacaoPorClasse();
-            model.PodeImprimir = false;
+            model.PodeImprimir = apropriacaoAppService.EhPermitidoImprimirRelAcompanhamentoFinanceiro();
 
             CarregarListas(model);
 
@@ -68,22 +70,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                     model.Filtro.PaginationParameters.OrderBy = "classe";
                 }
 
-
                 List<RelAcompanhamentoFinanceiroDTO> result;
 
-                if (model.Filtro.BaseadoPor == 0)
-                {
-                    result = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiro(model.Filtro,
-                                                                                               Usuario.Id,
-                                                                                               out totalRegistros);
-                }
-                else
-                {
-                    result = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiroExecutado(model.Filtro,
-                                                                                                        Usuario.Id,
-                                                                                                        out totalRegistros);
-                }
-
+                result = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiro(model.Filtro,
+                                                                                           out totalRegistros);
                 if (result.Any())
                 {
                     var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
@@ -99,6 +89,27 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var model = Session["Filtro"] as RelAcompanhamentoFinanceiroListaViewModel;
+            if (model == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NaoExistemRegistros, TypeMessage.Error);
+                return PartialView("_NotificationMessagesPartial");
+            }
+
+            var arquivo = apropriacaoAppService.ExportarRelAcompanhamentoFinanceiro(model.Filtro, formato);
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+
+        }
 
         #region "Métodos Privados"
 

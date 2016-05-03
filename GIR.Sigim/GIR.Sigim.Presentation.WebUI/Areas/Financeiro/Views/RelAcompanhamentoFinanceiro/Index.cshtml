@@ -226,6 +226,7 @@
 
 <script type="text/javascript">
     var ListaScrollLeft = 0;
+    desabilitaBotaoImprimir();
 
     jsonItemArrayClasse = JSON.parse($("#@Html.IdFor(m => m.JsonItensClasse)").val());
 
@@ -350,9 +351,15 @@
             function (e) {
                 ListaScrollLeft = $('#resultadoBusca div.table-responsive').scrollLeft();
                 listarFiltro();
+                //tratarBotoes();
             }
         );
 
+        $(document).on("habilitaBotaoImpressao",
+            function (e) {               
+                habilitaBotaoImprimir();
+            }
+        );
     });
 
     function validaCentroDeCusto() {
@@ -467,29 +474,48 @@
         onSuccess();
         // se a lista da pesquisa nao retornou , se não retornou desabilita o botão imprimir
         if (result.search('tableSearchResult') == -1) {
-            tratarBotoes(false);
+            limpaLista();
         }
     }
 
     function limpaLista() {
-        
-        tratarBotoes(false);
         $("#resultadoBusca").empty();
+        desabilitaBotaoImprimir();
     }
 
-    function tratarBotoes(condicaoImprimir) {
+    function habilitaBotaoImprimir() {
+        var permiteImpressao = false;
+
         @{
-            bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
+            bool? podeImprimirSimOuNao = Model.PodeImprimir as bool? ?? false;
+            if (podeImprimirSimOuNao.ToString().ToLower() == "true")
+            {
+                @:permiteImpressao = true;
+            }
         }
 
-        @if(podeImprimir.ToString().ToLower() == "false"){
-            @:condicaoImprimir = false;
-        }
+        var vazio = $('#resultadoBusca').is(':empty');
 
-        if (condicaoImprimir) {
+        if ((permiteImpressao == true) && ((vazio == false))) {
             $('#btnImprimir').attr("class", "btn btn-primary");
         }
-        else {
+    }
+
+    function desabilitaBotaoImprimir() {
+        var permiteImpressao = false;
+
+        @{
+            bool? podeImprimir = Model.PodeImprimir as bool? ?? false;
+            if (podeImprimir.ToString().ToLower() == "true")
+            {
+                @:permiteImpressao = true;
+            }
+        }
+
+        var vazio = $('#resultadoBusca').is(':empty');
+
+        if ((permiteImpressao == false) || (vazio == true))
+        {
             $('#btnImprimir').attr("class", "btn btn-primary disabled");
         }
     }
@@ -515,7 +541,7 @@
 
         if ((dataInicial == "") || (dataFinal == "")) {
             smartAlert("Atenção", "Informe o período !", "warning");
-            tratarBotoes(false);
+            limpaLista();
             validou = false;
             return validou;
         }
@@ -523,7 +549,7 @@
         if ((dataInicial != "") && (dataFinal != "")) {
             if (compararDatas(dataInicial, dataFinal) > 0) {
                 smartAlert("Atenção", "Data inicial maior que data final !", "warning");
-                tratarBotoes(false);
+                limpaLista();
                 validou = false;
                 return validou;
             }
@@ -531,21 +557,21 @@
 
         if (centroCustoCodigo == "") {
             smartAlert("Atenção", "Informe o centro de custo !", "warning");
-            tratarBotoes(false);
+            limpaLista();
             validou = false;
             return validou;
         }
 
         if ((indiceId != "" && indiceId > 0) && (defasagem == "")) {
             smartAlert("Atenção", "Informe a defasagem !", "warning");
-            tratarBotoes(false);
+            limpaLista();
             validou = false;
             return validou;
         }
 
         if ((indiceId == "") && (ehValorCorrigido)) {
             smartAlert("Atenção", "Informe o índice !", "warning");
-            tratarBotoes(false);
+            limpaLista();
             validou = false;
             return validou;
         }
@@ -555,10 +581,7 @@
     }
 
     function listarFiltro() {
-        tratarBotoes(true);
-
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
-
         $('#collapseFiltro').attr("class", "panel-collapse collapse");
 
         //if (centroCustoValidation.search('note note-error field-validation-error') == -1) {
