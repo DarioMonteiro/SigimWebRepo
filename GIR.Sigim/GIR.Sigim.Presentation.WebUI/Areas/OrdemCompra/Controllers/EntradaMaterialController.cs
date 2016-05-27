@@ -174,34 +174,34 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         {
             int? tipoNotaFiscalId = null;
             int? tipoNotaFreteId = null;
-            string CodigoTipoCompra = null;
-            int? CifFobId = null;
+            string codigoTipoCompra = null;
+            int? cifFobId = null;
             string codigoNaturezaOperacao = null;
-            int? SerieNFId = null;
-            string CodigoCST = null;
-            string CodigoContribuicaoId = null;
+            int? serieNFId = null;
+            string codigoCST = null;
+            string codigoContribuicaoId = null;
 
             if (model.EntradaMaterial != null)
             {
                 tipoNotaFiscalId = model.EntradaMaterial.TipoNotaFiscalId;
                 tipoNotaFreteId = model.EntradaMaterial.TipoNotaFreteId;
-                CodigoTipoCompra = model.EntradaMaterial.CodigoTipoCompra;
-                CifFobId = model.EntradaMaterial.CifFobId;
+                codigoTipoCompra = model.EntradaMaterial.CodigoTipoCompra;
+                cifFobId = model.EntradaMaterial.CifFobId;
                 codigoNaturezaOperacao = model.EntradaMaterial.CodigoNaturezaOperacao;
-                SerieNFId = model.EntradaMaterial.SerieNFId;
-                CodigoCST = model.EntradaMaterial.CodigoCST;
-                CodigoContribuicaoId = model.EntradaMaterial.CodigoContribuicaoId;
+                serieNFId = model.EntradaMaterial.SerieNFId;
+                codigoCST = model.EntradaMaterial.CodigoCST;
+                codigoContribuicaoId = model.EntradaMaterial.CodigoContribuicaoId;
             }
 
             var listaTipoDocumento = tipoDocumentoAppService.ListarTodos();
             model.ListaTipoNotaFiscal = new SelectList(listaTipoDocumento, "Id", "Sigla", tipoNotaFiscalId);
             model.ListaTipoNotaFrete = new SelectList(listaTipoDocumento, "Id", "Sigla", tipoNotaFreteId);
-            model.ListaTipoCompra = new SelectList(tipoCompraAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
-            model.ListaCifFob = new SelectList(cifFobAppService.ListarTodos(), "Id", "Descricao", tipoNotaFiscalId);
-            model.ListaNaturezaOperacao = new SelectList(naturezaOperacaoAppService.ListarTodos(), "Codigo", "CodigoComDescricao", tipoNotaFiscalId);
-            model.ListaSerieNF = new SelectList(serieNFAppService.ListarTodos(), "Id", "Descricao", tipoNotaFiscalId);
-            model.ListaCST = new SelectList(CSTAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
-            model.ListaCodigoContribuicao = new SelectList(codigoContribuicaoAppService.ListarTodos(), "Codigo", "Descricao", tipoNotaFiscalId);
+            model.ListaTipoCompra = new SelectList(tipoCompraAppService.ListarTodos(), "Codigo", "Descricao", codigoTipoCompra);
+            model.ListaCifFob = new SelectList(cifFobAppService.ListarTodos(), "Id", "Descricao", cifFobId);
+            model.ListaNaturezaOperacao = new SelectList(naturezaOperacaoAppService.ListarTodos(), "Codigo", "CodigoComDescricao", codigoNaturezaOperacao);
+            model.ListaSerieNF = new SelectList(serieNFAppService.ListarTodos(), "Id", "Descricao", serieNFId);
+            model.ListaCST = new SelectList(CSTAppService.ListarTodos(), "Codigo", "Descricao", codigoCST);
+            model.ListaCodigoContribuicao = new SelectList(codigoContribuicaoAppService.ListarTodos(), "Codigo", "Descricao", codigoContribuicaoId);
             model.ListaComplementoNaturezaOperacao = new SelectList(complementoNaturezaOperacaoAppService.ListarPorNaturezaOperacao(codigoNaturezaOperacao), "Codigo", "Descricao");
             model.ListaComplementoCST = new SelectList(complementoCSTAppService.ListarTodos(), "Codigo", "Descricao");
             model.ListaNaturezaReceita = new SelectList(naturezaReceitaAppService.ListarTodos(), "Codigo", "Descricao");
