@@ -31,6 +31,9 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .WithMany(c => c.ListaTituloReceber)
                 .HasForeignKey(l => l.TipoDocumentoId);
 
+            Property(l => l.DataEmissaoDocumento)
+                .HasColumnName("dataEmissaoDocumento");
+
             Property(l => l.TituloPaiId)
                 .HasColumnName("tituloPai");
 

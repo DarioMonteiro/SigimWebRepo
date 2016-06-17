@@ -14,6 +14,7 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public SituacaoTituloReceber Situacao { get; set; }
         public TipoCompromisso TipoCompromisso { get; set; }
         public TipoDocumento TipoDocumento { get; set; }
+        public Nullable<DateTime> DataEmissaoDocumento { get; set; }
         public int? TituloPaiId { get; set; }
         public virtual TituloReceber TituloPai { get; set; }
         public short? Parcela { get; set; }
