@@ -13,7 +13,11 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         //Sintetico = 1,
 
         [Description("Analítico")]
-        Analitico = 2
+        Analitico = 2,
+
+        [Description("Analítico detalhado")]
+        AnaliticoDetalhado = 3
+
 
     }
 

@@ -275,7 +275,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             }
 
-            listaApropriacaoClasseRelatorio = AgrupaRelApropriacaoPorClasseRelatorio(listaApropriacaoClasseRelatorio);
+            listaApropriacaoClasseRelatorio = AgrupaRelApropriacaoPorClasseRelatorio(filtro.OpcoesRelatorio.Value, listaApropriacaoClasseRelatorio);
 
             List<ApropriacaoClasseCCRelatorioDTO> listaApropriacaoClasseRelatorioDTO = new List<ApropriacaoClasseCCRelatorioDTO>();
             if (listaApropriacaoClasseRelatorio.Count == 0)
@@ -293,18 +293,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public FileDownloadDTO ExportarRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro, List<ApropriacaoClasseCCRelatorioDTO> listaApropriacaoClasseRelatorioDTO, FormatoExportacaoArquivo formato)
         {
-            relApropriacaoPorClasseSintetico objRel = new relApropriacaoPorClasseSintetico();
 
             DataTable dtaRelatorio = CriaDataTableApropriacaoClasseCCRelatorio();
 
             List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio = listaApropriacaoClasseRelatorioDTO.To<List<ApropriacaoClasseCCRelatorio>>();
 
-            if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
-            {
-                dtaRelatorio = RelApropriacaoPorClasseAnaliticoToDataTable(listaApropriacaoClasseRelatorio);
-            }
-
-            objRel.SetDataSource(dtaRelatorio);
+            dtaRelatorio = RelApropriacaoPorClasseToDataTable(filtro.OpcoesRelatorio.Value, listaApropriacaoClasseRelatorio);
 
             var parametros = parametrosFinanceiroRepository.Obter();
             var centroCusto = centroCustoRepository.ObterPeloCodigo(filtro.CentroCusto.Codigo, l => l.ListaCentroCustoEmpresa);
@@ -315,27 +309,52 @@ namespace GIR.Sigim.Application.Service.Financeiro
             string situacaoReceberSelecao = MontaStringSituacaoAReceber(filtro);
             string tipoData = MontaStringTipoPesquisa(filtro);
 
-            objRel.SetParameterValue("DataInicial", filtro.DataInicial.Value.ToString("dd/MM/yyyy"));
-            objRel.SetParameterValue("DataFinal", filtro.DataFinal.Value.ToString("dd/MM/yyyy"));
-            objRel.SetParameterValue("CentroCusto", centroCusto != null ? centroCusto.Codigo + "-" + centroCusto.Descricao : "");
-            if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
-            {
-                objRel.SetParameterValue("Tipo", "A");
-            }
-            else
-            {
-                objRel.SetParameterValue("Tipo", "S");
-            }
-            objRel.SetParameterValue("nomeEmpresa", nomeEmpresa);
-            objRel.SetParameterValue("SituacaoPagar", situacaoPagarSelecao.Trim());
-            objRel.SetParameterValue("SituacaoReceber", situacaoReceberSelecao.Trim());
-            objRel.SetParameterValue("TipoData", tipoData);
-            objRel.SetParameterValue("caminhoImagem", caminhoImagem);
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Apropriação por classe ", null, formato);
 
-            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Apropriação por classe", objRel.ExportToStream((ExportFormatType)formato), formato);
+            switch (filtro.OpcoesRelatorio.Value)
+            {
+                case (int)OpcoesRelatorioApropriacaoPorClasse.Analitico:
+                    relApropriacaoPorClasseSintetico objRelAna = new relApropriacaoPorClasseSintetico();
+
+                    objRelAna.SetDataSource(dtaRelatorio);
+
+                    objRelAna.SetParameterValue("DataInicial", filtro.DataInicial.Value.ToString("dd/MM/yyyy"));
+                    objRelAna.SetParameterValue("DataFinal", filtro.DataFinal.Value.ToString("dd/MM/yyyy"));
+                    objRelAna.SetParameterValue("CentroCusto", centroCusto != null ? centroCusto.Codigo + "-" + centroCusto.Descricao : "");
+                    objRelAna.SetParameterValue("Tipo", "A");
+                    objRelAna.SetParameterValue("nomeEmpresa", nomeEmpresa);
+                    objRelAna.SetParameterValue("SituacaoPagar", situacaoPagarSelecao.Trim());
+                    objRelAna.SetParameterValue("SituacaoReceber", situacaoReceberSelecao.Trim());
+                    objRelAna.SetParameterValue("TipoData", tipoData);
+                    objRelAna.SetParameterValue("caminhoImagem", caminhoImagem);
+
+                    arquivo = new FileDownloadDTO("Rel. Apropriação por classe analítico", objRelAna.ExportToStream((ExportFormatType)formato), formato);
+
+                    break;
+                case (int)OpcoesRelatorioApropriacaoPorClasse.AnaliticoDetalhado:
+                    relApropriacaoPorClasse objRelAnaDet = new relApropriacaoPorClasse();
+
+                    objRelAnaDet.SetDataSource(dtaRelatorio);
+
+                    objRelAnaDet.SetParameterValue("DataInicial", filtro.DataInicial.Value.ToString("dd/MM/yyyy"));
+                    objRelAnaDet.SetParameterValue("DataFinal", filtro.DataFinal.Value.ToString("dd/MM/yyyy"));
+                    objRelAnaDet.SetParameterValue("CentroCusto", centroCusto != null ? centroCusto.Codigo + "-" + centroCusto.Descricao : "");
+                    objRelAnaDet.SetParameterValue("nomeEmpresa", nomeEmpresa);
+                    objRelAnaDet.SetParameterValue("SituacaoPagar", situacaoPagarSelecao.Trim());
+                    objRelAnaDet.SetParameterValue("SituacaoReceber", situacaoReceberSelecao.Trim());
+                    objRelAnaDet.SetParameterValue("TipoData", tipoData);
+                    objRelAnaDet.SetParameterValue("caminhoImagem", caminhoImagem);
+
+                    arquivo = new FileDownloadDTO("Rel. Apropriação por classe analítico detalhado", objRelAnaDet.ExportToStream((ExportFormatType)formato), formato);
+
+                    break;
+            }
 
             if (System.IO.File.Exists(caminhoImagem))
+            {
                 System.IO.File.Delete(caminhoImagem);
+            }
+
             return arquivo;
 
         }
@@ -1122,7 +1141,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     case "PagamentosPendentesEhPagos":
                         apropriacaoClasseCCRelatorio.TipoClasseCC = "S";
                         apropriacaoClasseCCRelatorio.TipoCodigo = "PG";
-                        apropriacaoClasseCCRelatorio.CorrentistaConta = apropriacao.TituloPagar.Cliente.Nome;
+                        apropriacaoClasseCCRelatorio.CorrentistaConta = apropriacao.TituloPagar.Id + " " + apropriacao.TituloPagar.Cliente.Nome;
                         apropriacaoClasseCCRelatorio.SiglaDocumento = "";
                         if (apropriacao.TituloPagar.TipoDocumento != null)
                         {
@@ -1140,7 +1159,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     case "RecebimentosPendentesEhRecebidos":
                         apropriacaoClasseCCRelatorio.TipoClasseCC = "E";
                         apropriacaoClasseCCRelatorio.TipoCodigo = "RC";
-                        apropriacaoClasseCCRelatorio.CorrentistaConta = apropriacao.TituloReceber.Cliente.Nome;
+                        apropriacaoClasseCCRelatorio.CorrentistaConta = apropriacao.TituloReceber.Id + " " + apropriacao.TituloReceber.Cliente.Nome;
                         apropriacaoClasseCCRelatorio.SiglaDocumento = "";
                         if (apropriacao.TituloReceber.TipoDocumento != null)
                         {
@@ -1157,7 +1176,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     case "MovimentoDebito":
                         apropriacaoClasseCCRelatorio.TipoClasseCC = "S";
                         apropriacaoClasseCCRelatorio.TipoCodigo = "MV";
-                        apropriacaoClasseCCRelatorio.CorrentistaConta = apropriacao.Movimento.ContaCorrente.Banco.Id + "-" + apropriacao.Movimento.ContaCorrente.Agencia.AgenciaCodigo + "/" + apropriacao.Movimento.ContaCorrente.ContaCodigo + "-" + apropriacao.Movimento.ContaCorrente.DVConta;
+                        apropriacaoClasseCCRelatorio.CorrentistaConta = apropriacao.Movimento.ContaCorrente.Banco.Id + " - " + apropriacao.Movimento.ContaCorrente.Agencia.AgenciaCodigo + "-" + apropriacao.Movimento.ContaCorrente.Agencia.DVAgencia + " / " + apropriacao.Movimento.ContaCorrente.ContaCodigo + "-" + apropriacao.Movimento.ContaCorrente.DVConta;
                         apropriacaoClasseCCRelatorio.SiglaDocumento = "";
                         apropriacaoClasseCCRelatorio.Documento = apropriacao.Movimento.Documento;
                         apropriacaoClasseCCRelatorio.Identificacao = apropriacao.Movimento.Referencia;
@@ -1183,7 +1202,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     case "MovimentoCredito":
                         apropriacaoClasseCCRelatorio.TipoClasseCC = "E";
                         apropriacaoClasseCCRelatorio.TipoCodigo = "MV";
-                        apropriacaoClasseCCRelatorio.CorrentistaConta = apropriacao.Movimento.ContaCorrente.Banco.Id + "-" + apropriacao.Movimento.ContaCorrente.Agencia.AgenciaCodigo + "/" + apropriacao.Movimento.ContaCorrente.ContaCodigo + "-" + apropriacao.Movimento.ContaCorrente.DVConta;
+                        apropriacaoClasseCCRelatorio.CorrentistaConta = apropriacao.Movimento.ContaCorrente.Banco.Id + " - " + apropriacao.Movimento.ContaCorrente.Agencia.AgenciaCodigo + "-" + apropriacao.Movimento.ContaCorrente.Agencia.DVAgencia + " / " + apropriacao.Movimento.ContaCorrente.ContaCodigo + "-" + apropriacao.Movimento.ContaCorrente.DVConta;
                         apropriacaoClasseCCRelatorio.SiglaDocumento = "";
                         apropriacaoClasseCCRelatorio.Documento = apropriacao.Movimento.Documento;
                         apropriacaoClasseCCRelatorio.Identificacao = apropriacao.Movimento.Referencia;
@@ -1237,7 +1256,8 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 {
                     apropriacaoClasseCCRelatorio.TipoClasseCC = "E";
                     apropriacaoClasseCCRelatorio.TipoCodigo = "CC";
-                    apropriacaoClasseCCRelatorio.CorrentistaConta = tituloDetalheCredCob.Id + " " + "FALTA PESQUISA O PARTICIPANTE DA VENDA";
+                    string nomeCliente = tituloDetalheCredCob.Contrato.ListaVendaParticipante.Where(l => l.TipoParticipanteId.Value == 1).FirstOrDefault().Cliente.Nome;
+                    apropriacaoClasseCCRelatorio.CorrentistaConta = tituloDetalheCredCob.Id + " " + nomeCliente;
                     apropriacaoClasseCCRelatorio.SiglaDocumento = tituloDetalheCredCob.Id.Value.ToString();
                     apropriacaoClasseCCRelatorio.Documento = "CREDCOB";
                     apropriacaoClasseCCRelatorio.Identificacao = "Crédito e Cobrança";
@@ -1283,7 +1303,24 @@ namespace GIR.Sigim.Application.Service.Financeiro
             }
         }
 
-        private List<ApropriacaoClasseCCRelatorio> AgrupaRelApropriacaoPorClasseRelatorio(List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        private List<ApropriacaoClasseCCRelatorio> AgrupaRelApropriacaoPorClasseRelatorio(int opcaoRelatorio, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        {
+            List<ApropriacaoClasseCCRelatorio> listaAgrupada = new List<ApropriacaoClasseCCRelatorio>();
+
+            switch(opcaoRelatorio)
+            {
+                case 2:
+                    listaAgrupada = AgrupaRelApropriacaoPorClasseRelatorioAnalitico(listaApropriacaoClasseRelatorio);
+                    break;
+                case 3:
+                    listaAgrupada = AgrupaRelApropriacaoPorClasseRelatorioAnaliticoDetalhado(listaApropriacaoClasseRelatorio);
+                    break;
+            }
+
+            return listaAgrupada;
+        }
+
+        private List<ApropriacaoClasseCCRelatorio> AgrupaRelApropriacaoPorClasseRelatorioAnalitico(List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
         {
             List<ApropriacaoClasseCCRelatorio> listaAgrupada = new List<ApropriacaoClasseCCRelatorio>();
 
@@ -1300,13 +1337,39 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
                 listaAgrupada.Add(registro);
 
-                AdicionaRegistroRelatorioPai(registro, listaAgrupada, valor);
+                AdicionaRegistroRelatorioAnaliticoPai(registro, listaAgrupada, valor);
             }
 
             return listaAgrupada;
         }
 
-        private void AdicionaRegistroRelatorioPai(ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorioFilho, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio, decimal valor)
+        private List<ApropriacaoClasseCCRelatorio> AgrupaRelApropriacaoPorClasseRelatorioAnaliticoDetalhado(List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        {
+            List<ApropriacaoClasseCCRelatorio> listaAgrupada = new List<ApropriacaoClasseCCRelatorio>();
+
+            decimal valor = 0;
+
+            foreach (ApropriacaoClasseCCRelatorio apropriacaoClasse in listaApropriacaoClasseRelatorio.OrderBy(l => l.Classe.Codigo).ThenBy(l => l.TipoClasseCC))
+            {
+                ApropriacaoClasseCCRelatorio registro = new ApropriacaoClasseCCRelatorio();
+                registro.TipoClasseCC = apropriacaoClasse.TipoClasseCC;
+                registro.Classe = apropriacaoClasse.Classe;
+                valor = apropriacaoClasse.ValorApropriado;
+                registro.ValorApropriado = valor;
+                registro.CorrentistaConta = apropriacaoClasse.CorrentistaConta;
+                registro.SiglaDocumento = apropriacaoClasse.SiglaDocumento;
+                registro.Documento = apropriacaoClasse.Documento;
+                registro.Identificacao = apropriacaoClasse.Identificacao;
+
+                listaAgrupada.Add(registro);
+
+                AdicionaRegistroRelatorioAnaliticoDetalhadoPai(registro, listaAgrupada, valor);
+            }
+
+            return listaAgrupada;
+        }
+
+        private void AdicionaRegistroRelatorioAnaliticoPai(ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorioFilho, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio, decimal valor)
         {
             if (apropriacaoClasseRelatorioFilho.Classe.ClassePai != null)
             {
@@ -1334,7 +1397,43 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
                 if (apropriacaoClasseRelatorio.Classe.ClassePai != null)
                 {
-                    AdicionaRegistroRelatorioPai(apropriacaoClasseRelatorio, listaApropriacaoClasseRelatorio, valor);
+                    AdicionaRegistroRelatorioAnaliticoPai(apropriacaoClasseRelatorio, listaApropriacaoClasseRelatorio, valor);
+                }
+            }
+        }
+
+        private void AdicionaRegistroRelatorioAnaliticoDetalhadoPai(ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorioFilho, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio, decimal valor)
+        {
+            if (apropriacaoClasseRelatorioFilho.Classe.ClassePai != null)
+            {
+                ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorio = new ApropriacaoClasseCCRelatorio();
+                bool recuperouApropriacao = false;
+                if (listaApropriacaoClasseRelatorio.Any(l => ((l.Classe.Codigo == apropriacaoClasseRelatorioFilho.Classe.CodigoPai) && l.TipoClasseCC == apropriacaoClasseRelatorioFilho.TipoClasseCC)))
+                {
+                    apropriacaoClasseRelatorio = listaApropriacaoClasseRelatorio.Where(l => l.Classe.Codigo == apropriacaoClasseRelatorioFilho.Classe.CodigoPai && l.TipoClasseCC == apropriacaoClasseRelatorioFilho.TipoClasseCC).FirstOrDefault();
+                    recuperouApropriacao = true;
+                }
+                else
+                {
+                    apropriacaoClasseRelatorio.TipoClasseCC = apropriacaoClasseRelatorioFilho.TipoClasseCC;
+                    apropriacaoClasseRelatorio.Classe = apropriacaoClasseRelatorioFilho.Classe.ClassePai;
+                    apropriacaoClasseRelatorio.ValorApropriado = 0;
+                    apropriacaoClasseRelatorio.CorrentistaConta = "";
+                    apropriacaoClasseRelatorio.SiglaDocumento = "";
+                    apropriacaoClasseRelatorio.Documento = "";
+                    apropriacaoClasseRelatorio.Identificacao = "";
+                }
+
+                apropriacaoClasseRelatorio.ValorApropriado = apropriacaoClasseRelatorio.ValorApropriado + valor;
+
+                if (!recuperouApropriacao)
+                {
+                    listaApropriacaoClasseRelatorio.Add(apropriacaoClasseRelatorio);
+                }
+
+                if (apropriacaoClasseRelatorio.Classe.ClassePai != null)
+                {
+                    AdicionaRegistroRelatorioAnaliticoDetalhadoPai(apropriacaoClasseRelatorio, listaApropriacaoClasseRelatorio, valor);
                 }
             }
         }
@@ -1587,31 +1686,58 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return dta;
         }
 
-        private DataTable RelApropriacaoPorClasseAnaliticoToDataTable(List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        private DataTable RelApropriacaoPorClasseToDataTable(int opcaoRelatorio,List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
         {
             DataTable dta = new DataTable();
             DataColumn tipoClasseCC = new DataColumn("tipoClasseCC");
             DataColumn codigoClasse = new DataColumn("codigoClasse");
             DataColumn descricaoClasse = new DataColumn("descricaoClasse");
-            DataColumn valorApropriado = new DataColumn("valorApropriado", System.Type.GetType("System.Decimal"));
             DataColumn tipoCodigo = new DataColumn("tipoCodigo");
+            DataColumn correntistaConta = new DataColumn("correntistaConta");
+            DataColumn siglaTipoDocumento = new DataColumn("siglaTipoDocumento");
+            DataColumn documento = new DataColumn("documento");
+            DataColumn identificacao = new DataColumn("identificacao");
+            DataColumn valorApropriado = new DataColumn("valorApropriado", System.Type.GetType("System.Decimal"));
             DataColumn girErro = new DataColumn("girErro");
 
             dta.Columns.Add(tipoClasseCC);
             dta.Columns.Add(codigoClasse);
             dta.Columns.Add(descricaoClasse);
+            switch (opcaoRelatorio)
+            {
+                case 2:
+                    dta.Columns.Add(tipoCodigo);
+                    break;
+                case 3:
+                    dta.Columns.Add(correntistaConta);
+                    dta.Columns.Add(siglaTipoDocumento);
+                    dta.Columns.Add(documento);
+                    dta.Columns.Add(identificacao);
+                    break;
+            }
             dta.Columns.Add(valorApropriado);
-            dta.Columns.Add(tipoCodigo);
             dta.Columns.Add(girErro);
 
             foreach (ApropriacaoClasseCCRelatorio apropriacaoClasseCCRelatorio in listaApropriacaoClasseRelatorio.OrderBy(l => l.Classe.Codigo))
             {
                 DataRow row = dta.NewRow();
-                row[tipoClasseCC] = apropriacaoClasseCCRelatorio.TipoClasseCC ;
+                row[tipoClasseCC] = apropriacaoClasseCCRelatorio.TipoClasseCC;
                 row[codigoClasse] = apropriacaoClasseCCRelatorio.Classe.Codigo;
                 row[descricaoClasse] = apropriacaoClasseCCRelatorio.Classe.Descricao;
                 row[valorApropriado] = apropriacaoClasseCCRelatorio.ValorApropriado;
-                row[tipoCodigo] = apropriacaoClasseCCRelatorio.TipoCodigo;
+                switch (opcaoRelatorio)
+                {
+                    case 2:
+                        row[tipoCodigo] = apropriacaoClasseCCRelatorio.TipoCodigo;
+                        break;
+                    case 3:
+                        row[correntistaConta] = apropriacaoClasseCCRelatorio.CorrentistaConta;
+                        row[siglaTipoDocumento] = apropriacaoClasseCCRelatorio.SiglaDocumento;
+                        row[documento] = apropriacaoClasseCCRelatorio.Documento;
+                        row[identificacao] = apropriacaoClasseCCRelatorio.Identificacao;
+                        break;
+                }
+
                 row[girErro] = "";
                 dta.Rows.Add(row);
             }
@@ -1619,38 +1745,71 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return dta;
         }
 
-        private void AdicionaRegistroRelatorioPai(ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorioFilho, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio, decimal valorApropriado, string tipoClasse)
-        {
-            if (apropriacaoClasseRelatorioFilho.Classe.ClassePai != null)
-            {
-                ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorio = new ApropriacaoClasseCCRelatorio();
-                bool recuperouApropriacao = false;
-                if (listaApropriacaoClasseRelatorio.Any(l => ((l.Classe.Codigo == apropriacaoClasseRelatorioFilho.Classe.CodigoPai) && l.TipoClasseCC == tipoClasse)))
-                {
-                    apropriacaoClasseRelatorio = listaApropriacaoClasseRelatorio.Where(l => l.Classe.Codigo == apropriacaoClasseRelatorioFilho.Classe.CodigoPai && l.TipoClasseCC == tipoClasse).FirstOrDefault();
-                    recuperouApropriacao = true;
-                }
-                else
-                {
-                    apropriacaoClasseRelatorio.TipoClasseCC = apropriacaoClasseRelatorioFilho.TipoClasseCC;
-                    apropriacaoClasseRelatorio.Classe = apropriacaoClasseRelatorioFilho.Classe.ClassePai;
-                    apropriacaoClasseRelatorio.ValorApropriado = 0;
-                    apropriacaoClasseRelatorio.TipoCodigo = "M";
-                }
 
-                apropriacaoClasseRelatorio.ValorApropriado = apropriacaoClasseRelatorio.ValorApropriado + valorApropriado;
+        //private DataTable RelApropriacaoPorClasseAnaliticoToDataTable(List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio)
+        //{
+        //    DataTable dta = new DataTable();
+        //    DataColumn tipoClasseCC = new DataColumn("tipoClasseCC");
+        //    DataColumn codigoClasse = new DataColumn("codigoClasse");
+        //    DataColumn descricaoClasse = new DataColumn("descricaoClasse");
+        //    DataColumn valorApropriado = new DataColumn("valorApropriado", System.Type.GetType("System.Decimal"));
+        //    DataColumn tipoCodigo = new DataColumn("tipoCodigo");
+        //    DataColumn girErro = new DataColumn("girErro");
 
-                if (!recuperouApropriacao)
-                {
-                    listaApropriacaoClasseRelatorio.Add(apropriacaoClasseRelatorio);
-                }
+        //    dta.Columns.Add(tipoClasseCC);
+        //    dta.Columns.Add(codigoClasse);
+        //    dta.Columns.Add(descricaoClasse);
+        //    dta.Columns.Add(valorApropriado);
+        //    dta.Columns.Add(tipoCodigo);
+        //    dta.Columns.Add(girErro);
 
-                if (apropriacaoClasseRelatorio.Classe.ClassePai != null)
-                {
-                    AdicionaRegistroRelatorioPai(apropriacaoClasseRelatorio, listaApropriacaoClasseRelatorio, valorApropriado, apropriacaoClasseRelatorio.TipoClasseCC);
-                }
-            }
-        }
+        //    foreach (ApropriacaoClasseCCRelatorio apropriacaoClasseCCRelatorio in listaApropriacaoClasseRelatorio.OrderBy(l => l.Classe.Codigo))
+        //    {
+        //        DataRow row = dta.NewRow();
+        //        row[tipoClasseCC] = apropriacaoClasseCCRelatorio.TipoClasseCC ;
+        //        row[codigoClasse] = apropriacaoClasseCCRelatorio.Classe.Codigo;
+        //        row[descricaoClasse] = apropriacaoClasseCCRelatorio.Classe.Descricao;
+        //        row[valorApropriado] = apropriacaoClasseCCRelatorio.ValorApropriado;
+        //        row[tipoCodigo] = apropriacaoClasseCCRelatorio.TipoCodigo;
+        //        row[girErro] = "";
+        //        dta.Rows.Add(row);
+        //    }
+
+        //    return dta;
+        //}
+
+        //private void AdicionaRegistroRelatorioPai(ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorioFilho, List<ApropriacaoClasseCCRelatorio> listaApropriacaoClasseRelatorio, decimal valorApropriado, string tipoClasse)
+        //{
+        //    if (apropriacaoClasseRelatorioFilho.Classe.ClassePai != null)
+        //    {
+        //        ApropriacaoClasseCCRelatorio apropriacaoClasseRelatorio = new ApropriacaoClasseCCRelatorio();
+        //        bool recuperouApropriacao = false;
+        //        if (listaApropriacaoClasseRelatorio.Any(l => ((l.Classe.Codigo == apropriacaoClasseRelatorioFilho.Classe.CodigoPai) && l.TipoClasseCC == tipoClasse)))
+        //        {
+        //            apropriacaoClasseRelatorio = listaApropriacaoClasseRelatorio.Where(l => l.Classe.Codigo == apropriacaoClasseRelatorioFilho.Classe.CodigoPai && l.TipoClasseCC == tipoClasse).FirstOrDefault();
+        //            recuperouApropriacao = true;
+        //        }
+        //        else
+        //        {
+        //            apropriacaoClasseRelatorio.TipoClasseCC = apropriacaoClasseRelatorioFilho.TipoClasseCC;
+        //            apropriacaoClasseRelatorio.Classe = apropriacaoClasseRelatorioFilho.Classe.ClassePai;
+        //            apropriacaoClasseRelatorio.ValorApropriado = 0;
+        //            apropriacaoClasseRelatorio.TipoCodigo = "M";
+        //        }
+
+        //        apropriacaoClasseRelatorio.ValorApropriado = apropriacaoClasseRelatorio.ValorApropriado + valorApropriado;
+
+        //        if (!recuperouApropriacao)
+        //        {
+        //            listaApropriacaoClasseRelatorio.Add(apropriacaoClasseRelatorio);
+        //        }
+
+        //        if (apropriacaoClasseRelatorio.Classe.ClassePai != null)
+        //        {
+        //            AdicionaRegistroRelatorioPai(apropriacaoClasseRelatorio, listaApropriacaoClasseRelatorio, valorApropriado, apropriacaoClasseRelatorio.TipoClasseCC);
+        //        }
+        //    }
+        //}
 
         private string MontarStringSituacaoAPagar(RelApropriacaoPorClasseFiltro filtro)
         {

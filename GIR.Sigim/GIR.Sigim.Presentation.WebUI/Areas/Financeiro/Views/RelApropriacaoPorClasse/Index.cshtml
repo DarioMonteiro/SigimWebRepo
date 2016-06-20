@@ -209,7 +209,7 @@
                                                     <div class="inline-group">
                                                         <label id="lblMovimentoDeCredito" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCredito)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCredito)</label>
                                                         <label id="lblMovimentoDeCreditoCaixa" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCreditoCaixa)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCreditoCaixa)</label>
-                                                        <label id="lblCreditoCobranca" class="checkbox state-disabled">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCreditoCobranca)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCreditoCobranca)</label>
+                                                        <label id="lblCreditoCobranca" class="checkbox state-disabled">@Html.CheckBoxFor(m => m.Filtro.EhMovimentoCreditoCobranca, new { @disabled="disabled" })<i></i>@Html.DisplayNameFor(m => m.Filtro.EhMovimentoCreditoCobranca)</label>
                                                     </div>
                                                 </section>
                                             </div>

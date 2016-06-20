@@ -281,6 +281,11 @@
       <DependentUpon>relAcompanhamentoFinanceiroExecutado.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Financeiro\relApropriacaoPorClasse.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relApropriacaoPorClasse.rpt</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Financeiro\relApropriacaoPorClasseSintetico.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -599,6 +604,10 @@
     <EmbeddedResource Include="Reports\Financeiro\relAcompanhamentoFinanceiroExecutado.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relAcompanhamentoFinanceiroExecutado.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relApropriacaoPorClasse.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relApropriacaoPorClasse.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Financeiro\relApropriacaoPorClasseSintetico.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
