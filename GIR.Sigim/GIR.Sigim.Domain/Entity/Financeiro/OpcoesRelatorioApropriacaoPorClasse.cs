@@ -9,8 +9,8 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
 {
     public enum OpcoesRelatorioApropriacaoPorClasse
     {
-        //[Description("Sintético")]
-        //Sintetico = 1,
+        [Description("Sintético")]
+        Sintetico = 1,
 
         [Description("Analítico")]
         Analitico = 2,

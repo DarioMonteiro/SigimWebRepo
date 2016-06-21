@@ -93,7 +93,7 @@ namespace GIR.Sigim.Application.Filtros.Financeiro
 
         public RelApropriacaoPorClasseFiltro()
         {
-            OpcoesRelatorio = 2;
+            OpcoesRelatorio = 1;
 
             ListaClasseDespesa = new List<ClasseDTO>();
             ListaClasseReceita = new List<ClasseDTO>();
