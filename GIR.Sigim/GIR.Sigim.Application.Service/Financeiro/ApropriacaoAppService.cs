@@ -112,6 +112,11 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 return null;
             }
 
+            if (!ValidarFiltroRelApropriacaoPorClasse(filtro))
+            {
+                return null;
+            }
+
             bool situacaoPagamentoPendente = filtro.EhSituacaoAPagarProvisionado || filtro.EhSituacaoAPagarAguardandoLiberacao || filtro.EhSituacaoAPagarLiberado || filtro.EhSituacaoAPagarCancelado;
             bool situacaoPago = filtro.EhSituacaoAPagarEmitido || filtro.EhSituacaoAPagarPago || filtro.EhSituacaoAPagarBaixado;
 
@@ -3029,6 +3034,20 @@ namespace GIR.Sigim.Application.Service.Financeiro
             #endregion
 
             return listaRelAcompanhamentoFinanceiro;
+        }
+
+        private bool ValidarFiltroRelApropriacaoPorClasse(RelApropriacaoPorClasseFiltro filtro)
+        {
+            if (filtro.DataInicial.HasValue && filtro.DataFinal.HasValue) 
+            {
+                if (filtro.DataInicial.Value > filtro.DataFinal.Value)
+                {
+                    messageQueue.Add("Data final menor que a data inicial", TypeMessage.Error);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         #endregion
