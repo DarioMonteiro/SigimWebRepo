@@ -30,6 +30,7 @@
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
                         @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
+                        @Html.HiddenFor(m => m.Filtro.OpcoesRelatorio)
                         <div class="panel-group smart-accordion-default" id="accordion">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -99,7 +100,7 @@
                                             <div class="row">
                                                 @Html.EditorFor(m => m.Filtro.CentroCusto, "CentroCusto", new { @sectionClass = "col col-6", @labelText = "Centro de Custo", @required = true })
                                             </div>
-                                            <div class="row">
+@*                                            <div class="row">
                                                 <section class="col col-12"> 
                                                     <div class="inline-group">
                                                         @foreach (var item in Model.ListaOpcoesRelatorio)
@@ -109,7 +110,7 @@
                                                         }
 									                </div>
 								                </section>
-                                            </div>
+                                            </div>*@
                                             <div class="row">
                                                 <section class="col col-12">
                                                     <div class="inline-group">
@@ -240,9 +241,11 @@
                                     disableBtnImprimir = "disabled";
                                 }
                             }
-                            <button id="btnImprimirFake" type="submit" class="btn btn-primary right @disableBtnImprimir">
+                            @*<button id="btnImprimirFake" type="submit" class="btn btn-primary right @disableBtnImprimir">*@
+@*                            <button id="btnImprimirFake" class="btn btn-primary right @disableBtnImprimir">
                                 Imprimir
-                            </button>
+                            </button>*@
+                            <a id="btnImprimirFake" class="btn btn-primary right @disableBtnImprimir">Imprimir</a>
 
                             @{
                             var url = Url.Action("Imprimir", "RelApropriacaoPorClasse");
@@ -469,6 +472,10 @@
 
         });
 
+        $('#btnImprimirFake').on("click", function () {
+            executarImpressaoFake();
+        });
+
     });
 
     function processData(node) {
@@ -692,8 +699,41 @@
     }
 
     function executarImpressao() {
-
         $('#btnImprimir')[0].click();
         hideLoading();
     }
+
+    function executarImpressaoFake() {
+        $.SmartMessageBox({
+            title: "Apresentação do relatório",
+            content: "Selecione o tipo de relatório que deseja",
+            buttons: "[OK]",
+            input: "select",
+            options: "[Sintético][Analítico][Analítico detalhado][Analítico detalhado por fornecedor]"
+        },
+        function (ButtonPress, Value) {
+            var opcoesRelatorio;
+            if (Value == "Sintético") {
+                opcoesRelatorio = 1;
+            }
+            if (Value == "Analítico") {
+                opcoesRelatorio = 2;
+            }
+            if (Value == "Analítico detalhado") {
+                opcoesRelatorio = 3;
+            }
+            if (Value == "Analítico detalhado por fornecedor") {
+                opcoesRelatorio = 4;
+            }
+
+            $("#@Html.IdFor(m => m.Filtro.OpcoesRelatorio)").val(opcoesRelatorio);
+
+            if (ButtonPress == "OK") {
+                $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+            }
+        });
+
+        //e.preventDefault();
+    }
+
 </script>
