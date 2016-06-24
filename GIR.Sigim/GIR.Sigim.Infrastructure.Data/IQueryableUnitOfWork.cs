@@ -15,5 +15,6 @@ namespace GIR.Sigim.Infrastructure.Data
         void Attach<TEntity>(TEntity item) where TEntity : BaseEntity;
         void SetModified<TEntity>(TEntity item) where TEntity : BaseEntity;
         void ApplyCurrentValues<TEntity>(TEntity original, TEntity current) where TEntity : BaseEntity;
+        IEnumerable<TEntity> ExecWithStoreProcedure<TEntity>(string query, params object[] parameters) where TEntity : BaseEntity;
     }
 }
