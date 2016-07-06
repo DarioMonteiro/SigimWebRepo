@@ -74,13 +74,6 @@ namespace GIR.Sigim.Presentation.WebUI
             bundles.Add(new StyleBundle("~/bundles/css/font-awesome").Include(
                 "~/Content/css/font-awesome.css", new CssRewriteUrlTransform()));
 
-            bundles.Add(new StyleBundle("~/bundles/fonts/font-awesome").Include(
-                "~/Content/fonts/fontawesome-webfont.eot", new CssRewriteUrlTransform())
-                .Include("~/Content/fonts/fontawesome-webfont.svg", new CssRewriteUrlTransform())
-                .Include("~/Content/fonts/fontawesome-webfont.ttf", new CssRewriteUrlTransform())
-                .Include("~/Content/fonts/fontawesome-webfont.woff", new CssRewriteUrlTransform())
-                .Include("~/Content/fonts/FontAwesome.otf", new CssRewriteUrlTransform()));
-
             bundles.Add(new StyleBundle("~/bundles/css/smartadmin-production").Include(
                 "~/Content/css/smartadmin-production.css", new CssRewriteUrlTransform()));
 
