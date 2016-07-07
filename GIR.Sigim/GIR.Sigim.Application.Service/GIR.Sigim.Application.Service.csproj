@@ -114,6 +114,8 @@
     <Compile Include="IoC\OrdemCompraBootstrapper.cs" />
     <Compile Include="IoC\OrcamentoBootstrapper.cs" />
     <Compile Include="IoC\FinanceiroBootstrapper.cs" />
+    <Compile Include="Orcamento\EmpresaAppService.cs" />
+    <Compile Include="Orcamento\ObraAppService.cs" />
     <Compile Include="Orcamento\OrcamentoAppService.cs" />
     <Compile Include="Orcamento\ParametrosOrcamentoAppService.cs" />
     <Compile Include="OrdemCompra\EntradaMaterialAppService.cs" />

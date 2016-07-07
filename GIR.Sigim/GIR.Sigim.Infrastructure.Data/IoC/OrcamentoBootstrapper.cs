@@ -14,6 +14,8 @@ namespace GIR.Sigim.Infrastructure.Data.IoC
     {
         public static void Initialise()
         {
+            Container.Current.RegisterType<IEmpresaRepository, EmpresaRepository>();
+            Container.Current.RegisterType<IObraRepository, ObraRepository>();
             Container.Current.RegisterType<IOrcamentoRepository, OrcamentoRepository>();
             Container.Current.RegisterType<IParametrosOrcamentoRepository, ParametrosOrcamentoRepository>();
         }

@@ -13,5 +13,6 @@ namespace GIR.Sigim.Application.Service.Orcamento
     {
         OrcamentoDTO ObterUltimoOrcamentoPeloCentroCusto(string codigoCentroCusto);
         OrcamentoDTO ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(string codigoCentroCusto);
+        bool EhPermitidoImprimirRelOrcamento();
     }
 }

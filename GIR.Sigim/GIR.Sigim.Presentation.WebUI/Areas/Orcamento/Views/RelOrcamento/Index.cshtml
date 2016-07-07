@@ -1,0 +1,241 @@
+﻿@using GIR.Sigim.Application.Adapter;
+@using GIR.Sigim.Application.DTO.Sigim;
+
+@model GIR.Sigim.Presentation.WebUI.Areas.Orcamento.ViewModel.RelOrcamentoListaViewModel
+@{
+    ViewBag.Title = "Orçamentos";
+}
+
+@Html.Partial("_NotificationMessagesPartial")
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable centerBox">
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <header>
+                <span class="widget-icon"><i class="fa fa-cog"></i></span>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    <div id="resultadoBusca"></div>
+                    @using (Ajax.BeginForm(
+                        "Imprimir",
+                        "RelOrcamento",
+                        null,
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageIndex)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.PageSize)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.OrderBy)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.Ascending)
+                        @Html.HiddenFor(m => m.Filtro.PaginationParameters.UniqueIdentifier)
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFiltro" class="">
+                                            <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                            Filtro
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseFiltro" class="panel-collapse collapse in">
+                                    <div class="panel-body no-padding">
+                                        <fieldset>
+                                            @*<legend></legend>*@
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Filtro.EmpresaId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.Filtro.EmpresaId, Model.ListaEmpresa, string.Empty)<i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Filtro.EmpresaId, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Filtro.ObraId, new { @class = "label" })
+                                                    <label class="select">
+                                                        @Html.DropDownListFor(m => m.Filtro.ObraId, Model.ListaObra, string.Empty)<i></i>
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Filtro.ObraId, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    @Html.LabelFor(m => m.Filtro.IndiceId, new { @class = "label" })                                
+                                                    <label class="select">                                                      
+                                                        @Html.DropDownListFor(m => m.Filtro.IndiceId, Model.ListaIndice, string.Empty)
+                                                        <i></i> 
+                                                    </label>
+                                                    @Html.ValidationMessageFor(m => m.Filtro.IndiceId, "", new { @class = "note note-error" })
+                                                </section>
+                                            </div>
+@*                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <h5>Tipo</h5>
+                                                </section>
+                                            </div>*@
+                                            <div class="row">
+                                                <section class="col col-2">
+                                                    @Html.LabelFor(m => m.Filtro.Defasagem, new { @class = "label" })
+                                                    <label class="input">
+                                                        @Html.TextBoxFor(m => m.Filtro.Defasagem, new { @maxlength = "10", @class = "numeric" })
+                                                    </label>
+                                                    <script type="text/javascript">
+                                                        $(document).ready(function () {
+                                                            $("#@Html.IdFor(m => m.Filtro.Defasagem)").on("change", function () {
+                                                                limpaLista();
+                                                            });
+                                                        });
+                                                    </script> 
+                                                    @Html.ValidationMessageFor(m => m.Filtro.Defasagem, "", new { @class = "note note-error" })
+                                                </section>
+                                                <section class="col col-4">
+                                                    <div class="inline-group">
+                                                        <label id="lblTipoBDI" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhBDI)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhBDI)</label>
+                                                        <label id="lblTipoClasse" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhClasse)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhClasse)</label>
+                                                    </div>
+                                                </section>
+                                            </div>
+
+                                        </fieldset>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer>
+                            @{
+                                string disableBtnImprimir = string.Empty;
+                                if (!Model.PodeImprimir)
+                                {
+                                    disableBtnImprimir = "disabled";
+                                }
+                            }
+                            <a id="btnImprimirFake" class="btn btn-primary right @disableBtnImprimir">Imprimir</a>
+
+                            @{
+                            var url = Url.Action("Imprimir", "RelOrcamento");
+                            }
+                            <a data-toggle="modal" href="#FormatoImpressao_ModalPanel" id="btnImprimir"></a>
+                            <div class="modal fade" id="FormatoImpressao_ModalPanel" tabindex="-1" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
+                                            <h4 class="modal-title">
+                                                Formato do Arquivo para Impressão
+                                            </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col col-12">
+                                                    @{
+                                                        var listaFormatoExportacaoArquivo = new SelectList(typeof(FormatoExportacaoArquivo).ToItemListaDTO(), "Id", "Descricao", (int)FormatoExportacaoArquivo.PDF);
+                                                        foreach (var item in listaFormatoExportacaoArquivo)
+	                                                    {
+                                                            var itemChecked = string.Empty;
+                                                            if (item.Selected)
+                                                            {
+                                                                itemChecked = "checked=\"checked\"";
+                                                            }
+                                                            @:<label class="radio">
+							                                @:  <input type="radio" name="formatoExportacaoArquivo" value="@item.Value" @itemChecked>
+							                                @:  <i></i>@item.Text
+                                                            @:</label>
+	                                                    }
+                                                    }
+					                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+					                        <button type="button" id="btnConfirmarImpressao" class="btn btn-primary" data-dismiss="modal">
+						                        Ok
+					                        </button>
+				                        </div>
+                                    </div>
+                                </div>
+                                <script type="text/javascript">
+                                    var parametrosUrlImpressao = '';
+                                    $(document).ready(function () {
+                                        $(document).on("show.bs.modal", "#FormatoImpressao_ModalPanel", function (e) {
+                                            $.event.trigger({
+                                                type: "showFormatoImpressaoModalPanel",
+                                                event: e
+                                            });
+                                        });
+
+                                        $("#btnConfirmarImpressao").on("click", function () {
+                                            window.open('@url?formato=' + $("input:radio[name=formatoExportacaoArquivo]:checked").val() + parametrosUrlImpressao);
+                                        });
+                                    });
+                                </script>
+                            </div>
+
+                        </footer>                        
+                    }
+                </div>
+            </div>
+
+        </div>
+    </article>
+</div>
+@section scripts{
+    @Html.EditorFor(m => m.Filtro.PaginationParameters, "ListPageScript");
+}
+
+<script type="text/javascript">
+@*    jsonItemArrayClasse = JSON.parse($("#@Html.IdFor(m => m.JsonItensClasse)").val());*@
+
+    $(document).ready(function () {
+        $('body').addClass("hidden-menu");
+
+        $("#@Html.IdFor(m => m.Filtro.EmpresaId)").on("change", function () {
+            limpaComboObra();
+            carregaComboObra();
+        });
+
+        $("#@Html.IdFor(m => m.Filtro.ObraId)").on("click", function () {
+            var empresaId = $('#@Html.IdFor(m => m.Filtro.EmpresaId)').val();
+            if ((empresaId == null) || (empresaId == '')) { smartAlert("Atenção", "Informe a empresa", "warning"); }
+        });
+
+    });
+
+    function limpaComboObra() {
+        $('#@Html.IdFor(m => m.Filtro.ObraId)').html('');
+        $('#@Html.IdFor(m => m.Filtro.ObraId)').append($('<option>').text('').attr('value', ''));
+        $('#@Html.IdFor(m => m.Filtro.ObraId)').val(0);
+    }
+
+    function carregaComboObra() {
+        var empresaId = $('#@Html.IdFor(m => m.Filtro.EmpresaId)').val();
+        if ((empresaId == null) || (empresaId == '')) { empresaId = 0; }
+        limpaComboObra();
+        if (empresaId != 0) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CarregaObraPorEmpresa", "RelOrcamento", new { Area = "Orcamento" })',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    empresaId: empresaId
+                }),
+                success: function (result) {
+                    $.each(result, function (index, item) {
+                        $('#@Html.IdFor(m => m.Filtro.ObraId)').append($('<option>').text(item.NumeroDescricao).attr('value', item.Id));
+                    });
+                },
+                error: function (result) {
+                    showErrorMessage(getErrorMessageContainer('@Html.NameFor(m => m.Filtro.ObraId)'), result.errorMessage);
+                    limpaComboObra();
+                }
+            });
+        }
+    }
+
+</script>

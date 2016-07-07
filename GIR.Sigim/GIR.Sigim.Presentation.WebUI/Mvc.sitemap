@@ -91,7 +91,15 @@
       </mvcSiteMapNode>
 
     </mvcSiteMapNode>
-    
+
+    <mvcSiteMapNode title="Orçamento" controller="Home" action="Index" area="Orcamento">
+      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_ORCAMENTO_ACESSAR">
+        <mvcSiteMapNode title="Orçamento" url="#" clickable="false" roles="REL_ORCAMENTO_ACESSAR">
+          <mvcSiteMapNode title="Orçamentos" controller="RelOrcamento" action="Index"/>
+        </mvcSiteMapNode>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
     <mvcSiteMapNode title="Ordem de Compra" controller="Home" action="Index" area="OrdemCompra">
       <!--<mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_ORDEMCOMPRA_ACESSAR,
                                                                        PARAMETRO_USUARIO_ORDEMCOMPRA_ACESSAR">

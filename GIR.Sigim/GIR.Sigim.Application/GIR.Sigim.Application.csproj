@@ -113,6 +113,7 @@
     <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />
     <Compile Include="DTO\Financeiro\RateioAutomaticoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoFinanceiroDTO.cs" />
+    <Compile Include="DTO\Orcamento\EmpresaDTO.cs" />
     <Compile Include="DTO\OrdemCompra\FreteDTO.cs" />
     <Compile Include="DTO\Sigim\AvaliacaoFornecedorDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoNaturezaOperacaoDTO.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Filtros\Financeiro\MotivoCancelamentoFiltro.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
+    <Compile Include="Filtros\Orcamento\RelOrcamentoFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\EntradaMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\OrdemCompraPesquisaFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\RelOcItensOrdemCompraFiltro.cs" />
@@ -285,6 +287,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relApropriacaoPorClasse.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Financeiro\relApropriacaoPorClasseSintetico.cs">
       <AutoGen>True</AutoGen>
@@ -296,6 +299,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relApropriacaoPorClasseTeste.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Financeiro\relCaixa.cs">
       <AutoGen>True</AutoGen>
@@ -522,6 +526,8 @@
     <Compile Include="Service\CredCob\ITituloMovimentoAppService.cs" />
     <Compile Include="Service\Financeiro\ITituloPagarAppService.cs" />
     <Compile Include="Service\IBaseAppService.cs" />
+    <Compile Include="Service\Orcamento\IEmpresaAppService.cs" />
+    <Compile Include="Service\Orcamento\IObraAppService.cs" />
     <Compile Include="Service\Orcamento\IOrcamentoAppService.cs" />
     <Compile Include="Service\Orcamento\IParametrosOrcamentoAppService.cs" />
     <Compile Include="Service\OrdemCompra\IEntradaMaterialAppService.cs" />

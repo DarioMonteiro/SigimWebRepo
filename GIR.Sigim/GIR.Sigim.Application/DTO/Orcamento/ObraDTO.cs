@@ -12,5 +12,11 @@ namespace GIR.Sigim.Application.DTO.Orcamento
         public string Numero { get; set; }
         public string Descricao { get; set; }
         public CentroCustoDTO CentroCusto { get; set; }
+
+        public string NumeroDescricao
+        {
+            get { return this.Numero + " - " + this.Descricao; }
+        }
+
     }
 }

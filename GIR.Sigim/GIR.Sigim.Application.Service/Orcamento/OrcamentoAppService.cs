@@ -10,6 +10,7 @@ using GIR.Sigim.Domain.Repository.Orcamento;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Financeiro;
+using GIR.Sigim.Application.Constantes;
 
 namespace GIR.Sigim.Application.Service.Orcamento
 {
@@ -41,6 +42,11 @@ namespace GIR.Sigim.Application.Service.Orcamento
         public OrcamentoDTO ObterUltimoOrcamentoPeloCentroCusto(string codigoCentroCusto)
         {
             return orcamentoRepository.ObterUltimoOrcamentoPeloCentroCusto(codigoCentroCusto).To<OrcamentoDTO>();
+        }
+
+        public bool EhPermitidoImprimirRelOrcamento()
+        {
+            return UsuarioLogado.IsInRole(Funcionalidade.RelatorioOrcamentoImprimir);
         }
 
         #endregion
