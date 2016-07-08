@@ -61,8 +61,8 @@
                                                     @Html.ValidationMessageFor(m => m.Filtro.ObraId, "", new { @class = "note note-error" })
                                                 </section>
                                             </div>
-                                            <div class="row">
-                                                <section class="col col-6">
+								            <div class="row">
+                                                <section class="col col-2">
                                                     @Html.LabelFor(m => m.Filtro.IndiceId, new { @class = "label" })                                
                                                     <label class="select">                                                      
                                                         @Html.DropDownListFor(m => m.Filtro.IndiceId, Model.ListaIndice, string.Empty)
@@ -70,37 +70,54 @@
                                                     </label>
                                                     @Html.ValidationMessageFor(m => m.Filtro.IndiceId, "", new { @class = "note note-error" })
                                                 </section>
-                                            </div>
-@*                                            <div class="row">
-                                                <section class="col col-6">
-                                                    <h5>Tipo</h5>
-                                                </section>
-                                            </div>*@
-                                            <div class="row">
                                                 <section class="col col-2">
                                                     @Html.LabelFor(m => m.Filtro.Defasagem, new { @class = "label" })
                                                     <label class="input">
-                                                        @Html.TextBoxFor(m => m.Filtro.Defasagem, new { @maxlength = "10", @class = "numeric" })
+                                                        @Html.TextBoxFor(m => m.Filtro.Defasagem, new { @maxlength = "10", @class = "text-right numeric" })
                                                     </label>
-                                                    <script type="text/javascript">
-                                                        $(document).ready(function () {
-                                                            $("#@Html.IdFor(m => m.Filtro.Defasagem)").on("change", function () {
-                                                                limpaLista();
-                                                            });
-                                                        });
-                                                    </script> 
                                                     @Html.ValidationMessageFor(m => m.Filtro.Defasagem, "", new { @class = "note note-error" })
                                                 </section>
-                                                <section class="col col-4">
+									            <section class="col col-2">
+										            <label class="label">Tipo</label>
                                                     <div class="inline-group">
                                                         <label id="lblTipoBDI" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhBDI)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhBDI)</label>
                                                         <label id="lblTipoClasse" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhClasse)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhClasse)</label>
                                                     </div>
+									            </section>
+									            <section class="col col-2">
+                                                    <label id="lblValorCorrigido" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhValorCorrigido)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhValorCorrigido)</label>
+                                                    <label id="lblSemDetalhamento" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSemDetalhamento)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSemDetalhamento)</label>
+									            </section>
+								            </div>
+							            </fieldset>
+                                        <fieldset id="formItensClasse">
+                                            <div class="row">
+                                                @Html.EditorFor(m => m.Classe, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
+                                            </div>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <button id="btnAddClasse" type="button" class="btn btn-primary">
+                                                        Adicionar
+                                                    </button>
+                                                    <button id="btnRemoverClasse" type="button" class="btn btn-danger">
+                                                        Remover
+                                                    </button>
                                                 </section>
                                             </div>
-
+                                            @Html.HiddenFor(m => m.JsonItensClasse)
+                                            <div class="table-responsive" style="min-height: 115px; height:135px; border: 1px solid #ddd; margin-bottom: 13px; width:100%; overflow: auto;">
+                                                <table id="tableItensClasse" class="table table-bordered table-striped table-condensed table-hover dataTable">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th>Código</th>
+                                                            <th>Descrição</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </fieldset>
-
                                     </div>
                                 </div>
                             </div>
@@ -188,10 +205,11 @@
 }
 
 <script type="text/javascript">
-@*    jsonItemArrayClasse = JSON.parse($("#@Html.IdFor(m => m.JsonItensClasse)").val());*@
+    jsonItemArrayClasse = JSON.parse($("#@Html.IdFor(m => m.JsonItensClasse)").val());
 
     $(document).ready(function () {
         $('body').addClass("hidden-menu");
+        desabilitarClasse();
 
         $("#@Html.IdFor(m => m.Filtro.EmpresaId)").on("change", function () {
             limpaComboObra();
@@ -199,11 +217,155 @@
         });
 
         $("#@Html.IdFor(m => m.Filtro.ObraId)").on("click", function () {
-            var empresaId = $('#@Html.IdFor(m => m.Filtro.EmpresaId)').val();
-            if ((empresaId == null) || (empresaId == '')) { smartAlert("Atenção", "Informe a empresa", "warning"); }
+            validaComboObra();
+        });
+
+        jQuery.validator.setDefaults({
+            ignore: '#formItensClasse *'
+        });
+
+        $('#btnAddClasse').on("click", function () {
+            if ($('#formItensClasse input').valid()) {
+                if (validaAdicionarClasse() == true) {
+                    addClasse();
+                }
+            }
+        });
+
+        $('#btnRemoverClasse').on("click", function () {
+            removerClasse();
+        });
+
+        jQuery.validator.addMethod(
+            "ehClasseValida",
+            function (value, element, params) {
+                var isValid = validaClasse_@(Html.IdFor(m => m.Classe.Codigo))();
+                $.validator.messages.ehClasseDespesaValida = $('#@Html.IdFor(m => m.Classe.Codigo)_ValidationMessage').html();
+                return isValid;
+            }, ''
+        );
+
+        $("#@Html.IdFor(m => m.Filtro.EhClasse)").on("change", function () {
+            if ($("#@Html.IdFor(m => m.Filtro.EhClasse)").is(':checked')) {
+                habilitarClasse();
+                $('#orcamentoClasseDespesaId').val(47);
+            }
+            else {
+                desabilitarClasse();
+                $('#orcamentoClasseDespesaId').val(0);
+            }
         });
 
     });
+
+    function habilitarClasse() {
+        $('#@Html.IdFor(m => m.Classe.Codigo)').prop('readonly', false);
+        $('#@Html.IdFor(m => m.Classe.Codigo)').removeClass("readonly");
+        $('#BtnShowModalPanel_@Html.IdFor(m => m.Classe.Codigo)').attr("data-toggle", "modal");
+        $('#btnAddClasse').attr("class", "btn btn-primary");
+        $('#btnRemoverClasse').attr("class", "btn btn-danger");
+    }
+
+    function desabilitarClasse() {
+        $('#@Html.IdFor(m => m.Classe.Codigo)').prop('readonly', true);
+        $('#@Html.IdFor(m => m.Classe.Codigo)').addClass("readonly");
+        $('#BtnShowModalPanel_@Html.IdFor(m => m.Classe.Codigo)').removeAttr("data-toggle", "modal");
+        $('#btnAddClasse').attr("class", "btn btn-primary disabled");
+        $('#btnRemoverClasse').attr("class", "btn btn-danger disabled");
+        $("#@Html.IdFor(m => m.Classe.Codigo)").val('');
+        $("#@Html.IdFor(m => m.Classe.Descricao)").val('');
+        $("#formItensClasse").val("[]");
+        $("#@Html.IdFor(m => m.JsonItensClasse)").val('[]');
+        $("#tableItensClasse tbody").empty();
+    }
+
+    function validaAdicionarClasse() {
+        var result = true;
+        if (($('#@Html.IdFor(m => m.Classe.Codigo)').val() == '')) {
+            result = false;
+            smartAlert("Erro", "Informe a classe.", "error");
+            return false;
+        }
+
+        var ehValidoClasse = validaClasse_@(Html.IdFor(m => m.Classe.Codigo))();
+        if (!ehValidoClasse) {
+            result = false;
+            smartAlert("Erro", "Selecione uma classe cadastrada.", "error");
+            return false;
+        }
+
+        $.each(jsonItemArrayClasse, function (index, obj) {
+            var ehMesmaClasse = (obj.Codigo == $('#@Html.IdFor(m => m.Classe.Codigo)').val());
+
+            if (ehMesmaClasse) {
+                result = false;
+                smartAlert("Erro", "A classe informada já foi adicionada !", "error");
+                return false;
+            }
+
+        });
+
+        return result;
+    }
+
+    function processData(node) {
+        var fieldId = node.getAttribute ? node.getAttribute('id') : '';
+        var fieldName = node.getAttribute ? node.getAttribute('name') : '';
+
+        return false;
+    }
+
+    function addClasse() {
+        var item = $("#formItensClasse").toObject({ mode: 'combine', skipEmpty: false, nodeCallback: processData })
+
+        jsonItemArrayClasse.push(item.Classe);
+
+        $("#@Html.IdFor(m => m.JsonItensClasse)").val(JSON.stringify(jsonItemArrayClasse));
+        fillTableClasse();
+        clearFormItemClasse();
+    }
+
+    function fillTableClasse() {
+        $("#tableItensClasse tbody").empty();
+        for (var i = 0; i < jsonItemArrayClasse.length; i++) {
+            var row = $('<tr />')
+            $("#tableItensClasse tbody").append(row);
+
+            var chkDisabled = '';
+            var labelClass = 'checkbox';
+            row.append($('<td><label class="' + labelClass + '"><input type="checkbox" name="checkbox" value="' + i + '" ' + chkDisabled + '><i></i>' + jsonItemArrayClasse[i].Codigo + '</label></td>'));
+            row.append($('<td class="text-left">' + jsonItemArrayClasse[i].Descricao + '</td>'));
+        }
+    }
+
+    function clearFormItemClasse() {
+        $("#@Html.IdFor(m => m.Classe.Codigo)").val('');
+
+        limpaClasseForm_@(Html.IdFor(m => m.Classe.Codigo))();
+    }
+
+    function removerClasse() {
+        var arrClasseCodigo = [];
+        var index;
+        $($('#tableItensClasse input[type=checkbox]:checked').get().reverse()).each(function () {
+            index = parseInt($(this).val());
+            arrClasseCodigo.push(index);
+            jsonItemArrayClasse.splice(index, 1);
+        });
+
+        if (arrClasseCodigo.length > 0) {
+            $("#@Html.IdFor(m => m.JsonItensClasse)").val(JSON.stringify(jsonItemArrayClasse));
+            fillTableClasse();
+        }
+        else {
+            smartAlert("Erro", "Selecione pelo menos uma classe para ser removida.", "error");
+        }
+    }
+
+    function validaComboObra() {
+        var empresaId = $('#@Html.IdFor(m => m.Filtro.EmpresaId)').val();
+        if ((empresaId == null) || (empresaId == '')) { smartAlert("Atenção", "Informe a empresa", "warning"); }
+    }
 
     function limpaComboObra() {
         $('#@Html.IdFor(m => m.Filtro.ObraId)').html('');

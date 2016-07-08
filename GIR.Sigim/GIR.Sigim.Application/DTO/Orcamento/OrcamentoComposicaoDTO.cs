@@ -10,6 +10,8 @@ namespace GIR.Sigim.Application.DTO.Orcamento
 {
     public class OrcamentoComposicaoDTO : BaseDTO
     {
+        public int? OrcamentoId { get; set; }
+        public OrcamentoDTO Orcamento { get; set; }
         public int? ComposicaoId { get; set; }
         public ComposicaoDTO Composicao { get; set; }
         public string codigoClasse { get; set; }
