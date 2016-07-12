@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using GIR.Sigim.Application.DTO.Financeiro;
 using GIR.Sigim.Application.Filtros.Orcamento;
+using GIR.Sigim.Application.DTO.Orcamento;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.ViewModel
 {
@@ -23,7 +24,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.ViewModel
 
         public RelOrcamentoListaViewModel()
         {
+            Classe = new ClasseDTO();
             Filtro = new RelOrcamentoFiltro();
+            Filtro.Orcamento = new OrcamentoDTO();
         }
 
     }

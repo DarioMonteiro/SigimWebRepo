@@ -62,13 +62,13 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
 
         public ActionResult CarregaObraPorEmpresa(int empresaId)
         {
-            List<ObraDTO> lista = null;
+            List<ObraDTO> lista = new List<ObraDTO>();
             EmpresaDTO empresa = empresaAppService.ObterEmpresaSemObraPai(empresaId);
             if (empresa != null && empresa.ListaObraSemPai != null)
             {
-                lista = empresa.ListaObraSemPai;
+                lista = empresa.ListaObraSemPai;               
             }
-            return Json(lista);
+            return Json(JsonConvert.SerializeObject(lista, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore}));
         }
 
         #endregion

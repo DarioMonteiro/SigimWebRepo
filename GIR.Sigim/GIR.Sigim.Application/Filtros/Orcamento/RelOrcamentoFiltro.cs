@@ -5,22 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Application.DTO.Financeiro;
+using GIR.Sigim.Application.DTO.Orcamento;
 
 namespace GIR.Sigim.Application.Filtros.Orcamento
 {
     public class RelOrcamentoFiltro : BaseFiltro
     {
         [Display(Name = "Empresa")]
-        public int EmpresaId { get; set; }
+        public int? EmpresaId { get; set; }
 
         [Display(Name = "Obra")]
-        public int ObraId { get; set; }
+        public int? ObraId { get; set; }
 
-        [Display(Name = "Orçamento")]
-        public int OrcamentoId { get; set; }
+        public OrcamentoDTO Orcamento { get; set; }
 
         [Display(Name = "Indice")]
-        public int IndiceId { get; set; }
+        public int? IndiceId { get; set; }
 
         [Display(Name = "BDI")]
         public bool EhBDI { get; set; }

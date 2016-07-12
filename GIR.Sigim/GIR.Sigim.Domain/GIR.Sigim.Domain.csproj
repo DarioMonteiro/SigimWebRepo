@@ -363,6 +363,7 @@
     <Compile Include="Specification\Financeiro\TituloPagarSpecification.cs" />
     <Compile Include="Specification\ISpecification.cs" />
     <Compile Include="Specification\NotSpecification.cs" />
+    <Compile Include="Specification\Orcamento\OrcamentoSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\AbstractRequisicaoMaterialSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\EntradaMaterialSpecification.cs" />
     <Compile Include="Specification\OrdemCompra\OrdemCompraItemSpecification.cs" />

@@ -437,6 +437,8 @@
     <Content Include="Areas\Orcamento\Views\Home\Index.cshtml" />
     <Content Include="Areas\Orcamento\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Orcamento\Views\Shared\_MenuPartial.cshtml" />
+    <Content Include="Areas\Orcamento\Views\Shared\EditorTemplates\OrcamentoPesquisaGenerica.cshtml" />
+    <Content Include="Areas\Orcamento\Views\Orcamento\ListaPesquisaPartial.cshtml" />
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>

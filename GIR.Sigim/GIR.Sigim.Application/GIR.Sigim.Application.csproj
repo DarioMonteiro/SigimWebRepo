@@ -225,6 +225,7 @@
     <Compile Include="Filtros\Financeiro\MotivoCancelamentoFiltro.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
+    <Compile Include="Filtros\Orcamento\OrcamentoPesquisaFiltro.cs" />
     <Compile Include="Filtros\Orcamento\RelOrcamentoFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\EntradaMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\OrdemCompraPesquisaFiltro.cs" />

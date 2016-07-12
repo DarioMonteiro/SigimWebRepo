@@ -14,7 +14,23 @@ namespace GIR.Sigim.Application.DTO.Orcamento
         public ClienteFornecedorDTO ClienteFornecedor { get; set; }
         public string NumeroNomeEmpresa
         {
-            get { return this.Numero + " - " + this.ClienteFornecedor.Nome; }
+            get
+            {
+                string numeroNomeEmpresa = "";
+                if (!string.IsNullOrEmpty(this.Numero))
+                {
+                    numeroNomeEmpresa = this.Numero;
+                }
+                if (this.ClienteFornecedor != null)
+                {
+                    if (!string.IsNullOrEmpty(this.ClienteFornecedor.Nome))
+                    {
+                        numeroNomeEmpresa = numeroNomeEmpresa + " - " + this.ClienteFornecedor.Nome;
+                    }
+                }
+
+                return numeroNomeEmpresa;
+            }
         }
 
         public List<ObraDTO> ListaObra { get; set; }

@@ -15,6 +15,8 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
         public string Descricao { get; set; }
         public string CodigoCentroCusto { get; set; }
         public CentroCusto CentroCusto { get; set; }
+        public bool? OrcamentoSimplificado { get; set; } 
+
         public ICollection<Orcamento> ListaOrcamento { get; set; }
 
         public Obra()

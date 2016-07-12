@@ -1,0 +1,288 @@
+﻿@model GIR.Sigim.Application.DTO.Orcamento.OrcamentoDTO
+@{
+    string uniqueIdentifier = Html.IdFor(m => m.Sequencial).ToHtmlString();
+    Model.PaginationParameters.UniqueIdentifier = uniqueIdentifier;
+    ViewBag.sectionStyle = !(string.IsNullOrEmpty(ViewBag.sectionStyle)) ? ViewBag.sectionStyle : "margin: 0px;";      
+}
+<section class="@ViewBag.sectionClass" style="@ViewBag.sectionStyle">
+    <input type="hidden" id="orcamentoIdPesquisaGenerica" />
+    <input type="hidden" id="empresaIdPesquisaGenerica" />
+    <input type="hidden" id="obraIdPesquisaGenerica" />
+    <label class="label">@ViewBag.label</label>
+    <div class="input-group">
+        <label class="input">
+            @Html.TextBoxFor(m => m.Sequencial, new { @readonly = "", @class = "readonly" })
+        </label>
+        <a id="BtnShowModalPanel_@(uniqueIdentifier)" data-toggle="modal" href="#@(uniqueIdentifier)_Pesquisa_ModalPanel" class="button-icon input-group-addon"><i class="fa fa-lg fa-search"></i></a>
+    </div>
+</section>
+<section class="@ViewBag.sectionClass">
+    <label class="label" for="fname">&nbsp;</label>
+    <label class="input">
+        @Html.TextBoxFor(m => m.Descricao, new { @readonly = "", @class = "readonly" })
+    </label>
+</section>
+
+<div class="modal fade" id="@(uniqueIdentifier)_Pesquisa_ModalPanel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Orçamento
+                </h4>
+            </div>
+            <div id="@(uniqueIdentifier)_Pesquisa_ModalBody" class="modal-body no-padding" style="min-height:290px;">
+                <div class="panel-group smart-accordion-default" id="@(uniqueIdentifier)_accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#@(uniqueIdentifier)_accordion" href="#@(uniqueIdentifier)_collapseFiltro" class="">
+                                    <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                    <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                    Filtro
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="@(uniqueIdentifier)_collapseFiltro" class="panel-collapse collapse in">
+                            @Html.HiddenFor(m => m.PaginationParameters.PageIndex)
+                            @Html.HiddenFor(m => m.PaginationParameters.PageSize)
+                            @Html.HiddenFor(m => m.PaginationParameters.OrderBy)
+                            @Html.HiddenFor(m => m.PaginationParameters.Ascending)
+                            @Html.HiddenFor(m => m.PaginationParameters.UniqueIdentifier)
+                            <div class="panel-body no-padding">
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="label" for="@(uniqueIdentifier)_cboCampo">Campo</label>
+                                            <label class="select">
+                                                <select id="@(uniqueIdentifier)_cboCampo" name="@(uniqueIdentifier)_cboCampo">
+                                                    <option value="sequencial">Sequencial</option>
+                                                    <option value="descricao">Descrição</option>
+                                                    <option value="obra">Obra</option>
+                                                    <option value="empresa">Empresa</option>
+                                                    <option value="centroCusto">Centro de custo</option>
+                                                    <option value="situacao">Situação</option>
+                                                    <option value="data">Data</option>
+                                                    @*<option value="simplificado">Simplificado</option>*@
+                                                </select>
+                                                <i></i>
+                                            </label>
+                                        </section>
+                                        <section class="col col-8">
+											<label class="label">Seleção</label>
+											<div class="inline-group">
+												<label class="radio">
+													<input type="radio" id="@(uniqueIdentifier)_radTipoSelecaoIntervalo" name="tipoSelecao" value="@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Intervalo)">
+													<i></i>
+                                                    Intervalo
+												</label>
+												<label class="radio">
+													<input type="radio" id="@(uniqueIdentifier)_radTipoSelecaoContem" name="tipoSelecao" value="@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)">
+													<i></i>
+                                                    Contém
+												</label>
+											</div>
+										</section>
+                                    </div>
+                                    <div class="row">
+                                        <section id="@(uniqueIdentifier)_sectionDe" class="col col-3">
+                                            <label class="label" for="@(uniqueIdentifier)_txtDe">De</label>
+                                            <label class="input">
+                                                <input id="@(uniqueIdentifier)_txtDe" name="txtDe" type="text" value="">
+                                            </label>
+                                        </section>
+
+                                        <section id="@(uniqueIdentifier)_sectionAte" class="col col-3">
+                                            <label class="label" for="@(uniqueIdentifier)_txtAte">Até</label>
+                                            <label class="input">
+                                                <input id="@(uniqueIdentifier)_txtAte" name="txtAte" type="text" value="">
+                                            </label>
+                                        </section>
+
+                                        <section class="col col-3">
+                                            <a id="@(uniqueIdentifier)_btnSearch" class="btn btn-primary base-align btnSearchWithPagination" title="Buscar">
+                                                <i class="fa fa-search fa-lg"></i>
+                                            </a>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="@(uniqueIdentifier)_resultadoBusca"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.EditorFor(m => m.PaginationParameters, "ListPageScript")
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        TratarSelecaoCombo@(uniqueIdentifier)();
+
+        $('input[type=radio][name=tipoSelecao]').change(function () {
+            if ($(this).val() == '@((int)GIR.Sigim.Application.Enums.TipoPesquisa.Contem)') {
+                $('#@(uniqueIdentifier)_sectionDe label[for="@(uniqueIdentifier)_txtDe"]:first').text('Contém');
+                $('#@(uniqueIdentifier)_sectionAte').hide();
+            }
+            else {
+                $('#@(uniqueIdentifier)_sectionDe label[for="@(uniqueIdentifier)_txtDe"]:first').text('De');
+                $('#@(uniqueIdentifier)_sectionAte').show();
+            }
+        });
+
+        $(document).on("show.bs.modal", "#@(uniqueIdentifier)_Pesquisa_ModalPanel", function () {
+            $('#@(uniqueIdentifier)_txtDe').val('');
+            $('#@(uniqueIdentifier)_txtAte').val('');
+            $('#@(uniqueIdentifier)_cboCampo').val($('#@(uniqueIdentifier)_cboCampo option:first').val());
+            $('#@(uniqueIdentifier)_resultadoBusca').html('');
+            SetTipoSelecao('Intervalo');
+        });
+
+        $(document).on("change", "#@(uniqueIdentifier)_cboCampo",
+            function (e) {
+                TratarSelecaoCombo@(uniqueIdentifier)();
+            }
+        );
+
+        $('#@(uniqueIdentifier)_btnSearch').on("click", function () {
+            goToPage@(Model.PaginationParameters.UniqueIdentifier)(0);
+        });
+
+        $(document).on("doFilter@(uniqueIdentifier)",
+            function (e) {
+                if (!ValidaPesquisa()) return;                
+                Pesquisar@(uniqueIdentifier)();
+            }
+        );
+
+    });
+
+    function ValidaPesquisa() {
+        if ($('#@(uniqueIdentifier)_cboCampo').val() == 'dataAssinatura') {
+            if ($('#@(uniqueIdentifier)_txtDe').val() != "") {
+                if (!isValidDate("dd/mm/yy", $('#@(uniqueIdentifier)_txtDe').val())) {
+                    smartAlert("Erro", "A data 'De' é inválida !", "error");
+                    return false;
+                }
+            }
+            if ($('#@(uniqueIdentifier)_txtAte').val() != "") {
+                if (!isValidDate("dd/mm/yy", $('#@(uniqueIdentifier)_txtAte').val())) {
+                    smartAlert("Erro", "A data 'Até' é inválida !", "error");
+                    return false;
+                }
+            }
+
+            var start = $('#@(uniqueIdentifier)_txtDe').val();
+            var end = $('#@(uniqueIdentifier)_txtAte').val();
+            if (compararDatas(start, end) > 0) {
+                smartAlert("Erro", "A data 'De' não pode ser maior que a 'Até' !", "error");
+                return false;
+            }
+
+        }
+        
+        return true;
+    }
+
+    function SetTipoSelecao(tipo) {
+        var radioId = '#@(uniqueIdentifier)_radTipoSelecao' + tipo;
+        $(radioId)
+            .attr('checked', true)
+            .trigger('change')
+            .trigger('click');
+    }
+
+    function TratarSelecaoCombo@(uniqueIdentifier)() {
+        $('#@(uniqueIdentifier)_txtDe').val('');
+        $('#@(uniqueIdentifier)_txtAte').val('');
+        $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val($('#@(uniqueIdentifier)_cboCampo').val());
+        $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(true);
+        if (($('#@(uniqueIdentifier)_cboCampo').val() == 'sequencial') || ($('#@(uniqueIdentifier)_cboCampo').val() == 'data')) 
+        {
+            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'sequencial') {
+                $('#@(uniqueIdentifier)_txtDe').addClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').addClass('text-right numeric');
+            }
+            else {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+            }
+            $('#@(uniqueIdentifier)_radTipoSelecaoIntervalo').attr('disabled', false);
+            SetTipoSelecao('Intervalo');
+            $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', true);
+        }
+        else {
+            @*            if ($('#@(uniqueIdentifier)_cboCampo').val() == 'descricaoSituacao') {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+                SetTipoSelecao('Contem');
+                $('#@(uniqueIdentifier)_radTipoSelecaoIntervalo').attr('disabled', true);
+            }
+            else {
+                $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+                $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+                $('#@(uniqueIdentifier)_radTipoSelecaoIntervalo').attr('disabled', false);
+            }*@
+
+            $('#@(uniqueIdentifier)_txtDe').removeClass('text-right numeric');
+            $('#@(uniqueIdentifier)_txtAte').removeClass('text-right numeric');
+            $('#@(uniqueIdentifier)_radTipoSelecaoContem').attr('disabled', false);
+            $('#@(uniqueIdentifier)_radTipoSelecaoIntervalo').attr('disabled', false);
+
+        }
+    }
+
+    function Pesquisar@(uniqueIdentifier)() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("PesquisarOrcamentos", "Orcamento", new { area = "Orcamento" })',
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                EmpresaId: $('#empresaIdPesquisaGenerica').val(),
+                ObraId: $('#obraIdPesquisaGenerica').val(),
+                Campo: $('#@(uniqueIdentifier)_cboCampo').val(),
+                TipoSelecao: $('input[type=radio][name=tipoSelecao]:checked').val(),
+                TextoInicio: $('#@(uniqueIdentifier)_txtDe').val(),
+                TextoFim: $('#@(uniqueIdentifier)_txtAte').val(),
+                PageIndex: $('#@Html.IdFor(m => m.PaginationParameters.PageIndex)').val(),
+                PageSize: $('#@Html.IdFor(m => m.PaginationParameters.PageSize)').val(),
+                OrderBy: $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val(),
+                Ascending: $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(),
+                UniqueIdentifier: $('#@Html.IdFor(m => m.PaginationParameters.UniqueIdentifier)').val()
+            })
+        })
+        .success(function (result) {
+            $('#@(uniqueIdentifier)_resultadoBusca').html(result);
+        });
+    }
+
+    function TratarSelecaoOrcamento@(uniqueIdentifier)(id, sequencial, descricao) {
+        $("#orcamentoIdPesquisaGenerica").val(id);
+        $('#@(uniqueIdentifier)').val(sequencial);
+        $('#@Html.IdFor(m => m.Sequencial)').val(sequencial);
+        $('#@Html.IdFor(m => m.Descricao)').val(descricao);
+        $('#@(uniqueIdentifier)_Pesquisa_ModalPanel').modal('hide');
+
+        $.event.trigger({
+            type: "orcamentoEscolhido",
+            contrato: id
+        });
+    }
+
+    function limpaOrcamentoForm_@(Html.IdFor(m => m.Sequencial))() {
+        $("#@Html.IdFor(m => m.Sequencial)").val('');
+        $("#@Html.IdFor(m => m.Descricao)").val('');
+        $("#orcamentoIdPesquisaGenerica").val(null);
+    }
+
+
+</script>
