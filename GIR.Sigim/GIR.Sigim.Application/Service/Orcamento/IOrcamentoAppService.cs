@@ -12,6 +12,7 @@ namespace GIR.Sigim.Application.Service.Orcamento
 {
     public interface IOrcamentoAppService
     {
+        OrcamentoDTO ObterPeloId(int? id);
         OrcamentoDTO ObterUltimoOrcamentoPeloCentroCusto(string codigoCentroCusto);
         OrcamentoDTO ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(string codigoCentroCusto);
         bool EhPermitidoImprimirRelOrcamento();

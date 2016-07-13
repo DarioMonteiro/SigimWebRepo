@@ -37,6 +37,11 @@ namespace GIR.Sigim.Application.Service.Orcamento
 
         #region Métodos IOrcamentoAppService
 
+        public OrcamentoDTO ObterPeloId(int? id)
+        {
+            return orcamentoRepository.ObterPeloId(id).To<OrcamentoDTO>();
+        }
+
         public OrcamentoDTO ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(string codigoCentroCusto)
         {
             return orcamentoRepository.ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(codigoCentroCusto).To<OrcamentoDTO>();

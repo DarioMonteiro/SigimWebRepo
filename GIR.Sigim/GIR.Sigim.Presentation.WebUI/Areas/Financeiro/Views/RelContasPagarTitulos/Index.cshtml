@@ -196,10 +196,8 @@
                                                 @Html.EditorFor(m => m.Filtro.Classe, "Classe", new { @sectionClass = "col col-6", @labelText = "Classe" })
                                                 <script type="text/javascript">
                                                     $(document).ready(function () {
-                                                        $(document).ready(function () {
-                                                            $(document).on("classeValidada", function (e) {
-                                                                limpaLista();
-                                                            });
+                                                        $(document).on("classeValidada", function (e) {
+                                                            limpaLista();
                                                         });
                                                     });
                                                 </script>

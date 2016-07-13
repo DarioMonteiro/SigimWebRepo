@@ -71,6 +71,25 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
             return Json(JsonConvert.SerializeObject(lista, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore}));
         }
 
+        public ActionResult ObterEmpresaObraDoOrcamento(int? orcamentoId)
+        {
+            var orcamento = orcamentoAppService.ObterPeloId(orcamentoId);
+            List<ObraDTO> lista = new List<ObraDTO>();
+            EmpresaDTO empresa = empresaAppService.ObterEmpresaSemObraPai(orcamento.EmpresaId);
+            if (empresa != null && empresa.ListaObraSemPai != null)
+            {
+                lista = empresa.ListaObraSemPai;
+            }
+            return Json(new
+                            {
+                                empresaId = orcamento.EmpresaId,
+                                obraId = orcamento.ObraId,
+                                listaObra = JsonConvert.SerializeObject(lista, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
+                            }
+                        );
+        }
+
+
         #endregion
 
         #region "Métodos privados"

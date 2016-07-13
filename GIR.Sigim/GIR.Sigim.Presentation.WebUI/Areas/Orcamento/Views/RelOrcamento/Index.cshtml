@@ -227,6 +227,7 @@
             limpaOrcamento();
             $("#obraIdPesquisaGenerica").val(null);
             validaComboObra();
+            desabilitarClasse();
         });
 
         jQuery.validator.setDefaults({
@@ -274,7 +275,50 @@
             }
         });
 
+        $(document).on("orcamentoEscolhido", function (e) {
+            selecionaEmpresaObra(e.orcamentoId);
+        });
+
     });
+
+    function selecionaEmpresaObra(parOrcamentoId) {
+        var orcamentoId = parOrcamentoId;
+
+        if ((orcamentoId == null) || (orcamentoId == '')) {
+            orcamentoId = 0;
+        }
+
+        limpaComboObra();
+
+        if (orcamentoId != 0) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ObterEmpresaObraDoOrcamento", "RelOrcamento", new { Area = "Orcamento" })',
+                cache: false,
+                async: false,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    orcamentoId: orcamentoId
+                }),
+            })
+            .success(function (result) {
+                $('#empresaIdPesquisaGenerica').val(result.empresaId);
+                $('#blocoIdPesquisaGenerica').val(result.blocoId);
+                var empresaId = result.empresaId;
+                var blocoId = result.blocoId;
+                var lista = JSON.parse(result.listaObra);
+                $('#@Html.IdFor(m => m.Filtro.EmpresaId)').val(result.empresaId);
+                $.each(lista, function (index, item) {
+                    $('#@Html.IdFor(m => m.Filtro.ObraId)').append($('<option>').text(item.NumeroDescricao).attr('value', item.Id));
+                });
+                $('#@Html.IdFor(m => m.Filtro.ObraId)').val(result.obraId);
+            })
+            .error(function (result) {
+                smartAlert("Atenção", "Erro", "warning");
+                limpaComboObra();
+            });
+        }
+    }
 
     function habilitarClasse() {
         $('#@Html.IdFor(m => m.Classe.Codigo)').prop('readonly', false);
@@ -416,7 +460,7 @@
                 }),
             })
             .success(function (result) {
-                lista = JSON.parse(result);
+                var lista = JSON.parse(result);
                 $.each(lista, function (index, item) {
                     $('#@Html.IdFor(m => m.Filtro.ObraId)').append($('<option>').text(item.NumeroDescricao).attr('value', item.Id));
                 });
