@@ -218,13 +218,15 @@ namespace GIR.Sigim.Application.Constantes
         public Funcionalidade()
         {
             FuncionalidadeAdmin();
-            FuncionalidadeComercial();
-            FuncionalidadeContrato();
-            FuncionalidadeFinanceiro();
-            FuncionalidadeOrcamento();
+            //FuncionalidadeComercial();
+            //FuncionalidadeContrato();
+            //FuncionalidadeFinanceiro();
+            //FuncionalidadeOrcamento();
             FuncionalidadeOrdemCompra();
             //FuncionalidadeSac();
         }
+
+        #region "FuncionalidadeAdmin"
 
         private void FuncionalidadeAdmin()
         {
@@ -241,143 +243,160 @@ namespace GIR.Sigim.Application.Constantes
             //MenuAdmin.Add(UsuarioFuncionalidadeImprimir, "Usuário funcionalidades - imprimir");
         }
 
-        private void FuncionalidadeContrato()
-        {
-            MenuContrato = new System.Collections.Hashtable();
+        #endregion
 
-            MenuContrato.Add(LiberacaoAcessar, "Liberação - acessar");
-            MenuContrato.Add(LiberacaoAprovarLiberar, "Liberação - aprovar e liberar");
-            MenuContrato.Add(LiberacaoAprovar, "Liberação - aprovar");
-            MenuContrato.Add(LiberacaoLiberar, "Liberação - liberar");
-            MenuContrato.Add(LiberacaoCancelar, "Liberação - cancelar liberação");
-            MenuContrato.Add(LiberacaoAssociarNF, "Liberação - associar nota fiscal");
-            MenuContrato.Add(LiberacaoAlterarVencimento, "Liberação - alterar data de vencimento");
-            MenuContrato.Add(LiberacaoImprimirMedicao, "Liberação - imprimir dados da medição");
+        #region "FuncionalidadeContrato"
 
-            MenuContrato.Add(MedicaoAcessar, "Medição - acessar");
-            MenuContrato.Add(MedicaoGravar, "Medição - gravar");
-            MenuContrato.Add(MedicaoDeletar, "Medição - deletar");
-            MenuContrato.Add(MedicaoImprimir, "Medição - imprimir");
+        //private void FuncionalidadeContrato()
+        //{
+        //    MenuContrato = new System.Collections.Hashtable();
 
-            MenuContrato.Add(RelNotasFiscaisLiberadasAcessar, "Relatório de notas fiscais liberadas - acessar");
-            MenuContrato.Add(RelNotasFiscaisLiberadasImprimir, "Relatório de notas fiscais liberadas - imprimir");
-        }
+        //    MenuContrato.Add(LiberacaoAcessar, "Liberação - acessar");
+        //    MenuContrato.Add(LiberacaoAprovarLiberar, "Liberação - aprovar e liberar");
+        //    MenuContrato.Add(LiberacaoAprovar, "Liberação - aprovar");
+        //    MenuContrato.Add(LiberacaoLiberar, "Liberação - liberar");
+        //    MenuContrato.Add(LiberacaoCancelar, "Liberação - cancelar liberação");
+        //    MenuContrato.Add(LiberacaoAssociarNF, "Liberação - associar nota fiscal");
+        //    MenuContrato.Add(LiberacaoAlterarVencimento, "Liberação - alterar data de vencimento");
+        //    MenuContrato.Add(LiberacaoImprimirMedicao, "Liberação - imprimir dados da medição");
 
-        private void FuncionalidadeComercial()
-        {
-            MenuComercial = new System.Collections.Hashtable();
+        //    MenuContrato.Add(MedicaoAcessar, "Medição - acessar");
+        //    MenuContrato.Add(MedicaoGravar, "Medição - gravar");
+        //    MenuContrato.Add(MedicaoDeletar, "Medição - deletar");
+        //    MenuContrato.Add(MedicaoImprimir, "Medição - imprimir");
 
-            MenuComercial.Add(RelStatusVendaAcessar , "Relatório de status da venda - acessar");
-            MenuComercial.Add(RelStatusVendaImprimir, "Relatório de status da venda - imprimir");
-        }
+        //    MenuContrato.Add(RelNotasFiscaisLiberadasAcessar, "Relatório de notas fiscais liberadas - acessar");
+        //    MenuContrato.Add(RelNotasFiscaisLiberadasImprimir, "Relatório de notas fiscais liberadas - imprimir");
+        //}
+        #endregion
 
-        private void FuncionalidadeFinanceiro()
-        {
-            MenuFinanceiro = new System.Collections.Hashtable();
+        #region "FuncionalidadeComercial"
+        //private void FuncionalidadeComercial()
+        //{
+        //    MenuComercial = new System.Collections.Hashtable();
 
-            //MenuFinanceiro.Add(ParametroFinanceiroAcessar, "Parâmetros - acessar");
-            //MenuFinanceiro.Add(ParametroFinanceiroGravar, "Parâmetros - gravar");
+        //    MenuComercial.Add(RelStatusVendaAcessar , "Relatório de status da venda - acessar");
+        //    MenuComercial.Add(RelStatusVendaImprimir, "Relatório de status da venda - imprimir");
+        //}
+        #endregion
 
-            //MenuFinanceiro.Add(ParametroUsuarioFinanceiroAcessar, "Parâmetros do usuário - acessar");
-            //MenuFinanceiro.Add(ParametroUsuarioFinanceiroGravar, "Parâmetros do usuário - gravar");
+        #region "FuncionalidadeFinanceiro"
 
-            //MenuFinanceiro.Add(CaixaAcessar, "Caixa - acessar");
-            //MenuFinanceiro.Add(CaixaGravar, "Caixa - gravar");
-            //MenuFinanceiro.Add(CaixaDeletar, "Caixa - deletar");
-            //MenuFinanceiro.Add(CaixaImprimir, "Caixa - imprimir");
+        //private void FuncionalidadeFinanceiro()
+        //{
+        //    MenuFinanceiro = new System.Collections.Hashtable();
 
-            //MenuFinanceiro.Add(ImpostoFinanceiroAcessar, "Imposto financeiro - acessar");
-            //MenuFinanceiro.Add(ImpostoFinanceiroGravar, "Imposto financeiro - gravar");
-            //MenuFinanceiro.Add(ImpostoFinanceiroDeletar, "Imposto financeiro - deletar");
-            //MenuFinanceiro.Add(ImpostoFinanceiroImprimir, "Imposto financeiro - imprimir");
+        //    //MenuFinanceiro.Add(ParametroFinanceiroAcessar, "Parâmetros - acessar");
+        //    //MenuFinanceiro.Add(ParametroFinanceiroGravar, "Parâmetros - gravar");
 
-            //MenuFinanceiro.Add(FormaRecebimentoAcessar, "Forma de recebimento - acessar");
-            //MenuFinanceiro.Add(FormaRecebimentoGravar, "Forma de recebimento - gravar");
-            //MenuFinanceiro.Add(FormaRecebimentoDeletar, "Forma de recebimento - deletar");
-            //MenuFinanceiro.Add(FormaRecebimentoImprimir, "Forma de recebimento - imprimir");
+        //    //MenuFinanceiro.Add(ParametroUsuarioFinanceiroAcessar, "Parâmetros do usuário - acessar");
+        //    //MenuFinanceiro.Add(ParametroUsuarioFinanceiroGravar, "Parâmetros do usuário - gravar");
 
-            //MenuFinanceiro.Add(MotivoCancelamentoAcessar, "Motivo de cancelamento - acessar");
-            //MenuFinanceiro.Add(MotivoCancelamentoGravar, "Motivo de cancelamento - gravar");
-            //MenuFinanceiro.Add(MotivoCancelamentoDeletar, "Motivo de cancelamento - deletar");
-            //MenuFinanceiro.Add(MotivoCancelamentoImprimir, "Motivo de cancelamento - imprimir");
+        //    //MenuFinanceiro.Add(CaixaAcessar, "Caixa - acessar");
+        //    //MenuFinanceiro.Add(CaixaGravar, "Caixa - gravar");
+        //    //MenuFinanceiro.Add(CaixaDeletar, "Caixa - deletar");
+        //    //MenuFinanceiro.Add(CaixaImprimir, "Caixa - imprimir");
 
-            //MenuFinanceiro.Add(RateioAutomaticoAcessar, "Rateio automático - acessar");
-            //MenuFinanceiro.Add(RateioAutomaticoGravar, "Rateio automático - gravar");
-            //MenuFinanceiro.Add(RateioAutomaticoDeletar, "Rateio automático - deletar");
-            //MenuFinanceiro.Add(RateioAutomaticoImprimir, "Rateio automático - imprimir");
+        //    //MenuFinanceiro.Add(ImpostoFinanceiroAcessar, "Imposto financeiro - acessar");
+        //    //MenuFinanceiro.Add(ImpostoFinanceiroGravar, "Imposto financeiro - gravar");
+        //    //MenuFinanceiro.Add(ImpostoFinanceiroDeletar, "Imposto financeiro - deletar");
+        //    //MenuFinanceiro.Add(ImpostoFinanceiroImprimir, "Imposto financeiro - imprimir");
 
-            //MenuFinanceiro.Add(TabelaBasicaFinanceiroAcessar, "Tabelas básicas - acessar");
-            //MenuFinanceiro.Add(TabelaBasicaFinanceiroGravar, "Tabelas básicas - gravar");
-            //MenuFinanceiro.Add(TabelaBasicaFinanceiroDeletar, "Tabelas básicas - deletar");
-            //MenuFinanceiro.Add(TabelaBasicaFinanceiroImprimir, "Tabelas básicas - imprimir");
+        //    //MenuFinanceiro.Add(FormaRecebimentoAcessar, "Forma de recebimento - acessar");
+        //    //MenuFinanceiro.Add(FormaRecebimentoGravar, "Forma de recebimento - gravar");
+        //    //MenuFinanceiro.Add(FormaRecebimentoDeletar, "Forma de recebimento - deletar");
+        //    //MenuFinanceiro.Add(FormaRecebimentoImprimir, "Forma de recebimento - imprimir");
 
-            //MenuFinanceiro.Add(TaxaAdministracaoAcessar, "Taxa de administração - acessar");
-            //MenuFinanceiro.Add(TaxaAdministracaoGravar, "Taxa de administração - gravar");
-            //MenuFinanceiro.Add(TaxaAdministracaoDeletar, "Taxa de administração - deletar");
-            //MenuFinanceiro.Add(TaxaAdministracaoImprimir, "Taxa de administração - imprimir");
+        //    //MenuFinanceiro.Add(MotivoCancelamentoAcessar, "Motivo de cancelamento - acessar");
+        //    //MenuFinanceiro.Add(MotivoCancelamentoGravar, "Motivo de cancelamento - gravar");
+        //    //MenuFinanceiro.Add(MotivoCancelamentoDeletar, "Motivo de cancelamento - deletar");
+        //    //MenuFinanceiro.Add(MotivoCancelamentoImprimir, "Motivo de cancelamento - imprimir");
 
-            //MenuFinanceiro.Add(TipoCompromissoAcessar, "Tipo de compromisso - acessar");
-            //MenuFinanceiro.Add(TipoCompromissoGravar, "Tipo de compromisso - gravar");
-            //MenuFinanceiro.Add(TipoCompromissoDeletar, "Tipo de compromisso - deletar");
-            //MenuFinanceiro.Add(TipoCompromissoImprimir, "Tipo de compromisso - imprimir");
+        //    //MenuFinanceiro.Add(RateioAutomaticoAcessar, "Rateio automático - acessar");
+        //    //MenuFinanceiro.Add(RateioAutomaticoGravar, "Rateio automático - gravar");
+        //    //MenuFinanceiro.Add(RateioAutomaticoDeletar, "Rateio automático - deletar");
+        //    //MenuFinanceiro.Add(RateioAutomaticoImprimir, "Rateio automático - imprimir");
 
-            //MenuFinanceiro.Add(TipoDocumentoAcessar, "Tipo de documento - acessar");
-            //MenuFinanceiro.Add(TipoDocumentoGravar, "Tipo de documento - gravar");
-            //MenuFinanceiro.Add(TipoDocumentoDeletar, "Tipo de documento - deletar");
-            //MenuFinanceiro.Add(TipoDocumentoImprimir, "Tipo de documento - Imprimir");
+        //    //MenuFinanceiro.Add(TabelaBasicaFinanceiroAcessar, "Tabelas básicas - acessar");
+        //    //MenuFinanceiro.Add(TabelaBasicaFinanceiroGravar, "Tabelas básicas - gravar");
+        //    //MenuFinanceiro.Add(TabelaBasicaFinanceiroDeletar, "Tabelas básicas - deletar");
+        //    //MenuFinanceiro.Add(TabelaBasicaFinanceiroImprimir, "Tabelas básicas - imprimir");
 
-            //MenuFinanceiro.Add(TipoMovimentoAcessar, "Tipo movimento - acessar");
-            //MenuFinanceiro.Add(TipoMovimentoGravar, "Tipo movimento - gravar");
-            //MenuFinanceiro.Add(TipoMovimentoDeletar, "Tipo movimento - deletar");
-            //MenuFinanceiro.Add(TipoMovimentoImprimir, "Tipo movimento - Imprimir");
+        //    //MenuFinanceiro.Add(TaxaAdministracaoAcessar, "Taxa de administração - acessar");
+        //    //MenuFinanceiro.Add(TaxaAdministracaoGravar, "Taxa de administração - gravar");
+        //    //MenuFinanceiro.Add(TaxaAdministracaoDeletar, "Taxa de administração - deletar");
+        //    //MenuFinanceiro.Add(TaxaAdministracaoImprimir, "Taxa de administração - imprimir");
 
-            //MenuFinanceiro.Add(TipoRateioAcessar, "Tipo rateio - acessar");
-            //MenuFinanceiro.Add(TipoRateioGravar, "Tipo rateio - gravar");
-            //MenuFinanceiro.Add(TipoRateioDeletar, "Tipo rateio - deletar");
-            //MenuFinanceiro.Add(TipoRateioImprimir, "Tipo rateio - Imprimir");
+        //    //MenuFinanceiro.Add(TipoCompromissoAcessar, "Tipo de compromisso - acessar");
+        //    //MenuFinanceiro.Add(TipoCompromissoGravar, "Tipo de compromisso - gravar");
+        //    //MenuFinanceiro.Add(TipoCompromissoDeletar, "Tipo de compromisso - deletar");
+        //    //MenuFinanceiro.Add(TipoCompromissoImprimir, "Tipo de compromisso - imprimir");
 
-            //MenuFinanceiro.Add(BancoAcessar, "Banco - acessar");
-            //MenuFinanceiro.Add(BancoGravar, "Banco - gravar");
-            //MenuFinanceiro.Add(BancoDeletar, "Banco - deletar");
-            //MenuFinanceiro.Add(BancoImprimir, "Banco - Imprimir");
+        //    //MenuFinanceiro.Add(TipoDocumentoAcessar, "Tipo de documento - acessar");
+        //    //MenuFinanceiro.Add(TipoDocumentoGravar, "Tipo de documento - gravar");
+        //    //MenuFinanceiro.Add(TipoDocumentoDeletar, "Tipo de documento - deletar");
+        //    //MenuFinanceiro.Add(TipoDocumentoImprimir, "Tipo de documento - Imprimir");
 
-            //MenuFinanceiro.Add(AgenciaAcessar, "Agência - acessar");
-            //MenuFinanceiro.Add(AgenciaGravar, "Agência - gravar");
-            //MenuFinanceiro.Add(AgenciaDeletar, "Agência - deletar");
-            //MenuFinanceiro.Add(AgenciaImprimir, "Agência - imprimir");
+        //    //MenuFinanceiro.Add(TipoMovimentoAcessar, "Tipo movimento - acessar");
+        //    //MenuFinanceiro.Add(TipoMovimentoGravar, "Tipo movimento - gravar");
+        //    //MenuFinanceiro.Add(TipoMovimentoDeletar, "Tipo movimento - deletar");
+        //    //MenuFinanceiro.Add(TipoMovimentoImprimir, "Tipo movimento - Imprimir");
 
-            //MenuFinanceiro.Add(ContaCorrenteAcessar, "Conta corrente - acessar");
-            //MenuFinanceiro.Add(ContaCorrenteGravar, "Conta corrente - gravar");
-            //MenuFinanceiro.Add(ContaCorrenteDeletar, "Conta corrente - deletar");
-            ////MenuFinanceiro.Add(ContaCorrenteImprimir, "Conta corrente - imprimir");
+        //    //MenuFinanceiro.Add(TipoRateioAcessar, "Tipo rateio - acessar");
+        //    //MenuFinanceiro.Add(TipoRateioGravar, "Tipo rateio - gravar");
+        //    //MenuFinanceiro.Add(TipoRateioDeletar, "Tipo rateio - deletar");
+        //    //MenuFinanceiro.Add(TipoRateioImprimir, "Tipo rateio - Imprimir");
 
-            MenuFinanceiro.Add(RelatorioApropriacaoPorClasseAcessar, "Relatório de apropriação por classe - acessar");
-            MenuFinanceiro.Add(RelatorioApropriacaoPorClasseImprimir, "Relatório de apropriação por classe - imprimir");
+        //    //MenuFinanceiro.Add(BancoAcessar, "Banco - acessar");
+        //    //MenuFinanceiro.Add(BancoGravar, "Banco - gravar");
+        //    //MenuFinanceiro.Add(BancoDeletar, "Banco - deletar");
+        //    //MenuFinanceiro.Add(BancoImprimir, "Banco - Imprimir");
+
+        //    //MenuFinanceiro.Add(AgenciaAcessar, "Agência - acessar");
+        //    //MenuFinanceiro.Add(AgenciaGravar, "Agência - gravar");
+        //    //MenuFinanceiro.Add(AgenciaDeletar, "Agência - deletar");
+        //    //MenuFinanceiro.Add(AgenciaImprimir, "Agência - imprimir");
+
+        //    //MenuFinanceiro.Add(ContaCorrenteAcessar, "Conta corrente - acessar");
+        //    //MenuFinanceiro.Add(ContaCorrenteGravar, "Conta corrente - gravar");
+        //    //MenuFinanceiro.Add(ContaCorrenteDeletar, "Conta corrente - deletar");
+        //    ////MenuFinanceiro.Add(ContaCorrenteImprimir, "Conta corrente - imprimir");
+
+        //    MenuFinanceiro.Add(RelatorioApropriacaoPorClasseAcessar, "Relatório de apropriação por classe - acessar");
+        //    MenuFinanceiro.Add(RelatorioApropriacaoPorClasseImprimir, "Relatório de apropriação por classe - imprimir");
 
 
-            MenuFinanceiro.Add(RelatorioContasAPagarTitulosAcessar, "Relatório de títulos a pagar - acessar");
-            MenuFinanceiro.Add(RelatorioContasAPagarTitulosImprimir, "Relatório de títulos a pagar - imprimir");
+        //    MenuFinanceiro.Add(RelatorioContasAPagarTitulosAcessar, "Relatório de títulos a pagar - acessar");
+        //    MenuFinanceiro.Add(RelatorioContasAPagarTitulosImprimir, "Relatório de títulos a pagar - imprimir");
 
-            MenuFinanceiro.Add(RelatorioAcompanhamentoFinanceiroAcessar, "Relatório Acompanhamento Financeiro - acessar");
-            MenuFinanceiro.Add(RelatorioAcompanhamentoFinanceiroImprimir, "Relatório Acompanhamento Financeiro - imprimir");
+        //    MenuFinanceiro.Add(RelatorioAcompanhamentoFinanceiroAcessar, "Relatório Acompanhamento Financeiro - acessar");
+        //    MenuFinanceiro.Add(RelatorioAcompanhamentoFinanceiroImprimir, "Relatório Acompanhamento Financeiro - imprimir");
 
-        }
+        //}
 
-        private void FuncionalidadeOrcamento()
-        {
-            MenuOrcamento = new System.Collections.Hashtable();
-            MenuOrcamento.Add(RelatorioOrcamentoAcessar, "Relatório Orçamento - acessar");
-            MenuOrcamento.Add(RelatorioOrcamentoImprimir, "Relatório Orçamento - imprimir");
-        }
+        #endregion
+
+        #region "FuncionalidadeOrcamento"
+
+        //private void FuncionalidadeOrcamento()
+        //{
+        //    MenuOrcamento = new System.Collections.Hashtable();
+        //    MenuOrcamento.Add(RelatorioOrcamentoAcessar, "Relatório Orçamento - acessar");
+        //    MenuOrcamento.Add(RelatorioOrcamentoImprimir, "Relatório Orçamento - imprimir");
+        //}
+
+        #endregion
+
+        #region "FuncionalidadeOrdemCompra"
 
         private void FuncionalidadeOrdemCompra()
         {
             MenuOrdemCompra = new System.Collections.Hashtable();
 
-            ////MenuOrdemCompra.Add(OrdemCompraMaterialAcessar, "Material - acessar");
-            ////MenuOrdemCompra.Add(OrdemCompraMaterialGravar, "Material - gravar");
-            ////MenuOrdemCompra.Add(OrdemCompraMaterialDeletar, "Material - deletar");
-            ////MenuOrdemCompra.Add(OrdemCompraMaterialImprimir, "Material - Imprimir");
+            //MenuOrdemCompra.Add(OrdemCompraMaterialAcessar, "Material - acessar");
+            //MenuOrdemCompra.Add(OrdemCompraMaterialGravar, "Material - gravar");
+            //MenuOrdemCompra.Add(OrdemCompraMaterialDeletar, "Material - deletar");
+            //MenuOrdemCompra.Add(OrdemCompraMaterialImprimir, "Material - Imprimir");
 
             //MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaAcessar, "Unidade de medida - acessar");
             //MenuOrdemCompra.Add(OrdemCompraUnidadeMedidaGravar, "Unidade de medida - gravar");
@@ -390,11 +409,11 @@ namespace GIR.Sigim.Application.Constantes
             //MenuOrdemCompra.Add(ParametroUsuarioOrdemCompraAcessar, "Parâmetros do usuário - acessar");
             //MenuOrdemCompra.Add(ParametroUsuarioOrdemCompraGravar, "Parâmetros do usuário - gravar");
 
-            MenuOrdemCompra.Add(PreRequisicaoMaterialAcessar, "Pré-Requisição de material - acessar");
-            MenuOrdemCompra.Add(PreRequisicaoMaterialGravar, "Pré-Requisição de material - gravar");
-            MenuOrdemCompra.Add(PreRequisicaoMaterialCancelar, "Pré-Requisição de material - cancelar");
-            MenuOrdemCompra.Add(PreRequisicaoMaterialImprimir, "Pré-Requisição de material - imprimir");
-            MenuOrdemCompra.Add(PreRequisicaoMaterialAprovar, "Pré-Requisição de material - aprovar");
+            //MenuOrdemCompra.Add(PreRequisicaoMaterialAcessar, "Pré-Requisição de material - acessar");
+            //MenuOrdemCompra.Add(PreRequisicaoMaterialGravar, "Pré-Requisição de material - gravar");
+            //MenuOrdemCompra.Add(PreRequisicaoMaterialCancelar, "Pré-Requisição de material - cancelar");
+            //MenuOrdemCompra.Add(PreRequisicaoMaterialImprimir, "Pré-Requisição de material - imprimir");
+            //MenuOrdemCompra.Add(PreRequisicaoMaterialAprovar, "Pré-Requisição de material - aprovar");
 
             MenuOrdemCompra.Add(RequisicaoMaterialAcessar, "Requisição de material - acessar");
             MenuOrdemCompra.Add(RequisicaoMaterialGravar, "Requisição de material - gravar");
@@ -403,15 +422,17 @@ namespace GIR.Sigim.Application.Constantes
             MenuOrdemCompra.Add(RequisicaoMaterialAprovar, "Requisição de material - aprovar");
             MenuOrdemCompra.Add(RequisicaoMaterialCancelarAprovacao, "Requisição de material - cancelar aprovação");
 
-            MenuOrdemCompra.Add(EntradaMaterialAcessar, "Entrada de material - acessar");
-            MenuOrdemCompra.Add(EntradaMaterialGravar, "Entrada de material - gravar");
-            MenuOrdemCompra.Add(EntradaMaterialCancelar, "Entrada de material - cancelar");
-            MenuOrdemCompra.Add(EntradaMaterialImprimir, "Entrada de material - imprimir");
+            //MenuOrdemCompra.Add(EntradaMaterialAcessar, "Entrada de material - acessar");
+            //MenuOrdemCompra.Add(EntradaMaterialGravar, "Entrada de material - gravar");
+            //MenuOrdemCompra.Add(EntradaMaterialCancelar, "Entrada de material - cancelar");
+            //MenuOrdemCompra.Add(EntradaMaterialImprimir, "Entrada de material - imprimir");
 
-            MenuOrdemCompra.Add(RelatorioItensOrdemCompraAcessar, "Relatório de itens de ordem de compra - acessar");
-            MenuOrdemCompra.Add(RelatorioItensOrdemCompraImprimir, "Relatório de itens de ordem de compra - imprimir");
+            //MenuOrdemCompra.Add(RelatorioItensOrdemCompraAcessar, "Relatório de itens de ordem de compra - acessar");
+            //MenuOrdemCompra.Add(RelatorioItensOrdemCompraImprimir, "Relatório de itens de ordem de compra - imprimir");
         }
+        #endregion
 
+        #region "FuncionalidadeSac"
         //private void FuncionalidadeSac()
         //{
         //    MenuSac = new System.Collections.Hashtable();
@@ -424,5 +445,6 @@ namespace GIR.Sigim.Application.Constantes
         //    MenuSac.Add(SetorSacDeletar, "Setor - deletar");
         //    //MenuSac.Add(SetorSacImprimir, "Setor - imprimir");
         //}
+        #endregion
     }
 }

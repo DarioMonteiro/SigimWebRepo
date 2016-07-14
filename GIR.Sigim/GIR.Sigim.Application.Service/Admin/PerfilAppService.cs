@@ -45,6 +45,7 @@ namespace GIR.Sigim.Application.Service.Admin
             var specification = (Specification<Perfil>)new TrueSpecification<Perfil>();
 
             specification &= PerfilSpecification.IgualAoModuloId(filtro.ModuloId);
+            specification &= PerfilSpecification.IdMaiorQueZero();
 
             return perfilRepository.ListarPeloFiltroComPaginacao(
                 specification,

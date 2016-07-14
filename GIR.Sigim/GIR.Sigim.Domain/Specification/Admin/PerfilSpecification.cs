@@ -22,5 +22,16 @@ namespace GIR.Sigim.Domain.Specification.Admin
             return specification;
         }
 
+        public static Specification<Perfil> IdMaiorQueZero()
+        {
+            Specification<Perfil> specification = new TrueSpecification<Perfil>();
+
+            var directSpecification = new DirectSpecification<Perfil>(l => l.Id > 0);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
+
     }
 }
