@@ -113,33 +113,35 @@ namespace GIR.Sigim.Application.Service.Sigim
                 l => l.ListaOrcamentoComposicao.Select(o => o.ListaOrcamentoComposicaoItem.Select(s => s.OrcamentoComposicao.Composicao)),
                 l => l.ListaOrcamentoComposicao.Select(o => o.ListaOrcamentoComposicaoItem.Select(s => s.OrcamentoComposicao.Orcamento.Obra)));
 
-            if (MaterialSelecionadoEncontradoNoOrcamentoEmElaboracao(orcamento, materialId))
-                messageQueue.Add("O insumo está em um orçamento que encontra-se em manutenção.", TypeMessage.Error);
-            else
+            if (orcamento != null)
             {
-                var listaOrcamentoComposicao = orcamento.ListaOrcamentoComposicao.SelectMany(l =>
-                    l.ListaOrcamentoComposicaoItem.Where(o =>
-                        o.MaterialId == materialId
-                        && o.EhControlado == true));
-                        //&& (!string.IsNullOrEmpty(codigoClasse) ? o.OrcamentoComposicao.codigoClasse == codigoClasse : true))).To<List<OrcamentoComposicaoItemDTO>>();
-
-                if (!listaOrcamentoComposicao.Any())
+                if (MaterialSelecionadoEncontradoNoOrcamentoEmElaboracao(orcamento, materialId))
+                    messageQueue.Add("O insumo está em um orçamento que encontra-se em manutenção.", TypeMessage.Error);
+                else
                 {
-                    var material = materialRepository.ObterPeloId(materialId);
-                    listaOrcamentoComposicao = orcamento.ListaOrcamentoComposicao.SelectMany(l =>
+                    var listaOrcamentoComposicao = orcamento.ListaOrcamentoComposicao.SelectMany(l =>
                         l.ListaOrcamentoComposicaoItem.Where(o =>
-                            o.MaterialId.HasValue
-                            && o.EhControlado == true
-                            && o.Material.CodigoMaterialClasseInsumo == material.CodigoMaterialClasseInsumo));
-                            //&& (!string.IsNullOrEmpty(codigoClasse) ? o.OrcamentoComposicao.codigoClasse == codigoClasse : true))).To<List<OrcamentoComposicaoItemDTO>>();
+                            o.MaterialId == materialId
+                            && o.EhControlado == true));
+                    //&& (!string.IsNullOrEmpty(codigoClasse) ? o.OrcamentoComposicao.codigoClasse == codigoClasse : true))).To<List<OrcamentoComposicaoItemDTO>>();
+
+                    if (!listaOrcamentoComposicao.Any())
+                    {
+                        var material = materialRepository.ObterPeloId(materialId);
+                        listaOrcamentoComposicao = orcamento.ListaOrcamentoComposicao.SelectMany(l =>
+                            l.ListaOrcamentoComposicaoItem.Where(o =>
+                                o.MaterialId.HasValue
+                                && o.EhControlado == true
+                                && o.Material.CodigoMaterialClasseInsumo == material.CodigoMaterialClasseInsumo));
+                        //&& (!string.IsNullOrEmpty(codigoClasse) ? o.OrcamentoComposicao.codigoClasse == codigoClasse : true))).To<List<OrcamentoComposicaoItemDTO>>();
+                    }
+
+                    if (listaOrcamentoComposicao.Any())
+                        possuiInterfaceOrcamento = true;
+
+                    listaDTO = listaOrcamentoComposicao.Where(l => !string.IsNullOrEmpty(codigoClasse) ? l.OrcamentoComposicao.CodigoClasse == codigoClasse : true).To<List<OrcamentoComposicaoItemDTO>>();
                 }
-
-                if (listaOrcamentoComposicao.Any())
-                    possuiInterfaceOrcamento = true;
-
-                listaDTO = listaOrcamentoComposicao.Where(l => !string.IsNullOrEmpty(codigoClasse) ? l.OrcamentoComposicao.CodigoClasse == codigoClasse : true).To<List<OrcamentoComposicaoItemDTO>>();
             }
-
             return listaDTO;
         }
 
