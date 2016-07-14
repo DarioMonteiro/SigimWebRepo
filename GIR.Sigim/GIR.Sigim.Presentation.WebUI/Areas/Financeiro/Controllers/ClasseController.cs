@@ -26,10 +26,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             var classe = classeAppService.ObterPeloCodigoEOrcamento(codigo, orcamentoId);
             if (!string.IsNullOrEmpty(codigo))
             {
-                //if (somenteNivelFolha && !classeAppService.EhClasseUltimoNivelValida(classe, orcamentoId)
-                //    || !classeAppService.EhClasseValida(classe, orcamentoId))
-                if (somenteNivelFolha && !classeAppService.EhClasseUltimoNivelValida(codigo, orcamentoId)
-                || !classeAppService.EhClasseValida(classe, orcamentoId))
+                if (somenteNivelFolha && !classeAppService.EhClasseUltimoNivelValida(classe, orcamentoId)
+                    || !classeAppService.EhClasseValida(classe, orcamentoId))
+                //if (somenteNivelFolha && !classeAppService.EhClasseUltimoNivelValida(codigo, orcamentoId)
+                //|| !classeAppService.EhClasseValida(classe, orcamentoId))
                 {
                     var msg = messageQueue.GetAll()[0].Text;
                     messageQueue.Clear();
