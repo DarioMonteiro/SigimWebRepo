@@ -16,13 +16,13 @@
       </mvcSiteMapNode>
     </mvcSiteMapNode>
 
-    <!--<mvcSiteMapNode title="Comercial" controller="Home" action="Index" area="Comercial">
+    <mvcSiteMapNode title="Comercial" controller="Home" action="Index" area="Comercial">
      <mvcSiteMapNode title="Relatórios" url="#" clickable="false" roles="REL_STATUS_VENDA_ACESSAR">
         <mvcSiteMapNode title="Relatórios de status da venda" controller="RelStatusVenda" action="Index"/>
       </mvcSiteMapNode>
     </mvcSiteMapNode>
 
-    <mvcSiteMapNode title="Contrato" controller="Home" action="Index" area="Contrato">
+    <!--<mvcSiteMapNode title="Contrato" controller="Home" action="Index" area="Contrato">
       <mvcSiteMapNode title="Medição e Liberação" url="#" clickable="false" roles="MEDICAO_ACESSAR,LIBERACAO_ACESSAR">
         <mvcSiteMapNode title="Medição" controller="MedicaoContrato" action="Index"/>
         <mvcSiteMapNode title="Medição" controller="MedicaoContrato" action="Medicao" visibility="SiteMapPathHelper,!*" preservedRouteParameters="id"/>
@@ -35,7 +35,8 @@
     </mvcSiteMapNode>
 
     <mvcSiteMapNode title="Financeiro" controller="Home" action="Index" area="Financeiro">
-      --><!--<mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_FINANCEIRO_ACESSAR,PARAMETRO_USUARIO_FINANCEIRO_ACESSAR">
+      -->
+    <!--<mvcSiteMapNode title="Sistema" url="#" clickable="false" roles="PARAMETRO_FINANCEIRO_ACESSAR,PARAMETRO_USUARIO_FINANCEIRO_ACESSAR">
         <mvcSiteMapNode title="Parâmetros" controller="ParametrosFinanceiro" action="Index"/>
         <mvcSiteMapNode title="Parâmetros - usuário" controller="ParametrosUsuarioFinanceiro" action="Index"/>
       </mvcSiteMapNode>--><!--

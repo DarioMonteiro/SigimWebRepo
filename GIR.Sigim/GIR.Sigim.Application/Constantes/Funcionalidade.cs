@@ -218,7 +218,7 @@ namespace GIR.Sigim.Application.Constantes
         public Funcionalidade()
         {
             FuncionalidadeAdmin();
-            //FuncionalidadeComercial();
+            FuncionalidadeComercial();
             //FuncionalidadeContrato();
             //FuncionalidadeFinanceiro();
             //FuncionalidadeOrcamento();
@@ -271,13 +271,15 @@ namespace GIR.Sigim.Application.Constantes
         #endregion
 
         #region "FuncionalidadeComercial"
-        //private void FuncionalidadeComercial()
-        //{
-        //    MenuComercial = new System.Collections.Hashtable();
 
-        //    MenuComercial.Add(RelStatusVendaAcessar , "Relatório de status da venda - acessar");
-        //    MenuComercial.Add(RelStatusVendaImprimir, "Relatório de status da venda - imprimir");
-        //}
+        private void FuncionalidadeComercial()
+        {
+            MenuComercial = new System.Collections.Hashtable();
+
+            MenuComercial.Add(RelStatusVendaAcessar, "Relatório de status da venda - acessar");
+            MenuComercial.Add(RelStatusVendaImprimir, "Relatório de status da venda - imprimir");
+        }
+
         #endregion
 
         #region "FuncionalidadeFinanceiro"
