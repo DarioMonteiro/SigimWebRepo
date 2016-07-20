@@ -16,6 +16,16 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         Aprovado = 1,
 
         [Description("Cancelado")]
-        Cancelado = 2
+        Cancelado = 2,
+
+        [Description("Atendido pelo estoque")]
+        AtendidoPeloEstoque = 3,
+
+        [Description("Entregue pelo estoque")]
+        EntreguePeloEstoque = 4,
+
+        [Description("Cancelada pelo estoque")]
+        CanceladaPeloEstoque = 5
+
     }
 }

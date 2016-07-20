@@ -19,6 +19,9 @@ namespace GIR.Sigim.Domain.Entity.OrdemCompra
         Fechada = 2,
 
         [Description("Cancelada")]
-        Cancelada = 3
+        Cancelada = 3,
+
+        [Description("Aprovada")]
+        Aprovada = 4
     }
 }
