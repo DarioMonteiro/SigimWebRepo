@@ -55,7 +55,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
 
             CarregarListas(model);
 
-            model.JsonItensClasse = JsonConvert.SerializeObject(new List<ClasseDTO>());
+            model.JsonItensClasse = JsonConvert.SerializeObject(new List<ClasseDTO>(), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             return View(model);
         }

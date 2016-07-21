@@ -92,15 +92,19 @@ namespace GIR.Sigim.Application.Service.Admin
             FuncionalidadeDTO Funcionalidade = new FuncionalidadeDTO();
             List<FuncionalidadeDTO> listaFuncionalidade = new List<FuncionalidadeDTO>();
 
-            foreach (var item in Menu.Keys)
+            if (Menu != null)
             {
-                Funcionalidade = new FuncionalidadeDTO();
-                Funcionalidade.Codigo = item.ToString();
-                Funcionalidade.Descricao = Menu[item].ToString();
-                listaFuncionalidade.Add(Funcionalidade);
+                foreach (var item in Menu.Keys)
+                {
+                    Funcionalidade = new FuncionalidadeDTO();
+                    Funcionalidade.Codigo = item.ToString();
+                    Funcionalidade.Descricao = Menu[item].ToString();
+                    listaFuncionalidade.Add(Funcionalidade);
+                }
+
+                listaFuncionalidade = listaFuncionalidade.OrderBy(l => l.Codigo).ToList<FuncionalidadeDTO>();
             }
 
-            listaFuncionalidade = listaFuncionalidade.OrderBy(l => l.Codigo).ToList<FuncionalidadeDTO>();
             return listaFuncionalidade;
 
         }

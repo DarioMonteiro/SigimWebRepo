@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GIR.Sigim.Application.DTO.Orcamento;
 
 namespace GIR.Sigim.Application.DTO.Financeiro
 {
@@ -26,15 +25,11 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public int? AnoMes { get; set; }
         public int? TipoTabela { get; set; }
         public bool Ativo { get; set; }
-        //public ClasseDTO ClassePai { get; set; }
         public ICollection<ClasseDTO> ListaFilhos { get; set; }
-        public ICollection<OrcamentoComposicaoDTO> ListaOrcamentoComposicao { get; set; }
-
 
         public ClasseDTO()
         {
             this.ListaFilhos = new HashSet<ClasseDTO>();
-            this.ListaOrcamentoComposicao = new HashSet<OrcamentoComposicaoDTO>();
         }
     }
 }

@@ -31,22 +31,24 @@ namespace GIR.Sigim.Application.Service.Financeiro
         public ClasseDTO ObterPeloCodigoEOrcamento(string codigo, int orcamentoId)
         {
             ClasseDTO classe = new ClasseDTO();
-            List<ClasseDTO> listaClasse = ClasseRepository.ObterPeloCodigoEOrcamento(codigo, orcamentoId, l => l.ListaFilhos).To<List<ClasseDTO>>();
+
+            List<Classe> listaClasse = ClasseRepository.ObterPeloCodigoEOrcamento(codigo, orcamentoId, l => l.ListaFilhos).To<List<Classe>>();
             if (listaClasse != null)
             {
                 if (listaClasse.Any(l => l.ListaOrcamentoComposicao.Any(o => o.OrcamentoId == orcamentoId)))
                 {
-                    classe = listaClasse.Where(l => l.ListaOrcamentoComposicao.Any(o => o.OrcamentoId == orcamentoId)).FirstOrDefault();
+                    classe = listaClasse.Where(l => l.ListaOrcamentoComposicao.Any(o => o.OrcamentoId == orcamentoId)).FirstOrDefault().To<ClasseDTO>();
                 }
                 else
                 {
-                    classe = listaClasse.Where(l => l.Codigo.StartsWith(codigo)).FirstOrDefault();
+                    classe = listaClasse.Where(l => l.Codigo.StartsWith(codigo)).FirstOrDefault().To<ClasseDTO>();
                 }
             }
             else 
             {
                 classe = null;
             }
+
             return classe;
         }
 

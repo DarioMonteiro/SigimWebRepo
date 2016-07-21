@@ -65,7 +65,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                     model.Cliente = lista.First().Cliente;
 
                     model.JsonItens = Newtonsoft.Json.JsonConvert.SerializeObject(lista,
-                                                                                  Formatting.None,
+                                                                                  Formatting.Indented,
                                                                                   new JsonSerializerSettings()
                                                                                   { 
                                                                                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -105,7 +105,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             else
             {
                 var lista = taxaAdministracaoAppService.ListarPeloCentroCustoCliente(centroCustoCodigo, clienteId.Value);
-                listaString = Newtonsoft.Json.JsonConvert.SerializeObject(lista, Formatting.None,
+                listaString = Newtonsoft.Json.JsonConvert.SerializeObject(lista, Formatting.Indented,
                                                                           new JsonSerializerSettings()
                                                                           {
                                                                               ReferenceLoopHandling = ReferenceLoopHandling.Ignore

@@ -39,8 +39,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             CarregarListas(model);
 
-            model.JsonItensClasseDespesa = JsonConvert.SerializeObject(new List<ClasseDTO>());
-            model.JsonItensClasseReceita = JsonConvert.SerializeObject(new List<ClasseDTO>());
+            model.JsonItensClasseDespesa = JsonConvert.SerializeObject(new List<ClasseDTO>(), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            model.JsonItensClasseReceita = JsonConvert.SerializeObject(new List<ClasseDTO>(), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             return View(model);
         }

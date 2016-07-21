@@ -148,7 +148,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             contratoAppService.RecuperarMedicoesALiberar(contrato, contratoRetificacaoItem, model.Resumo, out listaItemLiberacao);
             model.PodeConcluirContrato =  contratoAppService.PodeConcluirContrato(contrato);
 
-            model.JsonListaItemLiberacao = JsonConvert.SerializeObject(listaItemLiberacao);
+            model.JsonListaItemLiberacao = JsonConvert.SerializeObject(listaItemLiberacao, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             model.PodeHabilitarBotoes = contratoAppService.EhPermitidoHabilitarBotoes(contrato);
 
@@ -237,7 +237,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
                         ehRecuperou = true,
                         errorMessage = string.Empty,
                         resumo = resumo,
-                        listaItemLiberacao = JsonConvert.SerializeObject(listaItemLiberacao),
+                        listaItemLiberacao = JsonConvert.SerializeObject(listaItemLiberacao, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }),
                         podeConcluirContrato = podeConcluirContrato,
                         redirectToUrl = string.Empty
                     });
@@ -689,7 +689,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Contrato.Controllers
             {
                 estaOrdenado = estaOrdenado,
                 message = msg,
-                listaItemLiberacao = JsonConvert.SerializeObject(listaItemLiberacaoDTO)
+                listaItemLiberacao = JsonConvert.SerializeObject(listaItemLiberacaoDTO, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
             });
         }
 

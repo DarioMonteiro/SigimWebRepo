@@ -15,6 +15,7 @@ using GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Presentation.WebUI.CustomAttributes;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
+using Newtonsoft.Json;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
 {
@@ -89,7 +90,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
 
             model.PreRequisicaoMaterial = preRequisicaoMaterial;
-            model.JsonItens = Newtonsoft.Json.JsonConvert.SerializeObject(preRequisicaoMaterial.ListaItens);
+            model.JsonItens = JsonConvert.SerializeObject(preRequisicaoMaterial.ListaItens, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             var parametros = parametrosOrdemCompraAppService.Obter();
             if (parametros != null)

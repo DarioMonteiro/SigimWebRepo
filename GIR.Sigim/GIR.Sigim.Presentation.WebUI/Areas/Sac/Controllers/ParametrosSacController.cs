@@ -12,6 +12,7 @@ using GIR.Sigim.Presentation.WebUI.Areas.Sac.ViewModel;
 using GIR.Sigim.Presentation.WebUI.Controllers;
 using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Presentation.WebUI.CustomAttributes;
+using Newtonsoft.Json;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
 {
@@ -41,8 +42,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Sac.Controllers
             {
                 parametrosEmail.ParametrosSac = new ParametrosSacDTO();
             }
-            model.ParametrosSac = parametrosSac; 
-            model.JsonListaEmail = Newtonsoft.Json.JsonConvert.SerializeObject(model.ParametrosSac.ListaParametrosEmailSac);
+            model.ParametrosSac = parametrosSac;
+            model.JsonListaEmail = JsonConvert.SerializeObject(model.ParametrosSac.ListaParametrosEmailSac, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             CarregarCombos(model);
             return View(model);
