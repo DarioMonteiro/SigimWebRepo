@@ -39,6 +39,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
         public ActionResult PesquisarOrcamentos(OrcamentoPesquisaFiltro filtro)
         {
             int totalRegistros = 0;
+
+            if (string.IsNullOrEmpty(filtro.OrderBy))
+                filtro.OrderBy = "";
+
             List<OrcamentoDTO> result = orcamentoAppService.PesquisarOrcamentosPeloFiltro(filtro, out totalRegistros);
 
             if (result.Any())

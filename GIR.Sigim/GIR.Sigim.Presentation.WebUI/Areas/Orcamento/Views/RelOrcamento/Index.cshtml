@@ -218,6 +218,7 @@
         $("#@Html.IdFor(m => m.Filtro.EmpresaId)").on("change", function () {
             limpaOrcamento();
             $("#empresaIdPesquisaGenerica").val(null);
+            $("#obraIdPesquisaGenerica").val(null);
             limpaComboObra();
             carregaComboObra();
             desabilitarClasse();
@@ -447,7 +448,7 @@
         var empresaId = $('#@Html.IdFor(m => m.Filtro.EmpresaId)').val();
         if ((empresaId == null) || (empresaId == '')) { empresaId = 0; }
         limpaComboObra();
-        if (empresaId != 0) {
+        if (empresaId !== 0) {
             $('#empresaIdPesquisaGenerica').val(empresaId);
             $.ajax({
                 type: 'POST',

@@ -83,26 +83,29 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Orcamento
         {
             switch (orderBy)
             {
+                case "sequencial":
+                    set = ascending ? set.OrderBy(l => l.Sequencial) : set.OrderByDescending(l => l.Sequencial);
+                    break;
                 case "descricao":
-                    set = ascending ? set.OrderBy(l => l.Empresa.Numero).ThenBy(l => l.Obra.Numero).ThenBy(l => l.Descricao) : set.OrderByDescending(l => l.Empresa.Numero).ThenByDescending(l => l.Obra.Numero).ThenByDescending(l => l.Descricao);
+                    set = ascending ? set.OrderBy(l => l.Descricao) : set.OrderByDescending(l => l.Descricao);
                     break;
                 case "obra":
-                    set = ascending ? set.OrderBy(l => l.Empresa.Numero).ThenBy(l => l.Obra.Numero) : set.OrderByDescending(l => l.Empresa.Numero).ThenByDescending(l => l.Obra.Numero);
+                    set = ascending ? set.OrderBy(l => l.Obra.Numero) : set.OrderByDescending(l => l.Obra.Numero);
                     break;
                 case "empresa":
                     set = ascending ? set.OrderBy(l => l.Empresa.Numero) : set.OrderByDescending(l => l.Empresa.Numero);
                     break;
                 case "centroCusto":
-                    set = ascending ? set.OrderBy(l => l.Empresa.Numero).ThenBy(l => l.Obra.Numero).ThenBy(l => l.Obra.CodigoCentroCusto) : set.OrderByDescending(l => l.Empresa.Numero).ThenByDescending(l => l.Obra.Numero).ThenByDescending(l => l.Obra.CodigoCentroCusto);
+                    set = ascending ? set.OrderBy(l => l.Obra.CodigoCentroCusto) : set.OrderByDescending(l => l.Obra.CodigoCentroCusto);
                     break;
                 case "situacao":
-                    set = ascending ? set.OrderBy(l => l.Empresa.Numero).ThenBy(l => l.Obra.Numero).ThenBy(l => l.Situacao) : set.OrderByDescending(l => l.Empresa.Numero).ThenByDescending(l => l.Obra.Numero).ThenByDescending(l => l.Situacao);
+                    set = ascending ? set.OrderBy(l => l.Situacao) : set.OrderByDescending(l => l.Situacao);
                     break;
                 case "data":
-                    set = ascending ? set.OrderBy(l => l.Empresa.Numero).ThenBy(l => l.Obra.Numero).ThenBy(l => l.Data) : set.OrderByDescending(l => l.Empresa.Numero).ThenByDescending(l => l.Obra.Numero).ThenByDescending(l => l.Data);
+                    set = ascending ? set.OrderBy(l => l.Data) : set.OrderByDescending(l => l.Data);
                     break;
                 case "simplificado":
-                    set = ascending ? set.OrderBy(l => l.Empresa.Numero).ThenBy(l => l.Obra.Numero).ThenBy(l => l.Obra.OrcamentoSimplificado.Value) : set.OrderByDescending(l => l.Empresa.Numero).ThenByDescending(l => l.Obra.Numero).ThenByDescending(l => l.Obra.OrcamentoSimplificado.Value);
+                    set = ascending ? set.OrderBy(l => l.Obra.OrcamentoSimplificado.Value) : set.OrderByDescending(l => l.Obra.OrcamentoSimplificado.Value);
                     break;
                 default:
                     set = ascending ? set.OrderBy(l => l.Empresa.Numero).ThenBy(l => l.Obra.Numero).ThenBy(l => l.Sequencial) : set.OrderByDescending(l => l.Empresa.Numero).ThenByDescending(l => l.Obra.Numero).ThenByDescending(l => l.Sequencial);
