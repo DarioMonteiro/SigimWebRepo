@@ -260,6 +260,7 @@
             if ($("#@Html.IdFor(m => m.Filtro.EhClasse)").is(':checked')) 
             {
                 var idOrcamento = $("#orcamentoIdPesquisaGenerica").val();
+
                 if ((idOrcamento == "") || (idOrcamento == null)) idOrcamento = 0;
                 if (idOrcamento > 0) {
                     habilitarClasse();
@@ -278,7 +279,34 @@
 
         $(document).on("orcamentoEscolhido", function (e) {
             selecionaEmpresaObra(e.orcamentoId);
+            $("#@Html.IdFor(m => m.Filtro.Orcamento.Id)").val(e.orcamentoId);
         });
+
+
+        $(document).on("showFormatoImpressaoModalPanel", function (e) {
+            var orcamentoEscolhidoId = $("#orcamentoIdPesquisaGenerica").val();
+            if ((orcamentoEscolhidoId == "") || (orcamentoEscolhidoId == 0)) {
+                smartAlert("Atenção", "Selecione o orçamento !", "warning");
+                e.event.preventDefault();
+            }
+
+            var indiceId = $("#@Html.IdFor(m => m.Filtro.IndiceId)").val();
+
+            var ehValorCorrigido = $("#@Html.IdFor(m => m.Filtro.EhValorCorrigido)").val();
+
+            if ((indiceId != "" && indiceId > 0) && (ehValorCorrigido === "true")) {
+                smartAlert("Atenção", "Informe o índice !", "warning");
+                e.event.preventDefault();
+            }
+
+
+        });
+
+        $('#btnImprimirFake').on("click", function () {
+            $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
+        });
+
+
 
     });
 
@@ -345,6 +373,7 @@
     function limpaOrcamento() {
         limpaOrcamentoForm_@(Html.IdFor(m => m.Filtro.Orcamento.Sequencial))();
         $('#@Html.IdFor(m => m.Filtro.EhClasse)').prop('checked', false);
+        $('#@Html.IdFor(m => m.Filtro.Orcamento)').val(null);
     }
 
     function validaAdicionarClasse() {
@@ -470,6 +499,11 @@
                 smartAlert("Atenção", "Erro", "warning");
                 limpaComboObra(); });
         }
+    }
+
+    function executarImpressao() {
+        $('#btnImprimir')[0].click();
+        hideLoading();
     }
 
 </script>

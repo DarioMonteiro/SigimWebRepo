@@ -90,7 +90,7 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Orcamento
                     set = ascending ? set.OrderBy(l => l.Descricao) : set.OrderByDescending(l => l.Descricao);
                     break;
                 case "obra":
-                    set = ascending ? set.OrderBy(l => l.Obra.Numero) : set.OrderByDescending(l => l.Obra.Numero);
+                    set = ascending ? set.OrderBy(l => l.Obra.Numero).ThenBy(l =>l.Obra.Descricao) : set.OrderByDescending(l => l.Obra.Numero).ThenBy(l =>l.Obra.Descricao);
                     break;
                 case "empresa":
                     set = ascending ? set.OrderBy(l => l.Empresa.Numero) : set.OrderByDescending(l => l.Empresa.Numero);

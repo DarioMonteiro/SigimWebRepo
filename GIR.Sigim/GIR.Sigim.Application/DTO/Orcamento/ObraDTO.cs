@@ -43,5 +43,7 @@ namespace GIR.Sigim.Application.DTO.Orcamento
                 return numeroDescricao;
             }
         }
+        public Nullable<Decimal> BDIPercentual { get; set; }
+
     }
 }

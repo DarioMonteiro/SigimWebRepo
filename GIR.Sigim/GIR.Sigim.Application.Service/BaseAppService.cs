@@ -156,7 +156,7 @@ namespace GIR.Sigim.Application.Service
                 System.IO.File.Delete(caminhoImagem);
         }
 
-        private byte[] ObterIconeRelatorio(CentroCusto centroCusto)
+        protected internal byte[] ObterIconeRelatorio(CentroCusto centroCusto)
         {
             if (centroCusto == null)
                 return null;

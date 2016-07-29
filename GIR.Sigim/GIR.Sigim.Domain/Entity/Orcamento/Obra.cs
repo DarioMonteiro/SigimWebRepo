@@ -15,7 +15,11 @@ namespace GIR.Sigim.Domain.Entity.Orcamento
         public string Descricao { get; set; }
         public string CodigoCentroCusto { get; set; }
         public CentroCusto CentroCusto { get; set; }
-        public bool? OrcamentoSimplificado { get; set; } 
+        public bool? OrcamentoSimplificado { get; set; }
+        public Nullable<Decimal> BDIPercentual { get; set; }
+        public Nullable<Decimal> AreaConstrucaoAreaReal { get; set; }
+        public Nullable<Decimal> AreaConstrucaoAreaEquivalente { get; set; }
+
 
         public ICollection<Orcamento> ListaOrcamento { get; set; }
 

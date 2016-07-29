@@ -25,6 +25,11 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnName("descricao")
                 .HasColumnOrder(2);
 
+            Property(l => l.UnidadeMedidaSigla)
+                .HasMaxLength(6)
+                .HasColumnName("unidadeMedida")
+                .HasColumnOrder(3);
+
             HasMany<OrcamentoComposicao>(l => l.ListaOrcamentoComposicao)
                 .WithOptional(c => c.Composicao)
                 .HasForeignKey(c => c.ComposicaoId);

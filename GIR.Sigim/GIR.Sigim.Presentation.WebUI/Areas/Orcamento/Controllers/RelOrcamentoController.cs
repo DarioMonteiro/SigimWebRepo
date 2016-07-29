@@ -14,6 +14,7 @@ using GIR.Sigim.Application.Service.Orcamento;
 using GIR.Sigim.Application.DTO.Orcamento;
 using GIR.Sigim.Application.Adapter;
 using GIR.Sigim.Application.Service.Sigim;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
 {
@@ -89,6 +90,59 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
                         );
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Imprimir(RelOrcamentoListaViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Session["Filtro"] = model;
+
+                model.Filtro.ListaClasse = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasse);
+
+                OrcamentoDTO orcamentoDTO = orcamentoAppService.GerarRelatorioOrcamento(model.Filtro);
+                if (orcamentoDTO == null)
+                {
+                    messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
+                    return PartialView("_NotificationMessagesPartial");
+                }
+
+                return Content("<script>executarImpressao();</script>");
+
+            }
+            return Content("<script>smartAlert(\"Atenção\", \"Ocorreu erro ao tentar imprimir !\", \"warning\")</script>");
+        }
+
+        public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        {
+            var model = Session["Filtro"] as RelOrcamentoListaViewModel;
+            if (model == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NaoExistemRegistros, TypeMessage.Error);
+                return PartialView("_NotificationMessagesPartial");
+            }
+
+            model.Filtro.ListaClasse = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasse);
+
+            OrcamentoDTO orcamentoDTO = orcamentoAppService.GerarRelatorioOrcamento(model.Filtro);
+            if (orcamentoDTO == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
+                return PartialView("_NotificationMessagesPartial");
+            }
+
+            var arquivo = orcamentoAppService.ExportarRelOrcamento(model.Filtro, orcamentoDTO, formato);
+
+            if (arquivo != null)
+            {
+                Response.Buffer = false;
+                Response.ClearContent();
+                Response.ClearHeaders();
+                return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+            }
+
+            return PartialView("_NotificationMessagesPartial");
+        }
 
         #endregion
 

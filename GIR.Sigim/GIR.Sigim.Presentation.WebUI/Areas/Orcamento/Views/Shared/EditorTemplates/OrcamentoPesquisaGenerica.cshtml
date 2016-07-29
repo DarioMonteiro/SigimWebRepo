@@ -8,6 +8,7 @@
     <input type="hidden" id="orcamentoIdPesquisaGenerica" />
     <input type="hidden" id="empresaIdPesquisaGenerica" />
     <input type="hidden" id="obraIdPesquisaGenerica" />
+    <input type="hidden" id="primeiraVez" value=true name="primeiraVez"/>
     <label class="label">@ViewBag.label</label>
     <div class="input-group">
         <label class="input">
@@ -46,6 +47,10 @@
                             </h4>
                         </div>
                         <div id="@(uniqueIdentifier)_collapseFiltro" class="panel-collapse collapse in">
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.HiddenFor(m => m.EmpresaId)
+                            @Html.HiddenFor(m => m.ObraId)
+
                             @Html.HiddenFor(m => m.PaginationParameters.PageIndex)
                             @Html.HiddenFor(m => m.PaginationParameters.PageSize)
                             @Html.HiddenFor(m => m.PaginationParameters.OrderBy)
@@ -142,6 +147,7 @@
             $('#@(uniqueIdentifier)_cboCampo').val($('#@(uniqueIdentifier)_cboCampo option:first').val());
             $('#@(uniqueIdentifier)_resultadoBusca').html('');
             SetTipoSelecao('Intervalo');
+            $('#primeiraVez').val('true');
         });
 
         $(document).on("change", "#@(uniqueIdentifier)_cboCampo",
@@ -241,6 +247,11 @@
     }
 
     function Pesquisar@(uniqueIdentifier)() {
+        var orderBy = $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val();
+        if ($('#primeiraVez').val() === "true") {
+            orderBy = "";
+            $('#primeiraVez').val(false);
+        }
         $.ajax({
             type: 'POST',
             url: '@Url.Action("PesquisarOrcamentos", "Orcamento", new { area = "Orcamento" })',
@@ -255,7 +266,7 @@
                 TextoFim: $('#@(uniqueIdentifier)_txtAte').val(),
                 PageIndex: $('#@Html.IdFor(m => m.PaginationParameters.PageIndex)').val(),
                 PageSize: $('#@Html.IdFor(m => m.PaginationParameters.PageSize)').val(),
-                OrderBy: $('#@Html.IdFor(m => m.PaginationParameters.OrderBy)').val(),
+                OrderBy: orderBy,
                 Ascending: $('#@Html.IdFor(m => m.PaginationParameters.Ascending)').val(),
                 UniqueIdentifier: $('#@Html.IdFor(m => m.PaginationParameters.UniqueIdentifier)').val()
             })
@@ -267,6 +278,7 @@
 
     function TratarSelecaoOrcamento@(uniqueIdentifier)(id, sequencial, descricao) {
         $("#orcamentoIdPesquisaGenerica").val(id);
+
         $('#@(uniqueIdentifier)').val(sequencial);
         $('#@Html.IdFor(m => m.Sequencial)').val(sequencial);
         $('#@Html.IdFor(m => m.Descricao)').val(descricao);
@@ -281,7 +293,9 @@
     function limpaOrcamentoForm_@(Html.IdFor(m => m.Sequencial))() {
         $("#@Html.IdFor(m => m.Sequencial)").val('');
         $("#@Html.IdFor(m => m.Descricao)").val('');
+
         $("#orcamentoIdPesquisaGenerica").val(null);
+
     }
 
 

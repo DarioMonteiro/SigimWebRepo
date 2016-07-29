@@ -51,6 +51,21 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
                 .HasColumnType("bit")
                 .HasColumnOrder(6);
 
+            Property(l => l.BDIPercentual)
+                .HasColumnName("BDIPercentual")
+                .HasPrecision(18,5)
+                .HasColumnOrder(9);
+
+            Property(l => l.AreaConstrucaoAreaReal)
+                .HasColumnName("areaConstrucaoAreaReal")
+                .HasPrecision(18, 5)
+                .HasColumnOrder(26);
+
+            Property(l => l.AreaConstrucaoAreaEquivalente)
+                .HasColumnName("areaConstrucaoAreaEquivalente")
+                .HasPrecision(18, 5)
+                .HasColumnOrder(28);
+
             HasMany<Domain.Entity.Orcamento.Orcamento>(l => l.ListaOrcamento)
                 .WithRequired(l => l.Obra)
                 .HasForeignKey(c => c.ObraId);

@@ -7,6 +7,7 @@ using GIR.Sigim.Application.DTO.Orcamento;
 using GIR.Sigim.Application.Filtros.Financeiro;
 using GIR.Sigim.Domain.Specification;
 using GIR.Sigim.Application.Filtros.Orcamento;
+using GIR.Sigim.Application.DTO.Sigim;
 
 namespace GIR.Sigim.Application.Service.Orcamento
 {
@@ -17,5 +18,7 @@ namespace GIR.Sigim.Application.Service.Orcamento
         OrcamentoDTO ObterUltimoOrcamentoPeloCentroCustoClasseOrcamento(string codigoCentroCusto);
         bool EhPermitidoImprimirRelOrcamento();
         List<OrcamentoDTO> PesquisarOrcamentosPeloFiltro(OrcamentoPesquisaFiltro filtro, out int totalRegistros);
+        OrcamentoDTO GerarRelatorioOrcamento(RelOrcamentoFiltro filtro);
+        FileDownloadDTO ExportarRelOrcamento(RelOrcamentoFiltro filtro, OrcamentoDTO orcamentoDTO, FormatoExportacaoArquivo formato);
     }
 }
