@@ -127,14 +127,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
 
             model.Filtro.ListaClasse = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasse);
 
-            //OrcamentoDTO orcamentoDTO = orcamentoAppService.GerarRelatorioOrcamento(model.Filtro);
-            //if (orcamentoDTO == null)
-            //{
-            //    messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
-            //    return PartialView("_NotificationMessagesPartial");
-            //}
-
-            OrcamentoDTO orcamentoDTO = (OrcamentoDTO)TempData["orcamentoDTO"];
+            OrcamentoDTO orcamentoDTO = TempData["orcamentoDTO"] as OrcamentoDTO;
+            if (orcamentoDTO == null)
+            {
+                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
+                return PartialView("_NotificationMessagesPartial");
+            }
 
             var arquivo = orcamentoAppService.ExportarRelOrcamento(model.Filtro, orcamentoDTO, formato);
 

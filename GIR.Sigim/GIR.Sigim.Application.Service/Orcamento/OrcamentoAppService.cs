@@ -283,13 +283,17 @@ namespace GIR.Sigim.Application.Service.Orcamento
         {
             DataTable dtaRelatorio = new DataTable();
 
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Orçamento ", new System.IO.MemoryStream(), formato);
+
+            if (orcamentoDTO == null)
+            {
+                return arquivo;
+            }
 
             ParametrosOrcamento parametros = parametrosOrcamentoRepository.Obter();
             var centroCusto = centroCustoRepository.ObterPeloCodigo(orcamentoDTO.Obra.CentroCusto.Codigo, l => l.ListaCentroCustoEmpresa);
             var caminhoImagem = PrepararIconeRelatorio(centroCusto, parametros);
             var nomeEmpresa = ObterNomeEmpresa(centroCusto, parametros);
-
-            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Orçamento ", null, formato);
 
             if (!filtro.EhClasse)
             {
