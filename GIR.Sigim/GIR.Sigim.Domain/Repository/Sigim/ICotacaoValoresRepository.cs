@@ -10,5 +10,6 @@ namespace GIR.Sigim.Domain.Repository.Sigim
     public interface ICotacaoValoresRepository : IRepository<CotacaoValores> 
     {
         decimal RecuperaCotacao(int indiceId, DateTime data);
+        CotacaoValores ObtemCotacao(int indiceId, DateTime data);
     }
 }

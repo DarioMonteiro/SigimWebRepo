@@ -392,6 +392,12 @@
       <DependentUpon>relOrcamento.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Orcamento\relOrcamentoClasse.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relOrcamentoClasse.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\OrdemCompra\relEntradaMaterial.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -694,6 +700,10 @@
     <EmbeddedResource Include="Reports\Orcamento\relOrcamento.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relOrcamento.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Orcamento\relOrcamentoClasse.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relOrcamentoClasse.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\OrdemCompra\relEntradaMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

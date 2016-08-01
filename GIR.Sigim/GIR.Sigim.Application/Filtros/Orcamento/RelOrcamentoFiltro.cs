@@ -42,9 +42,9 @@ namespace GIR.Sigim.Application.Filtros.Orcamento
         public Decimal BDITotal { get; set; }
         public Decimal PrecoTotal { get; set; }
         public DateTime DataBase { get; set; }
-        public Decimal CotacaoBase { get; set; }
+        public string CotacaoBase { get; set; }
         public DateTime DataAtual { get; set; }
-        public Decimal CotacaoAtual { get; set; }
+        public string CotacaoAtual { get; set; }
         public Decimal AreaConstrucaoAreaReal { get; set; }
         public Decimal AreaConstrucaoAreaEquivalente { get; set; }
 
@@ -52,6 +52,10 @@ namespace GIR.Sigim.Application.Filtros.Orcamento
 
         public RelOrcamentoFiltro()
         {
+            this.EhBDI = false;
+            this.EhClasse = false;
+            this.EhSemDetalhamento = false;
+            this.EhValorCorrigido = false;
             this.ListaClasse = new List<ClasseDTO>();
         }
     }

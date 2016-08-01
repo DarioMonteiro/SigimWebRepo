@@ -88,8 +88,10 @@
                                                     </div>
 									            </section>
 									            <section class="col col-3">
+                                                    <div class="inline-group">
                                                     <label id="lblValorCorrigido" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhValorCorrigido)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhValorCorrigido)</label>
                                                     <label id="lblSemDetalhamento" class="checkbox">@Html.CheckBoxFor(m => m.Filtro.EhSemDetalhamento)<i></i>@Html.DisplayNameFor(m => m.Filtro.EhSemDetalhamento)</label>
+                                                    </div>
 									            </section>
 								            </div>
 							            </fieldset>
@@ -292,9 +294,12 @@
 
             var indiceId = $("#@Html.IdFor(m => m.Filtro.IndiceId)").val();
 
-            var ehValorCorrigido = $("#@Html.IdFor(m => m.Filtro.EhValorCorrigido)").val();
+            var ehValorCorrigido = false;
+            if ($("#@Html.IdFor(m => m.Filtro.EhValorCorrigido)").is(':checked')) {
+                ehValorCorrigido = true;
+            }
 
-            if ((indiceId != "" && indiceId > 0) && (ehValorCorrigido === "true")) {
+            if ((indiceId == "" || indiceId == 0) && (ehValorCorrigido)) {
                 smartAlert("Atenção", "Informe o índice !", "warning");
                 e.event.preventDefault();
             }
@@ -302,7 +307,26 @@
 
         });
 
-        $('#btnImprimirFake').on("click", function () {
+        $('#btnImprimirFake').on("click", function (e) {
+
+            var orcamentoEscolhidoId = $("#orcamentoIdPesquisaGenerica").val();
+            if ((orcamentoEscolhidoId == "") || (orcamentoEscolhidoId == 0)) {
+                smartAlert("Atenção", "Selecione o orçamento !", "warning");
+                e.event.preventDefault();
+            }
+
+            var indiceId = $("#@Html.IdFor(m => m.Filtro.IndiceId)").val();
+
+            var ehValorCorrigido = false;
+            if ($("#@Html.IdFor(m => m.Filtro.EhValorCorrigido)").is(':checked')) {
+                ehValorCorrigido = true;
+            }
+
+            if ((indiceId == "" || indiceId == 0) && (ehValorCorrigido)) {
+                smartAlert("Atenção", "Informe o índice !", "warning");
+                e.event.preventDefault();
+            }
+
             $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
         });
 

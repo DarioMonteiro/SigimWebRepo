@@ -107,6 +107,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
                     return PartialView("_NotificationMessagesPartial");
                 }
 
+                TempData["orcamentoDTO"] = orcamentoDTO;
+
+
                 return Content("<script>executarImpressao();</script>");
 
             }
@@ -124,12 +127,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
 
             model.Filtro.ListaClasse = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasse);
 
-            OrcamentoDTO orcamentoDTO = orcamentoAppService.GerarRelatorioOrcamento(model.Filtro);
-            if (orcamentoDTO == null)
-            {
-                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
-                return PartialView("_NotificationMessagesPartial");
-            }
+            //OrcamentoDTO orcamentoDTO = orcamentoAppService.GerarRelatorioOrcamento(model.Filtro);
+            //if (orcamentoDTO == null)
+            //{
+            //    messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
+            //    return PartialView("_NotificationMessagesPartial");
+            //}
+
+            OrcamentoDTO orcamentoDTO = (OrcamentoDTO)TempData["orcamentoDTO"];
 
             var arquivo = orcamentoAppService.ExportarRelOrcamento(model.Filtro, orcamentoDTO, formato);
 

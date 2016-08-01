@@ -171,8 +171,8 @@ namespace GIR.Sigim.Application.Service.Orcamento
             {
                 decimal percentualBDI = orcamento.Obra.BDIPercentual.HasValue ? orcamento.Obra.BDIPercentual.Value : 0;
                 percentualBDI = percentualBDI / 100;
-                decimal cotacao = 1;
-                decimal cotacaoAtual = 1;
+                decimal valorCotacao = 1;
+                decimal valorCotacaoAtual = 1;
                 decimal preco = 0;
                 decimal quantidade = 0;
                 decimal BDI = 0;
@@ -191,27 +191,47 @@ namespace GIR.Sigim.Application.Service.Orcamento
                 {
                     IndiceFinanceiro indiceFinanceiro = indiceFinanceiroRepository.ObterPeloId(filtro.IndiceId.Value);
                     nomeIndice = indiceFinanceiro.Descricao;
-                    cotacao = cotacaoValoresRepository.RecuperaCotacao(filtro.IndiceId.Value, dataBase.Date);
+                    CotacaoValores cotacao = cotacaoValoresRepository.ObtemCotacao(filtro.IndiceId.Value, dataBase.Date);
+                    if (cotacao != null)
+                    {
+                        valorCotacao = cotacao.Valor.Value;
+                        dataBase = cotacao.Data.Value; 
+                    }
 
                     if (filtro.EhValorCorrigido)
                     {
-                        cotacaoAtual = cotacaoValoresRepository.RecuperaCotacao(filtro.IndiceId.Value, dataAtual.Date);
+                        CotacaoValores cotacaoAtual = cotacaoValoresRepository.ObtemCotacao(filtro.IndiceId.Value, dataAtual.Date);
+                        valorCotacaoAtual = cotacaoAtual.Valor.Value;
+                        dataAtual = cotacaoAtual.Data.Value;
                     }
                 }
 
-                foreach (var orcamentoComposicao in orcamento.ListaOrcamentoComposicao)
+                List<OrcamentoComposicao> listaOrcamentoComposicao = new List<OrcamentoComposicao>();
+                List<OrcamentoComposicao> listaClassePaiOrcamentoComposicao = new List<OrcamentoComposicao>();
+                listaOrcamentoComposicao = orcamento.ListaOrcamentoComposicao.ToList<OrcamentoComposicao>();
+                if (filtro.EhClasse)
                 {
-                    preco = orcamentoComposicao.Preco.HasValue ? orcamentoComposicao.Preco.Value : 0;
-                    quantidade = orcamentoComposicao.Preco.HasValue ? orcamentoComposicao.Preco.Value : 0;
-
-                    if (cotacao != 0)
+                    if (filtro.ListaClasse.Count > 0)
                     {
-                        preco = preco / cotacao;
+                        listaOrcamentoComposicao = orcamento.ListaOrcamentoComposicao.Where(l => filtro.ListaClasse.Any(lc => lc.Codigo.Contains(l.CodigoClasse))).ToList<OrcamentoComposicao>();
                     }
 
-                    if (cotacaoAtual != 0)
+                }
+
+                for (var i = 0; i < listaOrcamentoComposicao.Count; i++)
+                {
+                    OrcamentoComposicao orcamentoComposicao = listaOrcamentoComposicao.ElementAt(i);
+                    preco = orcamentoComposicao.Preco.HasValue ? orcamentoComposicao.Preco.Value : 0;
+                    quantidade = orcamentoComposicao.Quantidade.HasValue ? orcamentoComposicao.Quantidade.Value : 0;
+
+                    if (valorCotacao != 0)
                     {
-                        preco = preco / cotacaoAtual;
+                        preco = preco / valorCotacao;
+                    }
+
+                    if (valorCotacaoAtual != 0)
+                    {
+                        preco = preco * valorCotacaoAtual;
                     }
 
                     preco = Math.Round(preco, 5);
@@ -226,14 +246,26 @@ namespace GIR.Sigim.Application.Service.Orcamento
                     orcamentoComposicao.Preco = preco;
                     precoTotal = precoTotal + Math.Round((preco * quantidade), 5);
                     precoTotalSemBDI = precoTotalSemBDI + Math.Round((precoSemBDI * quantidade), 5);
+
+                    if (filtro.EhClasse)
+                    {
+                        AdicionaOrcamentoComposicaoClassePai(orcamentoComposicao, listaClassePaiOrcamentoComposicao, preco);
+                    }
                 }
+
+                if (filtro.EhClasse)
+                {
+                    listaOrcamentoComposicao.AddRange(listaClassePaiOrcamentoComposicao);
+                }
+
+                orcamento.ListaOrcamentoComposicao = listaOrcamentoComposicao.OrderBy(l => l.CodigoClasse).ToList<OrcamentoComposicao>();
 
                 BDITotal = precoTotalSemBDI * percentualBDI;
                 filtro.BDITotal = Math.Round(BDITotal, 4);
                 filtro.PrecoTotal = precoTotal;
                 filtro.NomeIndice = nomeIndice;
-                filtro.CotacaoBase = Math.Round(cotacao,5);
-                filtro.CotacaoAtual = Math.Round(cotacaoAtual,5);
+                filtro.CotacaoBase = String.Format("{0:0.00000}", Math.Round(valorCotacao,5));
+                filtro.CotacaoAtual = String.Format("{0:0.00000}", Math.Round(valorCotacaoAtual, 5)); 
                 filtro.Defasagem = defasagem;
                 filtro.DataBase = dataBase;
                 filtro.DataAtual = dataAtual;
@@ -243,7 +275,6 @@ namespace GIR.Sigim.Application.Service.Orcamento
                 orcamentoDTO = orcamento.To<OrcamentoDTO>();
             }
 
-
             return orcamentoDTO;
 
         }
@@ -252,7 +283,6 @@ namespace GIR.Sigim.Application.Service.Orcamento
         {
             DataTable dtaRelatorio = new DataTable();
 
-            dtaRelatorio = RelOrcamentoToDataTable(orcamentoDTO);
 
             ParametrosOrcamento parametros = parametrosOrcamentoRepository.Obter();
             var centroCusto = centroCustoRepository.ObterPeloCodigo(orcamentoDTO.Obra.CentroCusto.Codigo, l => l.ListaCentroCustoEmpresa);
@@ -261,28 +291,58 @@ namespace GIR.Sigim.Application.Service.Orcamento
 
             FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Orçamento ", null, formato);
 
-            relOrcamento objRelOrcamento = new relOrcamento();
+            if (!filtro.EhClasse)
+            {
+                relOrcamento objRelOrcamento = new relOrcamento();
 
-            objRelOrcamento.SetDataSource(dtaRelatorio);
+                dtaRelatorio = RelOrcamentoToDataTable(orcamentoDTO, false);
 
-            objRelOrcamento.SetParameterValue("ComBDI", filtro.EhBDI);
-            objRelOrcamento.SetParameterValue("SemDetalhamento", filtro.EhSemDetalhamento);
-            objRelOrcamento.SetParameterValue("TotalBDI", filtro.BDITotal);
-            objRelOrcamento.SetParameterValue("ValorTotal", filtro.PrecoTotal);
-            objRelOrcamento.SetParameterValue("NomeIndice", filtro.NomeIndice);
-            objRelOrcamento.SetParameterValue("Defasagem", filtro.Defasagem);
-            objRelOrcamento.SetParameterValue("DataBase", filtro.DataBase);
-            objRelOrcamento.SetParameterValue("CotacaoBase", filtro.CotacaoBase);
-            objRelOrcamento.SetParameterValue("DataAtual", filtro.DataAtual);
-            objRelOrcamento.SetParameterValue("CotacaoAtual", filtro.CotacaoAtual);
-            objRelOrcamento.SetParameterValue("ValorCorrigido", filtro.EhValorCorrigido);
-            objRelOrcamento.SetParameterValue("AreaConstrucaoAreaReal", filtro.AreaConstrucaoAreaReal);
-            objRelOrcamento.SetParameterValue("AreaConstrucaoAreaEquivalente", filtro.AreaConstrucaoAreaEquivalente);
-            //objRelOrcamento.SetParameterValue("nomeEmpresa", nomeEmpresa);
-            objRelOrcamento.SetParameterValue("caminhoImagem", caminhoImagem);
+                objRelOrcamento.SetDataSource(dtaRelatorio);
 
-            arquivo = new FileDownloadDTO("Rel. Orçamento", objRelOrcamento.ExportToStream((ExportFormatType)formato), formato);
+                objRelOrcamento.SetParameterValue("ComBDI", filtro.EhBDI);
+                objRelOrcamento.SetParameterValue("SemDetalhamento", filtro.EhSemDetalhamento);
+                objRelOrcamento.SetParameterValue("TotalBDI", filtro.BDITotal);
+                objRelOrcamento.SetParameterValue("ValorTotal", filtro.PrecoTotal);
+                objRelOrcamento.SetParameterValue("NomeIndice", filtro.NomeIndice);
+                objRelOrcamento.SetParameterValue("Defasagem", filtro.Defasagem);
+                objRelOrcamento.SetParameterValue("DataBase", filtro.DataBase);
+                objRelOrcamento.SetParameterValue("CotacaoBase", filtro.CotacaoBase);
+                objRelOrcamento.SetParameterValue("DataAtual", filtro.DataAtual);
+                objRelOrcamento.SetParameterValue("CotacaoAtual", filtro.CotacaoAtual);
+                objRelOrcamento.SetParameterValue("ValorCorrigido", filtro.EhValorCorrigido);
+                objRelOrcamento.SetParameterValue("AreaConstrucaoAreaReal", filtro.AreaConstrucaoAreaReal);
+                objRelOrcamento.SetParameterValue("AreaConstrucaoAreaEquivalente", filtro.AreaConstrucaoAreaEquivalente);
+                objRelOrcamento.SetParameterValue("caminhoImagem", caminhoImagem);
 
+                arquivo = new FileDownloadDTO("Rel. Orçamento", objRelOrcamento.ExportToStream((ExportFormatType)formato), formato);
+
+            }
+            else
+            {
+                relOrcamentoClasse objRelOrcamentoClasse = new relOrcamentoClasse();
+
+                dtaRelatorio = RelOrcamentoToDataTable(orcamentoDTO, true);
+
+                objRelOrcamentoClasse.SetDataSource(dtaRelatorio);
+
+                objRelOrcamentoClasse.SetParameterValue("ComBDI", filtro.EhBDI);
+                objRelOrcamentoClasse.SetParameterValue("SemDetalhamento", filtro.EhSemDetalhamento);
+                objRelOrcamentoClasse.SetParameterValue("TotalBDI", filtro.BDITotal);
+                objRelOrcamentoClasse.SetParameterValue("ValorTotal", filtro.PrecoTotal);
+                objRelOrcamentoClasse.SetParameterValue("NomeIndice", filtro.NomeIndice);
+                objRelOrcamentoClasse.SetParameterValue("Defasagem", filtro.Defasagem);
+                objRelOrcamentoClasse.SetParameterValue("DataBase", filtro.DataBase);
+                objRelOrcamentoClasse.SetParameterValue("CotacaoBase", filtro.CotacaoBase);
+                objRelOrcamentoClasse.SetParameterValue("DataAtual", filtro.DataAtual);
+                objRelOrcamentoClasse.SetParameterValue("CotacaoAtual", filtro.CotacaoAtual);
+                objRelOrcamentoClasse.SetParameterValue("ValorCorrigido", filtro.EhValorCorrigido);
+                objRelOrcamentoClasse.SetParameterValue("AreaConstrucaoAreaReal", filtro.AreaConstrucaoAreaReal);
+                objRelOrcamentoClasse.SetParameterValue("AreaConstrucaoAreaEquivalente", filtro.AreaConstrucaoAreaEquivalente);
+                objRelOrcamentoClasse.SetParameterValue("caminhoImagem", caminhoImagem);
+
+                arquivo = new FileDownloadDTO("Rel. Orçamento Classe", objRelOrcamentoClasse.ExportToStream((ExportFormatType)formato), formato);
+
+            }
 
             if (System.IO.File.Exists(caminhoImagem))
             {
@@ -296,6 +356,46 @@ namespace GIR.Sigim.Application.Service.Orcamento
         #endregion
 
         #region "Métodos privados"
+
+        private void AdicionaOrcamentoComposicaoClassePai(OrcamentoComposicao orcamentoComposicaoFilho, List<OrcamentoComposicao> listaClassePaiOrcamentoComposicao, decimal preco)
+        {
+            if (orcamentoComposicaoFilho.Classe.ClassePai != null)
+            {
+                OrcamentoComposicao orcamentoComposicaoClassePai = new OrcamentoComposicao();
+                bool recuperou = false;
+                decimal precoPai = 0;
+
+                if (listaClassePaiOrcamentoComposicao.Any(l => l.Classe.Codigo == orcamentoComposicaoFilho.Classe.CodigoPai))
+                {
+                    orcamentoComposicaoClassePai = listaClassePaiOrcamentoComposicao.Where(l => l.Classe.Codigo == orcamentoComposicaoFilho.Classe.CodigoPai).FirstOrDefault();
+                    precoPai = orcamentoComposicaoClassePai.Preco.HasValue ? orcamentoComposicaoClassePai.Preco.Value : 0;
+                    orcamentoComposicaoClassePai.Preco = precoPai + preco;
+                    recuperou = true;
+                }
+                else
+                {
+                    orcamentoComposicaoClassePai.CodigoClasse = orcamentoComposicaoFilho.Classe.ClassePai.Codigo;
+                    orcamentoComposicaoClassePai.Classe = orcamentoComposicaoFilho.Classe.ClassePai;
+                    orcamentoComposicaoClassePai.Preco = preco;
+                    orcamentoComposicaoClassePai.Quantidade = 1;
+                    orcamentoComposicaoClassePai.Orcamento = orcamentoComposicaoFilho.Orcamento;
+                    orcamentoComposicaoClassePai.OrcamentoId = orcamentoComposicaoFilho.OrcamentoId;
+                    orcamentoComposicaoClassePai.Composicao = new Composicao();
+                    orcamentoComposicaoClassePai.ComposicaoId = null;
+                }
+
+                if (!recuperou)
+                {
+                    listaClassePaiOrcamentoComposicao.Add(orcamentoComposicaoClassePai);
+                }
+
+                if (orcamentoComposicaoClassePai.Classe.ClassePai != null)
+                {
+                    AdicionaOrcamentoComposicaoClassePai(orcamentoComposicaoClassePai, listaClassePaiOrcamentoComposicao,preco);
+                }
+            }
+
+        }
 
         private string ObterNomeEmpresa(CentroCusto centroCusto, ParametrosOrcamento parametros)
         {
@@ -357,7 +457,7 @@ namespace GIR.Sigim.Application.Service.Orcamento
             return true;
         }
 
-        private DataTable RelOrcamentoToDataTable(OrcamentoDTO orcamentoDTO)
+        private DataTable RelOrcamentoToDataTable(OrcamentoDTO orcamentoDTO, bool ehPorClasse)
         {
             DataTable dta = new DataTable();
             DataColumn numeroNomeEmpresa = new DataColumn("numeroNomeEmpresa");
@@ -371,6 +471,8 @@ namespace GIR.Sigim.Application.Service.Orcamento
             DataColumn quantidade = new DataColumn("quantidade", System.Type.GetType("System.Decimal"));
             DataColumn preco = new DataColumn("preco", System.Type.GetType("System.Decimal"));
             DataColumn girErro = new DataColumn("girErro");
+            DataColumn descricaoClasse = new DataColumn("descricaoClasse");
+            DataColumn codigoDescricaoClasse = new DataColumn("codigoDescricaoClasse");
 
             dta.Columns.Add(numeroNomeEmpresa);
             dta.Columns.Add(numeroDescricaoObra);
@@ -383,6 +485,11 @@ namespace GIR.Sigim.Application.Service.Orcamento
             dta.Columns.Add(quantidade);
             dta.Columns.Add(preco);
             dta.Columns.Add(girErro);
+            if (ehPorClasse)
+            {
+                dta.Columns.Add(descricaoClasse);
+                dta.Columns.Add(codigoDescricaoClasse);
+            }
 
             foreach (OrcamentoComposicaoDTO orcamentoComposicao in orcamentoDTO.ListaOrcamentoComposicao)
             {
@@ -398,12 +505,18 @@ namespace GIR.Sigim.Application.Service.Orcamento
                 row[quantidade] = orcamentoComposicao.Quantidade.Value;
                 row[preco] = orcamentoComposicao.Preco.Value;
                 row[girErro] = "";
+
+                if (ehPorClasse)
+                {
+                    row[descricaoClasse] = orcamentoComposicao.Classe.Descricao;
+                    row[codigoDescricaoClasse] = orcamentoComposicao.codigoClasse + " - " + orcamentoComposicao.Classe.Descricao;
+                }
+
                 dta.Rows.Add(row);
             }
 
             return dta;
         }
-
 
         #endregion
     }
