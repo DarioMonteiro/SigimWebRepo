@@ -406,11 +406,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return UsuarioLogado.IsInRole(Funcionalidade.RelatorioAcompanhamentoFinanceiroImprimir);
         }
 
-        public List<RelAcompanhamentoFinanceiroDTO> ListarPeloFiltroRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro,
-                                                                                                         out int totalRegistros)
+        public List<RelAcompanhamentoFinanceiroDTO> ListarPeloFiltroRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro)
         {
             List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro = new List<RelAcompanhamentoFinanceiroDTO>();
-            totalRegistros = 0;
 
             if (filtro.BaseadoPor == 0)
             {
@@ -420,6 +418,15 @@ namespace GIR.Sigim.Application.Service.Financeiro
             {
                 listaRelAcompanhamentoFinanceiro = ListarPeloFiltroRelAcompanhamentoFinanceiroExecutado(filtro);
             }
+
+            return listaRelAcompanhamentoFinanceiro;
+        }
+
+        public List<RelAcompanhamentoFinanceiroDTO> PaginarPeloFiltroRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro,
+                                                                                                 List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro,
+                                                                                                                            out int totalRegistros)
+        {
+            List<RelAcompanhamentoFinanceiroDTO> lista = new List<RelAcompanhamentoFinanceiroDTO>();
 
             totalRegistros = listaRelAcompanhamentoFinanceiro.Count();
 
@@ -428,13 +435,13 @@ namespace GIR.Sigim.Application.Service.Financeiro
             int pageCount = filtro.PaginationParameters.PageSize;
             int pageIndex = filtro.PaginationParameters.PageIndex;
 
-            listaRelAcompanhamentoFinanceiro = listaRelAcompanhamentoFinanceiro.Skip(pageCount * pageIndex).Take(pageCount).To<List<RelAcompanhamentoFinanceiroDTO>>();
+            lista = listaRelAcompanhamentoFinanceiro.Skip(pageCount * pageIndex).Take(pageCount).To<List<RelAcompanhamentoFinanceiroDTO>>();
 
-            return listaRelAcompanhamentoFinanceiro;
-
+            return lista;
         }
 
         public FileDownloadDTO ExportarRelAcompanhamentoFinanceiro(RelAcompanhamentoFinanceiroFiltro filtro,
+                                                                   List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro,
                                                                    FormatoExportacaoArquivo formato)
         {
             if (!EhPermitidoImprimirRelAcompanhamentoFinanceiro())
@@ -443,20 +450,15 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 return null;
             }
 
-            List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiro = new List<RelAcompanhamentoFinanceiroDTO>();
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Acompanhamento financeiro", new System.IO.MemoryStream(), formato);
 
-            if (filtro.BaseadoPor == 0)
+            if (listaRelAcompanhamentoFinanceiro == null)
             {
-                listaRelAcompanhamentoFinanceiro = ListarPeloFiltroRelAcompanhamentoFinanceiroPorTitulo(filtro);
-            }
-            else
-            {
-                listaRelAcompanhamentoFinanceiro = ListarPeloFiltroRelAcompanhamentoFinanceiroExecutado(filtro);
+                return arquivo;
             }
 
             listaRelAcompanhamentoFinanceiro = listaRelAcompanhamentoFinanceiro.OrderBy(l => l.CodigoClasse).ToList<RelAcompanhamentoFinanceiroDTO>();
 
-            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Acompanhamento financeiro", null, formato);
 
             var parametros = parametrosFinanceiroRepository.Obter();
             CentroCusto centroCusto = new CentroCusto();
@@ -611,7 +613,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             return arquivo;
         }
-
 
         #endregion
 

@@ -36,5 +36,41 @@ namespace GIR.Sigim.Application.DTO.Financeiro
         public string CodigoDescricaoClasse { get; set; }
         public string CodigoCentroCusto { get; set; }
         public string CodigoDescricaoCentroCusto { get; set; }
+
+        public RelContasPagarTitulosDTO()
+        {
+            
+        }
+
+        public RelContasPagarTitulosDTO(RelContasPagarTitulosDTO other)
+        {
+            this.TituloId = other.TituloId;
+            this.DataVencimento = other.DataVencimento;
+            this.DataEmissaoDocumento = other.DataEmissaoDocumento;
+            this.DocumentoCompleto = other.DocumentoCompleto;
+            this.ValorTitulo = other.ValorTitulo;
+            this.ValorLiquido = other.ValorLiquido;
+            this.ClienteId = other.ClienteId;
+            this.NomeCliente = other.NomeCliente;
+            this.Identificacao = other.Identificacao;
+            this.FormaPagamentoDescricao = other.FormaPagamentoDescricao;
+            this.DocumentoPagamento = other.DocumentoPagamento;
+            this.AgenciaContaCorrente = other.AgenciaContaCorrente;
+            this.TipoCompromissoDescricao = other.TipoCompromissoDescricao;
+            this.SituacaoTituloDescricao = other.SituacaoTituloDescricao;
+            this.DataSelecao = other.DataSelecao;
+            this.DataEmissao = other.DataEmissao;
+            this.DataPagamento = other.DataPagamento;
+            this.DataBaixa = other.DataBaixa;
+            this.MotivoCancelamentoDescricao = other.MotivoCancelamentoDescricao;
+            this.CPFCNPJ = other.CPFCNPJ;
+            this.LoginUsuarioCadastro  = other.LoginUsuarioCadastro;
+            this.DataCadastro = other.DataCadastro;
+            this.ValorApropriado =  other.ValorApropriado;
+            this.CodigoClasse = other.CodigoClasse;
+            this.CodigoDescricaoClasse = other.CodigoDescricaoClasse;
+            this.CodigoCentroCusto = other.CodigoCentroCusto;
+            this.CodigoDescricaoCentroCusto = other.CodigoDescricaoCentroCusto;
+        }
     }
 }

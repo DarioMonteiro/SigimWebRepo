@@ -130,8 +130,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Orcamento.Controllers
             OrcamentoDTO orcamentoDTO = TempData["orcamentoDTO"] as OrcamentoDTO;
             if (orcamentoDTO == null)
             {
-                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
-                return PartialView("_NotificationMessagesPartial");
+                orcamentoDTO = orcamentoAppService.GerarRelatorioOrcamento(model.Filtro);
+                TempData["orcamentoDTO"] = orcamentoDTO;
             }
 
             var arquivo = orcamentoAppService.ExportarRelOrcamento(model.Filtro, orcamentoDTO, formato);
