@@ -14,7 +14,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Orcamento
 
         public EmpresaConfiguration()
         {
-            ToTable("Obra", "Empresa");
+            ToTable("Empresa","Orcamento");
 
             Property(l => l.Id)
                 .HasColumnName("codigo")

@@ -1,0 +1,110 @@
+﻿@using GIR.Sigim.Application.DTO.Orcamento
+@model GIR.Sigim.Presentation.WebUI.ViewModel.ListaViewModel
+
+@{
+    IEnumerable<OrcamentoDTO> Lista = Model.Records as IEnumerable<OrcamentoDTO>;
+}
+
+<div class="table-container" style="padding:0;">
+    @if (Lista != null && Lista.Any())
+    {
+        <div class="dt-toolbar table-header hidden-xs" style="padding: 6px 7px 1px; box-sizing: border-box;">
+            <div class="col-sm-12 col-xs-12" style="height: 37px;">
+                <div class="dataTables_length" id="dt_basic_length" style="float: right!important;">
+                    <label>
+                        @Html.DropDownListFor(
+                            m => m.PageSize,
+                            Model.PageSizeList,
+                            new {
+                                @id = "pageSizeSelector" + Model.UniqueIdentifier,
+                                @aria_controls="dt_basic",
+                                @class="form-control"
+                            })
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="tableSearchResult@(Model.UniqueIdentifier)" class="table-responsive" style="max-height: 315px; border: 1px solid #ddd; overflow-x: auto;">
+            <table class="table table-bordered table-striped table-condensed table-hover dataTable">
+                <thead>
+                    <tr role="row">
+                        @{
+                            string sortingSuffix = Model.Ascending ? "_asc" : "_desc";
+                            string sequencialSortingSuffix = "sorting";
+                            string descricaoSortingSuffix = "sorting";
+                            string obraSortingSuffix = "sorting";
+                            string empresaSortingSuffix = "sorting";
+                            string centroCustoSortingSuffix = "sorting";
+                            string situacaoSortingSuffix = "sorting";
+                            string dataSortingSuffix = "sorting";
+                            string simplificadoSortingSuffix = "sorting";
+                        
+                            switch (Model.OrderBy)
+                            {
+                                case "sequencial":
+                                    sequencialSortingSuffix += sortingSuffix;
+                                    break;
+                                case "descricao":
+                                    descricaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "obra":
+                                    obraSortingSuffix += sortingSuffix;
+                                    break;
+                                case "empresa":
+                                    empresaSortingSuffix += sortingSuffix;
+                                    break;
+                                case "centroCusto":
+                                    centroCustoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "situacao":
+                                    situacaoSortingSuffix += sortingSuffix;
+                                    break;
+                                case "data":
+                                    dataSortingSuffix += sortingSuffix;
+                                    break;
+                                case "simplificado":
+                                    simplificadoSortingSuffix += sortingSuffix;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        <th class="sorting @sequencialSortingSuffix text-left" data-order="sequencial" style="min-width:75px;">Sequencial</th>
+                        <th class="sorting @descricaoSortingSuffix text-left" data-order="descricao" style="min-width:300px;">Descrição</th>
+                        <th class="sorting @obraSortingSuffix text-left" data-order="obra" style="min-width:190px;">Obra</th>
+                        <th class="sorting @empresaSortingSuffix text-left" data-order="empresa" style="min-width:190px;">Empresa</th>
+                        <th class="sorting @centroCustoSortingSuffix text-left" data-order="centroCusto" style="min-width:190px;">Centro Custo</th>
+                        <th class="sorting @situacaoSortingSuffix text-left" data-order="situacao" style="min-width:105px;">Situação</th>
+                        <th class="sorting @dataSortingSuffix text-left" data-order="data" style="min-width:85px;">Data</th>
+                        <th class="sorting @simplificadoSortingSuffix text-left" data-order="simplificado" style="min-width:85px;">Simplificado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Lista)
+                    {
+                        string data = "";
+                        if (item.Data.HasValue)
+                        {
+                            data = item.Data.ToString().Remove((item.Data.ToString().Length - 3), 3);
+                            if (item.Data.ToString().Contains("00:00:00"))
+                            {
+                                data = item.Data.Value.ToShortDateString();
+                            }
+                        }
+                        <tr>
+                            <td class="text-right"><a href="javascript:TratarSelecaoOrcamento@(Model.UniqueIdentifier)(@item.Id,@item.Sequencial,'@item.Descricao');">@item.Sequencial</a></td>
+                            <td class="text-left">@item.Descricao</td>
+                            <td class="text-left">@item.Obra.NumeroDescricao</td>
+                            <td class="text-left">@item.Empresa.NumeroNomeEmpresa</td>
+                            <td class="text-left">@item.Obra.CentroCusto.CentroCustoDescricao</td>
+                            <td class="text-left">@item.SituacaoDescricao</td>
+                            <td class="text-center">@data</td>
+                            <td class="text-left">@item.Obra.DescricaoOrcamentoSimplificado</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @Html.Partial("_PaginationPartial", Model)
+    }
+</div>

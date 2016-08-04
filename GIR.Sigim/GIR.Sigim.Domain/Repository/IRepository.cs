@@ -48,5 +48,7 @@ namespace GIR.Sigim.Domain.Repository
             bool ascending,
             out int totalRecords,
             params Expression<Func<TEntity, object>>[] includes);
+
+        IEnumerable<TEntity> ExecutarStoreProcedure(string query, params object[] parameters);
     }
 }

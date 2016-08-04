@@ -9,5 +9,6 @@ namespace GIR.Sigim.Application.DTO.Sigim
     public class ComposicaoDTO : BaseDTO
     {
         public string Descricao { get; set; }
+        public string UnidadeMedidaSigla { get; set; }
     }
 }

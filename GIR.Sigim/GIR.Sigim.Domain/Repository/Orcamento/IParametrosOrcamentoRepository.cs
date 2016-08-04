@@ -9,5 +9,6 @@ namespace GIR.Sigim.Domain.Repository.Orcamento
 {
     public interface IParametrosOrcamentoRepository : IRepository<ParametrosOrcamento>
     {
+        ParametrosOrcamento Obter();
     }
 }

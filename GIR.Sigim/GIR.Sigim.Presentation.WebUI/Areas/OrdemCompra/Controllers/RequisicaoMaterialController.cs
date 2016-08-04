@@ -92,7 +92,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
 
             model.RequisicaoMaterial = requisicaoMaterial;
-            model.JsonItens = JsonConvert.SerializeObject(requisicaoMaterial.ListaItens);
+            model.JsonItens = JsonConvert.SerializeObject(requisicaoMaterial.ListaItens, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+
 
             if ((requisicaoMaterial.CentroCusto == null) || (string.IsNullOrEmpty(requisicaoMaterial.CentroCusto.Codigo)))
             {

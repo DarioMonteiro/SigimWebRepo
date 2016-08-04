@@ -13,6 +13,9 @@ namespace GIR.Sigim.Application.Helper
     {
         public static void Initialise()
         {
+            Mapper.CreateMap<Empresa, EmpresaDTO>();
+            Mapper.CreateMap<EmpresaDTO, Empresa>();
+
             Mapper.CreateMap<Obra, ObraDTO>();
             Mapper.CreateMap<ObraDTO, Obra>();
 

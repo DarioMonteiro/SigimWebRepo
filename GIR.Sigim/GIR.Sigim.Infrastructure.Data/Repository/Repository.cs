@@ -161,6 +161,11 @@ namespace GIR.Sigim.Infrastructure.Data.Repository
             throw new NotImplementedException();
         }
 
+        public IEnumerable<TEntity> ExecutarStoreProcedure(string query, params object[] parameters)
+        {
+            return unitOfWork.ExecWithStoreProcedure<TEntity>(query,parameters);
+        }
+
         #endregion
 
         #region IDisposable Members

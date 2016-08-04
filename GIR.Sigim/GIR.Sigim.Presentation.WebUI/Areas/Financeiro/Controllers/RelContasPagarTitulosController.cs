@@ -17,17 +17,23 @@ using GIR.Sigim.Application.Enums;
 using GIR.Sigim.Application.Filtros;
 using GIR.Sigim.Presentation.WebUI.ViewModel;
 using GIR.Sigim.Presentation.WebUI.CustomAttributes;
+using GIR.Sigim.Application.DTO.Financeiro;
 
 namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 {
     public class RelContasPagarTitulosController : BaseController
     {
+        #region "Declaração"
+
         private ITipoCompromissoAppService tipoCompromissoAppService;
         private IBancoAppService bancoAppService;
         private IContaCorrenteAppService contaCorrenteAppService;
         private ICaixaAppService caixaAppService;
         private ITituloPagarAppService tituloPagarAppService;
 
+        #endregion
+
+        #region "Construtor"
 
         public RelContasPagarTitulosController(ITipoCompromissoAppService tipoCompromissoAppService,
                                                 IBancoAppService bancoAppService,
@@ -43,6 +49,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             this.caixaAppService = caixaAppService;
             this.tituloPagarAppService = tituloPagarAppService;
         }
+
+        #endregion 
+
+        #region "Métodos públicos"
 
         [AutorizacaoAcessoAuthorize(GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb, Roles = Funcionalidade.RelatorioContasAPagarTitulosAcessar)]
         public ActionResult Index()
@@ -75,12 +85,16 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 if (string.IsNullOrEmpty(model.Filtro.PaginationParameters.OrderBy))
                     model.Filtro.PaginationParameters.OrderBy = "tituloId";
 
-                var result = tituloPagarAppService.ListarPeloFiltroRelContasPagarTitulos(model.Filtro, 
-                                                                                         Usuario.Id, 
-                                                                                         out totalRegistros,
-                                                                                         out totalValorTitulo, 
-                                                                                         out totalValorLiquido, 
-                                                                                         out totalValorApropriado);
+                List<RelContasPagarTitulosDTO> listaRelContasPagarTitulosDTO = tituloPagarAppService.ListarPeloFiltroRelContasPagarTitulos(model.Filtro, 
+                                                                                                                                            Usuario.Id, 
+                                                                                                                                            out totalValorTitulo, 
+                                                                                                                                            out totalValorLiquido, 
+                                                                                                                                            out totalValorApropriado);
+                TempData["listaRelContasPagarTitulosDTO"] = listaRelContasPagarTitulosDTO;
+                TempData["totalValorTituloRelContasPagarTitulosDTO"] = totalValorTitulo;
+                TempData["totalValorLiquidoRelContasPagarTitulosDTO"] = totalValorLiquido;
+
+                var result = tituloPagarAppService.PaginarPeloFiltroRelContasPagarTitulos(model.Filtro, listaRelContasPagarTitulosDTO, out totalRegistros);
 
                 if (result.Any())
                 {
@@ -103,17 +117,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return PartialView("_NotificationMessagesPartial");
         }
 
-        private void CarregarListas(RelContasPagarTitulosListaViewModel model)
-        {
-            model.ListaTipoCompromisso = new SelectList(tipoCompromissoAppService.ListarTipoPagar().OrderBy(l => l.Descricao), "Id", "Descricao", model.Filtro.TipoCompromissoId);
-            model.ListaFormaPagamento = new SelectList(typeof(FormaPagamento).ToItemListaDTO(), "Id", "Descricao");
-            List<BancoDTO> listaBanco = bancoAppService.ListarTodosComContaCorrenteAtiva().OrderBy(l => l.Nome).ToList();
-            model.ListaBanco = new SelectList(listaBanco, "Id", "Nome", model.Filtro.BancoId);
-            List<ContaCorrenteDTO> listaContaCorrente = new List<ContaCorrenteDTO>();
-            model.ListaAgenciaConta = new SelectList(listaContaCorrente, "Id", "AgenciaContaCorrente", model.Filtro.BancoId);
-            model.ListaCaixa = new SelectList(caixaAppService.ListarCaixaAtivo(), "Id", "Descricao", model.Filtro.CaixaId);
-        }
-
         [HttpPost]
         public ActionResult CarregaComboAgenciaContaCorrente(int? bancoId)
         {
@@ -125,7 +128,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return Json(new
             {
                 listaContaCorrente = JsonConvert.SerializeObject(listaContaCorrente, Formatting.Indented,
-                                      new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore})
+                                      new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
             });
         }
 
@@ -138,7 +141,40 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 return PartialView("_NotificationMessagesPartial");
             }
 
-            var arquivo = tituloPagarAppService.ExportarRelContasPagarTitulos(model.Filtro, Usuario.Id, formato);
+            decimal totalValorTitulo;
+            decimal totalValorLiquido;
+            decimal totalValorApropriado;
+
+            Nullable<Decimal> valorTotalTitulo = 0;
+            Nullable<Decimal> valorTotalLiquido = 0;
+
+            List<RelContasPagarTitulosDTO> listaRelContasPagarTitulosDTO = TempData["listaRelContasPagarTitulosDTO"] as List<RelContasPagarTitulosDTO>;
+            valorTotalTitulo = (TempData["totalValorTituloRelContasPagarTitulosDTO"] as Nullable<Decimal>) ?? 0;
+            valorTotalLiquido = (TempData["totalValorLiquidoRelContasPagarTitulosDTO"] as Nullable<Decimal>) ?? 0;
+
+            if (listaRelContasPagarTitulosDTO == null)
+            {
+
+                listaRelContasPagarTitulosDTO = tituloPagarAppService.ListarPeloFiltroRelContasPagarTitulos(model.Filtro,
+                                                                                                            Usuario.Id,
+                                                                                                            out totalValorTitulo,
+                                                                                                            out totalValorLiquido,
+                                                                                                            out totalValorApropriado);
+
+                valorTotalTitulo = totalValorTitulo;
+                valorTotalLiquido = totalValorLiquido;
+
+                TempData["listaRelContasPagarTitulosDTO"] = listaRelContasPagarTitulosDTO;
+                TempData["totalValorTituloRelContasPagarTitulosDTO"] = totalValorTitulo;
+                TempData["totalValorLiquidoRelContasPagarTitulosDTO"] = totalValorLiquido;
+
+            }
+
+            var arquivo = tituloPagarAppService.ExportarRelContasPagarTitulos(model.Filtro, 
+                                                                              listaRelContasPagarTitulosDTO, 
+                                                                              valorTotalTitulo.Value, 
+                                                                              valorTotalLiquido.Value, 
+                                                                              formato);
             if (arquivo != null)
             {
                 Response.Buffer = false;
@@ -150,6 +186,22 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return PartialView("_NotificationMessagesPartial");
 
         }
+
+        #endregion
+
+        #region "métodos privados"
+
+        private void CarregarListas(RelContasPagarTitulosListaViewModel model)
+        {
+            model.ListaTipoCompromisso = new SelectList(tipoCompromissoAppService.ListarTipoPagar().OrderBy(l => l.Descricao), "Id", "Descricao", model.Filtro.TipoCompromissoId);
+            model.ListaFormaPagamento = new SelectList(typeof(FormaPagamento).ToItemListaDTO(), "Id", "Descricao");
+            List<BancoDTO> listaBanco = bancoAppService.ListarTodosComContaCorrenteAtiva().OrderBy(l => l.Nome).ToList();
+            model.ListaBanco = new SelectList(listaBanco, "Id", "Nome", model.Filtro.BancoId);
+            List<ContaCorrenteDTO> listaContaCorrente = new List<ContaCorrenteDTO>();
+            model.ListaAgenciaConta = new SelectList(listaContaCorrente, "Id", "AgenciaContaCorrente", model.Filtro.BancoId);
+            model.ListaCaixa = new SelectList(caixaAppService.ListarCaixaAtivo(), "Id", "Descricao", model.Filtro.CaixaId);
+        }
+
 
         private ListaViewModelRelContasPagarTitulo CreateListaViewModel(PaginationParameters paginationParameters,
                                                                         int totalRecords, 
@@ -179,5 +231,6 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return listaViewModel;
         }
 
+        #endregion
     }
 }

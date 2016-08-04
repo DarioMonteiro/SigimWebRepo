@@ -30,8 +30,32 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
         public ClasseDTO ObterPeloCodigoEOrcamento(string codigo, int orcamentoId)
         {
-            return ClasseRepository.ObterPeloCodigoEOrcamento(codigo, orcamentoId, l => l.ListaFilhos).To<ClasseDTO>();
+            ClasseDTO classe = new ClasseDTO();
+
+            List<Classe> listaClasse = ClasseRepository.ObterPeloCodigoEOrcamento(codigo, orcamentoId, l => l.ListaFilhos).To<List<Classe>>();
+            if (listaClasse != null)
+            {
+                if (listaClasse.Any(l => l.ListaOrcamentoComposicao.Any(o => o.OrcamentoId == orcamentoId)))
+                {
+                    classe = listaClasse.Where(l => l.ListaOrcamentoComposicao.Any(o => o.OrcamentoId == orcamentoId)).FirstOrDefault().To<ClasseDTO>();
+                }
+                else
+                {
+                    classe = listaClasse.Where(l => l.Codigo.StartsWith(codigo)).FirstOrDefault().To<ClasseDTO>();
+                }
+            }
+            else 
+            {
+                classe = null;
+            }
+
+            return classe;
         }
+
+        //public ClasseDTO ObterPeloCodigoEOrcamento(string codigo, int orcamentoId)
+        //{
+        //    return ClasseRepository.ObterPeloCodigoEOrcamento(codigo, orcamentoId, l => l.ListaFilhos).To<ClasseDTO>();
+        //}
 
         public bool EhClasseValida(ClasseDTO Classe, int orcamentoId)
         {
@@ -47,12 +71,12 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return true;
         }
 
-        public bool EhClasseUltimoNivelValida(ClasseDTO Classe, int orcamentoId)
+        public bool EhClasseUltimoNivelValida(string codigoClasse, int orcamentoId)
         {
-            if (!EhClasseValida(Classe, orcamentoId))
+            if (string.IsNullOrEmpty(codigoClasse))
                 return false;
 
-            var filhosClasse = ClasseRepository.ListarPeloFiltro(l => l.Codigo.StartsWith(Classe.Codigo));
+            var filhosClasse = ClasseRepository.ListarPeloFiltro(l => l.Codigo.StartsWith(codigoClasse));
             if (filhosClasse.Count() > 1)
             {
                 messageQueue.Add(Resource.Financeiro.ErrorMessages.ClasseUltimoNivel, TypeMessage.Error);
@@ -61,6 +85,21 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             return true;
         }
+
+        //public bool EhClasseUltimoNivelValida(ClasseDTO Classe, int orcamentoId)
+        //{
+        //    if (!EhClasseValida(Classe, orcamentoId))
+        //        return false;
+
+        //    var filhosClasse = ClasseRepository.ListarPeloFiltro(l => l.Codigo.StartsWith(Classe.Codigo));
+        //    if (filhosClasse.Count() > 1)
+        //    {
+        //        messageQueue.Add(Resource.Financeiro.ErrorMessages.ClasseUltimoNivel, TypeMessage.Error);
+        //        return false;
+        //    }
+
+        //    return true;
+        //}
 
         public List<TreeNodeDTO> ListarPeloOrcamento(int? orcamentoId)
         {

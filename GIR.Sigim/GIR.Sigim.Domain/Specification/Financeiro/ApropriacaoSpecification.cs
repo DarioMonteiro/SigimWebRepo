@@ -547,7 +547,7 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
             return specification;
         }
 
-        public static Specification<Apropriacao> EhTipoTituloDiferenteDeTituloPai()
+        public static Specification<Apropriacao> EhTipoTituloDiferenteDeTituloPagarPai()
         {
             Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
 
@@ -556,6 +556,17 @@ namespace GIR.Sigim.Domain.Specification.Financeiro
 
             return specification;
         }
+
+        public static Specification<Apropriacao> EhTipoTituloDiferenteDeTituloReceberPai()
+        {
+            Specification<Apropriacao> specification = new TrueSpecification<Apropriacao>();
+
+            var directSpecification = new DirectSpecification<Apropriacao>(l => l.TituloReceber.TipoTitulo != TipoTitulo.Pai);
+            specification &= directSpecification;
+
+            return specification;
+        }
+
 
         public static Specification<Apropriacao> EhClasseExistente(string codigoClasse)
         {

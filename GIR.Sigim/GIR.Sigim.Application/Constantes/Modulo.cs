@@ -13,6 +13,7 @@ namespace GIR.Sigim.Application.Constantes
         public const string ComercialWeb = "COMERCIALWEB";
         public const string ContratoWeb = "CONTRATOWEB";
         public const string FinanceiroWeb = "FINANCEIROWEB";
+        public const string OrcamentoWeb = "ORCAMENTOWEB";
         public const string OrdemCompraWeb = "ORDEMCOMPRAWEB";
         public const string SacWeb = "SACWEB";
     }

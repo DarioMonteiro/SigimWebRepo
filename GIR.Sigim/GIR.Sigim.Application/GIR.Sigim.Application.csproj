@@ -113,6 +113,7 @@
     <Compile Include="DTO\Financeiro\TaxaAdministracaoDTO.cs" />
     <Compile Include="DTO\Financeiro\RateioAutomaticoDTO.cs" />
     <Compile Include="DTO\Financeiro\ImpostoFinanceiroDTO.cs" />
+    <Compile Include="DTO\Orcamento\EmpresaDTO.cs" />
     <Compile Include="DTO\OrdemCompra\FreteDTO.cs" />
     <Compile Include="DTO\Sigim\AvaliacaoFornecedorDTO.cs" />
     <Compile Include="DTO\Sigim\ComplementoNaturezaOperacaoDTO.cs" />
@@ -224,6 +225,8 @@
     <Compile Include="Filtros\Financeiro\MotivoCancelamentoFiltro.cs" />
     <Compile Include="Filtros\Financeiro\TipoCompromissoFiltro.cs" />
     <Compile Include="Filtros\Contrato\MedicaoContratoFiltro.cs" />
+    <Compile Include="Filtros\Orcamento\OrcamentoPesquisaFiltro.cs" />
+    <Compile Include="Filtros\Orcamento\RelOrcamentoFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\EntradaMaterialFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\OrdemCompraPesquisaFiltro.cs" />
     <Compile Include="Filtros\OrdemCompras\RelOcItensOrdemCompraFiltro.cs" />
@@ -281,10 +284,22 @@
       <DependentUpon>relAcompanhamentoFinanceiroExecutado.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Financeiro\relApropriacaoPorClasse.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relApropriacaoPorClasse.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Financeiro\relApropriacaoPorClasseSintetico.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relApropriacaoPorClasseSintetico.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Financeiro\relApropriacaoPorClasseTeste.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relApropriacaoPorClasseTeste.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Financeiro\relCaixa.cs">
@@ -369,6 +384,18 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>relTituloPagarFornecedor.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Orcamento\relOrcamento.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relOrcamento.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Orcamento\relOrcamentoClasse.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>relOrcamentoClasse.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\OrdemCompra\relEntradaMaterial.cs">
@@ -512,6 +539,8 @@
     <Compile Include="Service\CredCob\ITituloMovimentoAppService.cs" />
     <Compile Include="Service\Financeiro\ITituloPagarAppService.cs" />
     <Compile Include="Service\IBaseAppService.cs" />
+    <Compile Include="Service\Orcamento\IEmpresaAppService.cs" />
+    <Compile Include="Service\Orcamento\IObraAppService.cs" />
     <Compile Include="Service\Orcamento\IOrcamentoAppService.cs" />
     <Compile Include="Service\Orcamento\IParametrosOrcamentoAppService.cs" />
     <Compile Include="Service\OrdemCompra\IEntradaMaterialAppService.cs" />
@@ -600,9 +629,17 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relAcompanhamentoFinanceiroExecutado.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relApropriacaoPorClasse.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relApropriacaoPorClasse.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Financeiro\relApropriacaoPorClasseSintetico.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relApropriacaoPorClasseSintetico.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Financeiro\relApropriacaoPorClasseTeste.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relApropriacaoPorClasseTeste.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Financeiro\relCaixa.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -659,6 +696,14 @@
     <EmbeddedResource Include="Reports\Financeiro\relTituloPagarFornecedor.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>relTituloPagarFornecedor.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Orcamento\relOrcamento.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relOrcamento.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Orcamento\relOrcamentoClasse.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>relOrcamentoClasse.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\OrdemCompra\relEntradaMaterial.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

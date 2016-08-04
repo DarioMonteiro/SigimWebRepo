@@ -13,6 +13,7 @@ namespace GIR.Sigim.Application.Service.IoC
     {
         public static void Initialise()
         {
+            Container.Current.RegisterType<IEmpresaAppService, EmpresaAppService>();
             Container.Current.RegisterType<IOrcamentoAppService, OrcamentoAppService>();
             Container.Current.RegisterType<IParametrosOrcamentoAppService, ParametrosOrcamentoAppService>();
         }

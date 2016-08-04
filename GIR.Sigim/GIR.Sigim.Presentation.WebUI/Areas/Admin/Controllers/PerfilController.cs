@@ -65,8 +65,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
                 perfil = perfilAppService.ObterPeloId(Id) ?? new PerfilDTO();
                 model.Perfil = perfil;
                 var listaFuncionalidadesModulo = funcionalidadeAppService.ListarPeloModulo(perfil.ModuloId);
-                model.JsonFuncionalidadesModulo = JsonConvert.SerializeObject(listaFuncionalidadesModulo);
-                model.JsonFuncionalidadesPerfil = JsonConvert.SerializeObject(perfil.ListaFuncionalidade);
+                model.JsonFuncionalidadesModulo = JsonConvert.SerializeObject(listaFuncionalidadesModulo, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                model.JsonFuncionalidadesPerfil = JsonConvert.SerializeObject(perfil.ListaFuncionalidade, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
             }
 
             model.PodeSalvar = perfilAppService.EhPermitidoSalvar();

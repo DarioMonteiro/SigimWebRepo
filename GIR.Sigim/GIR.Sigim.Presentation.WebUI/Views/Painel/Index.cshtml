@@ -24,6 +24,11 @@
         </a> @Html.ActionLink("Financeiro", "Index", "Home", new { area = "Financeiro" }, htmlAttributes: new { @class = "username", title = "Financeiro" })
     </li>
     <li style="list-style-type:none">
+        <a href="@Url.Action("Index","Home",new { area = "Orçamento" })" class="">
+            <img src="@Url.Content("~/Content/img/MODULO_ORCAMENTO.ico")" alt="Icon Image" />
+        </a> @Html.ActionLink("Orçamento", "Index", "Home", new { area = "Orcamento" }, htmlAttributes: new { @class = "username", title = "Orçamento" })
+    </li>
+    <li style="list-style-type:none">
         <a href="@Url.Action("Index","Home",new { area = "OrdemCompra" })" class="">
             <img src="@Url.Content("~/Content/img/MODULO_ORDEM-DE-COMPRA.ico")" alt="Icon Image" />
         </a> @Html.ActionLink("Ordem de Compra", "Index", "Home", new { area = "OrdemCompra" }, htmlAttributes: new { @class = "username", title = "Ordem de Compra" })

@@ -87,21 +87,13 @@ namespace GIR.Sigim.Application.Service.CredCob
             specification &= TituloCredCobSpecification.DataPeriodoMaiorOuIgualRelApropriacaoPorClasse(filtro.DataInicial);
             specification &= TituloCredCobSpecification.DataPeriodoMenorOuIgualRelApropriacaoPorClasse(filtro.DataFinal);
 
-            if (filtro.OpcoesRelatorio.HasValue)
+            if (filtro.ListaClasseReceita.Count > 0)
             {
-                //if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                string[] arrayCodigoClasse = PopulaArrayComCodigosDeClassesSelecionadas(filtro.ListaClasseReceita);
 
-                if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
+                if (arrayCodigoClasse.Length > 0)
                 {
-                    if (filtro.ListaClasseReceita.Count > 0)
-                    {
-                        string[] arrayCodigoClasse = PopulaArrayComCodigosDeClassesSelecionadas(filtro.ListaClasseReceita);
-
-                        if (arrayCodigoClasse.Length > 0)
-                        {
-                            specification &= TituloCredCobSpecification.SaoClassesExistentes(arrayCodigoClasse);
-                        }
-                    }
+                    specification &= TituloCredCobSpecification.SaoClassesExistentes(arrayCodigoClasse);
                 }
             }
 
@@ -118,7 +110,6 @@ namespace GIR.Sigim.Application.Service.CredCob
                     specification &= TituloCredCobSpecification.EhSituacaoQuitado();
                 }
             }
-
 
             return specification;
         }

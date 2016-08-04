@@ -125,9 +125,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
                 messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NenhumRegistroEncontrado, TypeMessage.Error);
 
             model.EntradaMaterial = entradaMaterial;
-            model.JsonItens = JsonConvert.SerializeObject(entradaMaterial.ListaItens);
-            model.JsonFormasPagamento = JsonConvert.SerializeObject(entradaMaterial.ListaFormaPagamento);
-            model.JsonImpostos = JsonConvert.SerializeObject(entradaMaterial.ListaImposto);
+            model.JsonItens = JsonConvert.SerializeObject(entradaMaterial.ListaItens, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+
+            model.JsonFormasPagamento = JsonConvert.SerializeObject(entradaMaterial.ListaFormaPagamento, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            model.JsonImpostos = JsonConvert.SerializeObject(entradaMaterial.ListaImposto, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             if ((entradaMaterial.CentroCusto == null) || (string.IsNullOrEmpty(entradaMaterial.CentroCusto.Codigo)))
             {
@@ -270,7 +271,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         [HttpPost]
         public ActionResult ListarItensDeOrdemCompraLiberadaComSaldo(int? entradaMaterialId)
         {
-            var jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItensDeOrdemCompraLiberadaComSaldo(entradaMaterialId));
+            var jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItensDeOrdemCompraLiberadaComSaldo(entradaMaterialId), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+
             var msg = messageQueue.GetAll().Any() ? messageQueue.GetAll().First().Text : string.Empty;
             messageQueue.Clear();
             return Json(new { errorMessage = msg, itens = jsonItens });
@@ -281,7 +283,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         {
             string jsonItens = "[]";
             if (entradaMaterialAppService.AdicionarItens(entradaMaterialId, itens))
-                jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItens(entradaMaterialId));
+            {
+                jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItens(entradaMaterialId), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            }
 
             var messages = messageQueue.GetAll();
             messageQueue.Clear();
@@ -293,7 +297,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         {
             string jsonItens = "[]";
             if (entradaMaterialAppService.RemoverItens(entradaMaterialId, itens))
-                jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItens(entradaMaterialId));
+            {
+                jsonItens = JsonConvert.SerializeObject(entradaMaterialAppService.ListarItens(entradaMaterialId), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            }           
 
             var messages = messageQueue.GetAll();
             messageQueue.Clear();
@@ -305,7 +311,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         {
             string jsonFormasPagamento = "[]";
             if (entradaMaterialAppService.RemoverFormasPagamento(entradaMaterialId, formasPagamento))
-                jsonFormasPagamento = JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamento(entradaMaterialId));
+                jsonFormasPagamento = JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamento(entradaMaterialId), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             var messages = messageQueue.GetAll();
             messageQueue.Clear();
@@ -315,7 +321,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         [HttpPost]
         public ActionResult ListarFretePendente(int? entradaMaterialId)
         {
-            return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFretePendente(entradaMaterialId)));
+            return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFretePendente(entradaMaterialId), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
         }
 
         [HttpPost]
@@ -348,7 +354,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
         [HttpPost]
         public ActionResult ListarFormasPagamentoOrdemCompraPendentes(int?[] ordemCompraIds)
         {
-            return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamentoOrdemCompraPendentes(ordemCompraIds)));
+            return Json(JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamentoOrdemCompraPendentes(ordemCompraIds), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore }));
         }
 
         [HttpPost]
@@ -363,7 +369,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.OrdemCompra.Controllers
             List<EntradaMaterialFormaPagamentoDTO> listaEntradaMaterialFormaPagamento = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EntradaMaterialFormaPagamentoDTO>>(formasPagamento);
             string jsonFormasPagamento = "[]";
             if (entradaMaterialAppService.AdicionarFormasPagamento(entradaMaterialId, listaEntradaMaterialFormaPagamento))
-                jsonFormasPagamento = JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamento(entradaMaterialId));
+            {
+                jsonFormasPagamento = JsonConvert.SerializeObject(entradaMaterialAppService.ListarFormasPagamento(entradaMaterialId), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            }
 
             var messages = messageQueue.GetAll();
             messageQueue.Clear();

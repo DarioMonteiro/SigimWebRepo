@@ -21,9 +21,9 @@ namespace GIR.Sigim.Domain.Entity.Financeiro
         public string TipoCodigo { get; set; }
         public DateTime DataVencimento { get; set; }
         public DateTime DataEmissaoDocumento { get; set; }
-        public DateTime DataEmissao { get; set; }
-        public DateTime DataPagamento { get; set; }
-        public DateTime DataBaixa { get; set; }
+        public Nullable<DateTime> DataEmissao { get; set; }
+        public Nullable<DateTime> DataPagamento { get; set; }
+        public Nullable<DateTime> DataBaixa { get; set; }
         public string  MesAno { get; set; }
         public string NomeCliente { get; set; }
     }

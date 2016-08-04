@@ -47,12 +47,10 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             CarregarListas(model);
 
-            model.JsonItensClasse = JsonConvert.SerializeObject(new List<ClasseDTO>());
+            model.JsonItensClasse = JsonConvert.SerializeObject(new List<ClasseDTO>(), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             return View(model);
         }
-
-        #endregion
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -70,14 +68,18 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                     model.Filtro.PaginationParameters.OrderBy = "classe";
                 }
 
-                List<RelAcompanhamentoFinanceiroDTO> result;
+                List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiroDTO;
 
-                result = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiro(model.Filtro,
-                                                                                           out totalRegistros);
+                listaRelAcompanhamentoFinanceiroDTO = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiro(model.Filtro);
+
+                TempData["listaAcompanhamentoFinanceiroDTO"] = listaRelAcompanhamentoFinanceiroDTO;
+
+                var result = apropriacaoAppService.PaginarPeloFiltroRelAcompanhamentoFinanceiro(model.Filtro, listaRelAcompanhamentoFinanceiroDTO, out totalRegistros);
+
                 if (result.Any())
                 {
                     var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
-                    if (model.Filtro.BaseadoPor == 1) 
+                    if (model.Filtro.BaseadoPor == 1)
                     {
                         return PartialView("ListaPartialPercentualExecutado", listaViewModel);
                     }
@@ -98,7 +100,14 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                 return PartialView("_NotificationMessagesPartial");
             }
 
-            var arquivo = apropriacaoAppService.ExportarRelAcompanhamentoFinanceiro(model.Filtro, formato);
+            List<RelAcompanhamentoFinanceiroDTO> listaRelAcompanhamentoFinanceiroDTO = TempData["listaAcompanhamentoFinanceiroDTO"] as List<RelAcompanhamentoFinanceiroDTO>;
+            if (listaRelAcompanhamentoFinanceiroDTO == null)
+            {
+                listaRelAcompanhamentoFinanceiroDTO = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiro(model.Filtro);
+                TempData["listaAcompanhamentoFinanceiroDTO"] = listaRelAcompanhamentoFinanceiroDTO;
+            }
+
+            var arquivo = apropriacaoAppService.ExportarRelAcompanhamentoFinanceiro(model.Filtro, listaRelAcompanhamentoFinanceiroDTO, formato);
             if (arquivo != null)
             {
                 Response.Buffer = false;
@@ -110,6 +119,66 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             return PartialView("_NotificationMessagesPartial");
 
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Lista(RelAcompanhamentoFinanceiroListaViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Session["Filtro"] = model;
+
+        //        model.Filtro.ListaClasse = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasse);
+
+        //        int totalRegistros;
+        //        if (string.IsNullOrEmpty(model.Filtro.PaginationParameters.OrderBy))
+        //        {
+        //            model.Filtro.PaginationParameters.OrderBy = "classe";
+        //        }
+
+        //        List<RelAcompanhamentoFinanceiroDTO> result;
+
+        //        result = apropriacaoAppService.ListarPeloFiltroRelAcompanhamentoFinanceiro(model.Filtro,
+        //                                                                                   out totalRegistros);
+        //        if (result.Any())
+        //        {
+        //            var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
+        //            if (model.Filtro.BaseadoPor == 1) 
+        //            {
+        //                return PartialView("ListaPartialPercentualExecutado", listaViewModel);
+        //            }
+        //            return PartialView("ListaPartial", listaViewModel);
+        //        }
+        //        return PartialView("_EmptyListPartial");
+        //    }
+
+        //    return PartialView("_NotificationMessagesPartial");
+        //}
+
+        //public ActionResult Imprimir(FormatoExportacaoArquivo formato)
+        //{
+        //    var model = Session["Filtro"] as RelAcompanhamentoFinanceiroListaViewModel;
+        //    if (model == null)
+        //    {
+        //        messageQueue.Add(Application.Resource.Sigim.ErrorMessages.NaoExistemRegistros, TypeMessage.Error);
+        //        return PartialView("_NotificationMessagesPartial");
+        //    }
+
+        //    var arquivo = apropriacaoAppService.ExportarRelAcompanhamentoFinanceiro(model.Filtro, formato);
+        //    if (arquivo != null)
+        //    {
+        //        Response.Buffer = false;
+        //        Response.ClearContent();
+        //        Response.ClearHeaders();
+        //        return File(arquivo.Stream, arquivo.ContentType, arquivo.NomeComExtensao);
+        //    }
+
+        //    return PartialView("_NotificationMessagesPartial");
+
+        //}
+
+        #endregion
+
 
         #region "Métodos Privados"
 

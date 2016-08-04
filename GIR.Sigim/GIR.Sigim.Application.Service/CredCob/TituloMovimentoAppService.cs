@@ -67,21 +67,13 @@ namespace GIR.Sigim.Application.Service.CredCob
 
             specification &= TituloMovimentoSpecification.EhValorMovimentoMaiorQueZero();
 
-            if (filtro.OpcoesRelatorio.HasValue)
+            if (filtro.ListaClasseReceita.Count > 0)
             {
-                //if (filtro.OpcoesRelatorio.Value != (int)OpcoesRelatorioApropriacaoPorClasse.Sintetico)
+                string[] arrayCodigoClasse = PopulaArrayComCodigosDeClassesSelecionadas(filtro.ListaClasseReceita);
 
-                if (filtro.OpcoesRelatorio.Value == (int)OpcoesRelatorioApropriacaoPorClasse.Analitico)
+                if (arrayCodigoClasse.Length > 0)
                 {
-                    if (filtro.ListaClasseReceita.Count > 0)
-                    {
-                        string[] arrayCodigoClasse = PopulaArrayComCodigosDeClassesSelecionadas(filtro.ListaClasseReceita);
-
-                        if (arrayCodigoClasse.Length > 0)
-                        {
-                            specification &= TituloMovimentoSpecification.SaoClassesExistentes(arrayCodigoClasse);
-                        }
-                    }
+                    specification &= TituloMovimentoSpecification.SaoClassesExistentes(arrayCodigoClasse);
                 }
             }
 

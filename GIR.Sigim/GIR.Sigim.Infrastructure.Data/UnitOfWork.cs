@@ -84,6 +84,11 @@ namespace GIR.Sigim.Infrastructure.Data
                               .ForEach(entry => entry.State = System.Data.Entity.EntityState.Unchanged);
         }
 
+        public IEnumerable<TEntity> ExecWithStoreProcedure<TEntity>(string query, params object[] parameters) where TEntity : BaseEntity
+        {
+            return base.Database.SqlQuery<TEntity>(query, parameters);
+        }
+
         #endregion
 
         #region DbContext Overrides

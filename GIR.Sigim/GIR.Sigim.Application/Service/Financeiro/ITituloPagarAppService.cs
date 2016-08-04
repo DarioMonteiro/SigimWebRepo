@@ -13,7 +13,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
     {
         bool ExisteNumeroDocumento(Nullable<DateTime> DataEmissao, Nullable<DateTime> DataVencimento, string NumeroDocumento, int? ClienteId);
         bool EhPermitidoImprimirRelContasPagarTitulo();
-        List<RelContasPagarTitulosDTO> ListarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, int? usuarioId, out int totalRegistros, out decimal totalValorTitulo, out decimal totalValorLiquido, out decimal totalValorApropriado);
-        FileDownloadDTO ExportarRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, int? usuarioId, FormatoExportacaoArquivo formato);
+        List<RelContasPagarTitulosDTO> ListarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, int? usuarioId, out decimal totalValorTitulo, out decimal totalValorLiquido, out decimal totalValorApropriado);
+        //List<RelContasPagarTitulosDTO> ListarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, int? usuarioId, out int totalRegistros, out decimal totalValorTitulo, out decimal totalValorLiquido, out decimal totalValorApropriado);
+        List<RelContasPagarTitulosDTO> PaginarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, List<RelContasPagarTitulosDTO> listaRelContasPagarTitulos, out int totalRegistros);
+        FileDownloadDTO ExportarRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, List<RelContasPagarTitulosDTO> listaRelContasPagarTitulos, decimal totalValorTitulo, decimal totalValorLiquido, FormatoExportacaoArquivo formato);
+        //FileDownloadDTO ExportarRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, int? usuarioId, FormatoExportacaoArquivo formato);
     }
 }

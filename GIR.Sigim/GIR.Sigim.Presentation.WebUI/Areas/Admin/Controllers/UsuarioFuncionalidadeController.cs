@@ -139,9 +139,9 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
                 }
 
                 var listaFuncionalidadesModulo = funcionalidadeAppService.ListarPeloModulo(ModuloId.Value);
-                model.JsonFuncionalidadesModulo = JsonConvert.SerializeObject(listaFuncionalidadesModulo);
-                model.JsonFuncionalidadesPerfil = JsonConvert.SerializeObject(perfil.ListaFuncionalidade);
-                model.JsonFuncionalidadesAvulsas = JsonConvert.SerializeObject(listaFuncionalidadesAvulsas);
+                model.JsonFuncionalidadesModulo = JsonConvert.SerializeObject(listaFuncionalidadesModulo, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                model.JsonFuncionalidadesPerfil = JsonConvert.SerializeObject(perfil.ListaFuncionalidade, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                model.JsonFuncionalidadesAvulsas = JsonConvert.SerializeObject(listaFuncionalidadesAvulsas, Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
             }
 
             model.PodeSalvar = usuarioAppService.EhPermitidoSalvar();

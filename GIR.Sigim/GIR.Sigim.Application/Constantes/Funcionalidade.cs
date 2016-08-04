@@ -16,6 +16,7 @@ namespace GIR.Sigim.Application.Constantes
         public System.Collections.Hashtable MenuContrato;
         public System.Collections.Hashtable MenuComercial;
         public System.Collections.Hashtable MenuFinanceiro;
+        public System.Collections.Hashtable MenuOrcamento;
         public System.Collections.Hashtable MenuOrdemCompra;
         public System.Collections.Hashtable MenuSac;
 
@@ -153,6 +154,13 @@ namespace GIR.Sigim.Application.Constantes
 
         #endregion
 
+        #region "Orcamento"
+
+        public const string RelatorioOrcamentoAcessar = "REL_ORCAMENTO_ACESSAR";
+        public const string RelatorioOrcamentoImprimir = "REL_ORCAMENTO_IMPRIMIR";
+
+        #endregion
+
         #region OrdemCompra
 
         public const string ParametroOrdemCompraAcessar = "PARAMETRO_ORDEMCOMPRA_ACESSAR";
@@ -213,6 +221,7 @@ namespace GIR.Sigim.Application.Constantes
             FuncionalidadeComercial();
             FuncionalidadeContrato();
             FuncionalidadeFinanceiro();
+            FuncionalidadeOrcamento();
             FuncionalidadeOrdemCompra();
             //FuncionalidadeSac();
         }
@@ -352,6 +361,13 @@ namespace GIR.Sigim.Application.Constantes
             MenuFinanceiro.Add(RelatorioAcompanhamentoFinanceiroAcessar, "Relatório Acompanhamento Financeiro - acessar");
             MenuFinanceiro.Add(RelatorioAcompanhamentoFinanceiroImprimir, "Relatório Acompanhamento Financeiro - imprimir");
 
+        }
+
+        private void FuncionalidadeOrcamento()
+        {
+            MenuOrcamento = new System.Collections.Hashtable();
+            MenuOrcamento.Add(RelatorioOrcamentoAcessar, "Relatório Orçamento - acessar");
+            MenuOrcamento.Add(RelatorioOrcamentoImprimir, "Relatório Orçamento - imprimir");
         }
 
         private void FuncionalidadeOrdemCompra()

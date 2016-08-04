@@ -123,7 +123,7 @@ namespace GIR.Sigim.Application.Service.Sigim
                         l.ListaOrcamentoComposicaoItem.Where(o =>
                             o.MaterialId == materialId
                             && o.EhControlado == true));
-                    //&& (!string.IsNullOrEmpty(codigoClasse) ? o.OrcamentoComposicao.codigoClasse == codigoClasse : true))).To<List<OrcamentoComposicaoItemDTO>>();
+                            //&& (!string.IsNullOrEmpty(codigoClasse) ? o.OrcamentoComposicao.codigoClasse == codigoClasse : true))).To<List<OrcamentoComposicaoItemDTO>>();
 
                     if (!listaOrcamentoComposicao.Any())
                     {
@@ -133,7 +133,7 @@ namespace GIR.Sigim.Application.Service.Sigim
                                 o.MaterialId.HasValue
                                 && o.EhControlado == true
                                 && o.Material.CodigoMaterialClasseInsumo == material.CodigoMaterialClasseInsumo));
-                        //&& (!string.IsNullOrEmpty(codigoClasse) ? o.OrcamentoComposicao.codigoClasse == codigoClasse : true))).To<List<OrcamentoComposicaoItemDTO>>();
+                                //&& (!string.IsNullOrEmpty(codigoClasse) ? o.OrcamentoComposicao.codigoClasse == codigoClasse : true))).To<List<OrcamentoComposicaoItemDTO>>();
                     }
 
                     if (listaOrcamentoComposicao.Any())
@@ -142,6 +142,7 @@ namespace GIR.Sigim.Application.Service.Sigim
                     listaDTO = listaOrcamentoComposicao.Where(l => !string.IsNullOrEmpty(codigoClasse) ? l.OrcamentoComposicao.CodigoClasse == codigoClasse : true).To<List<OrcamentoComposicaoItemDTO>>();
                 }
             }
+
             return listaDTO;
         }
 

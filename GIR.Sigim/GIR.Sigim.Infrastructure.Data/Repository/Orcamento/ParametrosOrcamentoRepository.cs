@@ -19,5 +19,16 @@ namespace GIR.Sigim.Infrastructure.Data.Repository.Orcamento
         }
 
         #endregion
+
+        #region IParametrosOrcamentosRepository Members
+
+        public ParametrosOrcamento Obter()
+        {
+            var set = CreateSetAsQueryable();
+            return set.FirstOrDefault();
+        }
+
+        #endregion
+
     }
 }

@@ -39,8 +39,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
 
             CarregarListas(model);
 
-            model.JsonItensClasseDespesa = JsonConvert.SerializeObject(new List<ClasseDTO>());
-            model.JsonItensClasseReceita = JsonConvert.SerializeObject(new List<ClasseDTO>());
+            model.JsonItensClasseDespesa = JsonConvert.SerializeObject(new List<ClasseDTO>(), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            model.JsonItensClasseReceita = JsonConvert.SerializeObject(new List<ClasseDTO>(), Formatting.Indented, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             return View(model);
         }
@@ -63,6 +63,7 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
                     return PartialView("_NotificationMessagesPartial");
                 }
 
+                TempData["listaApropriacaoPorClasseDTO"] = listaApropriacaoPorClasseDTO;
                 return Content("<script>executarImpressao();</script>");
 
             }
@@ -80,11 +81,12 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Financeiro.Controllers
             model.Filtro.ListaClasseDespesa = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasseDespesa);
             model.Filtro.ListaClasseReceita = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClasseDTO>>(model.JsonItensClasseReceita);
 
-            List<ApropriacaoClasseCCRelatorioDTO> listaApropriacaoPorClasseDTO = apropriacaoAppService.GerarRelatorioApropriacaoPorClasse(model.Filtro, Usuario.Id);
-            if (listaApropriacaoPorClasseDTO == null)
+            List<ApropriacaoClasseCCRelatorioDTO> listaApropriacaoPorClasseDTO = TempData["listaApropriacaoPorClasseDTO"] as List<ApropriacaoClasseCCRelatorioDTO>;
+
+            if (listaApropriacaoPorClasseDTO == null)           
             {
-                messageQueue.Add(Application.Resource.Sigim.ErrorMessages.InformacaoNaoEncontrada, TypeMessage.Error);
-                return PartialView("_NotificationMessagesPartial");
+                listaApropriacaoPorClasseDTO = apropriacaoAppService.GerarRelatorioApropriacaoPorClasse(model.Filtro, Usuario.Id);
+                TempData["listaApropriacaoPorClasseDTO"] = listaApropriacaoPorClasseDTO;
             }
 
             var arquivo = apropriacaoAppService.ExportarRelApropriacaoPorClasse(model.Filtro,listaApropriacaoPorClasseDTO, formato);

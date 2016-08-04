@@ -107,10 +107,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
             return UsuarioLogado.IsInRole(Funcionalidade.RelatorioContasAPagarTitulosImprimir);
         }
 
-        public List<RelContasPagarTitulosDTO> ListarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, 
-                                                                                    int? usuarioId, 
-                                                                                    out int totalRegistros, 
-                                                                                    out decimal totalValorTitulo, 
+        public List<RelContasPagarTitulosDTO> ListarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro,
+                                                                                    int? usuarioId,
+                                                                                    out decimal totalValorTitulo,
                                                                                     out decimal totalValorLiquido,
                                                                                     out decimal totalValorApropriado)
         {
@@ -146,13 +145,20 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                                             l => l.ListaApropriacao.Select(a => a.Classe),
                                                             l => l.MotivoCancelamento).To<List<TituloPagar>>();
 
-            var listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro, 
-                                                                                 listaTitulosPagar,
-                                                                                 usuarioId,
-                                                                                 out totalValorTitulo, 
-                                                                                 out totalValorLiquido,
-                                                                                 out totalValorApropriado);
+            List<RelContasPagarTitulosDTO> listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro,
+                                                                                                             listaTitulosPagar,
+                                                                                                             usuarioId,
+                                                                                                             out totalValorTitulo,
+                                                                                                             out totalValorLiquido,
+                                                                                                             out totalValorApropriado);
 
+            return listaRelContasPagarTitulos;
+        }
+
+        public List<RelContasPagarTitulosDTO> PaginarPeloFiltroRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro,
+                                                                                     List<RelContasPagarTitulosDTO> listaRelContasPagarTitulos,
+                                                                                     out int totalRegistros)
+        {
             totalRegistros = listaRelContasPagarTitulos.Count();
 
             if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 4))
@@ -160,19 +166,21 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 filtro.PaginationParameters.OrderBy = "dataSelecao";
             }
 
-            listaRelContasPagarTitulos = OrdenaListaRelContasPagarTitulosDTO(filtro, listaRelContasPagarTitulos);
+            List<RelContasPagarTitulosDTO> lista = OrdenaListaRelContasPagarTitulosDTO(filtro, listaRelContasPagarTitulos);
 
             int pageCount = filtro.PaginationParameters.PageSize;
             int pageIndex = filtro.PaginationParameters.PageIndex;
 
-            listaRelContasPagarTitulos = listaRelContasPagarTitulos.Skip(pageCount * pageIndex).Take(pageCount).To<List<RelContasPagarTitulosDTO>>();
+            lista = lista.Skip(pageCount * pageIndex).Take(pageCount).To<List<RelContasPagarTitulosDTO>>();
 
-            return listaRelContasPagarTitulos;
+            return lista;
 
         }
 
         public FileDownloadDTO ExportarRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro,
-                                                             int? usuarioId,
+                                                             List<RelContasPagarTitulosDTO> listaRelContasPagarTitulos,
+                                                             decimal totalValorTitulo,
+                                                             decimal totalValorLiquido,
                                                              FormatoExportacaoArquivo formato)
         {
             if (!EhPermitidoImprimirRelContasPagarTitulo())
@@ -181,56 +189,19 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 return null;
             }
 
-            decimal totalValorTitulo = 0; 
-            decimal totalValorLiquido = 0;
-            decimal totalValorApropriado = 0;
+            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Contas a pagar títulos", new System.IO.MemoryStream(), formato);
 
-            bool situacaoPagamentoPendente = filtro.EhSituacaoAPagarProvisionado || filtro.EhSituacaoAPagarAguardandoLiberacao || filtro.EhSituacaoAPagarLiberado || filtro.EhSituacaoAPagarCancelado;
-            bool situacaoPagamentoPago = filtro.EhSituacaoAPagarEmitido || filtro.EhSituacaoAPagarPago || filtro.EhSituacaoAPagarBaixado;
-
-            List<TituloPagar> listaTitulosPagar = new List<TituloPagar>();
-
-            var specificationTeste1 = (Specification<TituloPagar>)new TrueSpecification<TituloPagar>();
-
-            if ((situacaoPagamentoPendente) || ((!situacaoPagamentoPendente) && (!situacaoPagamentoPago)))
+            if (listaRelContasPagarTitulos == null)
             {
-                specificationTeste1 &= MontarSpecificationSituacaoPendentesRelContasPagarTitulos(filtro, usuarioId);
+                return arquivo;
             }
 
-            var specificationTeste2 = (Specification<TituloPagar>)new TrueSpecification<TituloPagar>();
-
-            if ((situacaoPagamentoPago) || ((!situacaoPagamentoPendente) && (!situacaoPagamentoPago)))
-            {
-                specificationTeste2 &= MontarSpecificationSituacaoPagosRelContasPagarTitulos(filtro, usuarioId);
-            }
-
-            listaTitulosPagar =
-             tituloPagarRepository.ListarPeloFiltroComUnion(specificationTeste1,
-                                                            specificationTeste2,
-                                                            l => l.Cliente.PessoaFisica,
-                                                            l => l.Cliente.PessoaJuridica,
-                                                            l => l.Movimento.ContaCorrente.Agencia,
-                                                            l => l.Movimento.Caixa,
-                                                            l => l.TipoCompromisso,
-                                                            l => l.TipoDocumento,
-                                                            l => l.ListaApropriacao.Select(a => a.CentroCusto),
-                                                            l => l.ListaApropriacao.Select(a => a.Classe),
-                                                            l => l.MotivoCancelamento).To<List<TituloPagar>>();
-
-            var listaRelContasPagarTitulos = PopulaListaRelContasPagarTitulosDTO(filtro,
-                                                                                 listaTitulosPagar,
-                                                                                 usuarioId,
-                                                                                 out totalValorTitulo,
-                                                                                 out totalValorLiquido,
-                                                                                 out totalValorApropriado);
 
             if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 4))
             {
                 listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.DataSelecao).ToList<RelContasPagarTitulosDTO>();
             }
 
-
-            FileDownloadDTO arquivo = new FileDownloadDTO("Rel. Contas a pagar títulos", null, formato);
 
             var parametros = parametrosFinanceiroRepository.Obter();
             CentroCusto centroCusto = new CentroCusto();
@@ -366,8 +337,6 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             return arquivo;
         }
-
-
 
         #endregion
 
@@ -646,7 +615,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 {
                     relat.DocumentoCompleto = tituloPagar.TipoDocumento.Sigla + " " + tituloPagar.Documento;
                 }
-                relat.ValorTitulo = tituloPagar.ValorTitulo;
+                relat.ValorTitulo = Math.Round( tituloPagar.ValorTitulo,2,MidpointRounding.AwayFromZero);
 
                 relat.ClienteId = tituloPagar.ClienteId;
                 relat.NomeCliente = tituloPagar.Cliente.Nome;
@@ -742,7 +711,7 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
                 if (situacaoPagamentoPendente)
                 {
-                    relat.ValorLiquido = CalculaValorLiquido(tituloPagar,DateTime.Now.Date);
+                    relat.ValorLiquido =  CalculaValorLiquido(tituloPagar, DateTime.Now.Date);
                 }
                 else
                 {
@@ -779,16 +748,23 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 {
                     if (tituloPagar.Cliente.TipoPessoa == "F")
                     {
-                        relat.CPFCNPJ = tituloPagar.Cliente.PessoaFisica.Cpf;
+                        if (tituloPagar.Cliente.PessoaFisica != null)
+                        {
+                            relat.CPFCNPJ = tituloPagar.Cliente.PessoaFisica.Cpf;
+                        }
                     }
                     else
                     {
                         if (tituloPagar.Cliente.TipoPessoa == "J")
                         {
-                            relat.CPFCNPJ = tituloPagar.Cliente.PessoaJuridica.Cnpj;
-                            if ((filtro.VisualizarClientePor.HasValue) && (filtro.VisualizarClientePor.Value == 1))
+                            if (tituloPagar.Cliente.PessoaJuridica != null)
                             {
-                                relat.NomeCliente = tituloPagar.Cliente.PessoaJuridica.NomeFantasia;
+                                relat.CPFCNPJ = tituloPagar.Cliente.PessoaJuridica.Cnpj;
+
+                                if ((filtro.VisualizarClientePor.HasValue) && (filtro.VisualizarClientePor.Value == 1))
+                                {
+                                    relat.NomeCliente = tituloPagar.Cliente.PessoaJuridica.NomeFantasia;
+                                }
                             }
                         }
                     }
@@ -805,8 +781,10 @@ namespace GIR.Sigim.Application.Service.Financeiro
                     if (tituloPagar.ListaApropriacao.Count > 0)
                     {
                         decimal totalValorApropriado = 0;
+
                         foreach (var apropriacao in tituloPagar.ListaApropriacao)
                         {
+
                             if (!string.IsNullOrEmpty(filtro.Classe.Codigo))
                             {
                                 if (filtro.Classe.Codigo != apropriacao.Classe.Codigo)
@@ -843,6 +821,9 @@ namespace GIR.Sigim.Application.Service.Financeiro
                                 relat.CodigoDescricaoCentroCusto = apropriacao.CentroCusto.Codigo + " - " + apropriacao.CentroCusto.Descricao;
 
                                 listaRelContasPagarTitulos.Add(relat);
+
+                                RelContasPagarTitulosDTO relatAux = new RelContasPagarTitulosDTO(relat);
+                                relat = new RelContasPagarTitulosDTO(relatAux);                                
                             }
                         }
                         if ((filtro.EhTotalizadoPor.HasValue) && (filtro.EhTotalizadoPor.Value == 4))
@@ -876,9 +857,38 @@ namespace GIR.Sigim.Application.Service.Financeiro
 
             }
 
-            totalizadoValorTitulo = listaRelContasPagarTitulos.Sum(l => l.ValorTitulo);
-            totalizadoValorLiquido = listaRelContasPagarTitulos.Sum(l => l.ValorLiquido);
-            totalizadoValorApropriado = listaRelContasPagarTitulos.Sum(l => l.ValorApropriado);
+            totalizadoValorTitulo = 0;
+            totalizadoValorLiquido = 0;
+            totalizadoValorApropriado = 0;
+
+            listaRelContasPagarTitulos = listaRelContasPagarTitulos.OrderBy(l => l.TituloId).To<List<RelContasPagarTitulosDTO>>();
+
+            if (filtro.EhTotalizadoPor == 4)
+            {
+                totalizadoValorTitulo = listaRelContasPagarTitulos.GroupBy(l => new { TituloId = l.TituloId, ValorTitulo = l.ValorTitulo }).Sum(c => c.Key.ValorTitulo);
+                totalizadoValorLiquido = listaRelContasPagarTitulos.GroupBy(l => new { TituloId = l.TituloId, ValorLiquido = l.ValorLiquido }).Sum(c => c.Key.ValorLiquido);
+                totalizadoValorApropriado = listaRelContasPagarTitulos.Sum(l => l.ValorApropriado);
+            }
+            else
+            {
+                decimal valor1 = 0;
+                decimal valor2 = 0;
+                totalizadoValorApropriado = listaRelContasPagarTitulos.Sum(l => l.ValorApropriado);
+                totalizadoValorTitulo = listaRelContasPagarTitulos.GroupBy(l => new { TituloId = l.TituloId, ValorTitulo = l.ValorTitulo }).Sum(c => c.Key.ValorTitulo);
+
+                valor1 = listaRelContasPagarTitulos.Where(l => ((l.SituacaoTituloDescricao == SituacaoTituloPagar.Provisionado.ObterDescricao()) ||
+                                                                                (l.SituacaoTituloDescricao == SituacaoTituloPagar.AguardandoLiberacao.ObterDescricao()) ||
+                                                                                (l.SituacaoTituloDescricao == SituacaoTituloPagar.Liberado.ObterDescricao()) ||
+                                                                                (l.SituacaoTituloDescricao == SituacaoTituloPagar.Cancelado.ObterDescricao())))
+                                                     .GroupBy(l => new { TituloId = l.TituloId, ValorLiquido = l.ValorLiquido }).Sum(c => c.Key.ValorLiquido);
+
+                valor2 = listaRelContasPagarTitulos.Where(l => ((l.SituacaoTituloDescricao == SituacaoTituloPagar.Emitido.ObterDescricao()) ||
+                                                                                (l.SituacaoTituloDescricao == SituacaoTituloPagar.Pago.ObterDescricao()) ||
+                                                                                (l.SituacaoTituloDescricao == SituacaoTituloPagar.Baixado.ObterDescricao())))
+                                                     .GroupBy(l => new { TituloId = l.TituloId, ValorLiquido = l.ValorLiquido }).Sum(c => c.Key.ValorLiquido);
+                totalizadoValorLiquido = valor1 + valor2;
+            }
+
 
             return listaRelContasPagarTitulos;
         }
@@ -911,31 +921,31 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 if ((titulo.EhMultaPercentual.HasValue) && (titulo.EhMultaPercentual.Value))
                 {
                     valorMultaCalculada = ((titulo.ValorTitulo * multa) / 100);
-                    valorMultaCalculada = Math.Round(valorMultaCalculada,2);
+                    valorMultaCalculada = Math.Round(valorMultaCalculada,2,MidpointRounding.AwayFromZero);
                 }
                 else
                 {
-                    valorMultaCalculada = Math.Round(multa,2);
+                    valorMultaCalculada = Math.Round(multa, 2, MidpointRounding.AwayFromZero);
                 }
 
                 if ((titulo.EhTaxaPermanenciaPercentual.HasValue) && (titulo.EhTaxaPermanenciaPercentual.Value))
                 {
                     fator = 30;
                     valorTaxa = (taxaPermanencia / fator) * atraso;
-                    taxaPermanenciaCalculada = ((titulo.ValorTitulo * valorTaxa) / 100);
+                    taxaPermanenciaCalculada = Math.Round(((titulo.ValorTitulo * valorTaxa) / 100), 2, MidpointRounding.AwayFromZero);
                 }
                 else
                 {
                     fator = 1;
                     valorTaxa = (taxaPermanencia / fator) * atraso;
-                    taxaPermanenciaCalculada = Math.Round(valorTaxa,2);
+                    taxaPermanenciaCalculada = Math.Round(valorTaxa, 2, MidpointRounding.AwayFromZero);
                 }
                 valorLiquido = valorLiquido -  retencao + valorMultaCalculada + taxaPermanenciaCalculada;
                 if (titulo.DataLimiteDesconto.HasValue)
                 {
                     if (titulo.DataLimiteDesconto.Value.Date >= dataEmissao)
                     {
-                        valorLiquido = Math.Round((valorLiquido - desconto),2);
+                        valorLiquido = Math.Round((valorLiquido - desconto), 2, MidpointRounding.AwayFromZero);
                     }
                 }
             }
@@ -945,13 +955,13 @@ namespace GIR.Sigim.Application.Service.Financeiro
                 {
                     if (titulo.DataLimiteDesconto.Value.Date >= dataEmissao)
                     {
-                        valorLiquido = Math.Round((valorLiquido - desconto),2);
+                        valorLiquido = Math.Round((valorLiquido - desconto), 2, MidpointRounding.AwayFromZero);
                     }
                 }
-                valorLiquido = Math.Round((valorLiquido - retencao),2);
+                valorLiquido = Math.Round((valorLiquido - retencao), 2, MidpointRounding.AwayFromZero);
             }
 
-            return valorLiquido;
+            return Math.Round(valorLiquido, 2, MidpointRounding.AwayFromZero);
         }
 
         private Specification<TituloPagar> MontarSpecificationSituacaoPendentesRelContasPagarTitulos(RelContasPagarTitulosFiltro filtro, int? idUsuario)

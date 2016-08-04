@@ -43,10 +43,6 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Financeiro
                 .HasMaxLength(10)
                 .HasColumnOrder(7);
 
-            Property(l => l.DataEmissaoDocumento)
-                .HasColumnName("dataEmissaoDocumento")
-                .HasColumnOrder(8);
-
             Property(l => l.DataVencimento)
                 .HasColumnName("dataVencimento")
                 .HasColumnOrder(9);
