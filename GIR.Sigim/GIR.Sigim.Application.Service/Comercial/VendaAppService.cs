@@ -22,6 +22,8 @@ using GIR.Sigim.Domain.Specification.Comercial;
 using GIR.Sigim.Application.Filtros.Comercial;
 using GIR.Sigim.Application.Constantes;
 using GIR.Sigim.Application.DTO.Sigim;
+using GIR.Sigim.Domain.Repository.CredCob;
+using GIR.Sigim.Domain.Entity.CredCob;
 
 namespace GIR.Sigim.Application.Service.Comercial
 {
@@ -29,13 +31,18 @@ namespace GIR.Sigim.Application.Service.Comercial
     {
         private IVendaRepository vendaRepository;
         private IParametrosSigimRepository parametrosRepository;
+        private IMoedaRepository moedaRepository;
 
 
-        public VendaAppService(IVendaRepository vendaRepository, IParametrosSigimRepository parametrosRepository, MessageQueue messageQueue)
+        public VendaAppService(IVendaRepository vendaRepository, 
+                               IParametrosSigimRepository parametrosRepository, 
+                               IMoedaRepository moedaRepository,
+                               MessageQueue messageQueue)
             : base(messageQueue)
         {
             this.vendaRepository = vendaRepository;
             this.parametrosRepository = parametrosRepository;
+            this.moedaRepository = moedaRepository;
         }
 
         #region IVendaRepositoryAppService Members
@@ -150,9 +157,22 @@ namespace GIR.Sigim.Application.Service.Comercial
             objRel.SetDataSource(RelStatusVendaToDataTable(lista));
 
             var parametros = parametrosRepository.Obter();
-            var caminhoImagem = PrepararIconeRelatorio(null, parametros);
+            Moeda moedaPadrao = new Moeda();
+            Moeda moedaConversao = new Moeda();
+            if (parametros.MoedaPadraoId.HasValue && parametros.MoedaPadraoId.Value > 0)
+            {
+                moedaPadrao = moedaRepository.ObterPeloId(parametros.MoedaPadraoId.Value);
+            }
 
-            objRel.SetParameterValue("descricaoMoeda", "");
+            if (filtro.MoedaConversao != 0)
+            {
+                moedaConversao = moedaRepository.ObterPeloId(filtro.MoedaConversao);
+            }
+
+            var caminhoImagem = PrepararIconeRelatorio(null, parametros);
+            var descricaoMoeda = ObterDescricaoMoeda(moedaPadrao,moedaConversao);
+
+            objRel.SetParameterValue("descricaoMoeda", descricaoMoeda);
             objRel.SetParameterValue("caminhoImagem", caminhoImagem);
 
             FileDownloadDTO arquivo = new FileDownloadDTO(

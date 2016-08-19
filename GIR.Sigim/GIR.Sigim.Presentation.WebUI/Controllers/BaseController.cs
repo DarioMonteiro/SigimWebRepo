@@ -155,5 +155,13 @@ namespace GIR.Sigim.Presentation.WebUI.Controllers
                 return logGIRCliente ; 
             }
         }
+
+        protected int MoedaConversao
+        {
+            get
+            {
+                return Convert.ToInt32(System.Web.Configuration.WebConfigurationManager.AppSettings["MoedaConversao"]);
+            }
+        }
     }
 }

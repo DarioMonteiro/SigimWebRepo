@@ -152,6 +152,7 @@ namespace GIR.Sigim.Infrastructure.Data
 
             #region CrebCob
 
+            modelBuilder.Configurations.Add(new MoedaConfiguration());
             modelBuilder.Configurations.Add(new TituloCredCobConfiguration());
             modelBuilder.Configurations.Add(new TituloMovimentoConfiguration());
             modelBuilder.Configurations.Add(new VerbaCobrancaConfiguration());

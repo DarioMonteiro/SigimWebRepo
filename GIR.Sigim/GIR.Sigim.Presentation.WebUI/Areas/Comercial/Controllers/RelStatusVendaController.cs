@@ -104,6 +104,8 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Comercial.Controllers
                 return PartialView("_NotificationMessagesPartial");
             }
 
+            model.Filtro.MoedaConversao = this.MoedaConversao;
+
             var arquivo = vendaAppService.ExportarRelStatusVenda(model.Filtro, Usuario.Id, formato);
             if (arquivo != null)
             {

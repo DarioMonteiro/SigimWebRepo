@@ -113,21 +113,21 @@
                         <th class="sorting @incorporadorSortingSuffix text-left" data-order="incorporador" style="min-width:60px;">Incorporador</th>
                         <th class="sorting @empreendimentoSortingSuffix text-left" data-order="empreendimento" style="min-width:60px;">Empreendimento</th>
                         <th class="sorting @blocoSortingSuffix text-left" data-order="bloco" style="min-width:60px;">Bloco</th>
-                        <th class="sorting @unidadeSortingSuffix text-center" data-order="unidade" style="min-width:60px;">Unidade</th>
-                        <th class="sorting @contratoSortingSuffix text-right" data-order="contratoId" style="width:60px; ">Contrato</th>
-                        <th class="sorting @descricaoSituacaoContratoSortingSuffix text-center" data-order="descricaoSituacaoContrato" style="width:50px; ">Situação contrato</th>
+                        <th class="sorting @unidadeSortingSuffix text-left" data-order="unidade" style="min-width:60px;">Unidade</th>
+                        <th class="sorting @contratoSortingSuffix text-left" data-order="contratoId" style="min-width:90px; ">Contrato</th>
+                        <th class="sorting @descricaoSituacaoContratoSortingSuffix text-left" data-order="descricaoSituacaoContrato" style="min-width:50px; ">Situação contrato</th>
                         <th class="sorting @clienteSortingSuffix text-left" data-order="cliente" style="min-width:70px;">Cliente</th>
                         <th class="sorting @tabelaVendaSortingSuffix text-left" data-order="tabelaVenda" style="min-width:60px;">Tabela de Venda</th>
-                        <th class="sorting @dataVendaSortingSuffix text-center" data-order="dataVenda" style="min-width:60px;">Data venda</th>
-                        <th class="sorting @precoTabelaSortingSuffix text-right" data-order="precoTabela" style="min-width:60px;">Preço Tabela</th>
-                        <th class="sorting @valorDescontoSortingSuffix text-right" data-order="valorDesconto" style="min-width:60px;">Valor Desconto</th>
-                        <th class="sorting @percentualDescontoSortingSuffix text-right" data-order="percentualDesconto" style="min-width:60px;">% Desconto</th>
-                        <th class="sorting @precoPraticadoSortingSuffix text-right" data-order="precoPraticado" style="min-width:60px;">Preço Praticado</th>
-                        <th class="sorting @dataAssinaturaSortingSuffix text-center" data-order="dataAssinatura" style="min-width:60px;">Data assinatura</th>
-                        <th class="sorting @dataCancelamentoSortingSuffix text-center" data-order="dataCancelamento" style="min-width:60px;">Data Cancelamento</th>
-                        <th class="sorting @aprovadoSortingSuffix text-center" data-order="aprovado" style="min-width:60px;">Aprovado</th>
-                        <th class="sorting @usuarioAprovacaoSortingSuffix text-center" data-order="usuarioAprovacao" style="min-width:60px;">Usuário aprovação</th>
-                        <th class="sorting @dataAprovacaoSortingSuffix text-center" data-order="dataAprovacao" style="min-width:60px;">Dt. aprovação</th>
+                        <th class="sorting @dataVendaSortingSuffix text-left" data-order="dataVenda" style="min-width:90px;">Data venda</th>
+                        <th class="sorting @precoTabelaSortingSuffix text-left" data-order="precoTabela" style="min-width:60px;">Preço Tabela</th>
+                        <th class="sorting @valorDescontoSortingSuffix text-left" data-order="valorDesconto" style="min-width:90px;">Valor Desconto</th>
+                        <th class="sorting @percentualDescontoSortingSuffix text-left" data-order="percentualDesconto" style="min-width:90px;">% Desconto</th>
+                        <th class="sorting @precoPraticadoSortingSuffix text-left" data-order="precoPraticado" style="min-width:60px;">Preço Praticado</th>
+                        <th class="sorting @dataAssinaturaSortingSuffix text-left" data-order="dataAssinatura" style="min-width:75px;">Data assinatura</th>
+                        <th class="sorting @dataCancelamentoSortingSuffix text-left" data-order="dataCancelamento" style="min-width:90px;">Data Cancelamento</th>
+                        <th class="sorting @aprovadoSortingSuffix text-left" data-order="aprovado" style="min-width:75px;">Aprovado</th>
+                        <th class="sorting @usuarioAprovacaoSortingSuffix text-left" data-order="usuarioAprovacao" style="min-width:75px;">Usuário aprovação</th>
+                        <th class="sorting @dataAprovacaoSortingSuffix text-left" data-order="dataAprovacao" style="min-width:75px;">Dt. aprovação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -150,6 +150,12 @@
                         {
                             dataAprovacao = item.DataAprovacao.Value.ToShortDateString();
                         }
+
+                        string valorDesconto = "0,00";
+                        if (item.ValorDesconto.HasValue)
+                        {
+                            valorDesconto =  item.ValorDesconto.Value.ToString("N2");
+                        }
                         
                         <tr>
                             <td class="text-left text-nowrap">@item.Contrato.Unidade.Empreendimento.Incorporador.RazaoSocial </td>
@@ -162,11 +168,11 @@
                             <td class="text-left text-nowrap">@item.TabelaVenda.Nome</td>
                             <td class="text-center text-nowrap">@item.DataVenda.Value.ToString("dd/MM/yyyy")</td>
                             <td class="text-right text-nowrap">@item.PrecoTabela.ToString("N2")</td>
-                            <td class="text-right text-nowrap">@if (item.ValorDesconto.HasValue) {@item.ValorDesconto.Value.ToString("N2");}&nbsp;</td>
+                            <td class="text-right text-nowrap">@valorDesconto</td>
                             <td class="text-right text-nowrap">@item.PercentualDesconto.ToString("N2")</td>
                             <td class="text-right text-nowrap">@item.PrecoPraticado.ToString("N2")</td>
                             <td class="text-center text-nowrap">@if (item.DataAssinatura.HasValue){@item.DataAssinatura.Value.ToString("dd/MM/yyyy");}&nbsp;</td>
-                            <td class="text-center text-nowrap">@if (item.DataCancelamento.HasValue) {@item.DataCancelamento.Value.ToString("dd/MM/yyyy");}&nbsp;</td>
+                            <td class="text-center text-nowrap">@if (item.DataCancelamento.HasValue){@item.DataCancelamento.Value.ToString("dd/MM/yyyy");}&nbsp;</td>
                             <td class="text-center text-nowrap">@aprovado</td>
                             <td class="text-center text-nowrap">@item.UsuarioAprovacao</td>
                             <td class="text-center text-nowrap">@dataAprovacao</td>

@@ -46,6 +46,7 @@ namespace GIR.Sigim.Application.Filtros.Comercial
         [Display(Name = "Aprovado")]
         public int? Aprovado { get; set; }
 
+        public int MoedaConversao { get; set; }
 
     }
 }

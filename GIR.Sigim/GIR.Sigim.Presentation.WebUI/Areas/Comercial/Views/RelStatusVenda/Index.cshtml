@@ -17,7 +17,7 @@
                         "Lista",
                         "RelStatusVenda",
                         null,
-                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onSuccess", UpdateTargetId = "resultadoBusca" },
+                        new AjaxOptions() { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "renderTela", UpdateTargetId = "resultadoBusca" },
                         new { @id = "formFilter" + Model.Filtro.PaginationParameters.UniqueIdentifier, @class = "smart-form client-form", @novalidate = "novalidate" }))
                     {
                         @Html.AntiForgeryToken()
@@ -228,7 +228,12 @@
 
     function renderTela() {
         onSuccess();
-        $('#resultadoBusca div.table-responsive').scrollLeft(ListaScrollLeft);
+
+        var achou = $('#divEmptyResult').hasClass('empty-result');
+        if (achou == false) {
+            tratarBotoes(true);
+            $('#resultadoBusca div.table-responsive').scrollLeft(ListaScrollLeft);
+        }
     }
 
     function refresh(result) {
@@ -294,7 +299,7 @@
             return;
         }
 
-        tratarBotoes(true);
+        //tratarBotoes(true);
 
         $('#formFilter@(Model.Filtro.PaginationParameters.UniqueIdentifier)').submit();
 

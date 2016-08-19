@@ -9,6 +9,7 @@ using GIR.Sigim.Application.DTO;
 using GIR.Sigim.Application.Service.Sigim;
 using GIR.Sigim.Domain.Entity;
 using GIR.Sigim.Domain.Entity.Financeiro;
+using GIR.Sigim.Domain.Entity.CredCob;
 using GIR.Sigim.Domain.Repository.Admin;
 using GIR.Sigim.Infrastructure.Crosscutting.Notification;
 using GIR.Sigim.Infrastructure.Crosscutting.Security;
@@ -148,6 +149,29 @@ namespace GIR.Sigim.Application.Service
                     return centroCustoEmpresa.Cliente.Nome;
             }
             return parametros.Cliente != null ? parametros.Cliente.Nome : string.Empty;
+        }
+
+        protected string ObterDescricaoMoeda(Moeda moedaPadrao, Moeda moedaConversao)
+        {
+            string descricaoMoedaPadrao;
+
+            if (moedaPadrao.Id.HasValue && moedaPadrao.Id.Value > 0)
+            {
+                if (moedaConversao.Id.HasValue && moedaConversao.Id.Value > 0)
+                {
+                    descricaoMoedaPadrao = "Padrão: " + moedaPadrao.Simbolo + " - Valores dos relatórios em " + moedaConversao.Simbolo;
+                }
+                else
+                {
+                    descricaoMoedaPadrao = "Padrão: " + moedaPadrao.Simbolo + " - Moeda de conversão não cadastrada";
+                }
+            }
+            else
+            {
+                descricaoMoedaPadrao = "Moeda padrão não cadastrada";
+            }
+            return descricaoMoedaPadrao;
+
         }
 
         protected void RemoverIconeRelatorio(string caminhoImagem)

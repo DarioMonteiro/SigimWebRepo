@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIR.Sigim.Domain.Entity.CredCob;
 
 namespace GIR.Sigim.Domain.Entity.Sigim
 {
@@ -16,6 +17,8 @@ namespace GIR.Sigim.Domain.Entity.Sigim
         public int ClienteId { get; set; }
         public ClienteFornecedor Cliente { get; set; }
         public byte[] IconeRelatorio { get; set; }
+        public int? MoedaPadraoId { get; set; }
+        public Moeda MoedaPadrao { get; set; }
         public bool? AplicaEncargosPorMes { get; set; }
         public bool? CorrecaoMesCheioDiaPrimeiro { get; set; }
     }

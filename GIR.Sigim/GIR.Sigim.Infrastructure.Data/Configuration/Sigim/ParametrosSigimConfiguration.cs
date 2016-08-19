@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GIR.Sigim.Domain.Entity.Sigim;
+using GIR.Sigim.Domain.Entity.CredCob;
 
 namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
 {
@@ -56,7 +57,7 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .IsRequired()
                 .HasColumnOrder(14);
 
-            HasRequired(l => l.Cliente)
+            HasRequired<ClienteFornecedor>(l => l.Cliente)
                 .WithMany(l => l.ListaParametrosSigim)
                 .HasForeignKey(l => l.ClienteId);
 
@@ -64,6 +65,15 @@ namespace GIR.Sigim.Infrastructure.Data.Configuration.Sigim
                 .HasColumnType("image")
                 .HasColumnName("iconeRelatorios")
                 .HasColumnOrder(15);
+
+            Property(l => l.MoedaPadraoId)
+                .HasColumnName("moedaPadrao")
+                .HasColumnOrder(17);
+
+            HasRequired<Moeda>(l => l.MoedaPadrao)
+                .WithMany(l => l.ListaParametrosSigim)
+                .HasForeignKey(l => l.MoedaPadraoId);
+
 
             Property(l => l.AplicaEncargosPorMes)
                 .HasColumnName("aplicaEncargosPorMes")

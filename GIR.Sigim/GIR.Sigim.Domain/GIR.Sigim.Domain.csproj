@@ -70,6 +70,7 @@
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicao.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoItemMedicaoNF.cs" />
     <Compile Include="Entity\Contrato\ContratoRetificacaoProvisao.cs" />
+    <Compile Include="Entity\CredCob\Moeda.cs" />
     <Compile Include="Entity\CredCob\Periodicidade.cs" />
     <Compile Include="Entity\CredCob\TituloCredCob.cs" />
     <Compile Include="Entity\CredCob\TituloDetalheCredCob.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Repository\Contrato\IContratoRepository.cs" />
     <Compile Include="Repository\Contrato\IContratoRetificacaoItemMedicaoRepository.cs" />
     <Compile Include="Repository\Contrato\IParametrosContratoRepository.cs" />
+    <Compile Include="Repository\CredCob\IMoedaRepository.cs" />
     <Compile Include="Repository\CredCob\ITituloCredCobRepository.cs" />
     <Compile Include="Repository\CredCob\ITituloMovimentoRepository.cs" />
     <Compile Include="Repository\Financeiro\IApropriacaoRepository.cs" />
