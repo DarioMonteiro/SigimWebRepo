@@ -61,21 +61,21 @@ namespace GIR.Sigim.Application.Service.Admin
                     Menu = Funcionalidade.MenuComercial;
                     break;
 
-                case GIR.Sigim.Application.Constantes.Modulo.ContratoWeb:
-                    Menu = Funcionalidade.MenuContrato;
-                    break;
+                //case GIR.Sigim.Application.Constantes.Modulo.ContratoWeb:
+                //    Menu = Funcionalidade.MenuContrato;
+                //    break;
 
-                case GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb:
-                    Menu = Funcionalidade.MenuFinanceiro;
-                    break;
+                //case GIR.Sigim.Application.Constantes.Modulo.FinanceiroWeb:
+                //    Menu = Funcionalidade.MenuFinanceiro;
+                //    break;
 
                 case GIR.Sigim.Application.Constantes.Modulo.OrdemCompraWeb: 
                     Menu = Funcionalidade.MenuOrdemCompra;
                     break;
 
-                case GIR.Sigim.Application.Constantes.Modulo.SacWeb:
-                    Menu = Funcionalidade.MenuSac;
-                    break;                
+                //case GIR.Sigim.Application.Constantes.Modulo.SacWeb:
+                //    Menu = Funcionalidade.MenuSac;
+                //    break;                
 
                 default:
                     break;

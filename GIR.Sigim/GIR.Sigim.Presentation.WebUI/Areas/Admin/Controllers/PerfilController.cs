@@ -148,7 +148,15 @@ namespace GIR.Sigim.Presentation.WebUI.Areas.Admin.Controllers
                     model.Filtro.PaginationParameters.OrderBy = "descricao";
                 }
 
-                var result = perfilAppService.ListarPeloFiltro(model.Filtro, out totalRegistros); ;
+                var result = perfilAppService.ListarPeloFiltro(model.Filtro, out totalRegistros);
+                //isso é um erro que está acontecendo quando a tabela de perfil está vazia,
+                //ele traz um registro sempre, talvez tenha que verificar o relationamento
+                //na configuration. Abaixo é um bacalhau
+                if (result.Count == 1)
+                {
+                    if (result[0] == null) result = new List<PerfilDTO>();
+                }
+
                 if (result.Any())
                 {
                     var listaViewModel = CreateListaViewModel(model.Filtro.PaginationParameters, totalRegistros, result);
