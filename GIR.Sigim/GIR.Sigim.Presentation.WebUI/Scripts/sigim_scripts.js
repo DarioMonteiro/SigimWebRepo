@@ -309,13 +309,13 @@ function diasDecorridos(dt1, dt2){
     var mesDt1 = dt1.split("/")[1];
     var anoDt1 = dt1.split("/")[2];
 
-    var dt1 = new Date(anoDt1, mesDt1, diaDt1);
+    var dt1 = new Date(anoDt1, (mesDt1 - 1) , diaDt1);
 
     var diaDt2 = dt2.split("/")[0];
     var mesDt2 = dt2.split("/")[1];
     var anoDt2 = dt2.split("/")[2];
 
-    var dt2 = new Date(anoDt2, mesDt2, diaDt2);
+    var dt2 = new Date(anoDt2, (mesDt2 - 1), diaDt2);
 
     // ajusta o horario de cada objeto Date
     dt1.setHours(0);
